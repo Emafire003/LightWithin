@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "id": "coloredglowlib",
+  "version": "${version}",
+
+  "name": "Mod",
+  "description": "Desc",
+  "authors": [
+    "Emafire003"
+  ],
+  "contact": {
+    "homepage": "https://github.com/Emafire003/ColoredGlowLib",
+    "sources": "https://github.com/Emafire003/ColoredGlowLib",
+    "issues": "https://github.com/Emafire003/ColoredGlowLib/issues"
+  },
+
+  "license": "GNU LGPL3",
+  "icon": "assets/modid/icon.png",
+
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "me.emafire003.dev.modid.ExampleMod"
+    ],
+    "client": [
+
+    ]
+  },
+  "mixins": [
+    "modid.mixins.json"
+  ],
+
+  "depends": {
+    "fabricloader": ">=0.13.3",
+    "minecraft": ">=1.17-",
+    "java": ">=16"
+  },
+  "suggests": {
+    "another-mod": "*"
+  }
+}
