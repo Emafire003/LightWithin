@@ -1,4 +1,4 @@
-# Ema Example Mod
+# Light Within Mod
 
 ## Setup
 

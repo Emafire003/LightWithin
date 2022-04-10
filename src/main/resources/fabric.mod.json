@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "id": "coloredglowlib",
+  "id": "lightwithin",
   "version": "${version}",
 
   "name": "Mod",
@@ -9,25 +9,25 @@
     "Emafire003"
   ],
   "contact": {
-    "homepage": "https://github.com/Emafire003/ColoredGlowLib",
-    "sources": "https://github.com/Emafire003/ColoredGlowLib",
-    "issues": "https://github.com/Emafire003/ColoredGlowLib/issues"
+    "homepage": "https://github.com/Emafire003/LightWithin",
+    "sources": "https://github.com/Emafire003/LightWithin",
+    "issues": "https://github.com/Emafire003/LightWithin/issues"
   },
 
   "license": "GNU LGPL3",
-  "icon": "assets/modid/icon.png",
+  "icon": "assets/lightwithin/icon.png",
 
   "environment": "*",
   "entrypoints": {
     "main": [
-      "me.emafire003.dev.modid.ExampleMod"
+      "me.emafire003.dev.lightwithin.LightWithin"
     ],
     "client": [
 
     ]
   },
   "mixins": [
-    "modid.mixins.json"
+    "lightwithin.mixins.json"
   ],
 
   "depends": {
