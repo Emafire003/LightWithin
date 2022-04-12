@@ -10,17 +10,23 @@ import static me.emafire003.dev.lightwithin.LightWithin.LOGGER;
 
 public class HealLight extends InnerLight {
 
-    public HealLight(List<LivingEntity> targets, double cooldown_time, int power_multiplier, int duration, Color color, LivingEntity caster, boolean rainbow_col) {
+    public HealLight(List<LivingEntity> targets, double cooldown_time, double power_multiplier, int duration, Color color, LivingEntity caster, boolean rainbow_col) {
         super(targets, cooldown_time, power_multiplier, duration, color, caster, rainbow_col);
+        type = InnerLightTypes.HEAL;
+    }
+
+    public HealLight(List<LivingEntity> targets, double cooldown_time, double power_multiplier, int duration, LivingEntity caster, boolean rainbow_col) {
+        super(targets, cooldown_time, power_multiplier, duration, caster, rainbow_col);
         type = InnerLightTypes.HEAL;
         color = new Color(255, 66, 21);
     }
 
-    public HealLight(List<LivingEntity> targets, double cooldown_time, int power_multiplier, int duration, LivingEntity caster) {
+    public HealLight(List<LivingEntity> targets, double cooldown_time, double power_multiplier, int duration, LivingEntity caster) {
         super(targets, cooldown_time, power_multiplier, duration, caster);
         type = InnerLightTypes.HEAL;
         color = new Color(255, 66, 21);
     }
+
 
     @Override
     public void execute(){
@@ -33,7 +39,8 @@ public class HealLight extends InnerLight {
         }
         for(LivingEntity target : this.targets){
             //TODO maybe configable, default amout: 1.5 hearts
-            target.heal(3*this.power_multiplier);
+            //ok it works :D
+            target.heal((float) (3*this.power_multiplier));
             LOGGER.info("healed: " + 3*this.power_multiplier);
         }
     }

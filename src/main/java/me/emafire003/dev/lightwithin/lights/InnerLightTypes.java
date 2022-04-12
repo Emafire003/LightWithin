@@ -15,6 +15,7 @@ public enum InnerLightTypes {
     FREEZE,
     BURN,
     ENDER_AURA,
-    GENERIC
+    GENERIC,
+    NONE
 }
 

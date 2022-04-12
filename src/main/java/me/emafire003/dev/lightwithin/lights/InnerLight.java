@@ -10,7 +10,7 @@ public class InnerLight {
 
     protected List<LivingEntity> targets = new ArrayList<>();
     protected double cooldown_time;
-    protected int power_multiplier;
+    protected double power_multiplier;
     protected int duration;
     protected Color color;
     protected LivingEntity caster;
@@ -20,11 +20,30 @@ public class InnerLight {
     public void execute(){
     }
 
-    InnerLight(List<LivingEntity> targets, double cooldown_time, int power_multiplier, int duration, Color color, LivingEntity caster, boolean rainbow_col){
-
+    public InnerLight(List<LivingEntity> targets, double cooldown_time, double power_multiplier, int duration, Color color, LivingEntity caster, boolean rainbow_col){
+        this.targets = targets;
+        this.cooldown_time = cooldown_time;
+        this.power_multiplier = power_multiplier;
+        this.duration = duration;
+        this.color = color;
+        this.caster = caster;
+        this.rainbow_col = rainbow_col;
     }
 
-    InnerLight(List<LivingEntity> targets, double cooldown_time, int power_multiplier, int duration, LivingEntity caster){
+    public InnerLight(List<LivingEntity> targets, double cooldown_time, double power_multiplier, int duration, LivingEntity caster, boolean rainbow_col){
+        this.targets = targets;
+        this.cooldown_time = cooldown_time;
+        this.power_multiplier = power_multiplier;
+        this.duration = duration;
+        this.caster = caster;
+        this.rainbow_col = rainbow_col;
+    }
 
+    public InnerLight(List<LivingEntity> targets, double cooldown_time, double power_multiplier, int duration, LivingEntity caster){
+        this.targets = targets;
+        this.cooldown_time = cooldown_time;
+        this.power_multiplier = power_multiplier;
+        this.duration = duration;
+        this.caster = caster;
     }
 }
