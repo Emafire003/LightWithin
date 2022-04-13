@@ -101,9 +101,9 @@ public class LightEvents {
             //The max cooldown is 100
 
             component.setCooldown(determineCooldown(id_bits));
-            LOGGER.info("Cooldown: " + determineCooldown(id_bits) + " \n UUID: " + id);
 
-            component.setDuration(5);
+            //Duration bit
+            component.setDuration(determineDuration(id_bits));
             component.setTargets(TargetTypes.OTHER);
             component.setPowerMultiplier(1+player.getRandom().nextInt(2));
             component.setRainbow(true);
@@ -111,6 +111,7 @@ public class LightEvents {
         });
     }
 
+    //id bit 1
     public static InnerLightTypes determineType(String[] id_bits, String id){
         if(String.valueOf(id_bits[1].charAt(0)).matches("[a-h]") && Character.isDigit(id_bits[1].charAt(1))){
             //component.setType(InnerLightTypes.HEAL);
@@ -125,6 +126,7 @@ public class LightEvents {
     }
 
     //TODO set a cooldown multiplier option in the condif
+    //id bits 0
     public static int determineCooldown(String[] id_bits){
         for(int i = 0; i<id_bits[0].length(); i++){
             if(Character.isDigit(id_bits[0].charAt(i))){
@@ -136,6 +138,21 @@ public class LightEvents {
             }
         }
         return 90;
+    }
+
+    //TODO set a cooldown multiplier option in the condif
+    //id bit 2
+    public static int determineDuration(String[] id_bits){
+        for(int i = 0; i<id_bits[0].length(); i++){
+            if(Character.isDigit(id_bits[2].charAt(i))){
+                if(Character.getNumericValue(id_bits[2].charAt(i)) == 0){
+                    return 3;
+                }else{
+                    return Character.getNumericValue(id_bits[2].charAt(i));
+                }
+            }
+        }
+        return 5;
     }
 
 }
