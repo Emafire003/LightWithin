@@ -5,6 +5,7 @@ import dev.onyxstudios.cca.api.v3.component.sync.AutoSyncedComponent;
 import me.emafire003.dev.coloredglowlib.util.Color;
 import me.emafire003.dev.lightwithin.LightWithin;
 import me.emafire003.dev.lightwithin.lights.InnerLightTypes;
+import me.emafire003.dev.lightwithin.util.TargetTypes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 
@@ -12,14 +13,14 @@ import static me.emafire003.dev.lightwithin.LightWithin.LOGGER;
 
 public class LightComponent implements ComponentV3, AutoSyncedComponent {
 
-    protected TargetTypes targets;
-    protected double cooldown_time;
-    protected double power_multiplier;
-    protected int duration;
-    protected Color color;
-    protected boolean rainbow_col;
+    protected TargetTypes targets =  TargetTypes.NONE;
+    protected double cooldown_time = -1;
+    protected double power_multiplier = -1;
+    protected int duration = -1;
+    protected Color color = Color.getWhiteColor();
+    protected boolean rainbow_col = false;
     private PlayerEntity caster;
-    protected InnerLightTypes type;
+    protected InnerLightTypes type = InnerLightTypes.NONE;
 
     public LightComponent(PlayerEntity playerEntity) {
         this.caster = playerEntity;

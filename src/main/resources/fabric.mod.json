@@ -26,7 +26,7 @@
 
     ],
     "cardinal-components-entity": [
-      "us.potatoboy.fedora.Fedora"
+      "me.emafire003.dev.lightwithin.LightWithin"
     ]
   },
   "mixins": [

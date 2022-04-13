@@ -6,8 +6,11 @@ import dev.onyxstudios.cca.api.v3.entity.EntityComponentFactoryRegistry;
 import dev.onyxstudios.cca.api.v3.entity.EntityComponentInitializer;
 import dev.onyxstudios.cca.api.v3.entity.RespawnCopyStrategy;
 import me.emafire003.dev.lightwithin.component.LightComponent;
+import me.emafire003.dev.lightwithin.util.TargetTypes;
+import me.emafire003.dev.lightwithin.events.PlayerJoinEvent;
 import me.emafire003.dev.lightwithin.lights.HealLight;
 import me.emafire003.dev.lightwithin.lights.InnerLight;
+import me.emafire003.dev.lightwithin.lights.InnerLightTypes;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.player.AttackEntityCallback;
 import net.minecraft.entity.LivingEntity;
@@ -49,14 +52,36 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 		//Also, set nbt boolean "LightReady" that will also show up in thw HUD
 
 		//this works
+		//TODO lights could be levelled up maybe
 		AttackEntityCallback.EVENT.register((player, world, hand, entity, hitResult) ->{
-			List<LivingEntity> targets = new ArrayList<>();
-			targets.add(player);
-			InnerLight light = new HealLight(targets, 1, 2, 1, player);
-			light.execute();
 			LightComponent component = LIGHT_COMPONENT.get(player);
+			if(!component.getType().equals(InnerLightTypes.NONE)){
+				List<LivingEntity> targets = new ArrayList<>();
+				if(component.getTargets().equals(TargetTypes.SELF)){
+					targets.add(player);
+				}else{
+					//Will check for the other possibilities
+					targets.add(player);
+				}
+				InnerLight light = new HealLight(targets, component.getCooldown(), component.getPowerMultiplier(), component.getDuration(), player);
+				light.execute();
+			}
 			return ActionResult.PASS;
 		} );
+
+		PlayerJoinEvent.EVENT.register((player, server) -> {
+			LightComponent component = LIGHT_COMPONENT.get(player);
+			String id = player.getUuidAsString();
+			if(component.getType().equals(InnerLightTypes.NONE) || component.getType() == null){
+				component.setType(InnerLightTypes.HEAL);
+				component.setCooldown(10);
+				component.setDuration(0);
+				component.setTargets(TargetTypes.SELF);
+				component.setPowerMultiplier(1.5);
+				component.setRainbow(true);
+			}
+			return ActionResult.PASS;
+		});
 	}
 
 	@Override
