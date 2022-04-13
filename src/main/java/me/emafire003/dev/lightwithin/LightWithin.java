@@ -1,21 +1,30 @@
 package me.emafire003.dev.lightwithin;
 
+import com.google.common.cache.Cache;
 import dev.onyxstudios.cca.api.v3.component.ComponentKey;
 import dev.onyxstudios.cca.api.v3.component.ComponentRegistry;
 import dev.onyxstudios.cca.api.v3.entity.EntityComponentFactoryRegistry;
 import dev.onyxstudios.cca.api.v3.entity.EntityComponentInitializer;
 import dev.onyxstudios.cca.api.v3.entity.RespawnCopyStrategy;
 import me.emafire003.dev.lightwithin.component.LightComponent;
+import me.emafire003.dev.lightwithin.events.LightEvents;
+import me.emafire003.dev.lightwithin.util.CacheSystem;
 import me.emafire003.dev.lightwithin.util.TargetTypes;
 import me.emafire003.dev.lightwithin.events.PlayerJoinEvent;
 import me.emafire003.dev.lightwithin.lights.HealLight;
 import me.emafire003.dev.lightwithin.lights.InnerLight;
 import me.emafire003.dev.lightwithin.lights.InnerLightTypes;
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.entity.event.v1.EntitySleepEvents;
 import net.fabricmc.fabric.api.event.player.AttackEntityCallback;
+import net.minecraft.client.render.item.ItemRenderer;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.passive.PassiveEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.server.world.SleepManager;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.Box;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,43 +54,8 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 		// Proceed with mild caution.
 		LOGGER.info("Hello Fabric world!");
 
+		LightEvents.registerListeners();
 
-		//From nbt gets type, then gets the variables need for the type. Aka
-		//if type == Heal
-		//get cool down, get thing ecc
-		//Also, set nbt boolean "LightReady" that will also show up in thw HUD
-
-		//this works
-		//TODO lights could be levelled up maybe
-		AttackEntityCallback.EVENT.register((player, world, hand, entity, hitResult) ->{
-			LightComponent component = LIGHT_COMPONENT.get(player);
-			if(!component.getType().equals(InnerLightTypes.NONE)){
-				List<LivingEntity> targets = new ArrayList<>();
-				if(component.getTargets().equals(TargetTypes.SELF)){
-					targets.add(player);
-				}else{
-					//Will check for the other possibilities
-					targets.add(player);
-				}
-				InnerLight light = new HealLight(targets, component.getCooldown(), component.getPowerMultiplier(), component.getDuration(), player);
-				light.execute();
-			}
-			return ActionResult.PASS;
-		} );
-
-		PlayerJoinEvent.EVENT.register((player, server) -> {
-			LightComponent component = LIGHT_COMPONENT.get(player);
-			String id = player.getUuidAsString();
-			if(component.getType().equals(InnerLightTypes.NONE) || component.getType() == null){
-				component.setType(InnerLightTypes.HEAL);
-				component.setCooldown(10);
-				component.setDuration(0);
-				component.setTargets(TargetTypes.SELF);
-				component.setPowerMultiplier(1.5);
-				component.setRainbow(true);
-			}
-			return ActionResult.PASS;
-		});
 	}
 
 	@Override

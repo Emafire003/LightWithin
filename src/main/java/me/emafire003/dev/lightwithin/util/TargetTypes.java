@@ -6,5 +6,8 @@ public enum TargetTypes {
     ENEMIES,
     ALL,
     OTHER,
+    PASSIVE_MOBS,
+    MOBS,
+    PASSIVE_AND_SELF, //Might use other instead
     NONE
 }

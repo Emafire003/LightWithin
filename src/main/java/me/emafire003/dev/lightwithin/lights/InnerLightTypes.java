@@ -15,6 +15,8 @@ public enum InnerLightTypes {
     FREEZE,
     BURN,
     ENDER_AURA,
+    PROJECTILE,
+    JUMPY, //Check if there are blocks too high and the player needs. I dunno. Something? Maybe only when in combat?
     GENERIC,
     NONE
 }

@@ -10,6 +10,17 @@ import static me.emafire003.dev.lightwithin.LightWithin.LOGGER;
 
 public class HealLight extends InnerLight {
 
+    /*Possible triggers:
+       - self low health
+       - allies low health (checkable like this if type = Heal && target = allies do stuff TODO include pets in this
+       - passive mobs on low health
+     */
+
+    /*Possible targets:
+    * - self
+    * - allies
+    * - Passive mobs & self*/
+
     public HealLight(List<LivingEntity> targets, double cooldown_time, double power_multiplier, int duration, Color color, LivingEntity caster, boolean rainbow_col) {
         super(targets, cooldown_time, power_multiplier, duration, color, caster, rainbow_col);
         type = InnerLightTypes.HEAL;

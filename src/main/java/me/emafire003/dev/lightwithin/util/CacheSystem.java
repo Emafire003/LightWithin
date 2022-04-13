@@ -7,5 +7,7 @@ import java.util.UUID;
 public class CacheSystem {
 
     public static List<UUID> healLightSelf = new ArrayList<>();
+    public static List<UUID> healLightAllies = new ArrayList<>();
+    public static List<UUID> healLightPassiveAndSelf = new ArrayList<>();
 
 }

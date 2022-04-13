@@ -166,4 +166,14 @@ public class LightComponent implements ComponentV3, AutoSyncedComponent {
         LightWithin.LIGHT_COMPONENT.sync(caster);
     }
 
+    public void clear(){
+        this.targets =  TargetTypes.NONE;
+        this.cooldown_time = -1;
+        this.power_multiplier = -1;
+        this.duration = -1;
+        this.color = Color.getWhiteColor();
+        this.rainbow_col = false;
+        this.type = InnerLightTypes.NONE;
+    }
+
 }
