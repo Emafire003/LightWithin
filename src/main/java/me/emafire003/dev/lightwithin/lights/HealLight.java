@@ -3,6 +3,8 @@ package me.emafire003.dev.lightwithin.lights;
 import me.emafire003.dev.coloredglowlib.ColoredGlowLib;
 import me.emafire003.dev.coloredglowlib.util.Color;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.entity.effect.StatusEffects;
 
 import java.util.List;
 
@@ -42,7 +44,7 @@ public class HealLight extends InnerLight {
     @Override
     public void execute(){
         LOGGER.info("Executing the stuff!");
-        LOGGER.info("Type: " + this.type);
+        LOGGER.info("Type: " + this.type + " duration " + this.duration + " power " + this.power_multiplier);
         if(this.rainbow_col){
             ColoredGlowLib.setRainbowColorToEntity(this.caster, true);
         }else{
@@ -51,8 +53,8 @@ public class HealLight extends InnerLight {
         for(LivingEntity target : this.targets){
             //TODO maybe configable, default amout: 1.5 hearts
             //ok it works :D
-            target.heal((float) (3*this.power_multiplier));
-            LOGGER.info("healed: " + 3*this.power_multiplier);
+            //target.heal((float) (3*this.power_multiplier));
+            target.addStatusEffect(new StatusEffectInstance(StatusEffects.REGENERATION, this.duration*20, (int) this.power_multiplier, false, false));
         }
     }
 }
