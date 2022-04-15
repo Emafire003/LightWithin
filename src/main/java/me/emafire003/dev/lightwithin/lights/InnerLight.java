@@ -15,7 +15,7 @@ public class InnerLight {
     protected Color color;
     protected LivingEntity caster;
     protected boolean rainbow_col;
-    protected InnerLightTypes type = InnerLightTypes.GENERIC;
+    protected InnerLightType type = InnerLightType.GENERIC;
 
     public void execute(){
     }

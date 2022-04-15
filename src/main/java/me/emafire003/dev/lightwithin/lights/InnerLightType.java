@@ -1,6 +1,6 @@
 package me.emafire003.dev.lightwithin.lights;
 
-public enum InnerLightTypes {
+public enum InnerLightType {
     HEAL,
     PITCH_BLACK,
     PURE_WHITE,

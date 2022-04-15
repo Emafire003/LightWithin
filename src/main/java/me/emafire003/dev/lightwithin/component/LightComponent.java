@@ -4,8 +4,8 @@ import dev.onyxstudios.cca.api.v3.component.ComponentV3;
 import dev.onyxstudios.cca.api.v3.component.sync.AutoSyncedComponent;
 import me.emafire003.dev.coloredglowlib.util.Color;
 import me.emafire003.dev.lightwithin.LightWithin;
-import me.emafire003.dev.lightwithin.lights.InnerLightTypes;
-import me.emafire003.dev.lightwithin.util.TargetTypes;
+import me.emafire003.dev.lightwithin.lights.InnerLightType;
+import me.emafire003.dev.lightwithin.util.TargetType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 
@@ -13,14 +13,14 @@ import static me.emafire003.dev.lightwithin.LightWithin.LOGGER;
 
 public class LightComponent implements ComponentV3, AutoSyncedComponent {
 
-    protected TargetTypes targets =  TargetTypes.NONE;
+    protected TargetType targets =  TargetType.NONE;
     protected double cooldown_time = -1;
     protected double power_multiplier = -1;
     protected int duration = -1;
     protected Color color = Color.getWhiteColor();
     protected boolean rainbow_col = false;
     private PlayerEntity caster;
-    protected InnerLightTypes type = InnerLightTypes.NONE;
+    protected InnerLightType type = InnerLightType.NONE;
 
     public LightComponent(PlayerEntity playerEntity) {
         this.caster = playerEntity;
@@ -30,16 +30,16 @@ public class LightComponent implements ComponentV3, AutoSyncedComponent {
     public void readFromNbt(NbtCompound tag) {
         if(tag.contains("type")){
             LOGGER.info("the type got: " + tag.getString("type"));
-            this.type = InnerLightTypes.valueOf(tag.getString("type"));
+            this.type = InnerLightType.valueOf(tag.getString("type"));
         }else{
-            this.type = InnerLightTypes.NONE;
+            this.type = InnerLightType.NONE;
         }
 
         if(tag.contains("targets")){
             LOGGER.info("the targets got: " + tag.getString("targets"));
-            this.targets = TargetTypes.valueOf(tag.getString("targets"));
+            this.targets = TargetType.valueOf(tag.getString("targets"));
         }else{
-            this.targets = TargetTypes.NONE;
+            this.targets = TargetType.NONE;
         }
 
         if(tag.contains("cooldown_time")){
@@ -76,7 +76,6 @@ public class LightComponent implements ComponentV3, AutoSyncedComponent {
         }else{
             this.rainbow_col = false;
         }
-
     }
 
     //TODO search when/how is this triggered.
@@ -92,11 +91,11 @@ public class LightComponent implements ComponentV3, AutoSyncedComponent {
     }
 
 
-    public InnerLightTypes getType() {
+    public InnerLightType getType() {
         return this.type;
     }
 
-    public TargetTypes getTargets() {
+    public TargetType getTargets() {
         return this.targets;
     }
 
@@ -120,12 +119,12 @@ public class LightComponent implements ComponentV3, AutoSyncedComponent {
         return this.rainbow_col;
     }
 
-    public void setType(InnerLightTypes type) {
+    public void setType(InnerLightType type) {
         this.type = type;
         LightWithin.LIGHT_COMPONENT.sync(caster);
     }
 
-    public void setTargets(TargetTypes targets) {
+    public void setTargets(TargetType targets) {
         this.targets = targets;
         LightWithin.LIGHT_COMPONENT.sync(caster);
     }
@@ -155,7 +154,7 @@ public class LightComponent implements ComponentV3, AutoSyncedComponent {
         LightWithin.LIGHT_COMPONENT.sync(caster);
     }
 
-    public void setAll(InnerLightTypes type, TargetTypes targets, double cooldown, double power, int duration, Color color, boolean b){
+    public void setAll(InnerLightType type, TargetType targets, double cooldown, double power, int duration, Color color, boolean b){
         this.type = type;
         this.targets = targets;
         this.cooldown_time = cooldown;
@@ -167,13 +166,13 @@ public class LightComponent implements ComponentV3, AutoSyncedComponent {
     }
 
     public void clear(){
-        this.targets =  TargetTypes.NONE;
+        this.targets =  TargetType.NONE;
         this.cooldown_time = -1;
         this.power_multiplier = -1;
         this.duration = -1;
         this.color = Color.getWhiteColor();
         this.rainbow_col = false;
-        this.type = InnerLightTypes.NONE;
+        this.type = InnerLightType.NONE;
     }
 
 }

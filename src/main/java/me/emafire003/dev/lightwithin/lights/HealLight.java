@@ -25,18 +25,18 @@ public class HealLight extends InnerLight {
 
     public HealLight(List<LivingEntity> targets, double cooldown_time, double power_multiplier, int duration, Color color, LivingEntity caster, boolean rainbow_col) {
         super(targets, cooldown_time, power_multiplier, duration, color, caster, rainbow_col);
-        type = InnerLightTypes.HEAL;
+        type = InnerLightType.HEAL;
     }
 
     public HealLight(List<LivingEntity> targets, double cooldown_time, double power_multiplier, int duration, LivingEntity caster, boolean rainbow_col) {
         super(targets, cooldown_time, power_multiplier, duration, caster, rainbow_col);
-        type = InnerLightTypes.HEAL;
+        type = InnerLightType.HEAL;
         color = new Color(255, 66, 21);
     }
 
     public HealLight(List<LivingEntity> targets, double cooldown_time, double power_multiplier, int duration, LivingEntity caster) {
         super(targets, cooldown_time, power_multiplier, duration, caster);
-        type = InnerLightTypes.HEAL;
+        type = InnerLightType.HEAL;
         color = new Color(255, 66, 21);
     }
 
