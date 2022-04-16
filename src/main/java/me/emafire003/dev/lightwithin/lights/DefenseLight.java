@@ -13,7 +13,7 @@ import java.util.List;
 
 import static me.emafire003.dev.lightwithin.LightWithin.LOGGER;
 
-public class HealLight extends InnerLight {
+public class DefenseLight extends InnerLight {
 
     /*Possible triggers:
        - self low health
@@ -26,21 +26,21 @@ public class HealLight extends InnerLight {
     * - allies
     * - Passive mobs & self*/
 
-    public HealLight(List<LivingEntity> targets, double cooldown_time, double power_multiplier, int duration, Color color, LivingEntity caster, boolean rainbow_col) {
+    public DefenseLight(List<LivingEntity> targets, double cooldown_time, double power_multiplier, int duration, Color color, LivingEntity caster, boolean rainbow_col) {
         super(targets, cooldown_time, power_multiplier, duration, color, caster, rainbow_col);
-        type = InnerLightType.HEAL;
+        type = InnerLightType.DEFENCE;
     }
 
-    public HealLight(List<LivingEntity> targets, double cooldown_time, double power_multiplier, int duration, LivingEntity caster, boolean rainbow_col) {
+    public DefenseLight(List<LivingEntity> targets, double cooldown_time, double power_multiplier, int duration, LivingEntity caster, boolean rainbow_col) {
         super(targets, cooldown_time, power_multiplier, duration, caster, rainbow_col);
-        type = InnerLightType.HEAL;
-        color = new Color(255, 66, 21);
+        type = InnerLightType.DEFENCE;
+        color = new Color(67, 128, 60);
     }
 
-    public HealLight(List<LivingEntity> targets, double cooldown_time, double power_multiplier, int duration, LivingEntity caster) {
+    public DefenseLight(List<LivingEntity> targets, double cooldown_time, double power_multiplier, int duration, LivingEntity caster) {
         super(targets, cooldown_time, power_multiplier, duration, caster);
-        type = InnerLightType.HEAL;
-        color = new Color(255, 66, 21);
+        type = InnerLightType.DEFENCE;
+        color = new Color(67, 128, 60);
     }
 
 
@@ -53,14 +53,10 @@ public class HealLight extends InnerLight {
         }else{
             ColoredGlowLib.setColorToEntity(this.caster, this.color);
         }
-        //caster.getWorld().playSound((PlayerEntity) caster, caster.getBlockPos(), LightSounds.HEAL_LIGHT, SoundCategory.PLAYERS, 1f, 1f);
-        caster.playSound(LightSounds.HEAL_LIGHT, 1f, 0.9f);
+        caster.getWorld().playSound((PlayerEntity) caster, caster.getBlockPos(), LightSounds.HEAL_LIGHT, SoundCategory.AMBIENT, 1, 1);
         for(LivingEntity target : this.targets){
-            //TODO maybe configable, default amout: 1.5 hearts
-            //ok it works :D
-            //target.heal((float) (3*this.power_multiplier));
-            //target.playSound(LightSounds.HEAL_LIGHT, 1f, 1f);
-            target.addStatusEffect(new StatusEffectInstance(StatusEffects.REGENERATION, this.duration*20, (int) this.power_multiplier, false, false));
+            target.playSound(LightSounds.HEAL_LIGHT, 1, 1);
+            target.addStatusEffect(new StatusEffectInstance(StatusEffects.RESISTANCE, this.duration*20, (int) this.power_multiplier, false, false));
         }
     }
 }

@@ -7,7 +7,7 @@ public enum InnerLightType {
     THUNDER_AURA,
     SHOCKWAVE,
     STRENGTH,
-    RESISTANCE,
+    DEFENCE,
     LEECH,
     CONCEAL,
     SPEED,

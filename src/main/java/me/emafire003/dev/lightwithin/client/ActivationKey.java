@@ -1,6 +1,7 @@
 package me.emafire003.dev.lightwithin.client;
 
 import me.emafire003.dev.lightwithin.networking.LightUsedPacketC2S;
+import me.emafire003.dev.lightwithin.sounds.LightSounds;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
@@ -28,8 +29,12 @@ public class ActivationKey {
         if (client.player != null) {
             if (lightActivationKey.wasPressed()) {
                 LOGGER.info("HALLO, KEY WAS PRESSED");
-                client.player.sendMessage(new LiteralText("Yep it did work"), true);
-                ClientPlayNetworking.send(LightUsedPacketC2S.ID, new LightUsedPacketC2S(true));
+                client.player.sendMessage(new LiteralText("Yep it did work, " + LightWithinClient.isLightReady()), true);
+                if(LightWithinClient.isLightReady()){
+                    ClientPlayNetworking.send(LightUsedPacketC2S.ID, new LightUsedPacketC2S(true));
+                    LightWithinClient.setLightReady(false);
+                }
+
             }
         }
     }

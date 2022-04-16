@@ -6,13 +6,16 @@ import me.emafire003.dev.lightwithin.lights.InnerLightType;
 import me.emafire003.dev.lightwithin.networking.LightReadyPacketS2C;
 import me.emafire003.dev.lightwithin.util.CacheSystem;
 import me.emafire003.dev.lightwithin.util.TargetType;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.event.player.AttackEntityCallback;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.passive.PassiveEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.text.LiteralText;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.math.Box;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
@@ -25,6 +28,7 @@ public class LightTriggeringAndEvents {
     public static void sendReadyPacket(ServerPlayerEntity player, boolean b){
         try{
             ServerPlayNetworking.send(player, LightReadyPacketS2C.ID, new LightReadyPacketS2C(b));
+            player.sendMessage(new LiteralText("Sending packet"), false);
         }catch(Exception e){
             LOGGER.error("FAILED to send data packets to the client!");
             e.printStackTrace();
@@ -58,13 +62,11 @@ public class LightTriggeringAndEvents {
              */
             if(component.getType().equals(InnerLightType.HEAL)){
                 if(component.getTargets().equals(TargetType.SELF) && player.getHealth() <= (player.getMaxHealth())*25/100){
-                    CacheSystem.healLightSelf.add(player.getUuid());
+                    //CacheSystem.healLightSelf.add(player.getUuid());
                     sendReadyPacket((ServerPlayerEntity) player, true);
                 }else if(component.getTargets().equals(TargetType.ALLIES)){
                     //TODO set dimensions configable
-                    Box box = new Box(player.getBlockPos());
-                    box = box.expand(6);
-                    List<LivingEntity> entities = player.getWorld().getEntitiesByClass(LivingEntity.class, box, (entity1 -> true));
+                    List<LivingEntity> entities = player.getWorld().getEntitiesByClass(LivingEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amout), (entity1 -> true));
                     int ent_number = 0;
                     for(LivingEntity ent : entities){
                         //TODO integration with other mods that implement allies stuff
@@ -80,9 +82,7 @@ public class LightTriggeringAndEvents {
                         sendReadyPacket((ServerPlayerEntity) player, true);
                     }
                 }else if(component.getTargets().equals(TargetType.OTHER)){
-                    Box box = new Box(player.getBlockPos());
-                    box = box.expand(6);
-                    List<PassiveEntity> entities = world.getEntitiesByClass(PassiveEntity.class, box, (entity1 -> true));
+                    List<PassiveEntity> entities = world.getEntitiesByClass(PassiveEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amout), (entity1 -> true));
                     for(PassiveEntity ent : entities){
                         if(ent.getHealth() <= (ent.getMaxHealth())*50/100){
                             sendReadyPacket((ServerPlayerEntity) player, true);
@@ -91,9 +91,6 @@ public class LightTriggeringAndEvents {
                     }
                 }
             }
-
-
-
             return ActionResult.PASS;
         } );
 
@@ -141,7 +138,8 @@ public class LightTriggeringAndEvents {
 
     //id bit 1
     public static Pair<InnerLightType, TargetType> determineTypeAndTarget(String[] id_bits, int type_bit, int target_bit){
-        if(String.valueOf(id_bits[type_bit].charAt(0)).matches("[a-h]") && Character.isDigit(id_bits[type_bit].charAt(1))){
+        if((String.valueOf(id_bits[type_bit].charAt(0)).matches("[a-h]") && Character.isDigit(id_bits[type_bit].charAt(1))
+        || (String.valueOf(id_bits[type_bit].charAt(1)).matches("[a-h]") && Character.isDigit(id_bits[type_bit].charAt(2))))){
             //component.setType(InnerLightType.HEAL);
             if(String.valueOf(id_bits[target_bit].charAt(2)).matches("[f-s]") && Character.isDigit(id_bits[type_bit].charAt(3))){
                 return new Pair<InnerLightType, TargetType>(InnerLightType.HEAL, TargetType.SELF);
@@ -149,20 +147,25 @@ public class LightTriggeringAndEvents {
                 return new Pair<InnerLightType, TargetType>(InnerLightType.HEAL, TargetType.ALLIES);
             }else if(String.valueOf(id_bits[target_bit].charAt(2)).matches("[3-6]") && String.valueOf(id_bits[target_bit].charAt(2)).matches("[n-p]") && Character.isLetter(id_bits[type_bit].charAt(3))){
                 return new Pair<InnerLightType, TargetType>(InnerLightType.HEAL, TargetType.OTHER);
+            }else{
+                LOGGER.info("Forced self, id+" + id_bits[target_bit]);
+                return new Pair<InnerLightType, TargetType>(InnerLightType.HEAL, TargetType.SELF);
             }
         }
+        LOGGER.info("nop not matched, UUID bit: " + id_bits[type_bit]);
         return new Pair<InnerLightType, TargetType>(InnerLightType.HEAL, TargetType.SELF);
     }
 
     //TODO set a cooldown multiplier option in the condif
     //id bits 0
+    //formula: 10+10*stufffoundintheid aka minimum value 10+10*1, so 20s
     public static int determineCooldown(String[] id_bits, int string_bit){
         for(int i = 0; i<id_bits[string_bit].length(); i++){
             if(Character.isDigit(id_bits[string_bit].charAt(i))){
                 if(Character.getNumericValue(id_bits[string_bit].charAt(i)) == 0){
                     return 93;
                 }else{
-                    return 10*Character.getNumericValue(id_bits[string_bit].charAt(i));
+                    return 10+10*Character.getNumericValue(id_bits[string_bit].charAt(i));
                 }
             }
         }

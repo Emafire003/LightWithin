@@ -1,0 +1,14 @@
+{
+  "heal_light": {
+    "subtitle": "lightwithin.heal_light_triggered",
+    "sounds": [
+      "lightwithin:heal_light"
+    ]
+  },
+  "light_ready": {
+    "subtitle": "lightwithin.light_ready_to_activate",
+    "sounds": [
+      "lightwithin:light_ready"
+    ]
+  }
+}

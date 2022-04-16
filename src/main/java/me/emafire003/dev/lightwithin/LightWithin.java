@@ -8,21 +8,16 @@ import dev.onyxstudios.cca.api.v3.entity.RespawnCopyStrategy;
 import me.emafire003.dev.lightwithin.component.LightComponent;
 import me.emafire003.dev.lightwithin.events.LightTriggeringAndEvents;
 import me.emafire003.dev.lightwithin.lights.HealLight;
-import me.emafire003.dev.lightwithin.lights.InnerLight;
 import me.emafire003.dev.lightwithin.lights.InnerLightType;
 import me.emafire003.dev.lightwithin.networking.LightUsedPacketC2S;
-import me.emafire003.dev.lightwithin.util.CacheSystem;
+import me.emafire003.dev.lightwithin.sounds.LightSounds;
 import me.emafire003.dev.lightwithin.util.TargetType;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.passive.PassiveEntity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.LiteralText;
-import net.minecraft.util.ActionResult;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Box;
 import org.slf4j.Logger;
@@ -30,14 +25,13 @@ import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
-import static me.emafire003.dev.lightwithin.events.LightTriggeringAndEvents.sendReadyPacket;
-
 public class LightWithin implements ModInitializer, EntityComponentInitializer {
 	// This logger is used to write text to the console and the log file.
 	// It is considered best practice to use your mod id as the logger's name.
 	// That way, it's clear which mod wrote info, warnings, and errors.
 	public static final String MOD_ID = "lightwithin";
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
+	public static int box_expansion_amout = 6;
 
 	public static final ComponentKey<LightComponent> LIGHT_COMPONENT =
 			ComponentRegistry.getOrCreate(new Identifier(MOD_ID, "light_component"), LightComponent.class);
@@ -58,6 +52,7 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 
 		LightTriggeringAndEvents.registerListeners();
 		registerLightUsedPacket();
+		LightSounds.registerSounds();
 
 	}
 
@@ -114,7 +109,7 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 		//Yay.
 		else if(component.getTargets().equals(TargetType.ALLIES)){
 			//TODO set box dimensions configable
-			List<LivingEntity> entities = player.getWorld().getEntitiesByClass(LivingEntity.class, new Box(player.getBlockPos()).expand(6), (entity1 -> true));
+			List<LivingEntity> entities = player.getWorld().getEntitiesByClass(LivingEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amout), (entity1 -> true));
 			for(LivingEntity ent : entities){
 				//TODO integration with other mods that implement allies stuff
 				//TODO may need this to prevent bugs
@@ -129,7 +124,7 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 			if(player.getHealth() <= (player.getMaxHealth())*50/100){
 				targets.add(player);
 			}
-			targets.addAll(player.getWorld().getEntitiesByClass(PassiveEntity.class, new Box(player.getBlockPos()).expand(6), (entity1 -> true)));
+			targets.addAll(player.getWorld().getEntitiesByClass(PassiveEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amout), (entity1 -> true)));
 		}
 		player.sendMessage(new LiteralText("Ok light triggered"), false);
 		new HealLight(targets, component.getCooldown(), component.getPowerMultiplier(),

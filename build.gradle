@@ -28,6 +28,8 @@ repositories {
 		url = 'https://ladysnake.jfrog.io/artifactory/mods'
 	}
 
+	maven { url 'https://jitpack.io' }
+
 }
 
 dependencies {
@@ -46,6 +48,9 @@ dependencies {
 	//CardinalComponents
 	modImplementation "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-entity:4.0.1"
 	include "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-entity:4.0.1"
+
+	//Renderer
+	include modImplementation("com.github.0x3C50:Renderer:master-SNAPSHOT")
 }
 
 processResources {
