@@ -14,13 +14,14 @@ import static me.emafire003.dev.lightwithin.LightWithin.LOGGER;
 public class LightComponent implements ComponentV3, AutoSyncedComponent {
 
     protected TargetType targets =  TargetType.NONE;
-    protected double cooldown_time = -1;
+    protected int cooldown_time = -1;
     protected double power_multiplier = -1;
     protected int duration = -1;
     protected Color color = Color.getWhiteColor();
     protected boolean rainbow_col = false;
     private PlayerEntity caster;
     protected InnerLightType type = InnerLightType.NONE;
+    protected boolean incooldown = false;
 
     public LightComponent(PlayerEntity playerEntity) {
         this.caster = playerEntity;
@@ -44,7 +45,7 @@ public class LightComponent implements ComponentV3, AutoSyncedComponent {
 
         if(tag.contains("cooldown_time")){
             LOGGER.info("the cooldown got: " + tag.getDouble("cooldown_time"));
-            this.cooldown_time = tag.getDouble("cooldown_time");
+            this.cooldown_time = tag.getInt("cooldown_time");
         }else{
             this.cooldown_time = -1;
         }
@@ -76,6 +77,13 @@ public class LightComponent implements ComponentV3, AutoSyncedComponent {
         }else{
             this.rainbow_col = false;
         }
+
+        if(tag.contains("incooldown")){
+            LOGGER.info("the incooldown got: " + tag.getBoolean("incooldown"));
+            this.incooldown = tag.getBoolean("incooldown");
+        }else{
+            this.incooldown = false;
+        }
     }
 
     //TODO search when/how is this triggered.
@@ -88,6 +96,7 @@ public class LightComponent implements ComponentV3, AutoSyncedComponent {
         tag.putInt("duration", this.duration);
         tag.putString("color", this.color.toHEX());
         tag.putBoolean("rainbow_col", this.rainbow_col);
+        tag.putBoolean("incooldown", this.incooldown);
     }
 
 
@@ -99,7 +108,7 @@ public class LightComponent implements ComponentV3, AutoSyncedComponent {
         return this.targets;
     }
 
-    public double getCooldown() {
+    public int getMaxCooldown() {
         return this.cooldown_time;
     }
 
@@ -119,6 +128,11 @@ public class LightComponent implements ComponentV3, AutoSyncedComponent {
         return this.rainbow_col;
     }
 
+    public boolean getInCooldown() {
+        LOGGER.info("yep, this is incooldown: "+ incooldown);
+        return incooldown;
+    }
+
     public void setType(InnerLightType type) {
         this.type = type;
         LightWithin.LIGHT_COMPONENT.sync(caster);
@@ -129,7 +143,12 @@ public class LightComponent implements ComponentV3, AutoSyncedComponent {
         LightWithin.LIGHT_COMPONENT.sync(caster);
     }
 
-    public void setCooldown(double cooldown) {
+    public void setMaxCooldown(int cooldown) {
+        this.cooldown_time = cooldown;
+        LightWithin.LIGHT_COMPONENT.sync(caster);
+    }
+
+    public void setCooldown(int cooldown) {
         this.cooldown_time = cooldown;
         LightWithin.LIGHT_COMPONENT.sync(caster);
     }
@@ -154,7 +173,13 @@ public class LightComponent implements ComponentV3, AutoSyncedComponent {
         LightWithin.LIGHT_COMPONENT.sync(caster);
     }
 
-    public void setAll(InnerLightType type, TargetType targets, double cooldown, double power, int duration, Color color, boolean b){
+    public void setInCooldown(boolean incooldown) {
+        LOGGER.info("==========================OK SETTED COOLDOWN==========================");
+        this.incooldown = incooldown;
+        LightWithin.LIGHT_COMPONENT.sync(caster);
+    }
+
+    public void setAll(InnerLightType type, TargetType targets, int cooldown, double power, int duration, Color color, boolean b, boolean incooldown){
         this.type = type;
         this.targets = targets;
         this.cooldown_time = cooldown;
@@ -162,6 +187,7 @@ public class LightComponent implements ComponentV3, AutoSyncedComponent {
         this.duration = duration;
         this.color = color;
         this.rainbow_col = b;
+        this.incooldown = incooldown;
         LightWithin.LIGHT_COMPONENT.sync(caster);
     }
 
@@ -173,6 +199,7 @@ public class LightComponent implements ComponentV3, AutoSyncedComponent {
         this.color = Color.getWhiteColor();
         this.rainbow_col = false;
         this.type = InnerLightType.NONE;
+        LightWithin.LIGHT_COMPONENT.sync(caster);
     }
 
 }

@@ -4,9 +4,12 @@
   "package": "me.emafire003.dev.lightwithin.mixin",
   "compatibilityLevel": "JAVA_16",
   "mixins": [
-    "PlayerJoinMixin"
+    "PlayerJoinMixin",
   ],
   "client": [
+  ],
+  "server":[
+
   ],
   "injectors": {
     "defaultRequire": 1
