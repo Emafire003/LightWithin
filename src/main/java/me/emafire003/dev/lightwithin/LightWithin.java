@@ -5,6 +5,7 @@ import dev.onyxstudios.cca.api.v3.component.ComponentRegistry;
 import dev.onyxstudios.cca.api.v3.entity.EntityComponentFactoryRegistry;
 import dev.onyxstudios.cca.api.v3.entity.EntityComponentInitializer;
 import dev.onyxstudios.cca.api.v3.entity.RespawnCopyStrategy;
+import me.emafire003.dev.coloredglowlib.ColoredGlowLib;
 import me.emafire003.dev.lightwithin.commands.LWCommandRegister;
 import me.emafire003.dev.lightwithin.component.LightComponent;
 import me.emafire003.dev.lightwithin.events.LightTriggeringAndEvents;
@@ -44,8 +45,6 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 	public static final ComponentKey<LightComponent> LIGHT_COMPONENT =
 			ComponentRegistry.getOrCreate(new Identifier(MOD_ID, "light_component"), LightComponent.class);
 
-	public static List<UUID> light_used = new ArrayList<>();
-
 	//per selectare la inner light usare un enum
 	//LightWithin -> mod, InnerLights the powers
 	//TODO vocal sayout loud of lightname when activating
@@ -77,15 +76,15 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 				return;
 			}
 			var results = LightUsedPacketC2S.read(buf);
-			player.sendMessage(new LiteralText("yep it runs. uhm"), false);
 			server.execute(() -> {
 				try{
-					if(!player.hasStatusEffect(LightEffects.LIGHT_FATIGUE)){
+					if(!(player.hasStatusEffect(LightEffects.LIGHT_FATIGUE) || player.hasStatusEffect(LightEffects.LIGHT_ACTIVE))){
 						player.sendMessage(new LiteralText("Ok not in cooldown, starting the ticking"), false);
-						player.addStatusEffect(new StatusEffectInstance(LightEffects.LIGHT_FATIGUE, 20*LIGHT_COMPONENT.get(player).getMaxCooldown()));
+						player.addStatusEffect(new StatusEffectInstance(LightEffects.LIGHT_ACTIVE, 20*LIGHT_COMPONENT.get(player).getDuration()));
+					}else{
+						return;
 					}
-					if(results && player.hasStatusEffect(LightEffects.LIGHT_FATIGUE)){
-						light_used.add(player.getUuid());
+					if(results){
 
 						LightComponent component = LIGHT_COMPONENT.get(player);
 						InnerLightType type = component.getType();
@@ -94,15 +93,20 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 						}
 						if(type.equals(InnerLightType.HEAL)){
 							activateHeal(component, player);
+							component.setPrevColor(ColoredGlowLib.getEntityColor(player));
 						}else if(type.equals(InnerLightType.DEFENCE)){
 							activateDefense(component, player);
+							component.setPrevColor(ColoredGlowLib.getEntityColor(player));
 						}else if(type.equals(InnerLightType.STRENGTH)){
 							activateStrength(component, player);
+							component.setPrevColor(ColoredGlowLib.getEntityColor(player));
 						}
 						//for now defaults here
 						else{
 							activateHeal(component, player);
 						}
+						//TODO config toggable
+						player.setGlowing(true);
 					}
 				}catch (NoSuchElementException e){
 					LOGGER.warn("No value in the packet, probably not a big problem");

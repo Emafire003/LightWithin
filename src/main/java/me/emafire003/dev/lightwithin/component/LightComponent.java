@@ -18,6 +18,7 @@ public class LightComponent implements ComponentV3, AutoSyncedComponent {
     protected double power_multiplier = -1;
     protected int duration = -1;
     protected Color color = Color.getWhiteColor();
+    protected Color prev_color = Color.getWhiteColor();
     protected boolean rainbow_col = false;
     private PlayerEntity caster;
     protected InnerLightType type = InnerLightType.NONE;
@@ -71,6 +72,13 @@ public class LightComponent implements ComponentV3, AutoSyncedComponent {
             this.color = Color.getWhiteColor();
         }
 
+        if(tag.contains("prev_color")){
+            LOGGER.info("the prev_color got: " + tag.getString("prev_color"));
+            this.prev_color = Color.translateFromHEX(tag.getString("prev_color"));
+        }else{
+            this.prev_color = Color.getWhiteColor();
+        }
+
         if(tag.contains("rainbow_col")){
             LOGGER.info("the rainbow_col got: " + tag.getBoolean("rainbow_col"));
             this.rainbow_col = tag.getBoolean("rainbow_col");
@@ -95,6 +103,7 @@ public class LightComponent implements ComponentV3, AutoSyncedComponent {
         tag.putDouble("power_multiplier", this.power_multiplier);
         tag.putInt("duration", this.duration);
         tag.putString("color", this.color.toHEX());
+        tag.putString("prev_color", this.prev_color.toHEX());
         tag.putBoolean("rainbow_col", this.rainbow_col);
         tag.putBoolean("incooldown", this.incooldown);
     }
@@ -121,6 +130,10 @@ public class LightComponent implements ComponentV3, AutoSyncedComponent {
     }
 
     public Color getColor() {
+        return this.color;
+    }
+
+    public Color getPrevColor() {
         return this.color;
     }
 
@@ -165,6 +178,11 @@ public class LightComponent implements ComponentV3, AutoSyncedComponent {
 
     public void setColor(Color color) {
         this.color = color;
+        LightWithin.LIGHT_COMPONENT.sync(caster);
+    }
+
+    public void setPrevColor(Color color) {
+        this.prev_color = color;
         LightWithin.LIGHT_COMPONENT.sync(caster);
     }
 

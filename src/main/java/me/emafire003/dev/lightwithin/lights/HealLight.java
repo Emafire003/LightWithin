@@ -6,11 +6,10 @@ import me.emafire003.dev.lightwithin.sounds.LightSounds;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.sound.SoundCategory;
 
 import java.util.List;
 
+import static me.emafire003.dev.lightwithin.LightWithin.LIGHT_COMPONENT;
 import static me.emafire003.dev.lightwithin.LightWithin.LOGGER;
 
 public class HealLight extends InnerLight {

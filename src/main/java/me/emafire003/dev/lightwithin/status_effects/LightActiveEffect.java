@@ -2,12 +2,18 @@ package me.emafire003.dev.lightwithin.status_effects;
 
 import me.emafire003.dev.coloredglowlib.ColoredGlowLib;
 import me.emafire003.dev.coloredglowlib.util.Color;
+import me.emafire003.dev.lightwithin.component.LightComponent;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.AttributeContainer;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectCategory;
+import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.entity.player.PlayerEntity;
 
-public class LightFatigueEffect extends StatusEffect {
+import static me.emafire003.dev.lightwithin.LightWithin.LIGHT_COMPONENT;
+
+public class LightActiveEffect extends StatusEffect {
 
     //LORE: Basicly your light after being used decays and well it needs to rechange so you can't use it for a while
     //it's a cool way to make a cooldown visible for the player too. As lot's have said, it's not a bug it's a feature
@@ -15,12 +21,13 @@ public class LightFatigueEffect extends StatusEffect {
     //xD
     //TODO mixin into the GlowingEffect and make it so it can clear the ColoredGlowLib color
 
-    public LightFatigueEffect() {
-        super(StatusEffectCategory.HARMFUL, 0x9EC1BE);
-    }
-
     private Color former_color = null;
-    private boolean rainbow;
+    private boolean rainbow = false;
+    private boolean already_run = false;
+
+    public LightActiveEffect() {
+        super(StatusEffectCategory.BENEFICIAL, 0xF3FF28);
+    }
 
     @Override
     public boolean canApplyUpdateEffect(int duration, int amplifier) {
@@ -29,21 +36,20 @@ public class LightFatigueEffect extends StatusEffect {
     }
 
     // This method is called when it applies the status effect. We implement custom functionality here.
-    //TODO not setting the correct "discharged" color
     @Override
     public void applyUpdateEffect(LivingEntity entity, int amplifier) {
-        if(amplifier > 10){
+        if(!already_run){
             former_color = ColoredGlowLib.getEntityColor(entity);
             rainbow = ColoredGlowLib.getEntityRainbowColor(entity);
-            if(rainbow){
-                ColoredGlowLib.setRainbowColorToEntity(entity, false);
-            }
-            ColoredGlowLib.setColorToEntity(entity, Color.translateFromHEX("9EC1BE)"));
+            already_run = true;
         }
     }
 
     @Override
     public void onRemoved(LivingEntity entity, AttributeContainer attributes, int amplifier){
+        if(!entity.hasStatusEffect(StatusEffects.GLOWING)){
+            entity.setGlowing(false);
+        }
         if(former_color != null ){
             if(!former_color.equals(Color.getWhiteColor())){
                 ColoredGlowLib.setColorToEntity(entity, former_color);
@@ -51,6 +57,10 @@ public class LightFatigueEffect extends StatusEffect {
             if(rainbow){
                 ColoredGlowLib.setRainbowColorToEntity(entity, true);
             }
+        }
+        if(entity instanceof PlayerEntity){
+            LightComponent component = LIGHT_COMPONENT.get(entity);
+            entity.addStatusEffect(new StatusEffectInstance(LightEffects.LIGHT_FATIGUE, 20*(component.getMaxCooldown()-component.getDuration()), 1));
         }
     }
 }

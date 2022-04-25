@@ -8,6 +8,8 @@ import net.minecraft.util.registry.Registry;
 public class LightEffects {
     public static final StatusEffect LIGHT_FATIGUE = registerStatusEffect("light_fatigue",
             new LightFatigueEffect());
+    public static final StatusEffect LIGHT_ACTIVE = registerStatusEffect("light_active",
+            new LightActiveEffect());
 
     private static StatusEffect registerStatusEffect(String name, StatusEffect effect){
 
