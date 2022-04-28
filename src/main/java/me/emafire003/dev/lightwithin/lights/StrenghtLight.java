@@ -8,6 +8,7 @@ import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.sound.SoundCategory;
+import net.minecraft.text.LiteralText;
 
 import java.util.List;
 
@@ -56,6 +57,7 @@ public class StrenghtLight extends InnerLight {
         caster.getWorld().playSound((PlayerEntity) caster, caster.getBlockPos(), LightSounds.HEAL_LIGHT, SoundCategory.AMBIENT, 1, 1);
         for(LivingEntity target : this.targets){
             target.playSound(LightSounds.HEAL_LIGHT, 1, 1);
+            ((PlayerEntity) caster).sendMessage(new LiteralText("Hello tryed to play sound from the light"), false);
             target.addStatusEffect(new StatusEffectInstance(StatusEffects.STRENGTH, this.duration*20, (int) this.power_multiplier, false, false));
         }
     }

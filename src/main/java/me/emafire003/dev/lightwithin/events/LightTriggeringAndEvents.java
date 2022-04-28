@@ -15,6 +15,7 @@ import net.minecraft.text.LiteralText;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.math.Box;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
@@ -28,7 +29,7 @@ public class LightTriggeringAndEvents {
     public static void sendReadyPacket(ServerPlayerEntity player, boolean b){
         try{
             ServerPlayNetworking.send(player, LightReadyPacketS2C.ID, new LightReadyPacketS2C(b));
-            //player.sendMessage(new LiteralText("Sending packet"), false);
+            player.sendMessage(new LiteralText("Sending ready packet"), false);
         }catch(Exception e){
             LOGGER.error("FAILED to send data packets to the client!");
             e.printStackTrace();
@@ -54,7 +55,6 @@ public class LightTriggeringAndEvents {
                 return ActionResult.PASS;
             }
             if(player.hasStatusEffect(LightEffects.LIGHT_FATIGUE)){
-                player.sendMessage(new LiteralText("Not executing ur still in cooldown"), false);
                 return ActionResult.PASS;
             }
 
@@ -66,23 +66,27 @@ public class LightTriggeringAndEvents {
              */
             if(component.getType().equals(InnerLightType.HEAL)){
                 if(component.getTargets().equals(TargetType.SELF) && player.getHealth() <= (player.getMaxHealth())*25/100){
-                    //CacheSystem.healLightSelf.add(player.getUuid());
                     sendReadyPacket((ServerPlayerEntity) player, true);
                 }else if(component.getTargets().equals(TargetType.ALLIES)){
                     //TODO set dimensions configable
                     List<LivingEntity> entities = player.getWorld().getEntitiesByClass(LivingEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amout), (entity1 -> true));
                     int ent_number = 0;
+                    //I need to this to prevent a ConcurrentModificationError
+                    List<LivingEntity> team_entities = new ArrayList<>();
+                    //loops through the entities near the player, if the entities are in the same team as the player
+                    //and they are not the entity that has been hit then add them to the team_entities and check if their health is ok
                     for(LivingEntity ent : entities){
                         //TODO integration with other mods that implement allies stuff
                         if(!entity.equals(ent) && ent.getScoreboardTeam() != null && ent.getScoreboardTeam().isEqual(player.getScoreboardTeam()) ){
                             if(ent.getHealth() <= (ent.getMaxHealth())*50/100){
                                 ent_number++;
                             }
-                        }else{
-                            entities.remove(ent);
+                            team_entities.add(ent);
                         }
                     }
-                    if(entities.size() == ent_number){
+                    //If the total team targets && the number of entities of team with the right health are true then
+                    //send the ready packet
+                    if(team_entities.size() == ent_number){
                         sendReadyPacket((ServerPlayerEntity) player, true);
                     }
                 }else if(component.getTargets().equals(TargetType.OTHER)){
@@ -103,17 +107,22 @@ public class LightTriggeringAndEvents {
                     //TODO set dimensions configable
                     List<LivingEntity> entities = player.getWorld().getEntitiesByClass(LivingEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amout), (entity1 -> true));
                     int ent_number = 0;
+                    //I need to this to prevent a ConcurrentModificationError
+                    List<LivingEntity> team_entities = new ArrayList<>();
+                    //loops through the entities near the player, if the entities are in the same team as the player
+                    //and they are not the entity that has been hit then add them to the team_entities and check if their health is ok
                     for(LivingEntity ent : entities){
                         //TODO integration with other mods that implement allies stuff
                         if(!entity.equals(ent) && ent.getScoreboardTeam() != null && ent.getScoreboardTeam().isEqual(player.getScoreboardTeam()) ){
                             if(ent.getHealth() <= (ent.getMaxHealth())*50/100){
                                 ent_number++;
                             }
-                        }else{
-                            entities.remove(ent);
+                            team_entities.add(ent);
                         }
                     }
-                    if(entities.size() == ent_number){
+                    //If the total team targets && the number of entities of team with the right health are true then
+                    //send the ready packet
+                    if(team_entities.size() == ent_number){
                         sendReadyPacket((ServerPlayerEntity) player, true);
                     }
                 }else if(component.getTargets().equals(TargetType.OTHER)){
@@ -134,17 +143,22 @@ public class LightTriggeringAndEvents {
                     //TODO set dimensions configable
                     List<LivingEntity> entities = player.getWorld().getEntitiesByClass(LivingEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amout), (entity1 -> true));
                     int ent_number = 0;
+                    //I need to this to prevent a ConcurrentModificationError
+                    List<LivingEntity> team_entities = new ArrayList<>();
+                    //loops through the entities near the player, if the entities are in the same team as the player
+                    //and they are not the entity that has been hit then add them to the team_entities and check if their health is ok
                     for(LivingEntity ent : entities){
                         //TODO integration with other mods that implement allies stuff
                         if(!entity.equals(ent) && ent.getScoreboardTeam() != null && ent.getScoreboardTeam().isEqual(player.getScoreboardTeam()) ){
                             if(ent.getHealth() <= (ent.getMaxHealth())*50/100){
                                 ent_number++;
                             }
-                        }else{
-                            entities.remove(ent);
+                            team_entities.add(ent);
                         }
                     }
-                    if(entities.size() == ent_number){
+                    //If the total team targets && the number of entities of team with the right health are true then
+                    //send the ready packet
+                    if(team_entities.size() == ent_number){
                         sendReadyPacket((ServerPlayerEntity) player, true);
                     }
                 }else if(component.getTargets().equals(TargetType.OTHER)){
@@ -164,6 +178,10 @@ public class LightTriggeringAndEvents {
             if(player.getWorld().isClient){
                 return ActionResult.PASS;
             }
+            //if it's already in the cache noworries NEVERMIND MINECRAFT SHOULD AUTOSAVE THESE
+            /*if(CacheSystem.player_components.containsKey(player.getUuid())){
+                return ActionResult.PASS;
+            }*/
             LightComponent component = LIGHT_COMPONENT.get(player);
             String id = player.getUuidAsString().toLowerCase();
             //3eec9f18-1d0e-3f17-917c-6994e7d034d1
@@ -223,6 +241,31 @@ public class LightTriggeringAndEvents {
         return new Pair<InnerLightType, TargetType>(InnerLightType.HEAL, TargetType.SELF);
     }
 
+    public static TargetType determineBuffTarget(String[] id_bits, int target_bit){
+        //If it's all letters or numbers, or if there is at least one number from 5-9 or e/f then allies
+        //if the char at the position 2 is abc && the nextone is a digit then it's other
+        //in the other cases it's self
+        boolean allies_cond1 = id_bits[target_bit].matches("[0-9]+") || id_bits[target_bit].matches("[a-f]+");
+        boolean allies_cond2 = false;
+        for(int i = 0; i<id_bits[target_bit].length()-1; i++){
+            if(allies_cond1){
+                break;
+            }
+            char a = id_bits[target_bit].charAt(i);
+            if(String.valueOf(a).matches("[5-9]") || String.valueOf(a).matches("[e-f]")){
+                allies_cond2 = true;
+                break;
+            }
+        }
+        if(allies_cond1 || allies_cond2){
+            return TargetType.ALLIES;
+        }else if(String.valueOf(id_bits[target_bit].charAt(2)).matches("[a-c]") && Character.isDigit(id_bits[target_bit].charAt(3))){
+            return TargetType.OTHER;
+        }else{
+            return TargetType.SELF;
+        }
+    }
+
     public static Pair<InnerLightType, TargetType> determineTypeAndTarget(String[] id_bits, int type_bit, int target_bit){
         int i;
         boolean notfound = false;
@@ -237,56 +280,29 @@ public class LightTriggeringAndEvents {
         }
 
         if(notfound){
-            //do stuff
+            //TODO do stuff
         }
 
+        //HEAL
         if(String.valueOf(id_bits[type_bit].charAt(i)).matches("[a-b]")){
-            //component.setType(InnerLightType.HEAL);
-            if(String.valueOf(id_bits[target_bit].charAt(2)).matches("a") && Character.isDigit(id_bits[type_bit].charAt(3))){
-                return new Pair<InnerLightType, TargetType>(InnerLightType.HEAL, TargetType.SELF);
-            }else if(String.valueOf(id_bits[target_bit].charAt(2)).matches("d") && Character.isLetter(id_bits[type_bit].charAt(3))){
-                return new Pair<InnerLightType, TargetType>(InnerLightType.HEAL, TargetType.ALLIES);
-            }else if(String.valueOf(id_bits[target_bit].charAt(2)).matches("[3-6]") && String.valueOf(id_bits[target_bit].charAt(2)).matches("e") && Character.isLetter(id_bits[type_bit].charAt(3))){
-                return new Pair<InnerLightType, TargetType>(InnerLightType.HEAL, TargetType.OTHER);
-            }else{
-                LOGGER.info("Forced self, id+" + id_bits[target_bit]);
-                return new Pair<InnerLightType, TargetType>(InnerLightType.HEAL, TargetType.SELF);
-            }
+            return new Pair<>(InnerLightType.HEAL, determineBuffTarget(id_bits, target_bit));
         }
+        //DEFENCE
         else if(String.valueOf(id_bits[type_bit].charAt(i)).matches("[c-d]")){
-            if(String.valueOf(id_bits[target_bit].charAt(2)).matches("a") && Character.isDigit(id_bits[type_bit].charAt(3))){
-                return new Pair<InnerLightType, TargetType>(InnerLightType.DEFENCE, TargetType.SELF);
-            }else if(String.valueOf(id_bits[target_bit].charAt(2)).matches("d") && Character.isLetter(id_bits[type_bit].charAt(3))){
-                return new Pair<InnerLightType, TargetType>(InnerLightType.DEFENCE, TargetType.ALLIES);
-            }else if(String.valueOf(id_bits[target_bit].charAt(2)).matches("[3-6]") && String.valueOf(id_bits[target_bit].charAt(2)).matches("e") && Character.isLetter(id_bits[type_bit].charAt(3))){
-                return new Pair<InnerLightType, TargetType>(InnerLightType.DEFENCE, TargetType.OTHER);
-            }else{
-                LOGGER.info("Forced self, id+" + id_bits[target_bit]);
-                return new Pair<InnerLightType, TargetType>(InnerLightType.DEFENCE, TargetType.SELF);
-            }
+            return new Pair<InnerLightType, TargetType>(InnerLightType.DEFENCE, determineBuffTarget(id_bits, target_bit));
+        //STRENGTH
         }else if(String.valueOf(id_bits[type_bit].charAt(i)).matches("[e-f]")){
-            if(String.valueOf(id_bits[target_bit].charAt(2)).matches("a") && Character.isDigit(id_bits[type_bit].charAt(3))){
-                return new Pair<InnerLightType, TargetType>(InnerLightType.STRENGTH, TargetType.SELF);
-            }else if(String.valueOf(id_bits[target_bit].charAt(2)).matches("d") && Character.isLetter(id_bits[type_bit].charAt(3))){
-                return new Pair<InnerLightType, TargetType>(InnerLightType.STRENGTH, TargetType.ALLIES);
-            }else if(String.valueOf(id_bits[target_bit].charAt(2)).matches("[3-6]") && String.valueOf(id_bits[target_bit].charAt(2)).matches("e") && Character.isLetter(id_bits[type_bit].charAt(3))){
-                return new Pair<InnerLightType, TargetType>(InnerLightType.STRENGTH, TargetType.OTHER);
-            }else{
-                LOGGER.info("Forced self, id+" + id_bits[target_bit]);
-                return new Pair<InnerLightType, TargetType>(InnerLightType.STRENGTH, TargetType.SELF);
-            }
+            return new Pair<InnerLightType, TargetType>(InnerLightType.STRENGTH, determineBuffTarget(id_bits, target_bit));
         }
         LOGGER.info("nop not matched, UUID bit: " + id_bits[type_bit]);
         return new Pair<InnerLightType, TargetType>(InnerLightType.HEAL, TargetType.SELF);
     }
-    //if a-i -> heal
-    //if j-r -> defense
-    //if s-z -> strenght
 
     //TODO set a cooldown multiplier option in the condif
     //id bits 0
     //formula: 10+10*stufffoundintheid aka minimum value 10+10*1, so 20s
     public static int determineCooldown(String[] id_bits, int string_bit){
+        //checks the first char digit that finds and multiplies it
         for(int i = 0; i<id_bits[string_bit].length(); i++){
             if(Character.isDigit(id_bits[string_bit].charAt(i))){
                 if(Character.getNumericValue(id_bits[string_bit].charAt(i)) == 0){

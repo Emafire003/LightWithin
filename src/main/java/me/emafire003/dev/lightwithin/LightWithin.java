@@ -9,11 +9,14 @@ import me.emafire003.dev.coloredglowlib.ColoredGlowLib;
 import me.emafire003.dev.lightwithin.commands.LWCommandRegister;
 import me.emafire003.dev.lightwithin.component.LightComponent;
 import me.emafire003.dev.lightwithin.events.LightTriggeringAndEvents;
+import me.emafire003.dev.lightwithin.items.LightItems;
 import me.emafire003.dev.lightwithin.lights.DefenseLight;
 import me.emafire003.dev.lightwithin.lights.HealLight;
 import me.emafire003.dev.lightwithin.lights.InnerLightType;
 import me.emafire003.dev.lightwithin.lights.StrenghtLight;
+import me.emafire003.dev.lightwithin.networking.LightReadyPacketS2C;
 import me.emafire003.dev.lightwithin.networking.LightUsedPacketC2S;
+import me.emafire003.dev.lightwithin.networking.RenderRunePacketS2C;
 import me.emafire003.dev.lightwithin.sounds.LightSounds;
 import me.emafire003.dev.lightwithin.status_effects.LightEffects;
 import me.emafire003.dev.lightwithin.util.TargetType;
@@ -32,7 +35,6 @@ import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.UUID;
 
 public class LightWithin implements ModInitializer, EntityComponentInitializer {
 	// This logger is used to write text to the console and the log file.
@@ -62,6 +64,7 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 		LightSounds.registerSounds();
 		LWCommandRegister.registerCommands();
 		LightEffects.registerModEffects();
+		LightItems.registerItems();
 
 	}
 
@@ -78,35 +81,8 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 			var results = LightUsedPacketC2S.read(buf);
 			server.execute(() -> {
 				try{
-					if(!(player.hasStatusEffect(LightEffects.LIGHT_FATIGUE) || player.hasStatusEffect(LightEffects.LIGHT_ACTIVE))){
-						player.sendMessage(new LiteralText("Ok not in cooldown, starting the ticking"), false);
-						player.addStatusEffect(new StatusEffectInstance(LightEffects.LIGHT_ACTIVE, 20*LIGHT_COMPONENT.get(player).getDuration()));
-					}else{
-						return;
-					}
 					if(results){
-
-						LightComponent component = LIGHT_COMPONENT.get(player);
-						InnerLightType type = component.getType();
-						if(type.equals(InnerLightType.NONE)){
-							return;
-						}
-						if(type.equals(InnerLightType.HEAL)){
-							activateHeal(component, player);
-							component.setPrevColor(ColoredGlowLib.getEntityColor(player));
-						}else if(type.equals(InnerLightType.DEFENCE)){
-							activateDefense(component, player);
-							component.setPrevColor(ColoredGlowLib.getEntityColor(player));
-						}else if(type.equals(InnerLightType.STRENGTH)){
-							activateStrength(component, player);
-							component.setPrevColor(ColoredGlowLib.getEntityColor(player));
-						}
-						//for now defaults here
-						else{
-							activateHeal(component, player);
-						}
-						//TODO config toggable
-						player.setGlowing(true);
+						activateLight(player);
 					}
 				}catch (NoSuchElementException e){
 					LOGGER.warn("No value in the packet, probably not a big problem");
@@ -116,6 +92,40 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 				}
 			});
 		})));
+	}
+
+	public static void activateLight(ServerPlayerEntity player){
+		if(!(player.hasStatusEffect(LightEffects.LIGHT_FATIGUE) || player.hasStatusEffect(LightEffects.LIGHT_ACTIVE))){
+			player.sendMessage(new LiteralText("Ok not in cooldown, starting the ticking"), false);
+			player.addStatusEffect(new StatusEffectInstance(LightEffects.LIGHT_ACTIVE, 20*LIGHT_COMPONENT.get(player).getDuration()));
+		}else{
+			return;
+		}
+		LightComponent component = LIGHT_COMPONENT.get(player);
+		InnerLightType type = component.getType();
+		if(type.equals(InnerLightType.NONE)){
+			return;
+		}
+		if(type.equals(InnerLightType.HEAL)){
+			activateHeal(component, player);
+			component.setPrevColor(ColoredGlowLib.getEntityColor(player));
+			player.playSound(LightSounds.HEAL_LIGHT, 1f, 0.9f);
+			player.sendMessage(new LiteralText("Tried to play the heal sound LightWitihin.activateLight..."), false);
+		}else if(type.equals(InnerLightType.DEFENCE)){
+			activateDefense(component, player);
+			component.setPrevColor(ColoredGlowLib.getEntityColor(player));
+		}else if(type.equals(InnerLightType.STRENGTH)){
+			activateStrength(component, player);
+			component.setPrevColor(ColoredGlowLib.getEntityColor(player));
+		}
+		//for now defaults here
+		else{
+			activateHeal(component, player);
+			component.setPrevColor(ColoredGlowLib.getEntityColor(player));
+		}
+		//TODO config toggable
+		player.setGlowing(true);
+		sendRenderRunePacket(player, type);
 	}
 
 	//=======================HEAL LIGHT=======================
@@ -227,6 +237,16 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 		player.sendMessage(new LiteralText("Ok light triggered"), false);
 		new StrenghtLight(targets, component.getMaxCooldown(), component.getPowerMultiplier(),
 				component.getDuration(), player).execute();
+	}
+
+	public static void sendRenderRunePacket(ServerPlayerEntity player, InnerLightType type){
+		try{
+			ServerPlayNetworking.send(player, RenderRunePacketS2C.ID, new RenderRunePacketS2C(type));
+		}catch(Exception e){
+			LOGGER.error("FAILED to send data packets to the client!");
+			e.printStackTrace();
+			return;
+		}
 	}
 
 }

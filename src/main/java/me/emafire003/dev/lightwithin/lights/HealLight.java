@@ -6,10 +6,11 @@ import me.emafire003.dev.lightwithin.sounds.LightSounds;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.sound.SoundCategory;
 
 import java.util.List;
 
-import static me.emafire003.dev.lightwithin.LightWithin.LIGHT_COMPONENT;
 import static me.emafire003.dev.lightwithin.LightWithin.LOGGER;
 
 public class HealLight extends InnerLight {
@@ -52,13 +53,10 @@ public class HealLight extends InnerLight {
         }else{
             ColoredGlowLib.setColorToEntity(this.caster, this.color);
         }
-        //caster.getWorld().playSound((PlayerEntity) caster, caster.getBlockPos(), LightSounds.HEAL_LIGHT, SoundCategory.PLAYERS, 1f, 1f);
-        caster.playSound(LightSounds.HEAL_LIGHT, 1f, 0.9f);
+        caster.getWorld().playSound((PlayerEntity) caster, caster.getBlockPos(), LightSounds.HEAL_LIGHT, SoundCategory.AMBIENT, 1,1);
         for(LivingEntity target : this.targets){
             //TODO maybe configable, default amout: 1.5 hearts
-            //ok it works :D
-            //target.heal((float) (3*this.power_multiplier));
-            //target.playSound(LightSounds.HEAL_LIGHT, 1f, 1f);
+            target.playSound(LightSounds.HEAL_LIGHT, 1, 1);
             target.addStatusEffect(new StatusEffectInstance(StatusEffects.REGENERATION, this.duration*20, (int) this.power_multiplier, false, false));
         }
     }
