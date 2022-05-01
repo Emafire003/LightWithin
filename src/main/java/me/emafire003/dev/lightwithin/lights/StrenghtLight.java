@@ -3,12 +3,13 @@ package me.emafire003.dev.lightwithin.lights;
 import me.emafire003.dev.coloredglowlib.ColoredGlowLib;
 import me.emafire003.dev.coloredglowlib.util.Color;
 import me.emafire003.dev.lightwithin.sounds.LightSounds;
+import me.emafire003.dev.lightwithin.particles.LightParticlesUtil;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundCategory;
-import net.minecraft.text.LiteralText;
 
 import java.util.List;
 
@@ -45,6 +46,7 @@ public class StrenghtLight extends InnerLight {
     }
 
 
+
     @Override
     public void execute(){
         LOGGER.info("Executing the stuff!");
@@ -57,8 +59,10 @@ public class StrenghtLight extends InnerLight {
         caster.getWorld().playSound((PlayerEntity) caster, caster.getBlockPos(), LightSounds.HEAL_LIGHT, SoundCategory.AMBIENT, 1, 1);
         for(LivingEntity target : this.targets){
             target.playSound(LightSounds.HEAL_LIGHT, 1, 1);
-            ((PlayerEntity) caster).sendMessage(new LiteralText("Hello tryed to play sound from the light"), false);
-            target.addStatusEffect(new StatusEffectInstance(StatusEffects.STRENGTH, this.duration*20, (int) this.power_multiplier, false, false));
+            target.addStatusEffect(new StatusEffectInstance(StatusEffects.RESISTANCE, this.duration*20, (int) this.power_multiplier, false, false));
+        }
+        if(caster instanceof ServerPlayerEntity){
+            LightParticlesUtil.spawnStrengthParticles((ServerPlayerEntity) caster);
         }
     }
 }

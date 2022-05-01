@@ -10,5 +10,11 @@
     "sounds": [
       "lightwithin:light_ready"
     ]
-  }
+  },
+  "defense_light": {
+  "subtitle": "lightwithin.defense_light_triggered",
+  "sounds": [
+    "lightwithin:defense_light"
+  ]
+}
 }

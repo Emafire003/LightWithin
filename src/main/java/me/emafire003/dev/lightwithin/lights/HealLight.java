@@ -3,10 +3,12 @@ package me.emafire003.dev.lightwithin.lights;
 import me.emafire003.dev.coloredglowlib.ColoredGlowLib;
 import me.emafire003.dev.coloredglowlib.util.Color;
 import me.emafire003.dev.lightwithin.sounds.LightSounds;
+import me.emafire003.dev.lightwithin.particles.LightParticlesUtil;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundCategory;
 
 import java.util.List;
@@ -58,6 +60,9 @@ public class HealLight extends InnerLight {
             //TODO maybe configable, default amout: 1.5 hearts
             target.playSound(LightSounds.HEAL_LIGHT, 1, 1);
             target.addStatusEffect(new StatusEffectInstance(StatusEffects.REGENERATION, this.duration*20, (int) this.power_multiplier, false, false));
+        }
+        if(caster instanceof ServerPlayerEntity){
+            LightParticlesUtil.spawnHealParticles((ServerPlayerEntity) caster);
         }
     }
 }

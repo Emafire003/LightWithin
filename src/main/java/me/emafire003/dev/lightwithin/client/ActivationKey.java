@@ -1,7 +1,6 @@
 package me.emafire003.dev.lightwithin.client;
 
 import me.emafire003.dev.lightwithin.networking.LightUsedPacketC2S;
-import me.emafire003.dev.lightwithin.sounds.LightSounds;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;

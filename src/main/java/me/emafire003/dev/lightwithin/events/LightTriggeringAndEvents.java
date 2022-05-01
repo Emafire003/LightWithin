@@ -29,7 +29,6 @@ public class LightTriggeringAndEvents {
     public static void sendReadyPacket(ServerPlayerEntity player, boolean b){
         try{
             ServerPlayNetworking.send(player, LightReadyPacketS2C.ID, new LightReadyPacketS2C(b));
-            player.sendMessage(new LiteralText("Sending ready packet"), false);
         }catch(Exception e){
             LOGGER.error("FAILED to send data packets to the client!");
             e.printStackTrace();
@@ -196,7 +195,8 @@ public class LightTriggeringAndEvents {
             //If the second part of the UUID starts with a letter form a to h && the second character is a digit -> Heal
             Pair<InnerLightType, TargetType> type_and_target = determineTypeAndTarget(id_bits, 1, 3);
             //type
-            component.setType(type_and_target.getFirst());
+            //component.setType(type_and_target.getFirst());
+            component.setType(InnerLightType.DEFENCE);
             //Target
             component.setTargets(type_and_target.getSecond());
 
@@ -247,12 +247,13 @@ public class LightTriggeringAndEvents {
         //in the other cases it's self
         boolean allies_cond1 = id_bits[target_bit].matches("[0-9]+") || id_bits[target_bit].matches("[a-f]+");
         boolean allies_cond2 = false;
+        LOGGER.info("Ally cond1 and 2: " + allies_cond1 + " " + allies_cond2);
         for(int i = 0; i<id_bits[target_bit].length()-1; i++){
             if(allies_cond1){
                 break;
             }
             char a = id_bits[target_bit].charAt(i);
-            if(String.valueOf(a).matches("[5-9]") || String.valueOf(a).matches("[e-f]")){
+            if(String.valueOf(a).matches("[5-9]")){
                 allies_cond2 = true;
                 break;
             }

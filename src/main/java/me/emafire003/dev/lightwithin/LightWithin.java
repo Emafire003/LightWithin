@@ -14,11 +14,11 @@ import me.emafire003.dev.lightwithin.lights.DefenseLight;
 import me.emafire003.dev.lightwithin.lights.HealLight;
 import me.emafire003.dev.lightwithin.lights.InnerLightType;
 import me.emafire003.dev.lightwithin.lights.StrenghtLight;
-import me.emafire003.dev.lightwithin.networking.LightReadyPacketS2C;
 import me.emafire003.dev.lightwithin.networking.LightUsedPacketC2S;
 import me.emafire003.dev.lightwithin.networking.RenderRunePacketS2C;
 import me.emafire003.dev.lightwithin.sounds.LightSounds;
 import me.emafire003.dev.lightwithin.status_effects.LightEffects;
+import me.emafire003.dev.lightwithin.particles.LightParticlesUtil;
 import me.emafire003.dev.lightwithin.util.TargetType;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
@@ -43,6 +43,9 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 	public static final String MOD_ID = "lightwithin";
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 	public static int box_expansion_amout = 6;
+
+	private static boolean debug = false;
+	private boolean not_debug = true;
 
 	public static final ComponentKey<LightComponent> LIGHT_COMPONENT =
 			ComponentRegistry.getOrCreate(new Identifier(MOD_ID, "light_component"), LightComponent.class);
@@ -96,7 +99,10 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 
 	public static void activateLight(ServerPlayerEntity player){
 		if(!(player.hasStatusEffect(LightEffects.LIGHT_FATIGUE) || player.hasStatusEffect(LightEffects.LIGHT_ACTIVE))){
-			player.sendMessage(new LiteralText("Ok not in cooldown, starting the ticking"), false);
+
+			if(debug){
+				player.sendMessage(new LiteralText("Ok not in cooldown, starting the ticking"), false);
+			}
 			player.addStatusEffect(new StatusEffectInstance(LightEffects.LIGHT_ACTIVE, 20*LIGHT_COMPONENT.get(player).getDuration()));
 		}else{
 			return;
@@ -110,7 +116,9 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 			activateHeal(component, player);
 			component.setPrevColor(ColoredGlowLib.getEntityColor(player));
 			player.playSound(LightSounds.HEAL_LIGHT, 1f, 0.9f);
-			player.sendMessage(new LiteralText("Tried to play the heal sound LightWitihin.activateLight..."), false);
+			if(debug) {
+				player.sendMessage(new LiteralText("Tried to play the heal sound LightWitihin.activateLight..."), false);
+			}
 		}else if(type.equals(InnerLightType.DEFENCE)){
 			activateDefense(component, player);
 			component.setPrevColor(ColoredGlowLib.getEntityColor(player));
@@ -125,6 +133,8 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 		}
 		//TODO config toggable
 		player.setGlowing(true);
+		LightParticlesUtil.spawnDefaultLightParticleSequence(player);
+		//LightParticlesUtil.spawnEffectParticles(player);
 		sendRenderRunePacket(player, type);
 	}
 
@@ -160,7 +170,9 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 			}
 			targets.addAll(player.getWorld().getEntitiesByClass(PassiveEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amout), (entity1 -> true)));
 		}
-		player.sendMessage(new LiteralText("Ok light triggered"), false);
+		if(debug){
+			player.sendMessage(new LiteralText("Ok light triggered"), false);
+		}
 		new HealLight(targets, component.getMaxCooldown(), component.getPowerMultiplier(),
 				component.getDuration(), player).execute();
 	}
@@ -197,7 +209,9 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 			}
 			targets.addAll(player.getWorld().getEntitiesByClass(PassiveEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amout), (entity1 -> true)));
 		}
-		player.sendMessage(new LiteralText("Ok light triggered"), false);
+		if(debug){
+			player.sendMessage(new LiteralText("Ok light triggered"), false);
+		}
 		new DefenseLight(targets, component.getMaxCooldown(), component.getPowerMultiplier(),
 				component.getDuration(), player).execute();
 	}
@@ -234,7 +248,9 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 			}
 			targets.addAll(player.getWorld().getEntitiesByClass(PassiveEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amout), (entity1 -> true)));
 		}
-		player.sendMessage(new LiteralText("Ok light triggered"), false);
+		if(debug){
+			player.sendMessage(new LiteralText("Ok light triggered"), false);
+		}
 		new StrenghtLight(targets, component.getMaxCooldown(), component.getPowerMultiplier(),
 				component.getDuration(), player).execute();
 	}

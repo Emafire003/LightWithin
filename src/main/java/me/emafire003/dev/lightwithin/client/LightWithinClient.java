@@ -1,5 +1,6 @@
 package me.emafire003.dev.lightwithin.client;
 
+import me.emafire003.dev.lightwithin.lights.InnerLightType;
 import me.emafire003.dev.lightwithin.networking.LightReadyPacketS2C;
 import me.emafire003.dev.lightwithin.networking.RenderRunePacketS2C;
 import me.emafire003.dev.lightwithin.sounds.LightSounds;
@@ -63,7 +64,6 @@ public class LightWithinClient implements ClientModInitializer {
 
             client.execute(() -> {
                 try{
-                    LOGGER.info("Ready Packet recived on client! Value: " + results);
                     if(!lightReady){
                         lightReady = results;
                         client.player.playSound(LightSounds.LIGHT_READY, 1f, 0.63f);
@@ -83,12 +83,13 @@ public class LightWithinClient implements ClientModInitializer {
         LOGGER.info("Registering runes render packet reciver on client...");
         ClientPlayNetworking.registerGlobalReceiver(RenderRunePacketS2C.ID, ((client, handler, buf, responseSender) -> {
             var results = RenderRunePacketS2C.read(buf);
-            client.player.sendMessage(new LiteralText("render Pakcet recived on client"), false);
 
             client.execute(() -> {
                 try{
-                    client.player.sendMessage(new LiteralText("render Pakcet recived on client"), false);
-                    event_handler.renderRunes(results);
+                    event_handler.renderRunes(results, client.player);
+                    if(results.equals(InnerLightType.HEAL)){
+                        client.player.playSound(LightSounds.HEAL_LIGHT, 1,1);
+                    }
                 }catch (NoSuchElementException e){
                     LOGGER.warn("No value in the packet, probably not a big problem");
                 }catch (Exception e){
