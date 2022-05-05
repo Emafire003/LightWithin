@@ -2,6 +2,7 @@ package me.emafire003.dev.lightwithin.lights;
 
 import me.emafire003.dev.coloredglowlib.ColoredGlowLib;
 import me.emafire003.dev.coloredglowlib.util.Color;
+import me.emafire003.dev.lightwithin.particles.LightParticles;
 import me.emafire003.dev.lightwithin.sounds.LightSounds;
 import me.emafire003.dev.lightwithin.particles.LightParticlesUtil;
 import net.minecraft.entity.LivingEntity;
@@ -10,6 +11,7 @@ import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundCategory;
+import net.minecraft.text.LiteralText;
 
 import java.util.List;
 
@@ -31,25 +33,39 @@ public class HealLight extends InnerLight {
     public HealLight(List<LivingEntity> targets, double cooldown_time, double power_multiplier, int duration, Color color, LivingEntity caster, boolean rainbow_col) {
         super(targets, cooldown_time, power_multiplier, duration, color, caster, rainbow_col);
         type = InnerLightType.HEAL;
+        checkSafety();
     }
 
     public HealLight(List<LivingEntity> targets, double cooldown_time, double power_multiplier, int duration, LivingEntity caster, boolean rainbow_col) {
         super(targets, cooldown_time, power_multiplier, duration, caster, rainbow_col);
         type = InnerLightType.HEAL;
         color = new Color(255, 66, 21);
+        checkSafety();
     }
 
     public HealLight(List<LivingEntity> targets, double cooldown_time, double power_multiplier, int duration, LivingEntity caster) {
         super(targets, cooldown_time, power_multiplier, duration, caster);
         type = InnerLightType.HEAL;
         color = new Color(255, 66, 21);
+        checkSafety();
+    }
+
+    private void checkSafety(){
+        if(this.duration > 5 && this.power_multiplier > 3){
+            this.duration = 3;
+        }
+        if(this.duration > 3 && this.power_multiplier > 5){
+            this.duration = 2;
+        }
+        if(this.power_multiplier < 1){
+            power_multiplier = power_multiplier*2;
+        }
+        LOGGER.info("Type: " + this.type + " duration " + this.duration + " power " + this.power_multiplier);
     }
 
 
     @Override
     public void execute(){
-        LOGGER.info("Executing the stuff!");
-        LOGGER.info("Type: " + this.type + " duration " + this.duration + " power " + this.power_multiplier);
         if(this.rainbow_col){
             ColoredGlowLib.setRainbowColorToEntity(this.caster, true);
         }else{
@@ -57,12 +73,9 @@ public class HealLight extends InnerLight {
         }
         caster.getWorld().playSound((PlayerEntity) caster, caster.getBlockPos(), LightSounds.HEAL_LIGHT, SoundCategory.AMBIENT, 1,1);
         for(LivingEntity target : this.targets){
-            //TODO maybe configable, default amout: 1.5 hearts
             target.playSound(LightSounds.HEAL_LIGHT, 1, 1);
+            LightParticlesUtil.spawnLightTypeParticle(LightParticles.HEALLIGHT_PARTICLE, target);
             target.addStatusEffect(new StatusEffectInstance(StatusEffects.REGENERATION, this.duration*20, (int) this.power_multiplier, false, false));
-        }
-        if(caster instanceof ServerPlayerEntity){
-            LightParticlesUtil.spawnHealParticles((ServerPlayerEntity) caster);
         }
     }
 }

@@ -16,5 +16,11 @@
   "sounds": [
     "lightwithin:defense_light"
   ]
-}
+  },
+  "strength_light": {
+    "subtitle": "lightwithin.strength_light_triggered",
+    "sounds": [
+      "lightwithin:strength_light"
+    ]
+  }
 }

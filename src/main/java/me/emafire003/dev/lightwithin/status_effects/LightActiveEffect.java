@@ -3,6 +3,7 @@ package me.emafire003.dev.lightwithin.status_effects;
 import me.emafire003.dev.coloredglowlib.ColoredGlowLib;
 import me.emafire003.dev.coloredglowlib.util.Color;
 import me.emafire003.dev.lightwithin.component.LightComponent;
+import me.emafire003.dev.lightwithin.lights.InnerLight;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.AttributeContainer;
 import net.minecraft.entity.effect.StatusEffect;
@@ -24,6 +25,7 @@ public class LightActiveEffect extends StatusEffect {
     private Color former_color = null;
     private boolean rainbow = false;
     private boolean already_run = false;
+    private InnerLight type;
 
     public LightActiveEffect() {
         super(StatusEffectCategory.BENEFICIAL, 0xF3FF28);

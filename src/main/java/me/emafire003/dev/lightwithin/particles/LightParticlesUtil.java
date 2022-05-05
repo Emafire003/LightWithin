@@ -1,14 +1,14 @@
 package me.emafire003.dev.lightwithin.particles;
 
-import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
-import net.minecraft.client.particle.CloudParticle;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.particle.ParticleType;
+import net.minecraft.particle.DustParticleEffect;
+import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.LiteralText;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
+import net.minecraft.util.math.Vec3f;
+import org.apache.logging.log4j.core.jmx.Server;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -20,36 +20,32 @@ public class LightParticlesUtil {
         spawnDefaultLightParticleColumns(player);
     }
 
-    public static void spawnBallEffect(ServerPlayerEntity player, ParticleType type, int radius, Vec3d center, int amount){
-        double increment = (2 * Math.PI) / amount;
-        ArrayList<Vec3d> locations = new ArrayList<Vec3d>();
-        for (int i = 0; i < amount; i++) {
-            double angle = i * increment;
-            double x = center.getX() + (radius * Math.cos(angle));
-            double y = center.getY() + (radius * Math.cos(angle));
-            double z = center.getZ() + (radius * Math.sin(angle));
-            locations.add(new Vec3d(x, center.getY(), z));
+    public static void spawnLightTypeParticle(ParticleEffect particle, LivingEntity entity){
+        Vec3d pos = entity.getPos().add(0,0.5,0);
+
+        for(int i = 0; i < 360; i++) {
+                if(i % 20 == 0) {
+                    entity.getWorld().addParticle(particle,
+                            pos.getX() + 0.5d, pos.getY() + 1, pos.getZ() + 0.5d,
+                            Math.cos(i) * 0.25d, 0.15d, Math.sin(i) * 0.25d);
+                }
         }
 
     }
 
-    public static void spawnExpandingBallEffect(){
-
-    }
     
     public static void spawnDefaultLightParticleColumns(ServerPlayerEntity player){
         Vec3d pos = player.getPos();
-        double speed = 0.01;
         player.sendMessage(new LiteralText("Ok sending particle"), false);
-        ArrayList<Vec3d> circle = LightParticlesUtil.getCircle(pos, 2, 8, player.getWorld());
+        ArrayList<Vec3d> circle = LightParticlesUtil.getCircle(pos, 2, 8);
         for(Vec3d column_pos : circle){
-            player.getWorld().spawnParticles(player, ParticleTypes.END_ROD, false, column_pos.x, pos.y, column_pos.z, 100, 0, 1.10, 0, (double)speed);
+            player.getWorld().spawnParticles(player, ParticleTypes.END_ROD, false, column_pos.x, pos.y, column_pos.z, 100, 0, 1.10, 0, 0.01);
         }
-        player.getWorld().spawnParticles(player, ParticleTypes.FLASH, false, pos.x, pos.y, pos.z, 2, 0, 0, 0, (double)speed);
+        player.getWorld().spawnParticles(player, ParticleTypes.FLASH, false, pos.x, pos.y, pos.z, 2, 0, 0, 0, 0.01);
 
     }
 
-    public static ArrayList<Vec3d> getCircle(Vec3d center, double radius, int amount, World world) {
+    public static ArrayList<Vec3d> getCircle(Vec3d center, double radius, int amount) {
         double increment = (2 * Math.PI) / amount;
         ArrayList<Vec3d> locations = new ArrayList<Vec3d>();
         for (int i = 0; i < amount; i++) {
@@ -61,52 +57,38 @@ public class LightParticlesUtil {
         return locations;
     }
 
-    public static void spawnEffectParticles(ServerPlayerEntity player){
+    /*public static void spawnRedstoneParticles(World world, BlockPos pos){
+        double d = 0.5625D;
+        Random random = world.random;
+        Direction[] var5 = Direction.values();
+        int var6 = var5.length;
+
+        for(int var7 = 0; var7 < var6; ++var7) {
+            Direction direction = var5[var7];
+            BlockPos blockPos = pos.offset(direction);
+            if (!world.getBlockState(blockPos).isOpaqueFullCube(world, blockPos)) {
+                Direction.Axis axis = direction.getAxis();
+                double e = axis == Direction.Axis.X ? 0.5D + 0.5625D * (double)direction.getOffsetX() : (double)random.nextFloat();
+                double f = axis == Direction.Axis.Y ? 0.5D + 0.5625D * (double)direction.getOffsetY() : (double)random.nextFloat();
+                double g = axis == Direction.Axis.Z ? 0.5D + 0.5625D * (double)direction.getOffsetZ() : (double)random.nextFloat();
+                world.addParticle(DustParticleEffect.DEFAULT, (double)pos.getX() + e, (double)pos.getY() + f, (double)pos.getZ() + g, 0.0D, 0.0D, 0.0D);
+            }
+        }
+    }*/
+
+    public static void spawnEffectParticles(LivingEntity entity){
+        Vec3d pos = entity.getPos();
+        for(int i = 0; i<200; i++){
+            entity.getWorld().addParticle(new DustParticleEffect(new Vec3f(Vec3d.unpackRgb(43758)), 1.0F), (double)pos.getX(), (double)pos.getY(), (double)pos.getZ(), 0.2D, 0.2D, 0.2D);
+        }
+    }
+
+    /*public static void spawnDustParticles(ServerPlayerEntity player){
         Vec3d pos = player.getPos();
         double speed = 0;
-        player.sendMessage(new LiteralText("Ok sending particle_s"), false);
-        ArrayList<Vec3d> spiral_vec = LightParticlesUtil.getSpiral(pos, 1, 200, 0.2, 10, player.getWorld());
-        for(Vec3d spiral : spiral_vec){
-            player.getWorld().spawnParticles(player, ParticleTypes.END_ROD, false, spiral.x, spiral.y, spiral.z, 100, 0, 1.10, 0, (double)speed);
-        }
-    }
-
-    public static void spawnHealParticles(ServerPlayerEntity player){
-        Vec3d pos = player.getPos();
-        double speed = 0.001;
-        player.getWorld().spawnParticles(player, ParticleTypes.HAPPY_VILLAGER, false, pos.x, pos.y+1, pos.z, 100, 0.4, 0.4, 0.4, (double)speed);
-    }
-
-    public static void spawnStrengthParticles(ServerPlayerEntity player){
-        Vec3d pos = player.getPos();
-        double speed = 0.001;
-        player.getWorld().spawnParticles(player, ParticleTypes.CRIMSON_SPORE, false, pos.x, pos.y+0.5, pos.z, 200, 0, 0, 0, (double)speed);
-
-    }
-
-    public static void spawnDefenseParticles(ServerPlayerEntity player){
-        Vec3d pos = player.getPos();
-        double speed = 0.001;
-        player.getWorld().spawnParticles(player, ParticleTypes.ENCHANTED_HIT, false, pos.x, pos.y+0.5, pos.z, 100, 0.125, 0.125, 0.125, (double)speed);
-    }
-
-    public static ArrayList<Vec3d> getSpiral(Vec3d center, double radius, int amount, double y_progression, int n_elements_per_height, World world) {
-        double increment = (2 * Math.PI) / amount;
-        ArrayList<Vec3d> locations = new ArrayList<Vec3d>();
-        int elements_in_height = 0;
-        double y = center.getY();
-        for (int i = 0; i < amount; i++) {
-            elements_in_height++;
-            double angle = i * increment;
-            double x = center.getX() + (radius * Math.cos(angle));
-            double z = center.getZ() + (radius * Math.sin(angle));
-            if(elements_in_height > n_elements_per_height){
-                y = y+y_progression;
-            }
-            locations.add(new Vec3d(x, y, z));
-        }
-        return locations;
-    }
+        //player.getWorld().spawnParticles(player, new Vec3f(Vec3d.unpackRgb(43758)), false, pos.x, pos.y, pos.z, 100, 0, 0, 0, speed);
+        player.getWorld().addParticle(new DustParticleEffect(new Vec3f(Vec3d.unpackRgb(43758)), 1.0F), pos.getX(), pos.getY(), pos.getZ(), 0.0D, 0.0D, 0.0D);
+    }*/
 
     //Generated using ParticleConverter. This is done not only because for me it's easier but also because it doesn't need to calculate each team the position of hunderds of particles.+
     //So it's it's like it has been compiled, performing better

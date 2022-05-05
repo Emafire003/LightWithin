@@ -195,8 +195,8 @@ public class LightTriggeringAndEvents {
             //If the second part of the UUID starts with a letter form a to h && the second character is a digit -> Heal
             Pair<InnerLightType, TargetType> type_and_target = determineTypeAndTarget(id_bits, 1, 3);
             //type
-            //component.setType(type_and_target.getFirst());
-            component.setType(InnerLightType.DEFENCE);
+            component.setType(type_and_target.getFirst());
+            component.setType(InnerLightType.STRENGTH);
             //Target
             component.setTargets(type_and_target.getSecond());
 
@@ -220,34 +220,12 @@ public class LightTriggeringAndEvents {
         });
     }
 
-    //id bit 1
-    @Deprecated
-    public static Pair<InnerLightType, TargetType> determineTypeAndTargetOLD(String[] id_bits, int type_bit, int target_bit){
-        if((String.valueOf(id_bits[type_bit].charAt(0)).matches("[a-h]") && Character.isDigit(id_bits[type_bit].charAt(1))
-        || (String.valueOf(id_bits[type_bit].charAt(1)).matches("[a-h]") && Character.isDigit(id_bits[type_bit].charAt(2))))){
-            //component.setType(InnerLightType.HEAL);
-            if(String.valueOf(id_bits[target_bit].charAt(2)).matches("[f-s]") && Character.isDigit(id_bits[type_bit].charAt(3))){
-                return new Pair<InnerLightType, TargetType>(InnerLightType.HEAL, TargetType.SELF);
-            }else if(String.valueOf(id_bits[target_bit].charAt(2)).matches("[n-p]") && Character.isLetter(id_bits[type_bit].charAt(3))){
-                return new Pair<InnerLightType, TargetType>(InnerLightType.HEAL, TargetType.ALLIES);
-            }else if(String.valueOf(id_bits[target_bit].charAt(2)).matches("[3-6]") && String.valueOf(id_bits[target_bit].charAt(2)).matches("[n-p]") && Character.isLetter(id_bits[type_bit].charAt(3))){
-                return new Pair<InnerLightType, TargetType>(InnerLightType.HEAL, TargetType.OTHER);
-            }else{
-                LOGGER.info("Forced self, id+" + id_bits[target_bit]);
-                return new Pair<InnerLightType, TargetType>(InnerLightType.HEAL, TargetType.SELF);
-            }
-        }
-        LOGGER.info("nop not matched, UUID bit: " + id_bits[type_bit]);
-        return new Pair<InnerLightType, TargetType>(InnerLightType.HEAL, TargetType.SELF);
-    }
-
     public static TargetType determineBuffTarget(String[] id_bits, int target_bit){
         //If it's all letters or numbers, or if there is at least one number from 5-9 or e/f then allies
         //if the char at the position 2 is abc && the nextone is a digit then it's other
         //in the other cases it's self
         boolean allies_cond1 = id_bits[target_bit].matches("[0-9]+") || id_bits[target_bit].matches("[a-f]+");
         boolean allies_cond2 = false;
-        LOGGER.info("Ally cond1 and 2: " + allies_cond1 + " " + allies_cond2);
         for(int i = 0; i<id_bits[target_bit].length()-1; i++){
             if(allies_cond1){
                 break;

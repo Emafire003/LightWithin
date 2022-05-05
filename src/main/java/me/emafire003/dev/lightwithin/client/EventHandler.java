@@ -12,14 +12,12 @@ import me.x150.renderer.renderer.MSAAFramebuffer;
 import me.x150.renderer.renderer.Rectangle;
 import me.x150.renderer.renderer.Renderer2d;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
-import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
+import net.minecraft.block.FallingBlock;
+import net.minecraft.block.RedstoneOreBlock;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.screen.option.KeybindsScreen;
-import net.minecraft.client.input.KeyboardInput;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.option.Perspective;
-import net.minecraft.client.particle.GlowParticle;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.FallingBlockEntity;
 import net.minecraft.util.Identifier;
 
 import static me.emafire003.dev.lightwithin.LightWithin.LOGGER;
@@ -30,9 +28,9 @@ public class EventHandler {
     public static int y = 10;//305;
     //private int counter = 0;
     private boolean heal_runes = false;
-    private int heal_ticks = 0;
     private boolean defense_runes = false;
-    private int defense_ticks = 0;
+    private boolean strength_runes = false;
+    private int ticks = 0;
     int center_x = 0;
     int center_y = 0;
     double scale_factor;
@@ -60,6 +58,11 @@ public class EventHandler {
                     Renderer2d.renderTexture(re.getStack(), new Identifier(LightWithin.MOD_ID, "textures/lights/runes/defense_light_runes.png"), center_x-(400/scale_factor)/2, center_y-(160/scale_factor)/2, (400/scale_factor)*1.2, (160/scale_factor)*1.2);
                     ClipStack.globalInstance.popWindow();
                 }
+                if(strength_runes){
+                    ClipStack.globalInstance.addWindow(re.getStack(),new Rectangle(1,1,1000,1000));
+                    Renderer2d.renderTexture(re.getStack(), new Identifier(LightWithin.MOD_ID, "textures/lights/runes/strength_light_runes.png"), center_x-(400/scale_factor)/2, center_y-(160/scale_factor)/2, (400/scale_factor)*1.2, (160/scale_factor)*1.2);
+                    ClipStack.globalInstance.popWindow();
+                }
             }
         });
     }
@@ -72,6 +75,9 @@ public class EventHandler {
         }else if(type.equals(InnerLightType.DEFENCE)){
             defense_runes = true;
             player.playSound(LightSounds.DEFENSE_LIGHT, 1 ,1);
+        }else if(type.equals(InnerLightType.STRENGTH)){
+            strength_runes = true;
+            player.playSound(LightSounds.STRENGTH_LIGHT, 1 ,1);
         }
     }
 
@@ -81,17 +87,24 @@ public class EventHandler {
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             //This makes the runes appear only for a configured amount of time
             if(heal_runes){
-                heal_ticks++;
-                if(heal_ticks > 20*3){
-                    heal_ticks = 0;
+                ticks++;
+                if(ticks > 20*3){
+                    ticks = 0;
                     heal_runes = false;
                 }
             }
             if(defense_runes){
-                defense_ticks++;
-                if(defense_ticks > 20*3){
-                    defense_ticks = 0;
+                ticks++;
+                if(ticks > 20*3){
+                    ticks = 0;
                     defense_runes = false;
+                }
+            }
+            if(strength_runes){
+                ticks++;
+                if(ticks > 20*3){
+                    ticks = 0;
+                    strength_runes = false;
                 }
             }
         });

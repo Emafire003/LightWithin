@@ -3,6 +3,8 @@ package me.emafire003.dev.lightwithin.client;
 import me.emafire003.dev.lightwithin.lights.InnerLightType;
 import me.emafire003.dev.lightwithin.networking.LightReadyPacketS2C;
 import me.emafire003.dev.lightwithin.networking.RenderRunePacketS2C;
+import me.emafire003.dev.lightwithin.particles.LightParticle;
+import me.emafire003.dev.lightwithin.particles.LightParticles;
 import me.emafire003.dev.lightwithin.sounds.LightSounds;
 import me.x150.renderer.event.Events;
 import net.fabricmc.api.ClientModInitializer;
@@ -10,7 +12,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.minecraft.text.LiteralText;
+import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
 
 import java.util.NoSuchElementException;
 
@@ -31,8 +33,9 @@ public class LightWithinClient implements ClientModInitializer {
        registerRenderRunesPacket();
        Events.registerEventHandlerClass(event_handler);
        event_handler.registerRunesRenderer();
-
-
+       ParticleFactoryRegistry.getInstance().register(LightParticles.HEALLIGHT_PARTICLE, LightParticle.Factory::new);
+       ParticleFactoryRegistry.getInstance().register(LightParticles.DEFENSELIGHT_PARTICLE, LightParticle.Factory::new);
+        ParticleFactoryRegistry.getInstance().register(LightParticles.STRENGTHLIGHT_PARTICLE, LightParticle.Factory::new);
 
        ClientTickEvents.END_CLIENT_TICK.register((minecraftClient -> {
             if(lightReady){

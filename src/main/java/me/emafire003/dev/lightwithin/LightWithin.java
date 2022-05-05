@@ -13,9 +13,10 @@ import me.emafire003.dev.lightwithin.items.LightItems;
 import me.emafire003.dev.lightwithin.lights.DefenseLight;
 import me.emafire003.dev.lightwithin.lights.HealLight;
 import me.emafire003.dev.lightwithin.lights.InnerLightType;
-import me.emafire003.dev.lightwithin.lights.StrenghtLight;
+import me.emafire003.dev.lightwithin.lights.StrengthLight;
 import me.emafire003.dev.lightwithin.networking.LightUsedPacketC2S;
 import me.emafire003.dev.lightwithin.networking.RenderRunePacketS2C;
+import me.emafire003.dev.lightwithin.particles.LightParticles;
 import me.emafire003.dev.lightwithin.sounds.LightSounds;
 import me.emafire003.dev.lightwithin.status_effects.LightEffects;
 import me.emafire003.dev.lightwithin.particles.LightParticlesUtil;
@@ -68,6 +69,7 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 		LWCommandRegister.registerCommands();
 		LightEffects.registerModEffects();
 		LightItems.registerItems();
+		LightParticles.registerParticles();
 
 	}
 
@@ -157,7 +159,7 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 			for(LivingEntity ent : entities){
 				//TODO integration with other mods that implement allies stuff
 				//TODO may need this to prevent bugs
-				if(/*!entity.equals(ent) && */ent.getScoreboardTeam() != null && ent.getScoreboardTeam().isEqual(player.getScoreboardTeam())){
+				if(ent.getScoreboardTeam() != null && ent.getScoreboardTeam().isEqual(player.getScoreboardTeam())){
 					targets.add(ent);
 				}
 			}
@@ -251,7 +253,7 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 		if(debug){
 			player.sendMessage(new LiteralText("Ok light triggered"), false);
 		}
-		new StrenghtLight(targets, component.getMaxCooldown(), component.getPowerMultiplier(),
+		new StrengthLight(targets, component.getMaxCooldown(), component.getPowerMultiplier(),
 				component.getDuration(), player).execute();
 	}
 

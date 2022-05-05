@@ -2,20 +2,20 @@ package me.emafire003.dev.lightwithin.lights;
 
 import me.emafire003.dev.coloredglowlib.ColoredGlowLib;
 import me.emafire003.dev.coloredglowlib.util.Color;
-import me.emafire003.dev.lightwithin.sounds.LightSounds;
+import me.emafire003.dev.lightwithin.particles.LightParticles;
 import me.emafire003.dev.lightwithin.particles.LightParticlesUtil;
+import me.emafire003.dev.lightwithin.sounds.LightSounds;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundCategory;
 
 import java.util.List;
 
 import static me.emafire003.dev.lightwithin.LightWithin.LOGGER;
 
-public class StrenghtLight extends InnerLight {
+public class StrengthLight extends InnerLight {
 
     /*Possible triggers:
        - self low health
@@ -28,18 +28,18 @@ public class StrenghtLight extends InnerLight {
     * - allies
     * - Passive mobs & self*/
 
-    public StrenghtLight(List<LivingEntity> targets, double cooldown_time, double power_multiplier, int duration, Color color, LivingEntity caster, boolean rainbow_col) {
+    public StrengthLight(List<LivingEntity> targets, double cooldown_time, double power_multiplier, int duration, Color color, LivingEntity caster, boolean rainbow_col) {
         super(targets, cooldown_time, power_multiplier, duration, color, caster, rainbow_col);
         type = InnerLightType.STRENGTH;
     }
 
-    public StrenghtLight(List<LivingEntity> targets, double cooldown_time, double power_multiplier, int duration, LivingEntity caster, boolean rainbow_col) {
+    public StrengthLight(List<LivingEntity> targets, double cooldown_time, double power_multiplier, int duration, LivingEntity caster, boolean rainbow_col) {
         super(targets, cooldown_time, power_multiplier, duration, caster, rainbow_col);
         type = InnerLightType.STRENGTH;
         color = new Color(203, 9, 71);
     }
 
-    public StrenghtLight(List<LivingEntity> targets, double cooldown_time, double power_multiplier, int duration, LivingEntity caster) {
+    public StrengthLight(List<LivingEntity> targets, double cooldown_time, double power_multiplier, int duration, LivingEntity caster) {
         super(targets, cooldown_time, power_multiplier, duration, caster);
         type = InnerLightType.STRENGTH;
         color = new Color(203, 9, 71);
@@ -49,20 +49,16 @@ public class StrenghtLight extends InnerLight {
 
     @Override
     public void execute(){
-        LOGGER.info("Executing the stuff!");
-        LOGGER.info("Type: " + this.type + " duration " + this.duration + " power " + this.power_multiplier);
         if(this.rainbow_col){
             ColoredGlowLib.setRainbowColorToEntity(this.caster, true);
         }else{
             ColoredGlowLib.setColorToEntity(this.caster, this.color);
         }
-        caster.getWorld().playSound((PlayerEntity) caster, caster.getBlockPos(), LightSounds.HEAL_LIGHT, SoundCategory.AMBIENT, 1, 1);
+        caster.getWorld().playSound((PlayerEntity) caster, caster.getBlockPos(), LightSounds.STRENGTH_LIGHT, SoundCategory.AMBIENT, 1, 1);
         for(LivingEntity target : this.targets){
-            target.playSound(LightSounds.HEAL_LIGHT, 1, 1);
+            target.playSound(LightSounds.STRENGTH_LIGHT, 1, 1);
+            LightParticlesUtil.spawnLightTypeParticle(LightParticles.STRENGTHLIGHT_PARTICLE, target);
             target.addStatusEffect(new StatusEffectInstance(StatusEffects.RESISTANCE, this.duration*20, (int) this.power_multiplier, false, false));
-        }
-        if(caster instanceof ServerPlayerEntity){
-            LightParticlesUtil.spawnStrengthParticles((ServerPlayerEntity) caster);
         }
     }
 }
