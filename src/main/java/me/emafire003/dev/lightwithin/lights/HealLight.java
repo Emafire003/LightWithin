@@ -10,6 +10,7 @@ import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.text.LiteralText;
 
@@ -51,16 +52,22 @@ public class HealLight extends InnerLight {
     }
 
     private void checkSafety(){
-        if(this.duration > 5 && this.power_multiplier > 3){
-            this.duration = 3;
+        if(this.power_multiplier > 8){
+            this.power_multiplier = 8;
         }
-        if(this.duration > 3 && this.power_multiplier > 5){
-            this.duration = 2;
+        if(this.duration < 4){
+            this.duration = 4;
         }
-        if(this.power_multiplier < 1){
-            power_multiplier = power_multiplier*2;
+        if(this.duration > 6 && this.power_multiplier > 5){
+               this.duration = 6;
+
         }
-        LOGGER.info("Type: " + this.type + " duration " + this.duration + " power " + this.power_multiplier);
+        if(this.duration > 8 && this.power_multiplier > 4){
+            this.duration = 8;
+        }
+        if(this.power_multiplier <= 1){
+            power_multiplier = 2;
+        }
     }
 
 
@@ -74,7 +81,10 @@ public class HealLight extends InnerLight {
         caster.getWorld().playSound((PlayerEntity) caster, caster.getBlockPos(), LightSounds.HEAL_LIGHT, SoundCategory.AMBIENT, 1,1);
         for(LivingEntity target : this.targets){
             target.playSound(LightSounds.HEAL_LIGHT, 1, 1);
-            LightParticlesUtil.spawnLightTypeParticle(LightParticles.HEALLIGHT_PARTICLE, target);
+            if(!caster.getWorld().isClient){
+                LightParticlesUtil.spawnLightTypeParticle(LightParticles.HEALLIGHT_PARTICLE, (ServerWorld) caster.getWorld(), target.getEyePos());
+            }
+            //LightParticlesUtil.spawnLightTypeParticle(LightParticles.HEALLIGHT_PARTICLE, target);
             target.addStatusEffect(new StatusEffectInstance(StatusEffects.REGENERATION, this.duration*20, (int) this.power_multiplier, false, false));
         }
     }

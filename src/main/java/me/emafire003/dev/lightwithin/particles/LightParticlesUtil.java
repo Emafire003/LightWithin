@@ -1,14 +1,15 @@
 package me.emafire003.dev.lightwithin.particles;
 
+import me.emafire003.dev.lightwithin.LightWithin;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.particle.DustParticleEffect;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.LiteralText;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3f;
-import org.apache.logging.log4j.core.jmx.Server;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -20,14 +21,12 @@ public class LightParticlesUtil {
         spawnDefaultLightParticleColumns(player);
     }
 
-    public static void spawnLightTypeParticle(ParticleEffect particle, LivingEntity entity){
-        Vec3d pos = entity.getPos().add(0,0.5,0);
-
+    public static void spawnLightTypeParticle(ParticleEffect particle, ServerWorld world, Vec3d pos){
         for(int i = 0; i < 360; i++) {
                 if(i % 20 == 0) {
-                    entity.getWorld().addParticle(particle,
-                            pos.getX() + 0.5d, pos.getY() + 1, pos.getZ() + 0.5d,
-                            Math.cos(i) * 0.25d, 0.15d, Math.sin(i) * 0.25d);
+                    world.spawnParticles(particle,
+                            pos.getX(), pos.getY()+1, pos.getZ(), 1,
+                            Math.cos(i) * 0.25d, 0.15d, Math.sin(i) * 0.25d, 0.01);
                 }
         }
 

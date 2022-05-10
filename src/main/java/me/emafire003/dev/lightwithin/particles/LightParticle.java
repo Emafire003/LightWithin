@@ -6,6 +6,7 @@ import net.minecraft.client.particle.*;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.particle.DefaultParticleType;
 
+@Deprecated
 public class LightParticle extends SpriteBillboardParticle {
     protected LightParticle(ClientWorld level, double xCoord, double yCoord, double zCoord,
                             SpriteProvider spriteSet, double xd, double yd, double zd) {

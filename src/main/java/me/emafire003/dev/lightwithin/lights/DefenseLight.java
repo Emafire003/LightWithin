@@ -10,6 +10,7 @@ import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 
 import java.util.List;
@@ -46,9 +47,21 @@ public class DefenseLight extends InnerLight {
         color = new Color(67, 128, 60);
     }
 
+    private void checkSafety(){
+        //TODO configable
+        if(this.power_multiplier > 6){
+            power_multiplier = 6;
+        }
+        if(this.power_multiplier > 4 && this.duration > 7){
+            this.duration = 7;
+        }
+        LOGGER.info("Type: " + this.type + " duration " + this.duration + " power " + this.power_multiplier);
+    }
+
 
     @Override
     public void execute(){
+        checkSafety();
         if(this.rainbow_col){
             ColoredGlowLib.setRainbowColorToEntity(this.caster, true);
         }else{
@@ -57,7 +70,10 @@ public class DefenseLight extends InnerLight {
         caster.getWorld().playSound((PlayerEntity) caster, caster.getBlockPos(), LightSounds.DEFENSE_LIGHT, SoundCategory.AMBIENT, 1, 1);
         for(LivingEntity target : this.targets){
             target.playSound(LightSounds.DEFENSE_LIGHT, 1, 1);
-            LightParticlesUtil.spawnLightTypeParticle(LightParticles.DEFENSELIGHT_PARTICLE, target);
+            //LightParticlesUtil.spawnLightTypeParticle(LightParticles.DEFENSELIGHT_PARTICLE, target);
+            if(!caster.getWorld().isClient){
+                LightParticlesUtil.spawnLightTypeParticle(LightParticles.DEFENSELIGHT_PARTICLE, (ServerWorld) caster.getWorld(), target.getEyePos());
+            }
             target.addStatusEffect(new StatusEffectInstance(StatusEffects.RESISTANCE, this.duration*20, (int) this.power_multiplier, false, false));
         }
 

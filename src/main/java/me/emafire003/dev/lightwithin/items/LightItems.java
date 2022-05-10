@@ -14,8 +14,17 @@ import static me.emafire003.dev.lightwithin.LightWithin.LOGGER;
 public class LightItems {
 
     public static final Item LUXINTUS_BERRY = registerItem("luxintus_berry",
+            new LuxintusBerryItem(new FabricItemSettings().rarity(Rarity.EPIC)
+                    .food(new FoodComponent.Builder().alwaysEdible().hunger(5).build()).maxCount(16).group(ItemGroup.FOOD)));
+
+    public static final Item LUXCOGNITA_BERRY = registerItem("luxcognita_berry",
             new LuxintusBerryItem(new FabricItemSettings().rarity(Rarity.RARE)
                     .food(new FoodComponent.Builder().alwaysEdible().hunger(5).build()).maxCount(16).group(ItemGroup.FOOD)));
+
+    public static final Item LUXMUTUA_BERRY = registerItem("luxmutua_berry",
+            new LuxintusBerryItem(new FabricItemSettings().rarity(Rarity.EPIC)
+                    .food(new FoodComponent.Builder().alwaysEdible().hunger(5).build()).maxCount(16).group(ItemGroup.FOOD)));
+
 
     private static Item registerItem(String name, Item item){
         return Registry.register(Registry.ITEM, new Identifier(LightWithin.MOD_ID, name), item);

@@ -9,11 +9,11 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
+import net.minecraft.text.LiteralText;
 
 import java.util.List;
-
-import static me.emafire003.dev.lightwithin.LightWithin.LOGGER;
 
 public class StrengthLight extends InnerLight {
 
@@ -45,10 +45,20 @@ public class StrengthLight extends InnerLight {
         color = new Color(203, 9, 71);
     }
 
+    private void checkSafety(){
+        //TODO configable
+        if(this.power_multiplier > 6){
+            power_multiplier = 6;
+        }
+        if(this.power_multiplier > 4 && this.duration > 7){
+            this.duration = 7;
+        }
+    }
 
 
     @Override
     public void execute(){
+        checkSafety();
         if(this.rainbow_col){
             ColoredGlowLib.setRainbowColorToEntity(this.caster, true);
         }else{
@@ -57,8 +67,11 @@ public class StrengthLight extends InnerLight {
         caster.getWorld().playSound((PlayerEntity) caster, caster.getBlockPos(), LightSounds.STRENGTH_LIGHT, SoundCategory.AMBIENT, 1, 1);
         for(LivingEntity target : this.targets){
             target.playSound(LightSounds.STRENGTH_LIGHT, 1, 1);
-            LightParticlesUtil.spawnLightTypeParticle(LightParticles.STRENGTHLIGHT_PARTICLE, target);
-            target.addStatusEffect(new StatusEffectInstance(StatusEffects.RESISTANCE, this.duration*20, (int) this.power_multiplier, false, false));
+            if(!caster.getWorld().isClient){
+                LightParticlesUtil.spawnLightTypeParticle(LightParticles.STRENGTHLIGHT_PARTICLE, (ServerWorld) caster.getWorld(), target.getEyePos());
+            }
+            //LightParticlesUtil.spawnLightTypeParticle(LightParticles.STRENGTHLIGHT_PARTICLE, target);
+            target.addStatusEffect(new StatusEffectInstance(StatusEffects.STRENGTH, this.duration*20, (int) this.power_multiplier, false, false));
         }
     }
 }

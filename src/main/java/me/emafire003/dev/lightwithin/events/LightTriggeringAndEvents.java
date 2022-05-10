@@ -8,8 +8,11 @@ import me.emafire003.dev.lightwithin.status_effects.LightEffects;
 import me.emafire003.dev.lightwithin.util.TargetType;
 import net.fabricmc.fabric.api.event.player.AttackEntityCallback;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.minecraft.client.particle.TotemParticle;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.passive.PassiveEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.LiteralText;
 import net.minecraft.util.ActionResult;
@@ -36,6 +39,134 @@ public class LightTriggeringAndEvents {
         }
     }
 
+    public static void checkHeal(PlayerEntity player, LightComponent component, Entity entity){
+        if(component.getTargets().equals(TargetType.SELF) && player.getHealth() <= (player.getMaxHealth())*25/100){
+            sendReadyPacket((ServerPlayerEntity) player, true);
+        }else if(component.getTargets().equals(TargetType.ALLIES)){
+            //TODO set dimensions configable
+            List<LivingEntity> entities = player.getWorld().getEntitiesByClass(LivingEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amout), (entity1 -> true));
+            int ent_number = 0;
+            //I need to this to prevent a ConcurrentModificationError
+            List<LivingEntity> team_entities = new ArrayList<>();
+            //loops through the entities near the player, if the entities are in the same team as the player
+            //and they are not the entity that has been hit then add them to the team_entities and check if their health is ok
+            for(LivingEntity ent : entities){
+                //TODO integration with other mods that implement allies stuff
+                if(!entity.equals(ent) && ent.getScoreboardTeam() != null && ent.getScoreboardTeam().isEqual(player.getScoreboardTeam()) ){
+                    if(ent.getHealth() <= (ent.getMaxHealth())*50/100){
+                        ent_number++;
+                    }
+                    team_entities.add(ent);
+                }
+            }
+            //If the total team targets && the number of entities of team with the right health are true then
+            //send the ready packet
+            if(team_entities.size() == ent_number){
+                sendReadyPacket((ServerPlayerEntity) player, true);
+            }
+        }else if(component.getTargets().equals(TargetType.OTHER)){
+            List<PassiveEntity> entities = entity.getWorld().getEntitiesByClass(PassiveEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amout), (entity1 -> true));
+            for(PassiveEntity ent : entities){
+                if(ent.getHealth() <= (ent.getMaxHealth())*50/100){
+                    sendReadyPacket((ServerPlayerEntity) player, true);
+                    break;
+                }
+            }
+        }
+    }
+
+    public static void checkDefense(PlayerEntity player, LightComponent component, Entity entity){
+        if(component.getTargets().equals(TargetType.SELF) && player.getHealth() <= (player.getMaxHealth())*25/100){
+            //CacheSystem.healLightSelf.add(player.getUuid());
+            sendReadyPacket((ServerPlayerEntity) player, true);
+        }else if(component.getTargets().equals(TargetType.ALLIES)){
+            //TODO set dimensions configable
+            List<LivingEntity> entities = player.getWorld().getEntitiesByClass(LivingEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amout), (entity1 -> true));
+            int ent_number = 0;
+            //I need to this to prevent a ConcurrentModificationError
+            List<LivingEntity> team_entities = new ArrayList<>();
+            //loops through the entities near the player, if the entities are in the same team as the player
+            //and they are not the entity that has been hit then add them to the team_entities and check if their health is ok
+            for(LivingEntity ent : entities){
+                //TODO integration with other mods that implement allies stuff
+                if(!entity.equals(ent) && ent.getScoreboardTeam() != null && ent.getScoreboardTeam().isEqual(player.getScoreboardTeam()) ){
+                    if(ent.getHealth() <= (ent.getMaxHealth())*50/100){
+                        ent_number++;
+                    }
+                    team_entities.add(ent);
+                }
+            }
+            //If the total team targets && the number of entities of team with the right health are true then
+            //send the ready packet
+            if(team_entities.size() == ent_number){
+                sendReadyPacket((ServerPlayerEntity) player, true);
+            }
+        }else if(component.getTargets().equals(TargetType.OTHER)){
+            List<PassiveEntity> entities = entity.getWorld().getEntitiesByClass(PassiveEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amout), (entity1 -> true));
+            for(PassiveEntity ent : entities){
+                if(ent.getHealth() <= (ent.getMaxHealth())*50/100){
+                    sendReadyPacket((ServerPlayerEntity) player, true);
+                    break;
+                }
+            }
+        }
+    }
+
+    public static void checkStrength(PlayerEntity player, LightComponent component, Entity entity){
+        if(component.getTargets().equals(TargetType.SELF) && player.getHealth() <= (player.getMaxHealth())*25/100){
+            //CacheSystem.healLightSelf.add(player.getUuid());
+            sendReadyPacket((ServerPlayerEntity) player, true);
+        }else if(component.getTargets().equals(TargetType.ALLIES)){
+            //TODO set dimensions configable
+            List<LivingEntity> entities = player.getWorld().getEntitiesByClass(LivingEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amout), (entity1 -> true));
+            int ent_number = 0;
+            //I need to this to prevent a ConcurrentModificationError
+            List<LivingEntity> team_entities = new ArrayList<>();
+            //loops through the entities near the player, if the entities are in the same team as the player
+            //and they are not the entity that has been hit then add them to the team_entities and check if their health is ok
+            for(LivingEntity ent : entities){
+                //TODO integration with other mods that implement allies stuff
+                if(!entity.equals(ent) && ent.getScoreboardTeam() != null && ent.getScoreboardTeam().isEqual(player.getScoreboardTeam()) ){
+                    if(ent.getHealth() <= (ent.getMaxHealth())*50/100){
+                        ent_number++;
+                    }
+                    team_entities.add(ent);
+                }
+            }
+            //If the total team targets && the number of entities of team with the right health are true then
+            //send the ready packet
+            if(team_entities.size() == ent_number){
+                sendReadyPacket((ServerPlayerEntity) player, true);
+            }
+        }else if(component.getTargets().equals(TargetType.OTHER)){
+            List<PassiveEntity> entities = entity.getWorld().getEntitiesByClass(PassiveEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amout), (entity1 -> true));
+            for(PassiveEntity ent : entities){
+                if(ent.getHealth() <= (ent.getMaxHealth())*50/100){
+                    sendReadyPacket((ServerPlayerEntity) player, true);
+                    break;
+                }
+            }
+        }
+    }
+
+    /**Checks if you can trigger the light or not
+     * */
+    public static boolean isTriggerable(PlayerEntity player){
+        if(player.getWorld().isClient){
+            return false;
+        }
+        if(LIGHT_COMPONENT.get(player).getType().equals(InnerLightType.NONE)){
+            return false;
+        }
+        if(player.hasStatusEffect(LightEffects.LIGHT_FATIGUE)){
+            return false;
+        }
+        if(player.hasStatusEffect(LightEffects.LIGHT_ACTIVE)){
+            return false;
+        }
+        return true;
+    }
+
     public static void registerListeners(){
         LOGGER.info("Registering events listeners");
         //From nbt gets type, then gets the variables need for the type. Aka
@@ -45,130 +176,37 @@ public class LightTriggeringAndEvents {
 
         //this works
         //TODO lights could be levelled up maybe
+        EntityAttackEntityEvent.EVENT.register(((attacker, target) -> {
+            LOGGER.info(attacker + " is attacking " + target + "!");
+            if(!(attacker instanceof PlayerEntity)){
+                return;
+            }
+            PlayerEntity player = (PlayerEntity) attacker;
+            if(!isTriggerable(player)){
+                return;
+            }
+            LightComponent component = LIGHT_COMPONENT.get(player);
+            if(component.getType().equals(InnerLightType.HEAL)){
+                checkHeal(player, component, target);
+            }
+            if(component.getType().equals(InnerLightType.DEFENCE)){
+                checkDefense(player, component, target);
+            }
+        }));
+
         AttackEntityCallback.EVENT.register((player, world, hand, entity, hitResult) ->{
-            if(world.isClient){
+            if(!isTriggerable(player)){
                 return ActionResult.PASS;
             }
             LightComponent component = LIGHT_COMPONENT.get(player);
-            if(component.getType().equals(InnerLightType.NONE)){
-                return ActionResult.PASS;
-            }
-            if(player.hasStatusEffect(LightEffects.LIGHT_FATIGUE)){
-                return ActionResult.PASS;
-            }
-
             //=======================HEAL LIGHT=======================
             /*
             sends the ready packet only if the player has less than 75% health and is heal.self
             if all of the allies have less tha 50% and heal.allies
             if at least one passive mob has 50% or less health and heal.other
              */
-            if(component.getType().equals(InnerLightType.HEAL)){
-                if(component.getTargets().equals(TargetType.SELF) && player.getHealth() <= (player.getMaxHealth())*25/100){
-                    sendReadyPacket((ServerPlayerEntity) player, true);
-                }else if(component.getTargets().equals(TargetType.ALLIES)){
-                    //TODO set dimensions configable
-                    List<LivingEntity> entities = player.getWorld().getEntitiesByClass(LivingEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amout), (entity1 -> true));
-                    int ent_number = 0;
-                    //I need to this to prevent a ConcurrentModificationError
-                    List<LivingEntity> team_entities = new ArrayList<>();
-                    //loops through the entities near the player, if the entities are in the same team as the player
-                    //and they are not the entity that has been hit then add them to the team_entities and check if their health is ok
-                    for(LivingEntity ent : entities){
-                        //TODO integration with other mods that implement allies stuff
-                        if(!entity.equals(ent) && ent.getScoreboardTeam() != null && ent.getScoreboardTeam().isEqual(player.getScoreboardTeam()) ){
-                            if(ent.getHealth() <= (ent.getMaxHealth())*50/100){
-                                ent_number++;
-                            }
-                            team_entities.add(ent);
-                        }
-                    }
-                    //If the total team targets && the number of entities of team with the right health are true then
-                    //send the ready packet
-                    if(team_entities.size() == ent_number){
-                        sendReadyPacket((ServerPlayerEntity) player, true);
-                    }
-                }else if(component.getTargets().equals(TargetType.OTHER)){
-                    List<PassiveEntity> entities = world.getEntitiesByClass(PassiveEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amout), (entity1 -> true));
-                    for(PassiveEntity ent : entities){
-                        if(ent.getHealth() <= (ent.getMaxHealth())*50/100){
-                            sendReadyPacket((ServerPlayerEntity) player, true);
-                            break;
-                        }
-                    }
-                }
-            }
-            if(component.getType().equals(InnerLightType.DEFENCE)){
-                if(component.getTargets().equals(TargetType.SELF) && player.getHealth() <= (player.getMaxHealth())*25/100){
-                    //CacheSystem.healLightSelf.add(player.getUuid());
-                    sendReadyPacket((ServerPlayerEntity) player, true);
-                }else if(component.getTargets().equals(TargetType.ALLIES)){
-                    //TODO set dimensions configable
-                    List<LivingEntity> entities = player.getWorld().getEntitiesByClass(LivingEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amout), (entity1 -> true));
-                    int ent_number = 0;
-                    //I need to this to prevent a ConcurrentModificationError
-                    List<LivingEntity> team_entities = new ArrayList<>();
-                    //loops through the entities near the player, if the entities are in the same team as the player
-                    //and they are not the entity that has been hit then add them to the team_entities and check if their health is ok
-                    for(LivingEntity ent : entities){
-                        //TODO integration with other mods that implement allies stuff
-                        if(!entity.equals(ent) && ent.getScoreboardTeam() != null && ent.getScoreboardTeam().isEqual(player.getScoreboardTeam()) ){
-                            if(ent.getHealth() <= (ent.getMaxHealth())*50/100){
-                                ent_number++;
-                            }
-                            team_entities.add(ent);
-                        }
-                    }
-                    //If the total team targets && the number of entities of team with the right health are true then
-                    //send the ready packet
-                    if(team_entities.size() == ent_number){
-                        sendReadyPacket((ServerPlayerEntity) player, true);
-                    }
-                }else if(component.getTargets().equals(TargetType.OTHER)){
-                    List<PassiveEntity> entities = world.getEntitiesByClass(PassiveEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amout), (entity1 -> true));
-                    for(PassiveEntity ent : entities){
-                        if(ent.getHealth() <= (ent.getMaxHealth())*50/100){
-                            sendReadyPacket((ServerPlayerEntity) player, true);
-                            break;
-                        }
-                    }
-                }
-            }
             if(component.getType().equals(InnerLightType.STRENGTH)){
-                if(component.getTargets().equals(TargetType.SELF) && player.getHealth() <= (player.getMaxHealth())*25/100){
-                    //CacheSystem.healLightSelf.add(player.getUuid());
-                    sendReadyPacket((ServerPlayerEntity) player, true);
-                }else if(component.getTargets().equals(TargetType.ALLIES)){
-                    //TODO set dimensions configable
-                    List<LivingEntity> entities = player.getWorld().getEntitiesByClass(LivingEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amout), (entity1 -> true));
-                    int ent_number = 0;
-                    //I need to this to prevent a ConcurrentModificationError
-                    List<LivingEntity> team_entities = new ArrayList<>();
-                    //loops through the entities near the player, if the entities are in the same team as the player
-                    //and they are not the entity that has been hit then add them to the team_entities and check if their health is ok
-                    for(LivingEntity ent : entities){
-                        //TODO integration with other mods that implement allies stuff
-                        if(!entity.equals(ent) && ent.getScoreboardTeam() != null && ent.getScoreboardTeam().isEqual(player.getScoreboardTeam()) ){
-                            if(ent.getHealth() <= (ent.getMaxHealth())*50/100){
-                                ent_number++;
-                            }
-                            team_entities.add(ent);
-                        }
-                    }
-                    //If the total team targets && the number of entities of team with the right health are true then
-                    //send the ready packet
-                    if(team_entities.size() == ent_number){
-                        sendReadyPacket((ServerPlayerEntity) player, true);
-                    }
-                }else if(component.getTargets().equals(TargetType.OTHER)){
-                    List<PassiveEntity> entities = world.getEntitiesByClass(PassiveEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amout), (entity1 -> true));
-                    for(PassiveEntity ent : entities){
-                        if(ent.getHealth() <= (ent.getMaxHealth())*50/100){
-                            sendReadyPacket((ServerPlayerEntity) player, true);
-                            break;
-                        }
-                    }
-                }
+                checkStrength(player, component, entity);
             }
             return ActionResult.PASS;
         } );
@@ -196,7 +234,6 @@ public class LightTriggeringAndEvents {
             Pair<InnerLightType, TargetType> type_and_target = determineTypeAndTarget(id_bits, 1, 3);
             //type
             component.setType(type_and_target.getFirst());
-            component.setType(InnerLightType.STRENGTH);
             //Target
             component.setTargets(type_and_target.getSecond());
 
@@ -290,6 +327,7 @@ public class LightTriggeringAndEvents {
                     return 10+10*Character.getNumericValue(id_bits[string_bit].charAt(i));
                 }
             }
+
         }
         return 90;
     }
@@ -300,13 +338,14 @@ public class LightTriggeringAndEvents {
         for(int i = 0; i<id_bits[string_bit].length(); i++){
             if(Character.isDigit(id_bits[string_bit].charAt(i))){
                 if(Character.getNumericValue(id_bits[string_bit].charAt(i)) == 0){
-                    return 3;
+                    return 12;
                 }else{
-                    return Character.getNumericValue(id_bits[string_bit].charAt(i));
+                    //1 2 4 5 6 7 8 10 11
+                    return (int) (Character.getNumericValue(id_bits[string_bit].charAt(i))*2);
                 }
             }
         }
-        return 5;
+        return 9;
     }
 
 
