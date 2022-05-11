@@ -27,9 +27,9 @@ public class LuxcognitaBerryItem extends Item {
         if(user instanceof ServerPlayerEntity){
             //TODO make cooldown bypassable in config
             if(user instanceof PlayerEntity){
-
                 LightComponent component = LightWithin.LIGHT_COMPONENT.get(user);
                 InnerLightType type = component.getType();
+                user.playSound(LightSounds.LIGHT_READY, 1, 0.8f);
                 if(type.equals(InnerLightType.NONE)){
                     ((ServerPlayerEntity) user).sendMessage(new LiteralText("Uhm... your light is... an error? Light not found, report please! "), true);
                 }else if(type.equals(InnerLightType.HEAL)){

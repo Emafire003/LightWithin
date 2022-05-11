@@ -27,7 +27,6 @@ public class ActivationKey {
     public static void update(MinecraftClient client) {
         if (client.player != null) {
             if (lightActivationKey.wasPressed()) {
-                client.player.sendMessage(new LiteralText("Yep it did work, " + LightWithinClient.isLightReady()), true);
                 if(LightWithinClient.isLightReady()){
                     ClientPlayNetworking.send(LightUsedPacketC2S.ID, new LightUsedPacketC2S(true));
                     LightWithinClient.setLightReady(false);

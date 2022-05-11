@@ -5,6 +5,7 @@ import me.emafire003.dev.lightwithin.networking.LightReadyPacketS2C;
 import me.emafire003.dev.lightwithin.networking.RenderRunePacketS2C;
 import me.emafire003.dev.lightwithin.particles.LightParticle;
 import me.emafire003.dev.lightwithin.particles.LightParticleV2;
+import me.emafire003.dev.lightwithin.particles.LightParticleV3;
 import me.emafire003.dev.lightwithin.particles.LightParticles;
 import me.emafire003.dev.lightwithin.sounds.LightSounds;
 import me.x150.renderer.event.Events;
@@ -34,9 +35,9 @@ public class LightWithinClient implements ClientModInitializer {
        registerRenderRunesPacket();
        Events.registerEventHandlerClass(event_handler);
        event_handler.registerRunesRenderer();
-       ParticleFactoryRegistry.getInstance().register(LightParticles.HEALLIGHT_PARTICLE, LightParticleV2.Factory::new);
-       ParticleFactoryRegistry.getInstance().register(LightParticles.DEFENSELIGHT_PARTICLE, LightParticleV2.Factory::new);
-       ParticleFactoryRegistry.getInstance().register(LightParticles.STRENGTHLIGHT_PARTICLE, LightParticleV2.Factory::new);
+       ParticleFactoryRegistry.getInstance().register(LightParticles.HEALLIGHT_PARTICLE, LightParticleV3.Factory::new);
+       ParticleFactoryRegistry.getInstance().register(LightParticles.DEFENSELIGHT_PARTICLE, LightParticleV3.Factory::new);
+       ParticleFactoryRegistry.getInstance().register(LightParticles.STRENGTHLIGHT_PARTICLE, LightParticleV3.Factory::new);
 
        ClientTickEvents.END_CLIENT_TICK.register((minecraftClient -> {
             if(lightReady){

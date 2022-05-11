@@ -18,11 +18,11 @@ public class LightItems {
                     .food(new FoodComponent.Builder().alwaysEdible().hunger(5).build()).maxCount(16).group(ItemGroup.FOOD)));
 
     public static final Item LUXCOGNITA_BERRY = registerItem("luxcognita_berry",
-            new LuxintusBerryItem(new FabricItemSettings().rarity(Rarity.RARE)
+            new LuxcognitaBerryItem(new FabricItemSettings().rarity(Rarity.RARE)
                     .food(new FoodComponent.Builder().alwaysEdible().hunger(5).build()).maxCount(16).group(ItemGroup.FOOD)));
 
     public static final Item LUXMUTUA_BERRY = registerItem("luxmutua_berry",
-            new LuxintusBerryItem(new FabricItemSettings().rarity(Rarity.EPIC)
+            new LuxmutuaBerryItem(new FabricItemSettings().rarity(Rarity.EPIC)
                     .food(new FoodComponent.Builder().alwaysEdible().hunger(5).build()).maxCount(16).group(ItemGroup.FOOD)));
 
 

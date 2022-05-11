@@ -26,19 +26,37 @@ public class LuxmutuaBerryItem extends Item {
                 return this.isFood() ? user.eatFood(world, stack) : stack;
             }
             LightComponent component = LightWithin.LIGHT_COMPONENT.get(user);
-            int r = user.getRandom().nextInt(2);
-            if(r == 0){
-                component.setType(InnerLightType.HEAL);
+            InnerLightType current = component.getType();
+            InnerLightType newone = genNewLight((ServerPlayerEntity) user);
+            if(newone.equals(InnerLightType.NONE)){
+                return stack;
             }
-            else if(r == 1){
-                component.setType(InnerLightType.DEFENCE);
+            while (current.equals(newone)){
+                newone = genNewLight((ServerPlayerEntity) user);
+                if(newone.equals(InnerLightType.NONE)){
+                    return stack;
+                }
             }
-            else if(r == 2){
-                component.setType(InnerLightType.STRENGTH);
-            }
+            component.setType(newone);
             //TODO config
             ((ServerPlayerEntity) user).sendMessage(new LiteralText("Your, light resonated with you again and decided it was time to change"), true);
         }
         return this.isFood() ? user.eatFood(world, stack) : stack;
+    }
+
+    public InnerLightType genNewLight(ServerPlayerEntity player){
+        int r = player.getRandom().nextInt(3);
+        if(r == 0){
+            return InnerLightType.HEAL;
+        }
+        else if(r == 1){
+            return InnerLightType.DEFENCE;
+        }
+        else if(r == 2){
+            return InnerLightType.STRENGTH;
+        }else{
+            player.sendMessage(new LiteralText("There was an error, sorry. " + r), false);
+            return InnerLightType.NONE;
+        }
     }
 }

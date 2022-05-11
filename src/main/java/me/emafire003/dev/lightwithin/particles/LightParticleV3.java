@@ -9,15 +9,14 @@ import net.minecraft.client.particle.SpriteProvider;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.particle.DefaultParticleType;
 
-@Deprecated
 @Environment(EnvType.CLIENT)
-public class LightParticleV2 extends AnimatedParticle {
-    LightParticleV2(ClientWorld world, double x, double y, double z, double velocityX, double velocityY, double velocityZ, SpriteProvider spriteProvider) {
-        super(world, x, y, z, spriteProvider, 1.25F);
+public class LightParticleV3 extends AnimatedParticle {
+    LightParticleV3(ClientWorld world, double x, double y, double z, double velocityX, double velocityY, double velocityZ, SpriteProvider spriteProvider) {
+        super(world, x, y, z, spriteProvider, -1.75F);
         this.velocityMultiplier = 0.6F;
-        this.velocityX = velocityX;
+        this.velocityX = velocityX*0.1;
         this.velocityY = velocityY;
-        this.velocityZ = velocityZ;
+        this.velocityZ = velocityZ*0.1;
         this.scale *= 0.75F;
         this.maxAge = 60 + this.random.nextInt(12);
         this.setSpriteForAge(spriteProvider);
@@ -41,7 +40,7 @@ public class LightParticleV2 extends AnimatedParticle {
         }
 
         public Particle createParticle(DefaultParticleType defaultParticleType, ClientWorld clientWorld, double d, double e, double f, double g, double h, double i) {
-            return new LightParticleV2(clientWorld, d, e, f, g, h, i, this.spriteProvider);
+            return new LightParticleV3(clientWorld, d, e, f, g, h, i, this.spriteProvider);
         }
     }
 }

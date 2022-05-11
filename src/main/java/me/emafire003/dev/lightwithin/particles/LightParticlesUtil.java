@@ -22,13 +22,17 @@ public class LightParticlesUtil {
     }
 
     public static void spawnLightTypeParticle(ParticleEffect particle, ServerWorld world, Vec3d pos){
-        for(int i = 0; i < 360; i++) {
+        /*for(int i = 0; i < 360; i++) {
                 if(i % 20 == 0) {
                     world.spawnParticles(particle,
-                            pos.getX(), pos.getY()+1, pos.getZ(), 1,
+                            pos.getX(), pos.getY(), pos.getZ(), 1,
                             Math.cos(i) * 0.25d, 0.15d, Math.sin(i) * 0.25d, 0.01);
                 }
-        }
+        }*/
+        world.spawnParticles(particle,
+                pos.getX(), pos.getY(), pos.getZ(), 50,
+                0.25, 0.15d, 0.25, 0.2);
+
 
     }
 

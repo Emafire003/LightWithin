@@ -19,8 +19,10 @@ public enum InnerLightType {
     SLOW,
     ENDER_AURA,
     PROJECTILE,
+    SPIDER_SENSE,//scale up walls?
     SCATTER, //Maybe explodes taking some of the player's hp and scattering projectiles?
     JUMPY, //Check if there are blocks too high and the player needs. I dunno. Something? Maybe only when in combat?
+    FIREFLIES_MASTER, //Welp, not coming with 1.19 sooooo. It's gonna shoot out firefiles that attack or explode
     GENERIC,
     NONE
 }

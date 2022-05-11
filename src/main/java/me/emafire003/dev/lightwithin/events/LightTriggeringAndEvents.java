@@ -12,6 +12,7 @@ import net.minecraft.client.particle.TotemParticle;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.passive.PassiveEntity;
+import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.LiteralText;
@@ -57,6 +58,14 @@ public class LightTriggeringAndEvents {
                         ent_number++;
                     }
                     team_entities.add(ent);
+                }else
+                if(ent instanceof TameableEntity){
+                    if(((TameableEntity) ent).getOwner().equals(player)){
+                        if(ent.getHealth() <= (ent.getMaxHealth())*50/100){
+                            ent_number++;
+                        }
+                        team_entities.add(ent);
+                    }
                 }
             }
             //If the total team targets && the number of entities of team with the right health are true then
@@ -94,6 +103,21 @@ public class LightTriggeringAndEvents {
                         ent_number++;
                     }
                     team_entities.add(ent);
+                }else
+                if(ent instanceof TameableEntity){
+                    ((TameableEntity) ent).getOwner().equals(player);
+                    if(ent.getHealth() <= (ent.getMaxHealth())*50/100){
+                        ent_number++;
+                    }
+                    team_entities.add(ent);
+                }else
+                if(ent instanceof TameableEntity){
+                    if(((TameableEntity) ent).getOwner().equals(player)){
+                        if(ent.getHealth() <= (ent.getMaxHealth())*50/100){
+                            ent_number++;
+                        }
+                        team_entities.add(ent);
+                    }
                 }
             }
             //If the total team targets && the number of entities of team with the right health are true then
@@ -131,6 +155,14 @@ public class LightTriggeringAndEvents {
                         ent_number++;
                     }
                     team_entities.add(ent);
+                }else
+                if(ent instanceof TameableEntity){
+                    if(((TameableEntity) ent).getOwner().equals(player)){
+                        if(ent.getHealth() <= (ent.getMaxHealth())*50/100){
+                            ent_number++;
+                        }
+                        team_entities.add(ent);
+                    }
                 }
             }
             //If the total team targets && the number of entities of team with the right health are true then
@@ -176,24 +208,26 @@ public class LightTriggeringAndEvents {
 
         //this works
         //TODO lights could be levelled up maybe
+
+        //Player being attacked by something
         EntityAttackEntityEvent.EVENT.register(((attacker, target) -> {
-            LOGGER.info(attacker + " is attacking " + target + "!");
-            if(!(attacker instanceof PlayerEntity)){
+            if(!(target instanceof PlayerEntity)){
                 return;
             }
-            PlayerEntity player = (PlayerEntity) attacker;
+            PlayerEntity player = (PlayerEntity) target;
             if(!isTriggerable(player)){
                 return;
             }
             LightComponent component = LIGHT_COMPONENT.get(player);
             if(component.getType().equals(InnerLightType.HEAL)){
-                checkHeal(player, component, target);
+                checkHeal(player, component, attacker);
             }
             if(component.getType().equals(InnerLightType.DEFENCE)){
-                checkDefense(player, component, target);
+                checkDefense(player, component, attacker);
             }
         }));
 
+        //Player attacking something
         AttackEntityCallback.EVENT.register((player, world, hand, entity, hitResult) ->{
             if(!isTriggerable(player)){
                 return ActionResult.PASS;
@@ -208,6 +242,7 @@ public class LightTriggeringAndEvents {
             if(component.getType().equals(InnerLightType.STRENGTH)){
                 checkStrength(player, component, entity);
             }
+            LOGGER.info("Ok what the fuck is happening?");
             return ActionResult.PASS;
         } );
 
@@ -234,13 +269,9 @@ public class LightTriggeringAndEvents {
             Pair<InnerLightType, TargetType> type_and_target = determineTypeAndTarget(id_bits, 1, 3);
             //type
             component.setType(type_and_target.getFirst());
+            component.setType(InnerLightType.HEAL);
             //Target
             component.setTargets(type_and_target.getSecond());
-
-            //this saves the player data onto the cache so it will be easier to get it later
-            cache.put(player.getUuid(), type_and_target);
-
-            LOGGER.info("Welp, type and target and UUID: " + cache);
 
             //Cooldown Bit
             //The max cooldown is 100

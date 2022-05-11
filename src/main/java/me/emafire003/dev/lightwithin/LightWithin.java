@@ -6,7 +6,6 @@ import dev.onyxstudios.cca.api.v3.entity.EntityComponentFactoryRegistry;
 import dev.onyxstudios.cca.api.v3.entity.EntityComponentInitializer;
 import dev.onyxstudios.cca.api.v3.entity.RespawnCopyStrategy;
 import me.emafire003.dev.coloredglowlib.ColoredGlowLib;
-import me.emafire003.dev.lightwithin.commands.LWCommandRegister;
 import me.emafire003.dev.lightwithin.component.LightComponent;
 import me.emafire003.dev.lightwithin.events.LightTriggeringAndEvents;
 import me.emafire003.dev.lightwithin.items.LightItems;
@@ -26,6 +25,8 @@ import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.passive.PassiveEntity;
+import net.minecraft.entity.passive.TameableEntity;
+import net.minecraft.entity.passive.WolfEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.LiteralText;
 import net.minecraft.util.Identifier;
@@ -66,7 +67,6 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 		LightTriggeringAndEvents.registerListeners();
 		registerLightUsedPacket();
 		LightSounds.registerSounds();
-		LWCommandRegister.registerCommands();
 		LightEffects.registerModEffects();
 		LightItems.registerItems();
 		LightParticles.registerParticles();
@@ -162,6 +162,10 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 				//TODO may need this to prevent bugs
 				if(ent.getScoreboardTeam() != null && ent.getScoreboardTeam().isEqual(player.getScoreboardTeam())){
 					targets.add(ent);
+				}else if(ent instanceof TameableEntity){
+					if(((TameableEntity) ent).getOwner().equals(player)){
+						targets.add(ent);
+					}
 				}
 			}
 			player.sendMessage(new LiteralText("Your light flowed trough you and your allies, sewing your wounds!"), true);
@@ -205,6 +209,10 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 				//TODO may need this to prevent bugs
 				if(/*!entity.equals(ent) && */ent.getScoreboardTeam() != null && ent.getScoreboardTeam().isEqual(player.getScoreboardTeam())){
 					targets.add(ent);
+				}else if(ent instanceof TameableEntity){
+					if(((TameableEntity) ent).getOwner().equals(player)){
+						targets.add(ent);
+					}
 				}
 			}
 			player.sendMessage(new LiteralText("Your light tensed up, shielding your allies from an hurtful future!"), true);
@@ -247,6 +255,10 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 				//TODO may need this to prevent bugs
 				if(/*!entity.equals(ent) && */ent.getScoreboardTeam() != null && ent.getScoreboardTeam().isEqual(player.getScoreboardTeam())){
 					targets.add(ent);
+				}else if(ent instanceof TameableEntity){
+					if(((TameableEntity) ent).getOwner().equals(player)){
+						targets.add(ent);
+					}
 				}
 			}
 			player.sendMessage(new LiteralText("Your light shone bright, strengthening your allies!"), true);
@@ -261,6 +273,8 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 			targets.addAll(player.getWorld().getEntitiesByClass(PassiveEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amout), (entity1 -> true)));
 			player.sendMessage(new LiteralText("Your light shone bright, strengthening peaceful creatures around you!"), true);
 		}
+
+
 		if(debug){
 			player.sendMessage(new LiteralText("Ok light triggered"), false);
 		}
