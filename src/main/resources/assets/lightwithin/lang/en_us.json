@@ -4,5 +4,9 @@
   "effect.lightwithin.light_active": "Light Active",
   "item.lightwithin.luxintus_berry": "Luxintus Berry",
   "item.lightwithin.luxmutua_berry": "Luxmutua Berry",
-  "item.lightwithin.luxcognita_berry": "Luxcognita Berry"
+  "item.lightwithin.luxcognita_berry": "Luxcognita Berry",
+  "item.lightwithin.berry.tooltip": "Press §dSHIFT§r to know what this berry does!",
+  "item.lightwithin.luxintus_berry.tooltip": "§eThis light-dense berry will §aunleash§r your §binner light§r!",
+  "item.lightwithin.luxmutua_berry.tooltip": "§eThe ever-twisting light of this berry will §achange§r your §binner light§r!",
+  "item.lightwithin.luxcognita_berry.tooltip": "§eThe knowing light of this berry will §atell you the secrets§r of your §binner light§r!"
 }

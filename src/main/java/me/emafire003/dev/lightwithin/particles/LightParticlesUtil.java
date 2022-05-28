@@ -39,12 +39,11 @@ public class LightParticlesUtil {
     
     public static void spawnDefaultLightParticleColumns(ServerPlayerEntity player){
         Vec3d pos = player.getPos();
-        player.sendMessage(new LiteralText("Ok sending particle"), false);
         ArrayList<Vec3d> circle = LightParticlesUtil.getCircle(pos, 2, 8);
         for(Vec3d column_pos : circle){
             player.getWorld().spawnParticles(player, ParticleTypes.END_ROD, false, column_pos.x, pos.y, column_pos.z, 100, 0, 1.10, 0, 0.01);
         }
-        player.getWorld().spawnParticles(player, ParticleTypes.FLASH, false, pos.x, pos.y, pos.z, 2, 0, 0, 0, 0.01);
+        player.getWorld().spawnParticles(player, ParticleTypes.FLASH, false, pos.x, pos.y, pos.z, 3, 0, 0, 0, 0.01);
 
     }
 

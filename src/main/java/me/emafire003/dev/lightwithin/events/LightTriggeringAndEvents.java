@@ -53,7 +53,7 @@ public class LightTriggeringAndEvents {
             //and they are not the entity that has been hit then add them to the team_entities and check if their health is ok
             for(LivingEntity ent : entities){
                 //TODO integration with other mods that implement allies stuff
-                if(!entity.equals(ent) && ent.getScoreboardTeam() != null && ent.getScoreboardTeam().isEqual(player.getScoreboardTeam()) ){
+                if(!entity.equals(ent) && ent.getScoreboardTeam() != null && ent.isTeammate(player) ){
                     if(ent.getHealth() <= (ent.getMaxHealth())*50/100){
                         ent_number++;
                     }
@@ -98,7 +98,7 @@ public class LightTriggeringAndEvents {
             //and they are not the entity that has been hit then add them to the team_entities and check if their health is ok
             for(LivingEntity ent : entities){
                 //TODO integration with other mods that implement allies stuff
-                if(!entity.equals(ent) && ent.getScoreboardTeam() != null && ent.getScoreboardTeam().isEqual(player.getScoreboardTeam()) ){
+                if(!entity.equals(ent) && ent.getScoreboardTeam() != null && ent.isTeammate(player) ){
                     if(ent.getHealth() <= (ent.getMaxHealth())*50/100){
                         ent_number++;
                     }
@@ -150,7 +150,7 @@ public class LightTriggeringAndEvents {
             //and they are not the entity that has been hit then add them to the team_entities and check if their health is ok
             for(LivingEntity ent : entities){
                 //TODO integration with other mods that implement allies stuff
-                if(!entity.equals(ent) && ent.getScoreboardTeam() != null && ent.getScoreboardTeam().isEqual(player.getScoreboardTeam()) ){
+                if(!entity.equals(ent) && ent.getScoreboardTeam() != null && ent.isTeammate(player) ){
                     if(ent.getHealth() <= (ent.getMaxHealth())*50/100){
                         ent_number++;
                     }
@@ -199,32 +199,56 @@ public class LightTriggeringAndEvents {
         return true;
     }
 
+    public static void entityAttackEntityTriggerCheck(PlayerEntity player, LivingEntity attacker){
+        if(!isTriggerable(player)){
+            return;
+        }
+        LightComponent component = LIGHT_COMPONENT.get(player);
+        if(component.getType().equals(InnerLightType.HEAL)){
+            checkHeal(player, component, attacker);
+        }
+        if(component.getType().equals(InnerLightType.DEFENCE)){
+            checkDefense(player, component, attacker);
+        }
+    }
+
     public static void registerListeners(){
         LOGGER.info("Registering events listeners");
-        //From nbt gets type, then gets the variables need for the type. Aka
-        //if type == Heal
-        //get cool down, get thing ecc
-        //Also, set nbt boolean "LightReady" that will also show up in thw HUD
 
         //this works
         //TODO lights could be levelled up maybe
 
         //Player being attacked by something
         EntityAttackEntityEvent.EVENT.register(((attacker, target) -> {
-            if(!(target instanceof PlayerEntity)){
+            //Checks if someone is attacked and if they are the one getting attacked
+            if(target instanceof PlayerEntity){
+                entityAttackEntityTriggerCheck((PlayerEntity) target, attacker);
                 return;
             }
-            PlayerEntity player = (PlayerEntity) target;
-            if(!isTriggerable(player)){
+            if(target instanceof TameableEntity){
+                if(((TameableEntity) target).getOwner() instanceof PlayerEntity){
+                    entityAttackEntityTriggerCheck((PlayerEntity) ((TameableEntity) target).getOwner(), attacker);
+                }
                 return;
             }
-            LightComponent component = LIGHT_COMPONENT.get(player);
-            if(component.getType().equals(InnerLightType.HEAL)){
-                checkHeal(player, component, attacker);
+            if(target.getScoreboardTeam() != null){
+                List<PlayerEntity> entities = target.getWorld().getEntitiesByClass(PlayerEntity.class, new Box(target.getBlockPos()).expand(box_expansion_amout), (entity1 -> true));
+                for(PlayerEntity p : entities){
+                    if(p.isTeammate(target) && !p.equals(target)){
+                        entityAttackEntityTriggerCheck(p, attacker);
+                    }
+                }
             }
-            if(component.getType().equals(InnerLightType.DEFENCE)){
-                checkDefense(player, component, attacker);
+            if(target instanceof PassiveEntity){
+                List<PlayerEntity> entities = target.getWorld().getEntitiesByClass(PlayerEntity.class, new Box(target.getBlockPos()).expand(box_expansion_amout), (entity1 -> true));
+                for(PlayerEntity p : entities){
+                    if(!p.equals(target)){
+                        entityAttackEntityTriggerCheck(p, attacker);
+                    }
+                }
             }
+
+
         }));
 
         //Player attacking something
@@ -257,8 +281,7 @@ public class LightTriggeringAndEvents {
             LightComponent component = LIGHT_COMPONENT.get(player);
             String id = player.getUuidAsString().toLowerCase();
             //3eec9f18-1d0e-3f17-917c-6994e7d034d1
-            //TODO remove
-            component.clear();
+            //component.clear();
             if(!component.getType().equals(InnerLightType.NONE) || component.getType() == null){
                 return ActionResult.PASS;
             }

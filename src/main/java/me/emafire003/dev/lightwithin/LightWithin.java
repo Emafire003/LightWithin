@@ -160,7 +160,7 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 			for(LivingEntity ent : entities){
 				//TODO integration with other mods that implement allies stuff
 				//TODO may need this to prevent bugs
-				if(ent.getScoreboardTeam() != null && ent.getScoreboardTeam().isEqual(player.getScoreboardTeam())){
+				if(ent.getScoreboardTeam() != null && ent.isTeammate(player)){
 					targets.add(ent);
 				}else if(ent instanceof TameableEntity){
 					if(((TameableEntity) ent).getOwner().equals(player)){
@@ -207,7 +207,7 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 			for(LivingEntity ent : entities){
 				//TODO integration with other mods that implement allies stuff
 				//TODO may need this to prevent bugs
-				if(/*!entity.equals(ent) && */ent.getScoreboardTeam() != null && ent.getScoreboardTeam().isEqual(player.getScoreboardTeam())){
+				if(/*!entity.equals(ent) && */ent.getScoreboardTeam() != null && ent.isTeammate(player)){
 					targets.add(ent);
 				}else if(ent instanceof TameableEntity){
 					if(((TameableEntity) ent).getOwner().equals(player)){
@@ -253,7 +253,7 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 			for(LivingEntity ent : entities){
 				//TODO integration with other mods that implement allies stuff
 				//TODO may need this to prevent bugs
-				if(/*!entity.equals(ent) && */ent.getScoreboardTeam() != null && ent.getScoreboardTeam().isEqual(player.getScoreboardTeam())){
+				if(/*!entity.equals(ent) && */ent.getScoreboardTeam() != null && ent.isTeammate(player)){
 					targets.add(ent);
 				}else if(ent instanceof TameableEntity){
 					if(((TameableEntity) ent).getOwner().equals(player)){
