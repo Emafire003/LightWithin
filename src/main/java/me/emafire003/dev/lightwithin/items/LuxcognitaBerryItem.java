@@ -29,6 +29,9 @@ public class LuxcognitaBerryItem extends Item {
 
     @Override
     public ItemStack finishUsing(ItemStack stack, World world, LivingEntity user) {
+        if(world.isClient){
+            user.playSound(LightSounds.LIGHT_READY, 1, 1);
+        }
         if(user instanceof ServerPlayerEntity){
             //TODO make cooldown bypassable in config
             if(user instanceof PlayerEntity){

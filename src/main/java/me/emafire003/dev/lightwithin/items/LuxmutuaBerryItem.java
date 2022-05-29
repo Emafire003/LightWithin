@@ -3,6 +3,7 @@ package me.emafire003.dev.lightwithin.items;
 import me.emafire003.dev.lightwithin.LightWithin;
 import me.emafire003.dev.lightwithin.component.LightComponent;
 import me.emafire003.dev.lightwithin.lights.InnerLightType;
+import me.emafire003.dev.lightwithin.sounds.LightSounds;
 import me.emafire003.dev.lightwithin.status_effects.LightEffects;
 import me.emafire003.dev.lightwithin.util.TargetType;
 import net.minecraft.client.gui.screen.Screen;
@@ -50,6 +51,9 @@ public class LuxmutuaBerryItem extends Item {
 
     @Override
     public ItemStack finishUsing(ItemStack stack, World world, LivingEntity user) {
+        if(world.isClient){
+            user.playSound(LightSounds.LIGHT_READY, 1, 1.3F);
+        }
         if(user instanceof ServerPlayerEntity){
             //TODO make cooldown bypassable in config
             if(user.hasStatusEffect(LightEffects.LIGHT_FATIGUE) || user.hasStatusEffect(LightEffects.LIGHT_ACTIVE)){
