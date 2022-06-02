@@ -14,7 +14,9 @@ The duration, power, the cooldown and other similar things are all based on the 
 Of course the LightType and Target of the light are determined with the UUID as well. More on that later.
 
 ### How to trigger a light
-Whenever you meet the trigger conditions for the activation of your inner light, a in icon like:  is going to appear in the top-left corner of your screen, along with a sound effect. When you noitce this ![icon](https://user-images.githubusercontent.com/29462910/171633058-da9bb4a7-64d0-4706-9c86-fe4eaa587860.PNG) press the **V** button (default, you can change this in the keybinds settings) to activate it!
+Whenever you meet the trigger conditions for the activation of your inner light, a in icon like: ![icon](https://user-images.githubusercontent.com/29462910/171633058-da9bb4a7-64d0-4706-9c86-fe4eaa587860.PNG) is going to appear in the top-left corner of your screen, along with a sound effect. When you noitce this press the **V** button (default, you can change this in the keybinds settings) to activate it!
+
+When you trigger it a bunch of particles arranged in a circle with 8 columns, and a flash representing your light being unleashed. Also, if you are in 1st person mode a writing with the colors of the effect will show up at the center of your vision (they need to be reworked a bit tho). I wonder what it says... and which language...
 
 
 # SPOILERS AHED: 
@@ -23,10 +25,32 @@ Whenever you meet the trigger conditions for the activation of your inner light,
 
 ### The light types:
 #### Heal
-If a player has this inner light when he gets attacked and his HP drop below 25% (usually 3 hearts) the light is going to trigger and start to heal you/your allies/others. It summon a reverse cascade of particles of heal light on the target of the effect.
+If a player has this inner light when they or their allies get attacked and their HP drop below 25% (usually 3 hearts) (50% for allies) the light is going to trigger and start to heal you/your allies/others. It summons a reverse cascade of particles of heal light on the target of the effect, and it regenerates life based on the power and duration of your effect (which are different for each player as seen above).
+There is a small chance of being a "other target" heal lightuser, which targets passive entities, animals and similar. The trigger is the same, when one of these creatures HP drop under 50% your light starts to shine inside you and you can activate it.
 
-*Trivia: This was the firs!t light that was developed*
+*Trivia: This was the first light that was developed!*
 
+#### Defense
+If a player has this inner light when they or their allies get attacked and their HP drop below 25% (usually 3 hearts) (50% for allies) the light is going to trigger and start to shield you/your allies/others from damages giving resistance. It summons a reverse cascade of particles of defense light on the target of the effect, and it protectes you based on the power and duration of your effect (which are different for each player as seen above).
+There is a small chance of being a "other target" defense lightuser, which targets passive entities, animals and similar. The trigger is the same, when one of these creatures HP drop under 50% your light starts to shine inside you and you can activate it.
+
+*Trivia: This was the first light to recive the particle/logo in development!*
+
+#### Strength 
+If a player has this inner light when they attack another entity and their (or their allies) HP is below 25% (usually 3 hearts) (50% for allies) the light is going to trigger and your/your allies/others attackes gets boosted. It summons a reverse cascade of particles of strength light on the target of the effect, and it strengths you based on the power and duration of your effect (which are different for each player as seen above).
+There is a small chance of being a "other target" strength lightuser, which targets passive entities, animals and similar. The trigger is the same, when one of these creatures HP drop under 50% your light starts to shine inside you and you can activate it. But it's likely that this is going to get reworked.
+
+*Trivia: This was the trickies to pull of for random reasons!*
+
+### The target types (cuurently used)
+#### Self
+This is self explainatory. The target of the effect of your light is going to go towards you. For example, you will be the one getting the regeneretion when your HP drops below 25% with a heal light.
+
+#### Allies
+When your allies are in a certain condition (hp below 50% usually) your light is going to activate. Allies consist of minecraft team members and pets (if i recall correctly i will modify later if i haven't implemented this yet) and in the future other mods that add features like guilds, factions, parties and such will be included.
+
+#### Others
+Usually depends on the type of light, for now it represents the passive entities
 
 ## Setup
 
