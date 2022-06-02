@@ -14,7 +14,7 @@ The duration, power, the cooldown and other similar things are all based on the 
 Of course the LightType and Target of the light are determined with the UUID as well. More on that later.
 
 ### How to trigger a light
-Whenever you meet the trigger conditions for the activation of your inner light, a in icon like: [light_ready](https://user-images.githubusercontent.com/29462910/171597886-6992c6a3-a4c7-4d49-8712-9bb528b685e4.png) is going to appear in the top-left corner of your screen, along with a sound effect. When you noitce this press the **V** button (default, you can change this in the keybinds settings) to activate it!
+Whenever you meet the trigger conditions for the activation of your inner light, a in icon like:  is going to appear in the top-left corner of your screen, along with a sound effect. When you noitce this ![icon](https://user-images.githubusercontent.com/29462910/171633058-da9bb4a7-64d0-4706-9c86-fe4eaa587860.PNG) press the **V** button (default, you can change this in the keybinds settings) to activate it!
 
 
 # SPOILERS AHED: 
@@ -23,7 +23,8 @@ Whenever you meet the trigger conditions for the activation of your inner light,
 
 ### The light types:
 #### Heal
-If a player has this inner light when he gets attacked and his HP drop below 25% (usually 3 hearts) t
+If a player has this inner light when he gets attacked and his HP drop below 25% (usually 3 hearts) the light is going to trigger and start to heal you/your allies/others. It summon a reverse cascade of particles of heal light on the target of the effect.
+
 *Trivia: This was the firs!t light that was developed*
 
 
