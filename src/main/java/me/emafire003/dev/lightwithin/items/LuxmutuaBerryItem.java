@@ -57,7 +57,6 @@ public class LuxmutuaBerryItem extends Item {
         if(user instanceof ServerPlayerEntity){
             //TODO make cooldown bypassable in config
             if(user.hasStatusEffect(LightEffects.LIGHT_FATIGUE) || user.hasStatusEffect(LightEffects.LIGHT_ACTIVE)){
-                ((ServerPlayerEntity) user).sendMessage(new LiteralText("Helo, returning cuz yes"), false);
                 return stack;
             }
             LightComponent component = LightWithin.LIGHT_COMPONENT.get(user);

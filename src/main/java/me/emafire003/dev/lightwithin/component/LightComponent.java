@@ -23,6 +23,7 @@ public class LightComponent implements ComponentV3, AutoSyncedComponent {
     private PlayerEntity caster;
     protected InnerLightType type = InnerLightType.NONE;
     protected boolean incooldown = false;
+    private boolean debug = false;
 
     public LightComponent(PlayerEntity playerEntity) {
         this.caster = playerEntity;
@@ -31,63 +32,65 @@ public class LightComponent implements ComponentV3, AutoSyncedComponent {
     @Override
     public void readFromNbt(NbtCompound tag) {
         if(tag.contains("type")){
-            LOGGER.info("the type got: " + tag.getString("type"));
+            if(debug){
+                LOGGER.info("the type got: " + tag.getString("type"));
+            }
             this.type = InnerLightType.valueOf(tag.getString("type"));
         }else{
             this.type = InnerLightType.NONE;
         }
 
         if(tag.contains("targets")){
-            LOGGER.info("the targets got: " + tag.getString("targets"));
+            if(debug){LOGGER.info("the targets got: " + tag.getString("targets"));}
             this.targets = TargetType.valueOf(tag.getString("targets"));
         }else{
             this.targets = TargetType.NONE;
         }
 
         if(tag.contains("cooldown_time")){
-            LOGGER.info("the cooldown got: " + tag.getDouble("cooldown_time"));
+            if(debug){LOGGER.info("the cooldown got: " + tag.getDouble("cooldown_time"));}
             this.cooldown_time = tag.getInt("cooldown_time");
         }else{
             this.cooldown_time = -1;
         }
 
         if(tag.contains("power_multiplier")){
-            LOGGER.info("the power got: " + tag.getDouble("power_multiplier"));
+            if(debug){LOGGER.info("the power got: " + tag.getDouble("power_multiplier"));}
             this.power_multiplier = tag.getDouble("power_multiplier");
         }else{
             this.power_multiplier = -1;
         }
 
         if(tag.contains("duration")){
-            LOGGER.info("the cduration got: " + tag.getInt("duration"));
+            if(debug){LOGGER.info("the cduration got: " + tag.getInt("duration"));}
             this.duration= tag.getInt("duration");
         }else{
             this.duration = -1;
         }
 
         if(tag.contains("color")){
-            LOGGER.info("the color got: " + tag.getString("color"));
+            if(debug){LOGGER.info("the color got: " + tag.getString("color"));}
             this.color = Color.translateFromHEX(tag.getString("color"));
         }else{
             this.color = Color.getWhiteColor();
         }
 
         if(tag.contains("prev_color")){
-            LOGGER.info("the prev_color got: " + tag.getString("prev_color"));
+            if(debug){LOGGER.info("the prev_color got: " + tag.getString("prev_color"));}
             this.prev_color = Color.translateFromHEX(tag.getString("prev_color"));
         }else{
             this.prev_color = Color.getWhiteColor();
         }
 
         if(tag.contains("rainbow_col")){
-            LOGGER.info("the rainbow_col got: " + tag.getBoolean("rainbow_col"));
+            if(debug){LOGGER.info("the rainbow_col got: " + tag.getBoolean("rainbow_col"));}
             this.rainbow_col = tag.getBoolean("rainbow_col");
         }else{
             this.rainbow_col = false;
         }
 
         if(tag.contains("incooldown")){
-            LOGGER.info("the incooldown got: " + tag.getBoolean("incooldown"));
+            if(debug){LOGGER.info("the incooldown got: " + tag.getBoolean("incooldown"));}
             this.incooldown = tag.getBoolean("incooldown");
         }else{
             this.incooldown = false;
@@ -142,7 +145,6 @@ public class LightComponent implements ComponentV3, AutoSyncedComponent {
     }
 
     public boolean getInCooldown() {
-        LOGGER.info("yep, this is incooldown: "+ incooldown);
         return incooldown;
     }
 
@@ -192,7 +194,6 @@ public class LightComponent implements ComponentV3, AutoSyncedComponent {
     }
 
     public void setInCooldown(boolean incooldown) {
-        LOGGER.info("==========================OK SETTED COOLDOWN==========================");
         this.incooldown = incooldown;
         LightWithin.LIGHT_COMPONENT.sync(caster);
     }

@@ -9,4 +9,6 @@
   "item.lightwithin.luxintus_berry.tooltip": "§eThis light-dense berry will §aunleash§r your §binner light§r!",
   "item.lightwithin.luxmutua_berry.tooltip": "§eThe ever-twisting light of this berry will §achange§r your §binner light§r!",
   "item.lightwithin.luxcognita_berry.tooltip": "§eThe knowing light of this berry will §atell you the secrets§r of your §binner light§r!"
+  "light.unknown": "No light named: ",
+  "lighttype.unknown": "No light type named: "
 }

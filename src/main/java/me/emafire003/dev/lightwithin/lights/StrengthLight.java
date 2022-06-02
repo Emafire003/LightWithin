@@ -52,6 +52,9 @@ public class StrengthLight extends InnerLight {
         if(this.power_multiplier > 4 && this.duration > 7){
             this.duration = 7;
         }
+        if(this.duration <5){
+            this.duration = 5;
+        }
     }
 
 

@@ -55,7 +55,9 @@ public class DefenseLight extends InnerLight {
         if(this.power_multiplier > 4 && this.duration > 7){
             this.duration = 7;
         }
-        LOGGER.info("Type: " + this.type + " duration " + this.duration + " power " + this.power_multiplier);
+        if(this.duration < 5){
+            this.duration = 5;
+        }
     }
 
 
