@@ -43,7 +43,7 @@ There is a small chance of being a "other target" strength lightuser, which targ
 
 *Trivia: This was the trickies to pull of for no-sense reasons!*
 
-## The target types (cuurently used)
+## The target types (currently used, there are more)
 ### Self
 This is self explainatory. The target of the effect of your light is going to go towards you. For example, you will be the one getting the regeneretion when your HP drops below 25% with a heal light.
 
@@ -55,18 +55,25 @@ Usually depends on the type of light, for now it represents the passive entities
 
 ## The "Lux" Berries
 They currently can't be obtained in survival, and when they will there are going to range in rarity from the golden apple to beyond the enchanted one.
+
 ![berries](https://user-images.githubusercontent.com/29462910/171917861-fd2f614a-b691-4a2b-b596-eabe64e2ff65.gif)
+
 *From left to right, Luxmuta Berry, Luxintus Berry, Luxcognita Berry*
 
-### Luxmutua Berry
+### Luxmutua Berry ![luxmut_berry](https://user-images.githubusercontent.com/29462910/171920401-c0134016-6a9f-453d-8f4b-2afad5165b17.png)
+
 This one, will mix up your innerlight, allowing you to change it innerlight. The change is random, and it won't be the same one you had before eating it. It also changed the target randomly. This is probably going to be even more rare that an enchanted golden apple
 
-### Luxintus Berry
+### Luxintus Berry ![sweet_berries](https://user-images.githubusercontent.com/29462910/171920163-2cdb1586-ded6-47ba-97ea-0d259be72187.png)
+
 This magical berry will refill your inner light, and trigger it right away. It will be as rare as an enchanted golden apple
 *Trivia: First berry to have developed, and the only one originally planned*
 
-### Luxcognita Berry
+### Luxcognita Berry ![luxcogni](https://user-images.githubusercontent.com/29462910/171920418-17c52b5a-0fa5-497b-94a8-7e5d3ea7c3c4.png) 
+
 This berry will read your innerlight, and tell you how it's made up, aka what does it do, before activating it. It will be useful once the mod is out of alpha... eheh. Anyway, it will be as rare as a normal golden apple. Maybe you could find it in the same places too.
+
+![bisecthosting](https://www.bisecthosting.com/partners/custom-banners/e9c85d2a-cafa-4e2f-98bf-4f62bd9e951c.png)
 
 ## Coming (soon tm) Features
 - QoL changes
