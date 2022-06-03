@@ -5,6 +5,7 @@
 This mod adds a new mechanic, called *"InnerLights"* which are present within player from the start, and are pretty much **UNIQUE** for every
 player.
 
+
 Currently there only 3 types of innerlights, Heal Light, Defense Light and Strength Light. For now, when they trigger they add a powerful potion effect (beyond vanilla levels) when the player (or the target of the light) needs it the most. Aka, for now, when they are below 25/50% depending on the specif light.
 But this is just a start, i'm going to make more complex lights with more complex triggers that may summon a raging storm at whover is attacking the player or his allies, or ice up the surroundings and such. I just don't have the time right now, and besides, this is just the alpha version!
 
@@ -14,7 +15,7 @@ The duration, power, the cooldown and other similar things are all based on the 
 Of course the LightType and Target of the light are determined with the UUID as well. More on that later.
 
 ### How to trigger a light
-Whenever you meet the trigger conditions for the activation of your inner light, a in icon like: ![icon](https://user-images.githubusercontent.com/29462910/171633058-da9bb4a7-64d0-4706-9c86-fe4eaa587860.PNG) is going to appear in the top-left corner of your screen, along with a sound effect. When you noitce this press the **V** button (default, you can change this in the keybinds settings) to activate it!
+Whenever you meet the trigger conditions for the activation of your inner light, a in icon like: ![Senza titolo](https://user-images.githubusercontent.com/29462910/171919382-d65f6f72-4a84-44f9-9ebb-62283755793e.png) is going to appear in the top-left corner of your screen, along with a sound effect. When you noitce this press the **V** button (default, you can change this in the keybinds settings) to activate it!
 
 When you trigger it a bunch of particles arranged in a circle with 8 columns, and a flash representing your light being unleashed. Also, if you are in 1st person mode a writing with the colors of the effect will show up at the center of your vision (they need to be reworked a bit tho). I wonder what it says... and which language...
 
@@ -24,23 +25,23 @@ When you trigger it a bunch of particles arranged in a circle with 8 columns, an
 
 
 ## The light types:
-### Heal
+### ![heal_light](https://user-images.githubusercontent.com/29462910/171918792-79693d99-249f-45b6-82cc-a2bb81facbea.png) Heal ![heal_light](https://user-images.githubusercontent.com/29462910/171918792-79693d99-249f-45b6-82cc-a2bb81facbea.png)
 If a player has this inner light when they or their allies get attacked and their HP drop below 25% (usually 3 hearts) (50% for allies) the light is going to trigger and start to heal you/your allies/others. It summons a reverse cascade of particles of heal light on the target of the effect, and it regenerates life based on the power and duration of your effect (which are different for each player as seen above).
 There is a small chance of being a "other target" heal lightuser, which targets passive entities, animals and similar. The trigger is the same, when one of these creatures HP drop under 50% your light starts to shine inside you and you can activate it.
 
 *Trivia: This was the first light that was developed!*
 
-### Defense
+### ![defense_light](https://user-images.githubusercontent.com/29462910/171918951-fc2e9a01-0384-48a5-9472-b0f212053f4b.png) Defense ![defense_light](https://user-images.githubusercontent.com/29462910/171918951-fc2e9a01-0384-48a5-9472-b0f212053f4b.png)
 If a player has this inner light when they or their allies get attacked and their HP drop below 25% (usually 3 hearts) (50% for allies) the light is going to trigger and start to shield you/your allies/others from damages giving resistance. It summons a reverse cascade of particles of defense light on the target of the effect, and it protectes you based on the power and duration of your effect (which are different for each player as seen above).
 There is a small chance of being a "other target" defense lightuser, which targets passive entities, animals and similar. The trigger is the same, when one of these creatures HP drop under 50% your light starts to shine inside you and you can activate it.
 
 *Trivia: This was the first light to recive the particle/logo in development!*
 
-### Strength 
+### ![strength_light](https://user-images.githubusercontent.com/29462910/171918991-6c40ce1f-9aca-4a2c-ba3f-1c7b8ace63c7.png) Strength ![strength_light](https://user-images.githubusercontent.com/29462910/171918991-6c40ce1f-9aca-4a2c-ba3f-1c7b8ace63c7.png)
 If a player has this inner light when they attack another entity and their (or their allies) HP is below 25% (usually 3 hearts) (50% for allies) the light is going to trigger and your/your allies/others attackes gets boosted. It summons a reverse cascade of particles of strength light on the target of the effect, and it strengths you based on the power and duration of your effect (which are different for each player as seen above).
 There is a small chance of being a "other target" strength lightuser, which targets passive entities, animals and similar. The trigger is the same, when one of these creatures HP drop under 50% your light starts to shine inside you and you can activate it. But it's likely that this is going to get reworked.
 
-*Trivia: This was the trickies to pull of for random reasons!*
+*Trivia: This was the trickies to pull of for no-sense reasons!*
 
 ## The target types (cuurently used)
 ### Self
@@ -54,17 +55,20 @@ Usually depends on the type of light, for now it represents the passive entities
 
 ## The "Lux" Berries
 They currently can't be obtained in survival, and when they will there are going to range in rarity from the golden apple to beyond the enchanted one.
-
-### Luxintus Berry
-This magical berry will refill your inner light, and trigger it right away. It will be as rare as an enchanted golden apple
+![berries](https://user-images.githubusercontent.com/29462910/171917861-fd2f614a-b691-4a2b-b596-eabe64e2ff65.gif)
+*From left to right, Luxmuta Berry, Luxintus Berry, Luxcognita Berry*
 
 ### Luxmutua Berry
 This one, will mix up your innerlight, allowing you to change it innerlight. The change is random, and it won't be the same one you had before eating it. It also changed the target randomly. This is probably going to be even more rare that an enchanted golden apple
 
+### Luxintus Berry
+This magical berry will refill your inner light, and trigger it right away. It will be as rare as an enchanted golden apple
+*Trivia: First berry to have developed, and the only one originally planned*
+
 ### Luxcognita Berry
 This berry will read your innerlight, and tell you how it's made up, aka what does it do, before activating it. It will be useful once the mod is out of alpha... eheh. Anyway, it will be as rare as a normal golden apple. Maybe you could find it in the same places too.
 
-## Future Features
+## Coming (soon tm) Features
 - QoL changes
 - Way more light types such as Thunder, Shockawave, Elemental lights and such 
 - More complex targets
