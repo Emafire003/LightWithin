@@ -21,12 +21,12 @@ import me.emafire003.dev.lightwithin.status_effects.LightEffects;
 import me.emafire003.dev.lightwithin.particles.LightParticlesUtil;
 import me.emafire003.dev.lightwithin.util.TargetType;
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.passive.PassiveEntity;
 import net.minecraft.entity.passive.TameableEntity;
-import net.minecraft.entity.passive.WolfEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.LiteralText;
 import net.minecraft.util.Identifier;
@@ -70,6 +70,10 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 		LightEffects.registerModEffects();
 		LightItems.registerItems();
 		LightParticles.registerParticles();
+
+		ServerLifecycleEvents.SERVER_STARTED.register(minecraftServer -> {
+			ColoredGlowLib.setOverrideTeamColors(true);
+		});
 
 	}
 

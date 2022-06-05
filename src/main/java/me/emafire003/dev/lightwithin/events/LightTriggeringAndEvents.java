@@ -266,7 +266,6 @@ public class LightTriggeringAndEvents {
             if(component.getType().equals(InnerLightType.STRENGTH)){
                 checkStrength(player, component, entity);
             }
-            LOGGER.info("Ok what the fuck is happening?");
             return ActionResult.PASS;
         } );
 
@@ -274,10 +273,6 @@ public class LightTriggeringAndEvents {
             if(player.getWorld().isClient){
                 return ActionResult.PASS;
             }
-            //if it's already in the cache noworries NEVERMIND MINECRAFT SHOULD AUTOSAVE THESE
-            /*if(CacheSystem.player_components.containsKey(player.getUuid())){
-                return ActionResult.PASS;
-            }*/
             LightComponent component = LIGHT_COMPONENT.get(player);
             String id = player.getUuidAsString().toLowerCase();
             //3eec9f18-1d0e-3f17-917c-6994e7d034d1
