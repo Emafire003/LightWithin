@@ -8,7 +8,7 @@ player.
 ![demo_heal_brief](https://user-images.githubusercontent.com/29462910/171922554-e776af80-241a-4acc-a5f8-1d0b3f26211c.gif)
 
 
-Currently there only 3 types of innerlights, Heal Light, Defense Light and Strength Light. For now, when they trigger they add a powerful potion effect (beyond vanilla levels) when the player (or the target of the light) needs it the most. Aka, for now, when they are below 25/50% depending on the specif light.
+Currently there are only 3 types of innerlights, Heal Light, Defense Light and Strength Light. For now, when they trigger they add a powerful potion effect (beyond vanilla levels) when the player (or the target of the light) needs it the most. Aka, for now, when they are below 25/50% HP depending on the specif light.
 But this is just a start, i'm going to make more complex lights with more complex triggers that may summon a raging storm at whover is attacking the player or his allies, or ice up the surroundings and such. I just don't have the time right now, and besides, this is just the alpha version!
 There also are cool little jingles for pretty much everything you do/activate!
 
