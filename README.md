@@ -109,3 +109,5 @@ If you would like to offer me a coffee, here you go.
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/S6S88307C)
 
 For modpack devs: You are permitted to use this mod without directly asking, but please credit me somewhere, it would help! (Also, I'm kind of a curious person so maybe send me a message when you include it into your modpack, and I'd like to check it out)
+
+Thanks to @FranzleOrange for the help with the Strength soundtrack
