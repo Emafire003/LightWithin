@@ -12,7 +12,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
 import java.util.ConcurrentModificationException;
-import java.util.List;
 
 import static me.emafire003.dev.lightwithin.LightWithin.LOGGER;
 

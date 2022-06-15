@@ -2,6 +2,7 @@ package me.emafire003.dev.lightwithin.items;
 
 import me.emafire003.dev.lightwithin.LightWithin;
 import me.emafire003.dev.lightwithin.component.LightComponent;
+import me.emafire003.dev.lightwithin.config.Config;
 import me.emafire003.dev.lightwithin.lights.InnerLightType;
 import me.emafire003.dev.lightwithin.sounds.LightSounds;
 import me.emafire003.dev.lightwithin.status_effects.LightEffects;
@@ -33,8 +34,8 @@ public class LuxmutuaBerryItem extends Item {
     @Override
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
             //TODO make cooldown bypassable in config
-        if(user.hasStatusEffect(LightEffects.LIGHT_FATIGUE) || user.hasStatusEffect(LightEffects.LIGHT_ACTIVE)){
-           return TypedActionResult.pass(user.getStackInHand(hand));
+        if(LightWithin.isPlayerInCooldown(user) && Config.LUXIMUTUA_BYPASS_COOLDOWN){
+            return TypedActionResult.pass(user.getStackInHand(hand));
         }
         if (this.isFood()) {
             ItemStack itemStack = user.getStackInHand(hand);
@@ -55,8 +56,7 @@ public class LuxmutuaBerryItem extends Item {
             user.playSound(LightSounds.LIGHT_READY, 1, 1.3F);
         }
         if(user instanceof ServerPlayerEntity){
-            //TODO make cooldown bypassable in config
-            if(user.hasStatusEffect(LightEffects.LIGHT_FATIGUE) || user.hasStatusEffect(LightEffects.LIGHT_ACTIVE)){
+            if(LightWithin.isPlayerInCooldown((PlayerEntity) user) && Config.LUXIMUTUA_BYPASS_COOLDOWN){
                 return stack;
             }
             LightComponent component = LightWithin.LIGHT_COMPONENT.get(user);

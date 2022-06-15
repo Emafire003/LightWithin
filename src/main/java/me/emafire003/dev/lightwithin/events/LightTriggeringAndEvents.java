@@ -8,14 +8,12 @@ import me.emafire003.dev.lightwithin.status_effects.LightEffects;
 import me.emafire003.dev.lightwithin.util.TargetType;
 import net.fabricmc.fabric.api.event.player.AttackEntityCallback;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.minecraft.client.particle.TotemParticle;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.passive.PassiveEntity;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.LiteralText;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.math.Box;
 
@@ -44,8 +42,8 @@ public class LightTriggeringAndEvents {
         if(component.getTargets().equals(TargetType.SELF) && player.getHealth() <= (player.getMaxHealth())*25/100){
             sendReadyPacket((ServerPlayerEntity) player, true);
         }else if(component.getTargets().equals(TargetType.ALLIES)){
-            //TODO set dimensions configable
-            List<LivingEntity> entities = player.getWorld().getEntitiesByClass(LivingEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amout), (entity1 -> true));
+            
+            List<LivingEntity> entities = player.getWorld().getEntitiesByClass(LivingEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amount), (entity1 -> true));
             int ent_number = 0;
             //I need to this to prevent a ConcurrentModificationError
             List<LivingEntity> team_entities = new ArrayList<>();
@@ -74,7 +72,7 @@ public class LightTriggeringAndEvents {
                 sendReadyPacket((ServerPlayerEntity) player, true);
             }
         }else if(component.getTargets().equals(TargetType.OTHER)){
-            List<PassiveEntity> entities = entity.getWorld().getEntitiesByClass(PassiveEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amout), (entity1 -> true));
+            List<PassiveEntity> entities = entity.getWorld().getEntitiesByClass(PassiveEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amount), (entity1 -> true));
             for(PassiveEntity ent : entities){
                 if(ent.getHealth() <= (ent.getMaxHealth())*50/100){
                     sendReadyPacket((ServerPlayerEntity) player, true);
@@ -89,8 +87,8 @@ public class LightTriggeringAndEvents {
             //CacheSystem.healLightSelf.add(player.getUuid());
             sendReadyPacket((ServerPlayerEntity) player, true);
         }else if(component.getTargets().equals(TargetType.ALLIES)){
-            //TODO set dimensions configable
-            List<LivingEntity> entities = player.getWorld().getEntitiesByClass(LivingEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amout), (entity1 -> true));
+            
+            List<LivingEntity> entities = player.getWorld().getEntitiesByClass(LivingEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amount), (entity1 -> true));
             int ent_number = 0;
             //I need to this to prevent a ConcurrentModificationError
             List<LivingEntity> team_entities = new ArrayList<>();
@@ -126,7 +124,7 @@ public class LightTriggeringAndEvents {
                 sendReadyPacket((ServerPlayerEntity) player, true);
             }
         }else if(component.getTargets().equals(TargetType.OTHER)){
-            List<PassiveEntity> entities = entity.getWorld().getEntitiesByClass(PassiveEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amout), (entity1 -> true));
+            List<PassiveEntity> entities = entity.getWorld().getEntitiesByClass(PassiveEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amount), (entity1 -> true));
             for(PassiveEntity ent : entities){
                 if(ent.getHealth() <= (ent.getMaxHealth())*50/100){
                     sendReadyPacket((ServerPlayerEntity) player, true);
@@ -141,8 +139,8 @@ public class LightTriggeringAndEvents {
             //CacheSystem.healLightSelf.add(player.getUuid());
             sendReadyPacket((ServerPlayerEntity) player, true);
         }else if(component.getTargets().equals(TargetType.ALLIES)){
-            //TODO set dimensions configable
-            List<LivingEntity> entities = player.getWorld().getEntitiesByClass(LivingEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amout), (entity1 -> true));
+            
+            List<LivingEntity> entities = player.getWorld().getEntitiesByClass(LivingEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amount), (entity1 -> true));
             int ent_number = 0;
             //I need to this to prevent a ConcurrentModificationError
             List<LivingEntity> team_entities = new ArrayList<>();
@@ -171,7 +169,7 @@ public class LightTriggeringAndEvents {
                 sendReadyPacket((ServerPlayerEntity) player, true);
             }
         }else if(component.getTargets().equals(TargetType.OTHER)){
-            List<PassiveEntity> entities = entity.getWorld().getEntitiesByClass(PassiveEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amout), (entity1 -> true));
+            List<PassiveEntity> entities = entity.getWorld().getEntitiesByClass(PassiveEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amount), (entity1 -> true));
             for(PassiveEntity ent : entities){
                 if(ent.getHealth() <= (ent.getMaxHealth())*50/100){
                     sendReadyPacket((ServerPlayerEntity) player, true);
@@ -232,7 +230,7 @@ public class LightTriggeringAndEvents {
                 return;
             }
             if(target.getScoreboardTeam() != null){
-                List<PlayerEntity> entities = target.getWorld().getEntitiesByClass(PlayerEntity.class, new Box(target.getBlockPos()).expand(box_expansion_amout), (entity1 -> true));
+                List<PlayerEntity> entities = target.getWorld().getEntitiesByClass(PlayerEntity.class, new Box(target.getBlockPos()).expand(box_expansion_amount), (entity1 -> true));
                 for(PlayerEntity p : entities){
                     if(p.isTeammate(target) && !p.equals(target)){
                         entityAttackEntityTriggerCheck(p, attacker);
@@ -240,7 +238,7 @@ public class LightTriggeringAndEvents {
                 }
             }
             if(target instanceof PassiveEntity){
-                List<PlayerEntity> entities = target.getWorld().getEntitiesByClass(PlayerEntity.class, new Box(target.getBlockPos()).expand(box_expansion_amout), (entity1 -> true));
+                List<PlayerEntity> entities = target.getWorld().getEntitiesByClass(PlayerEntity.class, new Box(target.getBlockPos()).expand(box_expansion_amount), (entity1 -> true));
                 for(PlayerEntity p : entities){
                     if(!p.equals(target)){
                         entityAttackEntityTriggerCheck(p, attacker);
@@ -363,7 +361,6 @@ public class LightTriggeringAndEvents {
         return new Pair<InnerLightType, TargetType>(InnerLightType.HEAL, TargetType.SELF);
     }
 
-    //TODO set a cooldown multiplier option in the condif
     //id bits 0
     //formula: 10+10*stufffoundintheid aka minimum value 10+10*1, so 20s
     public static int determineCooldown(String[] id_bits, int string_bit){
@@ -381,7 +378,6 @@ public class LightTriggeringAndEvents {
         return 90;
     }
 
-    //TODO set a cooldown multiplier option in the condif
     //id bit 2
     public static int determineDuration(String[] id_bits, int string_bit){
         for(int i = 0; i<id_bits[string_bit].length(); i++){
@@ -398,11 +394,10 @@ public class LightTriggeringAndEvents {
     }
 
 
-    //Gets the first 2 digits ir finds and sums them up, then divides by ten, so the max is 9+9/4, so 4,5
+    //Gets the first 2 digits ir finds and sums them up, then divides by ten, so the max is 9+9/3, so 6
     public static double determinePower(String[] id_bits, int string_bit){
         int n1 = -1;
         int n2 = 0;
-        double power;
         for(int i = 0; i<id_bits[string_bit].length(); i++){
             if(Character.isDigit(id_bits[string_bit].charAt(i))){
                 if(n1 == -1){
@@ -413,14 +408,9 @@ public class LightTriggeringAndEvents {
                 }
             }
         }
-        power = n1+n2;
-        //TODO maybe i should allow them to be 0,5 or similar
-        if(power <= 1){
-            power = 1;
-        }
-        double a = n1+n2/4;
-        if(a > 4.5){
-            a = 4.5;
+        double a = n1+n2/3;
+        if(a < 1){
+            a = 1;
         }
         return a;
     }

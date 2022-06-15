@@ -3,6 +3,7 @@ package me.emafire003.dev.lightwithin.status_effects;
 import me.emafire003.dev.coloredglowlib.ColoredGlowLib;
 import me.emafire003.dev.coloredglowlib.util.Color;
 import me.emafire003.dev.lightwithin.component.LightComponent;
+import me.emafire003.dev.lightwithin.config.Config;
 import me.emafire003.dev.lightwithin.lights.InnerLight;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.AttributeContainer;
@@ -62,7 +63,7 @@ public class LightActiveEffect extends StatusEffect {
         }
         if(entity instanceof PlayerEntity){
             LightComponent component = LIGHT_COMPONENT.get(entity);
-            entity.addStatusEffect(new StatusEffectInstance(LightEffects.LIGHT_FATIGUE, 20*(component.getMaxCooldown()-component.getDuration()), 1));
+            entity.addStatusEffect(new StatusEffectInstance(LightEffects.LIGHT_FATIGUE, (int) (Config.COOLDOWN_MULTIPLIER*20*(component.getMaxCooldown()-component.getDuration())), 1));
         }
     }
 }
