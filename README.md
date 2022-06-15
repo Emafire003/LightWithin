@@ -8,7 +8,7 @@ player.
 ![demo_heal_brief](https://user-images.githubusercontent.com/29462910/171922554-e776af80-241a-4acc-a5f8-1d0b3f26211c.gif)
 
 
-Currently there only 3 types of innerlights, Heal Light, Defense Light and Strength Light. For now, when they trigger they add a powerful potion effect (beyond vanilla levels) when the player (or the target of the light) needs it the most. Aka, for now, when they are below 25/50% depending on the specif light.
+Currently there are only 3 types of innerlights, Heal Light, Defense Light and Strength Light. For now, when they trigger they add a powerful potion effect (beyond vanilla levels) when the player (or the target of the light) needs it the most. Aka, for now, when they are below 25/50% HP depending on the specif light.
 But this is just a start, i'm going to make more complex lights with more complex triggers that may summon a raging storm at whover is attacking the player or his allies, or ice up the surroundings and such. I just don't have the time right now, and besides, this is just the alpha version!
 There also are cool little jingles for pretty much everything you do/activate!
 
@@ -32,7 +32,7 @@ When you trigger it a bunch of particles arranged in a circle with 8 columns, an
 If a player has this inner light when they or their allies get attacked and their HP drop below 25% (usually 3 hearts) (50% for allies) the light is going to trigger and start to heal you/your allies/others. It summons a reverse cascade of particles of heal light on the target of the effect, and it regenerates life based on the power and duration of your effect (which are different for each player as seen above).
 There is a small chance of being a "other target" heal lightuser, which targets passive entities, animals and similar. The trigger is the same, when one of these creatures HP drop under 50% your light starts to shine inside you and you can activate it.
 
-![Demo video](https://youtu.be/n2U2m_OYyW8)
+[Demo video](https://youtu.be/n2U2m_OYyW8)
 
 *Trivia: This was the first light that was developed!*
 
@@ -40,7 +40,7 @@ There is a small chance of being a "other target" heal lightuser, which targets 
 If a player has this inner light when they or their allies get attacked and their HP drop below 25% (usually 3 hearts) (50% for allies) the light is going to trigger and start to shield you/your allies/others from damages giving resistance. It summons a reverse cascade of particles of defense light on the target of the effect, and it protectes you based on the power and duration of your effect (which are different for each player as seen above).
 There is a small chance of being a "other target" defense lightuser, which targets passive entities, animals and similar. The trigger is the same, when one of these creatures HP drop under 50% your light starts to shine inside you and you can activate it.
 
-![Demo video](https://youtu.be/vaMZ8sPw9bY)
+[Demo video](https://youtu.be/vaMZ8sPw9bY)
 
 *Trivia: This was the first light to recive the particle/logo in development!*
 
@@ -48,7 +48,7 @@ There is a small chance of being a "other target" defense lightuser, which targe
 If a player has this inner light when they attack another entity and their (or their allies) HP is below 25% (usually 3 hearts) (50% for allies) the light is going to trigger and your/your allies/others attackes gets boosted. It summons a reverse cascade of particles of strength light on the target of the effect, and it strengths you based on the power and duration of your effect (which are different for each player as seen above).
 There is a small chance of being a "other target" strength lightuser, which targets passive entities, animals and similar. The trigger is the same, when one of these creatures HP drop under 50% your light starts to shine inside you and you can activate it. But it's likely that this is going to get reworked.
 
-![Demo video](https://youtu.be/fR4cRF6opM8)
+[Demo video](https://youtu.be/fR4cRF6opM8)
 
 *Trivia: This was the trickies to pull of for no-sense reasons!*
 
@@ -82,7 +82,7 @@ This magical berry will refill your inner light, and trigger it right away. It w
 
 This berry will read your innerlight, and tell you how it's made up, aka what does it do, before activating it. It will be useful once the mod is out of alpha... eheh. Anyway, it will be as rare as a normal golden apple. Maybe you could find it in the same places too.
 
-![bisecthosting](https://www.bisecthosting.com/partners/custom-banners/e9c85d2a-cafa-4e2f-98bf-4f62bd9e951c.png)
+[![bisecthosting](https://www.bisecthosting.com/partners/custom-banners/e9c85d2a-cafa-4e2f-98bf-4f62bd9e951c.png)](https://www.bisecthosting.com/LightDev)
 
 ## Coming (soon tm) Features
 - QoL changes
@@ -109,3 +109,5 @@ If you would like to offer me a coffee, here you go.
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/S6S88307C)
 
 For modpack devs: You are permitted to use this mod without directly asking, but please credit me somewhere, it would help! (Also, I'm kind of a curious person so maybe send me a message when you include it into your modpack, and I'd like to check it out)
+
+Thanks to @FranzleOrange for the help with the Strength soundtrack
