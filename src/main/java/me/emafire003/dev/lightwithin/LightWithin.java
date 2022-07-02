@@ -21,6 +21,7 @@ import me.emafire003.dev.lightwithin.particles.LightParticles;
 import me.emafire003.dev.lightwithin.sounds.LightSounds;
 import me.emafire003.dev.lightwithin.status_effects.LightEffects;
 import me.emafire003.dev.lightwithin.particles.LightParticlesUtil;
+import me.emafire003.dev.lightwithin.util.CheckAllies;
 import me.emafire003.dev.lightwithin.util.TargetType;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
@@ -179,7 +180,7 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 			for(LivingEntity ent : entities){
 				//TODO integration with other mods that implement allies stuff
 				//TODO may need this to prevent bugs
-				if(ent.getScoreboardTeam() != null && ent.isTeammate(player)){
+				if(CheckAllies.checkAlly(player, ent)){
 					targets.add(ent);
 				}else if(ent instanceof TameableEntity){
 					if(((TameableEntity) ent).getOwner().equals(player)){
@@ -225,7 +226,7 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 			for(LivingEntity ent : entities){
 				//TODO integration with other mods that implement allies stuff
 				//TODO may need this to prevent bugs
-				if(/*!entity.equals(ent) && */ent.getScoreboardTeam() != null && ent.isTeammate(player)){
+				if(/*!entity.equals(ent) && */CheckAllies.checkAlly(player, ent)){
 					targets.add(ent);
 				}else if(ent instanceof TameableEntity){
 					if(((TameableEntity) ent).getOwner().equals(player)){
@@ -270,7 +271,7 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 			for(LivingEntity ent : entities){
 				//TODO integration with other mods that implement allies stuff
 				//TODO may need this to prevent bugs
-				if(/*!entity.equals(ent) && */ent.getScoreboardTeam() != null && ent.isTeammate(player)){
+				if(/*!entity.equals(ent) && */CheckAllies.checkAlly(player, ent)){
 					targets.add(ent);
 				}else if(ent instanceof TameableEntity){
 					if(((TameableEntity) ent).getOwner().equals(player)){

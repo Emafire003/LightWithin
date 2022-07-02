@@ -5,6 +5,7 @@ import me.emafire003.dev.lightwithin.component.LightComponent;
 import me.emafire003.dev.lightwithin.lights.InnerLightType;
 import me.emafire003.dev.lightwithin.networking.LightReadyPacketS2C;
 import me.emafire003.dev.lightwithin.status_effects.LightEffects;
+import me.emafire003.dev.lightwithin.util.CheckAllies;
 import me.emafire003.dev.lightwithin.util.TargetType;
 import net.fabricmc.fabric.api.event.player.AttackEntityCallback;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
@@ -39,9 +40,12 @@ public class LightTriggeringAndEvents {
     }
 
     public static void checkHeal(PlayerEntity player, LightComponent component, Entity entity){
+        /**CHECKS for the self part*/
         if(component.getTargets().equals(TargetType.SELF) && player.getHealth() <= (player.getMaxHealth())*25/100){
             sendReadyPacket((ServerPlayerEntity) player, true);
-        }else if(component.getTargets().equals(TargetType.ALLIES)){
+        }
+        /**CHECKS for the allies part*/
+        else if(component.getTargets().equals(TargetType.ALLIES)){
             
             List<LivingEntity> entities = player.getWorld().getEntitiesByClass(LivingEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amount), (entity1 -> true));
             int ent_number = 0;
@@ -51,7 +55,7 @@ public class LightTriggeringAndEvents {
             //and they are not the entity that has been hit then add them to the team_entities and check if their health is ok
             for(LivingEntity ent : entities){
                 //TODO integration with other mods that implement allies stuff
-                if(!entity.equals(ent) && ent.getScoreboardTeam() != null && ent.isTeammate(player) ){
+                if(!entity.equals(ent) && CheckAllies.checkAlly(player, ent) ){
                     if(ent.getHealth() <= (ent.getMaxHealth())*50/100){
                         ent_number++;
                     }
@@ -71,6 +75,7 @@ public class LightTriggeringAndEvents {
             if(team_entities.size() == ent_number){
                 sendReadyPacket((ServerPlayerEntity) player, true);
             }
+            /**CHECKS for the other part*/
         }else if(component.getTargets().equals(TargetType.OTHER)){
             List<PassiveEntity> entities = entity.getWorld().getEntitiesByClass(PassiveEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amount), (entity1 -> true));
             for(PassiveEntity ent : entities){
@@ -84,7 +89,6 @@ public class LightTriggeringAndEvents {
 
     public static void checkDefense(PlayerEntity player, LightComponent component, Entity entity){
         if(component.getTargets().equals(TargetType.SELF) && player.getHealth() <= (player.getMaxHealth())*25/100){
-            //CacheSystem.healLightSelf.add(player.getUuid());
             sendReadyPacket((ServerPlayerEntity) player, true);
         }else if(component.getTargets().equals(TargetType.ALLIES)){
             
@@ -96,7 +100,7 @@ public class LightTriggeringAndEvents {
             //and they are not the entity that has been hit then add them to the team_entities and check if their health is ok
             for(LivingEntity ent : entities){
                 //TODO integration with other mods that implement allies stuff
-                if(!entity.equals(ent) && ent.getScoreboardTeam() != null && ent.isTeammate(player) ){
+                if(!entity.equals(ent) && CheckAllies.checkAlly(player, ent) ){
                     if(ent.getHealth() <= (ent.getMaxHealth())*50/100){
                         ent_number++;
                     }
@@ -148,7 +152,7 @@ public class LightTriggeringAndEvents {
             //and they are not the entity that has been hit then add them to the team_entities and check if their health is ok
             for(LivingEntity ent : entities){
                 //TODO integration with other mods that implement allies stuff
-                if(!entity.equals(ent) && ent.getScoreboardTeam() != null && ent.isTeammate(player) ){
+                if(!entity.equals(ent) && CheckAllies.checkAlly(player, ent) ){
                     if(ent.getHealth() <= (ent.getMaxHealth())*50/100){
                         ent_number++;
                     }

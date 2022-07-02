@@ -21,6 +21,13 @@ public class Config {
 
     public static boolean PLAYER_GLOWS;
 
+    public static boolean CHECK_SURROUNDED;
+    public static int SURROUNDED_AMOUNT;
+    public static double SURROUNDED_ALLIES_MULTIPLIER;
+    public static int SURROUNDED_DISTANCE;
+    public static boolean CHECK_SURROUNDING_MOBS_HEALTH;
+    public static int SURROUNDING_HEALTH_THRESHOLD;
+
     public static void registerConfigs() {
         configs = new ConfigProvider();
         createConfigs();
@@ -42,6 +49,14 @@ public class Config {
 
         configs.addKeyValuePair(new Pair<>("player_glows", true), "Does the player glow when the light activates?");
 
+        configs.addKeyValuePair(new Pair<>("check_surrounded", true), "Does the player need to be surrounded to trigger light?");
+        configs.addKeyValuePair(new Pair<>("surrounded_amount", 5), "How many hostile entities needs to be near a player to be considered surrounded?");
+        configs.addKeyValuePair(new Pair<>("surrounded_allies_multiplier", 2), "When checking if allies are surrounded, how much to multiply the default value above?");
+        configs.addKeyValuePair(new Pair<>("surrounded_distance", 5), "How far to check (in blocks) for hostile entities?");
+        configs.addKeyValuePair(new Pair<>("check_surrounding_mobs_health", true), "Do a check on the mobs health. If below a certain threshold, stop considering in the surrounded count");
+        configs.addKeyValuePair(new Pair<>("surrounding_health_threshold", 15), "The hp percentage below which mobs won't be considered in the surrounding count anymore (like 15, 20, 50)");
+
+
     }
 
     public static void reloadConfig(){
@@ -60,6 +75,14 @@ public class Config {
         DURATION_MULTIPLIER = CONFIG.getOrDefault("duration_multiplier", 1);
 
         PLAYER_GLOWS = CONFIG.getOrDefault("player_glows", true);
+
+        CHECK_SURROUNDED = CONFIG.getOrDefault("check_surrounded", true);
+        SURROUNDED_AMOUNT = CONFIG.getOrDefault("surrounded_amount", 5);
+        SURROUNDED_ALLIES_MULTIPLIER = CONFIG.getOrDefault("surrounded_allies_multiplier", 2);
+        SURROUNDED_DISTANCE = CONFIG.getOrDefault("surrounded_distance", 5);
+        CHECK_SURROUNDING_MOBS_HEALTH = CONFIG.getOrDefault("check_surrounding_mobs_health", false);
+        SURROUNDING_HEALTH_THRESHOLD = CONFIG.getOrDefault("surrounding_health_threshold", 15);
+
     }
 }
 
