@@ -28,6 +28,15 @@ public class Config {
     public static boolean CHECK_SURROUNDING_MOBS_HEALTH;
     public static int SURROUNDING_HEALTH_THRESHOLD;
 
+    public static int HP_PERCENTAGE_SELF;
+    public static int HP_PERCENTAGE_ALLIES;
+    public static int HP_PERCENTAGE_OTHER;
+
+    public static boolean CHECK_ARMOR_DURABILITY;
+    public static int DUR_PERCENTAGE_SELF;
+    public static int DUR_PERCENTAGE_ALLIES;
+    public static int DUR_PERCENTAGE_OTHER;
+
     public static void registerConfigs() {
         configs = new ConfigProvider();
         createConfigs();
@@ -56,6 +65,14 @@ public class Config {
         configs.addKeyValuePair(new Pair<>("check_surrounding_mobs_health", true), "Do a check on the mobs health. If below a certain threshold, stop considering in the surrounded count");
         configs.addKeyValuePair(new Pair<>("surrounding_health_threshold", 15), "The hp percentage below which mobs won't be considered in the surrounding count anymore (like 15, 20, 50)");
 
+        configs.addKeyValuePair(new Pair<>("hp_percentage_self", 25), "The hp percentage below which the light will be triggerable if the target is SELF (like 15, 20, 50) (in some cases it may not apply)");
+        configs.addKeyValuePair(new Pair<>("hp_percentage_allies", 50), "The hp percentage below which the light will be triggerable if the target is ALLIES (like 15, 20, 50) (in some cases it may not apply)");
+        configs.addKeyValuePair(new Pair<>("hp_percentage_other", 50), "The hp percentage below which the light will be triggerable if the target is OTHER/Passive mobs (like 15, 20, 50) (in some cases it may not apply)");
+
+        configs.addKeyValuePair(new Pair<>("check_armor_durability", false), "Do a check on the armor durability as well. Warning: I'd advise raising the Health percentage if this is enabled");
+        configs.addKeyValuePair(new Pair<>("dur_percentage_self", 5), "The armor durability percentage below which the light will be triggerable if the target is SELF (like 15, 20, 50) (in some cases it may not apply)");
+        configs.addKeyValuePair(new Pair<>("dur_percentage_allies", 10), "The armor durability percentage below which the light will be triggerable if the target is ALLIES (like 15, 20, 50) (in some cases it may not apply)");
+        configs.addKeyValuePair(new Pair<>("dur_percentage_other", 10), "The armor durability percentage below which the light will be triggerable if the target is OTHER/Passive mobs (like 15, 20, 50) (in some cases it may not apply)");
 
     }
 
@@ -82,6 +99,16 @@ public class Config {
         SURROUNDED_DISTANCE = CONFIG.getOrDefault("surrounded_distance", 5);
         CHECK_SURROUNDING_MOBS_HEALTH = CONFIG.getOrDefault("check_surrounding_mobs_health", false);
         SURROUNDING_HEALTH_THRESHOLD = CONFIG.getOrDefault("surrounding_health_threshold", 15);
+
+        HP_PERCENTAGE_SELF = CONFIG.getOrDefault("hp_percentage_self", 25);
+        HP_PERCENTAGE_ALLIES = CONFIG.getOrDefault("hp_percentage_allies", 50);
+        HP_PERCENTAGE_OTHER = CONFIG.getOrDefault("hp_percentage_other", 50);
+
+        CHECK_ARMOR_DURABILITY = CONFIG.getOrDefault("check_armor_durability", false);
+        DUR_PERCENTAGE_SELF = CONFIG.getOrDefault("dur_percentage_self", 5);
+        DUR_PERCENTAGE_ALLIES = CONFIG.getOrDefault("dur_percentage_allies", 10);
+        DUR_PERCENTAGE_OTHER = CONFIG.getOrDefault("dur_percentage_other", 10);
+
 
     }
 }

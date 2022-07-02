@@ -21,7 +21,7 @@ import me.emafire003.dev.lightwithin.particles.LightParticles;
 import me.emafire003.dev.lightwithin.sounds.LightSounds;
 import me.emafire003.dev.lightwithin.status_effects.LightEffects;
 import me.emafire003.dev.lightwithin.particles.LightParticlesUtil;
-import me.emafire003.dev.lightwithin.util.CheckAllies;
+import me.emafire003.dev.lightwithin.util.CheckUtils;
 import me.emafire003.dev.lightwithin.util.TargetType;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
@@ -57,8 +57,6 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 
 	public static final ComponentKey<LightComponent> LIGHT_COMPONENT =
 			ComponentRegistry.getOrCreate(new Identifier(MOD_ID, "light_component"), LightComponent.class);
-
-	//TODO vocal sayout loud of lightname when activating
 
 	@Override
 	public void onInitialize() {
@@ -111,11 +109,7 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 	}
 
 	public static boolean isPlayerInCooldown(PlayerEntity user){
-		if(user.hasStatusEffect(LightEffects.LIGHT_FATIGUE) || user.hasStatusEffect(LightEffects.LIGHT_ACTIVE)){
-			return true;
-		}else{
-			return false;
-		}
+		return user.hasStatusEffect(LightEffects.LIGHT_FATIGUE) || user.hasStatusEffect(LightEffects.LIGHT_ACTIVE);
 	}
 
 	public static void activateLight(ServerPlayerEntity player){
@@ -138,7 +132,7 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 			component.setPrevColor(ColoredGlowLib.getEntityColor(player));
 			player.playSound(LightSounds.HEAL_LIGHT, 1f, 0.9f);
 			if(debug) {
-				player.sendMessage(Text.literal("Tried to play the heal sound LightWitihin.activateLight..."), false);
+				player.sendMessage(Text.literal("Tried to play the heal sound LightWithin.activateLight..."), false);
 			}
 		}else if(type.equals(InnerLightType.DEFENCE)){
 			activateDefense(component, player);
@@ -172,18 +166,17 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 		}
 		//There could be a bug where the player stands near only 1 ally that is 50% life or lower and
 		// then enderpearls to other companions and cures them. But it's ok because of lore,
-		// like the light saw a an ally struggling and activated. Then it heals whoever is near.
+		// like the light saw an ally struggling and activated. Then it heals whoever is near.
 		// It's not a bug, it's a feature now.
 		//Yay.
 		else if(component.getTargets().equals(TargetType.ALLIES)){
 			List<LivingEntity> entities = player.getWorld().getEntitiesByClass(LivingEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amount), (entity1 -> true));
 			for(LivingEntity ent : entities){
-				//TODO integration with other mods that implement allies stuff
-				//TODO may need this to prevent bugs
-				if(CheckAllies.checkAlly(player, ent)){
+				// may need this to prevent bugs EDIT i don't even remember what "this" referred to eheh
+				if(CheckUtils.CheckAllies.checkAlly(player, ent)){
 					targets.add(ent);
 				}else if(ent instanceof TameableEntity){
-					if(((TameableEntity) ent).getOwner().equals(player)){
+					if(player.equals(((TameableEntity) ent).getOwner())){
 						targets.add(ent);
 					}
 				}
@@ -226,10 +219,10 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 			for(LivingEntity ent : entities){
 				//TODO integration with other mods that implement allies stuff
 				//TODO may need this to prevent bugs
-				if(/*!entity.equals(ent) && */CheckAllies.checkAlly(player, ent)){
+				if(/*!entity.equals(ent) && */CheckUtils.CheckAllies.checkAlly(player, ent)){
 					targets.add(ent);
 				}else if(ent instanceof TameableEntity){
-					if(((TameableEntity) ent).getOwner().equals(player)){
+					if(player.equals(((TameableEntity) ent).getOwner())){
 						targets.add(ent);
 					}
 				}
@@ -271,10 +264,10 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 			for(LivingEntity ent : entities){
 				//TODO integration with other mods that implement allies stuff
 				//TODO may need this to prevent bugs
-				if(/*!entity.equals(ent) && */CheckAllies.checkAlly(player, ent)){
+				if(/*!entity.equals(ent) && */CheckUtils.CheckAllies.checkAlly(player, ent)){
 					targets.add(ent);
 				}else if(ent instanceof TameableEntity){
-					if(((TameableEntity) ent).getOwner().equals(player)){
+					if(player.equals(((TameableEntity) ent).getOwner())){
 						targets.add(ent);
 					}
 				}
@@ -306,7 +299,6 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 		}catch(Exception e){
 			LOGGER.error("FAILED to send data packets to the client!");
 			e.printStackTrace();
-			return;
 		}
 	}
 

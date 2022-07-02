@@ -21,6 +21,7 @@ package me.emafire003.dev.lightwithin.config;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+//Modified by Emafire003
 
 import me.emafire003.dev.lightwithin.LightWithin;
 
@@ -35,7 +36,7 @@ import java.util.Scanner;
 import static me.emafire003.dev.lightwithin.LightWithin.LOGGER;
 
 public class SimpleConfig {
-    ;
+
     private final HashMap<String, String> config = new HashMap<>();
     private final ConfigRequest request;
     private boolean broken = false;
@@ -99,7 +100,7 @@ public class SimpleConfig {
     //Modified to fit the directory
     public static ConfigRequest of( String filename ) {
         Path path = LightWithin.PATH;
-        return new ConfigRequest( path.resolve( filename + ".properties" ).toFile(), filename );
+        return new ConfigRequest( path.resolve( filename + ".yml" ).toFile(), filename );
     }
 
     private void createConfig() throws IOException {
@@ -125,7 +126,7 @@ public class SimpleConfig {
     // Modification by Kaupenjoe
     private void parseConfigEntry( String entry, int line ) {
         if( !entry.isEmpty() && !entry.startsWith( "#" ) ) {
-            String[] parts = entry.split("=", 2);
+            String[] parts = entry.split(":", 2);
             if( parts.length == 2 ) {
                 // Recognizes comments after a value
                 String temp = parts[1].split(" #")[0];

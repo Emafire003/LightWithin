@@ -2,10 +2,11 @@ package me.emafire003.dev.lightwithin.events;
 
 import com.mojang.datafixers.util.Pair;
 import me.emafire003.dev.lightwithin.component.LightComponent;
+import me.emafire003.dev.lightwithin.config.Config;
 import me.emafire003.dev.lightwithin.lights.InnerLightType;
 import me.emafire003.dev.lightwithin.networking.LightReadyPacketS2C;
 import me.emafire003.dev.lightwithin.status_effects.LightEffects;
-import me.emafire003.dev.lightwithin.util.CheckAllies;
+import me.emafire003.dev.lightwithin.util.CheckUtils;
 import me.emafire003.dev.lightwithin.util.TargetType;
 import net.fabricmc.fabric.api.event.player.AttackEntityCallback;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
@@ -18,7 +19,6 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.math.Box;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
@@ -26,8 +26,6 @@ import java.util.UUID;
 import static me.emafire003.dev.lightwithin.LightWithin.*;
 
 public class LightTriggeringAndEvents {
-
-    public static HashMap<UUID, Pair<InnerLightType, TargetType>> cache = new HashMap<UUID, Pair<InnerLightType, TargetType>>();
 
     public static void sendReadyPacket(ServerPlayerEntity player, boolean b){
         try{
@@ -41,145 +39,73 @@ public class LightTriggeringAndEvents {
 
     public static void checkHeal(PlayerEntity player, LightComponent component, Entity entity){
         /**CHECKS for the self part*/
-        if(component.getTargets().equals(TargetType.SELF) && player.getHealth() <= (player.getMaxHealth())*25/100){
+        if(component.getTargets().equals(TargetType.SELF)
+                && CheckUtils.checkSelfHealth(player, Config.HP_PERCENTAGE_SELF)
+                && CheckUtils.checkSurrounded(player)
+                && CheckUtils.checkArmorDurability(player, Config.DUR_PERCENTAGE_SELF)
+        ){
             sendReadyPacket((ServerPlayerEntity) player, true);
         }
         /**CHECKS for the allies part*/
-        else if(component.getTargets().equals(TargetType.ALLIES)){
-            
-            List<LivingEntity> entities = player.getWorld().getEntitiesByClass(LivingEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amount), (entity1 -> true));
-            int ent_number = 0;
-            //I need to this to prevent a ConcurrentModificationError
-            List<LivingEntity> team_entities = new ArrayList<>();
-            //loops through the entities near the player, if the entities are in the same team as the player
-            //and they are not the entity that has been hit then add them to the team_entities and check if their health is ok
-            for(LivingEntity ent : entities){
-                //TODO integration with other mods that implement allies stuff
-                if(!entity.equals(ent) && CheckAllies.checkAlly(player, ent) ){
-                    if(ent.getHealth() <= (ent.getMaxHealth())*50/100){
-                        ent_number++;
-                    }
-                    team_entities.add(ent);
-                }else
-                if(ent instanceof TameableEntity){
-                    if(((TameableEntity) ent).getOwner().equals(player)){
-                        if(ent.getHealth() <= (ent.getMaxHealth())*50/100){
-                            ent_number++;
-                        }
-                        team_entities.add(ent);
-                    }
-                }
-            }
-            //If the total team targets && the number of entities of team with the right health are true then
-            //send the ready packet
-            if(team_entities.size() == ent_number){
-                sendReadyPacket((ServerPlayerEntity) player, true);
-            }
-            /**CHECKS for the other part*/
-        }else if(component.getTargets().equals(TargetType.OTHER)){
-            List<PassiveEntity> entities = entity.getWorld().getEntitiesByClass(PassiveEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amount), (entity1 -> true));
-            for(PassiveEntity ent : entities){
-                if(ent.getHealth() <= (ent.getMaxHealth())*50/100){
-                    sendReadyPacket((ServerPlayerEntity) player, true);
-                    break;
-                }
-            }
+        else if(component.getTargets().equals(TargetType.ALLIES)
+                && CheckUtils.checkAllyHealth(player, entity, Config.HP_PERCENTAGE_ALLIES)
+                && CheckUtils.checkSurrounded(player)
+                && CheckUtils.checkArmorDurability(player, Config.DUR_PERCENTAGE_ALLIES)
+        ){
+            sendReadyPacket((ServerPlayerEntity) player, true);
+        }else if(component.getTargets().equals(TargetType.OTHER)
+                && CheckUtils.checkPassiveHealth(player, entity, Config.HP_PERCENTAGE_OTHER)
+                && CheckUtils.checkArmorDurability(player, Config.DUR_PERCENTAGE_OTHER)
+        ){
+            sendReadyPacket((ServerPlayerEntity) player, true);
         }
     }
 
     public static void checkDefense(PlayerEntity player, LightComponent component, Entity entity){
-        if(component.getTargets().equals(TargetType.SELF) && player.getHealth() <= (player.getMaxHealth())*25/100){
+        /**CHECKS for the self part*/
+        if(component.getTargets().equals(TargetType.SELF)
+                && CheckUtils.checkSelfHealth(player, Config.HP_PERCENTAGE_SELF)
+                && CheckUtils.checkSurrounded(player)
+                && CheckUtils.checkArmorDurability(player, Config.DUR_PERCENTAGE_SELF)
+            ){
             sendReadyPacket((ServerPlayerEntity) player, true);
-        }else if(component.getTargets().equals(TargetType.ALLIES)){
-            
-            List<LivingEntity> entities = player.getWorld().getEntitiesByClass(LivingEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amount), (entity1 -> true));
-            int ent_number = 0;
-            //I need to this to prevent a ConcurrentModificationError
-            List<LivingEntity> team_entities = new ArrayList<>();
-            //loops through the entities near the player, if the entities are in the same team as the player
-            //and they are not the entity that has been hit then add them to the team_entities and check if their health is ok
-            for(LivingEntity ent : entities){
-                //TODO integration with other mods that implement allies stuff
-                if(!entity.equals(ent) && CheckAllies.checkAlly(player, ent) ){
-                    if(ent.getHealth() <= (ent.getMaxHealth())*50/100){
-                        ent_number++;
-                    }
-                    team_entities.add(ent);
-                }else
-                if(ent instanceof TameableEntity){
-                    ((TameableEntity) ent).getOwner().equals(player);
-                    if(ent.getHealth() <= (ent.getMaxHealth())*50/100){
-                        ent_number++;
-                    }
-                    team_entities.add(ent);
-                }else
-                if(ent instanceof TameableEntity){
-                    if(((TameableEntity) ent).getOwner().equals(player)){
-                        if(ent.getHealth() <= (ent.getMaxHealth())*50/100){
-                            ent_number++;
-                        }
-                        team_entities.add(ent);
-                    }
-                }
-            }
-            //If the total team targets && the number of entities of team with the right health are true then
-            //send the ready packet
-            if(team_entities.size() == ent_number){
-                sendReadyPacket((ServerPlayerEntity) player, true);
-            }
-        }else if(component.getTargets().equals(TargetType.OTHER)){
-            List<PassiveEntity> entities = entity.getWorld().getEntitiesByClass(PassiveEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amount), (entity1 -> true));
-            for(PassiveEntity ent : entities){
-                if(ent.getHealth() <= (ent.getMaxHealth())*50/100){
-                    sendReadyPacket((ServerPlayerEntity) player, true);
-                    break;
-                }
-            }
+        }
+        /**CHECKS for the allies part*/
+        else if(component.getTargets().equals(TargetType.ALLIES)
+                && CheckUtils.checkAllyHealth(player, entity, Config.HP_PERCENTAGE_ALLIES)
+                && CheckUtils.checkSurrounded(player)
+                && CheckUtils.checkArmorDurability(player, Config.DUR_PERCENTAGE_ALLIES)
+        ){
+            sendReadyPacket((ServerPlayerEntity) player, true);
+        }else if(component.getTargets().equals(TargetType.OTHER)
+                && CheckUtils.checkPassiveHealth(player, entity, Config.HP_PERCENTAGE_OTHER)
+                && CheckUtils.checkArmorDurability(player, Config.DUR_PERCENTAGE_OTHER)
+        ){
+            sendReadyPacket((ServerPlayerEntity) player, true);
         }
     }
 
     public static void checkStrength(PlayerEntity player, LightComponent component, Entity entity){
-        if(component.getTargets().equals(TargetType.SELF) && player.getHealth() <= (player.getMaxHealth())*25/100){
-            //CacheSystem.healLightSelf.add(player.getUuid());
+        /**CHECKS for the self part*/
+        if(component.getTargets().equals(TargetType.SELF)
+                && CheckUtils.checkSelfHealth(player, Config.HP_PERCENTAGE_SELF)
+                && CheckUtils.checkSurrounded(player)
+                && CheckUtils.checkArmorDurability(player, Config.DUR_PERCENTAGE_SELF)
+        ){
             sendReadyPacket((ServerPlayerEntity) player, true);
-        }else if(component.getTargets().equals(TargetType.ALLIES)){
-            
-            List<LivingEntity> entities = player.getWorld().getEntitiesByClass(LivingEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amount), (entity1 -> true));
-            int ent_number = 0;
-            //I need to this to prevent a ConcurrentModificationError
-            List<LivingEntity> team_entities = new ArrayList<>();
-            //loops through the entities near the player, if the entities are in the same team as the player
-            //and they are not the entity that has been hit then add them to the team_entities and check if their health is ok
-            for(LivingEntity ent : entities){
-                //TODO integration with other mods that implement allies stuff
-                if(!entity.equals(ent) && CheckAllies.checkAlly(player, ent) ){
-                    if(ent.getHealth() <= (ent.getMaxHealth())*50/100){
-                        ent_number++;
-                    }
-                    team_entities.add(ent);
-                }else
-                if(ent instanceof TameableEntity){
-                    if(((TameableEntity) ent).getOwner().equals(player)){
-                        if(ent.getHealth() <= (ent.getMaxHealth())*50/100){
-                            ent_number++;
-                        }
-                        team_entities.add(ent);
-                    }
-                }
-            }
-            //If the total team targets && the number of entities of team with the right health are true then
-            //send the ready packet
-            if(team_entities.size() == ent_number){
-                sendReadyPacket((ServerPlayerEntity) player, true);
-            }
-        }else if(component.getTargets().equals(TargetType.OTHER)){
-            List<PassiveEntity> entities = entity.getWorld().getEntitiesByClass(PassiveEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amount), (entity1 -> true));
-            for(PassiveEntity ent : entities){
-                if(ent.getHealth() <= (ent.getMaxHealth())*50/100){
-                    sendReadyPacket((ServerPlayerEntity) player, true);
-                    break;
-                }
-            }
+        }
+        /**CHECKS for the allies part*/
+        else if(component.getTargets().equals(TargetType.ALLIES)
+                && CheckUtils.checkAllyHealth(player, entity, Config.HP_PERCENTAGE_ALLIES)
+                && CheckUtils.checkSurrounded(player)
+                && CheckUtils.checkArmorDurability(player, Config.DUR_PERCENTAGE_ALLIES)
+        ){
+            sendReadyPacket((ServerPlayerEntity) player, true);
+        }else if(component.getTargets().equals(TargetType.OTHER)
+                && CheckUtils.checkPassiveHealth(player, entity, Config.HP_PERCENTAGE_OTHER)
+                && CheckUtils.checkArmorDurability(player, Config.DUR_PERCENTAGE_OTHER)
+        ){
+            sendReadyPacket((ServerPlayerEntity) player, true);
         }
     }
 
