@@ -3,8 +3,6 @@ package me.emafire003.dev.lightwithin.client;
 import me.emafire003.dev.lightwithin.lights.InnerLightType;
 import me.emafire003.dev.lightwithin.networking.LightReadyPacketS2C;
 import me.emafire003.dev.lightwithin.networking.RenderRunePacketS2C;
-import me.emafire003.dev.lightwithin.particles.LightParticle;
-import me.emafire003.dev.lightwithin.particles.LightParticleV2;
 import me.emafire003.dev.lightwithin.particles.LightParticleV3;
 import me.emafire003.dev.lightwithin.particles.LightParticles;
 import me.emafire003.dev.lightwithin.sounds.LightSounds;

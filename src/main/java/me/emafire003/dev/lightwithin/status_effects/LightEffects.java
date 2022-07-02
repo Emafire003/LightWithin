@@ -17,6 +17,6 @@ public class LightEffects {
     }
 
     public static void registerModEffects(){
-        System.out.println("Registering ModStatusEffects for mod:" + LightWithin.MOD_ID);
+        LightWithin.LOGGER.info("Registering status effects for " + LightWithin.MOD_ID);
     }
 }

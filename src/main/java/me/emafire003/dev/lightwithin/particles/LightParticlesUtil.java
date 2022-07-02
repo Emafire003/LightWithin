@@ -7,7 +7,6 @@ import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.text.LiteralText;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3f;
 import org.jetbrains.annotations.NotNull;

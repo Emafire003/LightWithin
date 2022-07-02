@@ -6,6 +6,7 @@ import dev.onyxstudios.cca.api.v3.entity.EntityComponentFactoryRegistry;
 import dev.onyxstudios.cca.api.v3.entity.EntityComponentInitializer;
 import dev.onyxstudios.cca.api.v3.entity.RespawnCopyStrategy;
 import me.emafire003.dev.coloredglowlib.ColoredGlowLib;
+import me.emafire003.dev.lightwithin.compat.ModChecker;
 import me.emafire003.dev.lightwithin.component.LightComponent;
 import me.emafire003.dev.lightwithin.config.Config;
 import me.emafire003.dev.lightwithin.events.LightTriggeringAndEvents;
@@ -31,7 +32,7 @@ import net.minecraft.entity.passive.PassiveEntity;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.LiteralText;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Box;
 import org.slf4j.Logger;
@@ -63,6 +64,8 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 		// This code runs as soon as Minecraft is in a mod-load-ready state.
 		// However, some things (like resources) may still be uninitialized.
 		// Proceed with mild caution.
+
+		ModChecker.setLoaded("factions", FabricLoader.getInstance().isModLoaded("factions"));
 
 		LightTriggeringAndEvents.registerListeners();
 		registerLightUsedPacket();
@@ -118,7 +121,7 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 		if(!(player.hasStatusEffect(LightEffects.LIGHT_FATIGUE) || player.hasStatusEffect(LightEffects.LIGHT_ACTIVE))){
 
 			if(debug){
-				player.sendMessage(new LiteralText("Ok not in cooldown, starting the ticking"), false);
+				player.sendMessage(Text.literal("Ok not in cooldown, starting the ticking"), false);
 			}
 			player.addStatusEffect(new StatusEffectInstance(LightEffects.LIGHT_ACTIVE, (int) (Config.DURATION_MULTIPLIER*20*LIGHT_COMPONENT.get(player).getDuration())));
 		}else{
@@ -134,7 +137,7 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 			component.setPrevColor(ColoredGlowLib.getEntityColor(player));
 			player.playSound(LightSounds.HEAL_LIGHT, 1f, 0.9f);
 			if(debug) {
-				player.sendMessage(new LiteralText("Tried to play the heal sound LightWitihin.activateLight..."), false);
+				player.sendMessage(Text.literal("Tried to play the heal sound LightWitihin.activateLight..."), false);
 			}
 		}else if(type.equals(InnerLightType.DEFENCE)){
 			activateDefense(component, player);
@@ -164,7 +167,7 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 
 		if(component.getTargets().equals(TargetType.SELF)){
 			targets.add(player);
-			player.sendMessage(new LiteralText("Your light flowed trough you, sewing your wounds!"), true);
+			player.sendMessage(Text.literal("Your light flowed trough you, sewing your wounds!"), true);
 		}
 		//There could be a bug where the player stands near only 1 ally that is 50% life or lower and
 		// then enderpearls to other companions and cures them. But it's ok because of lore,
@@ -184,7 +187,7 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 					}
 				}
 			}
-			player.sendMessage(new LiteralText("Your light flowed trough you and your allies, sewing your wounds!"), true);
+			player.sendMessage(Text.literal("Your light flowed trough you and your allies, sewing your wounds!"), true);
 
 		}
 
@@ -194,10 +197,10 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 				targets.add(player);
 			}
 			targets.addAll(player.getWorld().getEntitiesByClass(PassiveEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amount), (entity1 -> true)));
-			player.sendMessage(new LiteralText("Your light flowed trough peaceful creatures, sewing their wounds!"), true);
+			player.sendMessage(Text.literal("Your light flowed trough peaceful creatures, sewing their wounds!"), true);
 		}
 		if(debug){
-			player.sendMessage(new LiteralText("Ok light triggered"), false);
+			player.sendMessage(Text.literal("Ok light triggered"), false);
 		}
 		new HealLight(targets, component.getMaxCooldown(), component.getPowerMultiplier(),
 				component.getDuration(), player).execute();
@@ -210,7 +213,7 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 
 		if(component.getTargets().equals(TargetType.SELF)){
 			targets.add(player);
-			player.sendMessage(new LiteralText("Your light tensed up, shielding you from an hurtful future!"), true);
+			player.sendMessage(Text.literal("Your light tensed up, shielding you from an hurtful future!"), true);
 		}
 		//There could be a bug where the player stands near only 1 ally that is 50% life or lower and
 		// then enderpearls to other companions and cures them. But it's ok because of lore,
@@ -230,7 +233,7 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 					}
 				}
 			}
-			player.sendMessage(new LiteralText("Your light tensed up, shielding your allies from an hurtful future!"), true);
+			player.sendMessage(Text.literal("Your light tensed up, shielding your allies from an hurtful future!"), true);
 		}
 
 		//Same here
@@ -239,10 +242,10 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 				targets.add(player);
 			}
 			targets.addAll(player.getWorld().getEntitiesByClass(PassiveEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amount), (entity1 -> true)));
-			player.sendMessage(new LiteralText("Your light tensed up, shielding peaceful creatures from an hurtful future!"), true);
+			player.sendMessage(Text.literal("Your light tensed up, shielding peaceful creatures from an hurtful future!"), true);
 		}
 		if(debug){
-			player.sendMessage(new LiteralText("Ok light triggered"), false);
+			player.sendMessage(Text.literal("Ok light triggered"), false);
 		}
 		new DefenseLight(targets, component.getMaxCooldown(), component.getPowerMultiplier(),
 				component.getDuration(), player).execute();
@@ -255,7 +258,7 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 
 		if(component.getTargets().equals(TargetType.SELF)){
 			targets.add(player);
-			player.sendMessage(new LiteralText("Your light shone bright, strengthening your soul!"), true);
+			player.sendMessage(Text.literal("Your light shone bright, strengthening your soul!"), true);
 		}
 		//There could be a bug where the player stands near only 1 ally that is 50% life or lower and
 		// then enderpearls to other companions and cures them. But it's ok because of lore,
@@ -275,7 +278,7 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 					}
 				}
 			}
-			player.sendMessage(new LiteralText("Your light shone bright, strengthening your allies!"), true);
+			player.sendMessage(Text.literal("Your light shone bright, strengthening your allies!"), true);
 
 		}
 
@@ -285,12 +288,12 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 				targets.add(player);
 			}
 			targets.addAll(player.getWorld().getEntitiesByClass(PassiveEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amount), (entity1 -> true)));
-			player.sendMessage(new LiteralText("Your light shone bright, strengthening peaceful creatures around you!"), true);
+			player.sendMessage(Text.literal("Your light shone bright, strengthening peaceful creatures around you!"), true);
 		}
 
 
 		if(debug){
-			player.sendMessage(new LiteralText("Ok light triggered"), false);
+			player.sendMessage(Text.literal("Ok light triggered"), false);
 		}
 		new StrengthLight(targets, component.getMaxCooldown(), component.getPowerMultiplier(),
 				component.getDuration(), player).execute();

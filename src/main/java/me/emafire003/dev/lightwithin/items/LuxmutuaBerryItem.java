@@ -14,9 +14,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
@@ -83,7 +81,7 @@ public class LuxmutuaBerryItem extends Item {
             component.setTargets(newtarget);
 
             //TODO config
-            ((ServerPlayerEntity) user).sendMessage(new LiteralText("Your light resonated with you again and decided it was time to change"), true);
+            ((ServerPlayerEntity) user).sendMessage(Text.literal("Your light resonated with you again and decided it was time to change"), true);
         }
         return this.isFood() ? user.eatFood(world, stack) : stack;
     }
@@ -99,7 +97,7 @@ public class LuxmutuaBerryItem extends Item {
         else if(r == 2){
             return InnerLightType.STRENGTH;
         }else{
-            player.sendMessage(new LiteralText("There was an error, sorry. " + r), false);
+            player.sendMessage(Text.literal("There was an error, sorry. " + r), false);
             return InnerLightType.NONE;
         }
     }
@@ -115,7 +113,7 @@ public class LuxmutuaBerryItem extends Item {
         else if(r == 6){
             return TargetType.OTHER;
         }else{
-            player.sendMessage(new LiteralText("There was an error, sorry. " + r), false);
+            player.sendMessage(Text.literal("There was an error, sorry. " + r), false);
             return TargetType.NONE;
         }
     }
@@ -123,9 +121,9 @@ public class LuxmutuaBerryItem extends Item {
     @Override
     public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
         if(!Screen.hasShiftDown()) {
-            tooltip.add(new TranslatableText("item.lightwithin.berry.tooltip"));
+            tooltip.add(Text.translatable("item.lightwithin.berry.tooltip"));
         } else {
-            tooltip.add(new TranslatableText("item.lightwithin.luxmutua_berry.tooltip"));
+            tooltip.add(Text.translatable("item.lightwithin.luxmutua_berry.tooltip"));
         }
     }
 }

@@ -12,12 +12,9 @@ import me.x150.renderer.renderer.MSAAFramebuffer;
 import me.x150.renderer.renderer.Rectangle;
 import me.x150.renderer.renderer.Renderer2d;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
-import net.minecraft.block.FallingBlock;
-import net.minecraft.block.RedstoneOreBlock;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.option.Perspective;
-import net.minecraft.entity.FallingBlockEntity;
 import net.minecraft.util.Identifier;
 
 import static me.emafire003.dev.lightwithin.LightWithin.LOGGER;
