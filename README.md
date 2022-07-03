@@ -8,8 +8,9 @@ player.
 ![demo_heal_brief](https://user-images.githubusercontent.com/29462910/171922554-e776af80-241a-4acc-a5f8-1d0b3f26211c.gif)
 
 
-Currently there are only 3 types of innerlights, Heal Light, Defense Light and Strength Light. For now, when they trigger they add a powerful potion effect (beyond vanilla levels) when the player (or the target of the light) needs it the most. Aka, for now, when they are below 25/50% HP depending on the specif light.
-But this is just a start, i'm going to make more complex lights with more complex triggers that may summon a raging storm at whover is attacking the player or his allies, or ice up the surroundings and such. I just don't have the time right now, and besides, this is just the alpha version!
+Currently there are only 3 types of innerlights, Heal Light, Defense Light and Strength Light. For now, when they trigger they add a powerful potion effect (beyond vanilla levels) when the player (or the target of the light) needs it the most. For example, when they are below 25/50% HP or when they are surrounded by mobs etc, depending on the specif lightype. Elemental lights will require an item or a block to be near the player maybe.
+
+But this is just a start, i'm going to make more complex lights with more complex triggers that may summon a raging storm at whover is attacking the player or his allies, or ice up the surroundings and such. I just don't have the time right now, and besides, this is just the alpha version! EDIT: now I'm working on a bunch of stuff!
 There also are cool little jingles for pretty much everything you do/activate!
 
 ### How your unique light is deteremined
@@ -20,8 +21,9 @@ Of course the LightType and Target of the light are determined with the UUID as 
 ### How to trigger a light
 Whenever you meet the trigger conditions for the activation of your inner light, a in icon like: ![Senza titolo](https://user-images.githubusercontent.com/29462910/171919382-d65f6f72-4a84-44f9-9ebb-62283755793e.png) is going to appear in the top-left corner of your screen, along with a sound effect. When you noitce this press the **V** button (default, you can change this in the keybinds settings) to activate it!
 
-When you trigger it a bunch of particles arranged in a circle with 8 columns, and a flash representing your light being unleashed. Also, if you are in 1st person mode a writing with the colors of the effect will show up at the center of your vision (they need to be reworked a bit tho). I wonder what it says... and which language...
+When you trigger it a bunch of particles arranged in a circle with 8 columns, and a flash representing your light being unleashed. Also, if you are in 1st person mode a writing with the colors of the effect will show up at the center of your vision. I wonder what it says... and which language...
 
+[![bisecthosting](https://www.bisecthosting.com/partners/custom-banners/e9c85d2a-cafa-4e2f-98bf-4f62bd9e951c.png)](https://www.bisecthosting.com/LightDev)
 
 # SPOILERS AHED: 
 ### If you want to discover the features of this mod yourself (which is better in my opinion since it's intened to be something like "Oh no i'm gonna lose, but wait something within me is magicly helping me" like a main character of an anime) DO NOT LOOK AT THE LIGHT TYPES UNDER HERE. SKIP TO THE ![BERRIES](https://github.com/Emafire003/LightWithin#the-lux-berries) IF YOU WANT!
@@ -82,15 +84,14 @@ This magical berry will refill your inner light, and trigger it right away. It w
 
 This berry will read your innerlight, and tell you how it's made up, aka what does it do, before activating it. It will be useful once the mod is out of alpha... eheh. Anyway, it will be as rare as a normal golden apple. Maybe you could find it in the same places too.
 
-[![bisecthosting](https://www.bisecthosting.com/partners/custom-banners/e9c85d2a-cafa-4e2f-98bf-4f62bd9e951c.png)](https://www.bisecthosting.com/LightDev)
-
 ## Coming (soon tm) Features
-- QoL changes
-- Way more light types such as Thunder, Shockawave, Elemental lights and such 
+- QoL changes EDIT: some implementd
+- Way more light types such as Thunder, Shockawave, Elemental lights and such EDIT: Elementals coming
 - More complex targets
-- More complex triggers
+- More complex triggers EDIT: Added a few
 - Legendary lights with an heavy lore behind them (For now i can say, "black white and ???"
 - Fix bugs
+- Oraganize this page a little better, maybe using a wiki. If you want to help, contact me.
 - Make the effects better
 - Modify the writings that appear on screen when triggering
 - Suggestions accepted but likely to be low in the roadmap
