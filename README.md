@@ -111,4 +111,4 @@ If you would like to offer me a coffee, here you go.
 
 For modpack devs: You are permitted to use this mod without directly asking, but please credit me somewhere, it would help! (Also, I'm kind of a curious person so maybe send me a message when you include it into your modpack, and I'd like to check it out)
 
-Thanks to @FranzleOrange for the help with the Strength soundtrack
+Thanks to @FranzleOrange for the help with the Strength sound effect, and also some sounds have been sampled from https://mixkit.co !
