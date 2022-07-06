@@ -6,9 +6,18 @@
   "item.lightwithin.luxmutua_berry": "Luxmutua Berry",
   "item.lightwithin.luxcognita_berry": "Luxcognita Berry",
   "item.lightwithin.berry.tooltip": "Press §dSHIFT§r to know what this berry does!",
-  "item.lightwithin.luxintus_berry.tooltip": "§eThis light-dense berry will §aunleash§r your §binner light§r!",
-  "item.lightwithin.luxmutua_berry.tooltip": "§eThe ever-twisting light of this berry will §achange§r your §binner light§r!",
-  "item.lightwithin.luxcognita_berry.tooltip": "§eThe knowing light of this berry will §atell you the secrets§r of your §binner light§r!",
+  "item.lightwithin.luxintus_berry.tooltip": "§eThis light-dense berry will §aunleash§e your",
+  "item.lightwithin.luxintus_berry.tooltip1": "§binner light§e!",
+  "item.lightwithin.luxmutua_berry.tooltip": "§eThe ever-twisting light of this berry will",
+  "item.lightwithin.luxmutua_berry.tooltip1": "§achange§e your §binner light§e!",
+  "item.lightwithin.luxcognita_berry.tooltip": "§eThe all-knowing light of this berry will",
+  "item.lightwithin.luxcognita_berry.tooltip1": "§atell you the secrets§e of your §binner light§e!",
   "light.unknown": "No light named: ",
-  "lighttype.unknown": "No light type named: "
+  "lighttype.unknown": "No light type named: ",
+
+  "light.description.error": "Uhm... your light is... an error? Light not found, report please! ",
+  "light.description.heal": "Your light, yes, is a gentle and caring one indeed",
+  "light.description.defense": "Resilience, that's what your light is made of",
+  "light.description.strength": "You have a vigorous light, lending its powers to your blade",
+  "light.description.blazing": "It is already firing up within you, ready to burst every moment"
 }

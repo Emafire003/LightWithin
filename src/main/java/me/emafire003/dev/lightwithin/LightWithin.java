@@ -7,14 +7,12 @@ import dev.onyxstudios.cca.api.v3.entity.EntityComponentInitializer;
 import dev.onyxstudios.cca.api.v3.entity.RespawnCopyStrategy;
 import me.emafire003.dev.coloredglowlib.ColoredGlowLib;
 import me.emafire003.dev.lightwithin.compat.ModChecker;
+import me.emafire003.dev.lightwithin.compat.factions.FactionChecker;
 import me.emafire003.dev.lightwithin.component.LightComponent;
 import me.emafire003.dev.lightwithin.config.Config;
 import me.emafire003.dev.lightwithin.events.LightTriggeringAndEvents;
 import me.emafire003.dev.lightwithin.items.LightItems;
-import me.emafire003.dev.lightwithin.lights.DefenseLight;
-import me.emafire003.dev.lightwithin.lights.HealLight;
-import me.emafire003.dev.lightwithin.lights.InnerLightType;
-import me.emafire003.dev.lightwithin.lights.StrengthLight;
+import me.emafire003.dev.lightwithin.lights.*;
 import me.emafire003.dev.lightwithin.networking.LightUsedPacketC2S;
 import me.emafire003.dev.lightwithin.networking.RenderRunePacketS2C;
 import me.emafire003.dev.lightwithin.particles.LightParticles;
@@ -22,6 +20,7 @@ import me.emafire003.dev.lightwithin.sounds.LightSounds;
 import me.emafire003.dev.lightwithin.status_effects.LightEffects;
 import me.emafire003.dev.lightwithin.particles.LightParticlesUtil;
 import me.emafire003.dev.lightwithin.util.CheckUtils;
+import me.emafire003.dev.lightwithin.util.LootTableModifier;
 import me.emafire003.dev.lightwithin.util.TargetType;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
@@ -29,6 +28,7 @@ import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.passive.PassiveEntity;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -66,6 +66,7 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 
 		ModChecker.setLoaded("factions", FabricLoader.getInstance().isModLoaded("factions"));
 
+		//LootTableModifier.modifyLootTables(); Doesn't really work
 		LightTriggeringAndEvents.registerListeners();
 		registerLightUsedPacket();
 		LightSounds.registerSounds();
@@ -130,15 +131,14 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 		if(type.equals(InnerLightType.HEAL)){
 			activateHeal(component, player);
 			component.setPrevColor(ColoredGlowLib.getEntityColor(player));
-			player.playSound(LightSounds.HEAL_LIGHT, 1f, 0.9f);
-			if(debug) {
-				player.sendMessage(Text.literal("Tried to play the heal sound LightWithin.activateLight..."), false);
-			}
 		}else if(type.equals(InnerLightType.DEFENCE)){
 			activateDefense(component, player);
 			component.setPrevColor(ColoredGlowLib.getEntityColor(player));
 		}else if(type.equals(InnerLightType.STRENGTH)){
 			activateStrength(component, player);
+			component.setPrevColor(ColoredGlowLib.getEntityColor(player));
+		}else if(type.equals(InnerLightType.BLAZING)){
+			activateBlazing(component, player);
 			component.setPrevColor(ColoredGlowLib.getEntityColor(player));
 		}
 		//for now defaults here
@@ -245,7 +245,7 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 				component.getDuration(), player).execute();
 	}
 
-	//=======================Defense Light=======================
+	//=======================Strength Light=======================
 	public static void activateStrength(LightComponent component, ServerPlayerEntity player){
 		List<LivingEntity> targets = new ArrayList<>();
 		//TODO add config option for setting the amout before it triggers (look up)
@@ -290,6 +290,38 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 			player.sendMessage(Text.literal("Ok light triggered"), false);
 		}
 		new StrengthLight(targets, component.getMaxCooldown(), component.getPowerMultiplier(),
+				component.getDuration(), player).execute();
+	}
+
+	//=======================Blazing Light=======================
+	public static void activateBlazing(LightComponent component, ServerPlayerEntity player){
+		List<LivingEntity> targets = new ArrayList<>();
+		//TODO add config option for setting the amout before it triggers (look up)
+
+		if(component.getTargets().equals(TargetType.ALL)){
+			targets.addAll(player.getWorld().getEntitiesByClass(LivingEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amount), (entity1 -> true)));
+			component.setPowerMultiplier(component.getPowerMultiplier()+2);
+			player.sendMessage(Text.literal("Your light wants to incinerate everything that stands in your way!"), true);
+		}
+
+		else if(component.getTargets().equals(TargetType.ENEMIES)){
+			List<LivingEntity> entities = player.getWorld().getEntitiesByClass(LivingEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amount), (entity1 -> true));
+			for(LivingEntity ent : entities){
+				if(ent instanceof HostileEntity && !CheckUtils.CheckAllies.checkAlly(player, ent)){
+					targets.add(ent);
+				}
+				if(ent instanceof PlayerEntity && ModChecker.isLoaded("factions")){
+					FactionChecker.areEnemies(player, (PlayerEntity) ent);
+				}
+			}
+			player.sendMessage(Text.literal("Your light wants to incinerate the enemies that stand before you!"), true);
+		}
+
+
+		if(debug){
+			player.sendMessage(Text.literal("Ok light triggered"), false);
+		}
+		new BlazingLight(targets, component.getMaxCooldown(), component.getPowerMultiplier(),
 				component.getDuration(), player).execute();
 	}
 

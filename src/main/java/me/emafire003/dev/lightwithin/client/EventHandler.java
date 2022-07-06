@@ -27,6 +27,11 @@ public class EventHandler {
     private boolean heal_runes = false;
     private boolean defense_runes = false;
     private boolean strength_runes = false;
+    private boolean blazing_runes = false;
+    private boolean frost_runes = false;
+    private boolean earthen_runes = false;
+    private boolean wind_runes = false;
+    private boolean aqua_runes = false;
     private int ticks = 0;
     int center_x = 0;
     int center_y = 0;
@@ -60,12 +65,16 @@ public class EventHandler {
                     Renderer2d.renderTexture(re.getStack(), new Identifier(LightWithin.MOD_ID, "textures/lights/runes/strength_light_runes.png"), center_x-(400/scale_factor)/2, center_y-(160/scale_factor)/2, (400/scale_factor)*1.2, (160/scale_factor)*1.2);
                     ClipStack.globalInstance.popWindow();
                 }
+                if(blazing_runes){
+                    ClipStack.globalInstance.addWindow(re.getStack(),new Rectangle(1,1,1000,1000));
+                    Renderer2d.renderTexture(re.getStack(), new Identifier(LightWithin.MOD_ID, "textures/lights/runes/blazing_light_runes.png"), center_x-(400/scale_factor)/2, center_y-(160/scale_factor)/2, (400/scale_factor)*1.2, (160/scale_factor)*1.2);
+                    ClipStack.globalInstance.popWindow();
+                }
             }
         });
     }
 
     public void renderRunes(InnerLightType type, ClientPlayerEntity player){
-        LOGGER.info("Rendering runes?");
         if(type.equals(InnerLightType.HEAL)){
             heal_runes = true;
             player.playSound(LightSounds.HEAL_LIGHT, 1 ,1);
@@ -75,6 +84,9 @@ public class EventHandler {
         }else if(type.equals(InnerLightType.STRENGTH)){
             strength_runes = true;
             player.playSound(LightSounds.STRENGTH_LIGHT, 1 ,1);
+        }else if(type.equals(InnerLightType.BLAZING)){
+            blazing_runes = true;
+            player.playSound(LightSounds.BLAZING_LIGHT, 1 ,1);
         }
     }
 
@@ -102,6 +114,13 @@ public class EventHandler {
                 if(ticks > 20*3){
                     ticks = 0;
                     strength_runes = false;
+                }
+            }
+            if(blazing_runes){
+                ticks++;
+                if(ticks > 20*3){
+                    ticks = 0;
+                    blazing_runes = false;
                 }
             }
         });

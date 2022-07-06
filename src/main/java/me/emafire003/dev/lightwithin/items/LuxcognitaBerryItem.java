@@ -56,16 +56,19 @@ public class LuxcognitaBerryItem extends Item {
             LightComponent component = LightWithin.LIGHT_COMPONENT.get(user);
             InnerLightType type = component.getType();
             user.playSound(LightSounds.LIGHT_READY, 1, 0.8f);
+            //TODO make them translatable
             if(type.equals(InnerLightType.NONE)){
-                ((ServerPlayerEntity) user).sendMessage(Text.literal("Uhm... your light is... an error? Light not found, report please! "), true);
+                ((ServerPlayerEntity) user).sendMessage(Text.translatable("light.description.error"), true);
             }else if(type.equals(InnerLightType.HEAL)){
-                ((ServerPlayerEntity) user).sendMessage(Text.literal("Your light, yes, is a gentle and caring one indeed"), true);
+                ((ServerPlayerEntity) user).sendMessage(Text.translatable("light.description.heal"), true);
             }else if(type.equals(InnerLightType.DEFENCE)){
-                ((ServerPlayerEntity) user).sendMessage(Text.literal("Resilience, that's what your light is made of"), true);
+                ((ServerPlayerEntity) user).sendMessage(Text.translatable("light.description.defense"), true);
             }else if(type.equals(InnerLightType.STRENGTH)){
-                ((ServerPlayerEntity) user).sendMessage(Text.literal("You have a vigorous light, lending its powers to your blade"), true);
+                ((ServerPlayerEntity) user).sendMessage(Text.translatable("light.description.strength"), true);
+            }else if(type.equals(InnerLightType.BLAZING)){
+                ((ServerPlayerEntity) user).sendMessage(Text.translatable("light.description.blazing"), true);
             }else{
-                ((ServerPlayerEntity) user).sendMessage(Text.literal("Uhm... your light is... an error? Light not implemented, report please! "), true);
+                ((ServerPlayerEntity) user).sendMessage(Text.translatable("light.description.error "), true);
             }
             //((ServerPlayerEntity) user).sendMessage(Text.translatable("text.lightwithin.your_light_is"), true);
 
@@ -79,6 +82,7 @@ public class LuxcognitaBerryItem extends Item {
             tooltip.add(Text.translatable("item.lightwithin.berry.tooltip"));
         } else {
             tooltip.add(Text.translatable("item.lightwithin.luxcognita_berry.tooltip"));
+            tooltip.add(Text.translatable("item.lightwithin.luxcognita_berry.tooltip1"));
         }
     }
 

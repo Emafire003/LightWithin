@@ -11,6 +11,12 @@
       "lightwithin:light_ready"
     ]
   },
+  "light_crit": {
+    "subtitle": "lightwithin.light_critical_hit",
+    "sounds": [
+      "lightwithin:light_crit"
+    ]
+  },
   "defense_light": {
   "subtitle": "lightwithin.defense_light_triggered",
   "sounds": [
@@ -21,6 +27,12 @@
     "subtitle": "lightwithin.strength_light_triggered",
     "sounds": [
       "lightwithin:strength_light"
+    ]
+  },
+  "blazing_light": {
+    "subtitle": "lightwithin.blazing_light_triggered",
+    "sounds": [
+      "lightwithin:blazing_light"
     ]
   }
 }

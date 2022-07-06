@@ -1,14 +1,20 @@
 package me.emafire003.dev.lightwithin.particles;
 
 import me.emafire003.dev.lightwithin.LightWithin;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.particle.DustParticleEffect;
 import net.minecraft.particle.ParticleEffect;
+import net.minecraft.particle.ParticleType;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.text.Text;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3f;
+import net.minecraft.util.math.Vec3i;
+import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -46,6 +52,28 @@ public class LightParticlesUtil {
 
     }
 
+    public static void spawnColumn(ServerPlayerEntity player, ParticleEffect particle, Vec3d column_pos){
+        player.sendMessage(Text.literal("hello spawning coloumn, "));
+        player.getWorld().spawnParticles(player, particle, true, column_pos.x, column_pos.y, column_pos.z, 100, 0.1, 1.10, 0.1, 0.01);
+    }
+
+    private static int column_ticks = 0;
+    private static boolean stop_column = true;
+    public static void spawnDescendingColumn(ServerPlayerEntity player, ParticleEffect particle, Vec3d column_pos){
+        stop_column = false;
+        ServerTickEvents.END_SERVER_TICK.register(server -> {
+            if(stop_column){
+                return;
+            }
+            column_ticks++;
+            player.getWorld().spawnParticles(player, particle, true, column_pos.getX(), column_pos.getY()-0.1, column_pos.getZ(), 100, 0.1, 1.10, 0.1, 0);
+            if(column_ticks == 20){
+                column_ticks = 0;
+                stop_column = true;
+            }
+        });
+    }
+
     public static ArrayList<Vec3d> getCircle(Vec3d center, double radius, int amount) {
         double increment = (2 * Math.PI) / amount;
         ArrayList<Vec3d> locations = new ArrayList<Vec3d>();
@@ -56,6 +84,14 @@ public class LightParticlesUtil {
             locations.add(new Vec3d(x, center.getY(), z));
         }
         return locations;
+    }
+
+    public static void spawnCircle(Vec3d center, double radius, int amount, ParticleEffect particle, ServerWorld world){
+        for(Vec3d pos : getCircle(center, radius, amount)){
+            world.spawnParticles(particle,
+                    pos.getX(), pos.getY(), pos.getZ(), 1,
+                    0, 0, 0, 0);
+        }
     }
 
     /*public static void spawnRedstoneParticles(World world, BlockPos pos){

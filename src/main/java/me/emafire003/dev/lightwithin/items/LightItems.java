@@ -25,6 +25,10 @@ public class LightItems {
             new LuxmutuaBerryItem(new FabricItemSettings().rarity(Rarity.EPIC)
                     .food(new FoodComponent.Builder().alwaysEdible().hunger(5).build()).maxCount(16).group(ItemGroup.FOOD)));
 
+    public static final Item TEST_BERRY = registerItem("test_berry",
+            new LuxmutuaTestBerryItem(new FabricItemSettings().rarity(Rarity.EPIC)
+                    .food(new FoodComponent.Builder().alwaysEdible().hunger(5).build()).maxCount(16).group(ItemGroup.FOOD)));
+
 
     private static Item registerItem(String name, Item item){
         return Registry.register(Registry.ITEM, new Identifier(LightWithin.MOD_ID, name), item);

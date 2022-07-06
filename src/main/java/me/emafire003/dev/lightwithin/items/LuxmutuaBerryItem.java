@@ -1,8 +1,10 @@
 package me.emafire003.dev.lightwithin.items;
 
+import com.mojang.datafixers.util.Pair;
 import me.emafire003.dev.lightwithin.LightWithin;
 import me.emafire003.dev.lightwithin.component.LightComponent;
 import me.emafire003.dev.lightwithin.config.Config;
+import me.emafire003.dev.lightwithin.events.LightTriggeringAndEvents;
 import me.emafire003.dev.lightwithin.lights.InnerLightType;
 import me.emafire003.dev.lightwithin.sounds.LightSounds;
 import me.emafire003.dev.lightwithin.status_effects.LightEffects;
@@ -21,6 +23,7 @@ import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.UUID;
 
 //This will change the type and the target if needed of one's light. Randomly.
 public class LuxmutuaBerryItem extends Item {
@@ -58,64 +61,21 @@ public class LuxmutuaBerryItem extends Item {
                 return stack;
             }
             LightComponent component = LightWithin.LIGHT_COMPONENT.get(user);
-            InnerLightType current = component.getType();
-            InnerLightType newone = genNewLight((ServerPlayerEntity) user);
-            TargetType current_targets = component.getTargets();
-            if(newone.equals(InnerLightType.NONE)){
-                return stack;
+
+            Pair<InnerLightType, TargetType> current = new Pair<>(component.getType(), component.getTargets());
+            Pair<InnerLightType, TargetType> newone = LightTriggeringAndEvents.determineTypeAndTarget(UUID.randomUUID().toString().toLowerCase().split("-"), 1,3);
+
+            while(current.getFirst().equals(newone.getFirst())){
+                newone = LightTriggeringAndEvents.determineTypeAndTarget(UUID.randomUUID().toString().toLowerCase().split("-"), 1,3);
             }
-            while (current.equals(newone)){
-                newone = genNewLight((ServerPlayerEntity) user);
-                if(newone.equals(InnerLightType.NONE)){
-                    return stack;
-                }
-            }
-            TargetType newtarget = genNewTarget((ServerPlayerEntity) user, newone);
-            if(newtarget.equals(TargetType.NONE)){
-                return stack;
-            }
-            while (current_targets.equals(newtarget)){
-                newtarget = genNewTarget((ServerPlayerEntity) user, newone);
-            }
-            component.setType(newone);
-            component.setTargets(newtarget);
+
+            component.setType(newone.getFirst());
+            component.setTargets(newone.getSecond());
 
             //TODO config
             ((ServerPlayerEntity) user).sendMessage(Text.literal("Your light resonated with you again and decided it was time to change"), true);
         }
         return this.isFood() ? user.eatFood(world, stack) : stack;
-    }
-
-    public InnerLightType genNewLight(ServerPlayerEntity player){
-        int r = player.getRandom().nextInt(3);
-        if(r == 0){
-            return InnerLightType.HEAL;
-        }
-        else if(r == 1){
-            return InnerLightType.DEFENCE;
-        }
-        else if(r == 2){
-            return InnerLightType.STRENGTH;
-        }else{
-            player.sendMessage(Text.literal("There was an error, sorry. " + r), false);
-            return InnerLightType.NONE;
-        }
-    }
-
-    public TargetType genNewTarget(ServerPlayerEntity player, InnerLightType type){
-        int r = player.getRandom().nextInt(6);
-        if(r >= 0 && r <= 3){
-            return TargetType.SELF;
-        }
-        else if(r > 3 && r <=5){
-            return TargetType.ALLIES;
-        }
-        else if(r == 6){
-            return TargetType.OTHER;
-        }else{
-            player.sendMessage(Text.literal("There was an error, sorry. " + r), false);
-            return TargetType.NONE;
-        }
     }
 
     @Override
@@ -124,6 +84,7 @@ public class LuxmutuaBerryItem extends Item {
             tooltip.add(Text.translatable("item.lightwithin.berry.tooltip"));
         } else {
             tooltip.add(Text.translatable("item.lightwithin.luxmutua_berry.tooltip"));
+            tooltip.add(Text.translatable("item.lightwithin.luxmutua_berry.tooltip1"));
         }
     }
 }

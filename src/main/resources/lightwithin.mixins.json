@@ -6,7 +6,8 @@
   "mixins": [
     "PlayerJoinMixin",
     "MilkNotCleanLightEffectsMixin",
-    "EntityAttackEntityMixin"
+    "EntityAttackEntityMixin",
+    "AllyDeathMixin"
   ],
   "client": [
   ],

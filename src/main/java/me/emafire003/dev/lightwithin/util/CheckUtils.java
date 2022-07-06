@@ -3,16 +3,23 @@ package me.emafire003.dev.lightwithin.util;
 import me.emafire003.dev.lightwithin.compat.ModChecker;
 import me.emafire003.dev.lightwithin.compat.factions.FactionChecker;
 import me.emafire003.dev.lightwithin.config.Config;
+import net.minecraft.block.Block;
+import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.passive.PassiveEntity;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.network.packet.s2c.play.ChunkData;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static me.emafire003.dev.lightwithin.LightWithin.box_expansion_amount;
@@ -152,7 +159,7 @@ public class CheckUtils {
         }
 
         public static boolean checkFaction(PlayerEntity player, PlayerEntity player1){
-            return FactionChecker.areInSameFaction(player, player1);
+            return FactionChecker.areInSameFaction(player, player1) && FactionChecker.areAllies(player, player1);
         }
 
         public static boolean checkPet(LivingEntity entity, LivingEntity ent){
@@ -169,6 +176,49 @@ public class CheckUtils {
             return checkTeam(entity, teammate) || checkPet(entity, teammate);
 
         }
+    }
+
+    //TODO make list configable
+    private static final List<Item> fire_items = Arrays.asList(Items.TORCH, Items.FIRE_CHARGE, Items.FLINT_AND_STEEL, Items.CAMPFIRE, Items.SOUL_CAMPFIRE, Items.SOUL_TORCH, Items.LAVA_BUCKET);
+    private static final List<Block> fire_blocks = Arrays.asList(Blocks.LAVA, Blocks.MAGMA_BLOCK, Blocks.FIRE, Blocks.SOUL_FIRE, Blocks.TORCH, Blocks.SOUL_TORCH, Blocks.SOUL_WALL_TORCH, Blocks.WALL_TORCH, Blocks.CAMPFIRE, Blocks.SOUL_CAMPFIRE);
+
+    /**Used to check if the player has something that can be considered a Heat Source
+     * for the Blazing Light
+     *
+     * @param player The player to perform checks on*/
+    public static boolean checkBlazing(PlayerEntity player){
+        if(player.isOnFire()){
+            return true;
+        }
+
+        Item main = player.getMainHandStack().getItem();
+        Item off = player.getOffHandStack().getItem();
+        for(Item item : fire_items){
+            if(item.equals(main) || item.equals(main)){
+                return true;
+            }
+        }
+
+        //TODO config this since it could be performance heavy
+        BlockPos origin = player.getBlockPos();
+        int rad = 3;
+        for(int y = -rad; y <= rad; y++)
+        {
+            for(int x = -rad; x <= rad; x++)
+            {
+                for(int z = -rad; z <= rad; z++)
+                {
+                    BlockPos pos = origin.add(x, y, z);
+                    for(Block block : fire_blocks){
+                        if(player.getWorld().getBlockState(pos).equals(block)){
+                            return true;
+                        }
+                    }
+
+                }
+            }
+        }
+        return false;
     }
 
 }

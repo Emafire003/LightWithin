@@ -64,6 +64,7 @@ public class LuxintusBerryItem extends Item {
             tooltip.add(Text.translatable("item.lightwithin.berry.tooltip"));
         } else {
             tooltip.add(Text.translatable("item.lightwithin.luxintus_berry.tooltip"));
+            tooltip.add(Text.translatable("item.lightwithin.luxintus_berry.tooltip1"));
         }
     }
 }

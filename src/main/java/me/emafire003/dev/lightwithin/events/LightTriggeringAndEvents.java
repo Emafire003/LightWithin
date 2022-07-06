@@ -16,12 +16,11 @@ import net.minecraft.entity.passive.PassiveEntity;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.math.Box;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 import static me.emafire003.dev.lightwithin.LightWithin.*;
 
@@ -109,6 +108,33 @@ public class LightTriggeringAndEvents {
         }
     }
 
+
+    public static void checkBlazing(PlayerEntity player, LightComponent component, Entity entity){
+        /**If the player has ALL as target, he needs to be hurt (or an ally has to die, but that depends on the trigger)*/
+        player.sendMessage(Text.literal("helo, yes checking blaze: " + component.getTargets()));
+        player.sendMessage(Text.literal("The checks: " + component.getTargets().equals(TargetType.ENEMIES) +" "+ (CheckUtils.checkAllyHealth(player, entity, Config.HP_PERCENTAGE_ALLIES+5) || CheckUtils.checkSelfHealth(player, Config.HP_PERCENTAGE_SELF+5))
+                +" "+ CheckUtils.checkSurrounded(player)
+                +" "+ CheckUtils.checkArmorDurability(player, Config.DUR_PERCENTAGE_ALLIES)
+                +" "+ CheckUtils.checkBlazing(player)));
+        if(component.getTargets().equals(TargetType.ALL)
+                && CheckUtils.checkSelfHealth(player, Config.HP_PERCENTAGE_SELF+5)
+                && CheckUtils.checkSurrounded(player)
+                && CheckUtils.checkArmorDurability(player, Config.DUR_PERCENTAGE_SELF)
+                && CheckUtils.checkBlazing(player)
+        ){
+            sendReadyPacket((ServerPlayerEntity) player, true);
+        }
+        /**CHECKS if the player has ENEMIES as target, either his or his allies health needs to be low*/
+        else if(component.getTargets().equals(TargetType.ENEMIES)
+                && (CheckUtils.checkAllyHealth(player, entity, Config.HP_PERCENTAGE_ALLIES+5) || CheckUtils.checkSelfHealth(player, Config.HP_PERCENTAGE_SELF+5))
+                && CheckUtils.checkSurrounded(player)
+                && CheckUtils.checkArmorDurability(player, Config.DUR_PERCENTAGE_ALLIES)
+                && CheckUtils.checkBlazing(player)
+        ){
+            sendReadyPacket((ServerPlayerEntity) player, true);
+        }
+    }
+
     /**Checks if you can trigger the light or not
      * */
     public static boolean isTriggerable(PlayerEntity player){
@@ -185,17 +211,33 @@ public class LightTriggeringAndEvents {
                 return ActionResult.PASS;
             }
             LightComponent component = LIGHT_COMPONENT.get(player);
-            //=======================HEAL LIGHT=======================
-            /*
-            sends the ready packet only if the player has less than 75% health and is heal.self
-            if all of the allies have less tha 50% and heal.allies
-            if at least one passive mob has 50% or less health and heal.other
-             */
             if(component.getType().equals(InnerLightType.STRENGTH)){
                 checkStrength(player, component, entity);
             }
+            if(component.getType().equals(InnerLightType.BLAZING)){
+                checkBlazing(player, component, entity);
+            }
             return ActionResult.PASS;
         } );
+
+        AllyDeathEvent.EVENT.register(((entity, source) -> {
+            List<PlayerEntity> players = entity.getWorld().getEntitiesByClass(PlayerEntity.class, new Box(entity.getBlockPos()).expand(box_expansion_amount), (entity1 -> true));
+
+            for(PlayerEntity player : players){
+                if(CheckUtils.CheckAllies.checkAlly(entity, player)){
+                    /** Start to check for potential lights from here*/
+                    if(!isTriggerable(player)){
+                        return;
+                    }
+                    LightComponent component = LIGHT_COMPONENT.get(player);
+                    if(component.getType().equals(InnerLightType.BLAZING)){
+                        checkBlazing(player, component, entity);
+                    }
+                    /**End*/
+                }
+            }
+
+        }));
 
         PlayerJoinEvent.EVENT.register((player, server) -> {
             if(player.getWorld().isClient){
@@ -209,13 +251,11 @@ public class LightTriggeringAndEvents {
                 return ActionResult.PASS;
             }
             String[] id_bits = id.split("-");
-
             //Type bit & target bit
             //If the second part of the UUID starts with a letter form a to h && the second character is a digit -> Heal
             Pair<InnerLightType, TargetType> type_and_target = determineTypeAndTarget(id_bits, 1, 3);
             //type
             component.setType(type_and_target.getFirst());
-            component.setType(InnerLightType.HEAL);
             //Target
             component.setTargets(type_and_target.getSecond());
 
@@ -286,6 +326,26 @@ public class LightTriggeringAndEvents {
         //STRENGTH
         }else if(String.valueOf(id_bits[type_bit].charAt(i)).matches("[e-f]")){
             return new Pair<InnerLightType, TargetType>(InnerLightType.STRENGTH, determineBuffTarget(id_bits, target_bit));
+        }
+        //Blazing
+        else if(String.valueOf(id_bits[type_bit].charAt(i)).matches("[0-1]")){
+            return new Pair<InnerLightType, TargetType>(InnerLightType.BLAZING, determineBuffTarget(id_bits, target_bit));
+        }
+        //TODO Frost
+        else if(String.valueOf(id_bits[type_bit].charAt(i)).matches("[2-3]")){
+            return new Pair<InnerLightType, TargetType>(InnerLightType.BLAZING, determineBuffTarget(id_bits, target_bit));
+        }
+        //TODO Earthen
+        else if(String.valueOf(id_bits[type_bit].charAt(i)).matches("[4-5]")){
+            return new Pair<InnerLightType, TargetType>(InnerLightType.BLAZING, determineBuffTarget(id_bits, target_bit));
+        }
+        //TODO Wind
+        else if(String.valueOf(id_bits[type_bit].charAt(i)).matches("[6-7]")){
+            return new Pair<InnerLightType, TargetType>(InnerLightType.BLAZING, determineBuffTarget(id_bits, target_bit));
+        }
+        //TODO Aqua
+        else if(String.valueOf(id_bits[type_bit].charAt(i)).matches("[8-9]")){
+            return new Pair<InnerLightType, TargetType>(InnerLightType.BLAZING, determineBuffTarget(id_bits, target_bit));
         }
         LOGGER.info("nop not matched, UUID bit: " + id_bits[type_bit]);
         return new Pair<InnerLightType, TargetType>(InnerLightType.HEAL, TargetType.SELF);

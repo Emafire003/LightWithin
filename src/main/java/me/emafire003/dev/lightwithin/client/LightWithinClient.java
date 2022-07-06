@@ -37,7 +37,14 @@ public class LightWithinClient implements ClientModInitializer {
        ParticleFactoryRegistry.getInstance().register(LightParticles.DEFENSELIGHT_PARTICLE, LightParticleV3.Factory::new);
        ParticleFactoryRegistry.getInstance().register(LightParticles.STRENGTHLIGHT_PARTICLE, LightParticleV3.Factory::new);
 
-       ClientTickEvents.END_CLIENT_TICK.register((minecraftClient -> {
+        ParticleFactoryRegistry.getInstance().register(LightParticles.BLAZINGLIGHT_PARTICLE, LightParticleV3.Factory::new);
+        ParticleFactoryRegistry.getInstance().register(LightParticles.FROSTLIGHT_PARTICLE, LightParticleV3.Factory::new);
+        ParticleFactoryRegistry.getInstance().register(LightParticles.EARTHENLIGHT_PARTICLE, LightParticleV3.Factory::new);
+        ParticleFactoryRegistry.getInstance().register(LightParticles.WINDLIGHT_PARTICLE, LightParticleV3.Factory::new);
+        ParticleFactoryRegistry.getInstance().register(LightParticles.AQUALIGHT_PARTICLE, LightParticleV3.Factory::new);
+
+
+        ClientTickEvents.END_CLIENT_TICK.register((minecraftClient -> {
             if(lightReady){
                 if(tickCounter == 20*seconds){
                     lightReady = false;

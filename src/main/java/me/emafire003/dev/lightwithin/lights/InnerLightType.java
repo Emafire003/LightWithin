@@ -14,10 +14,14 @@ public enum InnerLightType {
     //elementals down below
 
     FROST, // Frost as well? Like one just ices the enemy and the other throws icecles? Needs ice around and
+    //Frost could have a defensive mode fore allies/self and one as an attack to enemies (no ALL target). The attack one encases the enemies in ice, the defensive builds up an ice wall around the allies to shield them
     BLAZING, //to trigger needs a heat source, either in HAND or in 3 block radious
     EARTHEN, //dirt/rock in hand or below feet
+    //could throw rocks and blind the attackers while encasing the allies in dirt/stone
     WIND, //in the air or... i dunno
+    //simply blow away the enemies and give speed and slow falling to self? The "ALLIES" could be like  buff both self and allies? With high speed and jump boost and stuff
     AQUA, //needs something watery (bottle/bucket) in hand or water around
+    //this is going to be quite complex
 
     CONCEAL,
     SPEED,
