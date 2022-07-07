@@ -300,6 +300,7 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 
 		if(component.getTargets().equals(TargetType.ALL)){
 			targets.addAll(player.getWorld().getEntitiesByClass(LivingEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amount), (entity1 -> true)));
+			targets.remove(player);
 			component.setPowerMultiplier(component.getPowerMultiplier()+2);
 			player.sendMessage(Text.literal("Your light wants to incinerate everything that stands in your way!"), true);
 		}

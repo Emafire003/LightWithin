@@ -2,6 +2,7 @@ package me.emafire003.dev.lightwithin.lights;
 
 import me.emafire003.dev.coloredglowlib.ColoredGlowLib;
 import me.emafire003.dev.coloredglowlib.util.Color;
+import me.emafire003.dev.lightwithin.config.Config;
 import me.emafire003.dev.lightwithin.particles.LightParticles;
 import me.emafire003.dev.lightwithin.sounds.LightSounds;
 import me.emafire003.dev.lightwithin.particles.LightParticlesUtil;
@@ -51,21 +52,21 @@ public class HealLight extends InnerLight {
     }
 
     private void checkSafety(){
-        if(this.power_multiplier > 8){
-            this.power_multiplier = 8;
+        if(this.power_multiplier > Config.HEAL_MAX_POWER){
+            this.power_multiplier = Config.HEAL_MAX_POWER;
         }
-        if(this.duration < 4){
-            this.duration = 4;
+        if(this.duration > Config.HEAL_MAX_DURATION){
+            this.duration = Config.HEAL_MAX_DURATION;
         }
-        if(this.duration > 6 && this.power_multiplier > 5){
-               this.duration = 6;
+        if(this.duration > Config.HEAL_MAX_DURATION*4/5 && this.power_multiplier > Config.HEAL_MAX_POWER/2){ //maxdur-1/5 && multiplier > maxpow/2 = maxdur-1/5
+            this.duration = Config.HEAL_MAX_DURATION*4/5;
+        }
 
+        if(this.power_multiplier < Config.HEAL_MIN_POWER){
+            power_multiplier = Config.HEAL_MIN_POWER;
         }
-        if(this.duration > 8 && this.power_multiplier > 4){
-            this.duration = 8;
-        }
-        if(this.power_multiplier <= 1){
-            power_multiplier = 2;
+        if(this.duration < Config.HEAL_MIN_DURATION){
+            this.duration = Config.HEAL_MIN_DURATION;
         }
     }
 

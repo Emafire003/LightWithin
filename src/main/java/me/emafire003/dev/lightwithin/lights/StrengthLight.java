@@ -2,6 +2,7 @@ package me.emafire003.dev.lightwithin.lights;
 
 import me.emafire003.dev.coloredglowlib.ColoredGlowLib;
 import me.emafire003.dev.coloredglowlib.util.Color;
+import me.emafire003.dev.lightwithin.config.Config;
 import me.emafire003.dev.lightwithin.particles.LightParticles;
 import me.emafire003.dev.lightwithin.particles.LightParticlesUtil;
 import me.emafire003.dev.lightwithin.sounds.LightSounds;
@@ -46,15 +47,20 @@ public class StrengthLight extends InnerLight {
     }
 
     private void checkSafety(){
-        //TODO configable
-        if(this.power_multiplier > 6){
-            power_multiplier = 6;
+        if(this.power_multiplier > Config.DEFENSE_MAX_POWER){
+            power_multiplier = Config.DEFENSE_MAX_POWER;
         }
-        if(this.power_multiplier > 4 && this.duration > 7){
-            this.duration = 7;
+        if(this.duration > Config.DEFENSE_MAX_DURATION){
+            this.duration = Config.DEFENSE_MAX_DURATION;
         }
-        if(this.duration <5){
-            this.duration = 5;
+        if(this.power_multiplier > Config.DEFENSE_MAX_POWER*2/3 && this.duration > Config.DEFENSE_MAX_DURATION*7/10){
+            this.duration = Config.DEFENSE_MAX_DURATION*7/10;
+        }
+        if(this.duration < Config.DEFENSE_MIN_DURATION){
+            this.duration = Config.DEFENSE_MIN_DURATION;
+        }
+        if(this.power_multiplier < Config.DEFENSE_MIN_POWER){
+            this.power_multiplier = Config.DEFENSE_MIN_POWER;
         }
     }
 

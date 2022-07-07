@@ -37,6 +37,30 @@ public class Config {
     public static int DUR_PERCENTAGE_ALLIES;
     public static int DUR_PERCENTAGE_OTHER;
 
+    public static int HEAL_MAX_POWER;
+    public static int HEAL_MAX_DURATION;
+    public static int HEAL_MIN_POWER;
+    public static int HEAL_MIN_DURATION;
+
+    public static int DEFENSE_MAX_POWER;
+    public static int DEFENSE_MAX_DURATION;
+    public static int DEFENSE_MIN_POWER;
+    public static int DEFENSE_MIN_DURATION;
+
+    public static int STRENGTH_MAX_POWER;
+    public static int STRENGTH_MAX_DURATION;
+    public static int STRENGTH_MIN_POWER;
+    public static int STRENGTH_MIN_DURATION;
+
+    public static int BLAZING_MAX_POWER;
+    public static int BLAZING_MAX_DURATION;
+    public static int BLAZING_MIN_POWER;
+    public static int BLAZING_MIN_DURATION;
+    public static double BLAZING_CRIT_MULTIPLIER;
+    public static int BLAZING_CRIT_FIRE_MULTIPLIER;
+    public static int BLAZING_ALL_DAMAGE_BONUS;
+    public static int BLAZING_DEFAULT_DAMAGE;
+
     public static void registerConfigs() {
         configs = new ConfigProvider();
         createConfigs();
@@ -74,6 +98,30 @@ public class Config {
         configs.addKeyValuePair(new Pair<>("dur_percentage_allies", 10), "The armor durability percentage below which the light will be triggerable if the target is ALLIES (like 15, 20, 50) (in some cases it may not apply)");
         configs.addKeyValuePair(new Pair<>("dur_percentage_other", 10), "The armor durability percentage below which the light will be triggerable if the target is OTHER/Passive mobs (like 15, 20, 50) (in some cases it may not apply)");
 
+        configs.addKeyValuePair(new Pair<>("heal_max_power", 8), "The maximum power multiplier (aka level of the effect)");
+        configs.addKeyValuePair(new Pair<>("heal_max_duration", 10), "The maximum duration of the effect");
+        configs.addKeyValuePair(new Pair<>("heal_min_power", 2), "The minimum power multiplier (aka level of the effect)");
+        configs.addKeyValuePair(new Pair<>("heal_min_duration", 4), "The minimum duration of the effect");
+
+        configs.addKeyValuePair(new Pair<>("defense_max_power", 6), "The maximum power multiplier (aka level of the effect)");
+        configs.addKeyValuePair(new Pair<>("defense_max_duration", 10), "The maximum duration of the effect");
+        configs.addKeyValuePair(new Pair<>("defense_min_power", 2), "The minimum power multiplier (aka level of the effect)");
+        configs.addKeyValuePair(new Pair<>("defense_min_duration", 5), "The minimum duration of the effect");
+
+        configs.addKeyValuePair(new Pair<>("strength_max_power", 6), "The maximum power multiplier (aka level of the effect)");
+        configs.addKeyValuePair(new Pair<>("strength_max_duration", 10), "The maximum duration of the effect");
+        configs.addKeyValuePair(new Pair<>("strength_min_power", 2), "The minimum power multiplier (aka level of the effect)");
+        configs.addKeyValuePair(new Pair<>("strength_min_duration", 5), "The minimum duration of the effect");
+
+        configs.addKeyValuePair(new Pair<>("blazing_default_damage", 2), "The default damage of the light when activates. It will be multiplied by the power multiplier, and also the target will be set on fire so be careful");
+        configs.addKeyValuePair(new Pair<>("blazing_max_power", 5), "The maximum power multiplier (aka by how much the default damage gets multiplied)");
+        configs.addKeyValuePair(new Pair<>("blazing_max_duration", 15), "The maximum duration of the fire");
+        configs.addKeyValuePair(new Pair<>("blazing_min_power", 1), "The minimum power multiplier (aka by how much the default damage gets multiplied)");
+        configs.addKeyValuePair(new Pair<>("blazing_min_duration", 5), "The minimum duration of the fire");
+        configs.addKeyValuePair(new Pair<>("blazing_crit_multiplier", 1.5), "The damage multiplier for a critical hit (must be >= 1)");
+        configs.addKeyValuePair(new Pair<>("blazing_crit_fire_multiplier", 2), "The multiplier of the duration in seconds, for which the target(s) will be set on fire (must be >= 1)");
+        configs.addKeyValuePair(new Pair<>("blazing_all_damage_bonus", 3), "The damage bonus (2 = 1 hearth) when the target is ALL");
+
     }
 
     public static void reloadConfig(){
@@ -108,6 +156,30 @@ public class Config {
         DUR_PERCENTAGE_SELF = CONFIG.getOrDefault("dur_percentage_self", 5);
         DUR_PERCENTAGE_ALLIES = CONFIG.getOrDefault("dur_percentage_allies", 10);
         DUR_PERCENTAGE_OTHER = CONFIG.getOrDefault("dur_percentage_other", 10);
+
+        HEAL_MAX_POWER = CONFIG.getOrDefault("heal_max_power", 8);
+        HEAL_MAX_DURATION = CONFIG.getOrDefault("heal_max_duration", 10);
+        HEAL_MIN_POWER = CONFIG.getOrDefault("heal_min_power", 2);
+        HEAL_MIN_DURATION = CONFIG.getOrDefault("heal_min_duration", 4);
+
+        DEFENSE_MAX_POWER = CONFIG.getOrDefault("defense_max_power", 6);
+        DEFENSE_MAX_DURATION = CONFIG.getOrDefault("defense_max_duration", 10);
+        DEFENSE_MIN_POWER = CONFIG.getOrDefault("defense_min_power", 2);
+        DEFENSE_MIN_DURATION = CONFIG.getOrDefault("defense_min_duration", 5);
+
+        STRENGTH_MAX_POWER = CONFIG.getOrDefault("strength_max_power", 6);
+        STRENGTH_MAX_DURATION = CONFIG.getOrDefault("strength_max_duration", 10);
+        STRENGTH_MIN_POWER = CONFIG.getOrDefault("strength_min_power", 2);
+        STRENGTH_MIN_DURATION = CONFIG.getOrDefault("strength_min_duration", 5);
+
+        BLAZING_MAX_POWER = CONFIG.getOrDefault("blazing_max_power", 5);
+        BLAZING_MAX_DURATION = CONFIG.getOrDefault("blazing_max_duration", 15);
+        BLAZING_MIN_POWER = CONFIG.getOrDefault("blazing_min_power", 1);
+        BLAZING_MIN_DURATION = CONFIG.getOrDefault("blazing_min_duration", 5);
+        BLAZING_CRIT_MULTIPLIER = CONFIG.getOrDefault("blazing_crit_multiplier", 1.5);
+        BLAZING_CRIT_FIRE_MULTIPLIER = CONFIG.getOrDefault("blazing_crit_fire_multiplier", 2);
+        BLAZING_ALL_DAMAGE_BONUS = CONFIG.getOrDefault("blazing_all_damage_bonus", 3);
+        BLAZING_DEFAULT_DAMAGE = CONFIG.getOrDefault("blazing_default_damage", 2);
 
 
     }

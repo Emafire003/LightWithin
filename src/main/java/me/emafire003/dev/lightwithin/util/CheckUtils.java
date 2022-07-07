@@ -15,6 +15,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.network.packet.s2c.play.ChunkData;
+import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import org.jetbrains.annotations.NotNull;
@@ -194,7 +195,7 @@ public class CheckUtils {
         Item main = player.getMainHandStack().getItem();
         Item off = player.getOffHandStack().getItem();
         for(Item item : fire_items){
-            if(item.equals(main) || item.equals(main)){
+            if(item.equals(main) || item.equals(off)){
                 return true;
             }
         }
@@ -210,7 +211,7 @@ public class CheckUtils {
                 {
                     BlockPos pos = origin.add(x, y, z);
                     for(Block block : fire_blocks){
-                        if(player.getWorld().getBlockState(pos).equals(block)){
+                        if(player.getWorld().getBlockState(pos).getBlock().equals(block)){
                             return true;
                         }
                     }
