@@ -61,6 +61,8 @@ public class Config {
     public static int BLAZING_ALL_DAMAGE_BONUS;
     public static int BLAZING_DEFAULT_DAMAGE;
 
+    public static boolean SHOULD_CHECK_BLOCKS;
+
     public static void registerConfigs() {
         configs = new ConfigProvider();
         createConfigs();
@@ -122,6 +124,8 @@ public class Config {
         configs.addKeyValuePair(new Pair<>("blazing_crit_fire_multiplier", 2), "The multiplier of the duration in seconds, for which the target(s) will be set on fire (must be >= 1)");
         configs.addKeyValuePair(new Pair<>("blazing_all_damage_bonus", 3), "The damage bonus (2 = 1 hearth) when the target is ALL");
 
+        configs.addKeyValuePair(new Pair<>("should_check_blocks", true), "Should the blocks near the player be checked for the light activation? Could impact on performance");
+
     }
 
     public static void reloadConfig(){
@@ -180,6 +184,8 @@ public class Config {
         BLAZING_CRIT_FIRE_MULTIPLIER = CONFIG.getOrDefault("blazing_crit_fire_multiplier", 2);
         BLAZING_ALL_DAMAGE_BONUS = CONFIG.getOrDefault("blazing_all_damage_bonus", 3);
         BLAZING_DEFAULT_DAMAGE = CONFIG.getOrDefault("blazing_default_damage", 2);
+
+        SHOULD_CHECK_BLOCKS = CONFIG.getOrDefault("should_check_blocks", true);
 
 
     }

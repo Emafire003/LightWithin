@@ -12,6 +12,7 @@ import net.fabricmc.fabric.api.event.player.AttackEntityCallback;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.passive.PassiveEntity;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -107,7 +108,7 @@ public class LightTriggeringAndEvents {
         }
     }
 
-
+    //TODO maybe I should remove the allies bit.
     public static void checkBlazing(PlayerEntity player, LightComponent component, Entity entity){
         /**If the player has ALL as target, he needs to be hurt (or an ally has to die, but that depends on the trigger)*/
         if(component.getTargets().equals(TargetType.ALL)
@@ -120,10 +121,31 @@ public class LightTriggeringAndEvents {
         }
         /**CHECKS if the player has ENEMIES as target, either his or his allies health needs to be low*/
         else if(component.getTargets().equals(TargetType.ENEMIES)
-                && (CheckUtils.checkAllyHealth(player, entity, Config.HP_PERCENTAGE_ALLIES+5) || CheckUtils.checkSelfHealth(player, Config.HP_PERCENTAGE_SELF+5))
+                && CheckUtils.checkSelfHealth(player, Config.HP_PERCENTAGE_SELF+5)
                 && CheckUtils.checkSurrounded(player)
                 && CheckUtils.checkArmorDurability(player, Config.DUR_PERCENTAGE_ALLIES)
                 && CheckUtils.checkBlazing(player)
+        ){
+            sendReadyPacket((ServerPlayerEntity) player, true);
+        }
+    }
+
+    public static void checkFrost(PlayerEntity player, LightComponent component, Entity entity){
+        /**If the player has ALL as target, he needs to be hurt (or an ally has to die, but that depends on the trigger)*/
+        if(component.getTargets().equals(TargetType.ALL)
+                && CheckUtils.checkSelfHealth(player, Config.HP_PERCENTAGE_SELF+5)
+                && CheckUtils.checkSurrounded(player)
+                && CheckUtils.checkArmorDurability(player, Config.DUR_PERCENTAGE_SELF)
+                && CheckUtils.checkFrost(player)
+        ){
+            sendReadyPacket((ServerPlayerEntity) player, true);
+        }
+        /**CHECKS if the player has ENEMIES as target, either his or his allies health needs to be low*/
+        else if(component.getTargets().equals(TargetType.ENEMIES)
+                && (CheckUtils.checkAllyHealth(player, entity, Config.HP_PERCENTAGE_ALLIES+5) || CheckUtils.checkSelfHealth(player, Config.HP_PERCENTAGE_SELF+5))
+                && CheckUtils.checkSurrounded(player)
+                && CheckUtils.checkArmorDurability(player, Config.DUR_PERCENTAGE_ALLIES)
+                && CheckUtils.checkFrost(player)
         ){
             sendReadyPacket((ServerPlayerEntity) player, true);
         }
@@ -157,6 +179,9 @@ public class LightTriggeringAndEvents {
         }
         if(component.getType().equals(InnerLightType.DEFENCE)){
             checkDefense(player, component, attacker);
+        }
+        if(component.getType().equals(InnerLightType.FROST)){
+            checkFrost(player, component, attacker);
         }
     }
 
@@ -226,6 +251,9 @@ public class LightTriggeringAndEvents {
                     LightComponent component = LIGHT_COMPONENT.get(player);
                     if(component.getType().equals(InnerLightType.BLAZING)){
                         checkBlazing(player, component, entity);
+                    }
+                    if(component.getType().equals(InnerLightType.FROST)){
+                        checkFrost(player, component, entity);
                     }
                     /**End*/
                 }
@@ -352,7 +380,7 @@ public class LightTriggeringAndEvents {
         }
         //TODO Frost
         else if(String.valueOf(id_bits[type_bit].charAt(i)).matches("[2-3]")){
-            return new Pair<InnerLightType, TargetType>(InnerLightType.BLAZING, determineAttackTarget(id_bits, target_bit));
+            return new Pair<InnerLightType, TargetType>(InnerLightType.FROST, determineAttackTarget(id_bits, target_bit));
         }
         //TODO Earthen
         else if(String.valueOf(id_bits[type_bit].charAt(i)).matches("[4-5]")){

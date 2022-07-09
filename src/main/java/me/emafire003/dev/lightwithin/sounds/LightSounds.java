@@ -15,6 +15,7 @@ public class LightSounds {
     public static SoundEvent DEFENSE_LIGHT = registerSoundEvent("defense_light");
     public static SoundEvent STRENGTH_LIGHT = registerSoundEvent("strength_light");
     public static SoundEvent BLAZING_LIGHT = registerSoundEvent("blazing_light");
+    public static SoundEvent FROST_LIGHT = registerSoundEvent("frost_light");
 
     private static SoundEvent registerSoundEvent(String name) {
         Identifier id = new Identifier(LightWithin.MOD_ID, name);

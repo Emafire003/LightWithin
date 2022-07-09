@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "facing=north": { "model": "lightwithin:block/frozen_player_bottom" },
+    "facing=east": { "model": "lightwithin:block/frozen_player_bottom", "y": 90 },
+    "facing=south": { "model": "lightwithin:block/frozen_player_bottom", "y": 180 },
+    "facing=west": { "model": "lightwithin:block/frozen_player_bottom", "y": 270 }
+  }
+}

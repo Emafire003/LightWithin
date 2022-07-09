@@ -6,6 +6,7 @@ import dev.onyxstudios.cca.api.v3.entity.EntityComponentFactoryRegistry;
 import dev.onyxstudios.cca.api.v3.entity.EntityComponentInitializer;
 import dev.onyxstudios.cca.api.v3.entity.RespawnCopyStrategy;
 import me.emafire003.dev.coloredglowlib.ColoredGlowLib;
+import me.emafire003.dev.lightwithin.blocks.LightBlocks;
 import me.emafire003.dev.lightwithin.compat.ModChecker;
 import me.emafire003.dev.lightwithin.compat.factions.FactionChecker;
 import me.emafire003.dev.lightwithin.component.LightComponent;
@@ -73,6 +74,7 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 		LightEffects.registerModEffects();
 		LightItems.registerItems();
 		LightParticles.registerParticles();
+		LightBlocks.registerBlocks();
 		Config.registerConfigs();
 
 		ServerLifecycleEvents.SERVER_STARTED.register(minecraftServer -> {
@@ -139,6 +141,9 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 			component.setPrevColor(ColoredGlowLib.getEntityColor(player));
 		}else if(type.equals(InnerLightType.BLAZING)){
 			activateBlazing(component, player);
+			component.setPrevColor(ColoredGlowLib.getEntityColor(player));
+		}else if(type.equals(InnerLightType.FROST)){
+			activateFrost(component, player);
 			component.setPrevColor(ColoredGlowLib.getEntityColor(player));
 		}
 		//for now defaults here
@@ -301,7 +306,7 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 		if(component.getTargets().equals(TargetType.ALL)){
 			targets.addAll(player.getWorld().getEntitiesByClass(LivingEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amount), (entity1 -> true)));
 			targets.remove(player);
-			component.setPowerMultiplier(component.getPowerMultiplier()+2);
+			component.setPowerMultiplier(component.getPowerMultiplier());
 			player.sendMessage(Text.literal("Your light wants to incinerate everything that stands in your way!"), true);
 		}
 
@@ -323,6 +328,39 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 			player.sendMessage(Text.literal("Ok light triggered"), false);
 		}
 		new BlazingLight(targets, component.getMaxCooldown(), component.getPowerMultiplier(),
+				component.getDuration(), player).execute();
+	}
+
+	//=======================Frost Light=======================
+	public static void activateFrost(LightComponent component, ServerPlayerEntity player){
+		List<LivingEntity> targets = new ArrayList<>();
+		//TODO add config option for setting the amout before it triggers (look up)
+
+		if(component.getTargets().equals(TargetType.ALL)){
+			targets.addAll(player.getWorld().getEntitiesByClass(LivingEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amount), (entity1 -> true)));
+			targets.remove(player);
+			component.setPowerMultiplier(component.getPowerMultiplier()+2);
+			player.sendMessage(Text.literal("Everything will be frozen in ice!"), true);
+		}
+
+		else if(component.getTargets().equals(TargetType.ENEMIES)){
+			List<LivingEntity> entities = player.getWorld().getEntitiesByClass(LivingEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amount), (entity1 -> true));
+			for(LivingEntity ent : entities){
+				if(ent instanceof HostileEntity && !CheckUtils.CheckAllies.checkAlly(player, ent)){
+					targets.add(ent);
+				}
+				if(ent instanceof PlayerEntity && ModChecker.isLoaded("factions")){
+					FactionChecker.areEnemies(player, (PlayerEntity) ent);
+				}
+			}
+			player.sendMessage(Text.literal("All your enemies will be made into a statue of ice!"), true);
+		}
+
+
+		if(debug){
+			player.sendMessage(Text.literal("Ok light triggered"), false);
+		}
+		new FrostLight(targets, component.getMaxCooldown(), component.getPowerMultiplier(),
 				component.getDuration(), player).execute();
 	}
 

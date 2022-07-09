@@ -34,5 +34,11 @@
     "sounds": [
       "lightwithin:blazing_light"
     ]
+  },
+  "frost_light": {
+    "subtitle": "lightwithin.frost_light_triggered",
+    "sounds": [
+      "lightwithin:frost_light"
+    ]
   }
 }

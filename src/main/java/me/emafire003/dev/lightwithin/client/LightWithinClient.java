@@ -1,5 +1,6 @@
 package me.emafire003.dev.lightwithin.client;
 
+import me.emafire003.dev.lightwithin.blocks.LightBlocks;
 import me.emafire003.dev.lightwithin.lights.InnerLightType;
 import me.emafire003.dev.lightwithin.networking.LightReadyPacketS2C;
 import me.emafire003.dev.lightwithin.networking.RenderRunePacketS2C;
@@ -10,9 +11,11 @@ import me.x150.renderer.event.Events;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
+import net.minecraft.client.render.RenderLayer;
 
 import java.util.NoSuchElementException;
 
@@ -43,6 +46,9 @@ public class LightWithinClient implements ClientModInitializer {
         ParticleFactoryRegistry.getInstance().register(LightParticles.WINDLIGHT_PARTICLE, LightParticleV3.Factory::new);
         ParticleFactoryRegistry.getInstance().register(LightParticles.AQUALIGHT_PARTICLE, LightParticleV3.Factory::new);
 
+        BlockRenderLayerMap.INSTANCE.putBlock(LightBlocks.FROZEN_PLAYER_TOP_BLOCK, RenderLayer.getCutout());
+        BlockRenderLayerMap.INSTANCE.putBlock(LightBlocks.FROZEN_PLAYER_BOTTOM_BLOCK, RenderLayer.getCutout());
+        BlockRenderLayerMap.INSTANCE.putBlock(LightBlocks.ICE_WALL, RenderLayer.getTranslucent());
 
         ClientTickEvents.END_CLIENT_TICK.register((minecraftClient -> {
             if(lightReady){

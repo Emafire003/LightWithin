@@ -2,6 +2,7 @@
   "key.lightwithin.activate_light": "Activate InnerLight Power",
   "effect.lightwithin.light_fatigue": "Light Fatigue",
   "effect.lightwithin.light_active": "Light Active",
+  "effect.lightwithin.frost": "Frost",
   "item.lightwithin.luxintus_berry": "Luxintus Berry",
   "item.lightwithin.luxmutua_berry": "Luxmutua Berry",
   "item.lightwithin.luxcognita_berry": "Luxcognita Berry",
@@ -12,6 +13,11 @@
   "item.lightwithin.luxmutua_berry.tooltip1": "§achange§e your §binner light§e!",
   "item.lightwithin.luxcognita_berry.tooltip": "§eThe all-knowing light of this berry will",
   "item.lightwithin.luxcognita_berry.tooltip1": "§atell you the secrets§e of your §binner light§e!",
+
+  "block.lightwithin.frozen_player_top": "Frozen Player Torso",
+  "block.lightwithin.frozen_player_bottom": "Frozen Player Legs",
+  "block.lightwithin.ice_wall": "Ice Wall",
+
   "light.unknown": "No light named: ",
   "lighttype.unknown": "No light type named: ",
 

@@ -3,6 +3,7 @@ package me.emafire003.dev.lightwithin.lights;
 import me.emafire003.dev.coloredglowlib.ColoredGlowLib;
 import me.emafire003.dev.coloredglowlib.util.Color;
 import me.emafire003.dev.lightwithin.LightWithin;
+import me.emafire003.dev.lightwithin.blocks.LightBlocks;
 import me.emafire003.dev.lightwithin.component.LightComponent;
 import me.emafire003.dev.lightwithin.config.Config;
 import me.emafire003.dev.lightwithin.particles.LightParticles;
@@ -11,6 +12,7 @@ import me.emafire003.dev.lightwithin.sounds.LightSounds;
 import me.emafire003.dev.lightwithin.status_effects.LightEffects;
 import me.emafire003.dev.lightwithin.util.TargetType;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffectInstance;
@@ -20,12 +22,16 @@ import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
+import net.minecraft.text.Text;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.Vec3d;
 
 import java.util.List;
 
 import static me.emafire003.dev.lightwithin.LightWithin.LIGHT_COMPONENT;
 
-public class BlazingLight extends InnerLight {
+public class FrostLight extends InnerLight {
 
     /*Possible triggers:
        - self low health
@@ -37,30 +43,31 @@ public class BlazingLight extends InnerLight {
 
     /*Possible targets:
     * - enemies
-    * - all (more powerful tho)
-*/
+    * - all
+    * - ally/self -> protective wall and other things. Maybe a buff of some sort.*/
 
-    public BlazingLight(List<LivingEntity> targets, double cooldown_time, double power_multiplier, int duration, Color color, PlayerEntity caster, boolean rainbow_col) {
+    public FrostLight(List<LivingEntity> targets, double cooldown_time, double power_multiplier, int duration, Color color, PlayerEntity caster, boolean rainbow_col) {
         super(targets, cooldown_time, power_multiplier, duration, color, caster, rainbow_col);
         type = InnerLightType.DEFENCE;
     }
 
-    public BlazingLight(List<LivingEntity> targets, double cooldown_time, double power_multiplier, int duration, PlayerEntity caster, boolean rainbow_col) {
+    public FrostLight(List<LivingEntity> targets, double cooldown_time, double power_multiplier, int duration, PlayerEntity caster, boolean rainbow_col) {
         super(targets, cooldown_time, power_multiplier, duration, caster, rainbow_col);
         type = InnerLightType.DEFENCE;
-        color = new Color(234, 71, 16);
+        color = new Color(141, 251, 255);
     }
 
-    public BlazingLight(List<LivingEntity> targets, double cooldown_time, double power_multiplier, int duration, PlayerEntity caster) {
+    public FrostLight(List<LivingEntity> targets, double cooldown_time, double power_multiplier, int duration, PlayerEntity caster) {
         super(targets, cooldown_time, power_multiplier, duration, caster);
         type = InnerLightType.DEFENCE;
-        color = new Color(234, 71, 16);
+        color = new Color(141, 251, 255);
     }
 
-    private double crit_multiplier = 1.5;
-    private double r = 0.5;
+    private int tickCounter = 0;
+    private int seconds = 10*20; //TODO Configable
 
     private void checkSafety(){
+        //TODO configable
         if(this.power_multiplier > Config.BLAZING_MAX_POWER){
             power_multiplier = Config.BLAZING_MAX_POWER;
         }
@@ -73,9 +80,6 @@ public class BlazingLight extends InnerLight {
         if(this.duration < Config.BLAZING_MIN_DURATION){
             this.duration = Config.BLAZING_MIN_DURATION;
         }
-        if(Config.BLAZING_CRIT_MULTIPLIER > 1){
-            crit_multiplier = Config.BLAZING_CRIT_MULTIPLIER;
-        }
     }
 
     @Override
@@ -86,41 +90,38 @@ public class BlazingLight extends InnerLight {
         }else{
             ColoredGlowLib.setColorToEntity(this.caster, this.color);
         }
-        caster.getWorld().playSound(caster, caster.getBlockPos(), LightSounds.BLAZING_LIGHT, SoundCategory.AMBIENT, 1, 1);
-        caster.addStatusEffect(new StatusEffectInstance(StatusEffects.FIRE_RESISTANCE, caster.getStatusEffect(LightEffects.LIGHT_ACTIVE).getDuration(), 0, false, false));
+        caster.getWorld().playSound(caster, caster.getBlockPos(), LightSounds.FROST_LIGHT, SoundCategory.AMBIENT, 1, 1);
 
-        LightComponent component = LIGHT_COMPONENT.get(caster);
-        if(component.getTargets().equals(TargetType.ALL)){
-            power_multiplier = power_multiplier + Config.BLAZING_ALL_DAMAGE_BONUS;
-        }
+        LightParticlesUtil.spawnSnowflake((ServerPlayerEntity) caster, caster.getPos().add(0, 2, 0));
+
         for(LivingEntity target : this.targets){
-            target.playSound(LightSounds.BLAZING_LIGHT, 1, 1);
+            target.playSound(LightSounds.FROST_LIGHT, 1, 1);
+            BlockPos norm_pos = target.getBlockPos();
+            target.teleport(norm_pos.getX(), norm_pos.getY(), norm_pos.getZ());
+            target.addStatusEffect(new StatusEffectInstance(LightEffects.FROST, this.duration*20, 0, false, false));
+            target.addStatusEffect(new StatusEffectInstance(StatusEffects.INVISIBILITY, this.duration*20, 0, false, false));
+
+            Direction facing = target.getHorizontalFacing();
+            int state = 0;
+            if(facing.equals(Direction.NORTH)){
+                state = 0;
+            }else if(facing.equals(Direction.EAST)){
+                state = 1;
+            }else if(facing.equals(Direction.SOUTH)){
+                state = 2;
+            }else if(facing.equals(Direction.WEST)){
+                state = 3;
+            }
+
+            target.getWorld().setBlockState(norm_pos, LightBlocks.FROZEN_PLAYER_BOTTOM_BLOCK.getDefaultState(), state);
+            target.getWorld().setBlockState(norm_pos.add(0,1,0), LightBlocks.FROZEN_PLAYER_TOP_BLOCK.getDefaultState(), state);
 
             if(!caster.getWorld().isClient){
-                LightParticlesUtil.spawnLightTypeParticle(LightParticles.BLAZINGLIGHT_PARTICLE, (ServerWorld) caster.getWorld(), target.getPos());
-                LightParticlesUtil.spawnLightTypeParticle(LightParticles.BLAZINGLIGHT_PARTICLE, (ServerWorld) caster.getWorld(), caster.getPos());
+                LightParticlesUtil.spawnLightTypeParticle(LightParticles.FROSTLIGHT_PARTICLE, (ServerWorld) caster.getWorld(), target.getPos());
+                LightParticlesUtil.spawnLightTypeParticle(LightParticles.FROSTLIGHT_PARTICLE, (ServerWorld) caster.getWorld(), caster.getPos());
             }
-            
-            //TODO make the chance configable EDIT: Maybe not
-            //it's basicly a crit, unique for now to the blazing light Currently 10 percent
-            if(caster.getRandom().nextInt(10) == 1){
-                target.damage(DamageSource.IN_FIRE, (float) (Config.BLAZING_DEFAULT_DAMAGE*this.power_multiplier*crit_multiplier));
-                target.setOnFireFor(this.duration*Config.BLAZING_CRIT_FIRE_MULTIPLIER);
-                target.playSound(LightSounds.LIGHT_CRIT, 1, 1);
-                LightParticlesUtil.spawnDescendingColumn((ServerPlayerEntity) caster, ParticleTypes.FLAME, target.getPos().add(0,3,0));
-            }else{
-                target.setOnFireFor(this.duration);
-                target.damage(DamageSource.IN_FIRE, (float) (Config.BLAZING_DEFAULT_DAMAGE*this.power_multiplier));
-            }
+            target.damage(DamageSource.FREEZE, (float) this.power_multiplier);
         }
-
-        //to spawn the expanding circle of particles
-        ServerTickEvents.END_SERVER_TICK.register((server -> {
-            if(r < LightWithin.box_expansion_amount){
-                r = r + 0.5;
-                LightParticlesUtil.spawnCircle(caster.getPos().add(0,0.7,0), r, 100, ParticleTypes.FLAME, (ServerWorld) caster.getWorld());
-            }
-        }));
 
     }
 }

@@ -4,18 +4,25 @@ public enum InnerLightType {
     HEAL,
     STRENGTH,
     DEFENCE,
-    PITCH_BLACK,
+    PITCH_BLACK, //maybe there could be only one of a kind of these two per server/world and if they don't log in for some time a new one can be chosen
     PURE_WHITE,
     LEECH,//could be degeneration of both of the two legendary lights up here ^
     THUNDER_AURA,
     SHOCKWAVE,
+
+    FROST_FIRE, //could be a special SELF eheh one
 
     //This could have a sort of stun effect where the player is kinda dizzy and the STUN effect which is not bucket removable and blocks the player from moving for a while, with a low chance of fumbling the weapon
     //elementals down below
 
     FROST, // Frost as well? Like one just ices the enemy and the other throws icecles? Needs ice around and
     //Frost could have a defensive mode fore allies/self and one as an attack to enemies (no ALL target). The attack one encases the enemies in ice, the defensive builds up an ice wall around the allies to shield them
+    //if the player dies of frost there is going to be an ice sculpture of it
+    //the player gets trapped in ice, i could make him invisible and spawn the ice scuplture and make him immovable
+    //could do another "ring" effect but more like a cloud effect like, more layered
+    //the block underneath will be converted to snow&blue ice
     BLAZING, //to trigger needs a heat source, either in HAND or in 3 block radious
+    //the block underneath will be turned to path and magma blocks and such
     EARTHEN, //dirt/rock in hand or below feet
     //could throw rocks and blind the attackers while encasing the allies in dirt/stone
     WIND, //in the air or... i dunno

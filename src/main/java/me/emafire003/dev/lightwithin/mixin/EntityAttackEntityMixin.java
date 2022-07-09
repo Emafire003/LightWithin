@@ -16,6 +16,11 @@ public abstract class EntityAttackEntityMixin{
 
     @Inject(method = "onAttacking", at = @At("HEAD"))
     public void injectOnAttacking(Entity target, CallbackInfo ci) {
+        //for the freeze effect, i didn't want to modify the same method twice
+        if(((LivingEntity) (Object) this).hasStatusEffect(LightEffects.FROST)){
+            ci.cancel();
+        }
+        //for the actual event
         if (target instanceof LivingEntity) {
             EntityAttackEntityEvent.EVENT.invoker().attack(((LivingEntity)(Object)this), (LivingEntity) target);
         }

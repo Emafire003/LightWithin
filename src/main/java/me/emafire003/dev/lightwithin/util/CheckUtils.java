@@ -200,7 +200,10 @@ public class CheckUtils {
             }
         }
 
-        //TODO config this since it could be performance heavy
+        if(!Config.SHOULD_CHECK_BLOCKS){
+            return false;
+        }
+
         BlockPos origin = player.getBlockPos();
         int rad = 3;
         for(int y = -rad; y <= rad; y++)
@@ -211,6 +214,50 @@ public class CheckUtils {
                 {
                     BlockPos pos = origin.add(x, y, z);
                     for(Block block : fire_blocks){
+                        if(player.getWorld().getBlockState(pos).getBlock().equals(block)){
+                            return true;
+                        }
+                    }
+
+                }
+            }
+        }
+        return false;
+    }
+
+    private static final List<Item> ice_items = Arrays.asList(Items.ICE, Items.PACKED_ICE, Items.BLUE_ICE, Items.SNOW, Items.SNOW_BLOCK, Items.SNOWBALL, Items.POWDER_SNOW_BUCKET);
+    private static final List<Block> ice_blocks = Arrays.asList(Blocks.POWDER_SNOW, Blocks.SNOW, Blocks.ICE, Blocks.PACKED_ICE, Blocks.BLUE_ICE, Blocks.SNOW, Blocks.SNOW_BLOCK, Blocks.POWDER_SNOW_CAULDRON);
+
+    /**Used to check if the player has something that can be considered a Cold Source
+     * for the Frost Light
+     *
+     * @param player The player to perform checks on*/
+    public static boolean checkFrost(PlayerEntity player){
+        if(player.isFrozen()){
+            return true;
+        }
+
+        Item main = player.getMainHandStack().getItem();
+        Item off = player.getOffHandStack().getItem();
+        for(Item item : ice_items){
+            if(item.equals(main) || item.equals(off)){
+                return true;
+            }
+        }
+        if(!Config.SHOULD_CHECK_BLOCKS){
+            return false;
+        }
+
+        BlockPos origin = player.getBlockPos();
+        int rad = 3;
+        for(int y = -rad; y <= rad; y++)
+        {
+            for(int x = -rad; x <= rad; x++)
+            {
+                for(int z = -rad; z <= rad; z++)
+                {
+                    BlockPos pos = origin.add(x, y, z);
+                    for(Block block : ice_blocks){
                         if(player.getWorld().getBlockState(pos).getBlock().equals(block)){
                             return true;
                         }
