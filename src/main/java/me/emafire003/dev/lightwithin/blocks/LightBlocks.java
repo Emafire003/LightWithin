@@ -21,7 +21,7 @@ public class LightBlocks {
             new FrozenPlayerBottomBlock(FabricBlockSettings.of(Material.ICE).strength(0.1f).collidable(true).slipperiness(0.9f).luminance(2).sounds(BlockSoundGroup.GLASS)), ItemGroup.DECORATIONS);
 
     public static final Block ICE_WALL = registerBlock("ice_wall",
-            new WallBlock(FabricBlockSettings.of(Material.ICE).strength(0.1f).collidable(true).slipperiness(0.9f).sounds(BlockSoundGroup.GLASS).nonOpaque()), ItemGroup.DECORATIONS);
+            new WallBlock(FabricBlockSettings.of(Material.ICE).strength(0.05f).collidable(true).slipperiness(0.9f).sounds(BlockSoundGroup.GLASS).nonOpaque()), ItemGroup.DECORATIONS);
 
     private static Block registerBlock(String name, Block block, ItemGroup tab) {
         registerBlockItem(name, block, tab);

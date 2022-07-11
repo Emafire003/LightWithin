@@ -67,7 +67,6 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 
 		ModChecker.setLoaded("factions", FabricLoader.getInstance().isModLoaded("factions"));
 
-		//LootTableModifier.modifyLootTables(); Doesn't really work
 		LightTriggeringAndEvents.registerListeners();
 		registerLightUsedPacket();
 		LightSounds.registerSounds();
@@ -75,7 +74,8 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 		LightItems.registerItems();
 		LightParticles.registerParticles();
 		LightBlocks.registerBlocks();
-		Config.registerConfigs();
+		LootTableModifier.modifyLootTables();
+
 
 		ServerLifecycleEvents.SERVER_STARTED.register(minecraftServer -> {
 			ColoredGlowLib.setOverrideTeamColors(true);

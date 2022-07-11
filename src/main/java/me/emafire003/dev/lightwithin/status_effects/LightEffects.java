@@ -15,9 +15,10 @@ public class LightEffects {
             new LightActiveEffect());
     public static final StatusEffect FROST = registerStatusEffect("frost",
             new FrostEffect());
+    public static final StatusEffect FREEZE_RESISTANCE = registerStatusEffect("freeze_resistance",
+            new FreezeResistanceEffect());
 
     private static StatusEffect registerStatusEffect(String name, StatusEffect effect){
-
         return Registry.register(Registry.STATUS_EFFECT, new Identifier(LightWithin.MOD_ID, name),effect);
     }
 

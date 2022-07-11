@@ -70,6 +70,11 @@ public class EventHandler {
                     Renderer2d.renderTexture(re.getStack(), new Identifier(LightWithin.MOD_ID, "textures/lights/runes/blazing_light_runes.png"), center_x-(400/scale_factor)/2, center_y-(160/scale_factor)/2, (400/scale_factor)*1.2, (160/scale_factor)*1.2);
                     ClipStack.globalInstance.popWindow();
                 }
+                if(frost_runes){
+                    ClipStack.globalInstance.addWindow(re.getStack(),new Rectangle(1,1,1000,1000));
+                    Renderer2d.renderTexture(re.getStack(), new Identifier(LightWithin.MOD_ID, "textures/lights/runes/frost_light_runes.png"), center_x-(500/scale_factor)/2, center_y-(160/scale_factor)/2, (400/scale_factor)*1.2, (160/scale_factor)*1.2);
+                    ClipStack.globalInstance.popWindow();
+                }
             }
         });
     }
@@ -87,6 +92,10 @@ public class EventHandler {
         }else if(type.equals(InnerLightType.BLAZING)){
             blazing_runes = true;
             player.playSound(LightSounds.BLAZING_LIGHT, 1 ,1);
+        }
+        else if(type.equals(InnerLightType.FROST)){
+            frost_runes = true;
+            player.playSound(LightSounds.FROST_LIGHT, 1 ,1);
         }
     }
 
@@ -121,6 +130,13 @@ public class EventHandler {
                 if(ticks > 20*3){
                     ticks = 0;
                     blazing_runes = false;
+                }
+            }
+            if(frost_runes){
+                ticks++;
+                if(ticks > 20*3){
+                    ticks = 0;
+                    frost_runes = false;
                 }
             }
         });
