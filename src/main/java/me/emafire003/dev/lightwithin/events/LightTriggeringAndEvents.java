@@ -132,6 +132,8 @@ public class LightTriggeringAndEvents {
 
     public static void checkFrost(PlayerEntity player, LightComponent component, Entity entity){
         /**If the player has ALL as target, he needs to be hurt (or an ally has to die, but that depends on the trigger)*/
+        player.sendMessage(Text.literal("Ok... " + component.getTargets()));
+        player.sendMessage(Text.literal("Ok... " + component.getTargets()));
         if(component.getTargets().equals(TargetType.ALL)
                 && CheckUtils.checkSelfHealth(player, Config.HP_PERCENTAGE_SELF+5)
                 && CheckUtils.checkSurrounded(player)
@@ -143,6 +145,20 @@ public class LightTriggeringAndEvents {
         /**CHECKS if the player has ENEMIES as target, either his or his allies health needs to be low*/
         else if(component.getTargets().equals(TargetType.ENEMIES)
                 && (CheckUtils.checkAllyHealth(player, entity, Config.HP_PERCENTAGE_ALLIES+5) || CheckUtils.checkSelfHealth(player, Config.HP_PERCENTAGE_SELF+5))
+                && CheckUtils.checkSurrounded(player)
+                && CheckUtils.checkArmorDurability(player, Config.DUR_PERCENTAGE_ALLIES)
+                && CheckUtils.checkFrost(player)
+        ){
+            sendReadyPacket((ServerPlayerEntity) player, true);
+        }else if(component.getTargets().equals(TargetType.SELF)
+                && CheckUtils.checkSelfHealth(player, Config.HP_PERCENTAGE_SELF+5)
+                && CheckUtils.checkSurrounded(player)
+                && CheckUtils.checkArmorDurability(player, Config.DUR_PERCENTAGE_ALLIES)
+                && CheckUtils.checkFrost(player)
+        ){
+            sendReadyPacket((ServerPlayerEntity) player, true);
+        }else if(component.getTargets().equals(TargetType.ALLIES)
+                && CheckUtils.checkAllyHealth(player, entity, Config.HP_PERCENTAGE_ALLIES+5)
                 && CheckUtils.checkSurrounded(player)
                 && CheckUtils.checkArmorDurability(player, Config.DUR_PERCENTAGE_ALLIES)
                 && CheckUtils.checkFrost(player)
@@ -321,6 +337,34 @@ public class LightTriggeringAndEvents {
         }
     }
 
+    public static TargetType determineAttackAndBuffTarget(String[] id_bits, int target_bit){
+        //If it's all letters or numbers, or if there is at least one number from 5-9 or e/f then all
+        //NOPE --if the char at the position 2 is abc && the nextone is a digit then it's other-- NOPE
+        //in the other cases it's enemies
+        boolean all_cond1 = id_bits[target_bit].matches("[0-9]+") || id_bits[target_bit].matches("[f-p]+");
+        boolean all_cond2 = false;
+        for(int i = 0; i<id_bits[target_bit].length()-1; i++){
+            if(all_cond1){
+                break;
+            }
+            char a = id_bits[target_bit].charAt(i);
+            if(String.valueOf(a).matches("[5-9]")){
+                all_cond2 = true;
+                break;
+            }
+        }
+        if(!all_cond1 == !all_cond2){
+            return TargetType.SELF;
+        }
+        else if(all_cond1 || all_cond2){
+            return TargetType.ALL;
+        }else if(String.valueOf(id_bits[target_bit].charAt(2)).matches("[a-c]") && Character.isDigit(id_bits[target_bit].charAt(3))){
+            return TargetType.ALLIES;
+        }else{
+            return TargetType.ENEMIES;
+        }
+    }
+
     public static TargetType determineBuffTarget(String[] id_bits, int target_bit){
         //If it's all letters or numbers, or if there is at least one number from 5-9 or e/f then allies
         //if the char at the position 2 is abc && the nextone is a digit then it's other
@@ -378,9 +422,9 @@ public class LightTriggeringAndEvents {
         else if(String.valueOf(id_bits[type_bit].charAt(i)).matches("[0-1]")){
             return new Pair<InnerLightType, TargetType>(InnerLightType.BLAZING, determineAttackTarget(id_bits, target_bit));
         }
-        //TODO Frost
+        //Frost
         else if(String.valueOf(id_bits[type_bit].charAt(i)).matches("[2-3]")){
-            return new Pair<InnerLightType, TargetType>(InnerLightType.FROST, determineAttackTarget(id_bits, target_bit));
+            return new Pair<InnerLightType, TargetType>(InnerLightType.FROST, determineAttackAndBuffTarget(id_bits, target_bit));
         }
         //TODO Earthen
         else if(String.valueOf(id_bits[type_bit].charAt(i)).matches("[4-5]")){
@@ -388,7 +432,7 @@ public class LightTriggeringAndEvents {
         }
         //TODO Wind
         else if(String.valueOf(id_bits[type_bit].charAt(i)).matches("[6-7]")){
-            return new Pair<InnerLightType, TargetType>(InnerLightType.BLAZING, determineAttackTarget(id_bits, target_bit));
+            return new Pair<InnerLightType, TargetType>(InnerLightType.FROST, determineAttackTarget(id_bits, target_bit));
         }
         //TODO Aqua
         else if(String.valueOf(id_bits[type_bit].charAt(i)).matches("[8-9]")){

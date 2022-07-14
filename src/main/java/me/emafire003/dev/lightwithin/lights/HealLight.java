@@ -16,8 +16,6 @@ import net.minecraft.sound.SoundCategory;
 
 import java.util.List;
 
-import static me.emafire003.dev.lightwithin.LightWithin.LOGGER;
-
 public class HealLight extends InnerLight {
 
     /*Possible triggers:

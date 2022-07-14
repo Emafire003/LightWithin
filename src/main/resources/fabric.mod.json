@@ -4,7 +4,7 @@
   "version": "${version}",
 
   "name": "LightWithin Mod",
-  "description": "Desc",
+  "description": "A mod adding new powers, the 'InnerLights' which are going to help the players when they need it the most!",
   "authors": [
     "Emafire003"
   ],
@@ -34,11 +34,11 @@
   ],
 
   "depends": {
-    "fabricloader": ">=0.13.3",
-    "minecraft": ">=1.17-",
+    "fabricloader": ">=0.14.8",
+    "minecraft": ">=1.19-",
     "java": ">=16",
     "fabric-key-binding-api-v1": "*",
-    "coloredglowlib": ">=1.3.0"
+    "coloredglowlib": ">=1.3.4"
   },
   "custom": {
     "cardinal-components": [

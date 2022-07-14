@@ -61,7 +61,14 @@ public class Config {
     public static int BLAZING_ALL_DAMAGE_BONUS;
     public static int BLAZING_DEFAULT_DAMAGE;
 
+    public static int FROST_MAX_POWER;
+    public static int FROST_MAX_DURATION;
+    public static int FROST_MIN_POWER;
+    public static int FROST_MIN_DURATION;
+    public static double FROST_FREEZE_RES_DURATION_MULTIPLIER;
+
     public static boolean SHOULD_CHECK_BLOCKS;
+    public static boolean STRUCTURE_GRIEFING;
 
     public static void registerConfigs() {
         configs = new ConfigProvider();
@@ -124,7 +131,15 @@ public class Config {
         configs.addKeyValuePair(new Pair<>("blazing_crit_fire_multiplier", 2), "The multiplier of the duration in seconds, for which the target(s) will be set on fire (must be >= 1)");
         configs.addKeyValuePair(new Pair<>("blazing_all_damage_bonus", 3), "The damage bonus (2 = 1 hearth) when the target is ALL");
 
+        configs.addKeyValuePair(new Pair<>("frost_max_power", 8), "The maximum power multiplier (aka the AMOUNT of freeze damage inflicted upon activation. 2 = 1 hearth)");
+        configs.addKeyValuePair(new Pair<>("frost_max_duration", 18), "The maximum duration of the frost effect");
+        configs.addKeyValuePair(new Pair<>("frost_min_power", 1), "The minimum power multiplier (aka the AMOUNT of freeze damage inflicted upon activation. 2 = 1 hearth)");
+        configs.addKeyValuePair(new Pair<>("frost_min_duration", 5), "The minimum duration of the frost effect");
+        configs.addKeyValuePair(new Pair<>("frost_freeze_res_duration_multiplier", 2.0), "The multiplier of the duration of the Freeze Resistance status effect given to allies or self. Set to 1 to use the default duration.");
+
+
         configs.addKeyValuePair(new Pair<>("should_check_blocks", true), "Should the blocks near the player be checked for the light activation? Could impact on performance");
+        configs.addKeyValuePair(new Pair<>("structure_griefing", true), "If set to false will prevent lights from spawning structures on activation (I'd suggest leaving it to true)");
 
     }
 
@@ -185,7 +200,13 @@ public class Config {
         BLAZING_ALL_DAMAGE_BONUS = CONFIG.getOrDefault("blazing_all_damage_bonus", 3);
         BLAZING_DEFAULT_DAMAGE = CONFIG.getOrDefault("blazing_default_damage", 2);
 
+        FROST_MAX_POWER = CONFIG.getOrDefault("frost_max_power", 8);
+        FROST_MAX_DURATION = CONFIG.getOrDefault("frost_max_duration", 18);
+        FROST_MIN_POWER = CONFIG.getOrDefault("frost_min_power", 1);
+        FROST_MIN_DURATION = CONFIG.getOrDefault("frost_min_duration", 5);
+
         SHOULD_CHECK_BLOCKS = CONFIG.getOrDefault("should_check_blocks", true);
+        STRUCTURE_GRIEFING = CONFIG.getOrDefault("structure_griefing", true);
 
 
     }

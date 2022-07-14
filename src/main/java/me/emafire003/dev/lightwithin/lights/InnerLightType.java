@@ -25,7 +25,8 @@ public enum InnerLightType {
     //the block underneath will be turned to path and magma blocks and such
     EARTHEN, //dirt/rock in hand or below feet
     //could throw rocks and blind the attackers while encasing the allies in dirt/stone
-    WIND, //in the air or... i dunno
+    //SPAWNS A GOLEM TO ATTACK THE ENEMIES AND SUCH (not sure if a normal one or a new gecko lib one)
+    WIND, //in the air or... i dunno MAYBE MAKES THE PLAYER FLY FOR A BIT?
     //simply blow away the enemies and give speed and slow falling to self? The "ALLIES" could be like  buff both self and allies? With high speed and jump boost and stuff
     AQUA, //needs something watery (bottle/bucket) in hand or water around
     //this is going to be quite complex
@@ -33,6 +34,7 @@ public enum InnerLightType {
     CONCEAL,
     SPEED,
     SLOW,
+    FOREST_AURA, //spawn vines to block people, poisons enemies and such
     ENDER_AURA,
     PROJECTILE,
     SPIDER_SENSE,//scale up walls?

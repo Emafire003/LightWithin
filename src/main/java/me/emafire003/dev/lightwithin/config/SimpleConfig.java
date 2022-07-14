@@ -198,6 +198,8 @@ public class SimpleConfig {
         try {
             return Integer.parseInt( get(key) );
         } catch (Exception e) {
+            LOGGER.info("ERROR! NOTHING FOUND");
+            e.printStackTrace();
             return def;
         }
     }

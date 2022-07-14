@@ -9,6 +9,7 @@ import me.emafire003.dev.lightwithin.particles.LightParticles;
 import me.emafire003.dev.lightwithin.particles.LightParticlesUtil;
 import me.emafire003.dev.lightwithin.sounds.LightSounds;
 import me.emafire003.dev.lightwithin.status_effects.LightEffects;
+import me.emafire003.dev.lightwithin.util.StructurePlacer;
 import me.emafire003.dev.lightwithin.util.TargetType;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.minecraft.entity.LivingEntity;
@@ -20,10 +21,15 @@ import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
+import net.minecraft.util.BlockMirror;
+import net.minecraft.util.BlockRotation;
+import net.minecraft.util.Identifier;
+import net.minecraft.util.math.BlockPos;
 
 import java.util.List;
 
 import static me.emafire003.dev.lightwithin.LightWithin.LIGHT_COMPONENT;
+import static me.emafire003.dev.lightwithin.LightWithin.MOD_ID;
 
 public class BlazingLight extends InnerLight {
 
@@ -93,6 +99,10 @@ public class BlazingLight extends InnerLight {
         if(component.getTargets().equals(TargetType.ALL)){
             power_multiplier = power_multiplier + Config.BLAZING_ALL_DAMAGE_BONUS;
         }
+        if(Config.STRUCTURE_GRIEFING && !caster.getWorld().isClient && (component.getTargets().equals(TargetType.ALL) || component.getTargets().equals(TargetType.ENEMIES))) {
+            StructurePlacer placer = new StructurePlacer((ServerWorld) caster.getWorld(), new Identifier(MOD_ID, "blazing_light"), caster.getBlockPos(), BlockMirror.NONE, BlockRotation.NONE, true, 1.0f, new BlockPos(-3, -4, -3));
+            placer.loadStructure((ServerWorld) caster.getWorld());
+        }
         for(LivingEntity target : this.targets){
             target.playSound(LightSounds.BLAZING_LIGHT, 1, 1);
 
@@ -108,6 +118,10 @@ public class BlazingLight extends InnerLight {
                 target.setOnFireFor(this.duration*Config.BLAZING_CRIT_FIRE_MULTIPLIER);
                 target.playSound(LightSounds.LIGHT_CRIT, 1, 1);
                 LightParticlesUtil.spawnDescendingColumn((ServerPlayerEntity) caster, ParticleTypes.FLAME, target.getPos().add(0,3,0));
+                if(!caster.getWorld().isClient){
+                    StructurePlacer placer = new StructurePlacer((ServerWorld) caster.getWorld(), new Identifier(MOD_ID, "fire_ring"), caster.getBlockPos());
+                    placer.loadStructure((ServerWorld) caster.getWorld());
+                }
             }else{
                 target.setOnFireFor(this.duration);
                 target.damage(DamageSource.IN_FIRE, (float) (Config.BLAZING_DEFAULT_DAMAGE*this.power_multiplier));

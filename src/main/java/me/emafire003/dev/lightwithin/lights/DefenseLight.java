@@ -11,13 +11,10 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 
 import java.util.List;
-
-import static me.emafire003.dev.lightwithin.LightWithin.LOGGER;
 
 public class DefenseLight extends InnerLight {
 

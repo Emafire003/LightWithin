@@ -72,7 +72,7 @@ public class EventHandler {
                 }
                 if(frost_runes){
                     ClipStack.globalInstance.addWindow(re.getStack(),new Rectangle(1,1,1000,1000));
-                    Renderer2d.renderTexture(re.getStack(), new Identifier(LightWithin.MOD_ID, "textures/lights/runes/frost_light_runes.png"), center_x-(500/scale_factor)/2, center_y-(160/scale_factor)/2, (400/scale_factor)*1.2, (160/scale_factor)*1.2);
+                    Renderer2d.renderTexture(re.getStack(), new Identifier(LightWithin.MOD_ID, "textures/lights/runes/frost_light_runes.png"), center_x-(435/scale_factor)/2, center_y-(160/scale_factor)/2, (400/scale_factor)*1.2, (160/scale_factor)*1.2);
                     ClipStack.globalInstance.popWindow();
                 }
             }

@@ -269,4 +269,40 @@ public class CheckUtils {
         return false;
     }
 
+    /**Rerturn a list of the player's enemies in the area
+     * for entity checks, also know as LightWithin.box_exapansion_amount
+     *
+     * @param player The player used as the center of the area to search of its enemies*/
+    public static List<LivingEntity> getEnemies(PlayerEntity player){
+        List<LivingEntity> targets = new ArrayList<>();
+        List<LivingEntity> entities = player.getWorld().getEntitiesByClass(LivingEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amount), (entity1 -> true));
+        for(LivingEntity ent : entities){
+            if(ent instanceof HostileEntity && !CheckUtils.CheckAllies.checkAlly(player, ent)){
+                targets.add(ent);
+            }
+            if(ent instanceof PlayerEntity && ModChecker.isLoaded("factions")){
+                FactionChecker.areEnemies(player, (PlayerEntity) ent);
+            }
+        }
+        return targets;
+    }
+
+    /**Rerturn a list of an entity's enemies in the area
+     * for entity checks, also know as LightWithin.box_exapansion_amount
+     *
+     * @param entity The entity used as the center of the area to search of its enemies*/
+    public static List<LivingEntity> getEnemies(LivingEntity entity){
+        List<LivingEntity> targets = new ArrayList<>();
+        List<LivingEntity> entities = entity.getWorld().getEntitiesByClass(LivingEntity.class, new Box(entity.getBlockPos()).expand(box_expansion_amount), (entity1 -> true));
+        for(LivingEntity ent : entities){
+            if(ent instanceof HostileEntity && !CheckUtils.CheckAllies.checkAlly(entity, ent)){
+                targets.add(ent);
+            }
+            if(ent instanceof PlayerEntity && ModChecker.isLoaded("factions") && entity instanceof PlayerEntity){
+                FactionChecker.areEnemies((PlayerEntity) entity, (PlayerEntity) ent);
+            }
+        }
+        return targets;
+    }
+
 }

@@ -80,6 +80,9 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 		ServerLifecycleEvents.SERVER_STARTED.register(minecraftServer -> {
 			ColoredGlowLib.setOverrideTeamColors(true);
 			box_expansion_amount = Config.AREA_OF_SEARCH_FOR_ENTITIES;
+			if(box_expansion_amount == 0){
+				box_expansion_amount = 6;
+			}
 			Config.reloadConfig();
 		});
 
@@ -267,8 +270,6 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 		else if(component.getTargets().equals(TargetType.ALLIES)){
 			List<LivingEntity> entities = player.getWorld().getEntitiesByClass(LivingEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amount), (entity1 -> true));
 			for(LivingEntity ent : entities){
-				//TODO integration with other mods that implement allies stuff
-				//TODO may need this to prevent bugs
 				if(/*!entity.equals(ent) && */CheckUtils.CheckAllies.checkAlly(player, ent)){
 					targets.add(ent);
 				}else if(ent instanceof TameableEntity){
@@ -334,12 +335,9 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 	//=======================Frost Light=======================
 	public static void activateFrost(LightComponent component, ServerPlayerEntity player){
 		List<LivingEntity> targets = new ArrayList<>();
-		//TODO add config option for setting the amout before it triggers (look up)
-
 		if(component.getTargets().equals(TargetType.ALL)){
 			targets.addAll(player.getWorld().getEntitiesByClass(LivingEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amount), (entity1 -> true)));
 			targets.remove(player);
-			component.setPowerMultiplier(component.getPowerMultiplier()+2);
 			player.sendMessage(Text.literal("Everything will be frozen in ice!"), true);
 		}
 
@@ -354,8 +352,23 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 				}
 			}
 			player.sendMessage(Text.literal("All your enemies will be made into a statue of ice!"), true);
+		}else if(component.getTargets().equals(TargetType.ALLIES)){
+			List<LivingEntity> entities = player.getWorld().getEntitiesByClass(LivingEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amount), (entity1 -> true));
+			for(LivingEntity ent : entities){
+				if(/*!entity.equals(ent) && */CheckUtils.CheckAllies.checkAlly(player, ent)){
+					targets.add(ent);
+				}else if(ent instanceof TameableEntity){
+					if(player.equals(((TameableEntity) ent).getOwner())){
+						targets.add(ent);
+					}
+				}
+			}
+			targets.add(player);
+			player.sendMessage(Text.literal("Go forth ice, and protect us!"), true);
+		}if(component.getTargets().equals(TargetType.SELF)){
+			targets.add(player);
+			player.sendMessage(Text.literal("Go forth ice, and protect me!"), true);
 		}
-
 
 		if(debug){
 			player.sendMessage(Text.literal("Ok light triggered"), false);

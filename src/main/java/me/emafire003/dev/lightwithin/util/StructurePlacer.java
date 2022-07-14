@@ -1,6 +1,5 @@
 package me.emafire003.dev.lightwithin.util;
 
-import net.minecraft.block.BlockState;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.structure.StructurePlacementData;
 import net.minecraft.structure.StructureTemplate;
@@ -34,7 +33,7 @@ public class StructurePlacer {
         this.offset = offset;
     }
 
-    public StructurePlacer(ServerWorld world, Identifier templateName, BlockPos blockPos){
+    public StructurePlacer(ServerWorld world, Identifier templateName, BlockPos blockPos) {
         this.world = world;
         this.templateName = templateName;
         this.blockPos = blockPos;
@@ -42,6 +41,61 @@ public class StructurePlacer {
         this.rotation = BlockRotation.NONE;
         this.ignoreEntities = true;
         this.integrity = 1.0f;
+        this.offset = new BlockPos(0, 0, 0);
+    }
+
+    public StructurePlacer(ServerWorld world, Identifier templateName, BlockPos blockPos, BlockPos offset){
+        this.world = world;
+        this.templateName = templateName;
+        this.blockPos = blockPos;
+        this.mirror = BlockMirror.NONE;
+        this.rotation = BlockRotation.NONE;
+        this.ignoreEntities = true;
+        this.integrity = 1.0f;
+        this.offset = offset;
+    }
+
+    public StructurePlacer(ServerWorld world, Identifier templateName, BlockPos blockPos, BlockMirror mirror){
+        this.world = world;
+        this.templateName = templateName;
+        this.blockPos = blockPos;
+        this.mirror = mirror;
+        this.rotation = BlockRotation.NONE;
+        this.ignoreEntities = true;
+        this.integrity = 1.0f;
+        this.offset = new BlockPos(0, 0, 0);
+    }
+
+    public StructurePlacer(ServerWorld world, Identifier templateName, BlockPos blockPos, BlockRotation rotation){
+        this.world = world;
+        this.templateName = templateName;
+        this.blockPos = blockPos;
+        this.mirror = BlockMirror.NONE;
+        this.rotation = rotation;
+        this.ignoreEntities = true;
+        this.integrity = 1.0f;
+        this.offset = new BlockPos(0, 0, 0);
+    }
+
+    public StructurePlacer(ServerWorld world, Identifier templateName, BlockPos blockPos, BlockMirror mirror, BlockRotation rotation){
+        this.world = world;
+        this.templateName = templateName;
+        this.blockPos = blockPos;
+        this.mirror = mirror;
+        this.rotation = rotation;
+        this.ignoreEntities = true;
+        this.integrity = 1.0f;
+        this.offset = new BlockPos(0, 0, 0);
+    }
+
+    public StructurePlacer(ServerWorld world, Identifier templateName, BlockPos blockPos, float integrity){
+        this.world = world;
+        this.templateName = templateName;
+        this.blockPos = blockPos;
+        this.mirror = BlockMirror.NONE;
+        this.rotation = BlockRotation.NONE;
+        this.ignoreEntities = true;
+        this.integrity = integrity;
         this.offset = new BlockPos(0, 0, 0);
     }
 
@@ -62,33 +116,25 @@ public class StructurePlacer {
         }
     }
 
-    public boolean place(StructureTemplate template) {;
-        Vec3i vec3i = template.getSize();
-        boolean bl2 = false;
-        if (!bl2) {
-            Vec3i size = vec3i;
-            BlockState blockState = world.getBlockState(blockPos);
-            world.updateListeners(blockPos, blockState, blockState, 3);
-        }
-
-        if (false && !bl2) {
-            return false;
-        } else {
+    public boolean place(StructureTemplate template) {
+        try {
             StructurePlacementData structurePlacementData = (new StructurePlacementData()).setMirror(this.mirror).setRotation(this.rotation).setIgnoreEntities(this.ignoreEntities);
             if (this.integrity < 1.0F) {
                 structurePlacementData.clearProcessors().addProcessor(new BlockRotStructureProcessor(MathHelper.clamp(this.integrity, 0.0F, 1.0F))).setRandom(createRandom(this.world.getSeed()));
             }
-
             BlockPos blockPos2 = blockPos.add(this.offset);
             template.place(world, blockPos2, blockPos2, structurePlacementData, createRandom(this.world.getSeed()), 2);
+            unloadStructure();
             return true;
+        }catch (Exception e){
+            e.printStackTrace();
+            return false;
         }
     }
 
     public void unloadStructure() {
         if (this.templateName != null) {
-            ServerWorld serverWorld = (ServerWorld)this.world;
-            StructureTemplateManager structureTemplateManager = serverWorld.getStructureTemplateManager();
+            StructureTemplateManager structureTemplateManager = world.getStructureTemplateManager();
             structureTemplateManager.unloadTemplate(this.templateName);
         }
     }
