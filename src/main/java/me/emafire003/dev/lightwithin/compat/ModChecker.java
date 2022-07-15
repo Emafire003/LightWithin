@@ -2,6 +2,7 @@ package me.emafire003.dev.lightwithin.compat;
 
 import java.util.HashMap;
 
+@Deprecated
 public class ModChecker {
     private static HashMap<String, Boolean> loaded_mods = new HashMap<>();
 

@@ -3,6 +3,7 @@ package me.emafire003.dev.lightwithin.util;
 import me.emafire003.dev.lightwithin.compat.ModChecker;
 import me.emafire003.dev.lightwithin.compat.factions.FactionChecker;
 import me.emafire003.dev.lightwithin.config.Config;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
@@ -23,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static me.emafire003.dev.lightwithin.LightWithin.LOGGER;
 import static me.emafire003.dev.lightwithin.LightWithin.box_expansion_amount;
 
 public class CheckUtils {
@@ -171,7 +173,7 @@ public class CheckUtils {
         }
 
         public static boolean checkAlly(LivingEntity entity, LivingEntity teammate){
-            if(ModChecker.isLoaded("factions") && entity instanceof PlayerEntity && teammate instanceof PlayerEntity){
+            if(FabricLoader.getInstance().isModLoaded("factions") && entity instanceof PlayerEntity && teammate instanceof PlayerEntity){
                 return checkFaction((PlayerEntity) entity, (PlayerEntity) teammate);
             }
             return checkTeam(entity, teammate) || checkPet(entity, teammate);
@@ -280,7 +282,7 @@ public class CheckUtils {
             if(ent instanceof HostileEntity && !CheckUtils.CheckAllies.checkAlly(player, ent)){
                 targets.add(ent);
             }
-            if(ent instanceof PlayerEntity && ModChecker.isLoaded("factions")){
+            if(ent instanceof PlayerEntity && FabricLoader.getInstance().isModLoaded("factions")){
                 FactionChecker.areEnemies(player, (PlayerEntity) ent);
             }
         }
@@ -298,7 +300,7 @@ public class CheckUtils {
             if(ent instanceof HostileEntity && !CheckUtils.CheckAllies.checkAlly(entity, ent)){
                 targets.add(ent);
             }
-            if(ent instanceof PlayerEntity && ModChecker.isLoaded("factions") && entity instanceof PlayerEntity){
+            if(ent instanceof PlayerEntity && FabricLoader.getInstance().isModLoaded("factions") && entity instanceof PlayerEntity){
                 FactionChecker.areEnemies((PlayerEntity) entity, (PlayerEntity) ent);
             }
         }
