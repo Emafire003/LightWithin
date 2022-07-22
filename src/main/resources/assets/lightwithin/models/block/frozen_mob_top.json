@@ -1,0 +1,117 @@
+{
+	"credit": "Made with Blockbench",
+	"texture_size": [64, 64],
+	"textures": {
+		"3": "lightwithin:block/frozen_mob",
+		"particle": "lightwithin:block/frozen_mob"
+	},
+	"elements": [
+		{
+			"name": "Left Arm",
+			"from": [12, 4.5, 0.4],
+			"to": [16, 8.5, 8.4],
+			"rotation": {"angle": 0, "axis": "x", "origin": [14, 9, 8]},
+			"faces": {
+				"north": {"uv": [13, 4, 12, 5], "rotation": 180, "texture": "#3"},
+				"east": {"uv": [10, 5, 11, 7], "rotation": 270, "texture": "#3"},
+				"south": {"uv": [12, 5, 11, 4], "texture": "#3"},
+				"west": {"uv": [12, 5, 13, 7], "rotation": 90, "texture": "#3"},
+				"up": {"uv": [11, 5, 12, 7], "rotation": 180, "texture": "#3"},
+				"down": {"uv": [13, 5, 14, 7], "texture": "#3"}
+			}
+		},
+		{
+			"name": "Body",
+			"from": [4, 0, 6],
+			"to": [12, 8, 10],
+			"faces": {
+				"north": {"uv": [5, 5, 7, 7], "texture": "#3"},
+				"east": {"uv": [4, 5, 5, 7], "texture": "#3"},
+				"south": {"uv": [8, 5, 10, 7], "texture": "#3"},
+				"west": {"uv": [7, 5, 8, 7], "texture": "#3"},
+				"up": {"uv": [7, 5, 5, 4], "texture": "#3"},
+				"down": {"uv": [9, 4, 7, 5], "texture": "#3"}
+			}
+		},
+		{
+			"name": "Head",
+			"from": [4, 8, 4],
+			"to": [12, 16, 12],
+			"faces": {
+				"north": {"uv": [2, 2, 4, 4], "texture": "#3"},
+				"east": {"uv": [0, 2, 2, 4], "texture": "#3"},
+				"south": {"uv": [6, 2, 8, 4], "texture": "#3"},
+				"west": {"uv": [4, 2, 6, 4], "texture": "#3"},
+				"up": {"uv": [4, 2, 2, 0], "texture": "#3"},
+				"down": {"uv": [6, 0, 4, 2], "texture": "#3"}
+			}
+		},
+		{
+			"name": "RightArm",
+			"from": [0, 4.5, -0.4],
+			"to": [4, 8.5, 7.6],
+			"rotation": {"angle": 0, "axis": "x", "origin": [3, 9, 8]},
+			"faces": {
+				"north": {"uv": [13, 4, 12, 5], "rotation": 180, "texture": "#3"},
+				"east": {"uv": [10, 5, 11, 7], "rotation": 270, "texture": "#3"},
+				"south": {"uv": [12, 5, 11, 4], "texture": "#3"},
+				"west": {"uv": [12, 5, 13, 7], "rotation": 90, "texture": "#3"},
+				"up": {"uv": [11, 5, 12, 7], "rotation": 180, "texture": "#3"},
+				"down": {"uv": [13, 5, 14, 7], "texture": "#3"}
+			}
+		}
+	],
+	"display": {
+		"thirdperson_righthand": {
+			"rotation": [68.25, 0, 0],
+			"translation": [0, 1, 2.5],
+			"scale": [0.5, 0.5, 0.5]
+		}
+	},
+	"groups": [
+		{
+			"name": "player_model",
+			"origin": [8, 8, 8],
+			"color": 0,
+			"nbt": "{}",
+			"armAnimationEnabled": false,
+			"children": [
+				{
+					"name": "LeftArm",
+					"origin": [-5, 22, 0],
+					"rotation": [-12, 0, 0],
+					"color": 0,
+					"nbt": "{}",
+					"armAnimationEnabled": false,
+					"children": [0]
+				},
+				{
+					"name": "Body",
+					"origin": [0, 24, 0],
+					"color": 0,
+					"nbt": "{}",
+					"armAnimationEnabled": false,
+					"children": [1]
+				},
+				{
+					"name": "Head",
+					"origin": [0, 24, 0],
+					"rotation": [6, -5, 0],
+					"color": 0,
+					"nbt": "{}",
+					"armAnimationEnabled": false,
+					"children": [2]
+				},
+				{
+					"name": "RightArm",
+					"origin": [-5, 22, 0],
+					"rotation": [-12, 0, 0],
+					"color": 0,
+					"nbt": "{}",
+					"armAnimationEnabled": false,
+					"children": [3]
+				}
+			]
+		}
+	]
+}

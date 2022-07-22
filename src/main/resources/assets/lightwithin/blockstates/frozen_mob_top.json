@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "facing=north": { "model": "lightwithin:block/frozen_mob_top" },
+    "facing=east": { "model": "lightwithin:block/frozen_mob_top", "y": 90 },
+    "facing=south": { "model": "lightwithin:block/frozen_mob_top", "y": 180 },
+    "facing=west": { "model": "lightwithin:block/frozen_mob_top", "y": 270 }
+  }
+}

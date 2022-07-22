@@ -1,6 +1,7 @@
 package me.emafire003.dev.lightwithin.lights;
 
 import me.emafire003.dev.coloredglowlib.util.Color;
+import me.emafire003.dev.lightwithin.util.TargetType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 
@@ -48,4 +49,6 @@ public class InnerLight {
         this.duration = duration;
         this.caster = caster;
     }
+
+
 }

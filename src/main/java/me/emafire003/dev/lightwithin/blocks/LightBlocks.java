@@ -20,6 +20,13 @@ public class LightBlocks {
     public static final Block FROZEN_PLAYER_BOTTOM_BLOCK = registerBlock("frozen_player_bottom",
             new FrozenPlayerBottomBlock(FabricBlockSettings.of(Material.ICE).strength(0.1f).collidable(true).slipperiness(0.9f).luminance(2).sounds(BlockSoundGroup.GLASS)), ItemGroup.DECORATIONS);
 
+    public static final Block FROZEN_MOB_TOP_BLOCK = registerBlock("frozen_mob_top",
+            new FrozenMobTopBlock(FabricBlockSettings.of(Material.ICE).strength(0.1f).collidable(true).slipperiness(0.9f).luminance(2).sounds(BlockSoundGroup.GLASS)), ItemGroup.DECORATIONS);
+
+    public static final Block FROZEN_MOB_BOTTOM_BLOCK = registerBlock("frozen_mob_bottom",
+            new FrozenMobBottomBlock(FabricBlockSettings.of(Material.ICE).strength(0.1f).collidable(true).slipperiness(0.9f).luminance(2).sounds(BlockSoundGroup.GLASS)), ItemGroup.DECORATIONS);
+
+
     public static final Block ICE_WALL = registerBlock("ice_wall",
             new WallBlock(FabricBlockSettings.of(Material.ICE).strength(0.05f).collidable(true).slipperiness(0.9f).sounds(BlockSoundGroup.GLASS).nonOpaque()), ItemGroup.DECORATIONS);
 

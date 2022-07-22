@@ -7,6 +7,8 @@ import dev.onyxstudios.cca.api.v3.entity.EntityComponentInitializer;
 import dev.onyxstudios.cca.api.v3.entity.RespawnCopyStrategy;
 import me.emafire003.dev.coloredglowlib.ColoredGlowLib;
 import me.emafire003.dev.lightwithin.blocks.LightBlocks;
+import me.emafire003.dev.lightwithin.commands.LightCommand;
+import me.emafire003.dev.lightwithin.commands.LightCommands;
 import me.emafire003.dev.lightwithin.compat.ModChecker;
 import me.emafire003.dev.lightwithin.compat.factions.FactionChecker;
 import me.emafire003.dev.lightwithin.component.LightComponent;
@@ -24,6 +26,7 @@ import me.emafire003.dev.lightwithin.util.CheckUtils;
 import me.emafire003.dev.lightwithin.util.LootTableModifier;
 import me.emafire003.dev.lightwithin.util.TargetType;
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.loader.api.FabricLoader;
@@ -41,20 +44,30 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.NoSuchElementException;
+import java.util.*;
+
+import static java.util.Map.entry;
 
 public class LightWithin implements ModInitializer, EntityComponentInitializer {
 	// This logger is used to write text to the console and the log file.
 	// It is considered best practice to use your mod id as the logger's name.
 	// That way, it's clear which mod wrote info, warnings, and errors.
 	public static final String MOD_ID = "lightwithin";
+	public static final String PREFIX_MSG = "[LightWithin] ";
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 	public static int box_expansion_amount = 6;
 
 	private static boolean debug = false;
 	public static Path PATH = Path.of(FabricLoader.getInstance().getConfigDir() + "/" + MOD_ID + "/");
+
+	public static final Map<InnerLightType, List<TargetType>> possible_targets = Map.ofEntries(
+			entry(InnerLightType.HEAL, Arrays.asList(TargetType.SELF, TargetType.ALLIES, TargetType.OTHER)),
+			entry(InnerLightType.DEFENCE, Arrays.asList(TargetType.SELF, TargetType.ALLIES, TargetType.OTHER)),
+			entry(InnerLightType.STRENGTH, Arrays.asList(TargetType.SELF, TargetType.ALLIES, TargetType.OTHER)),
+			entry(InnerLightType.BLAZING, Arrays.asList(TargetType.ENEMIES, TargetType.ALL)),
+			entry(InnerLightType.FROST, Arrays.asList(TargetType.SELF, TargetType.ALLIES, TargetType.ENEMIES, TargetType.ALL))
+	);
+
 
 	public static final ComponentKey<LightComponent> LIGHT_COMPONENT =
 			ComponentRegistry.getOrCreate(new Identifier(MOD_ID, "light_component"), LightComponent.class);
@@ -75,6 +88,8 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 		LightParticles.registerParticles();
 		LightBlocks.registerBlocks();
 		LootTableModifier.modifyLootTables();
+		LightCommands.registerArguments();
+		CommandRegistrationCallback.EVENT.register(LightCommands::registerCommands);
 
 
 		ServerLifecycleEvents.SERVER_STARTED.register(minecraftServer -> {

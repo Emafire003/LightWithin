@@ -112,7 +112,7 @@ public class LightTriggeringAndEvents {
     public static void checkBlazing(PlayerEntity player, LightComponent component, Entity entity){
         /**If the player has ALL as target, he needs to be hurt (or an ally has to die, but that depends on the trigger)*/
         if(component.getTargets().equals(TargetType.ALL)
-                && CheckUtils.checkSelfHealth(player, Config.HP_PERCENTAGE_SELF+5)
+                && CheckUtils.checkSelfHealth(player, Config.HP_PERCENTAGE_SELF+10)
                 && CheckUtils.checkSurrounded(player)
                 && CheckUtils.checkArmorDurability(player, Config.DUR_PERCENTAGE_SELF)
                 && CheckUtils.checkBlazing(player)
@@ -121,7 +121,7 @@ public class LightTriggeringAndEvents {
         }
         /**CHECKS if the player has ENEMIES as target, either his or his allies health needs to be low*/
         else if(component.getTargets().equals(TargetType.ENEMIES)
-                && CheckUtils.checkSelfHealth(player, Config.HP_PERCENTAGE_SELF+5)
+                && CheckUtils.checkSelfHealth(player, Config.HP_PERCENTAGE_SELF+10)
                 && CheckUtils.checkSurrounded(player)
                 && CheckUtils.checkArmorDurability(player, Config.DUR_PERCENTAGE_ALLIES)
                 && CheckUtils.checkBlazing(player)
@@ -132,8 +132,6 @@ public class LightTriggeringAndEvents {
 
     public static void checkFrost(PlayerEntity player, LightComponent component, Entity entity){
         /**If the player has ALL as target, he needs to be hurt (or an ally has to die, but that depends on the trigger)*/
-        player.sendMessage(Text.literal("Ok... " + component.getTargets()));
-        player.sendMessage(Text.literal("Ok... " + component.getTargets()));
         if(component.getTargets().equals(TargetType.ALL)
                 && CheckUtils.checkSelfHealth(player, Config.HP_PERCENTAGE_SELF+5)
                 && CheckUtils.checkSurrounded(player)
@@ -281,35 +279,40 @@ public class LightTriggeringAndEvents {
             if(player.getWorld().isClient){
                 return ActionResult.PASS;
             }
-            LightComponent component = LIGHT_COMPONENT.get(player);
-            String id = player.getUuidAsString().toLowerCase();
-            //3eec9f18-1d0e-3f17-917c-6994e7d034d1
-            //component.clear();
-            if(!component.getType().equals(InnerLightType.NONE) || component.getType() == null){
-                return ActionResult.PASS;
-            }
-            String[] id_bits = id.split("-");
-            //Type bit & target bit
-            //If the second part of the UUID starts with a letter form a to h && the second character is a digit -> Heal
-            Pair<InnerLightType, TargetType> type_and_target = determineTypeAndTarget(id_bits, 1, 3);
-            //type
-            component.setType(type_and_target.getFirst());
-            //Target
-            component.setTargets(type_and_target.getSecond());
+            createUniqueLight(player);
 
-            //Cooldown Bit
-            //The max cooldown is 100
-            component.setMaxCooldown(determineCooldown(id_bits, 0));
-
-            //Duration bit
-            component.setDuration(determineDuration(id_bits, 2));
-
-            //Power bit
-            component.setPowerMultiplier(determinePower(id_bits, 4));
-
-            component.setRainbow(true);
             return ActionResult.PASS;
         });
+    }
+
+    public static void createUniqueLight(PlayerEntity player){
+        LightComponent component = LIGHT_COMPONENT.get(player);
+        String id = player.getUuidAsString().toLowerCase();
+        //3eec9f18-1d0e-3f17-917c-6994e7d034d1
+        //component.clear();
+        if(!component.getType().equals(InnerLightType.NONE) || component.getType() == null){
+            return;
+        }
+        String[] id_bits = id.split("-");
+        //Type bit & target bit
+        //If the second part of the UUID starts with a letter form a to h && the second character is a digit -> Heal
+        Pair<InnerLightType, TargetType> type_and_target = determineTypeAndTarget(id_bits, 1, 3);
+        //type
+        component.setType(type_and_target.getFirst());
+        //Target
+        component.setTargets(type_and_target.getSecond());
+
+        //Cooldown Bit
+        //The max cooldown is 100
+        component.setMaxCooldown(determineCooldown(id_bits, 0));
+
+        //Duration bit
+        component.setDuration(determineDuration(id_bits, 2));
+
+        //Power bit
+        component.setPowerMultiplier(determinePower(id_bits, 4));
+
+        component.setRainbow(true);
     }
 
     public static TargetType determineAttackTarget(String[] id_bits, int target_bit){

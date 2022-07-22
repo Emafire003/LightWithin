@@ -3,7 +3,7 @@
 	"texture_size": [64, 64],
 	"textures": {
 		"1": "lightwithin:block/frozen_player",
-		"particle": "minecraft:blocks/blue_ice"
+		"particle": "lightwithin:block/frozen_player"
 	},
 	"elements": [
 		{

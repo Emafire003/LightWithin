@@ -12,11 +12,14 @@ import me.emafire003.dev.lightwithin.sounds.LightSounds;
 import me.emafire003.dev.lightwithin.status_effects.LightEffects;
 import me.emafire003.dev.lightwithin.util.StructurePlacer;
 import me.emafire003.dev.lightwithin.util.TargetType;
+import net.minecraft.client.render.entity.animation.WardenAnimations;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.server.command.DifficultyCommand;
+import net.minecraft.server.command.PlaceCommand;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
@@ -133,13 +136,17 @@ public class FrostLight extends InnerLight {
                     target.getWorld().setBlockState(norm_pos, LightBlocks.FROZEN_PLAYER_BOTTOM_BLOCK.getDefaultState(), state);
                     target.getWorld().setBlockState(norm_pos.add(0,1,0), LightBlocks.FROZEN_PLAYER_TOP_BLOCK.getDefaultState(), state);
                     */
-                    StructurePlacer placer = new StructurePlacer((ServerWorld) caster.getWorld(), new Identifier(MOD_ID, "frozen_player"), target.getBlockPos(), BlockMirror.NONE, BlockRotation.NONE, true, 1.0f, new BlockPos(0,0,0));;
+                    String statue_id = "frozen_mob";
+                    if(target instanceof PlayerEntity){
+                        statue_id = "frozen_player";
+                    }
+                    StructurePlacer placer = new StructurePlacer((ServerWorld) caster.getWorld(), new Identifier(MOD_ID, statue_id), target.getBlockPos(), BlockMirror.NONE, BlockRotation.NONE, true, 1.0f, new BlockPos(0,0,0));;
                     if(state == 1){
-                        placer = new StructurePlacer((ServerWorld) caster.getWorld(), new Identifier(MOD_ID, "frozen_player"), target.getBlockPos(), BlockMirror.NONE, BlockRotation.CLOCKWISE_90, true, 1.0f, new BlockPos(0,0,0));
+                        placer = new StructurePlacer((ServerWorld) caster.getWorld(), new Identifier(MOD_ID, statue_id), target.getBlockPos(), BlockMirror.NONE, BlockRotation.CLOCKWISE_90, true, 1.0f, new BlockPos(0,0,0));
                     }else if(state == 2){
-                        placer = new StructurePlacer((ServerWorld) caster.getWorld(), new Identifier(MOD_ID, "frozen_player"), target.getBlockPos(), BlockMirror.NONE, BlockRotation.CLOCKWISE_180, true, 1.0f, new BlockPos(0,0,0));
+                        placer = new StructurePlacer((ServerWorld) caster.getWorld(), new Identifier(MOD_ID, statue_id), target.getBlockPos(), BlockMirror.NONE, BlockRotation.CLOCKWISE_180, true, 1.0f, new BlockPos(0,0,0));
                     }else if(state == 3){
-                        placer = new StructurePlacer((ServerWorld) caster.getWorld(), new Identifier(MOD_ID, "frozen_player"), target.getBlockPos(), BlockMirror.NONE, BlockRotation.COUNTERCLOCKWISE_90, true, 1.0f, new BlockPos(0,0,0));
+                        placer = new StructurePlacer((ServerWorld) caster.getWorld(), new Identifier(MOD_ID, statue_id), target.getBlockPos(), BlockMirror.NONE, BlockRotation.COUNTERCLOCKWISE_90, true, 1.0f, new BlockPos(0,0,0));
                     }
                     placer.loadStructure((ServerWorld) caster.getWorld());
                     target.teleport(norm_pos.getX(), norm_pos.getY(), norm_pos.getZ());

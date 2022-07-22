@@ -70,6 +70,8 @@ public class Config {
     public static boolean SHOULD_CHECK_BLOCKS;
     public static boolean STRUCTURE_GRIEFING;
 
+    public static boolean TARGET_FEEDBACK;
+
     public static void registerConfigs() {
         configs = new ConfigProvider();
         createConfigs();
@@ -141,6 +143,7 @@ public class Config {
         configs.addKeyValuePair(new Pair<>("should_check_blocks", true), "Should the blocks near the player be checked for the light activation? Could impact on performance");
         configs.addKeyValuePair(new Pair<>("structure_griefing", true), "If set to false will prevent lights from spawning structures on activation (I'd suggest leaving it to true)");
 
+        configs.addKeyValuePair(new Pair<>("command_target_feedback", true), "Should a message be sent the target of a command, such us when changing its innerlight?");
     }
 
     public static void reloadConfig(){
@@ -207,6 +210,8 @@ public class Config {
 
         SHOULD_CHECK_BLOCKS = CONFIG.getOrDefault("should_check_blocks", true);
         STRUCTURE_GRIEFING = CONFIG.getOrDefault("structure_griefing", true);
+
+        TARGET_FEEDBACK = CONFIG.getOrDefault("command_target_feedback", true);
 
 
     }
