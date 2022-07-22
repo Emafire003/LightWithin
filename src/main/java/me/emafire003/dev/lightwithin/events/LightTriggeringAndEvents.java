@@ -289,7 +289,10 @@ public class LightTriggeringAndEvents {
         LightComponent component = LIGHT_COMPONENT.get(player);
         String id = player.getUuidAsString().toLowerCase();
         //3eec9f18-1d0e-3f17-917c-6994e7d034d1
-        //component.clear();
+
+        if(Config.RESET_ON_JOIN){
+            component.clear();
+        }
         if(!component.getType().equals(InnerLightType.NONE) || component.getType() == null){
             return;
         }
@@ -447,6 +450,7 @@ public class LightTriggeringAndEvents {
 
     //id bits 0
     //formula: 10+10*stufffoundintheid aka minimum value 10+10*1, so 20s
+    //max: 10+10*9 = 100
     public static int determineCooldown(String[] id_bits, int string_bit){
         //checks the first char digit that finds and multiplies it
         for(int i = 0; i<id_bits[string_bit].length(); i++){
@@ -459,17 +463,17 @@ public class LightTriggeringAndEvents {
             }
 
         }
-        return 90;
+        return 80;
     }
 
     //id bit 2
+    //max 18
     public static int determineDuration(String[] id_bits, int string_bit){
         for(int i = 0; i<id_bits[string_bit].length(); i++){
             if(Character.isDigit(id_bits[string_bit].charAt(i))){
                 if(Character.getNumericValue(id_bits[string_bit].charAt(i)) == 0){
                     return 12;
                 }else{
-                    //1 2 4 5 6 7 8 10 11
                     return (Character.getNumericValue(id_bits[string_bit].charAt(i))*2);
                 }
             }
@@ -478,7 +482,7 @@ public class LightTriggeringAndEvents {
     }
 
 
-    //Gets the first 2 digits ir finds and sums them up, then divides by ten, so the max is 9+9/3, so 6
+    //Gets the first 2 digits ir finds and sums them up, then divides by 3, so the max is 9+9/3, so 6
     public static double determinePower(String[] id_bits, int string_bit){
         int n1 = -1;
         int n2 = 0;

@@ -9,6 +9,7 @@ import net.fabricmc.fabric.api.command.v2.ArgumentTypeRegistry;
 import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.command.argument.serialize.ConstantArgumentSerializer;
 import net.minecraft.server.command.CommandManager;
+import net.minecraft.server.command.GiveCommand;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.util.Identifier;
 
@@ -37,7 +38,8 @@ public class LightCommands {
                 new SetLightCommand(),
                 new GetLightCommand(),
                 new ResetLightCommand(),
-                new ActivateLightCommand()
+                new ActivateLightCommand(),
+                new RerollLightCommand()
         };
 
         for (LightCommand command : commands) {

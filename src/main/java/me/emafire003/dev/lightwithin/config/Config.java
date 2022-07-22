@@ -71,6 +71,7 @@ public class Config {
     public static boolean STRUCTURE_GRIEFING;
 
     public static boolean TARGET_FEEDBACK;
+    public static boolean RESET_ON_JOIN;
 
     public static void registerConfigs() {
         configs = new ConfigProvider();
@@ -144,6 +145,7 @@ public class Config {
         configs.addKeyValuePair(new Pair<>("structure_griefing", true), "If set to false will prevent lights from spawning structures on activation (I'd suggest leaving it to true)");
 
         configs.addKeyValuePair(new Pair<>("command_target_feedback", true), "Should a message be sent the target of a command, such us when changing its innerlight?");
+        configs.addKeyValuePair(new Pair<>("reset_on_join", false), "Should the InnerLight be compleatly resetted upon joining the server/world again? Useful after an update of the mod that added new Light Types");
     }
 
     public static void reloadConfig(){
@@ -212,6 +214,8 @@ public class Config {
         STRUCTURE_GRIEFING = CONFIG.getOrDefault("structure_griefing", true);
 
         TARGET_FEEDBACK = CONFIG.getOrDefault("command_target_feedback", true);
+
+        RESET_ON_JOIN = CONFIG.getOrDefault("reset_on_join", false);
 
 
     }

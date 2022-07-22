@@ -15,8 +15,10 @@ import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
+import org.apache.logging.log4j.core.jmx.Server;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 public class ResetLightCommand implements LightCommand{
@@ -27,7 +29,7 @@ public class ResetLightCommand implements LightCommand{
     private int tickCounter = 0;
 
     private int reset(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
-        ServerPlayerEntity target = EntityArgumentType.getPlayer(context, "player");
+        Collection<ServerPlayerEntity> targets = EntityArgumentType.getPlayers(context, "player");
         ServerCommandSource source = context.getSource();
         if(!confirming){
             resetConfirm(context);
@@ -35,10 +37,12 @@ public class ResetLightCommand implements LightCommand{
         }
 
         try{
-            LightComponent component = LightWithin.LIGHT_COMPONENT.get(target);
-            component.clear();
-            LightTriggeringAndEvents.createUniqueLight(target);
-            source.sendFeedback(Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The InnerLight of §d" + target.getName().getString() + "§e has been resetted to its original values!" ).formatted(Formatting.YELLOW)), true);
+            for(ServerPlayerEntity target : targets){
+                LightComponent component = LightWithin.LIGHT_COMPONENT.get(target);
+                component.clear();
+                LightTriggeringAndEvents.createUniqueLight(target);
+                source.sendFeedback(Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The InnerLight of §d" + target.getName().getString() + "§e has been resetted to its original values!" ).formatted(Formatting.YELLOW)), true);
+            }
             return 1;
         }catch(Exception e){
             e.printStackTrace();
@@ -49,9 +53,8 @@ public class ResetLightCommand implements LightCommand{
     }
 
     private int resetConfirm(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
-        ServerPlayerEntity target = EntityArgumentType.getPlayer(context, "player");
         ServerCommandSource source = context.getSource();
-        source.sendFeedback(Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("§ePlease type §a/light reset " + target.getName().getString() + " confirm §eto §c§lreset §etheir InnerLight")), false);
+        source.sendFeedback(Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("§ePlease type §a/light reset <player/s> confirm §eto §c§lreset §etheir InnerLight")), false);
         confirming = true;
         ServerTickEvents.END_SERVER_TICK.register(server -> {
             if(confirming){
@@ -71,11 +74,11 @@ public class ResetLightCommand implements LightCommand{
         return CommandManager
                 .literal("reset")
                 .then(
-                        CommandManager.argument("player", EntityArgumentType.player())
+                        CommandManager.argument("player", EntityArgumentType.players())
                                 .executes(this::resetConfirm)
                 )
                 .then(
-                        CommandManager.argument("player", EntityArgumentType.player()).then(
+                        CommandManager.argument("player", EntityArgumentType.players()).then(
                                         CommandManager.literal("confirm")
                                                 .executes(this::reset)
                                 )
