@@ -79,7 +79,7 @@ public class StrengthLight extends InnerLight {
             if(!caster.getWorld().isClient){
                 LightParticlesUtil.spawnLightTypeParticle(LightParticles.STRENGTHLIGHT_PARTICLE, (ServerWorld) caster.getWorld(), target.getPos());
             }
-            target.addStatusEffect(new StatusEffectInstance(StatusEffects.STRENGTH, target.getStatusEffect(LightEffects.LIGHT_ACTIVE).getDuration(), (int) this.power_multiplier, false, false));
+            target.addStatusEffect(new StatusEffectInstance(StatusEffects.STRENGTH, caster.getStatusEffect(LightEffects.LIGHT_ACTIVE).getDuration(), (int) this.power_multiplier, false, false));
         }
     }
 }

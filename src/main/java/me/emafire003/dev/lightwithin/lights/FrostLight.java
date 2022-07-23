@@ -117,7 +117,7 @@ public class FrostLight extends InnerLight {
             if(self_or_allies){
                 target.addStatusEffect(new StatusEffectInstance(LightEffects.FREEZE_RESISTANCE, (int) (this.duration*Config.FROST_FREEZE_RES_DURATION_MULTIPLIER)*20));
                 if(Config.STRUCTURE_GRIEFING && !caster.getWorld().isClient){
-                    StructurePlacer placer = new StructurePlacer((ServerWorld) caster.getWorld(), new Identifier(MOD_ID, "frost_wall"), target.getBlockPos(), BlockMirror.NONE, BlockRotation.NONE, true, 1.0f, new BlockPos(-2, -1, -2));;
+                    StructurePlacer placer = new StructurePlacer((ServerWorld) caster.getWorld(), new Identifier(MOD_ID, "frost_wall"), target.getBlockPos(), BlockMirror.NONE, BlockRotation.NONE, true, 1.0f, new BlockPos(-2, -1, -2));
                     if(state == 1){
                         placer = new StructurePlacer((ServerWorld) caster.getWorld(), new Identifier(MOD_ID, "frost_wall"), target.getBlockPos(), BlockMirror.NONE, BlockRotation.CLOCKWISE_90, true, 1.0f, new BlockPos(2, -1, -2));
                     }else if(state == 2){
@@ -140,7 +140,7 @@ public class FrostLight extends InnerLight {
                     if(target instanceof PlayerEntity){
                         statue_id = "frozen_player";
                     }
-                    StructurePlacer placer = new StructurePlacer((ServerWorld) caster.getWorld(), new Identifier(MOD_ID, statue_id), target.getBlockPos(), BlockMirror.NONE, BlockRotation.NONE, true, 1.0f, new BlockPos(0,0,0));;
+                    StructurePlacer placer = new StructurePlacer((ServerWorld) caster.getWorld(), new Identifier(MOD_ID, statue_id), target.getBlockPos(), BlockMirror.NONE, BlockRotation.NONE, true, 1.0f, new BlockPos(0,0,0));
                     if(state == 1){
                         placer = new StructurePlacer((ServerWorld) caster.getWorld(), new Identifier(MOD_ID, statue_id), target.getBlockPos(), BlockMirror.NONE, BlockRotation.CLOCKWISE_90, true, 1.0f, new BlockPos(0,0,0));
                     }else if(state == 2){
@@ -150,8 +150,8 @@ public class FrostLight extends InnerLight {
                     }
                     placer.loadStructure((ServerWorld) caster.getWorld());
                     target.teleport(norm_pos.getX(), norm_pos.getY(), norm_pos.getZ());
-                    target.addStatusEffect(new StatusEffectInstance(LightEffects.FROST, this.duration*20, 0, false, false));
-                    target.addStatusEffect(new StatusEffectInstance(StatusEffects.INVISIBILITY, this.duration*20, 0, false, false));
+                    target.addStatusEffect(new StatusEffectInstance(LightEffects.FROST, caster.getStatusEffect(LightEffects.LIGHT_ACTIVE).getDuration(), 0, false, false));
+                    target.addStatusEffect(new StatusEffectInstance(StatusEffects.INVISIBILITY, caster.getStatusEffect(LightEffects.LIGHT_ACTIVE).getDuration(), 0, false, false));
                     target.damage(DamageSource.FREEZE, (float) this.power_multiplier);
 
                 }
