@@ -20,6 +20,7 @@ Steps to reproduce the behavior:
 **Version information**
 LightWithin mod version: <version>
 Minecraft Version: <version>
+Fabric API version: <version>
 (Usually not required, but could be helpful if you want)
 Dependencies version: <coloredglowlib version> <cardinal components version> ecc
 
