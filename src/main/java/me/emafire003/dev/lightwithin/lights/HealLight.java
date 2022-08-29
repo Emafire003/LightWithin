@@ -1,5 +1,7 @@
 package me.emafire003.dev.lightwithin.lights;
 
+import com.google.common.collect.Maps;
+import com.google.common.collect.Multimap;
 import me.emafire003.dev.coloredglowlib.ColoredGlowLib;
 import me.emafire003.dev.coloredglowlib.util.Color;
 import me.emafire003.dev.lightwithin.config.Config;
@@ -8,12 +10,16 @@ import me.emafire003.dev.lightwithin.sounds.LightSounds;
 import me.emafire003.dev.lightwithin.particles.LightParticlesUtil;
 import me.emafire003.dev.lightwithin.status_effects.LightEffects;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.attribute.EntityAttribute;
+import net.minecraft.entity.attribute.EntityAttributeModifier;
+import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 
+import java.util.HashMap;
 import java.util.List;
 
 public class HealLight extends InnerLight {

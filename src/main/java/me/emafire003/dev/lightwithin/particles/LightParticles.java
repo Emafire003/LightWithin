@@ -16,6 +16,9 @@ public class LightParticles {
     public static final DefaultParticleType WINDLIGHT_PARTICLE = FabricParticleTypes.simple();
     public static final DefaultParticleType AQUALIGHT_PARTICLE = FabricParticleTypes.simple();
 
+    public static final DefaultParticleType EARTH_PARTICLE = FabricParticleTypes.simple();
+
+
     public static void registerParticles() {
         Registry.register(Registry.PARTICLE_TYPE, new Identifier(LightWithin.MOD_ID, "heal_light_particle"),
                 HEALLIGHT_PARTICLE);

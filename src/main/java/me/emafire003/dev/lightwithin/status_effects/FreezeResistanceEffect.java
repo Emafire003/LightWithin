@@ -10,7 +10,7 @@ public class FreezeResistanceEffect extends StatusEffect {
 
 
     public FreezeResistanceEffect() {
-        super(StatusEffectCategory.HARMFUL, 0x8DFBFF);
+        super(StatusEffectCategory.BENEFICIAL, 0x8DFBFF);
     }
 
 

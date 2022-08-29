@@ -3,7 +3,6 @@ package me.emafire003.dev.lightwithin.mixin;
 import me.emafire003.dev.lightwithin.status_effects.LightEffects;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.effect.StatusEffects;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -35,7 +34,7 @@ public class FreezeEntityMixin {
         }
     }
 
-    @Inject(
+    /*@Inject(
             method = "collides",
             at = @At("HEAD"),
             cancellable = true
@@ -45,7 +44,7 @@ public class FreezeEntityMixin {
         if (entity.hasStatusEffect(LightEffects.FROST)) {
             cir.setReturnValue(false);
         }
-    }
+    }*/
 
     @Inject(
             method = "isPushable",

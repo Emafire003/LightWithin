@@ -1,6 +1,7 @@
 package me.emafire003.dev.lightwithin.events;
 
 import com.mojang.datafixers.util.Pair;
+import me.emafire003.dev.lightwithin.LightWithin;
 import me.emafire003.dev.lightwithin.component.LightComponent;
 import me.emafire003.dev.lightwithin.config.Config;
 import me.emafire003.dev.lightwithin.lights.InnerLightType;
@@ -371,6 +372,69 @@ public class LightTriggeringAndEvents {
         }
     }
 
+    public static TargetType determineEnemiesAlliesSelfOtherTarget(String[] id_bits, int target_bit){
+        //If it's all letters or numbers, or if there is at least one number from 5-9 or e/f then all
+        //NOPE --if the char at the position 2 is abc && the nextone is a digit then it's other-- NOPE
+        //in the other cases it's enemies
+        boolean all_cond1 = id_bits[target_bit].matches("[0-9]+") || id_bits[target_bit].matches("[f-p]+");
+        boolean all_cond2 = false;
+        for(int i = 0; i<id_bits[target_bit].length()-1; i++){
+            if(all_cond1){
+                break;
+            }
+            char a = id_bits[target_bit].charAt(i);
+            if(String.valueOf(a).matches("[5-9]")){
+                all_cond2 = true;
+                break;
+            }
+        }
+        if(!all_cond1 == !all_cond2){
+            return TargetType.SELF;
+        }
+        else if(all_cond1 || all_cond2){
+            return TargetType.OTHER;
+        }else if(String.valueOf(id_bits[target_bit].charAt(2)).matches("[a-c]") && Character.isDigit(id_bits[target_bit].charAt(3))){
+            return TargetType.ALLIES;
+        }else{
+            return TargetType.ENEMIES;
+        }
+    }
+
+    /**
+     *
+     *
+     * @param targets_ordered A list of targets. The first object on the list will be most likely and so on.*/
+    public static TargetType determineTarget(String[] id_bits, int target_bit, List<TargetType> targets_ordered){
+        //If it's all letters or numbers, or if there is at least one number from 5-9 or e/f then all
+        //NOPE --if the char at the position 2 is abc && the nextone is a digit then it's other-- NOPE
+        //in the other cases it's enemies
+        boolean cond1 = id_bits[target_bit].matches("[0-9]+") || id_bits[target_bit].matches("[f-p]+");
+        boolean cond2 = false;
+        for(int i = 0; i<id_bits[target_bit].length()-1; i++){
+            if(cond1){
+                break;
+            }
+            char a = id_bits[target_bit].charAt(i);
+            if(String.valueOf(a).matches("[5-9]")){
+                cond2 = true;
+                break;
+            }
+        }
+        if((cond1 == cond2) && targets_ordered.size() < 3){
+            return targets_ordered.get(2);
+        }
+        else if(cond1 || cond2 && targets_ordered.size() < 2){
+            return targets_ordered.get(1);
+        }else if(String.valueOf(id_bits[target_bit].charAt(2)).matches("[a-c]") && Character.isDigit(id_bits[target_bit].charAt(3)) && targets_ordered.size() < 4){
+            return targets_ordered.get(3);
+        }else if(String.valueOf(id_bits[target_bit].charAt(3)).matches("[l-m]") && Character.isDigit(id_bits[target_bit].charAt(2)) && targets_ordered.size() < 4){
+            return targets_ordered.get(4);
+        }
+        else{
+            return targets_ordered.get(0);
+        }
+    }
+
     public static TargetType determineBuffTarget(String[] id_bits, int target_bit){
         //If it's all letters or numbers, or if there is at least one number from 5-9 or e/f then allies
         //if the char at the position 2 is abc && the nextone is a digit then it's other
@@ -415,26 +479,26 @@ public class LightTriggeringAndEvents {
 
         //HEAL
         if(String.valueOf(id_bits[type_bit].charAt(i)).matches("[a-b]")){
-            return new Pair<>(InnerLightType.HEAL, determineBuffTarget(id_bits, target_bit));
+            return new Pair<>(InnerLightType.HEAL, determineTarget(id_bits, target_bit, Arrays.asList(TargetType.SELF, TargetType.ALLIES, TargetType.OTHER)));
         }
         //DEFENCE
         else if(String.valueOf(id_bits[type_bit].charAt(i)).matches("[c-d]")){
-            return new Pair<InnerLightType, TargetType>(InnerLightType.DEFENCE, determineBuffTarget(id_bits, target_bit));
+            return new Pair<InnerLightType, TargetType>(InnerLightType.DEFENCE, determineTarget(id_bits, target_bit, Arrays.asList(TargetType.SELF, TargetType.ALLIES, TargetType.OTHER)));
         //STRENGTH
         }else if(String.valueOf(id_bits[type_bit].charAt(i)).matches("[e-f]")){
-            return new Pair<InnerLightType, TargetType>(InnerLightType.STRENGTH, determineBuffTarget(id_bits, target_bit));
+            return new Pair<InnerLightType, TargetType>(InnerLightType.STRENGTH, determineTarget(id_bits, target_bit, Arrays.asList(TargetType.SELF, TargetType.ALLIES, TargetType.OTHER)));
         }
         //Blazing
         else if(String.valueOf(id_bits[type_bit].charAt(i)).matches("[0-1]")){
-            return new Pair<InnerLightType, TargetType>(InnerLightType.BLAZING, determineAttackTarget(id_bits, target_bit));
+            return new Pair<InnerLightType, TargetType>(InnerLightType.BLAZING, determineTarget(id_bits, target_bit, Arrays.asList(TargetType.ENEMIES, TargetType.ALL)));
         }
         //Frost
         else if(String.valueOf(id_bits[type_bit].charAt(i)).matches("[2-3]")){
-            return new Pair<InnerLightType, TargetType>(InnerLightType.FROST, determineAttackAndBuffTarget(id_bits, target_bit));
+            return new Pair<InnerLightType, TargetType>(InnerLightType.FROST, determineTarget(id_bits, target_bit, Arrays.asList(TargetType.ENEMIES, TargetType.ALLIES, TargetType.ALL, TargetType.SELF)));
         }
-        //TODO Earthen
+        //Earthen
         else if(String.valueOf(id_bits[type_bit].charAt(i)).matches("[4-5]")){
-            return new Pair<InnerLightType, TargetType>(InnerLightType.BLAZING, determineAttackTarget(id_bits, target_bit));
+            return new Pair<InnerLightType, TargetType>(InnerLightType.EARTHEN, determineTarget(id_bits, target_bit, Arrays.asList(TargetType.ENEMIES, TargetType.SELF, TargetType.ALLIES, TargetType.OTHER)));
         }
         //TODO Wind
         else if(String.valueOf(id_bits[type_bit].charAt(i)).matches("[6-7]")){
@@ -444,7 +508,7 @@ public class LightTriggeringAndEvents {
         else if(String.valueOf(id_bits[type_bit].charAt(i)).matches("[8-9]")){
             return new Pair<InnerLightType, TargetType>(InnerLightType.BLAZING, determineAttackTarget(id_bits, target_bit));
         }
-        LOGGER.info("nop not matched, UUID bit: " + id_bits[type_bit]);
+        LOGGER.info("[debug] nop not matched, UUID bit: " + id_bits[type_bit]);
         return new Pair<InnerLightType, TargetType>(InnerLightType.HEAL, TargetType.SELF);
     }
 

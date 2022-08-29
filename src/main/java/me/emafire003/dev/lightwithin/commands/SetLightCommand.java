@@ -26,7 +26,7 @@ import java.util.Objects;
 public class SetLightCommand implements LightCommand{
 
     //Temporary, will remove once all lights have been implemented
-    private List<InnerLightType> currently_usable_lights = Arrays.asList(InnerLightType.HEAL, InnerLightType.DEFENCE, InnerLightType.STRENGTH, InnerLightType.BLAZING, InnerLightType.FROST);
+    private List<InnerLightType> currently_usable_lights = Arrays.asList(InnerLightType.HEAL, InnerLightType.DEFENCE, InnerLightType.STRENGTH, InnerLightType.BLAZING, InnerLightType.FROST, InnerLightType.EARTHEN);
 
     private int changeType(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
         Collection<ServerPlayerEntity> targets = EntityArgumentType.getPlayers(context, "player");
@@ -45,7 +45,6 @@ public class SetLightCommand implements LightCommand{
                 TargetType target_type = component.getTargets();
 
                 List<TargetType> possible = LightWithin.possible_targets.get(type);
-                possible.contains(target_type);
 
                 if(!possible.contains(target_type)){
                     //TODO will need to rework this based on the light possibile targets and such
@@ -67,7 +66,7 @@ public class SetLightCommand implements LightCommand{
             return 1;
         }catch(Exception e){
             e.printStackTrace();
-            source.sendFeedback(Text.literal("Error: " + e.toString()),false);
+            source.sendFeedback(Text.literal("Error: " + e),false);
             return 0;
         }
 

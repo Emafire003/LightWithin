@@ -12,6 +12,7 @@ public class FrostEffect extends StatusEffect {
         super(StatusEffectCategory.HARMFUL, 0x8CB1FF);
     }
 
+    int frozenTicks = 0;
     @Override
     public boolean canApplyUpdateEffect(int duration, int amplifier) {
         // In our case, we just make it return true so that it applies the status effect every tick.
@@ -21,9 +22,9 @@ public class FrostEffect extends StatusEffect {
     // This method is called when it applies the status effect. We implement custom functionality here.
     @Override
     public void applyUpdateEffect(LivingEntity entity, int amplifier) {
-        entity.setFrozenTicks(150);
+        entity.setFrozenTicks(frozenTicks);
+        this.frozenTicks = this.frozenTicks + 5;
         entity.lookAt(EntityAnchorArgumentType.EntityAnchor.FEET, entity.getPos().add(0,0,0));
-        //entity.changeLookDirection(0,0);
     }
 
     @Override

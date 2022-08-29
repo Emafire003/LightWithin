@@ -7,12 +7,10 @@ import dev.onyxstudios.cca.api.v3.entity.EntityComponentInitializer;
 import dev.onyxstudios.cca.api.v3.entity.RespawnCopyStrategy;
 import me.emafire003.dev.coloredglowlib.ColoredGlowLib;
 import me.emafire003.dev.lightwithin.blocks.LightBlocks;
-import me.emafire003.dev.lightwithin.commands.LightCommand;
 import me.emafire003.dev.lightwithin.commands.LightCommands;
-import me.emafire003.dev.lightwithin.compat.ModChecker;
-import me.emafire003.dev.lightwithin.compat.factions.FactionChecker;
 import me.emafire003.dev.lightwithin.component.LightComponent;
 import me.emafire003.dev.lightwithin.config.Config;
+import me.emafire003.dev.lightwithin.entities.LightEntities;
 import me.emafire003.dev.lightwithin.events.LightTriggeringAndEvents;
 import me.emafire003.dev.lightwithin.items.LightItems;
 import me.emafire003.dev.lightwithin.lights.*;
@@ -65,7 +63,8 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 			entry(InnerLightType.DEFENCE, Arrays.asList(TargetType.SELF, TargetType.ALLIES, TargetType.OTHER)),
 			entry(InnerLightType.STRENGTH, Arrays.asList(TargetType.SELF, TargetType.ALLIES, TargetType.OTHER)),
 			entry(InnerLightType.BLAZING, Arrays.asList(TargetType.ENEMIES, TargetType.ALL)),
-			entry(InnerLightType.FROST, Arrays.asList(TargetType.SELF, TargetType.ALLIES, TargetType.ENEMIES, TargetType.ALL))
+			entry(InnerLightType.FROST, Arrays.asList(TargetType.SELF, TargetType.ALLIES, TargetType.ENEMIES, TargetType.ALL)),
+			entry(InnerLightType.EARTHEN, Arrays.asList(TargetType.SELF, TargetType.ALLIES, TargetType.ENEMIES, TargetType.OTHER))
 	);
 
 
@@ -78,8 +77,6 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 		// However, some things (like resources) may still be uninitialized.
 		// Proceed with mild caution.
 
-		ModChecker.setLoaded("factions", FabricLoader.getInstance().isModLoaded("factions"));
-
 		LightTriggeringAndEvents.registerListeners();
 		registerLightUsedPacket();
 		LightSounds.registerSounds();
@@ -89,6 +86,7 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 		LightBlocks.registerBlocks();
 		LootTableModifier.modifyLootTables();
 		LightCommands.registerArguments();
+		LightEntities.registerEntities();
 		CommandRegistrationCallback.EVENT.register(LightCommands::registerCommands);
 
 
@@ -162,6 +160,9 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 			component.setPrevColor(ColoredGlowLib.getEntityColor(player));
 		}else if(type.equals(InnerLightType.FROST)){
 			activateFrost(component, player);
+			component.setPrevColor(ColoredGlowLib.getEntityColor(player));
+		}else if(type.equals(InnerLightType.EARTHEN)){
+			activateEarthen(component, player);
 			component.setPrevColor(ColoredGlowLib.getEntityColor(player));
 		}
 		//for now defaults here
@@ -322,7 +323,6 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 		if(component.getTargets().equals(TargetType.ALL)){
 			targets.addAll(player.getWorld().getEntitiesByClass(LivingEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amount), (entity1 -> true)));
 			targets.remove(player);
-			component.setPowerMultiplier(component.getPowerMultiplier());
 			player.sendMessage(Text.literal("Your light wants to incinerate everything that stands in your way!"), true);
 		}
 
@@ -331,9 +331,6 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 			for(LivingEntity ent : entities){
 				if(ent instanceof HostileEntity && !CheckUtils.CheckAllies.checkAlly(player, ent)){
 					targets.add(ent);
-				}
-				if(ent instanceof PlayerEntity && ModChecker.isLoaded("factions")){
-					FactionChecker.areEnemies(player, (PlayerEntity) ent);
 				}
 			}
 			player.sendMessage(Text.literal("Your light wants to incinerate the enemies that stand before you!"), true);
@@ -362,9 +359,6 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 				if(ent instanceof HostileEntity && !CheckUtils.CheckAllies.checkAlly(player, ent)){
 					targets.add(ent);
 				}
-				if(ent instanceof PlayerEntity && ModChecker.isLoaded("factions")){
-					FactionChecker.areEnemies(player, (PlayerEntity) ent);
-				}
 			}
 			player.sendMessage(Text.literal("All your enemies will be made into a statue of ice!"), true);
 		}else if(component.getTargets().equals(TargetType.ALLIES)){
@@ -389,6 +383,46 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 			player.sendMessage(Text.literal("Ok light triggered"), false);
 		}
 		new FrostLight(targets, component.getMaxCooldown(), component.getPowerMultiplier(),
+				component.getDuration(), player).execute();
+	}
+
+	//=======================Earthen Light=======================
+	public static void activateEarthen(LightComponent component, ServerPlayerEntity player){
+		List<LivingEntity> targets = new ArrayList<>();
+		if(component.getTargets().equals(TargetType.OTHER)){
+			player.sendMessage(Text.literal("Come forth my golem!"), true);
+		}
+
+		else if(component.getTargets().equals(TargetType.ENEMIES)){
+			List<LivingEntity> entities = player.getWorld().getEntitiesByClass(LivingEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amount), (entity1 -> true));
+			for(LivingEntity ent : entities){
+				if(ent instanceof HostileEntity && !CheckUtils.CheckAllies.checkAlly(player, ent)){
+					targets.add(ent);
+				}
+			}
+			player.sendMessage(Text.literal("The earth shall split under the soles of the enemy!"), true);
+		}else if(component.getTargets().equals(TargetType.ALLIES)){
+			List<LivingEntity> entities = player.getWorld().getEntitiesByClass(LivingEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amount), (entity1 -> true));
+			for(LivingEntity ent : entities){
+				if(/*!entity.equals(ent) && */CheckUtils.CheckAllies.checkAlly(player, ent)){
+					targets.add(ent);
+				}else if(ent instanceof TameableEntity){
+					if(player.equals(((TameableEntity) ent).getOwner())){
+						targets.add(ent);
+					}
+				}
+			}
+			targets.add(player);
+			player.sendMessage(Text.literal("Save us, and make us steadier!"), true);
+		}if(component.getTargets().equals(TargetType.SELF)){
+			targets.add(player);
+			player.sendMessage(Text.literal("Save me, and make me steadier!"), true);
+		}
+
+		if(debug){
+			player.sendMessage(Text.literal("Ok light triggered"), false);
+		}
+		new EarthenLight(targets, component.getMaxCooldown(), component.getPowerMultiplier(),
 				component.getDuration(), player).execute();
 	}
 

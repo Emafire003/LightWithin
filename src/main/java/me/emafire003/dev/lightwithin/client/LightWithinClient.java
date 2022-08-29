@@ -1,6 +1,10 @@
 package me.emafire003.dev.lightwithin.client;
 
+import me.emafire003.dev.lightwithin.LightWithin;
 import me.emafire003.dev.lightwithin.blocks.LightBlocks;
+import me.emafire003.dev.lightwithin.entities.LightEntities;
+import me.emafire003.dev.lightwithin.entities.earth_golem.EarthGolemEntityModel;
+import me.emafire003.dev.lightwithin.entities.earth_golem.EarthGolemEntityRenderer;
 import me.emafire003.dev.lightwithin.lights.InnerLightType;
 import me.emafire003.dev.lightwithin.networking.LightReadyPacketS2C;
 import me.emafire003.dev.lightwithin.networking.RenderRunePacketS2C;
@@ -15,7 +19,11 @@ import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
+import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
+import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.minecraft.client.render.RenderLayer;
+import net.minecraft.client.render.entity.model.EntityModelLayer;
+import net.minecraft.util.Identifier;
 
 import java.util.NoSuchElementException;
 
@@ -28,6 +36,9 @@ public class LightWithinClient implements ClientModInitializer {
     int seconds = 10;
     int tickCounter = 0;
     EventHandler event_handler = new EventHandler();
+
+    public static final EntityModelLayer MODEL_EARTH_GOLEM_LAYER = new EntityModelLayer(new Identifier(LightWithin.MOD_ID, "earth_golem"), "main");
+
 
     @Override
     public void onInitializeClient() {
@@ -51,6 +62,12 @@ public class LightWithinClient implements ClientModInitializer {
         BlockRenderLayerMap.INSTANCE.putBlock(LightBlocks.FROZEN_MOB_TOP_BLOCK, RenderLayer.getCutout());
         BlockRenderLayerMap.INSTANCE.putBlock(LightBlocks.FROZEN_MOB_BOTTOM_BLOCK, RenderLayer.getCutout());
         BlockRenderLayerMap.INSTANCE.putBlock(LightBlocks.ICE_WALL, RenderLayer.getTranslucent());
+
+        EntityRendererRegistry.register(LightEntities.EARTH_GOLEM, (context) -> {
+            return new EarthGolemEntityRenderer(context);
+        });
+
+        EntityModelLayerRegistry.registerModelLayer(MODEL_EARTH_GOLEM_LAYER, EarthGolemEntityModel::getTexturedModelData);
 
         ClientTickEvents.END_CLIENT_TICK.register((minecraftClient -> {
             if(lightReady){

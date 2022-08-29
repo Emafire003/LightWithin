@@ -1,6 +1,5 @@
 package me.emafire003.dev.lightwithin.util;
 
-import me.emafire003.dev.lightwithin.compat.ModChecker;
 import me.emafire003.dev.lightwithin.compat.factions.FactionChecker;
 import me.emafire003.dev.lightwithin.config.Config;
 import net.fabricmc.loader.api.FabricLoader;
@@ -15,8 +14,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.network.packet.s2c.play.ChunkData;
-import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import org.jetbrains.annotations.NotNull;
@@ -24,7 +21,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static me.emafire003.dev.lightwithin.LightWithin.LOGGER;
 import static me.emafire003.dev.lightwithin.LightWithin.box_expansion_amount;
 
 public class CheckUtils {
@@ -185,6 +181,43 @@ public class CheckUtils {
     private static final List<Item> fire_items = Arrays.asList(Items.TORCH, Items.FIRE_CHARGE, Items.FLINT_AND_STEEL, Items.CAMPFIRE, Items.SOUL_CAMPFIRE, Items.SOUL_TORCH, Items.LAVA_BUCKET);
     private static final List<Block> fire_blocks = Arrays.asList(Blocks.LAVA, Blocks.MAGMA_BLOCK, Blocks.FIRE, Blocks.SOUL_FIRE, Blocks.TORCH, Blocks.SOUL_TORCH, Blocks.SOUL_WALL_TORCH, Blocks.WALL_TORCH, Blocks.CAMPFIRE, Blocks.SOUL_CAMPFIRE);
 
+    /** Checks for blocks in a certain radius from the player pos
+     * if they match at least one from the given list.
+     *
+     * If SHOULD_CHECK_BLOCKS from the config it's on false, it will only check the block
+     * under the player's feet.
+     *
+     * @param player The player for which we are performing the check for
+     * @param blocks A list of blocks that if found, will return a positive match
+     * @param rad The radius in block in which to check (The lower, the better for the performance)
+     * */
+    public static boolean checkBlocks(PlayerEntity player, List<Block> blocks, int rad){
+        if(!Config.SHOULD_CHECK_BLOCKS){
+            BlockPos pos = player.getBlockPos().add(0, -1, 0);
+            if(blocks.contains((player.getWorld().getBlockState(pos).getBlock()))){
+                return true;
+            }
+        }
+
+        BlockPos origin = player.getBlockPos();
+        for(int y = -rad; y <= rad; y++)
+        {
+            for(int x = -rad; x <= rad; x++)
+            {
+                for(int z = -rad; z <= rad; z++)
+                {
+                    BlockPos pos = origin.add(x, y, z);
+                    if(blocks.contains(player.getWorld().getBlockState(pos).getBlock())){
+                        return true;
+                    }
+
+                }
+            }
+        }
+        //If no match has been found, return false.
+        return false;
+    }
+
     /**Used to check if the player has something that can be considered a Heat Source
      * for the Blazing Light
      *
@@ -196,35 +229,11 @@ public class CheckUtils {
 
         Item main = player.getMainHandStack().getItem();
         Item off = player.getOffHandStack().getItem();
-        for(Item item : fire_items){
-            if(item.equals(main) || item.equals(off)){
-                return true;
-            }
+        if(fire_items.contains(main) || fire_items.contains(off)){
+            return true;
         }
-
-        if(!Config.SHOULD_CHECK_BLOCKS){
-            return false;
-        }
-
-        BlockPos origin = player.getBlockPos();
-        int rad = 3;
-        for(int y = -rad; y <= rad; y++)
-        {
-            for(int x = -rad; x <= rad; x++)
-            {
-                for(int z = -rad; z <= rad; z++)
-                {
-                    BlockPos pos = origin.add(x, y, z);
-                    for(Block block : fire_blocks){
-                        if(player.getWorld().getBlockState(pos).getBlock().equals(block)){
-                            return true;
-                        }
-                    }
-
-                }
-            }
-        }
-        return false;
+        //TODO make the rad configable?
+        return checkBlocks(player, fire_blocks, 3);
     }
 
     private static final List<Item> ice_items = Arrays.asList(Items.ICE, Items.PACKED_ICE, Items.BLUE_ICE, Items.SNOW, Items.SNOW_BLOCK, Items.SNOWBALL, Items.POWDER_SNOW_BUCKET);
@@ -241,34 +250,10 @@ public class CheckUtils {
 
         Item main = player.getMainHandStack().getItem();
         Item off = player.getOffHandStack().getItem();
-        for(Item item : ice_items){
-            if(item.equals(main) || item.equals(off)){
-                return true;
-            }
+        if(ice_items.contains(main) || ice_items.contains(off)){
+            return true;
         }
-        if(!Config.SHOULD_CHECK_BLOCKS){
-            return false;
-        }
-
-        BlockPos origin = player.getBlockPos();
-        int rad = 3;
-        for(int y = -rad; y <= rad; y++)
-        {
-            for(int x = -rad; x <= rad; x++)
-            {
-                for(int z = -rad; z <= rad; z++)
-                {
-                    BlockPos pos = origin.add(x, y, z);
-                    for(Block block : ice_blocks){
-                        if(player.getWorld().getBlockState(pos).getBlock().equals(block)){
-                            return true;
-                        }
-                    }
-
-                }
-            }
-        }
-        return false;
+        return checkBlocks(player, ice_blocks, 3);
     }
 
     /**Rerturn a list of the player's enemies in the area
@@ -305,6 +290,20 @@ public class CheckUtils {
             }
         }
         return targets;
+    }
+
+    /**Rerturn true if the two player are enemies. If they are not allied, they are considered enemies
+     *
+     * @param player The player used as the center of the area to search of its enemies*/
+    public static boolean areEnemies(PlayerEntity player, PlayerEntity player1){
+        //TODO Config If Not allied == ENEMIES aka will be attacked
+        if(!CheckUtils.CheckAllies.checkAlly(player, player1)){
+            return true;
+            }
+        if(FabricLoader.getInstance().isModLoaded("factions")){
+              return FactionChecker.areEnemies(player, player1);
+        }
+        return false;
     }
 
 }

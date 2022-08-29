@@ -24,8 +24,11 @@ public enum InnerLightType {
     BLAZING, //to trigger needs a heat source, either in HAND or in 3 block radious
     //the block underneath will be turned to path and magma blocks and such
     EARTHEN, //dirt/rock in hand or below feet
+    //creates a moat between you and the others as a defensive & attack measure. Maybe it be that on defensive, it carves
+    //a hole around the player/builds a wall, on the attack it either summons dripstone like stuff above targets OR digs a hole under them
     //could throw rocks and blind the attackers while encasing the allies in dirt/stone
-    //SPAWNS A GOLEM TO ATTACK THE ENEMIES AND SUCH (not sure if a normal one or a new gecko lib one)
+    //As for the "OTHER" target type. SPAWNS A GOLEM TO ATTACK THE ENEMIES AND SUCH (not sure if a normal one or a new gecko lib one)
+    //For the self/the allies there will be a teleportation on top of the structure thingy maybe i should make an animation or something. Like a pillar and a moat.
     WIND, //in the air or... i dunno MAYBE MAKES THE PLAYER FLY FOR A BIT? Or it could launch it off like the DASH ability. Maybe also has a lower cooldown. And need to be on the surface.
     //simply blow away the enemies and give speed and slow falling to self? The "ALLIES" could be like  buff both self and allies? With high speed and jump boost and stuff
     AQUA, //needs something watery (bottle/bucket) in hand or water around

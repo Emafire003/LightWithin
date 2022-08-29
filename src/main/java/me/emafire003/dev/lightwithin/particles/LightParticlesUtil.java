@@ -2,10 +2,12 @@ package me.emafire003.dev.lightwithin.particles;
 
 import me.emafire003.dev.lightwithin.LightWithin;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.particle.BlockStateParticleEffect;
 import net.minecraft.particle.DustParticleEffect;
 import net.minecraft.particle.ParticleEffect;
-import net.minecraft.particle.ParticleType;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
@@ -13,8 +15,6 @@ import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3f;
-import net.minecraft.util.math.Vec3i;
-import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -94,6 +94,16 @@ public class LightParticlesUtil {
         }
     }
 
+    public static void spawnCylinder(Vec3d center, double radius, int amount, double height, double distance, ParticleEffect particle, ServerWorld world){
+        Vec3d c = center;
+        for(double i = 0; i < height; i = i+distance){
+            c = c.add(0, distance, 0);
+            spawnCircle(center, radius, amount, particle, world);
+        }
+    }
+
+
+
     /*public static void spawnRedstoneParticles(World world, BlockPos pos){
         double d = 0.5625D;
         Random random = world.random;
@@ -120,12 +130,13 @@ public class LightParticlesUtil {
         }
     }
 
-    /*public static void spawnDustParticles(ServerPlayerEntity player){
+    public static void spawnDustParticles(ServerPlayerEntity player, Vec3f color){
+        DustParticleEffect a = new DustParticleEffect(new Vec3f(0, 255, 255), 2);
         Vec3d pos = player.getPos();
         double speed = 0;
         //player.getWorld().spawnParticles(player, new Vec3f(Vec3d.unpackRgb(43758)), false, pos.x, pos.y, pos.z, 100, 0, 0, 0, speed);
         player.getWorld().addParticle(new DustParticleEffect(new Vec3f(Vec3d.unpackRgb(43758)), 1.0F), pos.getX(), pos.getY(), pos.getZ(), 0.0D, 0.0D, 0.0D);
-    }*/
+    }
 
     //Generated using ParticleConverter. This is done not only because for me it's easier but also because it doesn't need to calculate each team the position of hunderds of particles.+
     //So it's it's like it has been compiled, performing better

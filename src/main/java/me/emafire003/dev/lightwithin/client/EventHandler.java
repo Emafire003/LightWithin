@@ -37,7 +37,7 @@ public class EventHandler {
     int center_y = 0;
     double scale_factor;
 
-    @EventListener(shift= Shift.POST, type = EventType.HUD_RENDER)
+    @EventListener(shift= Shift.POST, value = EventType.HUD_RENDER)
     void preHudRender(RenderEvent re) {
         MSAAFramebuffer.use(MSAAFramebuffer.MAX_SAMPLES, () -> {
             center_x = MinecraftClient.getInstance().getWindow().getScaledWidth()/2;
@@ -75,6 +75,11 @@ public class EventHandler {
                     Renderer2d.renderTexture(re.getStack(), new Identifier(LightWithin.MOD_ID, "textures/lights/runes/frost_light_runes.png"), center_x-(435/scale_factor)/2, center_y-(160/scale_factor)/2, (400/scale_factor)*1.2, (160/scale_factor)*1.2);
                     ClipStack.globalInstance.popWindow();
                 }
+                if(earthen_runes){
+                    ClipStack.globalInstance.addWindow(re.getStack(),new Rectangle(1,1,1000,1000));
+                    Renderer2d.renderTexture(re.getStack(), new Identifier(LightWithin.MOD_ID, "textures/lights/runes/earthen_light_runes.png"), center_x-(435/scale_factor)/2, center_y-(160/scale_factor)/2, (400/scale_factor)*1.2, (160/scale_factor)*1.2);
+                    ClipStack.globalInstance.popWindow();
+                }
             }
         });
     }
@@ -96,6 +101,10 @@ public class EventHandler {
         else if(type.equals(InnerLightType.FROST)){
             frost_runes = true;
             player.playSound(LightSounds.FROST_LIGHT, 1 ,1);
+        }
+        else if(type.equals(InnerLightType.EARTHEN)){
+            earthen_runes = true;
+            player.playSound(LightSounds.EARTHEN_LIGHT, 1 ,1);
         }
     }
 
@@ -137,6 +146,13 @@ public class EventHandler {
                 if(ticks > 20*3){
                     ticks = 0;
                     frost_runes = false;
+                }
+            }
+            if(earthen_runes){
+                ticks++;
+                if(ticks > 20*3){
+                    ticks = 0;
+                    earthen_runes = false;
                 }
             }
         });

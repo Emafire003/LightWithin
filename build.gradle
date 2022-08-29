@@ -49,8 +49,13 @@ dependencies {
 	modImplementation "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-entity:4.0.1"
 	include "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-entity:4.0.1"
 
-	//Renderer TODO will need updating back to master-SNAPSHOT for 1.19
-	include modImplementation( 'com.github.0x3C50:Renderer:9804cf7d99' )
+	//Renderer TODO will need updating back to master-SNAPSHOT for 1.19.2
+	//include modImplementation( 'com.github.0x3C50:Renderer:9804cf7d99' )
+	include modImplementation( 'com.github.0x3C50:Renderer:master-SNAPSHOT' )
+
+	//StructurePlacerAPI
+	modImplementation "maven.modrinth:structureplacerapi:${project.structureplacerapi_version}"
+	include "maven.modrinth:structureplacerapi:${project.structureplacerapi_version}"
 
 	//OPTIONAL DEPENDENCIES:
 	modImplementation "maven.modrinth:factions:${project.factions_version}"

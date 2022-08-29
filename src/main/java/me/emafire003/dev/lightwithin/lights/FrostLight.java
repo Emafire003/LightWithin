@@ -2,28 +2,22 @@ package me.emafire003.dev.lightwithin.lights;
 
 import me.emafire003.dev.coloredglowlib.ColoredGlowLib;
 import me.emafire003.dev.coloredglowlib.util.Color;
-import me.emafire003.dev.lightwithin.blocks.LightBlocks;
 import me.emafire003.dev.lightwithin.component.LightComponent;
 import me.emafire003.dev.lightwithin.config.Config;
-import me.emafire003.dev.lightwithin.config.ConfigProvider;
 import me.emafire003.dev.lightwithin.particles.LightParticles;
 import me.emafire003.dev.lightwithin.particles.LightParticlesUtil;
 import me.emafire003.dev.lightwithin.sounds.LightSounds;
 import me.emafire003.dev.lightwithin.status_effects.LightEffects;
-import me.emafire003.dev.lightwithin.util.StructurePlacer;
 import me.emafire003.dev.lightwithin.util.TargetType;
-import net.minecraft.client.render.entity.animation.WardenAnimations;
+import me.emafire003.dev.structureplacerapi.StructurePlacerAPI;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.server.command.DifficultyCommand;
-import net.minecraft.server.command.PlaceCommand;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
-import net.minecraft.text.Text;
 import net.minecraft.util.BlockMirror;
 import net.minecraft.util.BlockRotation;
 import net.minecraft.util.Identifier;
@@ -52,18 +46,18 @@ public class FrostLight extends InnerLight {
 
     public FrostLight(List<LivingEntity> targets, double cooldown_time, double power_multiplier, int duration, Color color, PlayerEntity caster, boolean rainbow_col) {
         super(targets, cooldown_time, power_multiplier, duration, color, caster, rainbow_col);
-        type = InnerLightType.DEFENCE;
+        type = InnerLightType.FROST;
     }
 
     public FrostLight(List<LivingEntity> targets, double cooldown_time, double power_multiplier, int duration, PlayerEntity caster, boolean rainbow_col) {
         super(targets, cooldown_time, power_multiplier, duration, caster, rainbow_col);
-        type = InnerLightType.DEFENCE;
+        type = InnerLightType.FROST;
         color = new Color(141, 251, 255);
     }
 
     public FrostLight(List<LivingEntity> targets, double cooldown_time, double power_multiplier, int duration, PlayerEntity caster) {
         super(targets, cooldown_time, power_multiplier, duration, caster);
-        type = InnerLightType.DEFENCE;
+        type = InnerLightType.FROST;
         color = new Color(141, 251, 255);
     }
 
@@ -93,8 +87,8 @@ public class FrostLight extends InnerLight {
         caster.getWorld().playSound(caster, caster.getBlockPos(), LightSounds.FROST_LIGHT, SoundCategory.AMBIENT, 1, 1);
         LightComponent component = LIGHT_COMPONENT.get(caster);
         if(Config.STRUCTURE_GRIEFING && !caster.getWorld().isClient && (component.getTargets().equals(TargetType.ALL) || component.getTargets().equals(TargetType.ENEMIES))) {
-            StructurePlacer placer = new StructurePlacer((ServerWorld) caster.getWorld(), new Identifier(MOD_ID, "frost_light"), caster.getBlockPos(), BlockMirror.NONE, BlockRotation.NONE, true, 1.0f, new BlockPos(-4, -3, -3));
-            placer.loadStructure((ServerWorld) caster.getWorld());
+            StructurePlacerAPI placer = new StructurePlacerAPI((ServerWorld) caster.getWorld(), new Identifier(MOD_ID, "frost_light"), caster.getBlockPos(), BlockMirror.NONE, BlockRotation.NONE, true, 1.0f, new BlockPos(-4, -3, -3));
+            placer.loadStructure();
         }
 
         LightParticlesUtil.spawnSnowflake((ServerPlayerEntity) caster, caster.getPos().add(0, 2, 0));
@@ -117,15 +111,15 @@ public class FrostLight extends InnerLight {
             if(self_or_allies){
                 target.addStatusEffect(new StatusEffectInstance(LightEffects.FREEZE_RESISTANCE, (int) (this.duration*Config.FROST_FREEZE_RES_DURATION_MULTIPLIER)*20));
                 if(Config.STRUCTURE_GRIEFING && !caster.getWorld().isClient){
-                    StructurePlacer placer = new StructurePlacer((ServerWorld) caster.getWorld(), new Identifier(MOD_ID, "frost_wall"), target.getBlockPos(), BlockMirror.NONE, BlockRotation.NONE, true, 1.0f, new BlockPos(-2, -1, -2));
+                    StructurePlacerAPI placer = new StructurePlacerAPI((ServerWorld) caster.getWorld(), new Identifier(MOD_ID, "frost_wall"), target.getBlockPos(), BlockMirror.NONE, BlockRotation.NONE, true, 1.0f, new BlockPos(-2, -1, -2));
                     if(state == 1){
-                        placer = new StructurePlacer((ServerWorld) caster.getWorld(), new Identifier(MOD_ID, "frost_wall"), target.getBlockPos(), BlockMirror.NONE, BlockRotation.CLOCKWISE_90, true, 1.0f, new BlockPos(2, -1, -2));
+                        placer = new StructurePlacerAPI((ServerWorld) caster.getWorld(), new Identifier(MOD_ID, "frost_wall"), target.getBlockPos(), BlockMirror.NONE, BlockRotation.CLOCKWISE_90, true, 1.0f, new BlockPos(2, -1, -2));
                     }else if(state == 2){
-                        placer = new StructurePlacer((ServerWorld) caster.getWorld(), new Identifier(MOD_ID, "frost_wall"), target.getBlockPos(), BlockMirror.NONE, BlockRotation.CLOCKWISE_180, true, 1.0f, new BlockPos(2, -1, 2));
+                        placer = new StructurePlacerAPI((ServerWorld) caster.getWorld(), new Identifier(MOD_ID, "frost_wall"), target.getBlockPos(), BlockMirror.NONE, BlockRotation.CLOCKWISE_180, true, 1.0f, new BlockPos(2, -1, 2));
                     }else if(state == 3){
-                        placer = new StructurePlacer((ServerWorld) caster.getWorld(), new Identifier(MOD_ID, "frost_wall"), target.getBlockPos(), BlockMirror.NONE, BlockRotation.COUNTERCLOCKWISE_90, true, 1.0f, new BlockPos(-2, -1, 2));
+                        placer = new StructurePlacerAPI((ServerWorld) caster.getWorld(), new Identifier(MOD_ID, "frost_wall"), target.getBlockPos(), BlockMirror.NONE, BlockRotation.COUNTERCLOCKWISE_90, true, 1.0f, new BlockPos(-2, -1, 2));
                     }
-                    placer.loadStructure((ServerWorld) caster.getWorld());
+                    placer.loadStructure();
                 }
             }else{
                 if(!caster.getWorld().isClient){
@@ -140,15 +134,15 @@ public class FrostLight extends InnerLight {
                     if(target instanceof PlayerEntity){
                         statue_id = "frozen_player";
                     }
-                    StructurePlacer placer = new StructurePlacer((ServerWorld) caster.getWorld(), new Identifier(MOD_ID, statue_id), target.getBlockPos(), BlockMirror.NONE, BlockRotation.NONE, true, 1.0f, new BlockPos(0,0,0));
+                    StructurePlacerAPI placer = new StructurePlacerAPI((ServerWorld) caster.getWorld(), new Identifier(MOD_ID, statue_id), target.getBlockPos(), BlockMirror.NONE, BlockRotation.NONE, true, 1.0f, new BlockPos(0,0,0));
                     if(state == 1){
-                        placer = new StructurePlacer((ServerWorld) caster.getWorld(), new Identifier(MOD_ID, statue_id), target.getBlockPos(), BlockMirror.NONE, BlockRotation.CLOCKWISE_90, true, 1.0f, new BlockPos(0,0,0));
+                        placer = new StructurePlacerAPI((ServerWorld) caster.getWorld(), new Identifier(MOD_ID, statue_id), target.getBlockPos(), BlockMirror.NONE, BlockRotation.CLOCKWISE_90, true, 1.0f, new BlockPos(0,0,0));
                     }else if(state == 2){
-                        placer = new StructurePlacer((ServerWorld) caster.getWorld(), new Identifier(MOD_ID, statue_id), target.getBlockPos(), BlockMirror.NONE, BlockRotation.CLOCKWISE_180, true, 1.0f, new BlockPos(0,0,0));
+                        placer = new StructurePlacerAPI((ServerWorld) caster.getWorld(), new Identifier(MOD_ID, statue_id), target.getBlockPos(), BlockMirror.NONE, BlockRotation.CLOCKWISE_180, true, 1.0f, new BlockPos(0,0,0));
                     }else if(state == 3){
-                        placer = new StructurePlacer((ServerWorld) caster.getWorld(), new Identifier(MOD_ID, statue_id), target.getBlockPos(), BlockMirror.NONE, BlockRotation.COUNTERCLOCKWISE_90, true, 1.0f, new BlockPos(0,0,0));
+                        placer = new StructurePlacerAPI((ServerWorld) caster.getWorld(), new Identifier(MOD_ID, statue_id), target.getBlockPos(), BlockMirror.NONE, BlockRotation.COUNTERCLOCKWISE_90, true, 1.0f, new BlockPos(0,0,0));
                     }
-                    placer.loadStructure((ServerWorld) caster.getWorld());
+                    placer.loadStructure();
                     target.teleport(norm_pos.getX(), norm_pos.getY(), norm_pos.getZ());
                     target.addStatusEffect(new StatusEffectInstance(LightEffects.FROST, caster.getStatusEffect(LightEffects.LIGHT_ACTIVE).getDuration(), 0, false, false));
                     target.addStatusEffect(new StatusEffectInstance(StatusEffects.INVISIBILITY, caster.getStatusEffect(LightEffects.LIGHT_ACTIVE).getDuration(), 0, false, false));

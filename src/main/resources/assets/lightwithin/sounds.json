@@ -40,5 +40,11 @@
     "sounds": [
       "lightwithin:frost_light"
     ]
+  },
+  "earthen_light": {
+    "subtitle": "lightwithin.earthen_light_triggered",
+    "sounds": [
+      "lightwithin:earthen_light"
+    ]
   }
 }

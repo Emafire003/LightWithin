@@ -9,8 +9,8 @@ import me.emafire003.dev.lightwithin.particles.LightParticles;
 import me.emafire003.dev.lightwithin.particles.LightParticlesUtil;
 import me.emafire003.dev.lightwithin.sounds.LightSounds;
 import me.emafire003.dev.lightwithin.status_effects.LightEffects;
-import me.emafire003.dev.lightwithin.util.StructurePlacer;
 import me.emafire003.dev.lightwithin.util.TargetType;
+import me.emafire003.dev.structureplacerapi.StructurePlacerAPI;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
@@ -48,18 +48,18 @@ public class BlazingLight extends InnerLight {
 
     public BlazingLight(List<LivingEntity> targets, double cooldown_time, double power_multiplier, int duration, Color color, PlayerEntity caster, boolean rainbow_col) {
         super(targets, cooldown_time, power_multiplier, duration, color, caster, rainbow_col);
-        type = InnerLightType.DEFENCE;
+        type = InnerLightType.BLAZING;
     }
 
     public BlazingLight(List<LivingEntity> targets, double cooldown_time, double power_multiplier, int duration, PlayerEntity caster, boolean rainbow_col) {
         super(targets, cooldown_time, power_multiplier, duration, caster, rainbow_col);
-        type = InnerLightType.DEFENCE;
+        type = InnerLightType.BLAZING;
         color = new Color(234, 71, 16);
     }
 
     public BlazingLight(List<LivingEntity> targets, double cooldown_time, double power_multiplier, int duration, PlayerEntity caster) {
         super(targets, cooldown_time, power_multiplier, duration, caster);
-        type = InnerLightType.DEFENCE;
+        type = InnerLightType.BLAZING;
         color = new Color(234, 71, 16);
     }
 
@@ -100,8 +100,8 @@ public class BlazingLight extends InnerLight {
             power_multiplier = power_multiplier + Config.BLAZING_ALL_DAMAGE_BONUS;
         }
         if(Config.STRUCTURE_GRIEFING && !caster.getWorld().isClient && (component.getTargets().equals(TargetType.ALL) || component.getTargets().equals(TargetType.ENEMIES))) {
-            StructurePlacer placer = new StructurePlacer((ServerWorld) caster.getWorld(), new Identifier(MOD_ID, "blazing_light"), caster.getBlockPos(), BlockMirror.NONE, BlockRotation.NONE, true, 1.0f, new BlockPos(-3, -4, -3));
-            placer.loadStructure((ServerWorld) caster.getWorld());
+            StructurePlacerAPI placer = new StructurePlacerAPI((ServerWorld) caster.getWorld(), new Identifier(MOD_ID, "blazing_light"), caster.getBlockPos(), BlockMirror.NONE, BlockRotation.NONE, true, 1.0f, new BlockPos(-3, -4, -3));
+            placer.loadStructure();
         }
         for(LivingEntity target : this.targets){
             target.playSound(LightSounds.BLAZING_LIGHT, 1, 1);
@@ -119,8 +119,8 @@ public class BlazingLight extends InnerLight {
                 target.playSound(LightSounds.LIGHT_CRIT, 1, 1);
                 LightParticlesUtil.spawnDescendingColumn((ServerPlayerEntity) caster, ParticleTypes.FLAME, target.getPos().add(0,3,0));
                 if(!caster.getWorld().isClient){
-                    StructurePlacer placer = new StructurePlacer((ServerWorld) caster.getWorld(), new Identifier(MOD_ID, "fire_ring"), caster.getBlockPos());
-                    placer.loadStructure((ServerWorld) caster.getWorld());
+                    StructurePlacerAPI placer = new StructurePlacerAPI((ServerWorld) caster.getWorld(), new Identifier(MOD_ID, "fire_ring"), caster.getBlockPos());
+                    placer.loadStructure();
                 }
             }else{
                 target.setOnFireFor(this.duration);
