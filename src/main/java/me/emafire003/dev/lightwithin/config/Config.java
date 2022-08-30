@@ -67,8 +67,14 @@ public class Config {
     public static int FROST_MIN_DURATION;
     public static double FROST_FREEZE_RES_DURATION_MULTIPLIER;
 
+    public static int EARTHEN_MAX_POWER;
+    public static int EARTHEN_MAX_DURATION;
+    public static int EARTHEN_MIN_POWER;
+    public static int EARTHEN_MIN_DURATION;
+
     public static boolean SHOULD_CHECK_BLOCKS;
     public static boolean STRUCTURE_GRIEFING;
+    public static boolean NON_FUNDAMENTAL_STRUCTURE_GRIEFING;
 
     public static boolean TARGET_FEEDBACK;
     public static boolean RESET_ON_JOIN;
@@ -140,9 +146,16 @@ public class Config {
         configs.addKeyValuePair(new Pair<>("frost_min_duration", 5), "The minimum duration of the frost effect");
         configs.addKeyValuePair(new Pair<>("frost_freeze_res_duration_multiplier", 2.0), "The multiplier of the duration of the Freeze Resistance status effect given to allies or self. Set to 1 to use the default duration.");
 
+        configs.addKeyValuePair(new Pair<>("earthen_max_power", 9), "The maximum power multiplier (Used to determine the level of the structures spawned and the bonus damage done to enemies)");
+        configs.addKeyValuePair(new Pair<>("earthen_min_power", 1), "The minimum power multiplier (see above)");
+        configs.addKeyValuePair(new Pair<>("earthen_max_duration", 18), "The maximum duration of some effects that can be applied (like solid rock, mining fatigue)");
+        configs.addKeyValuePair(new Pair<>("earthen_min_duration", 1), "The minimum duration (see above)");
+
 
         configs.addKeyValuePair(new Pair<>("should_check_blocks", true), "Should the blocks near the player be checked for the light activation? Could impact on performance");
-        configs.addKeyValuePair(new Pair<>("structure_griefing", true), "If set to false will prevent lights from spawning structures on activation (I'd suggest leaving it to true)");
+        configs.addKeyValuePair(new Pair<>("structure_griefing", true), "If set to false will prevent lights from spawning ANY KIND structures on activation (I'd suggest leaving it to true)");
+        configs.addKeyValuePair(new Pair<>("non_fundamental_structure_griefing", true), "If set to false will prevent lights from spawning structures that are not fundamental for the light's effect. For example Earthen Light's structures will STILL SPAWN (I'd suggest leaving it to true)");
+
 
         configs.addKeyValuePair(new Pair<>("command_target_feedback", true), "Should a message be sent the target of a command, such us when changing its innerlight?");
         configs.addKeyValuePair(new Pair<>("reset_on_join", false), "Should the InnerLight be compleatly resetted upon joining the server/world again? Useful after an update of the mod that added new Light Types");
@@ -210,8 +223,14 @@ public class Config {
         FROST_MIN_POWER = CONFIG.getOrDefault("frost_min_power", 1);
         FROST_MIN_DURATION = CONFIG.getOrDefault("frost_min_duration", 5);
 
+        EARTHEN_MAX_POWER = CONFIG.getOrDefault("earthen_max_power", 9);
+        EARTHEN_MAX_DURATION = CONFIG.getOrDefault("earthen_max_duration", 18);
+        EARTHEN_MIN_POWER = CONFIG.getOrDefault("earthen_min_power", 1);
+        EARTHEN_MIN_DURATION = CONFIG.getOrDefault("earthen_min_duration", 1);
+
         SHOULD_CHECK_BLOCKS = CONFIG.getOrDefault("should_check_blocks", true);
         STRUCTURE_GRIEFING = CONFIG.getOrDefault("structure_griefing", true);
+        NON_FUNDAMENTAL_STRUCTURE_GRIEFING = CONFIG.getOrDefault("non_fundamental_structure_griefing", true);
 
         TARGET_FEEDBACK = CONFIG.getOrDefault("command_target_feedback", true);
 

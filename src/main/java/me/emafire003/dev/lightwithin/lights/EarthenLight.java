@@ -104,8 +104,8 @@ public class EarthenLight extends InnerLight {
             return;
         }
         LightComponent component = LIGHT_COMPONENT.get(caster);
+        //Will create a ravine under the enemies feet, and will also damage them and apply mining fatigue
         if(component.getTargets().equals(TargetType.ENEMIES)){
-            //create moat or summon stuff overhead
             //TODO maybe create a boudler projectile in the future
             //TODO probably need to extend the enemy radius
             LivingEntity oldtarget = null;
@@ -132,9 +132,10 @@ public class EarthenLight extends InnerLight {
                 //TODO maybe configable?
                 target.playSound(LightSounds.EARTHEN_LIGHT, 0.9f, 1);
                 target.addStatusEffect(new StatusEffectInstance(StatusEffects.MINING_FATIGUE, caster.getStatusEffect(LightEffects.LIGHT_ACTIVE).getDuration(), (int) this.power_multiplier, false, false));
-                target.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, 20, (int) this.power_multiplier, false, false));
             }
+            //It will spawn a wall around the allies and self, depending on the power level it could have a secret tunnel to escape underneath
         }else if(component.getTargets().equals(TargetType.ALLIES)){
+            //oldtarget and stuuf prevent generating multiple structures in the same area
             LivingEntity oldtarget = null;
             for(LivingEntity target : this.targets){
 
@@ -158,8 +159,8 @@ public class EarthenLight extends InnerLight {
 
                 }
             }
-            //create defensive moat/wall
-            //It could create a moat if there are enough "natural blocks" under the pos or a wall if there aren't
+            //Depending on the level it will spawn a small moat and pillar around the user, a big pillar only and a big pillar with a big moat.
+            //And will also give Solid Rock effect to self, making the player more resistant to knokback
         }else if(component.getTargets().equals(TargetType.SELF)){
             LightParticlesUtil.spawnLightTypeParticle(LightParticles.EARTHENLIGHT_PARTICLE, (ServerWorld) caster.getWorld(), caster.getPos());
             caster.addStatusEffect(new StatusEffectInstance(LightEffects.SOLID_ROCK, caster.getStatusEffect(LightEffects.LIGHT_ACTIVE).getDuration(), (int) this.power_multiplier, false, false));
@@ -186,18 +187,6 @@ public class EarthenLight extends InnerLight {
                     placer = new StructurePlacerAPI((ServerWorld) caster.getWorld(), new Identifier(MOD_ID, "small_moat"), caster.getBlockPos(), BlockMirror.NONE, BlockRotation.NONE, true, 0.9f, new BlockPos(-3, -5, -3));
                     caster.teleport(caster.getX(), caster.getY()+2, caster.getZ());
                 }
-                //If the terrain under the player's feet is natural block (times 3 aka 3 blocks down), will create a moat,  if not a wall.
-                /*
-                List<TagKey<Block>> tags = new ArrayList<>();
-                for(int i = 0; i<3;i++){
-                    caster.getWorld().getBlockState(caster.getBlockPos().add(0, -i, 0)).streamTags().forEach(tags::add);
-                }
-                if(tags.contains(TagKey.of(Registry.BLOCK_KEY, BlockTags.LUSH_GROUND_REPLACEABLE.id()))){
-
-                }else{
-                    //TODO maybe I should use the pillar_only structure??
-                    placer = new StructurePlacerAPI((ServerWorld) caster.getWorld(), new Identifier(MOD_ID, "earth_wall"), caster.getBlockPos(), BlockMirror.NONE, BlockRotation.NONE, true, 0.96f, new BlockPos(-3, -1, -4));
-                }*/
                 placer.loadStructure();
                 caster.playSound(LightSounds.EARTHEN_LIGHT, 1, 1);
             }

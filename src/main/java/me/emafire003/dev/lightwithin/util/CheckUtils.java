@@ -14,8 +14,11 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.tag.BlockTags;
+import net.minecraft.tag.TagKey;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
+import net.minecraft.util.registry.Registry;
 import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -104,7 +107,7 @@ public class CheckUtils {
         return player.getHealth() <= (player.getMaxHealth())*health_percent/100;
     }
 
-    /**Will check for nearby allies, if they are on low health and possibly surrounded
+    /**Will check for nearby allies, if they are on low health
      * it will return true
      *
      * @param player The player that could trigger their light
@@ -112,6 +115,36 @@ public class CheckUtils {
      * @param health_percent The percentage (15, 25, 70) below which the target is in danger (hence light activatable)
      * */
     public static boolean checkAllyHealth(@NotNull PlayerEntity player, Entity entity, int health_percent){
+        List<LivingEntity> entities = player.getWorld().getEntitiesByClass(LivingEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amount), (entity1 -> true));
+        int ent_number = 0;
+        //I need to this to prevent a ConcurrentModificationError
+        List<LivingEntity> team_entities = new ArrayList<>();
+        //loops through the entities near the player, if the entities are in the same team as the player
+        //and they are not the entity that has been hit then add them to the team_entities and check if their health is ok
+        for(LivingEntity ent : entities){
+            //Checks if the entity in the list is in the same team/faction/party/pet or not
+            if(!entity.equals(ent) && CheckAllies.checkAlly(player, ent) ){
+                //if it is, check the health
+                if(ent.getHealth() <= (ent.getMaxHealth())*health_percent/100){
+                    ent_number++;
+                }
+                team_entities.add(ent);
+            }
+        }
+        //If the total team targets && the number of entities of team with the right health are true then
+        //return true
+        return team_entities.size() == ent_number;
+        //otherwise, false
+    }
+
+    /**Will check for nearby enemies, if they are on high health and possibly surrounded
+     * it will return true
+     *
+     * @param player The player that could trigger their light
+     * @param entity The entity that is attacking it
+     * @param health_percent The percentage (15, 25, 70) below which the target is in danger (hence light activatable)
+     * */
+    public static boolean checkEnemyHealthHigh(@NotNull PlayerEntity player, Entity entity, int health_percent){
         List<LivingEntity> entities = player.getWorld().getEntitiesByClass(LivingEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amount), (entity1 -> true));
         int ent_number = 0;
         //I need to this to prevent a ConcurrentModificationError
@@ -180,6 +213,48 @@ public class CheckUtils {
     //TODO make list configable
     private static final List<Item> fire_items = Arrays.asList(Items.TORCH, Items.FIRE_CHARGE, Items.FLINT_AND_STEEL, Items.CAMPFIRE, Items.SOUL_CAMPFIRE, Items.SOUL_TORCH, Items.LAVA_BUCKET);
     private static final List<Block> fire_blocks = Arrays.asList(Blocks.LAVA, Blocks.MAGMA_BLOCK, Blocks.FIRE, Blocks.SOUL_FIRE, Blocks.TORCH, Blocks.SOUL_TORCH, Blocks.SOUL_WALL_TORCH, Blocks.WALL_TORCH, Blocks.CAMPFIRE, Blocks.SOUL_CAMPFIRE);
+
+    public static boolean checkBlocksWithTags(PlayerEntity player, int rad, TagKey tag){
+        //If the terrain under the player's feet is natural block (times 3 aka 3 blocks down), will create a moat,  if not a wall.
+        List<TagKey<Block>> tags = new ArrayList<>();
+
+        BlockPos origin = player.getBlockPos();
+        for(int y = -rad; y <= rad; y++)
+        {
+            for(int x = -rad; x <= rad; x++)
+            {
+                for(int z = -rad; z <= rad; z++)
+                {
+                    BlockPos pos = origin.add(x, y, z);
+                    player.getWorld().getBlockState(pos).streamTags().forEach(tags::add);
+
+                }
+            }
+        }
+        return tags.contains(tag);
+    }
+
+    public static boolean checkMultipleBlocksWithTags(PlayerEntity player, int rad, int block_number, TagKey tag){
+        //If the terrain under the player's feet is natural block (times 3 aka 3 blocks down), will create a moat,  if not a wall.
+        List<TagKey<Block>> tags = new ArrayList<>();
+        int number = 0;
+        BlockPos origin = player.getBlockPos();
+        for(int y = -rad; y <= rad; y++)
+        {
+            for(int x = -rad; x <= rad; x++)
+            {
+                for(int z = -rad; z <= rad; z++)
+                {
+                    BlockPos pos = origin.add(x, y, z);
+                    player.getWorld().getBlockState(pos).streamTags().forEach(tags::add);
+                    if(tags.contains(tag)){
+                        number++;
+                    }
+                }
+            }
+        }
+        return number >= block_number;
+    }
 
     /** Checks for blocks in a certain radius from the player pos
      * if they match at least one from the given list.
@@ -254,6 +329,20 @@ public class CheckUtils {
             return true;
         }
         return checkBlocks(player, ice_blocks, 3);
+    }
+
+    /**Used to check if the player has something that can be considered a Cold Source
+     * for the Frost Light
+     *
+     * @param player The player to perform checks on*/
+    public static boolean checkEarthen(PlayerEntity player){
+
+        if(player.getInventory().contains(new ItemStack(Items.DIRT, 64))){
+            player.getInventory().removeStack(player.getInventory().getSlotWithStack(new ItemStack(Items.DIRT, 64)));
+            return true;
+        }
+
+        return checkMultipleBlocksWithTags(player, 3, 3, TagKey.of(Registry.BLOCK_KEY, BlockTags.LUSH_GROUND_REPLACEABLE.id()));
     }
 
     /**Rerturn a list of the player's enemies in the area

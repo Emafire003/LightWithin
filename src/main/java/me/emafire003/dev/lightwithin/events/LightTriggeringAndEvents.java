@@ -166,6 +166,37 @@ public class LightTriggeringAndEvents {
         }
     }
 
+    public static void checkEarthen(PlayerEntity player, LightComponent component, Entity entity){
+        /**If the player has ALL as target, he needs to be hurt (or an ally has to die, but that depends on the trigger)*/
+        if(component.getTargets().equals(TargetType.ALL)
+                && CheckUtils.checkSelfHealth(player, Config.HP_PERCENTAGE_SELF)
+                && CheckUtils.checkSurrounded(player)
+                && CheckUtils.checkEarthen(player)
+        ){
+            sendReadyPacket((ServerPlayerEntity) player, true);
+        }
+        /**CHECKS if the player has ENEMIES as target, either his or his allies health needs to be low*/
+        else if(component.getTargets().equals(TargetType.ENEMIES)
+                && (CheckUtils.checkAllyHealth(player, entity, Config.HP_PERCENTAGE_ALLIES) || CheckUtils.checkSelfHealth(player, Config.HP_PERCENTAGE_SELF+5))
+                && CheckUtils.checkSurrounded(player)
+                && CheckUtils.checkFrost(player)
+        ){
+            sendReadyPacket((ServerPlayerEntity) player, true);
+        }else if(component.getTargets().equals(TargetType.SELF)
+                && CheckUtils.checkSelfHealth(player, Config.HP_PERCENTAGE_SELF)
+                && CheckUtils.checkSurrounded(player)
+                && CheckUtils.checkFrost(player)
+        ){
+            sendReadyPacket((ServerPlayerEntity) player, true);
+        }else if(component.getTargets().equals(TargetType.ALLIES)
+                && CheckUtils.checkAllyHealth(player, entity, Config.HP_PERCENTAGE_ALLIES)
+                && CheckUtils.checkSurrounded(player)
+                && CheckUtils.checkFrost(player)
+        ){
+            sendReadyPacket((ServerPlayerEntity) player, true);
+        }
+    }
+
     /**Checks if you can trigger the light or not
      * */
     public static boolean isTriggerable(PlayerEntity player){
@@ -197,6 +228,9 @@ public class LightTriggeringAndEvents {
         }
         if(component.getType().equals(InnerLightType.FROST)){
             checkFrost(player, component, attacker);
+        }
+        if(component.getType().equals(InnerLightType.EARTHEN)){
+            checkEarthen(player, component, attacker);
         }
     }
 
@@ -460,6 +494,8 @@ public class LightTriggeringAndEvents {
         }
     }
 
+    //0,0015% of probabilty of gaining a light? (well times 2)
+    //
     public static Pair<InnerLightType, TargetType> determineTypeAndTarget(String[] id_bits, int type_bit, int target_bit){
         int i;
         boolean notfound = false;
