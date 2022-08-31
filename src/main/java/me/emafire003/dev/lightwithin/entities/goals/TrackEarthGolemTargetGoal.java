@@ -29,15 +29,13 @@ public class TrackEarthGolemTargetGoal extends TrackTargetGoal {
 
     @Override
     public boolean canStart() {
-        Box box = this.golem.getBoundingBox().expand(10.0, 8.0, 10.0);
-        List<PlayerEntity> list = this.golem.world.getPlayers(this.targetPredicate, this.golem, box);
-        for (PlayerEntity playerEntity : list) {
-            if(golem.getSummoner() != null){
-                if(CheckUtils.areEnemies(playerEntity, golem.getSummoner())){
-                    this.target = playerEntity;
-                }
+        if(golem.getSummoner() != null){
+            if(golem.getSummoner().getDamageTracker().getMostRecentDamage() == null){
+                return false;
             }
-
+            if(golem.getSummoner().getDamageTracker().getMostRecentDamage().getAttacker() instanceof LivingEntity){
+                this.target = (LivingEntity) golem.getSummoner().getDamageTracker().getMostRecentDamage().getAttacker();
+            }
         }
         if (this.target == null) {
             return false;

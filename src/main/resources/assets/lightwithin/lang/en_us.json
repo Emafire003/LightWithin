@@ -16,6 +16,8 @@
   "item.lightwithin.luxcognita_berry.tooltip": "§eThe all-knowing light of this berry will",
   "item.lightwithin.luxcognita_berry.tooltip1": "§atell you the secrets§e of your §binner light§e!",
 
+  "entity.lightwithin.earth_golem": "Earth Golem",
+
   "block.lightwithin.frozen_player_top": "Frozen Player Torso",
   "block.lightwithin.frozen_player_bottom": "Frozen Player Legs",
   "block.lightwithin.frozen_mob_top": "Frozen Mob Torso",

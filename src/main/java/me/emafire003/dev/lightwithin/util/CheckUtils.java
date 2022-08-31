@@ -386,11 +386,14 @@ public class CheckUtils {
      * @param player The player used as the center of the area to search of its enemies*/
     public static boolean areEnemies(PlayerEntity player, PlayerEntity player1){
         //TODO Config If Not allied == ENEMIES aka will be attacked
+        if(player.equals(player1)){
+            return false;
+        }
         if(!CheckUtils.CheckAllies.checkAlly(player, player1)){
             return true;
-            }
+        }
         if(FabricLoader.getInstance().isModLoaded("factions")){
-              return FactionChecker.areEnemies(player, player1);
+            return FactionChecker.areEnemies(player, player1);
         }
         return false;
     }
