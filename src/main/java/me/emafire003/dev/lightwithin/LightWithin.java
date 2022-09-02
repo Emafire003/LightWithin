@@ -390,7 +390,7 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 	public static void activateEarthen(LightComponent component, ServerPlayerEntity player){
 		List<LivingEntity> targets = new ArrayList<>();
 		if(component.getTargets().equals(TargetType.OTHER)){
-			player.sendMessage(Text.literal("Come forth my golem!"), true);
+			player.sendMessage(Text.literal("Come forth my earthen golem!"), true);
 		}
 
 		else if(component.getTargets().equals(TargetType.ENEMIES)){
@@ -413,10 +413,10 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 				}
 			}
 			targets.add(player);
-			player.sendMessage(Text.literal("Save us, and make us steadier!"), true);
+			player.sendMessage(Text.literal("The Rock shall protect us!"), true);
 		}if(component.getTargets().equals(TargetType.SELF)){
 			targets.add(player);
-			player.sendMessage(Text.literal("Save me, and make me steadier!"), true);
+			player.sendMessage(Text.literal("Split and grow around me!"), true);
 		}
 
 		if(debug){

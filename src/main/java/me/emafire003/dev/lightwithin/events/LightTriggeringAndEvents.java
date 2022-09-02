@@ -167,9 +167,9 @@ public class LightTriggeringAndEvents {
     }
 
     public static void checkEarthen(PlayerEntity player, LightComponent component, Entity entity){
-        /**If the player has ALL as target, he needs to be hurt (or an ally has to die, but that depends on the trigger)*/
-        if(component.getTargets().equals(TargetType.ALL)
-                && CheckUtils.checkSelfHealth(player, Config.HP_PERCENTAGE_SELF)
+        /**If the player or their allies are on low health or surrounded, a golem will spawn if the player has the OTHER target*/
+        if(component.getTargets().equals(TargetType.OTHER)
+                && (CheckUtils.checkAllyHealth(player, entity, Config.HP_PERCENTAGE_ALLIES) || CheckUtils.checkSelfHealth(player, Config.HP_PERCENTAGE_SELF+5))
                 && CheckUtils.checkSurrounded(player)
                 && CheckUtils.checkEarthen(player)
         ){
@@ -179,19 +179,19 @@ public class LightTriggeringAndEvents {
         else if(component.getTargets().equals(TargetType.ENEMIES)
                 && (CheckUtils.checkAllyHealth(player, entity, Config.HP_PERCENTAGE_ALLIES) || CheckUtils.checkSelfHealth(player, Config.HP_PERCENTAGE_SELF+5))
                 && CheckUtils.checkSurrounded(player)
-                && CheckUtils.checkFrost(player)
+                && CheckUtils.checkEarthen(player)
         ){
             sendReadyPacket((ServerPlayerEntity) player, true);
         }else if(component.getTargets().equals(TargetType.SELF)
                 && CheckUtils.checkSelfHealth(player, Config.HP_PERCENTAGE_SELF)
                 && CheckUtils.checkSurrounded(player)
-                && CheckUtils.checkFrost(player)
+                && CheckUtils.checkEarthen(player)
         ){
             sendReadyPacket((ServerPlayerEntity) player, true);
         }else if(component.getTargets().equals(TargetType.ALLIES)
                 && CheckUtils.checkAllyHealth(player, entity, Config.HP_PERCENTAGE_ALLIES)
                 && CheckUtils.checkSurrounded(player)
-                && CheckUtils.checkFrost(player)
+                && CheckUtils.checkEarthen(player)
         ){
             sendReadyPacket((ServerPlayerEntity) player, true);
         }
