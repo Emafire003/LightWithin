@@ -186,7 +186,7 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 
 		if(component.getTargets().equals(TargetType.SELF)){
 			targets.add(player);
-			player.sendMessage(Text.literal("Your light flowed trough you, sewing your wounds!"), true);
+			player.sendMessage(Text.translatable("light.description.activation.heal.allies"), true);
 		}
 		//There could be a bug where the player stands near only 1 ally that is 50% life or lower and
 		// then enderpearls to other companions and cures them. But it's ok because of lore,
@@ -205,7 +205,7 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 					}
 				}
 			}
-			player.sendMessage(Text.literal("Your light flowed trough you and your allies, sewing your wounds!"), true);
+			player.sendMessage(Text.translatable("light.description.activation.heal.allies"), true);
 
 		}
 
@@ -215,7 +215,7 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 				targets.add(player);
 			}
 			targets.addAll(player.getWorld().getEntitiesByClass(PassiveEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amount), (entity1 -> true)));
-			player.sendMessage(Text.literal("Your light flowed trough peaceful creatures, sewing their wounds!"), true);
+			player.sendMessage(Text.translatable("light.description.activation.heal.other"), true);
 		}
 		if(debug){
 			player.sendMessage(Text.literal("Ok light triggered"), false);
@@ -231,7 +231,7 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 
 		if(component.getTargets().equals(TargetType.SELF)){
 			targets.add(player);
-			player.sendMessage(Text.literal("Your light tensed up, shielding you from an hurtful future!"), true);
+			player.sendMessage(Text.translatable("light.description.activation.defense.self"), true);
 		}
 		//There could be a bug where the player stands near only 1 ally that is 50% life or lower and
 		// then enderpearls to other companions and cures them. But it's ok because of lore,
@@ -251,7 +251,7 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 					}
 				}
 			}
-			player.sendMessage(Text.literal("Your light tensed up, shielding your allies from an hurtful future!"), true);
+			player.sendMessage(Text.translatable("light.description.activation.defense.allies"), true);
 		}
 
 		//Same here
@@ -260,7 +260,7 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 				targets.add(player);
 			}
 			targets.addAll(player.getWorld().getEntitiesByClass(PassiveEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amount), (entity1 -> true)));
-			player.sendMessage(Text.literal("Your light tensed up, shielding peaceful creatures from an hurtful future!"), true);
+			player.sendMessage(Text.translatable("light.description.activation.defense.other"), true);
 		}
 		if(debug){
 			player.sendMessage(Text.literal("Ok light triggered"), false);
@@ -276,7 +276,7 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 
 		if(component.getTargets().equals(TargetType.SELF)){
 			targets.add(player);
-			player.sendMessage(Text.literal("Your light shone bright, strengthening your soul!"), true);
+			player.sendMessage(Text.translatable("light.description.activation.strength.self"), true);
 		}
 		//There could be a bug where the player stands near only 1 ally that is 50% life or lower and
 		// then enderpearls to other companions and cures them. But it's ok because of lore,
@@ -294,7 +294,7 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 					}
 				}
 			}
-			player.sendMessage(Text.literal("Your light shone bright, strengthening your allies!"), true);
+			player.sendMessage(Text.translatable("light.description.activation.strength.allies"), true);
 
 		}
 
@@ -304,7 +304,7 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 				targets.add(player);
 			}
 			targets.addAll(player.getWorld().getEntitiesByClass(PassiveEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amount), (entity1 -> true)));
-			player.sendMessage(Text.literal("Your light shone bright, strengthening peaceful creatures around you!"), true);
+			player.sendMessage(Text.translatable("light.description.activation.strength.other"), true);
 		}
 
 
@@ -323,7 +323,7 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 		if(component.getTargets().equals(TargetType.ALL)){
 			targets.addAll(player.getWorld().getEntitiesByClass(LivingEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amount), (entity1 -> true)));
 			targets.remove(player);
-			player.sendMessage(Text.literal("Your light wants to incinerate everything that stands in your way!"), true);
+			player.sendMessage(Text.translatable("light.description.activation.blazing.all"), true);
 		}
 
 		else if(component.getTargets().equals(TargetType.ENEMIES)){
@@ -333,7 +333,7 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 					targets.add(ent);
 				}
 			}
-			player.sendMessage(Text.literal("Your light wants to incinerate the enemies that stand before you!"), true);
+			player.sendMessage(Text.translatable("light.description.activation.blazing.enemies"), true);
 		}
 
 
@@ -350,7 +350,7 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 		if(component.getTargets().equals(TargetType.ALL)){
 			targets.addAll(player.getWorld().getEntitiesByClass(LivingEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amount), (entity1 -> true)));
 			targets.remove(player);
-			player.sendMessage(Text.literal("Everything will be frozen in ice!"), true);
+			player.sendMessage(Text.translatable("light.description.activation.frost.all"), true);
 		}
 
 		else if(component.getTargets().equals(TargetType.ENEMIES)){
@@ -360,7 +360,7 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 					targets.add(ent);
 				}
 			}
-			player.sendMessage(Text.literal("All your enemies will be made into a statue of ice!"), true);
+			player.sendMessage(Text.translatable("light.description.activation.frost.enemies"), true);
 		}else if(component.getTargets().equals(TargetType.ALLIES)){
 			List<LivingEntity> entities = player.getWorld().getEntitiesByClass(LivingEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amount), (entity1 -> true));
 			for(LivingEntity ent : entities){
@@ -373,10 +373,10 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 				}
 			}
 			targets.add(player);
-			player.sendMessage(Text.literal("Go forth ice, and protect us!"), true);
+			player.sendMessage(Text.translatable("light.description.activation.frost.allies"), true);
 		}if(component.getTargets().equals(TargetType.SELF)){
 			targets.add(player);
-			player.sendMessage(Text.literal("Go forth ice, and protect me!"), true);
+			player.sendMessage(Text.translatable("light.description.activation.frost.self"), true);
 		}
 
 		if(debug){
@@ -390,7 +390,7 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 	public static void activateEarthen(LightComponent component, ServerPlayerEntity player){
 		List<LivingEntity> targets = new ArrayList<>();
 		if(component.getTargets().equals(TargetType.OTHER)){
-			player.sendMessage(Text.literal("Come forth my earthen golem!"), true);
+			player.sendMessage(Text.translatable("light.description.activation.earthen.other"), true);
 		}
 
 		else if(component.getTargets().equals(TargetType.ENEMIES)){
@@ -400,7 +400,7 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 					targets.add(ent);
 				}
 			}
-			player.sendMessage(Text.literal("The earth shall split under the soles of the enemy!"), true);
+			player.sendMessage(Text.translatable("light.description.activation.earthen.enemies"), true);
 		}else if(component.getTargets().equals(TargetType.ALLIES)){
 			List<LivingEntity> entities = player.getWorld().getEntitiesByClass(LivingEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amount), (entity1 -> true));
 			for(LivingEntity ent : entities){
@@ -413,10 +413,10 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 				}
 			}
 			targets.add(player);
-			player.sendMessage(Text.literal("The Rock shall protect us!"), true);
+			player.sendMessage(Text.translatable("light.description.activation.earthen.allies"), true);
 		}if(component.getTargets().equals(TargetType.SELF)){
 			targets.add(player);
-			player.sendMessage(Text.literal("Split and grow around me!"), true);
+			player.sendMessage(Text.translatable("light.description.activation.earthen.self"), true);
 		}
 
 		if(debug){

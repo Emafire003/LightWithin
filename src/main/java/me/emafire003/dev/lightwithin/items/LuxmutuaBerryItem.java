@@ -63,10 +63,12 @@ public class LuxmutuaBerryItem extends Item {
             LightComponent component = LightWithin.LIGHT_COMPONENT.get(user);
 
             Pair<InnerLightType, TargetType> current = new Pair<>(component.getType(), component.getTargets());
-            Pair<InnerLightType, TargetType> newone = LightTriggeringAndEvents.determineTypeAndTarget(UUID.randomUUID().toString().toLowerCase().split("-"), 1,3);
+            String[] id_bits = UUID.randomUUID().toString().toLowerCase().split("-");
+            Pair<InnerLightType, TargetType> newone = LightTriggeringAndEvents.determineTypeAndTarget(id_bits, 1,3);
 
             while(current.getFirst().equals(newone.getFirst())){
-                newone = LightTriggeringAndEvents.determineTypeAndTarget(UUID.randomUUID().toString().toLowerCase().split("-"), 1,3);
+                id_bits = UUID.randomUUID().toString().toLowerCase().split("-");
+                newone = LightTriggeringAndEvents.determineTypeAndTarget(id_bits, 1,3);
             }
 
             component.setType(newone.getFirst());

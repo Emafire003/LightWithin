@@ -33,5 +33,30 @@
   "light.description.strength": "You have a vigorous light, lending its powers to your blade",
   "light.description.blazing": "It is already firing up within you, ready to burst every moment",
   "light.description.frost": "Even if cold as ice, your light is ready to assist you",
-  "light.description.earthen": "Your light draws its power from the earth around you!"
+  "light.description.earthen": "Your light draws its power from the earth around you!",
+
+  "light.description.activation.heal.self": "Your light flowed trough you, sewing your wounds!",
+  "light.description.activation.heal.allies": "Your light flowed trough you and your allies, sewing your wounds!",
+  "light.description.activation.heal.other": "Your light flowed trough peaceful creatures, sewing their wounds!",
+
+  "light.description.activation.defense.self": "Your light tensed up, shielding you from an hurtful future!",
+  "light.description.activation.defense.allies": "Your light tensed up, shielding your allies from an hurtful future!",
+  "light.description.activation.defense.other": "Your light tensed up, shielding peaceful creatures from an hurtful future!",
+
+  "light.description.activation.strength.self": "Your light shone bright, strengthening your soul!",
+  "light.description.activation.strength.allies": "Your light shone bright, strengthening your allies!",
+  "light.description.activation.strength.other": "Your light shone bright, strengthening peaceful creatures around you!",
+
+  "light.description.activation.blazing.enemies": "Your light wants to incinerate the enemies that stand before you!",
+  "light.description.activation.blazing.all": "Your light will incinerate everything that stands in your way!",
+
+  "light.description.activation.frost.enemies": "All your enemies will be made into a statue of ice!",
+  "light.description.activation.frost.all": "Everything will be frozen in ice!",
+  "light.description.activation.frost.self": "Go forth ice, and protect me!",
+  "light.description.activation.frost.allies": "Go forth ice, and protect us!",
+
+  "light.description.activation.earthen.enemies": "The earth shall split under the soles of the enemy!",
+  "light.description.activation.earthen.other": "Come forth my earthen golem!",
+  "light.description.activation.earthen.self": "Split and grow around me!",
+  "light.description.activation.earthen.allies": "The Rock shall protect us!"
 }

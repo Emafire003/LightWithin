@@ -108,8 +108,8 @@ public class GetLightCommand implements LightCommand{
 
         try{
             Map<StatusEffect, StatusEffectInstance> effect_map = target.getActiveStatusEffects();
-            if(effect_map.containsKey(LightEffects.LIGHT_ACTIVE)){
-                int cooldown = effect_map.get(LightEffects.LIGHT_ACTIVE).getDuration()/20;
+            if(effect_map.containsKey(LightEffects.LIGHT_FATIGUE)){
+                int cooldown = effect_map.get(LightEffects.LIGHT_FATIGUE).getDuration()/20;
                 source.sendFeedback(Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The current cooldown of §d" + target.getName().getString() + "§e is: " ).formatted(Formatting.YELLOW)
                         .append(Text.literal("§a"+cooldown))), true);
             }else{

@@ -108,6 +108,7 @@ public class EarthenLight extends InnerLight {
         if(component.getTargets().equals(TargetType.ENEMIES)){
             //TODO maybe create a boudler projectile in the future
             //TODO probably need to extend the enemy radius
+            LightParticlesUtil.spawnLightTypeParticle(LightParticles.EARTHENLIGHT_PARTICLE, (ServerWorld) caster.getWorld(), caster.getPos());
             LivingEntity oldtarget = null;
             for(LivingEntity target : this.targets){
                 float r = target.getDimensions(EntityPose.STANDING).width/2;
@@ -118,8 +119,8 @@ public class EarthenLight extends InnerLight {
 
                 //LightParticlesUtil.spawnCylinderBlock(target.getPos(), 2.5, 50, 7, 0.2, Blocks.DIRT.getDefaultState(), (ServerWorld) caster.getWorld());
                 LightParticlesUtil.spawnCircle(target.getPos().add(0, 0.3, 0), 2.5, 150, new BlockStateParticleEffect(ParticleTypes.BLOCK, Blocks.DIRT.getDefaultState()), (ServerWorld) caster.getWorld());
-                LightParticlesUtil.spawnLightTypeParticle(LightParticles.EARTHENLIGHT_PARTICLE, (ServerWorld) target.getWorld(), target.getPos());
                 LightParticlesUtil.spawnCircle(target.getPos().add(0, 0.45, 0), 1.5, 150, new BlockStateParticleEffect(ParticleTypes.BLOCK, Blocks.MUD_BRICKS.getDefaultState()), (ServerWorld) caster.getWorld());
+
 
                 //If the oldtarget and the new one have a distance greater than 3 it will spawn a new hole,
                 //otherwise it will skip it, since probably they would end up in the same hole regardless
@@ -164,7 +165,7 @@ public class EarthenLight extends InnerLight {
         }else if(component.getTargets().equals(TargetType.SELF)){
             LightParticlesUtil.spawnLightTypeParticle(LightParticles.EARTHENLIGHT_PARTICLE, (ServerWorld) caster.getWorld(), caster.getPos());
             caster.addStatusEffect(new StatusEffectInstance(LightEffects.SOLID_ROCK, caster.getStatusEffect(LightEffects.LIGHT_ACTIVE).getDuration(), (int) this.power_multiplier, false, false));
-            caster.playSound(LightSounds.FROST_LIGHT, 1, 1);
+            caster.playSound(LightSounds.EARTHEN_LIGHT, 1, 1);
             if(Config.STRUCTURE_GRIEFING && !caster.getWorld().isClient) {
                 StructurePlacerAPI placer;
                 if(this.power_multiplier >= 6){

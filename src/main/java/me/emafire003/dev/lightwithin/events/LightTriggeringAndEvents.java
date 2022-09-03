@@ -378,62 +378,6 @@ public class LightTriggeringAndEvents {
         }
     }
 
-    public static TargetType determineAttackAndBuffTarget(String[] id_bits, int target_bit){
-        //If it's all letters or numbers, or if there is at least one number from 5-9 or e/f then all
-        //NOPE --if the char at the position 2 is abc && the nextone is a digit then it's other-- NOPE
-        //in the other cases it's enemies
-        boolean all_cond1 = id_bits[target_bit].matches("[0-9]+") || id_bits[target_bit].matches("[f-p]+");
-        boolean all_cond2 = false;
-        for(int i = 0; i<id_bits[target_bit].length()-1; i++){
-            if(all_cond1){
-                break;
-            }
-            char a = id_bits[target_bit].charAt(i);
-            if(String.valueOf(a).matches("[5-9]")){
-                all_cond2 = true;
-                break;
-            }
-        }
-        if(!all_cond1 == !all_cond2){
-            return TargetType.SELF;
-        }
-        else if(all_cond1 || all_cond2){
-            return TargetType.ALL;
-        }else if(String.valueOf(id_bits[target_bit].charAt(2)).matches("[a-c]") && Character.isDigit(id_bits[target_bit].charAt(3))){
-            return TargetType.ALLIES;
-        }else{
-            return TargetType.ENEMIES;
-        }
-    }
-
-    public static TargetType determineEnemiesAlliesSelfOtherTarget(String[] id_bits, int target_bit){
-        //If it's all letters or numbers, or if there is at least one number from 5-9 or e/f then all
-        //NOPE --if the char at the position 2 is abc && the nextone is a digit then it's other-- NOPE
-        //in the other cases it's enemies
-        boolean all_cond1 = id_bits[target_bit].matches("[0-9]+") || id_bits[target_bit].matches("[f-p]+");
-        boolean all_cond2 = false;
-        for(int i = 0; i<id_bits[target_bit].length()-1; i++){
-            if(all_cond1){
-                break;
-            }
-            char a = id_bits[target_bit].charAt(i);
-            if(String.valueOf(a).matches("[5-9]")){
-                all_cond2 = true;
-                break;
-            }
-        }
-        if(!all_cond1 == !all_cond2){
-            return TargetType.SELF;
-        }
-        else if(all_cond1 || all_cond2){
-            return TargetType.OTHER;
-        }else if(String.valueOf(id_bits[target_bit].charAt(2)).matches("[a-c]") && Character.isDigit(id_bits[target_bit].charAt(3))){
-            return TargetType.ALLIES;
-        }else{
-            return TargetType.ENEMIES;
-        }
-    }
-
     /**
      *
      *
@@ -459,7 +403,7 @@ public class LightTriggeringAndEvents {
         }
         else if(cond1 || cond2 && targets_ordered.size() < 2){
             return targets_ordered.get(1);
-        }else if(String.valueOf(id_bits[target_bit].charAt(2)).matches("[a-c]") && Character.isDigit(id_bits[target_bit].charAt(3)) && targets_ordered.size() < 4){
+        }else if(String.valueOf(id_bits[target_bit].charAt(2)).matches("[a-c]") && Character.isDigit(id_bits[target_bit].charAt(3)) && targets_ordered.size() < 3){
             return targets_ordered.get(3);
         }else if(String.valueOf(id_bits[target_bit].charAt(3)).matches("[l-m]") && Character.isDigit(id_bits[target_bit].charAt(2)) && targets_ordered.size() < 4){
             return targets_ordered.get(4);
@@ -469,32 +413,7 @@ public class LightTriggeringAndEvents {
         }
     }
 
-    public static TargetType determineBuffTarget(String[] id_bits, int target_bit){
-        //If it's all letters or numbers, or if there is at least one number from 5-9 or e/f then allies
-        //if the char at the position 2 is abc && the nextone is a digit then it's other
-        //in the other cases it's self
-        boolean allies_cond1 = id_bits[target_bit].matches("[0-9]+") || id_bits[target_bit].matches("[a-f]+");
-        boolean allies_cond2 = false;
-        for(int i = 0; i<id_bits[target_bit].length()-1; i++){
-            if(allies_cond1){
-                break;
-            }
-            char a = id_bits[target_bit].charAt(i);
-            if(String.valueOf(a).matches("[5-9]")){
-                allies_cond2 = true;
-                break;
-            }
-        }
-        if(allies_cond1 || allies_cond2){
-            return TargetType.ALLIES;
-        }else if(String.valueOf(id_bits[target_bit].charAt(2)).matches("[a-c]") && Character.isDigit(id_bits[target_bit].charAt(3))){
-            return TargetType.OTHER;
-        }else{
-            return TargetType.SELF;
-        }
-    }
-
-    //0,0015% of probabilty of gaining a light? (well times 2)
+    //0,0015% of probabilty of gaining a legendary light? (well times 2)
     //
     public static Pair<InnerLightType, TargetType> determineTypeAndTarget(String[] id_bits, int type_bit, int target_bit){
         int i;
