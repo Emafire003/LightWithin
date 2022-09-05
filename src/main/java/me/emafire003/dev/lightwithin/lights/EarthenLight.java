@@ -124,15 +124,13 @@ public class EarthenLight extends InnerLight {
 
                 //If the oldtarget and the new one have a distance greater than 3 it will spawn a new hole,
                 //otherwise it will skip it, since probably they would end up in the same hole regardless
-                if(oldtarget == null || oldtarget.distanceTo(target) > 3){
-                    StructurePlacerAPI placer = new StructurePlacerAPI((ServerWorld) caster.getWorld(), new Identifier(MOD_ID, "earth_hole"), target.getBlockPos(), BlockMirror.NONE, BlockRotation.NONE, true, 1f, new BlockPos(-3, -10, -3));
+                if((oldtarget == null || oldtarget.distanceTo(target) > 3) && Config.STRUCTURE_GRIEFING){
+                    StructurePlacerAPI placer = new StructurePlacerAPI((ServerWorld) caster.getWorld(), new Identifier(MOD_ID, "earth_hole"), target.getBlockPos(), BlockMirror.NONE, BlockRotation.NONE, true, 1f, new BlockPos(-3, -11, -3));
                     placer.loadStructure();
                 }
                 oldtarget = target;
-                //TODO add minging fatigue?
-                //TODO maybe configable?
                 target.playSound(LightSounds.EARTHEN_LIGHT, 0.9f, 1);
-                target.addStatusEffect(new StatusEffectInstance(StatusEffects.MINING_FATIGUE, caster.getStatusEffect(LightEffects.LIGHT_ACTIVE).getDuration(), (int) this.power_multiplier, false, false));
+                target.addStatusEffect(new StatusEffectInstance(StatusEffects.MINING_FATIGUE, caster.getStatusEffect(LightEffects.LIGHT_ACTIVE).getDuration(), (int) this.power_multiplier, false, true));
             }
             //It will spawn a wall around the allies and self, depending on the power level it could have a secret tunnel to escape underneath
         }else if(component.getTargets().equals(TargetType.ALLIES)){
