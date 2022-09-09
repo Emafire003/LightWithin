@@ -77,8 +77,10 @@ public class Config {
     public static boolean NON_FUNDAMENTAL_STRUCTURE_GRIEFING;
 
     public static boolean TARGET_FEEDBACK;
-    public static boolean RESET_ON_JOIN;
 
+    public static boolean AUTO_LIGHT_ACTIVATION;
+
+    public static boolean RESET_ON_JOIN;
     public static void registerConfigs() {
         configs = new ConfigProvider();
         createConfigs();
@@ -159,6 +161,9 @@ public class Config {
 
         configs.addKeyValuePair(new Pair<>("command_target_feedback", true), "Should a message be sent the target of a command, such us when changing its innerlight?");
         configs.addKeyValuePair(new Pair<>("reset_on_join", false), "Should the InnerLight be compleatly resetted upon joining the server/world again? Useful after an update of the mod that added new Light Types");
+
+        configs.addKeyValuePair(new Pair<>("auto_light_activation", false), "Should the light be activated without the player needing to press the button? (Suggestion: keep it to false)");
+
     }
 
     public static void reloadConfig(){
@@ -235,6 +240,8 @@ public class Config {
         TARGET_FEEDBACK = CONFIG.getOrDefault("command_target_feedback", true);
 
         RESET_ON_JOIN = CONFIG.getOrDefault("reset_on_join", false);
+
+        AUTO_LIGHT_ACTIVATION = Config.CONFIG.getOrDefault("auto_light_activation", false);
 
 
     }

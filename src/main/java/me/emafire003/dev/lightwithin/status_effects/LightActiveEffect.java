@@ -5,6 +5,7 @@ import me.emafire003.dev.coloredglowlib.util.Color;
 import me.emafire003.dev.lightwithin.component.LightComponent;
 import me.emafire003.dev.lightwithin.config.Config;
 import me.emafire003.dev.lightwithin.lights.InnerLight;
+import me.emafire003.dev.lightwithin.lights.InnerLightType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.AttributeContainer;
 import net.minecraft.entity.effect.StatusEffect;
@@ -12,6 +13,8 @@ import net.minecraft.entity.effect.StatusEffectCategory;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.particle.ParticleTypes;
+import net.minecraft.server.network.ServerPlayerEntity;
 
 import static me.emafire003.dev.lightwithin.LightWithin.LIGHT_COMPONENT;
 
@@ -45,6 +48,12 @@ public class LightActiveEffect extends StatusEffect {
             former_color = ColoredGlowLib.getEntityColor(entity);
             rainbow = ColoredGlowLib.getEntityRainbowColor(entity);
             already_run = true;
+        }
+        if(entity instanceof ServerPlayerEntity){
+            LightComponent component = LIGHT_COMPONENT.get(entity);
+            if(component.getType().equals(InnerLightType.WIND)){
+                ((ServerPlayerEntity) entity).getWorld().spawnParticles((ServerPlayerEntity) entity, ParticleTypes.CLOUD, false, entity.getX(), entity.getY(), entity.getZ(), 5, 0, 0, 0, 0.1);
+            }
         }
     }
 

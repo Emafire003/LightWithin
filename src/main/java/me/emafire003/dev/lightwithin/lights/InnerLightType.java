@@ -33,7 +33,10 @@ public enum InnerLightType {
     //simply blow away the enemies and give speed and slow falling to self? The "ALLIES" could be like  buff both self and allies? With high speed and jump boost and stuff
     AQUA, //needs something watery (bottle/bucket) in hand or water around
     //this is going to be quite complex
-
+	
+	VELOX, //Like maybe it triggers only for self and allies, and speeds away like superfast
+	VENOMOUS, //poisons everything around/only enemies, nullifies poison effect for self maybe spawing an area of effect? And other things like these
+	
     CONCEAL,
     SPEED,
     SLOW,

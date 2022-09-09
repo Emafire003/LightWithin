@@ -64,7 +64,8 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 			entry(InnerLightType.STRENGTH, Arrays.asList(TargetType.SELF, TargetType.ALLIES, TargetType.OTHER)),
 			entry(InnerLightType.BLAZING, Arrays.asList(TargetType.ENEMIES, TargetType.ALL)),
 			entry(InnerLightType.FROST, Arrays.asList(TargetType.SELF, TargetType.ALLIES, TargetType.ENEMIES, TargetType.ALL)),
-			entry(InnerLightType.EARTHEN, Arrays.asList(TargetType.SELF, TargetType.ALLIES, TargetType.ENEMIES, TargetType.OTHER))
+			entry(InnerLightType.EARTHEN, Arrays.asList(TargetType.SELF, TargetType.ALLIES, TargetType.ENEMIES, TargetType.OTHER)),
+			entry(InnerLightType.WIND, Arrays.asList(TargetType.SELF, TargetType.ALLIES, TargetType.OTHER))
 	);
 
 
@@ -114,7 +115,7 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 			var results = LightUsedPacketC2S.read(buf);
 			server.execute(() -> {
 				try{
-					if(results){
+					if(results || Config.AUTO_LIGHT_ACTIVATION){
 						activateLight(player);
 					}
 				}catch (NoSuchElementException e){
@@ -131,7 +132,7 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 		return user.hasStatusEffect(LightEffects.LIGHT_FATIGUE) || user.hasStatusEffect(LightEffects.LIGHT_ACTIVE);
 	}
 
-	public static void activateLight(ServerPlayerEntity player){
+	public static void activateLight(PlayerEntity player){
 		if(!(player.hasStatusEffect(LightEffects.LIGHT_FATIGUE) || player.hasStatusEffect(LightEffects.LIGHT_ACTIVE))){
 
 			if(debug){
@@ -164,25 +165,29 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 		}else if(type.equals(InnerLightType.EARTHEN)){
 			activateEarthen(component, player);
 			component.setPrevColor(ColoredGlowLib.getEntityColor(player));
+		}else if(type.equals(InnerLightType.WIND)){
+			activateWind(component, player);
+			component.setPrevColor(ColoredGlowLib.getEntityColor(player));
 		}
 		//for now defaults here
 		else{
-			activateHeal(component, player);
+			activateHeal(component, (ServerPlayerEntity) player);
 			component.setPrevColor(ColoredGlowLib.getEntityColor(player));
 		}
 
 		if(Config.PLAYER_GLOWS){
 			player.setGlowing(true);
 		}
+		if(!player.getWorld().isClient){
+			LightParticlesUtil.spawnDefaultLightParticleSequence((ServerPlayerEntity) player);
+			sendRenderRunePacket((ServerPlayerEntity) player, type);
+		}
 
-		LightParticlesUtil.spawnDefaultLightParticleSequence(player);
-		sendRenderRunePacket(player, type);
 	}
 
 	//=======================HEAL LIGHT=======================
-	public static void activateHeal(LightComponent component, ServerPlayerEntity player){
+	public static void activateHeal(LightComponent component, PlayerEntity player){
 		List<LivingEntity> targets = new ArrayList<>();
-		//TODO add config option for setting the amout before it triggers (what did i mean by this i don't know)
 
 		if(component.getTargets().equals(TargetType.SELF)){
 			targets.add(player);
@@ -225,19 +230,12 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 	}
 
 	//=======================Defense Light=======================
-	public static void activateDefense(LightComponent component, ServerPlayerEntity player){
+	public static void activateDefense(LightComponent component, PlayerEntity player){
 		List<LivingEntity> targets = new ArrayList<>();
-		//TODO add config option for setting the amout before it triggers (again, amount of what? dunno)
-
 		if(component.getTargets().equals(TargetType.SELF)){
 			targets.add(player);
 			player.sendMessage(Text.translatable("light.description.activation.defense.self"), true);
 		}
-		//There could be a bug where the player stands near only 1 ally that is 50% life or lower and
-		// then enderpearls to other companions and cures them. But it's ok because of lore,
-		// like the light saw a an ally struggling and activated. Then it heals whoever is near.
-		// It's not a bug, it's a feature now.
-		//Yay.
 		else if(component.getTargets().equals(TargetType.ALLIES)){
 			List<LivingEntity> entities = player.getWorld().getEntitiesByClass(LivingEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amount), (entity1 -> true));
 			for(LivingEntity ent : entities){
@@ -270,19 +268,13 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 	}
 
 	//=======================Strength Light=======================
-	public static void activateStrength(LightComponent component, ServerPlayerEntity player){
+	public static void activateStrength(LightComponent component, PlayerEntity player){
 		List<LivingEntity> targets = new ArrayList<>();
-		//TODO add config option for setting the amout before it triggers (look up)
 
 		if(component.getTargets().equals(TargetType.SELF)){
 			targets.add(player);
 			player.sendMessage(Text.translatable("light.description.activation.strength.self"), true);
 		}
-		//There could be a bug where the player stands near only 1 ally that is 50% life or lower and
-		// then enderpearls to other companions and cures them. But it's ok because of lore,
-		// like the light saw a an ally struggling and activated. Then it heals whoever is near.
-		// It's not a bug, it's a feature now.
-		//Yay.
 		else if(component.getTargets().equals(TargetType.ALLIES)){
 			List<LivingEntity> entities = player.getWorld().getEntitiesByClass(LivingEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amount), (entity1 -> true));
 			for(LivingEntity ent : entities){
@@ -316,7 +308,7 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 	}
 
 	//=======================Blazing Light=======================
-	public static void activateBlazing(LightComponent component, ServerPlayerEntity player){
+	public static void activateBlazing(LightComponent component, PlayerEntity player){
 		List<LivingEntity> targets = new ArrayList<>();
 		//TODO add config option for setting the amout before it triggers (look up)
 
@@ -345,7 +337,7 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 	}
 
 	//=======================Frost Light=======================
-	public static void activateFrost(LightComponent component, ServerPlayerEntity player){
+	public static void activateFrost(LightComponent component, PlayerEntity player){
 		List<LivingEntity> targets = new ArrayList<>();
 		if(component.getTargets().equals(TargetType.ALL)){
 			targets.addAll(player.getWorld().getEntitiesByClass(LivingEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amount), (entity1 -> true)));
@@ -387,7 +379,7 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 	}
 
 	//=======================Earthen Light=======================
-	public static void activateEarthen(LightComponent component, ServerPlayerEntity player){
+	public static void activateEarthen(LightComponent component, PlayerEntity player){
 		List<LivingEntity> targets = new ArrayList<>();
 		if(component.getTargets().equals(TargetType.OTHER)){
 			player.sendMessage(Text.translatable("light.description.activation.earthen.other"), true);
@@ -423,6 +415,34 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 			player.sendMessage(Text.literal("Ok light triggered"), false);
 		}
 		new EarthenLight(targets, component.getMaxCooldown(), component.getPowerMultiplier(),
+				component.getDuration(), player).execute();
+	}
+
+	//=======================Wind Light=======================
+	public static void activateWind(LightComponent component, PlayerEntity player){
+		List<LivingEntity> targets = new ArrayList<>();
+		if(component.getTargets().equals(TargetType.ALLIES)){
+			List<LivingEntity> entities = player.getWorld().getEntitiesByClass(LivingEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amount), (entity1 -> true));
+			for(LivingEntity ent : entities){
+				if(/*!entity.equals(ent) && */CheckUtils.CheckAllies.checkAlly(player, ent)){
+					targets.add(ent);
+				}else if(ent instanceof TameableEntity){
+					if(player.equals(((TameableEntity) ent).getOwner())){
+						targets.add(ent);
+					}
+				}
+			}
+			targets.add(player);
+			player.sendMessage(Text.translatable("light.description.activation.wind.allies"), true);
+		}if(component.getTargets().equals(TargetType.SELF)){
+			targets.add(player);
+			player.sendMessage(Text.translatable("light.description.activation.wind.self"), true);
+		}
+
+		if(debug){
+			player.sendMessage(Text.literal("Ok light triggered"), false);
+		}
+		new WindLight(targets, component.getMaxCooldown(), component.getPowerMultiplier(),
 				component.getDuration(), player).execute();
 	}
 

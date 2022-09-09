@@ -8,6 +8,7 @@ import me.emafire003.dev.lightwithin.entities.earth_golem.EarthGolemEntityRender
 import me.emafire003.dev.lightwithin.lights.InnerLightType;
 import me.emafire003.dev.lightwithin.networking.LightReadyPacketS2C;
 import me.emafire003.dev.lightwithin.networking.RenderRunePacketS2C;
+import me.emafire003.dev.lightwithin.util.fabridash.WindLightVelocityPacketS2C;
 import me.emafire003.dev.lightwithin.particles.LightParticleV3;
 import me.emafire003.dev.lightwithin.particles.LightParticles;
 import me.emafire003.dev.lightwithin.sounds.LightSounds;
@@ -45,6 +46,7 @@ public class LightWithinClient implements ClientModInitializer {
        ActivationKey.register();
        registerLightReadyPacket();
        registerRenderRunesPacket();
+       registerWindLightVelocityPacket();
        Events.registerEventHandlerClass(event_handler);
        event_handler.registerRunesRenderer();
        ParticleFactoryRegistry.getInstance().register(LightParticles.HEALLIGHT_PARTICLE, LightParticleV3.Factory::new);
@@ -125,6 +127,26 @@ public class LightWithinClient implements ClientModInitializer {
                     if(results.equals(InnerLightType.HEAL)){
                         client.player.playSound(LightSounds.HEAL_LIGHT, 1,1);
                     }
+                }catch (NoSuchElementException e){
+                    LOGGER.warn("No value in the packet, probably not a big problem");
+                }catch (Exception e){
+                    LOGGER.error("There was an error while getting the packet!");
+                    e.printStackTrace();
+                }
+            });
+        }));
+    }
+
+    private void registerWindLightVelocityPacket(){
+        LOGGER.info("Registering windlight velocity packet receiver on client...");
+        ClientPlayNetworking.registerGlobalReceiver(WindLightVelocityPacketS2C.ID, ((client, handler, buf, responseSender) -> {
+            var results = WindLightVelocityPacketS2C.read(buf);
+
+            client.execute(() -> {
+                try{
+                    client.player.setVelocity(results);
+                    //client.player.move(MovementType.SELF, client.player.getVelocity());
+
                 }catch (NoSuchElementException e){
                     LOGGER.warn("No value in the packet, probably not a big problem");
                 }catch (Exception e){

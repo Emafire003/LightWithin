@@ -1,6 +1,5 @@
 package me.emafire003.dev.lightwithin.lights;
 
-import com.google.common.collect.Maps;
 import me.emafire003.dev.coloredglowlib.ColoredGlowLib;
 import me.emafire003.dev.coloredglowlib.util.Color;
 import me.emafire003.dev.lightwithin.component.LightComponent;
@@ -13,30 +12,21 @@ import me.emafire003.dev.lightwithin.sounds.LightSounds;
 import me.emafire003.dev.lightwithin.status_effects.LightEffects;
 import me.emafire003.dev.lightwithin.util.TargetType;
 import me.emafire003.dev.structureplacerapi.StructurePlacerAPI;
-import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityPose;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.attribute.*;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.particle.BlockStateParticleEffect;
-import net.minecraft.particle.DustParticleEffect;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
-import net.minecraft.tag.BlockTags;
-import net.minecraft.tag.TagKey;
-import net.minecraft.text.Text;
 import net.minecraft.util.BlockMirror;
 import net.minecraft.util.BlockRotation;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3f;
-import net.minecraft.util.registry.Registry;
 
 import java.util.*;
 
@@ -76,17 +66,17 @@ public class EarthenLight extends InnerLight {
     }
 
     private void checkSafety(){
-        if(this.power_multiplier > Config.FROST_MAX_POWER){
-            power_multiplier = Config.FROST_MAX_POWER;
+        if(this.power_multiplier > Config.EARTHEN_MAX_POWER){
+            power_multiplier = Config.EARTHEN_MAX_POWER;
         }
-        if(this.power_multiplier < Config.FROST_MIN_POWER){
-            power_multiplier = Config.FROST_MIN_POWER;
+        if(this.power_multiplier < Config.EARTHEN_MIN_POWER){
+            power_multiplier = Config.EARTHEN_MIN_POWER;
         }
-        if(this.duration > Config.FROST_MAX_DURATION){
-            this.duration = Config.FROST_MAX_DURATION;
+        if(this.duration > Config.EARTHEN_MAX_DURATION){
+            this.duration = Config.EARTHEN_MAX_DURATION;
         }
-        if(this.duration < Config.FROST_MIN_DURATION){
-            this.duration = Config.FROST_MIN_DURATION;
+        if(this.duration < Config.EARTHEN_MIN_DURATION){
+            this.duration = Config.EARTHEN_MIN_DURATION;
         }
     }
 

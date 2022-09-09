@@ -13,6 +13,7 @@ import net.fabricmc.fabric.api.event.player.AttackEntityCallback;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.passive.PassiveEntity;
 import net.minecraft.entity.passive.TameableEntity;
@@ -21,6 +22,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.math.Box;
+import net.minecraft.util.math.random.Random;
 
 import java.util.*;
 
@@ -240,8 +242,22 @@ public class LightTriggeringAndEvents {
         //this works
         //TODO lights could be levelled up maybe
 
-        //Player being attacked by something
+        //Player (or other entity) being attacked by something else
         EntityAttackEntityEvent.EVENT.register(((attacker, target) -> {
+            //Checks if an attack should miss or not
+            if(target.hasStatusEffect(LightEffects.DODGING)){
+                StatusEffectInstance status = target.getStatusEffect(LightEffects.DODGING);
+                Random random = attacker.getRandom();
+                int amp = 0;
+                if(status.getAmplifier() > 100){
+                    amp = 100;
+                }else{
+                    amp = status.getAmplifier();
+                }
+                if(random.nextInt(100) >= amp){
+                    return;
+                }
+            }
             //Checks if someone is attacked and if they are the one getting attacked
             if(target instanceof PlayerEntity){
                 entityAttackEntityTriggerCheck((PlayerEntity) target, attacker);
