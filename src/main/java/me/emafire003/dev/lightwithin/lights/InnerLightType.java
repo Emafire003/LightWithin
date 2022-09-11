@@ -48,6 +48,7 @@ public enum InnerLightType {
     JUMPY, //Check if there are blocks too high and the player needs. I dunno. Something? Maybe only when in combat?
     FIREFLIES_MASTER, //Welp, not coming with 1.19 sooooo. It's gonna shoot out firefiles that attack or explode integrations with the Fireflally mod xD
     GENERIC,
+    FROG, //What's it doing here?
     NONE
 }
 //TODO for the elemental ones spawn block structures under the player's feet. Maybe they could have two stages targets, like one where they attack and one where they defend. FOr example, summoning a wall of thin ice to protect an ally from direct hit. Like some kinda ice which has low durability and shatters easly and melts afeter a few seconds. This could be done for the other elements as well.

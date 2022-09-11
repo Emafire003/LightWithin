@@ -84,6 +84,11 @@ public class HealLight extends InnerLight {
         }
         caster.getWorld().playSound(caster, caster.getBlockPos(), LightSounds.HEAL_LIGHT, SoundCategory.AMBIENT, 1,1);
         for(LivingEntity target : this.targets){
+
+            if(target.hasStatusEffect(StatusEffects.POISON)){
+                target.removeStatusEffect(StatusEffects.POISON);
+            }
+
             target.playSound(LightSounds.HEAL_LIGHT, 1, 1);
             if(!caster.getWorld().isClient){
                 LightParticlesUtil.spawnLightTypeParticle(LightParticles.HEALLIGHT_PARTICLE, (ServerWorld) caster.getWorld(), target.getPos());

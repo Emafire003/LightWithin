@@ -6,6 +6,7 @@ import me.emafire003.dev.lightwithin.component.LightComponent;
 import me.emafire003.dev.lightwithin.config.Config;
 import me.emafire003.dev.lightwithin.lights.InnerLight;
 import me.emafire003.dev.lightwithin.lights.InnerLightType;
+import me.emafire003.dev.lightwithin.util.TargetType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.AttributeContainer;
 import net.minecraft.entity.effect.StatusEffect;
@@ -51,7 +52,7 @@ public class LightActiveEffect extends StatusEffect {
         }
         if(entity instanceof ServerPlayerEntity){
             LightComponent component = LIGHT_COMPONENT.get(entity);
-            if(component.getType().equals(InnerLightType.WIND)){
+            if(component.getType().equals(InnerLightType.WIND) && !component.getTargets().equals(TargetType.OTHER)){
                 ((ServerPlayerEntity) entity).getWorld().spawnParticles((ServerPlayerEntity) entity, ParticleTypes.CLOUD, false, entity.getX(), entity.getY(), entity.getZ(), 5, 0, 0, 0, 0.1);
             }
         }

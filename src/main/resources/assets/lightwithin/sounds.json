@@ -46,5 +46,11 @@
     "sounds": [
       "lightwithin:earthen_light"
     ]
+  },
+  "wind_light": {
+    "subtitle": "lightwithin.wind_light_triggered",
+    "sounds": [
+      "lightwithin:wind_light"
+    ]
   }
 }

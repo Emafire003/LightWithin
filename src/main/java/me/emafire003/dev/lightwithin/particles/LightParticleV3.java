@@ -20,7 +20,7 @@ public class LightParticleV3 extends AnimatedParticle {
         this.scale *= 0.75F;
         this.maxAge = 60 + this.random.nextInt(12);
         this.setSpriteForAge(spriteProvider);
-        int val = this.random.nextInt(6);
+        int val = this.random.nextInt(12);
         if (val == 0) {
             this.setColor(0.5F + this.random.nextFloat() * 0.2F, 1F, 1F);
         }else if(val == 1){

@@ -90,14 +90,14 @@ public class WindLight extends InnerLight {
             ColoredGlowLib.setColorToEntity(this.caster, this.color);
         }
 
-        caster.getWorld().playSound(caster, caster.getBlockPos(), LightSounds.EARTHEN_LIGHT, SoundCategory.AMBIENT, 1, 1);
+        caster.getWorld().playSound(caster, caster.getBlockPos(), LightSounds.WIND_LIGHT, SoundCategory.AMBIENT, 1, 1);
         LightComponent component = LIGHT_COMPONENT.get(caster);
         //Will create a ravine under the enemies feet, and will also damage them and apply mining fatigue
         if(component.getTargets().equals(TargetType.OTHER)){
             LightParticlesUtil.spawnLightTypeParticle(LightParticles.WINDLIGHT_PARTICLE, (ServerWorld) caster.getWorld(), caster.getPos());
             for(LivingEntity target : this.targets){
                 FabriDash.dash(target, (float) this.power_multiplier, true);
-                ((ServerPlayerEntity )caster).getWorld().spawnParticles(((ServerPlayerEntity )caster), ParticleTypes.FLASH, false, caster.getX(), caster.getY()+1, caster.getZ(), 65, 0, 0.2, 0, 0.35);
+                ((ServerPlayerEntity )caster).getWorld().spawnParticles(((ServerPlayerEntity )caster), ParticleTypes.CLOUD, false, caster.getX(), caster.getY()+1, caster.getZ(), 65, 0, 0.2, 0, 0.35);
                 target.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, this.duration*20, (int) (this.power_multiplier/2), false, true));
             }
         }
@@ -105,10 +105,10 @@ public class WindLight extends InnerLight {
             //oldtarget and stuuf prevent generating multiple structures in the same area
             for(LivingEntity target : this.targets){
 
-                target.playSound(LightSounds.EARTHEN_LIGHT, 0.9f, 1);
+                target.playSound(LightSounds.WIND_LIGHT, 0.9f, 1);
                 target.addStatusEffect(new StatusEffectInstance(StatusEffects.SPEED, this.duration*20, (int) (this.power_multiplier), false, false));
                 target.addStatusEffect(new StatusEffectInstance(StatusEffects.JUMP_BOOST, this.duration*20, (int) (this.power_multiplier), false, false));
-                target.addStatusEffect(new StatusEffectInstance(LightEffects.DODGING, this.duration*20, 0, false, false));
+                target.addStatusEffect(new StatusEffectInstance(StatusEffects.HASTE, this.duration*20, (int) (this.power_multiplier/2.5), false, false));
 
                 LightParticlesUtil.spawnLightTypeParticle(LightParticles.WINDLIGHT_PARTICLE, (ServerWorld) target.getWorld(), target.getPos());
             }
@@ -117,14 +117,14 @@ public class WindLight extends InnerLight {
         }else if(component.getTargets().equals(TargetType.SELF)) {
             LightParticlesUtil.spawnLightTypeParticle(LightParticles.WINDLIGHT_PARTICLE, (ServerWorld) caster.getWorld(), caster.getPos());
 
-            ((ServerPlayerEntity )caster).getWorld().spawnParticles(((ServerPlayerEntity )caster), ParticleTypes.FLASH, false, caster.getX(), caster.getY()+1, caster.getZ(), 65, 0, 0.2, 0, 0.35);
+            ((ServerPlayerEntity )caster).getWorld().spawnParticles(((ServerPlayerEntity )caster), ParticleTypes.CLOUD, false, caster.getX(), caster.getY()+1, caster.getZ(), 65, 0, 0.2, 0, 0.35);
 
             FabriDash.dash(caster, (float) this.power_multiplier, false);
             caster.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOW_FALLING, this.duration*20, 0, false, false));
             caster.addStatusEffect(new StatusEffectInstance(StatusEffects.SPEED, this.duration*20, (int) (this.power_multiplier/1.5), false, false));
             caster.addStatusEffect(new StatusEffectInstance(StatusEffects.JUMP_BOOST, this.duration*20, (int) (this.power_multiplier/1.5), false, false));
 
-            //caster.playSound(LightSounds.WIND_LIGHT, 1, 1);
+            caster.playSound(LightSounds.WIND_LIGHT, 1, 1);
         }
 
     }

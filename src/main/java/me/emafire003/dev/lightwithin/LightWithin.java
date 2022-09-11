@@ -65,7 +65,8 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 			entry(InnerLightType.BLAZING, Arrays.asList(TargetType.ENEMIES, TargetType.ALL)),
 			entry(InnerLightType.FROST, Arrays.asList(TargetType.SELF, TargetType.ALLIES, TargetType.ENEMIES, TargetType.ALL)),
 			entry(InnerLightType.EARTHEN, Arrays.asList(TargetType.SELF, TargetType.ALLIES, TargetType.ENEMIES, TargetType.OTHER)),
-			entry(InnerLightType.WIND, Arrays.asList(TargetType.SELF, TargetType.ALLIES, TargetType.OTHER))
+			entry(InnerLightType.WIND, Arrays.asList(TargetType.SELF, TargetType.ALLIES, TargetType.OTHER)),
+			entry(InnerLightType.FROG, List.of(TargetType.ALL))
 	);
 
 
@@ -167,6 +168,9 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 			component.setPrevColor(ColoredGlowLib.getEntityColor(player));
 		}else if(type.equals(InnerLightType.WIND)){
 			activateWind(component, player);
+			component.setPrevColor(ColoredGlowLib.getEntityColor(player));
+		}else if(type.equals(InnerLightType.FROG)){
+			activateFrog(component, player);
 			component.setPrevColor(ColoredGlowLib.getEntityColor(player));
 		}
 		//for now defaults here
@@ -434,15 +438,30 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 			}
 			targets.add(player);
 			player.sendMessage(Text.translatable("light.description.activation.wind.allies"), true);
-		}if(component.getTargets().equals(TargetType.SELF)){
+		}else if(component.getTargets().equals(TargetType.SELF)){
 			targets.add(player);
 			player.sendMessage(Text.translatable("light.description.activation.wind.self"), true);
+		}else if(component.getTargets().equals(TargetType.OTHER)){
+			targets.addAll(player.getWorld().getEntitiesByClass(LivingEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amount), (entity1 -> true)));
+			targets.remove(player);
+			player.sendMessage(Text.translatable("light.description.activation.wind.other"), true);
 		}
 
 		if(debug){
 			player.sendMessage(Text.literal("Ok light triggered"), false);
 		}
 		new WindLight(targets, component.getMaxCooldown(), component.getPowerMultiplier(),
+				component.getDuration(), player).execute();
+	}
+
+	//=======================Frog Light=======================
+	public static void activateFrog(LightComponent component, PlayerEntity player){
+		List<LivingEntity> targets = new ArrayList<>();
+
+		targets.addAll(player.getWorld().getEntitiesByClass(LivingEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amount), (entity1 -> true)));
+		player.sendMessage(Text.translatable("light.description.activation.frog"), true);
+
+		new FrogLight(targets, component.getMaxCooldown(), component.getPowerMultiplier(),
 				component.getDuration(), player).execute();
 	}
 

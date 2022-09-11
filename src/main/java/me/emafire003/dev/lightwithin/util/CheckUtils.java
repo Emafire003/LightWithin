@@ -2,11 +2,16 @@ package me.emafire003.dev.lightwithin.util;
 
 import me.emafire003.dev.lightwithin.compat.factions.FactionChecker;
 import me.emafire003.dev.lightwithin.config.Config;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.entity.effect.StatusEffectCategory;
+import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.passive.PassiveEntity;
 import net.minecraft.entity.passive.TameableEntity;
@@ -22,6 +27,7 @@ import net.minecraft.util.registry.Registry;
 import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 import static me.emafire003.dev.lightwithin.LightWithin.box_expansion_amount;
@@ -293,6 +299,44 @@ public class CheckUtils {
         return false;
     }
 
+    /** Checks for multiple blocks in a certain radius from the player pos
+     * if they match at least one from the given list.
+     *
+     * If SHOULD_CHECK_BLOCKS from the config it's on false, it will only check the block
+     * under the player's feet.
+     *
+     * @param player The player for which we are performing the check for
+     * @param blocks A list of blocks that if found, will return a positive match
+     * @param rad The radius in block in which to check (The lower, the better for the performance)
+     * @param number The minimum number of blocks around the player needed for it to return true
+     * */
+    public static boolean checkMultipleBlocks(PlayerEntity player, List<Block> blocks, int rad, int number){
+        if(!Config.SHOULD_CHECK_BLOCKS){
+            BlockPos pos = player.getBlockPos().add(0, -1, 0);
+            if(blocks.contains((player.getWorld().getBlockState(pos).getBlock()))){
+                return true;
+            }
+        }
+
+        BlockPos origin = player.getBlockPos();
+        for(int y = -rad; y <= rad; y++)
+        {
+            for(int x = -rad; x <= rad; x++)
+            {
+                for(int z = -rad; z <= rad; z++)
+                {
+                    BlockPos pos = origin.add(x, y, z);
+                    if(blocks.contains(player.getWorld().getBlockState(pos).getBlock())){
+                        return true;
+                    }
+
+                }
+            }
+        }
+        //If no match has been found, return false.
+        return false;
+    }
+
     /**Used to check if the player has something that can be considered a Heat Source
      * for the Blazing Light
      *
@@ -331,8 +375,8 @@ public class CheckUtils {
         return checkBlocks(player, ice_blocks, 3);
     }
 
-    /**Used to check if the player has something that can be considered a Cold Source
-     * for the Frost Light
+    /**Used to check if the player can trigger the Earthen Light, aka if they have
+     * dirt in their inventory or are sourronded by natural blocks
      *
      * @param player The player to perform checks on*/
     public static boolean checkEarthen(PlayerEntity player){
@@ -343,6 +387,58 @@ public class CheckUtils {
         }
 
         return checkMultipleBlocksWithTags(player, 3, 3, TagKey.of(Registry.BLOCK_KEY, BlockTags.LUSH_GROUND_REPLACEABLE.id()));
+    }
+
+    /**Used to check if the player has something that can be considered a Cold Source
+     * for the Frost Light
+     *
+     * @param player The player to perform checks on*/
+    public static boolean checkWind(PlayerEntity player){
+
+        if(player.getY() >= 64){
+            if(!player.isOnGround()){
+                return true;
+            }
+            return true;
+        }
+
+        return checkMultipleBlocks(player, Arrays.asList(Blocks.AIR, Blocks.CAVE_AIR, Blocks.VOID_AIR), 3, 6);
+        //return checkMultipleBlocksWithTags(player, 3, 3, TagKey.of(Registry.BLOCK_KEY, BlockTags.AIR));
+    }
+
+    public static boolean checkFalling(LivingEntity entity) {
+        if(entity instanceof PlayerEntity){
+            return ((PlayerEntity) entity).fallDistance > 5 && !entity.isFallFlying() && !entity.isOnGround() && !entity.isClimbing() && !((PlayerEntity) entity).getAbilities().flying && !entity.isSwimming();
+        }
+        return entity.fallDistance > 5 && !entity.isFallFlying() && !entity.isOnGround() && !entity.isClimbing()  && !entity.isSwimming();
+        /*if(!entity.isFallFlying() && !entity.isOnGround() && !entity.onClimbable() && !entity.getAbilities().flying && !entity.isSwimming()) {
+            FallingData fallData = data.getData(this, () -> new FallingData(entity.getY()));
+            if(entity instanceof LocalPlayer) {
+                fallData.fallingSpeed = (float) (entity.getDeltaMovement().lengthSqr() / 11);
+                return entity.fallDistance > 3;
+            }
+            if(entity.getY() == fallData.lastY) { //rerender in same tick
+                return fallData.fallingSpeed > 0.5f / 3.5f;
+            }else {
+                fallData.fallingSpeed = (float) (fallData.lastY - entity.getY())/ 3.5f;
+                fallData.lastY = entity.getY();
+                return fallData.fallingSpeed > 0.5f / 3.5f;
+            }
+        }*/
+    }
+
+    public static boolean checkPoisoned(LivingEntity entity){
+        return entity.hasStatusEffect(StatusEffects.POISON);
+    }
+
+    public static boolean checkDebuffed(LivingEntity entity){
+        Collection<StatusEffectInstance> a = entity.getStatusEffects();
+        for(StatusEffectInstance status : a){
+            if(status.getEffectType().getCategory().equals(StatusEffectCategory.HARMFUL)){
+                return true;
+            }
+        }
+        return false;
     }
 
     /**Rerturn a list of the player's enemies in the area

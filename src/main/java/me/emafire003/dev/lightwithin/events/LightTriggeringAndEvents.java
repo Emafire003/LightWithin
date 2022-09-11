@@ -15,6 +15,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.entity.passive.FrogEntity;
 import net.minecraft.entity.passive.PassiveEntity;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -39,25 +40,27 @@ public class LightTriggeringAndEvents {
         }
     }
 
-    public static void checkHeal(PlayerEntity player, LightComponent component, Entity entity){
+    public static void checkHeal(PlayerEntity player, LightComponent component, LivingEntity entity){
         /**CHECKS for the self part*/
         if(component.getTargets().equals(TargetType.SELF)
                 && CheckUtils.checkSelfHealth(player, Config.HP_PERCENTAGE_SELF)
-                && CheckUtils.checkSurrounded(player)
-                && CheckUtils.checkArmorDurability(player, Config.DUR_PERCENTAGE_SELF)
+                &&  ((CheckUtils.checkSurrounded(player)
+                    && CheckUtils.checkArmorDurability(player, Config.DUR_PERCENTAGE_SELF))
+                 || CheckUtils.checkPoisoned(player))
         ){
             sendReadyPacket((ServerPlayerEntity) player, true);
         }
         /**CHECKS for the allies part*/
         else if(component.getTargets().equals(TargetType.ALLIES)
                 && CheckUtils.checkAllyHealth(player, entity, Config.HP_PERCENTAGE_ALLIES)
-                && CheckUtils.checkSurrounded(player)
-                && CheckUtils.checkArmorDurability(player, Config.DUR_PERCENTAGE_ALLIES)
+                &&  ((CheckUtils.checkSurrounded(player)
+                && CheckUtils.checkArmorDurability(player, Config.DUR_PERCENTAGE_SELF))
+                || CheckUtils.checkPoisoned(entity))
         ){
             sendReadyPacket((ServerPlayerEntity) player, true);
         }else if(component.getTargets().equals(TargetType.OTHER)
                 && CheckUtils.checkPassiveHealth(player, entity, Config.HP_PERCENTAGE_OTHER)
-                && CheckUtils.checkArmorDurability(player, Config.DUR_PERCENTAGE_OTHER)
+                && (CheckUtils.checkArmorDurability(player, Config.DUR_PERCENTAGE_OTHER) || CheckUtils.checkPoisoned(entity))
         ){
             sendReadyPacket((ServerPlayerEntity) player, true);
         }
@@ -199,6 +202,46 @@ public class LightTriggeringAndEvents {
         }
     }
 
+    //The entity is the attacker apparently. UHmmmmm
+    public static void checkWind(PlayerEntity player, LightComponent component, LivingEntity entity){
+        /**If the player has ALL as target, he needs to be hurt (or an ally has to die, but that depends on the trigger)*/
+        if(component.getTargets().equals(TargetType.OTHER)
+                && ((CheckUtils.checkSelfHealth(player, Config.HP_PERCENTAGE_SELF+5)
+                && CheckUtils.checkSurrounded(player)) || CheckUtils.checkFalling(player))
+                && CheckUtils.checkWind(player)
+
+        ){
+            sendReadyPacket((ServerPlayerEntity) player, true);
+        }
+        else if(component.getTargets().equals(TargetType.SELF)
+                && ((CheckUtils.checkSelfHealth(player, Config.HP_PERCENTAGE_SELF+5)
+                && CheckUtils.checkSurrounded(player)) || CheckUtils.checkFalling(player))
+                && CheckUtils.checkWind(player)
+        ){
+            sendReadyPacket((ServerPlayerEntity) player, true);
+        }else if(component.getTargets().equals(TargetType.ALLIES)
+                && CheckUtils.checkAllyHealth(player, entity, Config.HP_PERCENTAGE_ALLIES+5)
+                && (CheckUtils.checkSurrounded(player)  /*|| CheckUtils.checkSurrounded(entity)*/)
+                && (CheckUtils.checkFalling(player) /*|| CheckUtils.checkFalling(entity)*/)
+                && CheckUtils.checkWind(player)
+        ){
+            sendReadyPacket((ServerPlayerEntity) player, true);
+        }
+    }
+
+    public static void checkFrog(PlayerEntity player, LightComponent component, Entity entity){
+        if(CheckUtils.checkSelfHealth(player, Config.HP_PERCENTAGE_SELF+15)
+                || CheckUtils.checkSurrounded(player)
+        ){
+            sendReadyPacket((ServerPlayerEntity) player, true);
+        }
+        else if(entity instanceof FrogEntity
+
+        ){
+            sendReadyPacket((ServerPlayerEntity) player, true);
+        }
+    }
+
     /**Checks if you can trigger the light or not
      * */
     public static boolean isTriggerable(PlayerEntity player){
@@ -234,8 +277,11 @@ public class LightTriggeringAndEvents {
         if(component.getType().equals(InnerLightType.EARTHEN)){
             checkEarthen(player, component, attacker);
         }
+        if(component.getType().equals(InnerLightType.WIND)){
+            checkWind(player, component, attacker);
+        }
     }
-
+    //TODO HIGH PRIORITY rework the checkLights because some use the enemy as the ally. Need to ship another argument, the attacker and the allies instead of just "Entity"
     public static void registerListeners(){
         LOGGER.info("Registering events listeners");
 
@@ -244,20 +290,6 @@ public class LightTriggeringAndEvents {
 
         //Player (or other entity) being attacked by something else
         EntityAttackEntityEvent.EVENT.register(((attacker, target) -> {
-            //Checks if an attack should miss or not
-            if(target.hasStatusEffect(LightEffects.DODGING)){
-                StatusEffectInstance status = target.getStatusEffect(LightEffects.DODGING);
-                Random random = attacker.getRandom();
-                int amp = 0;
-                if(status.getAmplifier() > 100){
-                    amp = 100;
-                }else{
-                    amp = status.getAmplifier();
-                }
-                if(random.nextInt(100) >= amp){
-                    return;
-                }
-            }
             //Checks if someone is attacked and if they are the one getting attacked
             if(target instanceof PlayerEntity){
                 entityAttackEntityTriggerCheck((PlayerEntity) target, attacker);
@@ -319,6 +351,9 @@ public class LightTriggeringAndEvents {
                     }
                     if(component.getType().equals(InnerLightType.FROST)){
                         checkFrost(player, component, entity);
+                    }
+                    if(component.getType().equals(InnerLightType.WIND)){
+                        checkWind(player, component, entity);
                     }
                     /**End*/
                 }

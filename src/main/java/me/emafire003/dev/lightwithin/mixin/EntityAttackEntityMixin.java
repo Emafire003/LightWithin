@@ -1,7 +1,6 @@
 package me.emafire003.dev.lightwithin.mixin;
 
 import me.emafire003.dev.lightwithin.events.EntityAttackEntityEvent;
-import me.emafire003.dev.lightwithin.sounds.LightSounds;
 import me.emafire003.dev.lightwithin.status_effects.LightEffects;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
