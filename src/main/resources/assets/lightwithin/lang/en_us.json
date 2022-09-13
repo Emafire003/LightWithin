@@ -34,6 +34,8 @@
   "light.description.blazing": "It is already firing up within you, ready to burst every moment",
   "light.description.frost": "Even if cold as ice, your light is ready to assist you",
   "light.description.earthen": "Your light draws its power from the earth around you!",
+  "light.description.wind": "The wind is a good friend of your light!",
+  "light.description.frog": "*croak* Wait what?!",
 
   "light.description.activation.heal.self": "Your light flowed trough you, sewing your wounds!",
   "light.description.activation.heal.allies": "Your light flowed trough you and your allies, sewing your wounds!",
@@ -58,5 +60,12 @@
   "light.description.activation.earthen.enemies": "The earth shall split under the soles of the enemy!",
   "light.description.activation.earthen.other": "Come forth my earthen golem!",
   "light.description.activation.earthen.self": "Split and grow around me!",
-  "light.description.activation.earthen.allies": "The Rock shall protect us!"
+  "light.description.activation.earthen.allies": "The Rock shall protect us!",
+
+  "light.description.activation.frog": "Croak!",
+  "light.description.activation.frog.damage": "You are confused, so confused that you hit yourself.",
+
+  "light.description.activation.wind.self": "The wind shall carry me onwards!",
+  "light.description.activation.wind.allies": "Oh winds, aid our movements!",
+  "light.description.activation.wind.other": "Blow them away!"
 }

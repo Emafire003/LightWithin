@@ -162,7 +162,7 @@ public class Config {
         configs.addKeyValuePair(new Pair<>("command_target_feedback", true), "Should a message be sent the target of a command, such us when changing its innerlight?");
         configs.addKeyValuePair(new Pair<>("reset_on_join", false), "Should the InnerLight be compleatly resetted upon joining the server/world again? Useful after an update of the mod that added new Light Types");
 
-        configs.addKeyValuePair(new Pair<>("auto_light_activation", false), "Should the light be activated without the player needing to press the button? (Suggestion: keep it to false)");
+        configs.addKeyValuePair(new Pair<>("auto_light_activation", false), "Should the light be activated without the player needing to press the button? (Suggestion: keep it to false) CLIENT SIDE");
 
     }
 

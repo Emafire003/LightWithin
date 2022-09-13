@@ -86,7 +86,7 @@ public class FrogLight extends InnerLight {
                     target.damage(DamageSource.MAGIC, frogs);
                 }
                 if(target instanceof PlayerEntity){
-                    ((PlayerEntity) target).sendMessage(Text.literal("You are confused, so confused that you hit yourself."), true);
+                    ((PlayerEntity) target).sendMessage(Text.translatable("light.description.activation.frog.damage"), true);
                 }
             }
             FrogEntity frog = new FrogEntity(EntityType.FROG, caster.getWorld());

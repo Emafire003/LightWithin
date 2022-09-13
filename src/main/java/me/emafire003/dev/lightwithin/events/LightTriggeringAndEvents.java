@@ -13,17 +13,13 @@ import net.fabricmc.fabric.api.event.player.AttackEntityCallback;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.passive.FrogEntity;
 import net.minecraft.entity.passive.PassiveEntity;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.math.Box;
-import net.minecraft.util.math.random.Random;
 
 import java.util.*;
 
@@ -40,7 +36,7 @@ public class LightTriggeringAndEvents {
         }
     }
 
-    public static void checkHeal(PlayerEntity player, LightComponent component, LivingEntity entity){
+    public static void checkHeal(PlayerEntity player, LightComponent component, LivingEntity attacker, LivingEntity target){
         /**CHECKS for the self part*/
         if(component.getTargets().equals(TargetType.SELF)
                 && CheckUtils.checkSelfHealth(player, Config.HP_PERCENTAGE_SELF)
@@ -52,21 +48,21 @@ public class LightTriggeringAndEvents {
         }
         /**CHECKS for the allies part*/
         else if(component.getTargets().equals(TargetType.ALLIES)
-                && CheckUtils.checkAllyHealth(player, entity, Config.HP_PERCENTAGE_ALLIES)
+                && CheckUtils.checkAllyHealth(player, target, Config.HP_PERCENTAGE_ALLIES)
                 &&  ((CheckUtils.checkSurrounded(player)
                 && CheckUtils.checkArmorDurability(player, Config.DUR_PERCENTAGE_SELF))
-                || CheckUtils.checkPoisoned(entity))
+                || CheckUtils.checkPoisoned(target))
         ){
             sendReadyPacket((ServerPlayerEntity) player, true);
         }else if(component.getTargets().equals(TargetType.OTHER)
-                && CheckUtils.checkPassiveHealth(player, entity, Config.HP_PERCENTAGE_OTHER)
-                && (CheckUtils.checkArmorDurability(player, Config.DUR_PERCENTAGE_OTHER) || CheckUtils.checkPoisoned(entity))
+                && CheckUtils.checkPassiveHealth(player, target, Config.HP_PERCENTAGE_OTHER)
+                && (CheckUtils.checkArmorDurability(player, Config.DUR_PERCENTAGE_OTHER) || CheckUtils.checkPoisoned(target))
         ){
             sendReadyPacket((ServerPlayerEntity) player, true);
         }
     }
 
-    public static void checkDefense(PlayerEntity player, LightComponent component, Entity entity){
+    public static void checkDefense(PlayerEntity player, LightComponent component, LivingEntity attacker, LivingEntity target){
         /**CHECKS for the self part*/
         if(component.getTargets().equals(TargetType.SELF)
                 && CheckUtils.checkSelfHealth(player, Config.HP_PERCENTAGE_SELF)
@@ -77,20 +73,20 @@ public class LightTriggeringAndEvents {
         }
         /**CHECKS for the allies part*/
         else if(component.getTargets().equals(TargetType.ALLIES)
-                && CheckUtils.checkAllyHealth(player, entity, Config.HP_PERCENTAGE_ALLIES)
+                && CheckUtils.checkAllyHealth(player, target, Config.HP_PERCENTAGE_ALLIES)
                 && CheckUtils.checkSurrounded(player)
                 && CheckUtils.checkArmorDurability(player, Config.DUR_PERCENTAGE_ALLIES)
         ){
             sendReadyPacket((ServerPlayerEntity) player, true);
         }else if(component.getTargets().equals(TargetType.OTHER)
-                && CheckUtils.checkPassiveHealth(player, entity, Config.HP_PERCENTAGE_OTHER)
+                && CheckUtils.checkPassiveHealth(player, target, Config.HP_PERCENTAGE_OTHER)
                 && CheckUtils.checkArmorDurability(player, Config.DUR_PERCENTAGE_OTHER)
         ){
             sendReadyPacket((ServerPlayerEntity) player, true);
         }
     }
 
-    public static void checkStrength(PlayerEntity player, LightComponent component, Entity entity){
+    public static void checkStrength(PlayerEntity player, LightComponent component, Entity attacker, Entity target){
         /**CHECKS for the self part*/
         if(component.getTargets().equals(TargetType.SELF)
                 && CheckUtils.checkSelfHealth(player, Config.HP_PERCENTAGE_SELF)
@@ -101,21 +97,20 @@ public class LightTriggeringAndEvents {
         }
         /**CHECKS for the allies part*/
         else if(component.getTargets().equals(TargetType.ALLIES)
-                && CheckUtils.checkAllyHealth(player, entity, Config.HP_PERCENTAGE_ALLIES)
+                && CheckUtils.checkAllyHealth(player, target, Config.HP_PERCENTAGE_ALLIES)
                 && CheckUtils.checkSurrounded(player)
                 && CheckUtils.checkArmorDurability(player, Config.DUR_PERCENTAGE_ALLIES)
         ){
             sendReadyPacket((ServerPlayerEntity) player, true);
         }else if(component.getTargets().equals(TargetType.OTHER)
-                && CheckUtils.checkPassiveHealth(player, entity, Config.HP_PERCENTAGE_OTHER)
+                && CheckUtils.checkPassiveHealth(player, target, Config.HP_PERCENTAGE_OTHER)
                 && CheckUtils.checkArmorDurability(player, Config.DUR_PERCENTAGE_OTHER)
         ){
             sendReadyPacket((ServerPlayerEntity) player, true);
         }
     }
 
-    //TODO maybe I should remove the allies bit.
-    public static void checkBlazing(PlayerEntity player, LightComponent component, Entity entity){
+    public static void checkBlazing(PlayerEntity player, LightComponent component, Entity attacker, Entity target){
         /**If the player has ALL as target, he needs to be hurt (or an ally has to die, but that depends on the trigger)*/
         if(component.getTargets().equals(TargetType.ALL)
                 && CheckUtils.checkSelfHealth(player, Config.HP_PERCENTAGE_SELF+10)
@@ -136,7 +131,7 @@ public class LightTriggeringAndEvents {
         }
     }
 
-    public static void checkFrost(PlayerEntity player, LightComponent component, Entity entity){
+    public static void checkFrost(PlayerEntity player, LightComponent component, Entity attacker, LivingEntity target){
         /**If the player has ALL as target, he needs to be hurt (or an ally has to die, but that depends on the trigger)*/
         if(component.getTargets().equals(TargetType.ALL)
                 && CheckUtils.checkSelfHealth(player, Config.HP_PERCENTAGE_SELF+5)
@@ -148,7 +143,8 @@ public class LightTriggeringAndEvents {
         }
         /**CHECKS if the player has ENEMIES as target, either his or his allies health needs to be low*/
         else if(component.getTargets().equals(TargetType.ENEMIES)
-                && (CheckUtils.checkAllyHealth(player, entity, Config.HP_PERCENTAGE_ALLIES+5) || CheckUtils.checkSelfHealth(player, Config.HP_PERCENTAGE_SELF+5))
+                && (CheckUtils.CheckAllies.checkAlly(player, target) || player.equals(target))
+                && (CheckUtils.checkAllyHealth(player, target, Config.HP_PERCENTAGE_ALLIES+5) || CheckUtils.checkSelfHealth(player, Config.HP_PERCENTAGE_SELF+5))
                 && CheckUtils.checkSurrounded(player)
                 && CheckUtils.checkArmorDurability(player, Config.DUR_PERCENTAGE_ALLIES)
                 && CheckUtils.checkFrost(player)
@@ -162,7 +158,7 @@ public class LightTriggeringAndEvents {
         ){
             sendReadyPacket((ServerPlayerEntity) player, true);
         }else if(component.getTargets().equals(TargetType.ALLIES)
-                && CheckUtils.checkAllyHealth(player, entity, Config.HP_PERCENTAGE_ALLIES+5)
+                && CheckUtils.checkAllyHealth(player, target, Config.HP_PERCENTAGE_ALLIES+5)
                 && CheckUtils.checkSurrounded(player)
                 && CheckUtils.checkArmorDurability(player, Config.DUR_PERCENTAGE_ALLIES)
                 && CheckUtils.checkFrost(player)
@@ -171,10 +167,10 @@ public class LightTriggeringAndEvents {
         }
     }
 
-    public static void checkEarthen(PlayerEntity player, LightComponent component, Entity entity){
+    public static void checkEarthen(PlayerEntity player, LightComponent component, LivingEntity attacker, LivingEntity target){
         /**If the player or their allies are on low health or surrounded, a golem will spawn if the player has the OTHER target*/
         if(component.getTargets().equals(TargetType.OTHER)
-                && (CheckUtils.checkAllyHealth(player, entity, Config.HP_PERCENTAGE_ALLIES) || CheckUtils.checkSelfHealth(player, Config.HP_PERCENTAGE_SELF+5))
+                && (CheckUtils.checkAllyHealth(player, target, Config.HP_PERCENTAGE_ALLIES) || CheckUtils.checkSelfHealth(player, Config.HP_PERCENTAGE_SELF+5))
                 && CheckUtils.checkSurrounded(player)
                 && CheckUtils.checkEarthen(player)
         ){
@@ -182,19 +178,21 @@ public class LightTriggeringAndEvents {
         }
         /**CHECKS if the player has ENEMIES as target, either his or his allies health needs to be low*/
         else if(component.getTargets().equals(TargetType.ENEMIES)
-                && (CheckUtils.checkAllyHealth(player, entity, Config.HP_PERCENTAGE_ALLIES) || CheckUtils.checkSelfHealth(player, Config.HP_PERCENTAGE_SELF+5))
+                && (CheckUtils.CheckAllies.checkAlly(player, target) || player.equals(target))
+                && (CheckUtils.checkAllyHealth(player, target, Config.HP_PERCENTAGE_ALLIES) || CheckUtils.checkSelfHealth(player, Config.HP_PERCENTAGE_SELF+5))
                 && CheckUtils.checkSurrounded(player)
                 && CheckUtils.checkEarthen(player)
         ){
             sendReadyPacket((ServerPlayerEntity) player, true);
         }else if(component.getTargets().equals(TargetType.SELF)
+                && player.equals(target)
                 && CheckUtils.checkSelfHealth(player, Config.HP_PERCENTAGE_SELF)
                 && CheckUtils.checkSurrounded(player)
                 && CheckUtils.checkEarthen(player)
         ){
             sendReadyPacket((ServerPlayerEntity) player, true);
         }else if(component.getTargets().equals(TargetType.ALLIES)
-                && CheckUtils.checkAllyHealth(player, entity, Config.HP_PERCENTAGE_ALLIES)
+                && CheckUtils.checkAllyHealth(player, target, Config.HP_PERCENTAGE_ALLIES)
                 && CheckUtils.checkSurrounded(player)
                 && CheckUtils.checkEarthen(player)
         ){
@@ -202,42 +200,42 @@ public class LightTriggeringAndEvents {
         }
     }
 
-    //The entity is the attacker apparently. UHmmmmm
-    public static void checkWind(PlayerEntity player, LightComponent component, LivingEntity entity){
+    public static void checkWind(PlayerEntity player, LightComponent component, Entity attacker, LivingEntity target){
         /**If the player has ALL as target, he needs to be hurt (or an ally has to die, but that depends on the trigger)*/
         if(component.getTargets().equals(TargetType.OTHER)
                 && ((CheckUtils.checkSelfHealth(player, Config.HP_PERCENTAGE_SELF+5)
+                && player.equals(target)
                 && CheckUtils.checkSurrounded(player)) || CheckUtils.checkFalling(player))
                 && CheckUtils.checkWind(player)
-
         ){
             sendReadyPacket((ServerPlayerEntity) player, true);
         }
         else if(component.getTargets().equals(TargetType.SELF)
+                && player.equals(target)
                 && ((CheckUtils.checkSelfHealth(player, Config.HP_PERCENTAGE_SELF+5)
                 && CheckUtils.checkSurrounded(player)) || CheckUtils.checkFalling(player))
                 && CheckUtils.checkWind(player)
         ){
             sendReadyPacket((ServerPlayerEntity) player, true);
         }else if(component.getTargets().equals(TargetType.ALLIES)
-                && CheckUtils.checkAllyHealth(player, entity, Config.HP_PERCENTAGE_ALLIES+5)
-                && (CheckUtils.checkSurrounded(player)  /*|| CheckUtils.checkSurrounded(entity)*/)
-                && (CheckUtils.checkFalling(player) /*|| CheckUtils.checkFalling(entity)*/)
+                && (CheckUtils.checkAllyHealth(player, target, Config.HP_PERCENTAGE_ALLIES+5)
+                && (CheckUtils.checkSurrounded(player)  || CheckUtils.checkSurrounded(target))
+                )||(CheckUtils.checkFalling(player) || CheckUtils.checkFalling(target))
                 && CheckUtils.checkWind(player)
         ){
             sendReadyPacket((ServerPlayerEntity) player, true);
         }
     }
 
-    public static void checkFrog(PlayerEntity player, LightComponent component, Entity entity){
+    public static void checkFrog(PlayerEntity player, LightComponent component, LivingEntity attacker, Entity target){
         if(CheckUtils.checkSelfHealth(player, Config.HP_PERCENTAGE_SELF+15)
                 || CheckUtils.checkSurrounded(player)
         ){
             sendReadyPacket((ServerPlayerEntity) player, true);
         }
-        else if(entity instanceof FrogEntity
-
-        ){
+        else if(target instanceof FrogEntity){
+            sendReadyPacket((ServerPlayerEntity) player, true);
+        }else if(attacker instanceof FrogEntity){
             sendReadyPacket((ServerPlayerEntity) player, true);
         }
     }
@@ -260,78 +258,107 @@ public class LightTriggeringAndEvents {
         return true;
     }
 
-    public static void entityAttackEntityTriggerCheck(PlayerEntity player, LivingEntity attacker){
+    public static void entityAttackAllyEntityTriggerCheck(PlayerEntity player, LivingEntity attacker, LivingEntity target){
+        if(!isTriggerable(player)){
+            return;
+        }
+        LightComponent component = LIGHT_COMPONENT.get(player);
+        if(component.getType().equals(InnerLightType.STRENGTH)){
+            checkStrength(player, component, attacker, target);
+        }
+        if(component.getType().equals(InnerLightType.BLAZING)){
+            checkBlazing(player, component, attacker, target);
+        }
+    }
+
+    public static void entityAttackEntityTriggerCheck(PlayerEntity player, LivingEntity attacker, LivingEntity target){
         if(!isTriggerable(player)){
             return;
         }
         LightComponent component = LIGHT_COMPONENT.get(player);
         if(component.getType().equals(InnerLightType.HEAL)){
-            checkHeal(player, component, attacker);
+            checkHeal(player, component, attacker, target);
         }
         if(component.getType().equals(InnerLightType.DEFENCE)){
-            checkDefense(player, component, attacker);
+            checkDefense(player, component, attacker, target);
         }
         if(component.getType().equals(InnerLightType.FROST)){
-            checkFrost(player, component, attacker);
+            checkFrost(player, component, attacker, target);
         }
         if(component.getType().equals(InnerLightType.EARTHEN)){
-            checkEarthen(player, component, attacker);
+            checkEarthen(player, component, attacker, target);
         }
         if(component.getType().equals(InnerLightType.WIND)){
-            checkWind(player, component, attacker);
+            checkWind(player, component, attacker, target);
+        }
+        if(component.getType().equals(InnerLightType.FROG)){
+            checkFrog(player, component, attacker, target);
         }
     }
-    //TODO HIGH PRIORITY rework the checkLights because some use the enemy as the ally. Need to ship another argument, the attacker and the allies instead of just "Entity"
-    public static void registerListeners(){
-        LOGGER.info("Registering events listeners");
 
-        //this works
+    public static void registerListeners(){
+        LOGGER.info("Registering events listeners...");
+
         //TODO lights could be levelled up maybe
 
         //Player (or other entity) being attacked by something else
         EntityAttackEntityEvent.EVENT.register(((attacker, target) -> {
             //Checks if someone is attacked and if they are the one getting attacked
+            //If the target is the player with the light, he is also the target
             if(target instanceof PlayerEntity){
-                entityAttackEntityTriggerCheck((PlayerEntity) target, attacker);
+                entityAttackEntityTriggerCheck((PlayerEntity) target, attacker, (PlayerEntity) target);
                 return;
             }
+            //if the target is a pet of someone with a light, the pet is the target. (He is also considered an ally)
             if(target instanceof TameableEntity){
                 if(((TameableEntity) target).getOwner() instanceof PlayerEntity){
-                    entityAttackEntityTriggerCheck((PlayerEntity) ((TameableEntity) target).getOwner(), attacker);
+                    entityAttackEntityTriggerCheck((PlayerEntity) ((TameableEntity) target).getOwner(), attacker, target);
                 }
                 return;
             }
-            if(target.getScoreboardTeam() != null){
-                List<PlayerEntity> entities = target.getWorld().getEntitiesByClass(PlayerEntity.class, new Box(target.getBlockPos()).expand(box_expansion_amount), (entity1 -> true));
-                for(PlayerEntity p : entities){
-                    if(p.isTeammate(target) && !p.equals(target)){
-                        entityAttackEntityTriggerCheck(p, attacker);
-                    }
-                }
-            }
+
+            //if the one getting attacked is a passive entity, the entity is the target
+            //while the player who triggers the light is the one nearby
             if(target instanceof PassiveEntity){
-                List<PlayerEntity> entities = target.getWorld().getEntitiesByClass(PlayerEntity.class, new Box(target.getBlockPos()).expand(box_expansion_amount), (entity1 -> true));
-                for(PlayerEntity p : entities){
+                List<PlayerEntity> entities1 = target.getWorld().getEntitiesByClass(PlayerEntity.class, new Box(target.getBlockPos()).expand(box_expansion_amount), (entity1 -> true));
+                for(PlayerEntity p : entities1){
                     if(!p.equals(target)){
-                        entityAttackEntityTriggerCheck(p, attacker);
+                        entityAttackEntityTriggerCheck(p, attacker, target);
                     }
                 }
             }
 
+            //if someone/something gets attaccked and is an ally of a player nearby the target is the one getting attacked,
+            //while the player who triggers the light is the one present nearby
+            //if(target.getScoreboardTeam() != null){
+            List<PlayerEntity> entities = target.getWorld().getEntitiesByClass(PlayerEntity.class, new Box(target.getBlockPos()).expand(box_expansion_amount), (entity1 -> true));
+            for(PlayerEntity p : entities){
+                if(CheckUtils.CheckAllies.checkAlly(p, target) && !p.equals(target)){
+                    entityAttackEntityTriggerCheck(p, attacker, target);
+                    entityAttackAllyEntityTriggerCheck(p, attacker, target);
+                }
+            }
+            //}
 
         }));
 
         //Player attacking something
+        //Will need the stuff that is here to the other thingy up there
+        //TODO may need reworking. Currently if the ally gets attacked it will trigger the light of the allied player
+        //TODO so, it wouldn't actually be the player the one attaccking and then activating :/
         AttackEntityCallback.EVENT.register((player, world, hand, entity, hitResult) ->{
             if(!isTriggerable(player)){
                 return ActionResult.PASS;
             }
             LightComponent component = LIGHT_COMPONENT.get(player);
             if(component.getType().equals(InnerLightType.STRENGTH)){
-                checkStrength(player, component, entity);
+                checkStrength(player, component, player, entity);
             }
             if(component.getType().equals(InnerLightType.BLAZING)){
-                checkBlazing(player, component, entity);
+                checkBlazing(player, component, player, entity);
+            }
+            if(component.getType().equals(InnerLightType.FROG)){
+                checkFrog(player, component, player, entity);
             }
             return ActionResult.PASS;
         } );
@@ -346,14 +373,19 @@ public class LightTriggeringAndEvents {
                         return;
                     }
                     LightComponent component = LIGHT_COMPONENT.get(player);
+                    //needs to default to something sooo
+                    Entity attacker = entity;
+                    if(source.getSource() != null){
+                        attacker = source.getSource();
+                    }
                     if(component.getType().equals(InnerLightType.BLAZING)){
-                        checkBlazing(player, component, entity);
+                        checkBlazing(player, component, attacker, entity);
                     }
                     if(component.getType().equals(InnerLightType.FROST)){
-                        checkFrost(player, component, entity);
+                        checkFrost(player, component, attacker, entity);
                     }
                     if(component.getType().equals(InnerLightType.WIND)){
-                        checkWind(player, component, entity);
+                        checkWind(player, component, attacker, entity);
                     }
                     /**End*/
                 }

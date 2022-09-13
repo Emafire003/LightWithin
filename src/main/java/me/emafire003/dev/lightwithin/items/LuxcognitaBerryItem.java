@@ -71,6 +71,10 @@ public class LuxcognitaBerryItem extends Item {
                 ((ServerPlayerEntity) user).sendMessage(Text.translatable("light.description.frost"), true);
             }else if(type.equals(InnerLightType.EARTHEN)){
                 ((ServerPlayerEntity) user).sendMessage(Text.translatable("light.description.earthen"), true);
+            }else if(type.equals(InnerLightType.WIND)){
+                ((ServerPlayerEntity) user).sendMessage(Text.translatable("light.description.wind"), true);
+            }else if(type.equals(InnerLightType.FROG)){
+                ((ServerPlayerEntity) user).sendMessage(Text.translatable("light.description.frog"), true);
             }
             else{
                 ((ServerPlayerEntity) user).sendMessage(Text.translatable("light.description.error "), true);

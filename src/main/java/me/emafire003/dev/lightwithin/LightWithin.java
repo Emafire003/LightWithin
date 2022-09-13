@@ -116,7 +116,7 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 			var results = LightUsedPacketC2S.read(buf);
 			server.execute(() -> {
 				try{
-					if(results || Config.AUTO_LIGHT_ACTIVATION){
+					if(results){
 						activateLight(player);
 					}
 				}catch (NoSuchElementException e){

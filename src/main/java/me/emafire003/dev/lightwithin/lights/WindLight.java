@@ -5,31 +5,18 @@ import me.emafire003.dev.coloredglowlib.util.Color;
 import me.emafire003.dev.lightwithin.component.LightComponent;
 import me.emafire003.dev.lightwithin.config.Config;
 import me.emafire003.dev.lightwithin.util.fabridash.FabriDash;
-import me.emafire003.dev.lightwithin.util.fabridash.WindLightVelocityPacketS2C;
 import me.emafire003.dev.lightwithin.particles.LightParticles;
 import me.emafire003.dev.lightwithin.particles.LightParticlesUtil;
 import me.emafire003.dev.lightwithin.sounds.LightSounds;
-import me.emafire003.dev.lightwithin.status_effects.LightEffects;
 import me.emafire003.dev.lightwithin.util.TargetType;
-import me.emafire003.dev.structureplacerapi.StructurePlacerAPI;
-import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.minecraft.block.Blocks;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.particle.BlockStateParticleEffect;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
-import net.minecraft.util.BlockMirror;
-import net.minecraft.util.BlockRotation;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
 
 import java.util.List;
 
@@ -95,6 +82,7 @@ public class WindLight extends InnerLight {
         //Will create a ravine under the enemies feet, and will also damage them and apply mining fatigue
         if(component.getTargets().equals(TargetType.OTHER)){
             LightParticlesUtil.spawnLightTypeParticle(LightParticles.WINDLIGHT_PARTICLE, (ServerWorld) caster.getWorld(), caster.getPos());
+            ((ServerPlayerEntity )caster).getWorld().spawnParticles(((ServerPlayerEntity )caster), ParticleTypes.CLOUD, false, caster.getX(), caster.getY()+1, caster.getZ(), 65, 0, 0.2, 0, 0.35);
             for(LivingEntity target : this.targets){
                 FabriDash.dash(target, (float) this.power_multiplier, true);
                 ((ServerPlayerEntity )caster).getWorld().spawnParticles(((ServerPlayerEntity )caster), ParticleTypes.CLOUD, false, caster.getX(), caster.getY()+1, caster.getZ(), 65, 0, 0.2, 0, 0.35);
@@ -117,7 +105,7 @@ public class WindLight extends InnerLight {
         }else if(component.getTargets().equals(TargetType.SELF)) {
             LightParticlesUtil.spawnLightTypeParticle(LightParticles.WINDLIGHT_PARTICLE, (ServerWorld) caster.getWorld(), caster.getPos());
 
-            ((ServerPlayerEntity )caster).getWorld().spawnParticles(((ServerPlayerEntity )caster), ParticleTypes.CLOUD, false, caster.getX(), caster.getY()+1, caster.getZ(), 65, 0, 0.2, 0, 0.35);
+            ((ServerPlayerEntity )caster).getWorld().spawnParticles(((ServerPlayerEntity )caster), ParticleTypes.CLOUD, false, caster.getX(), caster.getY()+1, caster.getZ(), 200, 0.1, 0.2, 0.1, 0.35);
 
             FabriDash.dash(caster, (float) this.power_multiplier, false);
             caster.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOW_FALLING, this.duration*20, 0, false, false));

@@ -117,10 +117,10 @@ public class CheckUtils {
      * it will return true
      *
      * @param player The player that could trigger their light
-     * @param entity The entity that is attacking it
+     * @param attacker The entity that is attacking it
      * @param health_percent The percentage (15, 25, 70) below which the target is in danger (hence light activatable)
      * */
-    public static boolean checkAllyHealth(@NotNull PlayerEntity player, Entity entity, int health_percent){
+    public static boolean checkAllyHealth(@NotNull PlayerEntity player, Entity attacker, int health_percent){
         List<LivingEntity> entities = player.getWorld().getEntitiesByClass(LivingEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amount), (entity1 -> true));
         int ent_number = 0;
         //I need to this to prevent a ConcurrentModificationError
@@ -129,7 +129,7 @@ public class CheckUtils {
         //and they are not the entity that has been hit then add them to the team_entities and check if their health is ok
         for(LivingEntity ent : entities){
             //Checks if the entity in the list is in the same team/faction/party/pet or not
-            if(!entity.equals(ent) && CheckAllies.checkAlly(player, ent) ){
+            if(!attacker.equals(ent) && CheckAllies.checkAlly(player, ent) ){
                 //if it is, check the health
                 if(ent.getHealth() <= (ent.getMaxHealth())*health_percent/100){
                     ent_number++;

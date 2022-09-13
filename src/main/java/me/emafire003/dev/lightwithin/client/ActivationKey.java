@@ -1,5 +1,6 @@
 package me.emafire003.dev.lightwithin.client;
 
+import me.emafire003.dev.lightwithin.config.Config;
 import me.emafire003.dev.lightwithin.networking.LightUsedPacketC2S;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
@@ -25,7 +26,7 @@ public class ActivationKey {
 
     public static void update(MinecraftClient client) {
         if (client.player != null) {
-            if (lightActivationKey.wasPressed()) {
+            if (lightActivationKey.wasPressed() || Config.AUTO_LIGHT_ACTIVATION) {
                 if(LightWithinClient.isLightReady()){
                     ClientPlayNetworking.send(LightUsedPacketC2S.ID, new LightUsedPacketC2S(true));
                     LightWithinClient.setLightReady(false);
