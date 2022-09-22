@@ -20,7 +20,8 @@ public class LightEffects {
     public static final StatusEffect SOLID_ROCK = registerStatusEffect("solid_rock",
             new SolidRockEffect().addAttributeModifier(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE, "70d5f061-467c-430a-a9b6-48475f961db9", 0.15f, EntityAttributeModifier.Operation.ADDITION));
             //.addAttributeModifier(EntityAttributes.GENERIC_MOVEMENT_SPEED, "70d5f061-467c-430a-a9b6-48475f961db9", 0.5f, EntityAttributeModifier.Operation.MULTIPLY_TOTAL));
-
+    public static final StatusEffect WATER_SLIDE = registerStatusEffect("water_slide",
+                    new WaterSlideEffect());
     private static StatusEffect registerStatusEffect(String name, StatusEffect effect){
         return Registry.register(Registry.STATUS_EFFECT, new Identifier(LightWithin.MOD_ID, name),effect);
     }

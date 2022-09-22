@@ -72,6 +72,12 @@ public class Config {
     public static int EARTHEN_MIN_POWER;
     public static int EARTHEN_MIN_DURATION;
 
+    public static int WIND_MAX_POWER;
+    public static int WIND_MAX_DURATION;
+    public static int WIND_MIN_POWER;
+    public static int WIND_MIN_DURATION;
+
+
     public static boolean SHOULD_CHECK_BLOCKS;
     public static boolean STRUCTURE_GRIEFING;
     public static boolean NON_FUNDAMENTAL_STRUCTURE_GRIEFING;
@@ -153,6 +159,10 @@ public class Config {
         configs.addKeyValuePair(new Pair<>("earthen_max_duration", 18), "The maximum duration of some effects that can be applied (like solid rock, mining fatigue)");
         configs.addKeyValuePair(new Pair<>("earthen_min_duration", 1), "The minimum duration (see above)");
 
+        configs.addKeyValuePair(new Pair<>("wind_max_power", 9), "The maximum power multiplier (Used to determine the power of the status effects and the distance of the dash)");
+        configs.addKeyValuePair(new Pair<>("wind_min_power", 1), "The minimum power multiplier (see above)");
+        configs.addKeyValuePair(new Pair<>("wind_max_duration", 18), "The maximum duration of some effects that can be applied (like speed, haste, slow falling)");
+        configs.addKeyValuePair(new Pair<>("wind_min_duration", 1), "The minimum duration (see above)");
 
         configs.addKeyValuePair(new Pair<>("should_check_blocks", true), "Should the blocks near the player be checked for the light activation? Could impact on performance");
         configs.addKeyValuePair(new Pair<>("structure_griefing", true), "If set to false will prevent lights from spawning ANY KIND structures on activation (I'd suggest leaving it to true)");
@@ -232,6 +242,11 @@ public class Config {
         EARTHEN_MAX_DURATION = CONFIG.getOrDefault("earthen_max_duration", 18);
         EARTHEN_MIN_POWER = CONFIG.getOrDefault("earthen_min_power", 1);
         EARTHEN_MIN_DURATION = CONFIG.getOrDefault("earthen_min_duration", 1);
+
+        WIND_MAX_POWER = CONFIG.getOrDefault("wind_max_power", 9);
+        WIND_MAX_DURATION = CONFIG.getOrDefault("wind_max_duration", 18);
+        WIND_MIN_POWER = CONFIG.getOrDefault("wind_min_power", 1);
+        WIND_MIN_DURATION = CONFIG.getOrDefault("wind_min_duration", 1);
 
         SHOULD_CHECK_BLOCKS = CONFIG.getOrDefault("should_check_blocks", true);
         STRUCTURE_GRIEFING = CONFIG.getOrDefault("structure_griefing", true);

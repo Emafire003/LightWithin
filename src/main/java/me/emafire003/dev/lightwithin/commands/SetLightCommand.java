@@ -28,7 +28,7 @@ public class SetLightCommand implements LightCommand{
     //Temporary, will remove once all lights have been implemented
     private List<InnerLightType> currently_usable_lights = Arrays.asList(InnerLightType.HEAL, InnerLightType.DEFENCE,
             InnerLightType.STRENGTH, InnerLightType.BLAZING, InnerLightType.FROST, InnerLightType.EARTHEN,
-            InnerLightType.WIND, InnerLightType.FROG);
+            InnerLightType.WIND, InnerLightType.FROG, InnerLightType.AQUA);
 
     private int changeType(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
         Collection<ServerPlayerEntity> targets = EntityArgumentType.getPlayers(context, "player");

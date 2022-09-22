@@ -538,13 +538,17 @@ public class LightTriggeringAndEvents {
         else if(String.valueOf(id_bits[type_bit].charAt(i)).matches("[4-5]")){
             return new Pair<InnerLightType, TargetType>(InnerLightType.EARTHEN, determineTarget(id_bits, target_bit, Arrays.asList(TargetType.ENEMIES, TargetType.SELF, TargetType.ALLIES, TargetType.OTHER)));
         }
-        //TODO Wind
+        //Wind
         else if(String.valueOf(id_bits[type_bit].charAt(i)).matches("[6-7]")){
-            return new Pair<InnerLightType, TargetType>(InnerLightType.FROST, determineAttackTarget(id_bits, target_bit));
+            return new Pair<InnerLightType, TargetType>(InnerLightType.WIND, determineTarget(id_bits, target_bit, Arrays.asList(TargetType.SELF, TargetType.ALLIES, TargetType.OTHER)));
         }
         //TODO Aqua
         else if(String.valueOf(id_bits[type_bit].charAt(i)).matches("[8-9]")){
             return new Pair<InnerLightType, TargetType>(InnerLightType.BLAZING, determineAttackTarget(id_bits, target_bit));
+        }
+        //Frog?
+        else if(String.valueOf(id_bits[type_bit]).matches("frog")){
+            return new Pair<InnerLightType, TargetType>(InnerLightType.WIND, determineTarget(id_bits, target_bit, List.of(TargetType.ALL)));
         }
         LOGGER.info("[debug] nop not matched, UUID bit: " + id_bits[type_bit]);
         return new Pair<InnerLightType, TargetType>(InnerLightType.HEAL, TargetType.SELF);

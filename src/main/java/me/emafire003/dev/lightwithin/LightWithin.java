@@ -66,6 +66,7 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 			entry(InnerLightType.FROST, Arrays.asList(TargetType.SELF, TargetType.ALLIES, TargetType.ENEMIES, TargetType.ALL)),
 			entry(InnerLightType.EARTHEN, Arrays.asList(TargetType.SELF, TargetType.ALLIES, TargetType.ENEMIES, TargetType.OTHER)),
 			entry(InnerLightType.WIND, Arrays.asList(TargetType.SELF, TargetType.ALLIES, TargetType.OTHER)),
+			entry(InnerLightType.AQUA, Arrays.asList(TargetType.SELF, TargetType.ALLIES, TargetType.OTHER, TargetType.ENEMIES, TargetType.ALL)),
 			entry(InnerLightType.FROG, List.of(TargetType.ALL))
 	);
 
@@ -148,30 +149,25 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 		if(type.equals(InnerLightType.NONE)){
 			return;
 		}
+		component.setPrevColor(ColoredGlowLib.getEntityColor(player));
 		if(type.equals(InnerLightType.HEAL)){
 			activateHeal(component, player);
-			component.setPrevColor(ColoredGlowLib.getEntityColor(player));
 		}else if(type.equals(InnerLightType.DEFENCE)){
 			activateDefense(component, player);
-			component.setPrevColor(ColoredGlowLib.getEntityColor(player));
 		}else if(type.equals(InnerLightType.STRENGTH)){
 			activateStrength(component, player);
-			component.setPrevColor(ColoredGlowLib.getEntityColor(player));
 		}else if(type.equals(InnerLightType.BLAZING)){
 			activateBlazing(component, player);
-			component.setPrevColor(ColoredGlowLib.getEntityColor(player));
 		}else if(type.equals(InnerLightType.FROST)){
 			activateFrost(component, player);
-			component.setPrevColor(ColoredGlowLib.getEntityColor(player));
 		}else if(type.equals(InnerLightType.EARTHEN)){
 			activateEarthen(component, player);
-			component.setPrevColor(ColoredGlowLib.getEntityColor(player));
 		}else if(type.equals(InnerLightType.WIND)){
 			activateWind(component, player);
-			component.setPrevColor(ColoredGlowLib.getEntityColor(player));
+		}else if(type.equals(InnerLightType.AQUA)){
+			activateAqua(component, player);
 		}else if(type.equals(InnerLightType.FROG)){
 			activateFrog(component, player);
-			component.setPrevColor(ColoredGlowLib.getEntityColor(player));
 		}
 		//for now defaults here
 		else{
@@ -451,6 +447,48 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 			player.sendMessage(Text.literal("Ok light triggered"), false);
 		}
 		new WindLight(targets, component.getMaxCooldown(), component.getPowerMultiplier(),
+				component.getDuration(), player).execute();
+	}
+
+	//=======================Aqua Light=======================
+	public static void activateAqua(LightComponent component, PlayerEntity player){
+		List<LivingEntity> targets = new ArrayList<>();
+		if(component.getTargets().equals(TargetType.ALL)){
+			targets.addAll(player.getWorld().getEntitiesByClass(LivingEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amount), (entity1 -> true)));
+			targets.remove(player);
+			player.sendMessage(Text.translatable("light.description.activation.aqua.all"), true);
+		}
+
+		else if(component.getTargets().equals(TargetType.ENEMIES)){
+			List<LivingEntity> entities = player.getWorld().getEntitiesByClass(LivingEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amount), (entity1 -> true));
+			for(LivingEntity ent : entities){
+				if(ent instanceof HostileEntity && !CheckUtils.CheckAllies.checkAlly(player, ent)){
+					targets.add(ent);
+				}
+			}
+			player.sendMessage(Text.translatable("light.description.activation.aqua.enemies"), true);
+		}else if(component.getTargets().equals(TargetType.ALLIES)){
+			List<LivingEntity> entities = player.getWorld().getEntitiesByClass(LivingEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amount), (entity1 -> true));
+			for(LivingEntity ent : entities){
+				if(/*!entity.equals(ent) && */CheckUtils.CheckAllies.checkAlly(player, ent)){
+					targets.add(ent);
+				}else if(ent instanceof TameableEntity){
+					if(player.equals(((TameableEntity) ent).getOwner())){
+						targets.add(ent);
+					}
+				}
+			}
+			targets.add(player);
+			player.sendMessage(Text.translatable("light.description.activation.aqua.allies"), true);
+		}if(component.getTargets().equals(TargetType.SELF)){
+			targets.add(player);
+			player.sendMessage(Text.translatable("light.description.activation.aqua.self"), true);
+		}
+
+		if(debug){
+			player.sendMessage(Text.literal("Ok light triggered"), false);
+		}
+		new AquaLight(targets, component.getMaxCooldown(), component.getPowerMultiplier(),
 				component.getDuration(), player).execute();
 	}
 
