@@ -227,6 +227,42 @@ public class LightTriggeringAndEvents {
         }
     }
 
+    public static void checkAqua(PlayerEntity player, LightComponent component, Entity attacker, LivingEntity target){
+        /**If the player has ALL as target, he needs to be hurt (or an ally has to die, but that depends on the trigger)*/
+        if(component.getTargets().equals(TargetType.ALL)
+                && CheckUtils.checkSelfHealth(player, Config.HP_PERCENTAGE_SELF+5)
+                && CheckUtils.checkSurrounded(player)
+                && CheckUtils.checkArmorDurability(player, Config.DUR_PERCENTAGE_SELF)
+                && CheckUtils.checkAqua(player)
+        ){
+            sendReadyPacket((ServerPlayerEntity) player, true);
+        }
+        /**CHECKS if the player has ENEMIES as target, either his or his allies health needs to be low*/
+        else if(component.getTargets().equals(TargetType.ENEMIES)
+                && (CheckUtils.CheckAllies.checkAlly(player, target) || player.equals(target))
+                && (CheckUtils.checkAllyHealth(player, target, Config.HP_PERCENTAGE_ALLIES+5) || CheckUtils.checkSelfHealth(player, Config.HP_PERCENTAGE_SELF+5))
+                && CheckUtils.checkSurrounded(player)
+                && CheckUtils.checkArmorDurability(player, Config.DUR_PERCENTAGE_ALLIES)
+                && CheckUtils.checkAqua(player)
+        ){
+            sendReadyPacket((ServerPlayerEntity) player, true);
+        }else if(component.getTargets().equals(TargetType.SELF)
+                && CheckUtils.checkSelfHealth(player, Config.HP_PERCENTAGE_SELF+5)
+                && CheckUtils.checkSurrounded(player)
+                && CheckUtils.checkArmorDurability(player, Config.DUR_PERCENTAGE_ALLIES)
+                && CheckUtils.checkAqua(player)
+        ){
+            sendReadyPacket((ServerPlayerEntity) player, true);
+        }else if(component.getTargets().equals(TargetType.ALLIES)
+                && CheckUtils.checkAllyHealth(player, target, Config.HP_PERCENTAGE_ALLIES+5)
+                && CheckUtils.checkSurrounded(player)
+                && CheckUtils.checkArmorDurability(player, Config.DUR_PERCENTAGE_ALLIES)
+                && CheckUtils.checkAqua(player)
+        ){
+            sendReadyPacket((ServerPlayerEntity) player, true);
+        }
+    }
+
     public static void checkFrog(PlayerEntity player, LightComponent component, LivingEntity attacker, Entity target){
         if(CheckUtils.checkSelfHealth(player, Config.HP_PERCENTAGE_SELF+15)
                 || CheckUtils.checkSurrounded(player)
@@ -268,6 +304,9 @@ public class LightTriggeringAndEvents {
         }
         if(component.getType().equals(InnerLightType.BLAZING)){
             checkBlazing(player, component, attacker, target);
+        }
+        if(component.getType().equals(InnerLightType.AQUA)){
+            checkAqua(player, component, attacker, target);
         }
     }
 
@@ -357,8 +396,8 @@ public class LightTriggeringAndEvents {
             if(component.getType().equals(InnerLightType.BLAZING)){
                 checkBlazing(player, component, player, entity);
             }
-            if(component.getType().equals(InnerLightType.FROG)){
-                checkFrog(player, component, player, entity);
+            if(component.getType().equals(InnerLightType.AQUA) && entity instanceof LivingEntity){
+                checkAqua(player, component, player, (LivingEntity) entity);
             }
             return ActionResult.PASS;
         } );
@@ -542,9 +581,9 @@ public class LightTriggeringAndEvents {
         else if(String.valueOf(id_bits[type_bit].charAt(i)).matches("[6-7]")){
             return new Pair<InnerLightType, TargetType>(InnerLightType.WIND, determineTarget(id_bits, target_bit, Arrays.asList(TargetType.SELF, TargetType.ALLIES, TargetType.OTHER)));
         }
-        //TODO Aqua
+        //Aqua
         else if(String.valueOf(id_bits[type_bit].charAt(i)).matches("[8-9]")){
-            return new Pair<InnerLightType, TargetType>(InnerLightType.BLAZING, determineAttackTarget(id_bits, target_bit));
+            return new Pair<InnerLightType, TargetType>(InnerLightType.AQUA, determineAttackTarget(id_bits, target_bit));
         }
         //Frog?
         else if(String.valueOf(id_bits[type_bit]).matches("frog")){

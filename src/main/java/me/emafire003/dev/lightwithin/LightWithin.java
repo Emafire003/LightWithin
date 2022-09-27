@@ -66,7 +66,7 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 			entry(InnerLightType.FROST, Arrays.asList(TargetType.SELF, TargetType.ALLIES, TargetType.ENEMIES, TargetType.ALL)),
 			entry(InnerLightType.EARTHEN, Arrays.asList(TargetType.SELF, TargetType.ALLIES, TargetType.ENEMIES, TargetType.OTHER)),
 			entry(InnerLightType.WIND, Arrays.asList(TargetType.SELF, TargetType.ALLIES, TargetType.OTHER)),
-			entry(InnerLightType.AQUA, Arrays.asList(TargetType.SELF, TargetType.ALLIES, TargetType.OTHER, TargetType.ENEMIES, TargetType.ALL)),
+			entry(InnerLightType.AQUA, Arrays.asList(TargetType.SELF, TargetType.ALLIES,  TargetType.ENEMIES, TargetType.ALL)),
 			entry(InnerLightType.FROG, List.of(TargetType.ALL))
 	);
 

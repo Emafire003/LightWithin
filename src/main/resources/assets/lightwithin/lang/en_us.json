@@ -5,6 +5,7 @@
   "effect.lightwithin.frost": "Frost",
   "effect.lightwithin.freeze_resistance": "Freeze Resistance",
   "effect.lightwithin.solid_rock": "Solid Rock",
+  "effect.lightwithin.water_slide": "Water Slide",
   "item.lightwithin.luxintus_berry": "Luxintus Berry",
   "item.lightwithin.luxmutua_berry": "Luxmutua Berry",
   "item.lightwithin.luxcognita_berry": "Luxcognita Berry",
@@ -35,6 +36,7 @@
   "light.description.frost": "Even if cold as ice, your light is ready to assist you",
   "light.description.earthen": "Your light draws its power from the earth around you!",
   "light.description.wind": "The wind is a good friend of your light!",
+  "light.description.aqua": "Your light best reflects upon watery surfaces!",
   "light.description.frog": "*croak* Wait what?!",
 
   "light.description.activation.heal.self": "Your light flowed trough you, sewing your wounds!",
@@ -67,5 +69,10 @@
 
   "light.description.activation.wind.self": "The wind shall carry me onwards!",
   "light.description.activation.wind.allies": "Oh winds, aid our movements!",
-  "light.description.activation.wind.other": "Blow them away!"
+  "light.description.activation.wind.other": "Blow them away!",
+
+  "light.description.activation.aqua.enemies": "Your enemy shall drown in a watery cage!",
+  "light.description.activation.aqua.all": "Inhabitants of the depths, hear my call and aid me!",
+  "light.description.activation.aqua.self": "Let me swiftly move on a watery carpet!",
+  "light.description.activation.aqua.allies": "Let us swiftly move on a watery carpet!"
 }

@@ -48,7 +48,7 @@ public class WaterSlideEffect extends StatusEffect {
     @Override
     public void applyUpdateEffect(LivingEntity entity, int amplifier) {
         if(Config.STRUCTURE_GRIEFING && !entity.getWorld().isClient && !entity.getWorld().getBlockState(entity.getBlockPos()).isOf(Blocks.WATER)){
-            StructurePlacerAPI placer = new StructurePlacerAPI((ServerWorld) entity.getWorld(), new Identifier(MOD_ID, "water_bit"), entity.getBlockPos(), BlockMirror.NONE, BlockRotation.NONE, true, 1f, new BlockPos(0, 0, 0));
+            StructurePlacerAPI placer = new StructurePlacerAPI((ServerWorld) entity.getWorld(), new Identifier(MOD_ID, "water_bit"), entity.getBlockPos(), BlockMirror.NONE, BlockRotation.NONE, true, 1f, new BlockPos(-1, 0, -1));
             placer.loadStructure();
         }
     }

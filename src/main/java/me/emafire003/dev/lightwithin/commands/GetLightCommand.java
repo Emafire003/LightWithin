@@ -142,7 +142,7 @@ public class GetLightCommand implements LightCommand{
             source.sendFeedback(Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The duration is: " ).formatted(Formatting.YELLOW)
                     .append(Text.literal("§a"+duration))), true);
             int mcooldown = LightWithin.LIGHT_COMPONENT.get(target).getMaxCooldown();
-            source.sendFeedback(Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The max cooldown of is: " ).formatted(Formatting.YELLOW)
+            source.sendFeedback(Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The max cooldown is: " ).formatted(Formatting.YELLOW)
                     .append(Text.literal("§a"+mcooldown))), true);
 
             Map<StatusEffect, StatusEffectInstance> effect_map = target.getActiveStatusEffects();
@@ -153,6 +153,20 @@ public class GetLightCommand implements LightCommand{
                 source.sendFeedback(Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("§d" + target.getName().getString() + "§e is not in cooldown" ).formatted(Formatting.YELLOW)), true);
             }
 
+            return 1;
+        }catch(Exception e){
+            e.printStackTrace();
+            source.sendFeedback(Text.literal("Error: " + e.toString()),false);
+            return 0;
+        }
+    }
+
+    private int getLights(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
+        ServerCommandSource source = context.getSource();
+
+        try{
+            source.sendFeedback(Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The light-types available at this moment are: " ).formatted(Formatting.YELLOW)
+                    .append(Text.literal(SetLightCommand.currently_usable_lights.toString()).formatted(Formatting.GREEN))), true);
             return 1;
         }catch(Exception e){
             e.printStackTrace();
@@ -172,6 +186,10 @@ public class GetLightCommand implements LightCommand{
                                                 .executes(this::getAll)
 
                                 )
+                )
+                .then(
+                        CommandManager
+                                .literal("lights").executes(this::getLights)
                 )
                 .then(
                         CommandManager

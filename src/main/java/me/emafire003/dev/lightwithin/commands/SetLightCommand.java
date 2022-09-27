@@ -26,7 +26,7 @@ import java.util.Objects;
 public class SetLightCommand implements LightCommand{
 
     //Temporary, will remove once all lights have been implemented
-    private List<InnerLightType> currently_usable_lights = Arrays.asList(InnerLightType.HEAL, InnerLightType.DEFENCE,
+    public static List<InnerLightType> currently_usable_lights = Arrays.asList(InnerLightType.HEAL, InnerLightType.DEFENCE,
             InnerLightType.STRENGTH, InnerLightType.BLAZING, InnerLightType.FROST, InnerLightType.EARTHEN,
             InnerLightType.WIND, InnerLightType.FROG, InnerLightType.AQUA);
 

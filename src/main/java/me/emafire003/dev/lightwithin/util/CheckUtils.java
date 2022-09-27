@@ -406,6 +406,26 @@ public class CheckUtils {
         //return checkMultipleBlocksWithTags(player, 3, 3, TagKey.of(Registry.BLOCK_KEY, BlockTags.AIR));
     }
 
+    private static final List<Item> aqua_items = Arrays.asList(Items.WATER_BUCKET, Items.GLASS_BOTTLE);
+    private static final List<Block> aqua_blocks = Arrays.asList(Blocks.WATER, Blocks.WATER_CAULDRON);
+
+    /**Used to check if the player has something that can be considered a Cold Source
+     * for the Frost Light
+     *
+     * @param player The player to perform checks on*/
+    public static boolean checkAqua(PlayerEntity player){
+        if(player.isTouchingWaterOrRain()){
+            return true;
+        }
+
+        Item main = player.getMainHandStack().getItem();
+        Item off = player.getOffHandStack().getItem();
+        if(aqua_items.contains(main) || aqua_items.contains(off)){
+            return true;
+        }
+        return checkBlocks(player, aqua_blocks, 3);
+    }
+
     public static boolean checkFalling(LivingEntity entity) {
         if(entity instanceof PlayerEntity){
             return ((PlayerEntity) entity).fallDistance > 5 && !entity.isFallFlying() && !entity.isOnGround() && !entity.isClimbing() && !((PlayerEntity) entity).getAbilities().flying && !entity.isSwimming();

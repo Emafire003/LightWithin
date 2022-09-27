@@ -15,11 +15,9 @@ import me.emafire003.dev.structureplacerapi.StructurePlacerAPI;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.minecraft.block.Blocks;
 import net.minecraft.command.argument.EntityAnchorArgumentType;
+import net.minecraft.enchantment.ChannelingEnchantment;
 import net.minecraft.enchantment.Enchantments;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.*;
 import net.minecraft.entity.ai.goal.ActiveTargetGoal;
 import net.minecraft.entity.ai.goal.RevengeGoal;
 import net.minecraft.entity.ai.goal.WanderAroundGoal;
@@ -28,10 +26,7 @@ import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.mob.DrownedEntity;
 import net.minecraft.entity.mob.ZombifiedPiglinEntity;
-import net.minecraft.entity.passive.AxolotlEntity;
-import net.minecraft.entity.passive.IronGolemEntity;
-import net.minecraft.entity.passive.MerchantEntity;
-import net.minecraft.entity.passive.TurtleEntity;
+import net.minecraft.entity.passive.*;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.TridentEntity;
 import net.minecraft.item.ItemStack;
@@ -121,6 +116,7 @@ public class AquaLight extends InnerLight {
         caster.getWorld().playSound(caster, caster.getBlockPos(), LightSounds.WIND_LIGHT, SoundCategory.AMBIENT, 1, 1);
         LightComponent component = LIGHT_COMPONENT.get(caster);
 
+
         //ALL section (drowneds)
         if(component.getTargets().equals(TargetType.ALL)){
             LightParticlesUtil.spawnLightTypeParticle(LightParticles.AQUALIGHT_PARTICLE, (ServerWorld) caster.getWorld(), caster.getPos());
@@ -173,7 +169,7 @@ public class AquaLight extends InnerLight {
                 //TODO change to aqua sound effects
                 target.playSound(LightSounds.WIND_LIGHT, 0.9f, 1);
 
-                target.addStatusEffect(new StatusEffectInstance(LightEffects.WATER_SLIDE, this.duration*20, (int) (this.power_multiplier), false, false));
+                target.addStatusEffect(new StatusEffectInstance(LightEffects.WATER_SLIDE, this.duration*20, 0, false, false));
                 target.addStatusEffect(new StatusEffectInstance(StatusEffects.DOLPHINS_GRACE, this.duration*20, (int) (this.power_multiplier), false, false));
                 target.addStatusEffect(new StatusEffectInstance(StatusEffects.CONDUIT_POWER, this.duration*20, (int) (this.power_multiplier), false, false));
 
@@ -183,142 +179,38 @@ public class AquaLight extends InnerLight {
             //And will also give Solid Rock effect to self, making the player more resistant to knokback
         }
 
-        //enemies section (water ball & tridents)
+        //enemies section (water cage & tridents)
         else if(component.getTargets().equals(TargetType.ENEMIES)) {
             LightParticlesUtil.spawnLightTypeParticle(LightParticles.AQUALIGHT_PARTICLE, (ServerWorld) caster.getWorld(), caster.getPos());
-            //oldtarget and stuuf prevent generating multiple structures in the same area
-            LivingEntity oldtarget = null;
+
             for(LivingEntity target : this.targets){
                 //TODO change to aqua
                 target.playSound(LightSounds.EARTHEN_LIGHT, 0.9f, 1);
                 if(Config.STRUCTURE_GRIEFING && !caster.getWorld().isClient) {
-                    if(oldtarget == null || oldtarget.distanceTo(target) > 3){
-                        StructurePlacerAPI placer = new StructurePlacerAPI((ServerWorld) caster.getWorld(), new Identifier(MOD_ID, "water_ball"), target.getBlockPos(), BlockMirror.NONE, BlockRotation.NONE, true, 1f, new BlockPos(-3, 0, -3));
-                        placer.loadStructure();
-                        //target.teleport(target.getX(), target.getY()+1, target.getZ());
-                    }
-                    target.setAir(0);
-                    target.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, this.duration*20, (int) (this.power_multiplier*10), false, false));
+                    StructurePlacerAPI placer = new StructurePlacerAPI((ServerWorld) caster.getWorld(), new Identifier(MOD_ID, "water_cage"), target.getBlockPos(), BlockMirror.NONE, BlockRotation.NONE, true, 1f, new BlockPos(-1, 0, -1));
+                    placer.loadStructure();
+
+                    target.setAir(2);
+                    target.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, this.duration*10, (int) (this.power_multiplier*20), false, false));
+
                     if(this.power_multiplier >= 4){
-                        if(this.power_multiplier < 5){
-                            launchTrident(target, caster);
-                        }else if(this.power_multiplier < 6){
-                            launchMultipleTridents(target, caster, Arrays.asList(target.getPos().add(4.5, 2, 0), target.getPos().add(-4.5, 2, 0)));
-                        }else if(this.power_multiplier < 7){
-                            launchMultipleTridents(target, caster, Arrays.asList(
-                                    target.getPos().add(0, 0, 4.5),
-                                    target.getPos().add(0, 4.5, 0),
-                                    target.getPos().add(0, 0, -4.5)));
-                        }else if(this.power_multiplier < 8){
-                            launchMultipleTridents(target, caster, Arrays.asList(
-                                    target.getPos().add(0, 0, 4.5),
-                                    target.getPos().add(4.5, 0, 0),
-                                    target.getPos().add(-4.5, 0, 0),
-                                    target.getPos().add(0, 0, -4.5)));
-                        }else if(this.power_multiplier < 9){
-                            launchMultipleTridents(target, caster, Arrays.asList(
-                                    target.getPos().add(0, 0, 4.5),
-                                    target.getPos().add(4.5, 0, 0),
-                                    target.getPos().add(0, 4.5, 0),
-                                    target.getPos().add(-4.5, 0, 0),
-                                    target.getPos().add(0, 0, -4.5)));
-                        }else if(this.power_multiplier == 9){
-                            launchMultipleTridents(target, caster, Arrays.asList(
-                                    target.getPos().add(0, 0, 4.5),
-                                    target.getPos().add(4.5, 0, 0),
-                                    target.getPos().add(0, 4.5, 0),
-                                    target.getPos().add(0, -4.5, 0),
-                                    target.getPos().add(-4.5, 0, 0),
-                                    target.getPos().add(0, 0, -4.5)));
+                        ItemStack trident = new ItemStack(Items.TRIDENT);
+                        trident.addEnchantment(Enchantments.CHANNELING, 1);
+                        TridentEntity tridentEntity = new TridentEntity(caster.world, caster, trident);
+                        tridentEntity.setPos(target.getX(), target.getY()+10, target.getZ());
+                        tridentEntity.addVelocity(0, -1, 0);
+                        if(this.power_multiplier >= 7){
+                            LightningEntity lightning = new LightningEntity(EntityType.LIGHTNING_BOLT, caster.getWorld());
+                            lightning.setPos(target.getX(), target.getY(), target.getZ());
+                            target.getWorld().spawnEntity(lightning);
                         }
+                        target.playSound(SoundEvents.ITEM_TRIDENT_RETURN, 1, 0.7f);
+                        target.getWorld().spawnEntity(tridentEntity);
                     }
-                    oldtarget = target;
                 }
             }
         }
 
-    }
-
-    public void launchMultipleTridents(LivingEntity target, PlayerEntity caster, List<Vec3d> positions){
-        for(Vec3d pos : positions){
-            this.launchTrident(target, caster, pos);
-        }
-    }
-
-    //TODO make them stay airborn for a bit an THEN shoot.
-    private int ticks = 0;
-    public void launchTrident(LivingEntity target, PlayerEntity caster) {
-        TridentEntity tridentEntity = new TridentEntity(caster.world, caster, new ItemStack(Items.TRIDENT));
-        double d = target.getX() - caster.getX();
-        double e = target.getBodyY(0.3333333333333333D) - tridentEntity.getY();
-        double f = target.getZ() - caster.getZ();
-        double g = Math.sqrt(d * d + f * f);
-        tridentEntity.setVelocity(d, e + g * 0.20000000298023224D, f, 1.6F, (float)(14 - caster.world.getDifficulty().getId() * 4));
-        caster.playSound(SoundEvents.ENTITY_DROWNED_SHOOT, 1.0F, 1.0F / (caster.getRandom().nextFloat() * 0.4F + 0.8F));
-        caster.world.spawnEntity(tridentEntity);
-        ServerTickEvents.END_SERVER_TICK.register(server -> {
-            caster.sendMessage(Text.literal("Tic(helo?) : " + ticks));
-            if(ticks == -1){
-                caster.sendMessage(Text.literal("Ticks : " + ticks));
-                return;
-            }
-            ticks++;
-            if(ticks == 5){
-                tridentEntity.setNoGravity(true);
-                caster.sendMessage(Text.literal("Ticks : " + ticks));
-            }
-            if(ticks == 30){
-                caster.sendMessage(Text.literal("Ticks : " + ticks));
-                tridentEntity.setNoGravity(false);
-                ticks = -1;
-            }
-
-        });
-    }
-
-    //TODO make them stay airborn for a bit an THEN shoot.
-    public void launchTrident(LivingEntity target, PlayerEntity caster, Vec3d pos) {
-        ItemStack trident = new ItemStack(Items.TRIDENT);
-        trident.addEnchantment(Enchantments.CHANNELING, 1);
-        TridentEntity tridentEntity = new TridentEntity(caster.world, caster, trident);
-        tridentEntity.setPos(pos.x, pos.y, pos.z);
-        double d = target.getX() - caster.getX();
-        double e = target.getBodyY(0.3333333333333333D) - tridentEntity.getY();
-        double f = target.getZ() - caster.getZ();
-        double g = Math.sqrt(d * d + f * f);
-        tridentEntity.lookAt(EntityAnchorArgumentType.EntityAnchor.EYES, target.getPos());
-        tridentEntity.setNoGravity(true);
-        //tridentEntity.setVelocity(d, e + g * 0.20000000298023224D, f, 1.6F, (float)(14 - caster.world.getDifficulty().getId() * 4));
-
-        caster.playSound(SoundEvents.ENTITY_DROWNED_SHOOT, 1.0F, 1.0F / (caster.getRandom().nextFloat() * 0.4F + 0.8F));
-        caster.world.spawnEntity(tridentEntity);
-        ServerTickEvents.END_SERVER_TICK.register(server -> {
-            if(ticks == -1){
-                return;
-            }
-            ticks++;
-            if(ticks == 5){
-                tridentEntity.setNoGravity(true);
-            }
-            if(ticks == 30){
-                tridentEntity.setNoGravity(false);
-                ticks = -1;
-            }
-
-        });
-    }
-
-    private float changeAngle(float from, float to, float max) {
-        float f = MathHelper.wrapDegrees(to - from);
-        if (f > max) {
-            f = max;
-        }
-
-        if (f < -max) {
-            f = -max;
-        }
-
-        return from + f;
     }
 
 }
