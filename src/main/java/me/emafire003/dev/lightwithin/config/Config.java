@@ -77,6 +77,10 @@ public class Config {
     public static int WIND_MIN_POWER;
     public static int WIND_MIN_DURATION;
 
+    public static int AQUA_MAX_POWER;
+    public static int AQUA_MAX_DURATION;
+    public static int AQUA_MIN_POWER;
+    public static int AQUA_MIN_DURATION;
 
     public static boolean SHOULD_CHECK_BLOCKS;
     public static boolean STRUCTURE_GRIEFING;
@@ -85,6 +89,9 @@ public class Config {
     public static boolean TARGET_FEEDBACK;
 
     public static boolean AUTO_LIGHT_ACTIVATION;
+
+    public static boolean LIGHT_RUNES;
+    public static int LIGHT_RUNES_DURATION;
 
     public static boolean RESET_ON_JOIN;
     public static void registerConfigs() {
@@ -164,6 +171,12 @@ public class Config {
         configs.addKeyValuePair(new Pair<>("wind_max_duration", 18), "The maximum duration of some effects that can be applied (like speed, haste, slow falling)");
         configs.addKeyValuePair(new Pair<>("wind_min_duration", 1), "The minimum duration (see above)");
 
+        configs.addKeyValuePair(new Pair<>("aqua_max_power", 9), "The maximum power multiplier (Determines power of status effects, number of drowned spawned, if the cage will spawn a trident and lightning )");
+        configs.addKeyValuePair(new Pair<>("aqua_min_power", 1), "The minimum power multiplier (see above)");
+        configs.addKeyValuePair(new Pair<>("aqua_max_duration", 18), "The maximum duration of some effects that can be applied (like water slide, conduit, etc.)");
+        configs.addKeyValuePair(new Pair<>("aqua_min_duration", 1), "The minimum duration (see above)");
+
+
         configs.addKeyValuePair(new Pair<>("should_check_blocks", true), "Should the blocks near the player be checked for the light activation? Could impact on performance");
         configs.addKeyValuePair(new Pair<>("structure_griefing", true), "If set to false will prevent lights from spawning ANY KIND structures on activation (I'd suggest leaving it to true)");
         configs.addKeyValuePair(new Pair<>("non_fundamental_structure_griefing", true), "If set to false will prevent lights from spawning structures that are not fundamental for the light's effect. For example Earthen Light's structures will STILL SPAWN (I'd suggest leaving it to true)");
@@ -173,6 +186,9 @@ public class Config {
         configs.addKeyValuePair(new Pair<>("reset_on_join", false), "Should the InnerLight be compleatly resetted upon joining the server/world again? Useful after an update of the mod that added new Light Types");
 
         configs.addKeyValuePair(new Pair<>("auto_light_activation", false), "Should the light be activated without the player needing to press the button? (Suggestion: keep it to false) CLIENT SIDE");
+
+        configs.addKeyValuePair(new Pair<>("light_runes", true), "Should runes be rendered? (If true they will only render in first person)");
+        configs.addKeyValuePair(new Pair<>("light_runes_duration", 3), "How many seconds should the runes last on screen?");
 
     }
 
@@ -248,6 +264,11 @@ public class Config {
         WIND_MIN_POWER = CONFIG.getOrDefault("wind_min_power", 1);
         WIND_MIN_DURATION = CONFIG.getOrDefault("wind_min_duration", 1);
 
+        AQUA_MAX_POWER = CONFIG.getOrDefault("aqua_max_power", 9);
+        AQUA_MAX_DURATION = CONFIG.getOrDefault("aqua_max_duration", 18);
+        AQUA_MIN_POWER = CONFIG.getOrDefault("aqua_min_power", 1);
+        AQUA_MIN_DURATION = CONFIG.getOrDefault("aqua_min_duration", 1);
+
         SHOULD_CHECK_BLOCKS = CONFIG.getOrDefault("should_check_blocks", true);
         STRUCTURE_GRIEFING = CONFIG.getOrDefault("structure_griefing", true);
         NON_FUNDAMENTAL_STRUCTURE_GRIEFING = CONFIG.getOrDefault("non_fundamental_structure_griefing", true);
@@ -257,6 +278,9 @@ public class Config {
         RESET_ON_JOIN = CONFIG.getOrDefault("reset_on_join", false);
 
         AUTO_LIGHT_ACTIVATION = Config.CONFIG.getOrDefault("auto_light_activation", false);
+
+        LIGHT_RUNES = Config.CONFIG.getOrDefault("light_runes", true);
+        LIGHT_RUNES_DURATION = Config.CONFIG.getOrDefault("light_runes_duration", 3);
 
 
     }

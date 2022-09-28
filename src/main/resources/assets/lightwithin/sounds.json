@@ -52,5 +52,11 @@
     "sounds": [
       "lightwithin:wind_light"
     ]
+  },
+  "aqua_light": {
+    "subtitle": "lightwithin.aqua_light_triggered",
+    "sounds": [
+      "lightwithin:aqua_light"
+    ]
   }
 }

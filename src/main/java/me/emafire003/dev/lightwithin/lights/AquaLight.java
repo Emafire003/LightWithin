@@ -90,17 +90,17 @@ public class AquaLight extends InnerLight {
     }
 
     private void checkSafety(){
-        if(this.power_multiplier > Config.WIND_MAX_POWER){
-            power_multiplier = Config.WIND_MAX_POWER;
+        if(this.power_multiplier > Config.AQUA_MAX_POWER){
+            power_multiplier = Config.AQUA_MAX_POWER;
         }
-        if(this.power_multiplier < Config.WIND_MIN_POWER){
-            power_multiplier = Config.WIND_MIN_POWER;
+        if(this.power_multiplier < Config.AQUA_MIN_POWER){
+            power_multiplier = Config.AQUA_MIN_POWER;
         }
-        if(this.duration > Config.WIND_MAX_DURATION){
-            this.duration = Config.WIND_MAX_DURATION;
+        if(this.duration > Config.AQUA_MAX_DURATION){
+            this.duration = Config.AQUA_MAX_DURATION;
         }
-        if(this.duration < Config.WIND_MIN_DURATION){
-            this.duration = Config.WIND_MIN_DURATION;
+        if(this.duration < Config.AQUA_MIN_DURATION){
+            this.duration = Config.AQUA_MIN_DURATION;
         }
     }
 
@@ -113,7 +113,8 @@ public class AquaLight extends InnerLight {
             ColoredGlowLib.setColorToEntity(this.caster, this.color);
         }
 
-        caster.getWorld().playSound(caster, caster.getBlockPos(), LightSounds.WIND_LIGHT, SoundCategory.AMBIENT, 1, 1);
+        caster.getWorld().playSound(caster, caster.getBlockPos(), LightSounds.AQUA_LIGHT, SoundCategory.AMBIENT, 1, 1);
+
         LightComponent component = LIGHT_COMPONENT.get(caster);
 
 
@@ -166,8 +167,7 @@ public class AquaLight extends InnerLight {
         //Allies/self section (boosts & water slide)
         if(component.getTargets().equals(TargetType.ALLIES) || component.getTargets().equals(TargetType.SELF)){
             for(LivingEntity target : this.targets){
-                //TODO change to aqua sound effects
-                target.playSound(LightSounds.WIND_LIGHT, 0.9f, 1);
+                target.playSound(LightSounds.AQUA_LIGHT, 0.9f, 1);
 
                 target.addStatusEffect(new StatusEffectInstance(LightEffects.WATER_SLIDE, this.duration*20, 0, false, false));
                 target.addStatusEffect(new StatusEffectInstance(StatusEffects.DOLPHINS_GRACE, this.duration*20, (int) (this.power_multiplier), false, false));
@@ -184,8 +184,7 @@ public class AquaLight extends InnerLight {
             LightParticlesUtil.spawnLightTypeParticle(LightParticles.AQUALIGHT_PARTICLE, (ServerWorld) caster.getWorld(), caster.getPos());
 
             for(LivingEntity target : this.targets){
-                //TODO change to aqua
-                target.playSound(LightSounds.EARTHEN_LIGHT, 0.9f, 1);
+                target.playSound(LightSounds.AQUA_LIGHT, 0.9f, 1);
                 if(Config.STRUCTURE_GRIEFING && !caster.getWorld().isClient) {
                     StructurePlacerAPI placer = new StructurePlacerAPI((ServerWorld) caster.getWorld(), new Identifier(MOD_ID, "water_cage"), target.getBlockPos(), BlockMirror.NONE, BlockRotation.NONE, true, 1f, new BlockPos(-1, 0, -1));
                     placer.loadStructure();

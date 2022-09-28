@@ -126,10 +126,9 @@ public class EventHandler {
             wind_runes = true;
             player.playSound(LightSounds.WIND_LIGHT, 1 ,1);
         }
-        //TODO change sound to aqua
         else if(type.equals(InnerLightType.AQUA)){
             aqua_runes = true;
-            player.playSound(LightSounds.WIND_LIGHT, 1 ,1);
+            player.playSound(LightSounds.AQUA_LIGHT, 1 ,1);
         }
         else if(type.equals(InnerLightType.FROG)){
             frog_runes = true;
