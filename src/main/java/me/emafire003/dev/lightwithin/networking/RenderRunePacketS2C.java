@@ -8,7 +8,8 @@ import net.minecraft.util.Identifier;
 
 import java.util.NoSuchElementException;
 
-import static me.emafire003.dev.coloredglowlib.ColoredGlowLib.LOGGER;
+import static me.emafire003.dev.lightwithin.LightWithin.LOGGER;
+
 
 public class RenderRunePacketS2C extends PacketByteBuf {
     public static final Identifier ID = new Identifier(LightWithin.MOD_ID , "lightrune_render_packet");

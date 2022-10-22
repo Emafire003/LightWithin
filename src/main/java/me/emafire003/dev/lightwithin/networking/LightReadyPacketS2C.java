@@ -7,7 +7,7 @@ import net.minecraft.util.Identifier;
 
 import java.util.NoSuchElementException;
 
-import static me.emafire003.dev.coloredglowlib.ColoredGlowLib.LOGGER;
+import static me.emafire003.dev.lightwithin.LightWithin.LOGGER;
 
 public class LightReadyPacketS2C extends PacketByteBuf {
     public static final Identifier ID = new Identifier(LightWithin.MOD_ID , "light_ready_packet");
