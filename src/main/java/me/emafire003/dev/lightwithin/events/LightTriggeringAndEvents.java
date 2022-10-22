@@ -227,6 +227,7 @@ public class LightTriggeringAndEvents {
         }
     }
 
+    //Probably needs, player, attacker, attacked, ally
     public static void checkAqua(PlayerEntity player, LightComponent component, Entity attacker, LivingEntity target){
         /**If the player has ALL as target, he needs to be hurt (or an ally has to die, but that depends on the trigger)*/
         if(component.getTargets().equals(TargetType.ALL)
@@ -239,8 +240,7 @@ public class LightTriggeringAndEvents {
         }
         /**CHECKS if the player has ENEMIES as target, either his or his allies health needs to be low*/
         else if(component.getTargets().equals(TargetType.ENEMIES)
-                && (CheckUtils.CheckAllies.checkAlly(player, target) || player.equals(target))
-                && (CheckUtils.checkAllyHealth(player, target, Config.HP_PERCENTAGE_ALLIES+5) || CheckUtils.checkSelfHealth(player, Config.HP_PERCENTAGE_SELF+5))
+                && CheckUtils.checkSelfHealth(player, Config.HP_PERCENTAGE_SELF+5)
                 && CheckUtils.checkSurrounded(player)
                 && CheckUtils.checkArmorDurability(player, Config.DUR_PERCENTAGE_ALLIES)
                 && CheckUtils.checkAqua(player)
@@ -425,6 +425,9 @@ public class LightTriggeringAndEvents {
                     }
                     if(component.getType().equals(InnerLightType.WIND)){
                         checkWind(player, component, attacker, entity);
+                    }
+                    if(component.getType().equals(InnerLightType.AQUA) && entity instanceof LivingEntity){
+                        checkAqua(player, component, player, (LivingEntity) entity);
                     }
                     /**End*/
                 }

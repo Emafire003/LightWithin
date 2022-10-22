@@ -1,7 +1,5 @@
 package me.emafire003.dev.lightwithin.lights;
 
-import me.emafire003.dev.coloredglowlib.util.Color;
-import me.emafire003.dev.lightwithin.util.TargetType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 
@@ -14,7 +12,7 @@ public class InnerLight {
     protected double cooldown_time;
     protected double power_multiplier;
     protected int duration;
-    protected Color color;
+    protected String color;
     //TODO set to playerentity
     protected PlayerEntity caster;
     protected boolean rainbow_col;
@@ -23,7 +21,7 @@ public class InnerLight {
     public void execute(){
     }
 
-    public InnerLight(List<LivingEntity> targets, double cooldown_time, double power_multiplier, int duration, Color color, PlayerEntity caster, boolean rainbow_col){
+    public InnerLight(List<LivingEntity> targets, double cooldown_time, double power_multiplier, int duration, String color, PlayerEntity caster, boolean rainbow_col){
         this.targets = targets;
         this.cooldown_time = cooldown_time;
         this.power_multiplier = power_multiplier;

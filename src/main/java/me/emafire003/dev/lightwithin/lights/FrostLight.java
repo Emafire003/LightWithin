@@ -1,7 +1,6 @@
 package me.emafire003.dev.lightwithin.lights;
 
-import me.emafire003.dev.coloredglowlib.ColoredGlowLib;
-import me.emafire003.dev.coloredglowlib.util.Color;
+import me.emafire003.dev.lightwithin.compat.coloredglowlib.CGLCompat;
 import me.emafire003.dev.lightwithin.component.LightComponent;
 import me.emafire003.dev.lightwithin.config.Config;
 import me.emafire003.dev.lightwithin.particles.LightParticles;
@@ -10,6 +9,7 @@ import me.emafire003.dev.lightwithin.sounds.LightSounds;
 import me.emafire003.dev.lightwithin.status_effects.LightEffects;
 import me.emafire003.dev.lightwithin.util.TargetType;
 import me.emafire003.dev.structureplacerapi.StructurePlacerAPI;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffectInstance;
@@ -23,6 +23,7 @@ import net.minecraft.util.BlockRotation;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import org.lwjgl.opengl.CGL;
 
 import java.util.List;
 
@@ -44,7 +45,7 @@ public class FrostLight extends InnerLight {
     * - all
     * - ally/self -> protective wall and other things. Maybe a buff of some sort.*/
 
-    public FrostLight(List<LivingEntity> targets, double cooldown_time, double power_multiplier, int duration, Color color, PlayerEntity caster, boolean rainbow_col) {
+    public FrostLight(List<LivingEntity> targets, double cooldown_time, double power_multiplier, int duration, String color, PlayerEntity caster, boolean rainbow_col) {
         super(targets, cooldown_time, power_multiplier, duration, color, caster, rainbow_col);
         type = InnerLightType.FROST;
     }
@@ -52,13 +53,13 @@ public class FrostLight extends InnerLight {
     public FrostLight(List<LivingEntity> targets, double cooldown_time, double power_multiplier, int duration, PlayerEntity caster, boolean rainbow_col) {
         super(targets, cooldown_time, power_multiplier, duration, caster, rainbow_col);
         type = InnerLightType.FROST;
-        color = new Color(141, 251, 255);
+        color = "96fbff";
     }
 
     public FrostLight(List<LivingEntity> targets, double cooldown_time, double power_multiplier, int duration, PlayerEntity caster) {
         super(targets, cooldown_time, power_multiplier, duration, caster);
         type = InnerLightType.FROST;
-        color = new Color(141, 251, 255);
+        color = "96fbff";
     }
 
     private void checkSafety(){
@@ -79,11 +80,15 @@ public class FrostLight extends InnerLight {
     @Override
     public void execute(){
         checkSafety();
-        if(this.rainbow_col){
-            ColoredGlowLib.setRainbowColorToEntity(this.caster, true);
-        }else{
-            ColoredGlowLib.setColorToEntity(this.caster, this.color);
+
+        if(FabricLoader.getInstance().isModLoaded("coloredglowlib")){
+            if(this.rainbow_col){
+                CGLCompat.getLib().setRainbowColorToEntity(this.caster, true);
+            }else{
+                CGLCompat.getLib().setColorToEntity(this.caster, CGLCompat.fromHex(this.color));
+            }
         }
+
         caster.getWorld().playSound(caster, caster.getBlockPos(), LightSounds.FROST_LIGHT, SoundCategory.AMBIENT, 1, 1);
         LightComponent component = LIGHT_COMPONENT.get(caster);
         if((Config.STRUCTURE_GRIEFING || Config.NON_FUNDAMENTAL_STRUCTURE_GRIEFING) && !caster.getWorld().isClient && (component.getTargets().equals(TargetType.ALL) || component.getTargets().equals(TargetType.ENEMIES))) {

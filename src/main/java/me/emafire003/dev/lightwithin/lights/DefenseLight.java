@@ -1,12 +1,12 @@
 package me.emafire003.dev.lightwithin.lights;
-
-import me.emafire003.dev.coloredglowlib.ColoredGlowLib;
-import me.emafire003.dev.coloredglowlib.util.Color;
+;
+import me.emafire003.dev.lightwithin.compat.coloredglowlib.CGLCompat;
 import me.emafire003.dev.lightwithin.config.Config;
 import me.emafire003.dev.lightwithin.particles.LightParticles;
 import me.emafire003.dev.lightwithin.sounds.LightSounds;
 import me.emafire003.dev.lightwithin.particles.LightParticlesUtil;
 import me.emafire003.dev.lightwithin.status_effects.LightEffects;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
@@ -29,7 +29,7 @@ public class DefenseLight extends InnerLight {
     * - allies
     * - Passive mobs & self*/
 
-    public DefenseLight(List<LivingEntity> targets, double cooldown_time, double power_multiplier, int duration, Color color, PlayerEntity caster, boolean rainbow_col) {
+    public DefenseLight(List<LivingEntity> targets, double cooldown_time, double power_multiplier, int duration, String color, PlayerEntity caster, boolean rainbow_col) {
         super(targets, cooldown_time, power_multiplier, duration, color, caster, rainbow_col);
         type = InnerLightType.DEFENCE;
     }
@@ -37,13 +37,13 @@ public class DefenseLight extends InnerLight {
     public DefenseLight(List<LivingEntity> targets, double cooldown_time, double power_multiplier, int duration, PlayerEntity caster, boolean rainbow_col) {
         super(targets, cooldown_time, power_multiplier, duration, caster, rainbow_col);
         type = InnerLightType.DEFENCE;
-        color = new Color(67, 128, 60);
+        color = "427f3b";
     }
 
     public DefenseLight(List<LivingEntity> targets, double cooldown_time, double power_multiplier, int duration, PlayerEntity caster) {
         super(targets, cooldown_time, power_multiplier, duration, caster);
         type = InnerLightType.DEFENCE;
-        color = new Color(67, 128, 60);
+        color = "427f3b";
     }
 
     private void checkSafety(){
@@ -68,11 +68,15 @@ public class DefenseLight extends InnerLight {
     @Override
     public void execute(){
         checkSafety();
-        if(this.rainbow_col){
-            ColoredGlowLib.setRainbowColorToEntity(this.caster, true);
-        }else{
-            ColoredGlowLib.setColorToEntity(this.caster, this.color);
+
+        if(FabricLoader.getInstance().isModLoaded("coloredglowlib")){
+            if(this.rainbow_col){
+                CGLCompat.getLib().setRainbowColorToEntity(this.caster, true);
+            }else{
+                CGLCompat.getLib().setColorToEntity(this.caster, CGLCompat.fromHex(this.color));
+            }
         }
+
         caster.getWorld().playSound(caster, caster.getBlockPos(), LightSounds.DEFENSE_LIGHT, SoundCategory.AMBIENT, 1, 1);
         for(LivingEntity target : this.targets){
             target.playSound(LightSounds.DEFENSE_LIGHT, 1, 1);

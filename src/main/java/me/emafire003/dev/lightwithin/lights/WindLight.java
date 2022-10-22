@@ -1,7 +1,6 @@
 package me.emafire003.dev.lightwithin.lights;
 
-import me.emafire003.dev.coloredglowlib.ColoredGlowLib;
-import me.emafire003.dev.coloredglowlib.util.Color;
+import me.emafire003.dev.lightwithin.compat.coloredglowlib.CGLCompat;
 import me.emafire003.dev.lightwithin.component.LightComponent;
 import me.emafire003.dev.lightwithin.config.Config;
 import me.emafire003.dev.lightwithin.util.fabridash.FabriDash;
@@ -9,6 +8,7 @@ import me.emafire003.dev.lightwithin.particles.LightParticles;
 import me.emafire003.dev.lightwithin.particles.LightParticlesUtil;
 import me.emafire003.dev.lightwithin.sounds.LightSounds;
 import me.emafire003.dev.lightwithin.util.TargetType;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
@@ -35,7 +35,7 @@ public class WindLight extends InnerLight {
     * - ally/self -> launch up in the air and give jump boost velocity and
     * - ALL MAYBE, but not sure. -> everything/one boosted away*/
 
-    public WindLight(List<LivingEntity> targets, double cooldown_time, double power_multiplier, int duration, Color color, PlayerEntity caster, boolean rainbow_col) {
+    public WindLight(List<LivingEntity> targets, double cooldown_time, double power_multiplier, int duration, String color, PlayerEntity caster, boolean rainbow_col) {
         super(targets, cooldown_time, power_multiplier, duration, color, caster, rainbow_col);
         type = InnerLightType.WIND;
     }
@@ -43,13 +43,13 @@ public class WindLight extends InnerLight {
     public WindLight(List<LivingEntity> targets, double cooldown_time, double power_multiplier, int duration, PlayerEntity caster, boolean rainbow_col) {
         super(targets, cooldown_time, power_multiplier, duration, caster, rainbow_col);
         type = InnerLightType.WIND;
-        color = new Color(210, 243, 255);
+        color = "d1f2ff";
     }
 
     public WindLight(List<LivingEntity> targets, double cooldown_time, double power_multiplier, int duration, PlayerEntity caster) {
         super(targets, cooldown_time, power_multiplier, duration, caster);
         type = InnerLightType.WIND;
-        color = new Color(210, 243, 255);
+        color = "d1f2ff";
     }
 
     private void checkSafety(){
@@ -70,11 +70,15 @@ public class WindLight extends InnerLight {
     @Override
     public void execute(){
         checkSafety();
-        if(this.rainbow_col){
-            ColoredGlowLib.setRainbowColorToEntity(this.caster, true);
-        }else{
-            ColoredGlowLib.setColorToEntity(this.caster, this.color);
+
+        if(FabricLoader.getInstance().isModLoaded("coloredglowlib")){
+            if(this.rainbow_col){
+                CGLCompat.getLib().setRainbowColorToEntity(this.caster, true);
+            }else{
+                CGLCompat.getLib().setColorToEntity(this.caster, CGLCompat.fromHex(this.color));
+            }
         }
+
 
         caster.getWorld().playSound(caster, caster.getBlockPos(), LightSounds.WIND_LIGHT, SoundCategory.AMBIENT, 1, 1);
         LightComponent component = LIGHT_COMPONENT.get(caster);
@@ -91,7 +95,7 @@ public class WindLight extends InnerLight {
         }
         //If the target is allies, a series of boost will be given to allies and self
         else if(component.getTargets().equals(TargetType.ALLIES)){
-            //oldtarget and stuuf prevent generating multiple structures in the same area
+            //oldtarget and stuff prevent generating multiple structures in the same area
             for(LivingEntity target : this.targets){
 
                 target.playSound(LightSounds.WIND_LIGHT, 0.9f, 1);

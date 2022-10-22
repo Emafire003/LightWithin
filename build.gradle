@@ -43,7 +43,7 @@ dependencies {
 
 	//ColoredGlowLib
 	modImplementation "maven.modrinth:coloredglowlib:${project.coloredglowlib_version}"
-	//include "maven.modrinth:coloredglowlib:${project.coloredglowlib_version}"
+	include "maven.modrinth:coloredglowlib:${project.coloredglowlib_version}"
 
 	//CardinalComponents (old version 4.0.1)
 	include modImplementation("dev.onyxstudios.cardinal-components-api:cardinal-components-base:5.0.1")

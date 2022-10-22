@@ -2,7 +2,6 @@ package me.emafire003.dev.lightwithin.component;
 
 import dev.onyxstudios.cca.api.v3.component.ComponentV3;
 import dev.onyxstudios.cca.api.v3.component.sync.AutoSyncedComponent;
-import me.emafire003.dev.coloredglowlib.util.Color;
 import me.emafire003.dev.lightwithin.LightWithin;
 import me.emafire003.dev.lightwithin.lights.InnerLightType;
 import me.emafire003.dev.lightwithin.util.TargetType;
@@ -17,8 +16,8 @@ public class LightComponent implements ComponentV3, AutoSyncedComponent {
     protected int cooldown_time = -1;
     protected double power_multiplier = -1;
     protected int duration = -1;
-    protected Color color = Color.getWhiteColor();
-    protected Color prev_color = Color.getWhiteColor();
+    protected String color = "ffffff";
+    protected String prev_color = "ffffff";
     protected boolean rainbow_col = false;
     private PlayerEntity caster;
     protected InnerLightType type = InnerLightType.NONE;
@@ -70,16 +69,16 @@ public class LightComponent implements ComponentV3, AutoSyncedComponent {
 
         if(tag.contains("color")){
             if(debug){LOGGER.info("the color got: " + tag.getString("color"));}
-            this.color = Color.translateFromHEX(tag.getString("color"));
+            this.color = tag.getString("color");
         }else{
-            this.color = Color.getWhiteColor();
+            this.color = "ffffff";
         }
 
         if(tag.contains("prev_color")){
             if(debug){LOGGER.info("the prev_color got: " + tag.getString("prev_color"));}
-            this.prev_color = Color.translateFromHEX(tag.getString("prev_color"));
+            this.prev_color = tag.getString("prev_color");
         }else{
-            this.prev_color = Color.getWhiteColor();
+            this.prev_color = "ffffff";
         }
 
         if(tag.contains("rainbow_col")){
@@ -105,8 +104,8 @@ public class LightComponent implements ComponentV3, AutoSyncedComponent {
         tag.putDouble("cooldown_time", this.cooldown_time);
         tag.putDouble("power_multiplier", this.power_multiplier);
         tag.putInt("duration", this.duration);
-        tag.putString("color", this.color.toHEX());
-        tag.putString("prev_color", this.prev_color.toHEX());
+        tag.putString("color", this.color);
+        tag.putString("prev_color", this.prev_color);
         tag.putBoolean("rainbow_col", this.rainbow_col);
         tag.putBoolean("incooldown", this.incooldown);
     }
@@ -132,11 +131,11 @@ public class LightComponent implements ComponentV3, AutoSyncedComponent {
         return this.duration;
     }
 
-    public Color getColor() {
+    public String getColor() {
         return this.color;
     }
 
-    public Color getPrevColor() {
+    public String getPrevColor() {
         return this.color;
     }
 
@@ -178,12 +177,12 @@ public class LightComponent implements ComponentV3, AutoSyncedComponent {
         LightWithin.LIGHT_COMPONENT.sync(caster);
     }
 
-    public void setColor(Color color) {
+    public void setColor(String color) {
         this.color = color;
         LightWithin.LIGHT_COMPONENT.sync(caster);
     }
 
-    public void setPrevColor(Color color) {
+    public void setPrevColor(String color) {
         this.prev_color = color;
         LightWithin.LIGHT_COMPONENT.sync(caster);
     }
@@ -198,7 +197,7 @@ public class LightComponent implements ComponentV3, AutoSyncedComponent {
         LightWithin.LIGHT_COMPONENT.sync(caster);
     }
 
-    public void setAll(InnerLightType type, TargetType targets, int cooldown, double power, int duration, Color color, boolean b, boolean incooldown){
+    public void setAll(InnerLightType type, TargetType targets, int cooldown, double power, int duration, String color, boolean b, boolean incooldown){
         this.type = type;
         this.targets = targets;
         this.cooldown_time = cooldown;
@@ -215,7 +214,7 @@ public class LightComponent implements ComponentV3, AutoSyncedComponent {
         this.cooldown_time = -1;
         this.power_multiplier = -1;
         this.duration = -1;
-        this.color = Color.getWhiteColor();
+        this.color = "ffffff";
         this.rainbow_col = false;
         this.type = InnerLightType.NONE;
         LightWithin.LIGHT_COMPONENT.sync(caster);

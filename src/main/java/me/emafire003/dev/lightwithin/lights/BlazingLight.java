@@ -1,8 +1,7 @@
 package me.emafire003.dev.lightwithin.lights;
 
-import me.emafire003.dev.coloredglowlib.ColoredGlowLib;
-import me.emafire003.dev.coloredglowlib.util.Color;
 import me.emafire003.dev.lightwithin.LightWithin;
+import me.emafire003.dev.lightwithin.compat.coloredglowlib.CGLCompat;
 import me.emafire003.dev.lightwithin.component.LightComponent;
 import me.emafire003.dev.lightwithin.config.Config;
 import me.emafire003.dev.lightwithin.particles.LightParticles;
@@ -12,7 +11,9 @@ import me.emafire003.dev.lightwithin.status_effects.LightEffects;
 import me.emafire003.dev.lightwithin.util.TargetType;
 import me.emafire003.dev.structureplacerapi.StructurePlacerAPI;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.boss.BossBar;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
@@ -46,7 +47,7 @@ public class BlazingLight extends InnerLight {
     * - all (more powerful tho)
 */
 
-    public BlazingLight(List<LivingEntity> targets, double cooldown_time, double power_multiplier, int duration, Color color, PlayerEntity caster, boolean rainbow_col) {
+    public BlazingLight(List<LivingEntity> targets, double cooldown_time, double power_multiplier, int duration, String color, PlayerEntity caster, boolean rainbow_col) {
         super(targets, cooldown_time, power_multiplier, duration, color, caster, rainbow_col);
         type = InnerLightType.BLAZING;
     }
@@ -54,13 +55,13 @@ public class BlazingLight extends InnerLight {
     public BlazingLight(List<LivingEntity> targets, double cooldown_time, double power_multiplier, int duration, PlayerEntity caster, boolean rainbow_col) {
         super(targets, cooldown_time, power_multiplier, duration, caster, rainbow_col);
         type = InnerLightType.BLAZING;
-        color = new Color(234, 71, 16);
+        color = "ea4610";
     }
 
     public BlazingLight(List<LivingEntity> targets, double cooldown_time, double power_multiplier, int duration, PlayerEntity caster) {
         super(targets, cooldown_time, power_multiplier, duration, caster);
         type = InnerLightType.BLAZING;
-        color = new Color(234, 71, 16);
+        color = "ea4610";
     }
 
     private double crit_multiplier = 1.5;
@@ -87,10 +88,12 @@ public class BlazingLight extends InnerLight {
     @Override
     public void execute(){
         checkSafety();
-        if(this.rainbow_col){
-            ColoredGlowLib.setRainbowColorToEntity(this.caster, true);
-        }else{
-            ColoredGlowLib.setColorToEntity(this.caster, this.color);
+        if(FabricLoader.getInstance().isModLoaded("coloredglowlib")){
+            if(this.rainbow_col){
+                CGLCompat.getLib().setRainbowColorToEntity(this.caster, true);
+            }else{
+                CGLCompat.getLib().setColorToEntity(this.caster, CGLCompat.fromHex(this.color));
+            }
         }
         caster.getWorld().playSound(caster, caster.getBlockPos(), LightSounds.BLAZING_LIGHT, SoundCategory.AMBIENT, 1, 1);
         caster.addStatusEffect(new StatusEffectInstance(StatusEffects.FIRE_RESISTANCE, caster.getStatusEffect(LightEffects.LIGHT_ACTIVE).getDuration(), 0, false, false));

@@ -1,8 +1,7 @@
 package me.emafire003.dev.lightwithin.status_effects;
 
-import me.emafire003.dev.coloredglowlib.ColoredGlowLib;
-import me.emafire003.dev.coloredglowlib.util.Color;
-import net.minecraft.entity.Entity;
+import me.emafire003.dev.lightwithin.compat.coloredglowlib.CGLCompat;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.AttributeContainer;
 import net.minecraft.entity.effect.StatusEffect;
@@ -14,13 +13,13 @@ public class LightFatigueEffect extends StatusEffect {
     //it's a cool way to make a cooldown visible for the player too. As lot's have said, it's not a bug it's a feature
     //just look at it the right way
     //xD
-    //TODO mixin into the GlowingEffect and make it so it can clear the ColoredGlowLib color
+    //TODO mixin into the GlowingEffect and make it so it can clear the CGLCompat.getLib() color
 
     public LightFatigueEffect() {
         super(StatusEffectCategory.HARMFUL, 0x9EC1BE);
     }
 
-    private Color former_color = null;
+    private String former_color = "ffffff";
     private boolean rainbow;
 
     @Override
@@ -30,27 +29,26 @@ public class LightFatigueEffect extends StatusEffect {
     }
 
     // This method is called when it applies the status effect. We implement custom functionality here.
-    //TODO not setting the correct "discharged" color
     @Override
     public void applyUpdateEffect(LivingEntity entity, int amplifier) {
-        if(amplifier > 10){
-            former_color = ColoredGlowLib.getEntityColor(entity);
-            rainbow = ColoredGlowLib.getEntityRainbowColor(entity);
+        if(FabricLoader.getInstance().isModLoaded("coloredglowlib")){
+            former_color = CGLCompat.toHex(CGLCompat.getLib().getEntityColor(entity));
+            rainbow = CGLCompat.getLib().getEntityRainbowColor(entity);
             if(rainbow){
-                ColoredGlowLib.setRainbowColorToEntity(entity, false);
+                CGLCompat.getLib().setRainbowColorToEntity(entity, false);
             }
-            ColoredGlowLib.setColorToEntity(entity, Color.translateFromHEX("9EC1BE)"));
+            CGLCompat.getLib().setColorToEntity(entity, CGLCompat.fromHex("9EC1BE"));
         }
     }
 
     @Override
     public void onRemoved(LivingEntity entity, AttributeContainer attributes, int amplifier){
         if(former_color != null ){
-            if(!former_color.equals(Color.getWhiteColor())){
-                ColoredGlowLib.setColorToEntity(entity, former_color);
+            if(!former_color.equals("ffffff")){
+                CGLCompat.getLib().setColorToEntity(entity, CGLCompat.fromHex(former_color));
             }
             if(rainbow){
-                ColoredGlowLib.setRainbowColorToEntity(entity, true);
+                CGLCompat.getLib().setRainbowColorToEntity(entity, true);
             }
         }
     }

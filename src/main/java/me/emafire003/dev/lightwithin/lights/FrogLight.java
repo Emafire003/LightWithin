@@ -1,35 +1,22 @@
 package me.emafire003.dev.lightwithin.lights;
 
-import me.emafire003.dev.coloredglowlib.ColoredGlowLib;
-import me.emafire003.dev.coloredglowlib.util.Color;
-import me.emafire003.dev.lightwithin.component.LightComponent;
-import me.emafire003.dev.lightwithin.config.Config;
+import me.emafire003.dev.lightwithin.compat.coloredglowlib.CGLCompat;
 import me.emafire003.dev.lightwithin.particles.LightParticles;
 import me.emafire003.dev.lightwithin.particles.LightParticlesUtil;
-import me.emafire003.dev.lightwithin.sounds.LightSounds;
-import me.emafire003.dev.lightwithin.status_effects.LightEffects;
-import me.emafire003.dev.lightwithin.util.TargetType;
-import me.emafire003.dev.lightwithin.util.fabridash.FabriDash;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.passive.FrogEntity;
 import net.minecraft.entity.passive.FrogVariant;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.random.Random;
 
 import java.util.List;
 
-import static me.emafire003.dev.lightwithin.LightWithin.LIGHT_COMPONENT;
 import static me.emafire003.dev.lightwithin.LightWithin.LOGGER;
 
 public class FrogLight extends InnerLight {
@@ -46,21 +33,21 @@ public class FrogLight extends InnerLight {
     * - ally/self -> launch up in the air and give jump boost velocity and
     * - ALL MAYBE, but not sure. -> everything/one boosted away*/
 
-    public FrogLight(List<LivingEntity> targets, double cooldown_time, double power_multiplier, int duration, Color color, PlayerEntity caster, boolean rainbow_col) {
+    public FrogLight(List<LivingEntity> targets, double cooldown_time, double power_multiplier, int duration, String color, PlayerEntity caster, boolean rainbow_col) {
         super(targets, cooldown_time, power_multiplier, duration, color, caster, rainbow_col);
-        type = InnerLightType.EARTHEN;
+        type = InnerLightType.FROG;
     }
 
     public FrogLight(List<LivingEntity> targets, double cooldown_time, double power_multiplier, int duration, PlayerEntity caster, boolean rainbow_col) {
         super(targets, cooldown_time, power_multiplier, duration, caster, rainbow_col);
-        type = InnerLightType.EARTHEN;
-        color = new Color(196, 106, 49);
+        type = InnerLightType.FROG;
+        color = "c46931";
     }
 
     public FrogLight(List<LivingEntity> targets, double cooldown_time, double power_multiplier, int duration, PlayerEntity caster) {
         super(targets, cooldown_time, power_multiplier, duration, caster);
-        type = InnerLightType.EARTHEN;
-        color = new Color(196, 106, 49);
+        type = InnerLightType.FROG;
+        color = "c46931";
     }
 
     private void checkSafety(){
@@ -70,10 +57,12 @@ public class FrogLight extends InnerLight {
     @Override
     public void execute(){
         checkSafety();
-        if(this.rainbow_col){
-            ColoredGlowLib.setRainbowColorToEntity(this.caster, true);
-        }else{
-            ColoredGlowLib.setColorToEntity(this.caster, this.color);
+        if(FabricLoader.getInstance().isModLoaded("coloredglowlib")){
+            if(this.rainbow_col){
+                CGLCompat.getLib().setRainbowColorToEntity(this.caster, true);
+            }else{
+                CGLCompat.getLib().setColorToEntity(this.caster, CGLCompat.fromHex(this.color));
+            }
         }
 
         Random random = caster.getRandom();

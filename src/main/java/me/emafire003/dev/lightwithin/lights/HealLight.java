@@ -1,25 +1,19 @@
 package me.emafire003.dev.lightwithin.lights;
 
-import com.google.common.collect.Maps;
-import com.google.common.collect.Multimap;
-import me.emafire003.dev.coloredglowlib.ColoredGlowLib;
-import me.emafire003.dev.coloredglowlib.util.Color;
+
+import me.emafire003.dev.lightwithin.compat.coloredglowlib.CGLCompat;
 import me.emafire003.dev.lightwithin.config.Config;
 import me.emafire003.dev.lightwithin.particles.LightParticles;
 import me.emafire003.dev.lightwithin.sounds.LightSounds;
 import me.emafire003.dev.lightwithin.particles.LightParticlesUtil;
 import me.emafire003.dev.lightwithin.status_effects.LightEffects;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.attribute.EntityAttribute;
-import net.minecraft.entity.attribute.EntityAttributeModifier;
-import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 
-import java.util.HashMap;
 import java.util.List;
 
 public class HealLight extends InnerLight {
@@ -35,7 +29,7 @@ public class HealLight extends InnerLight {
     * - allies
     * - Passive mobs & self*/
 
-    public HealLight(List<LivingEntity> targets, double cooldown_time, double power_multiplier, int duration, Color color, PlayerEntity caster, boolean rainbow_col) {
+    public HealLight(List<LivingEntity> targets, double cooldown_time, double power_multiplier, int duration, String color, PlayerEntity caster, boolean rainbow_col) {
         super(targets, cooldown_time, power_multiplier, duration, color, caster, rainbow_col);
         type = InnerLightType.HEAL;
         checkSafety();
@@ -44,14 +38,14 @@ public class HealLight extends InnerLight {
     public HealLight(List<LivingEntity> targets, double cooldown_time, double power_multiplier, int duration, PlayerEntity caster, boolean rainbow_col) {
         super(targets, cooldown_time, power_multiplier, duration, caster, rainbow_col);
         type = InnerLightType.HEAL;
-        color = new Color(255, 66, 21);
+        color = "ff1443";
         checkSafety();
     }
 
     public HealLight(List<LivingEntity> targets, double cooldown_time, double power_multiplier, int duration, PlayerEntity caster) {
         super(targets, cooldown_time, power_multiplier, duration, caster);
         type = InnerLightType.HEAL;
-        color = new Color(255, 66, 21);
+        color = "ff1443";
         checkSafety();
     }
 
@@ -78,9 +72,9 @@ public class HealLight extends InnerLight {
     @Override
     public void execute(){
         if(this.rainbow_col){
-            ColoredGlowLib.setRainbowColorToEntity(this.caster, true);
+            CGLCompat.getLib().setRainbowColorToEntity(this.caster, true);
         }else{
-            ColoredGlowLib.setColorToEntity(this.caster, this.color);
+            CGLCompat.getLib().setColorToEntity(this.caster, CGLCompat.fromHex(this.color));
         }
         caster.getWorld().playSound(caster, caster.getBlockPos(), LightSounds.HEAL_LIGHT, SoundCategory.AMBIENT, 1,1);
         for(LivingEntity target : this.targets){

@@ -8,6 +8,7 @@ import dev.onyxstudios.cca.api.v3.entity.RespawnCopyStrategy;
 import me.emafire003.dev.coloredglowlib.ColoredGlowLib;
 import me.emafire003.dev.lightwithin.blocks.LightBlocks;
 import me.emafire003.dev.lightwithin.commands.LightCommands;
+import me.emafire003.dev.lightwithin.compat.coloredglowlib.CGLCompat;
 import me.emafire003.dev.lightwithin.component.LightComponent;
 import me.emafire003.dev.lightwithin.config.Config;
 import me.emafire003.dev.lightwithin.entities.LightEntities;
@@ -94,7 +95,9 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 
 
 		ServerLifecycleEvents.SERVER_STARTED.register(minecraftServer -> {
-			ColoredGlowLib.setOverrideTeamColors(true);
+			if(FabricLoader.getInstance().isModLoaded("coloredglowlib")){
+				CGLCompat.getLib().setOverrideTeamColors(true);
+			}
 			box_expansion_amount = Config.AREA_OF_SEARCH_FOR_ENTITIES;
 			if(box_expansion_amount == 0){
 				box_expansion_amount = 6;
@@ -149,7 +152,10 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 		if(type.equals(InnerLightType.NONE)){
 			return;
 		}
-		component.setPrevColor(ColoredGlowLib.getEntityColor(player));
+		if(FabricLoader.getInstance().isModLoaded("coloredglowlib")){
+			component.setPrevColor(CGLCompat.toHex(CGLCompat.getLib().getEntityColor(player)));
+		}
+
 		if(type.equals(InnerLightType.HEAL)){
 			activateHeal(component, player);
 		}else if(type.equals(InnerLightType.DEFENCE)){
@@ -171,8 +177,7 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 		}
 		//for now defaults here
 		else{
-			activateHeal(component, (ServerPlayerEntity) player);
-			component.setPrevColor(ColoredGlowLib.getEntityColor(player));
+			activateHeal(component, player);
 		}
 
 		if(Config.PLAYER_GLOWS){
@@ -200,6 +205,7 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 		//Yay.
 		else if(component.getTargets().equals(TargetType.ALLIES)){
 			List<LivingEntity> entities = player.getWorld().getEntitiesByClass(LivingEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amount), (entity1 -> true));
+			targets.add(player);
 			for(LivingEntity ent : entities){
 				// may need this to prevent bugs EDIT i don't even remember what "this" referred to eheh
 				if(CheckUtils.CheckAllies.checkAlly(player, ent)){
