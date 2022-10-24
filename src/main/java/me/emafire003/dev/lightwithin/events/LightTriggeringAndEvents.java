@@ -227,6 +227,34 @@ public class LightTriggeringAndEvents {
         }
     }
 
+    //This gets triggered when someone is falling
+    public static void checkWind(PlayerEntity player, LightComponent component, LivingEntity target, float fallHeight){
+        /**If the player has ALL as target, he needs to be hurt (or an ally has to die, but that depends on the trigger)*/
+        if(component.getTargets().equals(TargetType.OTHER)
+                && ((CheckUtils.checkSelfHealth(player, Config.HP_PERCENTAGE_SELF+5)
+                && player.equals(target)
+                && CheckUtils.checkSurrounded(player)) || CheckUtils.checkFalling(player))
+                && CheckUtils.checkWind(player)
+        ){
+            sendReadyPacket((ServerPlayerEntity) player, true);
+        }
+        else if(component.getTargets().equals(TargetType.SELF)
+                && player.equals(target)
+                && ((CheckUtils.checkSelfHealth(player, Config.HP_PERCENTAGE_SELF+5)
+                && CheckUtils.checkSurrounded(player)) || CheckUtils.checkFalling(player))
+                && CheckUtils.checkWind(player)
+        ){
+            sendReadyPacket((ServerPlayerEntity) player, true);
+        }else if(component.getTargets().equals(TargetType.ALLIES)
+                && (CheckUtils.checkAllyHealth(player, target, Config.HP_PERCENTAGE_ALLIES+5)
+                && (CheckUtils.checkSurrounded(player)  || CheckUtils.checkSurrounded(target))
+        )||(CheckUtils.checkFalling(player) || CheckUtils.checkFalling(target))
+                && CheckUtils.checkWind(player)
+        ){
+            sendReadyPacket((ServerPlayerEntity) player, true);
+        }
+    }
+
     //Probably needs, player, attacker, attacked, ally
     public static void checkAqua(PlayerEntity player, LightComponent component, Entity attacker, LivingEntity target){
         /**If the player has ALL as target, he needs to be hurt (or an ally has to die, but that depends on the trigger)*/
@@ -335,25 +363,33 @@ public class LightTriggeringAndEvents {
         }
     }
 
+    public static void entityFallingTriggerCheck(PlayerEntity player, LivingEntity falling_entity, float fallHeight){
+        if(!isTriggerable(player)){
+            return;
+        }
+        LightComponent component = LIGHT_COMPONENT.get(player);
+        if(component.getType().equals(InnerLightType.WIND)){
+            checkWind(player, component, falling_entity, fallHeight);
+        }
+
+    }
+
     public static void registerListeners(){
         LOGGER.info("Registering events listeners...");
 
-        //TODO lights could be levelled up maybe
-
+        //TODO may need to re-add those return statemes on every if
         //Player (or other entity) being attacked by something else
         EntityAttackEntityEvent.EVENT.register(((attacker, target) -> {
             //Checks if someone is attacked and if they are the one getting attacked
             //If the target is the player with the light, he is also the target
             if(target instanceof PlayerEntity){
                 entityAttackEntityTriggerCheck((PlayerEntity) target, attacker, (PlayerEntity) target);
-                return;
             }
             //if the target is a pet of someone with a light, the pet is the target. (He is also considered an ally)
             if(target instanceof TameableEntity){
                 if(((TameableEntity) target).getOwner() instanceof PlayerEntity){
                     entityAttackEntityTriggerCheck((PlayerEntity) ((TameableEntity) target).getOwner(), attacker, target);
                 }
-                return;
             }
 
             //if the one getting attacked is a passive entity, the entity is the target
@@ -378,6 +414,43 @@ public class LightTriggeringAndEvents {
                 }
             }
             //}
+
+        }));
+
+        //Player (or other entity) falling
+        //{Don't know why I put the returns there, stopping other possible things if for example the entity was a
+        // player but wasn't a wind light wielder, but one of teammate around him was and could not trigger a light}
+        EntityFallingEvent.EVENT.register(((entity, diff, fallDistance) -> {
+            //Checks if someone is attacked and if they are the one getting attacked
+            //If the target is the player with the light, he is also the target
+            if(entity instanceof PlayerEntity){
+                entityFallingTriggerCheck((PlayerEntity) entity, entity, fallDistance);
+            }
+            //if the target is a pet of someone with a light, the pet is the target. (He is also considered an ally)
+            if(entity instanceof TameableEntity){
+                if(((TameableEntity) entity).getOwner() instanceof PlayerEntity){
+                    entityFallingTriggerCheck((PlayerEntity) ((TameableEntity) entity).getOwner(), entity, fallDistance);
+                }
+            }
+
+            //if the one getting attacked is a passive entity, the entity is the target
+            //while the player who triggers the light is the one nearby
+            if(entity instanceof PassiveEntity){
+                List<PlayerEntity> entities1 = entity.getWorld().getEntitiesByClass(PlayerEntity.class, new Box(entity.getBlockPos()).expand(box_expansion_amount), (entity1 -> true));
+                for(PlayerEntity p : entities1){
+                    if(!p.equals(entity)){
+                        entityFallingTriggerCheck(p, entity, fallDistance);
+                    }
+                }
+            }
+            //if someone is a teammate of a player that can trigger their light by falling, this will check for it
+            List<PlayerEntity> entities = entity.getWorld().getEntitiesByClass(PlayerEntity.class, new Box(entity.getBlockPos()).expand(box_expansion_amount), (entity1 -> true));
+            for(PlayerEntity p : entities){
+                if(CheckUtils.CheckAllies.checkAlly(p, entity) && !p.equals(entity)){
+                    entityFallingTriggerCheck(p, entity, fallDistance);
+                }
+            }
+
 
         }));
 

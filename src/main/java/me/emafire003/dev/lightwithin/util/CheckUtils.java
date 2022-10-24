@@ -431,20 +431,6 @@ public class CheckUtils {
             return ((PlayerEntity) entity).fallDistance > 5 && !entity.isFallFlying() && !entity.isOnGround() && !entity.isClimbing() && !((PlayerEntity) entity).getAbilities().flying && !entity.isSwimming();
         }
         return entity.fallDistance > 5 && !entity.isFallFlying() && !entity.isOnGround() && !entity.isClimbing()  && !entity.isSwimming();
-        /*if(!entity.isFallFlying() && !entity.isOnGround() && !entity.onClimbable() && !entity.getAbilities().flying && !entity.isSwimming()) {
-            FallingData fallData = data.getData(this, () -> new FallingData(entity.getY()));
-            if(entity instanceof LocalPlayer) {
-                fallData.fallingSpeed = (float) (entity.getDeltaMovement().lengthSqr() / 11);
-                return entity.fallDistance > 3;
-            }
-            if(entity.getY() == fallData.lastY) { //rerender in same tick
-                return fallData.fallingSpeed > 0.5f / 3.5f;
-            }else {
-                fallData.fallingSpeed = (float) (fallData.lastY - entity.getY())/ 3.5f;
-                fallData.lastY = entity.getY();
-                return fallData.fallingSpeed > 0.5f / 3.5f;
-            }
-        }*/
     }
 
     public static boolean checkPoisoned(LivingEntity entity){

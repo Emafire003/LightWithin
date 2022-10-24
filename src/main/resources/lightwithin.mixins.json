@@ -9,7 +9,8 @@
     "EntityAttackEntityMixin",
     "AllyDeathMixin",
     "FreezeEntityMixin",
-    "DrownedEntityMixin"
+    "DrownedEntityMixin",
+    "EntityFallingMixin"
   ],
   "client": [
   ],
