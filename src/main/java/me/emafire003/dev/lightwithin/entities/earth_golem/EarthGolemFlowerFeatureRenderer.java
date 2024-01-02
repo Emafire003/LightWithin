@@ -10,7 +10,7 @@ import net.minecraft.client.render.block.BlockRenderManager;
 import net.minecraft.client.render.entity.feature.FeatureRenderer;
 import net.minecraft.client.render.entity.feature.FeatureRendererContext;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.util.math.Vec3f;
+import net.minecraft.util.math.RotationAxis;
 
 @Environment(value= EnvType.CLIENT)
 @SuppressWarnings("all")
@@ -34,7 +34,7 @@ public class EarthGolemFlowerFeatureRenderer extends FeatureRenderer<EarthGolemE
         matrixStack.translate(0.5, 0.5, 0.5);
         float m = 0.5f;
         matrixStack.scale(0.5f, 0.5f, 0.5f);
-        matrixStack.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(-90.0f));
+        matrixStack.multiply(RotationAxis.POSITIVE_X.rotationDegrees(-90.0F));
         matrixStack.translate(-0.5, -0.5, -0.5);
         this.blockRenderManager.renderBlockAsEntity(Blocks.POPPY.getDefaultState(), matrixStack, vertexConsumerProvider, i, OverlayTexture.DEFAULT_UV);
         matrixStack.pop();

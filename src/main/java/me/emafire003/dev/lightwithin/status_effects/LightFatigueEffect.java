@@ -51,5 +51,6 @@ public class LightFatigueEffect extends StatusEffect {
                 CGLCompat.getLib().setRainbowColorToEntity(entity, true);
             }
         }
+        super.onRemoved(entity, attributes, amplifier);
     }
 }

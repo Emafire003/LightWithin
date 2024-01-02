@@ -1,5 +1,5 @@
 package me.emafire003.dev.lightwithin.lights;
-;
+
 import me.emafire003.dev.lightwithin.compat.coloredglowlib.CGLCompat;
 import me.emafire003.dev.lightwithin.config.Config;
 import me.emafire003.dev.lightwithin.particles.LightParticles;
@@ -23,6 +23,14 @@ public class DefenseLight extends InnerLight {
        - allies low health (checkable like this if type = Heal && target = allies do stuff TODO include pets in this
        - passive mobs on low health
      */
+
+    /*Triggers when:
+    * - Low armor && less than 50% HP
+    * - Low armor && surrounded
+    * - Armor breaking && less than 50% HP
+    *
+    * - when facing a boss (a thing that has a > 150 HP) && HP < 55%
+    * Applies to allies*/
 
     /*Possible targets:
     * - self
@@ -56,8 +64,12 @@ public class DefenseLight extends InnerLight {
         if(this.power_multiplier > Config.DEFENSE_MAX_POWER*2/3 && this.duration > Config.DEFENSE_MAX_DURATION*7/10){
             this.duration = Config.DEFENSE_MAX_DURATION*7/10;
         }
-        if(this.duration < Config.DEFENSE_MIN_DURATION){
-            this.duration = Config.DEFENSE_MIN_DURATION;
+        int max_duration = Config.DEFENSE_MAX_DURATION;
+        if(Config.MULTIPLY_DURATION_LIMIT){
+            max_duration = (int) (Config.DEFENSE_MAX_DURATION * Config.DURATION_MULTIPLIER);
+        }
+        if(this.duration > max_duration){
+            this.duration = max_duration;
         }
         if(this.power_multiplier < Config.DEFENSE_MIN_POWER){
             this.power_multiplier = Config.DEFENSE_MIN_POWER;

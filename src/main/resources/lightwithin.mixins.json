@@ -10,7 +10,10 @@
     "AllyDeathMixin",
     "FreezeEntityMixin",
     "DrownedEntityMixin",
-    "EntityFallingMixin"
+    "EntityFallingMixin",
+    "LivingEntityDamageTriggersMixin",
+    "PlayerFreezeMixin",
+    "FreezeEntityLookMixin"
   ],
   "client": [
   ],

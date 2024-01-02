@@ -2,6 +2,7 @@ package me.emafire003.dev.lightwithin.lights;
 
 import me.emafire003.dev.lightwithin.compat.coloredglowlib.CGLCompat;
 import me.emafire003.dev.lightwithin.component.LightComponent;
+import me.emafire003.dev.lightwithin.component.SummonedByComponent;
 import me.emafire003.dev.lightwithin.config.Config;
 import me.emafire003.dev.lightwithin.entities.LightEntities;
 import me.emafire003.dev.lightwithin.entities.earth_golem.EarthGolemEntity;
@@ -30,8 +31,7 @@ import net.minecraft.util.math.BlockPos;
 
 import java.util.*;
 
-import static me.emafire003.dev.lightwithin.LightWithin.LIGHT_COMPONENT;
-import static me.emafire003.dev.lightwithin.LightWithin.MOD_ID;
+import static me.emafire003.dev.lightwithin.LightWithin.*;
 
 public class EarthenLight extends InnerLight {
 
@@ -42,6 +42,15 @@ public class EarthenLight extends InnerLight {
        - NEEDS to have in hand dirt/rock or be around them. 
        - Ally dying?
      */
+
+    /*Triggers when:
+     * - Low armor && less than 50% HP (whith dirt/nature stuff around)
+     * - Surrounded && less than 50% HP
+     * - Low armor && surrounded
+     * - Getting Hit by stalactite/falling blocks?
+     *
+     * - when y < 32 && HP < 75%
+     * */
 
     /*Possible targets:
     * - enemies -> Dripstone/Hole
@@ -72,8 +81,12 @@ public class EarthenLight extends InnerLight {
         if(this.power_multiplier < Config.EARTHEN_MIN_POWER){
             power_multiplier = Config.EARTHEN_MIN_POWER;
         }
-        if(this.duration > Config.EARTHEN_MAX_DURATION){
-            this.duration = Config.EARTHEN_MAX_DURATION;
+        int max_duration = Config.EARTHEN_MAX_DURATION;
+        if(Config.MULTIPLY_DURATION_LIMIT){
+            max_duration = (int) (Config.EARTHEN_MAX_DURATION * Config.DURATION_MULTIPLIER);
+        }
+        if(this.duration > max_duration){
+            this.duration = max_duration;
         }
         if(this.duration < Config.EARTHEN_MIN_DURATION){
             this.duration = Config.EARTHEN_MIN_DURATION;
@@ -107,7 +120,7 @@ public class EarthenLight extends InnerLight {
             for(LivingEntity target : this.targets){
                 float r = target.getDimensions(EntityPose.STANDING).width/2;
                 float h = target.getDimensions(EntityPose.STANDING).height;
-                target.damage(DamageSource.IN_WALL, (float) this.power_multiplier);
+                target.damage(caster.getWorld().getDamageSources().inWall(), (float) this.power_multiplier);
                 LightParticlesUtil.spawnCylinder(target.getPos().add(0, 0.2, 0), r, 50, h, h/5, new BlockStateParticleEffect(ParticleTypes.BLOCK, Blocks.DIRT.getDefaultState()), (ServerWorld) caster.getWorld());
 
 
@@ -134,7 +147,7 @@ public class EarthenLight extends InnerLight {
 
                 target.playSound(LightSounds.EARTHEN_LIGHT, 0.9f, 1);
                 LightParticlesUtil.spawnLightTypeParticle(LightParticles.EARTHENLIGHT_PARTICLE, (ServerWorld) target.getWorld(), target.getPos());
-                target.addStatusEffect(new StatusEffectInstance(LightEffects.SOLID_ROCK, caster.getStatusEffect(LightEffects.LIGHT_ACTIVE).getDuration(), (int) this.power_multiplier, false, false));
+                target.addStatusEffect(new StatusEffectInstance(LightEffects.STURDY_ROCK, caster.getStatusEffect(LightEffects.LIGHT_ACTIVE).getDuration(), (int) this.power_multiplier, false, false));
                 if(Config.STRUCTURE_GRIEFING && !caster.getWorld().isClient) {
                     if(oldtarget == null || oldtarget.distanceTo(target) > 3){
                         StructurePlacerAPI placer;
@@ -156,7 +169,7 @@ public class EarthenLight extends InnerLight {
             //And will also give Solid Rock effect to self, making the player more resistant to knokback
         }else if(component.getTargets().equals(TargetType.SELF)){
             LightParticlesUtil.spawnLightTypeParticle(LightParticles.EARTHENLIGHT_PARTICLE, (ServerWorld) caster.getWorld(), caster.getPos());
-            caster.addStatusEffect(new StatusEffectInstance(LightEffects.SOLID_ROCK, caster.getStatusEffect(LightEffects.LIGHT_ACTIVE).getDuration(), (int) this.power_multiplier, false, false));
+            caster.addStatusEffect(new StatusEffectInstance(LightEffects.STURDY_ROCK, caster.getStatusEffect(LightEffects.LIGHT_ACTIVE).getDuration(), (int) this.power_multiplier, false, false));
             caster.playSound(LightSounds.EARTHEN_LIGHT, 1, 1);
             if(Config.STRUCTURE_GRIEFING && !caster.getWorld().isClient) {
                 StructurePlacerAPI placer;

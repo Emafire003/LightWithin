@@ -3,8 +3,9 @@ package me.emafire003.dev.lightwithin.particles;
 import me.emafire003.dev.lightwithin.LightWithin;
 import net.fabricmc.fabric.api.particle.v1.FabricParticleTypes;
 import net.minecraft.particle.DefaultParticleType;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 
 public class LightParticles {
     public static final DefaultParticleType HEALLIGHT_PARTICLE = FabricParticleTypes.simple();
@@ -19,23 +20,23 @@ public class LightParticles {
 
 
     public static void registerParticles() {
-        Registry.register(Registry.PARTICLE_TYPE, new Identifier(LightWithin.MOD_ID, "heal_light_particle"),
+        Registry.register(Registries.PARTICLE_TYPE, new Identifier(LightWithin.MOD_ID, "heal_light_particle"),
                 HEALLIGHT_PARTICLE);
-        Registry.register(Registry.PARTICLE_TYPE, new Identifier(LightWithin.MOD_ID, "defense_light_particle"),
+        Registry.register(Registries.PARTICLE_TYPE, new Identifier(LightWithin.MOD_ID, "defense_light_particle"),
                 DEFENSELIGHT_PARTICLE);
-        Registry.register(Registry.PARTICLE_TYPE, new Identifier(LightWithin.MOD_ID, "strength_light_particle"),
+        Registry.register(Registries.PARTICLE_TYPE, new Identifier(LightWithin.MOD_ID, "strength_light_particle"),
                 STRENGTHLIGHT_PARTICLE);
-        Registry.register(Registry.PARTICLE_TYPE, new Identifier(LightWithin.MOD_ID, "blazing_light_particle"),
+        Registry.register(Registries.PARTICLE_TYPE, new Identifier(LightWithin.MOD_ID, "blazing_light_particle"),
                 BLAZINGLIGHT_PARTICLE);
-        Registry.register(Registry.PARTICLE_TYPE, new Identifier(LightWithin.MOD_ID, "frost_light_particle"),
+        Registry.register(Registries.PARTICLE_TYPE, new Identifier(LightWithin.MOD_ID, "frost_light_particle"),
                 FROSTLIGHT_PARTICLE);
-        Registry.register(Registry.PARTICLE_TYPE, new Identifier(LightWithin.MOD_ID, "earthen_light_particle"),
+        Registry.register(Registries.PARTICLE_TYPE, new Identifier(LightWithin.MOD_ID, "earthen_light_particle"),
                 EARTHENLIGHT_PARTICLE);
-        Registry.register(Registry.PARTICLE_TYPE, new Identifier(LightWithin.MOD_ID, "wind_light_particle"),
+        Registry.register(Registries.PARTICLE_TYPE, new Identifier(LightWithin.MOD_ID, "wind_light_particle"),
                 WINDLIGHT_PARTICLE);
-        Registry.register(Registry.PARTICLE_TYPE, new Identifier(LightWithin.MOD_ID, "aqua_light_particle"),
+        Registry.register(Registries.PARTICLE_TYPE, new Identifier(LightWithin.MOD_ID, "aqua_light_particle"),
                 AQUALIGHT_PARTICLE);
-        Registry.register(Registry.PARTICLE_TYPE, new Identifier(LightWithin.MOD_ID, "frog_light_particle"),
+        Registry.register(Registries.PARTICLE_TYPE, new Identifier(LightWithin.MOD_ID, "frog_light_particle"),
                 FROGLIGHT_PARTICLE);
     }
 }

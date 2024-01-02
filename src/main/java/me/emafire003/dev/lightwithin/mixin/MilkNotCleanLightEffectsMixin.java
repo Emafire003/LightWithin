@@ -7,6 +7,7 @@ import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.item.Item;
 import net.minecraft.item.MilkBucketItem;
+import org.spongepowered.asm.mixin.Debug;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
@@ -25,7 +26,7 @@ public abstract class MilkNotCleanLightEffectsMixin extends Item {
     @Redirect(at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;clearStatusEffects()Z"), method = "finishUsing")
     public boolean clearStatusExceptLights(LivingEntity instance){
         try{
-            if (instance.world.isClient) {
+            if (instance.getWorld().isClient) {
                 return false;
             } else {
                 for(StatusEffectInstance status : instance.getActiveStatusEffects().values()){

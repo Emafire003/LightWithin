@@ -4,12 +4,16 @@ import me.emafire003.dev.lightwithin.compat.coloredglowlib.CGLCompat;
 import me.emafire003.dev.lightwithin.particles.LightParticles;
 import me.emafire003.dev.lightwithin.particles.LightParticlesUtil;
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.block.MagmaBlock;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.entity.damage.DamageSources;
+import net.minecraft.entity.damage.DamageTypes;
 import net.minecraft.entity.passive.FrogEntity;
 import net.minecraft.entity.passive.FrogVariant;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.registry.RegistryKeys;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
@@ -72,7 +76,7 @@ public class FrogLight extends InnerLight {
             for(LivingEntity target : this.targets){
                 target.playSound(SoundEvents.ENTITY_FROG_HURT, 1, 0.8f);
                 if(!target.isSpectator()){
-                    target.damage(DamageSource.MAGIC, frogs);
+                    target.damage(caster.getWorld().getDamageSources().magic(), frogs);
                 }
                 if(target instanceof PlayerEntity){
                     ((PlayerEntity) target).sendMessage(Text.translatable("light.description.activation.frog.damage"), true);

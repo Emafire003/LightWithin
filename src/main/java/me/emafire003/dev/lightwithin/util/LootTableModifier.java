@@ -2,7 +2,6 @@ package me.emafire003.dev.lightwithin.util;
 
 import me.emafire003.dev.lightwithin.items.LightItems;
 import net.fabricmc.fabric.api.loot.v2.LootTableEvents;
-import net.minecraft.item.Items;
 import net.minecraft.loot.LootPool;
 import net.minecraft.loot.condition.RandomChanceLootCondition;
 import net.minecraft.loot.entry.ItemEntry;

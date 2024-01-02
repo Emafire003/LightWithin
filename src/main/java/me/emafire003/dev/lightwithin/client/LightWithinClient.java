@@ -8,11 +8,10 @@ import me.emafire003.dev.lightwithin.entities.earth_golem.EarthGolemEntityRender
 import me.emafire003.dev.lightwithin.lights.InnerLightType;
 import me.emafire003.dev.lightwithin.networking.LightReadyPacketS2C;
 import me.emafire003.dev.lightwithin.networking.RenderRunePacketS2C;
-import me.emafire003.dev.lightwithin.util.fabridash.WindLightVelocityPacketS2C;
+import me.emafire003.dev.lightwithin.networking.WindLightVelocityPacketS2C;
 import me.emafire003.dev.lightwithin.particles.LightParticleV3;
 import me.emafire003.dev.lightwithin.particles.LightParticles;
 import me.emafire003.dev.lightwithin.sounds.LightSounds;
-import me.x150.renderer.event.Events;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -36,7 +35,7 @@ public class LightWithinClient implements ClientModInitializer {
     private static boolean lightReady = false;
     int seconds = 10;
     int tickCounter = 0;
-    EventHandler event_handler = new EventHandler();
+    RendererEventHandler event_handler = new RendererEventHandler();
 
     public static final EntityModelLayer MODEL_EARTH_GOLEM_LAYER = new EntityModelLayer(new Identifier(LightWithin.MOD_ID, "earth_golem"), "main");
 
@@ -47,7 +46,7 @@ public class LightWithinClient implements ClientModInitializer {
        registerLightReadyPacket();
        registerRenderRunesPacket();
        registerWindLightVelocityPacket();
-       Events.registerEventHandlerClass(event_handler);
+       event_handler.registerRenderEvent();
        event_handler.registerRunesRenderer();
        ParticleFactoryRegistry.getInstance().register(LightParticles.HEALLIGHT_PARTICLE, LightParticleV3.Factory::new);
        ParticleFactoryRegistry.getInstance().register(LightParticles.DEFENSELIGHT_PARTICLE, LightParticleV3.Factory::new);
@@ -66,6 +65,7 @@ public class LightWithinClient implements ClientModInitializer {
         BlockRenderLayerMap.INSTANCE.putBlock(LightBlocks.FROZEN_MOB_TOP_BLOCK, RenderLayer.getCutout());
         BlockRenderLayerMap.INSTANCE.putBlock(LightBlocks.FROZEN_MOB_BOTTOM_BLOCK, RenderLayer.getCutout());
         BlockRenderLayerMap.INSTANCE.putBlock(LightBlocks.ICE_WALL, RenderLayer.getTranslucent());
+        BlockRenderLayerMap.INSTANCE.putBlock(LightBlocks.CLEAR_ICE, RenderLayer.getTranslucent());
 
         EntityRendererRegistry.register(LightEntities.EARTH_GOLEM, (context) -> {
             return new EarthGolemEntityRenderer(context);

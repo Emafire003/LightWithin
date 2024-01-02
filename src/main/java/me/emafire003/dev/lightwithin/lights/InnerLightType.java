@@ -7,7 +7,6 @@ public enum InnerLightType {
     PITCH_BLACK, //maybe there could be only one of a kind of these two per server/world and if they don't log in for some time a new one can be chosen
     PURE_WHITE,
     LEECH,//could be degeneration of both of the two legendary lights up here ^
-    THUNDER_AURA,
     SHOCKWAVE,
 
     FROST_FIRE, //could be a special SELF eheh one
@@ -40,6 +39,7 @@ public enum InnerLightType {
     CONCEAL,
     SPEED,
     SLOW,
+    THUNDER_AURA,
     FOREST_AURA, //spawn vines to block people, poisons enemies and such
     ENDER_AURA,
     PROJECTILE,

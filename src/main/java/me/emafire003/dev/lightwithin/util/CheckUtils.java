@@ -1,13 +1,15 @@
 package me.emafire003.dev.lightwithin.util;
 
+import me.emafire003.dev.lightwithin.compat.argonauts.ArgonautsChecker;
 import me.emafire003.dev.lightwithin.compat.factions.FactionChecker;
+import me.emafire003.dev.lightwithin.compat.open_parties_and_claims.OPACChecker;
 import me.emafire003.dev.lightwithin.config.Config;
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffectCategory;
 import net.minecraft.entity.effect.StatusEffectInstance;
@@ -19,17 +21,17 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.tag.BlockTags;
-import net.minecraft.tag.TagKey;
+import net.minecraft.registry.RegistryKeys;
+import net.minecraft.registry.tag.BlockTags;
+import net.minecraft.registry.tag.TagKey;
+import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
-import net.minecraft.util.registry.Registry;
 import org.jetbrains.annotations.NotNull;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
 
+import java.util.*;
+
+import static me.emafire003.dev.lightwithin.LightWithin.LOGGER;
 import static me.emafire003.dev.lightwithin.LightWithin.box_expansion_amount;
 
 public class CheckUtils {
@@ -59,7 +61,7 @@ public class CheckUtils {
         }else return entities.size() >= Config.SURROUNDED_AMOUNT;
     }
 
-    /**Sums up all of the durability of the armor items and if it below
+    /**Sums up all of the durability of the armor items and if it's below
      * a certain percentage it will return true.
      *
      * An empty armor slot counts as an iron armor with 0 durability*/
@@ -103,6 +105,175 @@ public class CheckUtils {
         return total_dmg <= (total_max_dmg)*dur_percent/100;
     }
 
+    public static boolean checkAllyArmor(PlayerEntity player, Entity ally, int dur_percent){
+        if(ally instanceof LivingEntity && CheckAllies.checkAlly(player, (LivingEntity) ally) && ally instanceof PlayerEntity){
+            return checkArmorDurability((PlayerEntity) ally, dur_percent);
+        }
+        return false;
+    }
+
+    /**Checks both the health and armor of the player,
+     * and check if it is below a certain percentage.
+     * If it is, returns true
+     *
+     * @param player The player that could trigger their light
+     * @param health_percent The percentage (15, 25, 70) below which the target is in danger (hence light activatable)
+     * */
+    public static boolean checkSelfHealthAndArmor(@NotNull PlayerEntity player, int health_percent){
+        return player.getArmor()+player.getHealth() <= (player.getMaxHealth())*health_percent/100;
+    }
+
+    public static double getTotDamage(@NotNull PlayerEntity player, int health_percent){
+        DamageSource damage_source = player.getRecentDamageSource();
+        if(damage_source == null){
+            //Probably the player hasn't been hit by anything recently, so using the simpler checks
+            player.sendMessage(Text.literal("§enull"));
+            return -1;
+        }
+
+        //Checking if the attacker is (not null) a living entity
+        if(player.getRecentDamageSource().getAttacker() != null && player.getRecentDamageSource().getAttacker() instanceof LivingEntity){
+            //Getting data for next attack damage (granted it's the same entity attacking the same way again)
+            //TODO MAY BE UNBALANCED
+            LivingEntity attacker = (LivingEntity) player.getRecentDamageSource().getAttacker();
+            double attacker_damage = attacker.getAttributeValue(EntityAttributes.GENERIC_ATTACK_DAMAGE);
+            double armor = player.getAttributeValue(EntityAttributes.GENERIC_ARMOR);
+            double toughness = player.getAttributeValue(EntityAttributes.GENERIC_ARMOR_TOUGHNESS);
+            double tot_damaged = attacker_damage;
+            double tough1 = armor-((attacker_damage*4)/(toughness+8));
+
+            //TODO i need to actually make this work
+            player.sendMessage(Text.literal("Attacker damage: §d"+attacker_damage+" §fplayer armor: §b"+armor
+            + " §fplayer toughness: §a"+toughness+" §fthough1: §e"+tough1));
+            //Next attack damage calculation
+            if(armor/5 > tough1){
+                if(armor/5 > 20){
+                    tot_damaged = attacker_damage*(1-20/25);
+                    player.sendMessage(Text.literal("new tot damage: "));
+                }
+            }else{
+                player.sendMessage(Text.literal("In the else thing"));
+                if(tough1 > 20){
+                    player.sendMessage(Text.literal("new tot damage2: "));
+                    tot_damaged = attacker_damage*(1-tough1/25);
+
+                }
+            }
+            player.sendMessage(Text.literal("§d" + tot_damaged));
+            try{
+                if(attacker.getAttributeValue(EntityAttributes.GENERIC_ATTACK_SPEED) != 0){
+                    tot_damaged = tot_damaged*(attacker.getAttributeValue(EntityAttributes.GENERIC_ATTACK_SPEED)/2);
+                    player.sendMessage(Text.literal("modified again, §d" + tot_damaged));
+                }
+
+            }catch(Exception e){
+                LOGGER.debug("Attribute attack speed not found. Most likely normal");
+            }
+
+            //TODO ok in realtà fa un return true. Solo che non viene gestito bene dopo
+            //If with the next hit the player would reach less than the health_percent activate
+            return tot_damaged;
+
+        }
+
+        //Simpler check TODO maybe make it a bit more precise
+        return -1;
+    }
+
+    /**Checks to see if the player would be below a certain threshold
+     * after the next attack, if it is returns true.
+     *
+     * Alternatively, Checks both the health and armor of the player,
+     * and check if it is below a certain percentage.
+     * If it is, returns true
+     *
+     * @param player The player that could trigger their light
+     * @param health_percent The percentage (15, 25, 70) below which the target is in danger (hence light activatable)
+     * */
+    public static boolean checkSelfDanger(@NotNull PlayerEntity player, int health_percent){
+        double tot_damaged = getTotDamage(player, health_percent);
+
+        if(tot_damaged == -1){
+            return player.getArmor()+player.getHealth() <= (player.getMaxHealth())*health_percent/100;
+        }
+
+        //If with the next hit the player would reach less than the health_percent activate
+        if(player.getHealth()-tot_damaged <= (player.getMaxHealth())*health_percent/100){
+            return true;
+        }
+
+        //Simpler check TODO maybe make it a bit more precise with the right formula
+        return player.getArmor()+player.getHealth() <= (player.getMaxHealth())*health_percent/100;
+    }
+
+    /**Checks to see if the player would be below a certain threshold
+     * after the next attack, if it is returns true.
+     *
+     * Alternatively, Checks both the health and armor of the player,
+     * and check if it is below a certain percentage.
+     * If it is, returns true
+     *
+     * @param player The player that could trigger their light
+     * @param health_percent The percentage (15, 25, 70) below which the target is in danger (hence light activatable)
+     * */
+    public static boolean checkSelfDanger(@NotNull PlayerEntity player, int health_percent, boolean surrounded){
+        double tot_damaged = getTotDamage(player, health_percent);
+
+        if(tot_damaged == -1){
+            return player.getArmor()+player.getHealth() <= (player.getMaxHealth())*health_percent/100;
+        }
+        //If the player is surrounded multiplies the tot damage by a factor of 1.3.
+        //TODO CONFIGURABLE aka how much should the multiplier be if the player is surrounded.
+        if(surrounded){
+            tot_damaged = tot_damaged*1.3;
+        }
+
+        if(player.getHealth()-tot_damaged <= (player.getMaxHealth())*health_percent/100){
+            return true;
+        }
+
+        //Simpler check TODO maybe make it a bit more precise
+        return player.getArmor()+player.getHealth() <= (player.getMaxHealth())*health_percent/100;
+    }
+
+    /**Checks to see if the player would be below a certain threshold
+     * after the next attack, if it is returns true.
+     *
+     * Alternatively, Checks both the health and armor of the player,
+     * and check if it is below a certain percentage.
+     * If it is, returns true
+     *
+     * @param player The player that could trigger their light
+     * @param health_percent The percentage (15, 25, 70) below which the target is in danger (hence light activatable)
+     * */
+    public static boolean checkSelfDanger(@NotNull PlayerEntity player, int health_percent, boolean surrounded, boolean low_armor){
+        double tot_damaged = getTotDamage(player, health_percent);
+
+        if(tot_damaged == -1){
+            player.sendMessage(Text.literal("Effettivamente è -1 il totdamage"));
+            return player.getArmor()+player.getHealth() <= (player.getMaxHealth())*health_percent/100;
+        }
+
+        //if the player has low armor multiplies by a factor of 1.15
+        //TODO CONFIGURABLE aka how much should the multiplier be if the player has low armor
+        if(low_armor){
+            tot_damaged = tot_damaged*1.1;
+        }
+
+        //If the player is surrounded multiplies the tot damage by a factor of 1.3.
+        //TODO CONFIGURABLE aka how much should the multiplier be if the player is surrounded.
+        if(surrounded){
+            tot_damaged = tot_damaged*1.3;
+        }
+
+        if(player.getHealth()-tot_damaged <= (player.getMaxHealth())*health_percent/100){
+            return true;
+        }
+
+        //Simpler check TODO maybe make it a bit more precise
+        return player.getArmor()+player.getHealth() <= (player.getMaxHealth())*health_percent/100;
+    }
+
     /**Just checks if the health of the player is below a certain percentage.
      * If it is, returns true
      *
@@ -111,6 +282,7 @@ public class CheckUtils {
      * */
     public static boolean checkSelfHealth(@NotNull PlayerEntity player, int health_percent){
         return player.getHealth() <= (player.getMaxHealth())*health_percent/100;
+
     }
 
     /**Will check for nearby allies, if they are on low health
@@ -197,7 +369,27 @@ public class CheckUtils {
         }
 
         public static boolean checkFaction(PlayerEntity player, PlayerEntity player1){
-            return FactionChecker.areInSameFaction(player, player1) && FactionChecker.areAllies(player, player1);
+            return FactionChecker.areInSameFaction(player, player1) || FactionChecker.areAllies(player, player1);
+        }
+
+        public static boolean checkEnemyFaction(PlayerEntity player, PlayerEntity player1){
+            return FactionChecker.areEnemies(player, player1);
+        }
+
+        public static boolean checkPartyArgo(PlayerEntity player, PlayerEntity player1){
+            return ArgonautsChecker.areInSameParty(player,player1);
+        }
+
+        public static boolean checkGuildArgo(PlayerEntity player, PlayerEntity player1){
+            return ArgonautsChecker.areInSameGuild(player,player1);
+        }
+
+        public static boolean checkArgonauts(PlayerEntity player, PlayerEntity player1){
+            return checkPartyArgo(player,player1) || checkGuildArgo(player,player1);
+        }
+
+        public static boolean checkOPACParty(PlayerEntity player, PlayerEntity player1){
+            return OPACChecker.areInSameParty(player, player1) || OPACChecker.areInAlliedParties(player, player1);
         }
 
         public static boolean checkPet(LivingEntity entity, LivingEntity ent){
@@ -211,8 +403,22 @@ public class CheckUtils {
             if(FabricLoader.getInstance().isModLoaded("factions") && entity instanceof PlayerEntity && teammate instanceof PlayerEntity){
                 return checkFaction((PlayerEntity) entity, (PlayerEntity) teammate);
             }
+            if(FabricLoader.getInstance().isModLoaded("argonauts") && entity instanceof PlayerEntity && teammate instanceof PlayerEntity){
+                return checkArgonauts((PlayerEntity) entity, (PlayerEntity) teammate);
+            }
+            if(FabricLoader.getInstance().isModLoaded("open-parties-and-claims") && entity instanceof PlayerEntity && teammate instanceof PlayerEntity){
+                return checkOPACParty((PlayerEntity) entity, (PlayerEntity) teammate);
+            }
             return checkTeam(entity, teammate) || checkPet(entity, teammate);
 
+        }
+
+        //TODO add option of "If in team but not allied, then enemy
+        public static boolean checkEnemies(LivingEntity entity, LivingEntity enemy){
+            if(FabricLoader.getInstance().isModLoaded("factions") && entity instanceof PlayerEntity && enemy instanceof PlayerEntity){
+                return checkEnemyFaction((PlayerEntity) entity, (PlayerEntity) enemy);
+            }
+            return false;
         }
     }
 
@@ -386,7 +592,7 @@ public class CheckUtils {
             return true;
         }
 
-        return checkMultipleBlocksWithTags(player, 3, 3, TagKey.of(Registry.BLOCK_KEY, BlockTags.LUSH_GROUND_REPLACEABLE.id()));
+        return checkMultipleBlocksWithTags(player, 3, 3, TagKey.of(RegistryKeys.BLOCK, BlockTags.LUSH_GROUND_REPLACEABLE.id()));
     }
 
     /**Used to check if the player has something that can be considered a Cold Source
@@ -395,14 +601,15 @@ public class CheckUtils {
      * @param player The player to perform checks on*/
     public static boolean checkWind(PlayerEntity player){
 
+        //If the player is above sea level and can see the sky winds are there right?
         if(player.getY() >= 64){
-            if(!player.isOnGround()){
+            if(!player.getEntityWorld().isSkyVisible(player.getBlockPos())){
                 return true;
             }
             return true;
         }
 
-        return checkMultipleBlocks(player, Arrays.asList(Blocks.AIR, Blocks.CAVE_AIR, Blocks.VOID_AIR), 3, 6);
+        return checkMultipleBlocks(player, Arrays.asList(Blocks.AIR), 3, 7);
         //return checkMultipleBlocksWithTags(player, 3, 3, TagKey.of(Registry.BLOCK_KEY, BlockTags.AIR));
     }
 
@@ -428,13 +635,22 @@ public class CheckUtils {
 
     public static boolean checkFalling(LivingEntity entity) {
         if(entity instanceof PlayerEntity){
-            return ((PlayerEntity) entity).fallDistance > 5 && !entity.isFallFlying() && !entity.isOnGround() && !entity.isClimbing() && !((PlayerEntity) entity).getAbilities().flying && !entity.isSwimming();
+            boolean b = ((PlayerEntity) entity).fallDistance > 5 && !entity.isFallFlying() && !entity.isOnGround() && !entity.isClimbing() && !((PlayerEntity) entity).getAbilities().flying && !entity.isSwimming();
+            return b;
         }
         return entity.fallDistance > 5 && !entity.isFallFlying() && !entity.isOnGround() && !entity.isClimbing()  && !entity.isSwimming();
     }
 
     public static boolean checkPoisoned(LivingEntity entity){
         return entity.hasStatusEffect(StatusEffects.POISON);
+    }
+
+    public static boolean checkAllyPoisoned(LivingEntity caster, LivingEntity target){
+        if(CheckAllies.checkAlly(caster, target)){
+            return target.hasStatusEffect(StatusEffects.POISON);
+        }
+        return false;
+
     }
 
     public static boolean checkDebuffed(LivingEntity entity){

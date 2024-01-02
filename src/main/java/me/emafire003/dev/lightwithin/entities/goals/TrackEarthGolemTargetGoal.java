@@ -1,7 +1,5 @@
 package me.emafire003.dev.lightwithin.entities.goals;
 
-
-
 import java.util.EnumSet;
 import java.util.List;
 
@@ -30,11 +28,11 @@ public class TrackEarthGolemTargetGoal extends TrackTargetGoal {
     @Override
     public boolean canStart() {
         if(golem.getSummoner() != null){
-            if(golem.getSummoner().getDamageTracker().getMostRecentDamage() == null){
+            if(golem.getSummoner().getRecentDamageSource() == null){
                 return false;
             }
-            if(golem.getSummoner().getDamageTracker().getMostRecentDamage().getAttacker() instanceof LivingEntity){
-                this.target = (LivingEntity) golem.getSummoner().getDamageTracker().getMostRecentDamage().getAttacker();
+            if(golem.getSummoner().getRecentDamageSource().getAttacker() instanceof LivingEntity){
+                this.target = (LivingEntity) golem.getSummoner().getRecentDamageSource().getAttacker();
             }
         }
         if (this.target == null) {

@@ -1,5 +1,6 @@
 package me.emafire003.dev.lightwithin.lights;
 
+import me.emafire003.dev.lightwithin.blocks.LightBlocks;
 import me.emafire003.dev.lightwithin.compat.coloredglowlib.CGLCompat;
 import me.emafire003.dev.lightwithin.component.LightComponent;
 import me.emafire003.dev.lightwithin.config.Config;
@@ -11,24 +12,23 @@ import me.emafire003.dev.lightwithin.util.TargetType;
 import me.emafire003.dev.structureplacerapi.StructurePlacerAPI;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
+import net.minecraft.text.Text;
 import net.minecraft.util.BlockMirror;
 import net.minecraft.util.BlockRotation;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Direction;
-import org.lwjgl.opengl.CGL;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 import static me.emafire003.dev.lightwithin.LightWithin.*;
-import static me.emafire003.dev.lightwithin.config.Config.CONFIG;
 
 public class FrostLight extends InnerLight {
 
@@ -36,9 +36,17 @@ public class FrostLight extends InnerLight {
        - self low health
        - allies low health (checkable like this if type = Heal && target = allies do stuff
        - surrounded++
-       - NEEDS to be on fire, hold a torch, near heat emitting stuff.
        - Ally dying?
      */
+
+    /*Triggers:
+    * - Snowing & HP < 75% (not ally)
+    * - Freezing & HP < 50%
+    * - HP < 25% (&& freeze stuff in hand/around)
+    * - Ally dying
+    *
+    * - When attacked by a snowball && HP <75%
+    * */
 
     /*Possible targets:
     * - enemies
@@ -69,8 +77,12 @@ public class FrostLight extends InnerLight {
         if(this.power_multiplier < Config.FROST_MIN_POWER){
             power_multiplier = Config.FROST_MIN_POWER;
         }
-        if(this.duration > Config.FROST_MAX_DURATION){
-            this.duration = Config.FROST_MAX_DURATION;
+        int max_duration = Config.FROST_MAX_DURATION;
+        if(Config.MULTIPLY_DURATION_LIMIT){
+            max_duration = (int) (Config.FROST_MAX_DURATION * Config.DURATION_MULTIPLIER);
+        }
+        if(this.duration > max_duration){
+            this.duration = max_duration;
         }
         if(this.duration < Config.FROST_MIN_DURATION){
             this.duration = Config.FROST_MIN_DURATION;
@@ -89,6 +101,7 @@ public class FrostLight extends InnerLight {
             }
         }
 
+
         caster.getWorld().playSound(caster, caster.getBlockPos(), LightSounds.FROST_LIGHT, SoundCategory.AMBIENT, 1, 1);
         LightComponent component = LIGHT_COMPONENT.get(caster);
         if((Config.STRUCTURE_GRIEFING || Config.NON_FUNDAMENTAL_STRUCTURE_GRIEFING) && !caster.getWorld().isClient && (component.getTargets().equals(TargetType.ALL) || component.getTargets().equals(TargetType.ENEMIES))) {
@@ -97,7 +110,6 @@ public class FrostLight extends InnerLight {
         }
 
         LightParticlesUtil.spawnSnowflake((ServerPlayerEntity) caster, caster.getPos().add(0, 2, 0));
-        caster.addStatusEffect(new StatusEffectInstance(LightEffects.FREEZE_RESISTANCE, this.duration));
 
         boolean self_or_allies = (component.getTargets().equals(TargetType.SELF) || component.getTargets().equals(TargetType.ALLIES));
         for(LivingEntity target : this.targets){
@@ -130,29 +142,17 @@ public class FrostLight extends InnerLight {
                 if(!caster.getWorld().isClient){
                     LightParticlesUtil.spawnLightTypeParticle(LightParticles.FROSTLIGHT_PARTICLE, (ServerWorld) caster.getWorld(), target.getPos());
                     LightParticlesUtil.spawnLightTypeParticle(LightParticles.FROSTLIGHT_PARTICLE, (ServerWorld) caster.getWorld(), caster.getPos());
-                    BlockPos norm_pos = target.getBlockPos();
-                    /*
-                    target.getWorld().setBlockState(norm_pos, LightBlocks.FROZEN_PLAYER_BOTTOM_BLOCK.getDefaultState(), state);
-                    target.getWorld().setBlockState(norm_pos.add(0,1,0), LightBlocks.FROZEN_PLAYER_TOP_BLOCK.getDefaultState(), state);
-                    */
-                    String statue_id = "frozen_mob";
-                    if(target instanceof PlayerEntity){
-                        statue_id = "frozen_player";
-                    }
-                    StructurePlacerAPI placer = new StructurePlacerAPI((ServerWorld) caster.getWorld(), new Identifier(MOD_ID, statue_id), target.getBlockPos(), BlockMirror.NONE, BlockRotation.NONE, true, 1.0f, new BlockPos(0,0,0));
-                    if(state == 1){
-                        placer = new StructurePlacerAPI((ServerWorld) caster.getWorld(), new Identifier(MOD_ID, statue_id), target.getBlockPos(), BlockMirror.NONE, BlockRotation.CLOCKWISE_90, true, 1.0f, new BlockPos(0,0,0));
-                    }else if(state == 2){
-                        placer = new StructurePlacerAPI((ServerWorld) caster.getWorld(), new Identifier(MOD_ID, statue_id), target.getBlockPos(), BlockMirror.NONE, BlockRotation.CLOCKWISE_180, true, 1.0f, new BlockPos(0,0,0));
-                    }else if(state == 3){
-                        placer = new StructurePlacerAPI((ServerWorld) caster.getWorld(), new Identifier(MOD_ID, statue_id), target.getBlockPos(), BlockMirror.NONE, BlockRotation.COUNTERCLOCKWISE_90, true, 1.0f, new BlockPos(0,0,0));
-                    }
-                    placer.loadStructure();
-                    target.teleport(norm_pos.getX(), norm_pos.getY(), norm_pos.getZ());
-                    target.addStatusEffect(new StatusEffectInstance(LightEffects.FROST, caster.getStatusEffect(LightEffects.LIGHT_ACTIVE).getDuration(), 0, false, false));
-                    target.addStatusEffect(new StatusEffectInstance(StatusEffects.INVISIBILITY, caster.getStatusEffect(LightEffects.LIGHT_ACTIVE).getDuration(), 0, false, false));
-                    target.damage(DamageSource.FREEZE, (float) this.power_multiplier);
 
+                    target.addStatusEffect(new StatusEffectInstance(LightEffects.FROST, caster.getStatusEffect(LightEffects.LIGHT_ACTIVE).getDuration(), 0, false, false));
+
+                    target.damage(caster.getWorld().getDamageSources().freeze(), (float) this.power_multiplier);
+
+                    Box box =  target.getDimensions(target.getPose()).getBoxAt(target.getPos());
+                    box.expand(1);
+                    Stream<BlockPos> stream_pos = BlockPos.stream(box);
+                    stream_pos.forEach( (pos) -> {
+                        caster.getWorld().setBlockState(pos, LightBlocks.CLEAR_ICE.getDefaultState());
+                    });
                 }
             }
 

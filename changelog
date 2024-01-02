@@ -1,0 +1,88 @@
+Updated to 1.20.1
+Updated Renderer library
+TODO change in the config the possibility of chosing between health+armor or only health
+Now the low health checks the armor too, using this forumla: player.getArmor()+player.getHealth() <= (player.getMaxHealth())*health_percent/100;
+Not only that, but uses a new way to ""predict"" how much damage will be next, and if it is under the designated health percentage it will tick. (new way of triggering the light below)
+Compatibility with:
+    - Open parties and claims
+    - Factions (dependency updated, no substantial changes, fixed the fact that now it's an samef || alliedf instead of samef && alliedf
+    - Argonauts, both parties and guilds
+
+Now the drowneds summoned with the Aqua light will never attack the player who summoned them, not even after the light runs out, but they will attack everyone else even during the day
+
+(The armor and surrounded can be toggled for the count in the config. It is advised to set them on true)
+Overhauled the way the lights triggers. Now there are a number of factors that allow a player to trigger a light. If enough of this factors are present, it will trigger
+For the Blazing light:
+- These factor have different weights, but they are:
+  ALL: Low health, Very Low Health, Blazing conditions, being surrounded, low armor
+  ENEMIES: same, + low armor of the armor of the allies
+For the Heal light:
+- Again different weights:
+    SELF: Low health, Very low health, Poisend, low armor
+    ALLIES: Allies low health, surrounded, allies low armor, allies poisoned
+    OTHER: Other low health, other poisened (in this case either of the two triggers it)
+For Defense light:
+    SELF: Low health, Very low health, low armor, surrounded (for example, here it triggers with very low health only, or a combination of low health and either low armor or surrounded)
+    ALLIES: ALlies low health, allies low armor, very low health (self), surrounded
+    OTHER: Other low health (yes it's the only parameter)
+For Strength light:
+    SELF: Low health, Very low health, low armor, surrounded
+    ALLIES: Allies low health, self very low health, allies low armor, surrounded
+For frost light:
+    ALL: Low health, very low health, surrunded, low armor, Frost conditions (for exmaple, frost conditions+low health triggers)
+    ENEMIES: Self Very low health, Allies low health, frost conditions, ally low armor,  self low armor, surrounded
+    SELF: Low health, very low health, surrounded low armor, frost conditions
+    ALLIES: Allies low health, very low health (self),  frost conditions, allies low armor, surrounded.
+For Earthen light:
+    OTHER: Ally low health, very low health self, earthen conditions, surrounded
+    ENEMIES: same as Other (the weights vary tho)
+    SELF: Very low health, low health, surrounded, earthen conditions
+    ALLIES: Ally low health, self very low health, earthen conditions, surrounded (again, weights vary)
+For Wind light:
+    OTHER: TODO subject to change: Very low health, surrounded, falling from a small height, falling from a higher height, wind conditions
+    SELF: Low health, Very low health, big fall, small fall, wind conditins, surrounded
+    ALLIES: allies low health, self very low health, surrounded, self falling (10 blocks), wind conditions, allies falling (20 blocks TODO maybe change),
+For Aqua light:
+    ALL: very low health, low armor, surrounded, aqua conditions
+    ENEMIES: very low health, low health, low armor, surrounded, aqua conditions
+    SELF: very low health, low health, low armor, surrounded, aqua conditions
+    ALLIES: allies low health, self very low health, surrounded, low armor, aqua conditions
+For Frog light: quite low health/surrounded (one of the two)
+
+Frost light:
+//TODO Subject to chage if I change all the durations
+Now the duration of the freeze resistance is multiplied by the power multiplier
+
+The ENEMIES & ALL targets have been changed. Now they will be encased in a box of clear ice, and internnaly,
+won't change looking direction anymore, and will not be able to attack or break blocks and will no longer be invisible.
+Unless they have freeze resistance.
+
+Added a new block, Clear Ice. It melts/breaks into a puff of snow and is more translucent than normal ice.
+It is also non-solid, meaning it doesn't do suffocating damage. Like glass.
+(Now the statues are no longer supported, but still present for creative decoration)
+
+Wind Light:
+The checkWind now only checks for standard AIR, not CAVE_AIR or VOID_AIR. Since wind isn't supposed to be there
+
+Added new triggers:
+- Fall Trigger, when a living entity (aka player or mob) falls it triggers a check for a light (not necessarly triggering it). The minimum for firing is 5 blocks
+- Burn Trigger, when an entity is on fire
+- Freeze Trigger, when an entity is freezing
+- Drowning Trigger, when an entity is drowning
+
+(separated the checkLights into another class from LightTriggeringAndEvents)
+
+Fixed a bug with the /reroll duration not working correctly and always giving the lowest amount.
+Fixed a similar bug, where using /light reroll cooldown would use a random power instead.
+
+Now the duration is better controllable using the config setting, and the duration of all the lights has been extended using the multiplier.
+Now the base values range from 1 to 16, and the default multiplier is 1.3. You can also adjust for low values in the config.
+
+Added /light reroll all command to reroll every aspect of the light
+
+Changed how the light types,targets,duration,cooldown,power ecc are determined so your default light might have changed.
+(You will be keeping your current light unless you use /light reset).
+Fixed an issue for determing the target type.
+
+
+

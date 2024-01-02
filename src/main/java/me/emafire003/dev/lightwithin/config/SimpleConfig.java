@@ -195,13 +195,14 @@ public class SimpleConfig {
      * @return  value corresponding to the given key, or the default value
      */
     public int getOrDefault( String key, int def ) {
-        try {
+        /*try {
             return Integer.parseInt( get(key) );
         } catch (Exception e) {
             LOGGER.info("ERROR! NOTHING FOUND");
             e.printStackTrace();
             return def;
-        }
+        }*/
+        return Integer.parseInt( get(key) );
     }
 
     /**

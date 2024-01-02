@@ -15,7 +15,7 @@ public class ReloadConfigCommand implements LightCommand{
     private int reloadConfig(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
         try{
             Config.reloadConfig();
-            context.getSource().sendFeedback(Text.literal(LightWithin.PREFIX_MSG).append("§aConfig successfully reloaded!"), false);
+            context.getSource().sendFeedback( () -> Text.literal(LightWithin.PREFIX_MSG).append("§aConfig successfully reloaded!"), false);
             return 1;
         }catch (Exception e){
             context.getSource().sendError(Text.literal(LightWithin.PREFIX_MSG).append("§cThere has been an error while reloading the config, check the logs"));

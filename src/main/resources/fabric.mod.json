@@ -35,14 +35,15 @@
 
   "depends": {
     "fabricloader": ">=0.14.8",
-    "minecraft": ">=1.19-",
+    "minecraft": ">=1.20-",
     "java": ">=16",
     "fabric-key-binding-api-v1": "*"
 
   },
   "custom": {
     "cardinal-components": [
-      "lightwithin:light_component"
+      "lightwithin:light_component",
+      "lightwithin:summoned_by_component"
     ]
   },
   "recommends": {

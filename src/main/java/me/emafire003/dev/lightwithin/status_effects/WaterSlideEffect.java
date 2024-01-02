@@ -1,30 +1,17 @@
 package me.emafire003.dev.lightwithin.status_effects;
 
-import me.emafire003.dev.coloredglowlib.ColoredGlowLib;
-import me.emafire003.dev.coloredglowlib.util.Color;
-import me.emafire003.dev.lightwithin.component.LightComponent;
 import me.emafire003.dev.lightwithin.config.Config;
-import me.emafire003.dev.lightwithin.lights.InnerLight;
-import me.emafire003.dev.lightwithin.lights.InnerLightType;
-import me.emafire003.dev.lightwithin.util.TargetType;
 import me.emafire003.dev.structureplacerapi.StructurePlacerAPI;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.attribute.AttributeContainer;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectCategory;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.BlockMirror;
 import net.minecraft.util.BlockRotation;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 
-import static me.emafire003.dev.lightwithin.LightWithin.LIGHT_COMPONENT;
 import static me.emafire003.dev.lightwithin.LightWithin.MOD_ID;
 
 public class WaterSlideEffect extends StatusEffect {

@@ -42,6 +42,14 @@ public class BlazingLight extends InnerLight {
        - Ally dying?
      */
 
+    /*Triggers:
+    * - When surrounded && HP < 50%
+    * - When facing a boss && HP < 50% ??
+    * - When on fire && HP < 75%
+    * - Ally dying
+    *
+    * - When attacked with fire aspect or something*/
+
     /*Possible targets:
     * - enemies
     * - all (more powerful tho)
@@ -74,8 +82,12 @@ public class BlazingLight extends InnerLight {
         if(this.power_multiplier < Config.BLAZING_MIN_POWER){
             power_multiplier = Config.BLAZING_MIN_POWER;
         }
-        if(this.duration > Config.BLAZING_MAX_DURATION){
-            this.duration = Config.BLAZING_MAX_DURATION;
+        int max_duration = Config.BLAZING_MAX_DURATION;
+        if(Config.MULTIPLY_DURATION_LIMIT){
+            max_duration = (int) (Config.BLAZING_MAX_DURATION * Config.DURATION_MULTIPLIER);
+        }
+        if(this.duration > max_duration){
+            this.duration = max_duration;
         }
         if(this.duration < Config.BLAZING_MIN_DURATION){
             this.duration = Config.BLAZING_MIN_DURATION;
@@ -117,7 +129,7 @@ public class BlazingLight extends InnerLight {
             //TODO make the chance configable EDIT: Maybe not
             //it's basicly a crit, unique for now to the blazing light Currently 10 percent
             if(caster.getRandom().nextInt(10) == 1){
-                target.damage(DamageSource.IN_FIRE, (float) (Config.BLAZING_DEFAULT_DAMAGE*this.power_multiplier*crit_multiplier));
+                target.damage(caster.getWorld().getDamageSources().inFire(), (float) (Config.BLAZING_DEFAULT_DAMAGE*this.power_multiplier*crit_multiplier));
                 target.setOnFireFor(this.duration*Config.BLAZING_CRIT_FIRE_MULTIPLIER);
                 target.playSound(LightSounds.LIGHT_CRIT, 1, 1);
                 LightParticlesUtil.spawnDescendingColumn((ServerPlayerEntity) caster, ParticleTypes.FLAME, target.getPos().add(0,3,0));
@@ -127,7 +139,7 @@ public class BlazingLight extends InnerLight {
                 }
             }else{
                 target.setOnFireFor(this.duration);
-                target.damage(DamageSource.IN_FIRE, (float) (Config.BLAZING_DEFAULT_DAMAGE*this.power_multiplier));
+                target.damage(caster.getWorld().getDamageSources().inFire(), (float) (Config.BLAZING_DEFAULT_DAMAGE*this.power_multiplier));
             }
         }
 

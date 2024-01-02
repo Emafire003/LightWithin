@@ -2,6 +2,7 @@ package me.emafire003.dev.lightwithin.lights;
 
 import me.emafire003.dev.lightwithin.compat.coloredglowlib.CGLCompat;
 import me.emafire003.dev.lightwithin.component.LightComponent;
+import me.emafire003.dev.lightwithin.component.SummonedByComponent;
 import me.emafire003.dev.lightwithin.config.Config;
 import me.emafire003.dev.lightwithin.particles.LightParticles;
 import me.emafire003.dev.lightwithin.particles.LightParticlesUtil;
@@ -29,8 +30,7 @@ import net.minecraft.util.math.BlockPos;
 
 import java.util.List;
 
-import static me.emafire003.dev.lightwithin.LightWithin.LIGHT_COMPONENT;
-import static me.emafire003.dev.lightwithin.LightWithin.MOD_ID;
+import static me.emafire003.dev.lightwithin.LightWithin.*;
 
 public class AquaLight extends InnerLight {
 
@@ -38,16 +38,21 @@ public class AquaLight extends InnerLight {
        - self low health
        - allies low health
        - surrounded+++
-       - NEEDS to have in hand dirt/rock or be around them.
      */
+
+    /* Triggers:
+    * - drowning && hp < 50%
+    * - surrounded && hp < 60%
+    * - hp < 35%
+    * */
 
     /*Possible targets:
     Always apply conduit effect
     * - self, ->
     * - ally/self -> spawn water under the player's feet, and give dolphin grace
-    * - enemies -> encase them in a water bubble and apply veeeery high slowness to them + damage. see below
-    * - enemies v2 -> throw a lot of tridents to them, putting their velocity to collide with the immobile player
-    * - ALL -> summon armored drowneds that don't attack the summoner (mixin) (this could also be self)
+    * - enemies -> encase tg their velocity to collide with the immobile player
+    * - ALL -> summon armored drowneds that don't attachem in a water bubble and apply veeeery high slowness to them + damage. see below
+    * - enemies v2 -> throw a lot of tridents to them, puttink the summoner (mixin) (this could also be self)
     * (if not self maybe the player could be not attacked if they have the conduit effect. Or dolphin grace.
     * - ALL MAYBE, but not sure. -> */
 
@@ -75,8 +80,12 @@ public class AquaLight extends InnerLight {
         if(this.power_multiplier < Config.AQUA_MIN_POWER){
             power_multiplier = Config.AQUA_MIN_POWER;
         }
-        if(this.duration > Config.AQUA_MAX_DURATION){
-            this.duration = Config.AQUA_MAX_DURATION;
+        int max_duration = Config.AQUA_MAX_DURATION;
+        if(Config.MULTIPLY_DURATION_LIMIT){
+            max_duration = (int) (Config.AQUA_MAX_DURATION * Config.DURATION_MULTIPLIER);
+        }
+        if(this.duration > max_duration){
+            this.duration = (int) max_duration;
         }
         if(this.duration < Config.AQUA_MIN_DURATION){
             this.duration = Config.AQUA_MIN_DURATION;
@@ -98,7 +107,6 @@ public class AquaLight extends InnerLight {
 
 
         caster.getWorld().playSound(caster, caster.getBlockPos(), LightSounds.AQUA_LIGHT, SoundCategory.AMBIENT, 1, 1);
-
         LightComponent component = LIGHT_COMPONENT.get(caster);
 
 
@@ -140,6 +148,8 @@ public class AquaLight extends InnerLight {
                     drowned.equipStack(EquipmentSlot.OFFHAND, trident);
                     drowned.equipStack(EquipmentSlot.MAINHAND, trident);
                 }
+                SUMMONED_BY_COMPONENT.get(drowned).setSummonerUUID(caster.getUuid());
+                SUMMONED_BY_COMPONENT.get(drowned).setIsSummoned(true);
 
                 drowned.setPos(caster.getX()+caster.getRandom().nextBetween(-3,3), caster.getY(), caster.getZ()+caster.getRandom().nextBetween(-3,3));
                 caster.getWorld().spawnEntity(drowned);
@@ -179,7 +189,7 @@ public class AquaLight extends InnerLight {
                     if(this.power_multiplier >= 4){
                         ItemStack trident = new ItemStack(Items.TRIDENT);
                         trident.addEnchantment(Enchantments.CHANNELING, 1);
-                        TridentEntity tridentEntity = new TridentEntity(caster.world, caster, trident);
+                        TridentEntity tridentEntity = new TridentEntity(caster.getWorld(), caster, trident);
                         tridentEntity.setPos(target.getX(), target.getY()+10, target.getZ());
                         tridentEntity.addVelocity(0, -1, 0);
                         if(this.power_multiplier >= 7){

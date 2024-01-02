@@ -1,5 +1,5 @@
 plugins {
-	id 'fabric-loom' version '0.12-SNAPSHOT'
+	id 'fabric-loom' version '1.3-SNAPSHOT'
 	id 'maven-publish'
 }
 
@@ -25,7 +25,12 @@ repositories {
 	}
 	maven {
 		name = 'Ladysnake Mods'
-		url = 'https://ladysnake.jfrog.io/artifactory/mods'
+		url = 'https://maven.ladysnake.org/releases'
+		content {
+			includeGroup 'io.github.ladysnake'
+			includeGroup 'org.ladysnake'
+			includeGroupByRegex 'dev\\.onyxstudios.*'
+		}
 	}
 
 	maven { url 'https://jitpack.io' }
@@ -45,19 +50,36 @@ dependencies {
 	modImplementation "maven.modrinth:coloredglowlib:${project.coloredglowlib_version}"
 
 	//CardinalComponents (old version 4.0.1)
-	include modImplementation("dev.onyxstudios.cardinal-components-api:cardinal-components-base:5.0.1")
-	include modImplementation("dev.onyxstudios.cardinal-components-api:cardinal-components-entity:5.0.1")
+	include modImplementation("dev.onyxstudios.cardinal-components-api:cardinal-components-base:${project.cardinal_components_version}")
+	include modImplementation("dev.onyxstudios.cardinal-components-api:cardinal-components-entity:${project.cardinal_components_version}")
 
 	//Renderer TODO will need updating back to master-SNAPSHOT for 1.19.2
-	//include modImplementation( 'com.github.0x3C50:Renderer:9804cf7d99' )
-	include modImplementation( 'com.github.0x3C50:Renderer:master-SNAPSHOT' )
+	//include modImplementation( 'com.github.0x3C50:Renderer:9804cf7d99' )c4faf83
+	//1.20.1
+	include modImplementation( 'com.github.0x3C50:Renderer:2273f5e562' )//2273f5e
+	//include modImplementation("com.github.0x3C50:Renderer:master-SNAPSHOT")
 
 	//StructurePlacerAPI
 	modImplementation "maven.modrinth:structureplacerapi:${project.structureplacerapi_version}"
 	include "maven.modrinth:structureplacerapi:${project.structureplacerapi_version}"
 
-	//OPTIONAL DEPENDENCIES:
+	//===========OPTIONAL DEPENDENCIES===========
+
+	//Factions
 	modImplementation "maven.modrinth:factions:${project.factions_version}"
+
+	//Argonauts
+	modImplementation "maven.modrinth:argonauts:${project.argonauts_version}"
+	modImplementation "maven.modrinth:resourceful-lib:${project.resourcefullib_version}"
+	//Which requires maybe: resourceful-lib
+
+	//Open parties and claims aka OPAC
+	modImplementation "maven.modrinth:open-parties-and-claims:${project.opac_version}"
+	//Which require maybe: forge-config-api-port
+
+	//LevelZ party addon -- Maybe later
+	//modImplementation "maven.modrinth:partyaddon:${project.levelz_party_version}"
+
 }
 
 processResources {

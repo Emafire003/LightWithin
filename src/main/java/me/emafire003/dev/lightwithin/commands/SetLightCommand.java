@@ -61,14 +61,14 @@ public class SetLightCommand implements LightCommand{
 
 
                 if(!Objects.requireNonNull(source.getPlayer()).equals(target) || !Config.TARGET_FEEDBACK){
-                    source.sendFeedback(Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The InnerLight type of §d" + target.getName().getString() + "§e has been changed to: " ).formatted(Formatting.YELLOW)
+                    source.sendFeedback( () -> Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The InnerLight type of §d" + target.getName().getString() + "§e has been changed to: " ).formatted(Formatting.YELLOW)
                             .append(Text.literal(type.toString()).formatted(Formatting.GREEN))), true);
                 }
             }
             return 1;
         }catch(Exception e){
             e.printStackTrace();
-            source.sendFeedback(Text.literal("Error: " + e),false);
+            source.sendFeedback( () -> Text.literal("Error: " + e),false);
             return 0;
         }
 
@@ -99,7 +99,7 @@ public class SetLightCommand implements LightCommand{
             }
 
             if(!Objects.requireNonNull(source.getPlayer()).equals(target) || !Config.TARGET_FEEDBACK){
-                source.sendFeedback(Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The target type of §d" + target.getName().getString() + "§e has been changed to: " ).formatted(Formatting.YELLOW)
+                source.sendFeedback( () -> Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The target type of §d" + target.getName().getString() + "§e has been changed to: " ).formatted(Formatting.YELLOW)
                         .append(Text.literal(type.toString()).formatted(Formatting.GREEN))), true);
             }
         }
@@ -121,7 +121,7 @@ public class SetLightCommand implements LightCommand{
             }
 
             if(!Objects.requireNonNull(source.getPlayer()).equals(target) || !Config.TARGET_FEEDBACK){
-                source.sendFeedback(Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The power of §d" + target.getName().getString() + "§e has been changed to: " ).formatted(Formatting.YELLOW)
+                source.sendFeedback( () -> Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The power of §d" + target.getName().getString() + "§e has been changed to: " ).formatted(Formatting.YELLOW)
                         .append(Text.literal(String.valueOf(power)).formatted(Formatting.GREEN))), true);
             }
 
@@ -144,7 +144,7 @@ public class SetLightCommand implements LightCommand{
             }
 
             if(!Objects.requireNonNull(source.getPlayer()).equals(target) || !Config.TARGET_FEEDBACK){
-                source.sendFeedback(Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The duration of §d" + target.getName().getString() + "§e has been changed to: " ).formatted(Formatting.YELLOW)
+                source.sendFeedback( () -> Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The duration of §d" + target.getName().getString() + "§e has been changed to: " ).formatted(Formatting.YELLOW)
                         .append(Text.literal(String.valueOf(duration)).formatted(Formatting.GREEN))), true);
             }
 
@@ -167,7 +167,7 @@ public class SetLightCommand implements LightCommand{
             }
 
             if(!Objects.requireNonNull(source.getPlayer()).equals(target) || !Config.TARGET_FEEDBACK){
-                source.sendFeedback(Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The max cooldown of §d" + target.getName().getString() + "§e has been changed to: " ).formatted(Formatting.YELLOW)
+                source.sendFeedback( () -> Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The max cooldown of §d" + target.getName().getString() + "§e has been changed to: " ).formatted(Formatting.YELLOW)
                         .append(Text.literal(String.valueOf(cooldown)).formatted(Formatting.GREEN))), true);
             }
 

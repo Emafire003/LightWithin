@@ -10,6 +10,7 @@ import me.emafire003.dev.lightwithin.blocks.LightBlocks;
 import me.emafire003.dev.lightwithin.commands.LightCommands;
 import me.emafire003.dev.lightwithin.compat.coloredglowlib.CGLCompat;
 import me.emafire003.dev.lightwithin.component.LightComponent;
+import me.emafire003.dev.lightwithin.component.SummonedByComponent;
 import me.emafire003.dev.lightwithin.config.Config;
 import me.emafire003.dev.lightwithin.entities.LightEntities;
 import me.emafire003.dev.lightwithin.events.LightTriggeringAndEvents;
@@ -31,6 +32,7 @@ import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.entity.mob.DrownedEntity;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.passive.PassiveEntity;
 import net.minecraft.entity.passive.TameableEntity;
@@ -75,6 +77,9 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 	public static final ComponentKey<LightComponent> LIGHT_COMPONENT =
 			ComponentRegistry.getOrCreate(new Identifier(MOD_ID, "light_component"), LightComponent.class);
 
+	public static final ComponentKey<SummonedByComponent> SUMMONED_BY_COMPONENT =
+			ComponentRegistry.getOrCreate(new Identifier(MOD_ID, "summoned_by_component"), SummonedByComponent.class);
+
 	@Override
 	public void onInitialize() {
 		// This code runs as soon as Minecraft is in a mod-load-ready state.
@@ -110,6 +115,8 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 	@Override
 	public void registerEntityComponentFactories(EntityComponentFactoryRegistry registry) {
 		registry.registerForPlayers(LIGHT_COMPONENT, LightComponent::new, RespawnCopyStrategy.ALWAYS_COPY);
+		registry.registerFor(LivingEntity.class, SUMMONED_BY_COMPONENT, SummonedByComponent::new);
+
 	}
 
 	private static void registerLightUsedPacket(){
@@ -143,7 +150,7 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 			if(debug){
 				player.sendMessage(Text.literal("Ok not in cooldown, starting the ticking"), false);
 			}
-			player.addStatusEffect(new StatusEffectInstance(LightEffects.LIGHT_ACTIVE, (int) (Config.DURATION_MULTIPLIER*20*LIGHT_COMPONENT.get(player).getDuration())));
+			player.addStatusEffect(new StatusEffectInstance(LightEffects.LIGHT_ACTIVE, (int) (20*LIGHT_COMPONENT.get(player).getDuration())));
 		}else{
 			return;
 		}
@@ -328,6 +335,8 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 			List<LivingEntity> entities = player.getWorld().getEntitiesByClass(LivingEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amount), (entity1 -> true));
 			for(LivingEntity ent : entities){
 				if(ent instanceof HostileEntity && !CheckUtils.CheckAllies.checkAlly(player, ent)){
+					targets.add(ent);
+				}else if(CheckUtils.CheckAllies.checkEnemies(player, ent)){
 					targets.add(ent);
 				}
 			}

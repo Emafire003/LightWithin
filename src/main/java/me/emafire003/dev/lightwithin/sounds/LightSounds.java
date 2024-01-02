@@ -1,9 +1,10 @@
 package me.emafire003.dev.lightwithin.sounds;
 
 import me.emafire003.dev.lightwithin.LightWithin;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 
 import static me.emafire003.dev.lightwithin.LightWithin.LOGGER;
 
@@ -22,7 +23,7 @@ public class LightSounds {
 
     private static SoundEvent registerSoundEvent(String name) {
         Identifier id = new Identifier(LightWithin.MOD_ID, name);
-        return Registry.register(Registry.SOUND_EVENT, id, new SoundEvent(id));
+        return Registry.register(Registries.SOUND_EVENT, id, SoundEvent.of(id));
     }
 
 

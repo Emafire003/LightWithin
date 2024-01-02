@@ -17,6 +17,7 @@ import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
+import net.minecraft.text.Text;
 
 import java.util.List;
 
@@ -29,6 +30,13 @@ public class WindLight extends InnerLight {
        - allies low health
        - surrounded+++
      */
+
+    /* Triggers:
+    * - Falling from more than 5 blocks
+    * - Surrounded && HP < 60%
+    * - HP < 25%
+    * - when at height of more than 128 blocks + HP < 50%
+    * */
 
     /*Possible targets:
     * - self, -> dash away + enemis pushed away/high velocity and jump
@@ -59,8 +67,12 @@ public class WindLight extends InnerLight {
         if(this.power_multiplier < Config.WIND_MIN_POWER){
             power_multiplier = Config.WIND_MIN_POWER;
         }
-        if(this.duration > Config.WIND_MAX_DURATION){
-            this.duration = Config.WIND_MAX_DURATION;
+        int max_duration = Config.WIND_MAX_DURATION;
+        if(Config.MULTIPLY_DURATION_LIMIT){
+            max_duration = (int) (Config.WIND_MAX_DURATION * Config.DURATION_MULTIPLIER);
+        }
+        if(this.duration > max_duration){
+            this.duration = max_duration;
         }
         if(this.duration < Config.WIND_MIN_DURATION){
             this.duration = Config.WIND_MIN_DURATION;
@@ -70,7 +82,7 @@ public class WindLight extends InnerLight {
     @Override
     public void execute(){
         checkSafety();
-
+    caster.sendMessage(Text.literal("Light triggered"));
         if(FabricLoader.getInstance().isModLoaded("coloredglowlib")){
             if(this.rainbow_col){
                 CGLCompat.getLib().setRainbowColorToEntity(this.caster, true);
@@ -82,14 +94,14 @@ public class WindLight extends InnerLight {
 
         caster.getWorld().playSound(caster, caster.getBlockPos(), LightSounds.WIND_LIGHT, SoundCategory.AMBIENT, 1, 1);
         LightComponent component = LIGHT_COMPONENT.get(caster);
-
+        ServerWorld world = (ServerWorld) ((ServerPlayerEntity )caster).getWorld();
         //If the light target is OTHER it will blow away every entity in radious
         if(component.getTargets().equals(TargetType.OTHER)){
             LightParticlesUtil.spawnLightTypeParticle(LightParticles.WINDLIGHT_PARTICLE, (ServerWorld) caster.getWorld(), caster.getPos());
-            ((ServerPlayerEntity )caster).getWorld().spawnParticles(((ServerPlayerEntity )caster), ParticleTypes.CLOUD, false, caster.getX(), caster.getY()+1, caster.getZ(), 65, 0, 0.2, 0, 0.35);
+            world.spawnParticles(((ServerPlayerEntity )caster), ParticleTypes.CLOUD, false, caster.getX(), caster.getY()+1, caster.getZ(), 65, 0, 0.2, 0, 0.35);
             for(LivingEntity target : this.targets){
                 FabriDash.dash(target, (float) this.power_multiplier, true);
-                ((ServerPlayerEntity )caster).getWorld().spawnParticles(((ServerPlayerEntity )caster), ParticleTypes.CLOUD, false, caster.getX(), caster.getY()+1, caster.getZ(), 65, 0, 0.2, 0, 0.35);
+                world.spawnParticles(((ServerPlayerEntity )caster), ParticleTypes.CLOUD, false, caster.getX(), caster.getY()+1, caster.getZ(), 65, 0, 0.2, 0, 0.35);
                 target.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, this.duration*20, (int) (this.power_multiplier/2), false, true));
             }
         }
@@ -109,7 +121,7 @@ public class WindLight extends InnerLight {
         else if(component.getTargets().equals(TargetType.SELF)) {
             LightParticlesUtil.spawnLightTypeParticle(LightParticles.WINDLIGHT_PARTICLE, (ServerWorld) caster.getWorld(), caster.getPos());
 
-            ((ServerPlayerEntity )caster).getWorld().spawnParticles(((ServerPlayerEntity )caster), ParticleTypes.CLOUD, false, caster.getX(), caster.getY()+1, caster.getZ(), 200, 0.1, 0.2, 0.1, 0.35);
+            world.spawnParticles(((ServerPlayerEntity )caster), ParticleTypes.CLOUD, false, caster.getX(), caster.getY()+1, caster.getZ(), 200, 0.1, 0.2, 0.1, 0.35);
 
             FabriDash.dash(caster, (float) this.power_multiplier, false);
             caster.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOW_FALLING, this.duration*20, 0, false, false));

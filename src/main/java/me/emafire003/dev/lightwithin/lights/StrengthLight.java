@@ -11,6 +11,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 
@@ -24,10 +25,19 @@ public class StrengthLight extends InnerLight {
        - passive mobs on low health
      */
 
+    /*Triggers:
+    * - When surrounded && hp < 50%
+    * - When HP < 25%
+    * - When weakened
+    * - when facing a boss (a thing that has more than 150 HP) && HP < 55% [self]
+    * - (upon attacking a more dangerous foe, aka either more life or more
+    *
+    * Applies to allies too*/
+
     /*Possible targets:
     * - self
     * - allies
-    * - Passive mobs & self*/
+    */
 
     public StrengthLight(List<LivingEntity> targets, double cooldown_time, double power_multiplier, int duration, String color, PlayerEntity caster, boolean rainbow_col) {
         super(targets, cooldown_time, power_multiplier, duration, color, caster, rainbow_col);
@@ -50,12 +60,16 @@ public class StrengthLight extends InnerLight {
         if(this.power_multiplier > Config.DEFENSE_MAX_POWER){
             power_multiplier = Config.DEFENSE_MAX_POWER;
         }
-        if(this.duration > Config.DEFENSE_MAX_DURATION){
-            this.duration = Config.DEFENSE_MAX_DURATION;
+        int max_duration = Config.STRENGTH_MAX_DURATION;
+        if(Config.MULTIPLY_DURATION_LIMIT){
+            max_duration = (int) (Config.STRENGTH_MAX_DURATION * Config.DURATION_MULTIPLIER);
+        }
+        if(this.duration > max_duration){
+            this.duration = max_duration;
         }
         if(this.power_multiplier > Config.DEFENSE_MAX_POWER*2/3 && this.duration > Config.DEFENSE_MAX_DURATION*7/10){
             this.duration = Config.DEFENSE_MAX_DURATION*7/10;
-        }
+        }//TODO wtf is this? Again?
         if(this.duration < Config.DEFENSE_MIN_DURATION){
             this.duration = Config.DEFENSE_MIN_DURATION;
         }

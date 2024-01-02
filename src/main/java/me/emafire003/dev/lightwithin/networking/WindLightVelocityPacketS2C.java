@@ -1,4 +1,4 @@
-package me.emafire003.dev.lightwithin.util.fabridash;
+package me.emafire003.dev.lightwithin.networking;
 
 import io.netty.buffer.Unpooled;
 import me.emafire003.dev.lightwithin.LightWithin;

@@ -16,12 +16,13 @@ import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.world.ServerWorld;
 
 import static me.emafire003.dev.lightwithin.LightWithin.LIGHT_COMPONENT;
 
 public class LightActiveEffect extends StatusEffect {
 
-    //LORE: Basicly your light after being used decays and well it needs to rechange so you can't use it for a while
+    //LORE: Your light after being used decays and well it needs to rechange so you can't use it for a while
     //it's a cool way to make a cooldown visible for the player too. As lot's have said, it's not a bug it's a feature
     //just look at it the right way
     //xD
@@ -53,7 +54,8 @@ public class LightActiveEffect extends StatusEffect {
         if(entity instanceof ServerPlayerEntity){
             LightComponent component = LIGHT_COMPONENT.get(entity);
             if(component.getType().equals(InnerLightType.WIND) && !component.getTargets().equals(TargetType.OTHER)){
-                ((ServerPlayerEntity) entity).getWorld().spawnParticles((ServerPlayerEntity) entity, ParticleTypes.CLOUD, false, entity.getX(), entity.getY(), entity.getZ(), 5, 0, 0, 0, 0.1);
+
+                ((ServerWorld) ((ServerPlayerEntity) entity).getWorld()).spawnParticles((ServerPlayerEntity) entity, ParticleTypes.CLOUD, false, entity.getX(), entity.getY(), entity.getZ(), 5, 0, 0, 0, 0.1);
             }
         }
     }
@@ -75,5 +77,6 @@ public class LightActiveEffect extends StatusEffect {
             LightComponent component = LIGHT_COMPONENT.get(entity);
             entity.addStatusEffect(new StatusEffectInstance(LightEffects.LIGHT_FATIGUE, (int) (Config.COOLDOWN_MULTIPLIER*20*(component.getMaxCooldown()-component.getDuration())), 1));
         }
+        super.onRemoved(entity, attributes, amplifier);
     }
 }

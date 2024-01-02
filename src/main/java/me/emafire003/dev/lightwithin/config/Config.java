@@ -15,6 +15,10 @@ public class Config {
     public static double COOLDOWN_MULTIPLIER;
     public static double DURATION_MULTIPLIER;
 
+    public static boolean ADJUST_FOR_LOW_DURATION;
+    public static int ADJUST_DUR_AMOUNT;
+    public static int ADJUST_DUR_THRESHOLD;
+
     public static boolean LUXINTUS_BYPASS_COOLDOWN;
     public static boolean LUXCOGNITA_BYPASS_COOLDOWN;
     public static boolean LUXIMUTUA_BYPASS_COOLDOWN;
@@ -93,6 +97,8 @@ public class Config {
     public static boolean LIGHT_RUNES;
     public static int LIGHT_RUNES_DURATION;
 
+    public static boolean MULTIPLY_DURATION_LIMIT;
+
     public static boolean RESET_ON_JOIN;
     public static void registerConfigs() {
         configs = new ConfigProvider();
@@ -106,8 +112,13 @@ public class Config {
 
     private static void createConfigs() {
         configs.addKeyValuePair(new Pair<>("area_of_search_for_entities", 6), "The box radius in which other entities (such as allies or targets) will be searched");
-        configs.addKeyValuePair(new Pair<>("cooldown_multiplier", 1), "Use this to extend or shorten the cooldown of the light powers effects in general (use <1 values to diminish the cooldown >1 to augment it)");
-        configs.addKeyValuePair(new Pair<>("duration_multiplier", 1), "Use this to extend or shorten the duration of the light powers effects in general (use <1 values to diminish the cooldown >1 to augment it)");
+        configs.addKeyValuePair(new Pair<>("cooldown_multiplier", 1.0), "Use this to extend or shorten the cooldown of the light powers effects in general (use <1 values to shorten the cooldown >1 to extend it)");
+        configs.addKeyValuePair(new Pair<>("duration_multiplier", 1.3), "Use this to extend or shorten the duration of the light powers effects in general (WARNING: Values below 1 are possible but not recommended)");
+        configs.addKeyValuePair(new Pair<>("multiply_duration_limit", true), "Should the max duration values (see below) be multiplied by the duration multiplier?");
+
+        configs.addKeyValuePair(new Pair<>("adjust_for_low_duration", false), "Should a very short duration value be adjusted to make it longer? (Bear in mind that each light has a duration minimum, configurable below)");
+        configs.addKeyValuePair(new Pair<>("adjust_dur_amount", 5), "How many extra seconds should be added to the low duration as adjustment. (Requires true above) (Also used with 0 and errors, regardless of the setting above)");
+        configs.addKeyValuePair(new Pair<>("adjust_dur_threshold", 4), "Which values to consider being very low. (For example, durations under 4 are considered low and to be adjusted if the setting is enabled)");
 
         configs.addKeyValuePair(new Pair<>("luxintus_bypass_cooldown", true), "Does eating a Luxintus Berry bypass the cooldown?");
         configs.addKeyValuePair(new Pair<>("luxcognita_bypass_cooldown", true), "Does eating a Luxcognita Berry bypass the cooldown?");
@@ -115,18 +126,18 @@ public class Config {
 
         configs.addKeyValuePair(new Pair<>("player_glows", true), "Does the player glow when the light activates?");
 
-        configs.addKeyValuePair(new Pair<>("check_surrounded", true), "Does the player need to be surrounded to trigger light?");
+        configs.addKeyValuePair(new Pair<>("check_surrounded", true), "Should being surrounded be considered to trigger light?");
         configs.addKeyValuePair(new Pair<>("surrounded_amount", 5), "How many hostile entities needs to be near a player to be considered surrounded?");
-        configs.addKeyValuePair(new Pair<>("surrounded_allies_multiplier", 2), "When checking if allies are surrounded, how much to multiply the default value above?");
-        configs.addKeyValuePair(new Pair<>("surrounded_distance", 5), "How far to check (in blocks) for hostile entities?");
+        configs.addKeyValuePair(new Pair<>("surrounded_allies_multiplier", 2.0), "When checking if allies are surrounded, how much to multiply the default value above?");
+        configs.addKeyValuePair(new Pair<>("surrounded_distance", 5), "How far to check (in blocks) for hostile entities? (Higher values may mean more lag. A lot higher tho)");
         configs.addKeyValuePair(new Pair<>("check_surrounding_mobs_health", true), "Do a check on the mobs health. If below a certain threshold, stop considering in the surrounded count");
         configs.addKeyValuePair(new Pair<>("surrounding_health_threshold", 15), "The hp percentage below which mobs won't be considered in the surrounding count anymore (like 15, 20, 50)");
 
-        configs.addKeyValuePair(new Pair<>("hp_percentage_self", 25), "The hp percentage below which the light will be triggerable if the target is SELF (like 15, 20, 50) (in some cases it may not apply)");
+        configs.addKeyValuePair(new Pair<>("hp_percentage_self", 30), "The hp percentage below which the light will be triggerable if the target is SELF (like 15, 20, 50) (in some cases it may not apply)");
         configs.addKeyValuePair(new Pair<>("hp_percentage_allies", 50), "The hp percentage below which the light will be triggerable if the target is ALLIES (like 15, 20, 50) (in some cases it may not apply)");
         configs.addKeyValuePair(new Pair<>("hp_percentage_other", 50), "The hp percentage below which the light will be triggerable if the target is OTHER/Passive mobs (like 15, 20, 50) (in some cases it may not apply)");
 
-        configs.addKeyValuePair(new Pair<>("check_armor_durability", false), "Do a check on the armor durability as well. Warning: I'd advise raising the Health percentage if this is enabled");
+        configs.addKeyValuePair(new Pair<>("check_armor_durability", true), "Should the armor durability be considered to trigger light?");
         configs.addKeyValuePair(new Pair<>("dur_percentage_self", 5), "The armor durability percentage below which the light will be triggerable if the target is SELF (like 15, 20, 50) (in some cases it may not apply)");
         configs.addKeyValuePair(new Pair<>("dur_percentage_allies", 10), "The armor durability percentage below which the light will be triggerable if the target is ALLIES (like 15, 20, 50) (in some cases it may not apply)");
         configs.addKeyValuePair(new Pair<>("dur_percentage_other", 10), "The armor durability percentage below which the light will be triggerable if the target is OTHER/Passive mobs (like 15, 20, 50) (in some cases it may not apply)");
@@ -204,14 +215,18 @@ public class Config {
         LUXIMUTUA_BYPASS_COOLDOWN = !CONFIG.getOrDefault("luxmutua_bypass_cooldown", false);
 
         AREA_OF_SEARCH_FOR_ENTITIES = CONFIG.getOrDefault("area_of_search_for_entities", 6);
-        COOLDOWN_MULTIPLIER = CONFIG.getOrDefault("cooldown_multiplier", 1);
-        DURATION_MULTIPLIER = CONFIG.getOrDefault("duration_multiplier", 1);
+        COOLDOWN_MULTIPLIER = CONFIG.getOrDefault("cooldown_multiplier", 1.0);
+        DURATION_MULTIPLIER = CONFIG.getOrDefault("duration_multiplier", 1.3);
+
+        ADJUST_FOR_LOW_DURATION = CONFIG.getOrDefault("adjust_for_low_duration", false);
+        ADJUST_DUR_AMOUNT = CONFIG.getOrDefault("adjust_dur_amount", 5);
+        ADJUST_DUR_THRESHOLD = CONFIG.getOrDefault("adjust_dur_threshold", 4);
 
         PLAYER_GLOWS = CONFIG.getOrDefault("player_glows", true);
 
         CHECK_SURROUNDED = CONFIG.getOrDefault("check_surrounded", true);
         SURROUNDED_AMOUNT = CONFIG.getOrDefault("surrounded_amount", 5);
-        SURROUNDED_ALLIES_MULTIPLIER = CONFIG.getOrDefault("surrounded_allies_multiplier", 2);
+        SURROUNDED_ALLIES_MULTIPLIER = CONFIG.getOrDefault("surrounded_allies_multiplier", 2.0);
         SURROUNDED_DISTANCE = CONFIG.getOrDefault("surrounded_distance", 5);
         CHECK_SURROUNDING_MOBS_HEALTH = CONFIG.getOrDefault("check_surrounding_mobs_health", false);
         SURROUNDING_HEALTH_THRESHOLD = CONFIG.getOrDefault("surrounding_health_threshold", 15);
@@ -253,6 +268,7 @@ public class Config {
         FROST_MAX_DURATION = CONFIG.getOrDefault("frost_max_duration", 18);
         FROST_MIN_POWER = CONFIG.getOrDefault("frost_min_power", 1);
         FROST_MIN_DURATION = CONFIG.getOrDefault("frost_min_duration", 5);
+        FROST_FREEZE_RES_DURATION_MULTIPLIER = CONFIG.getOrDefault("frost_freeze_res_duration_multiplier", 2.0);
 
         EARTHEN_MAX_POWER = CONFIG.getOrDefault("earthen_max_power", 9);
         EARTHEN_MAX_DURATION = CONFIG.getOrDefault("earthen_max_duration", 18);
@@ -281,6 +297,8 @@ public class Config {
 
         LIGHT_RUNES = Config.CONFIG.getOrDefault("light_runes", true);
         LIGHT_RUNES_DURATION = Config.CONFIG.getOrDefault("light_runes_duration", 3);
+
+        MULTIPLY_DURATION_LIMIT = Config.CONFIG.getOrDefault("multiply_duration_limit", true);
 
 
     }

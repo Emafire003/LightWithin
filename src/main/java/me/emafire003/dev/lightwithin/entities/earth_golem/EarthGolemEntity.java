@@ -74,7 +74,7 @@ public class EarthGolemEntity extends IronGolemEntity {
         if (!player.getAbilities().creativeMode) {
             itemStack.decrement(1);
         }
-        return ActionResult.success(this.world.isClient);
+        return ActionResult.success(this.getWorld().isClient);
     }
 
 
