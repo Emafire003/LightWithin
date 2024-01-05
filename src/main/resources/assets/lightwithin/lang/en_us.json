@@ -33,23 +33,23 @@
   "light.description.error": "Uhm... your light is... an error? Light not found, report please! ",
   "light.description.heal": "Your light, yes, is a gentle and caring one indeed",
   "light.description.defense": "Resilience, that's what your light is made of",
-  "light.description.strength": "You have a vigorous light, lending its powers to your blade",
+  "light.description.strength": "You have a strong light, ready to land its strength to you",
   "light.description.blazing": "It is already firing up within you, ready to burst every moment",
-  "light.description.frost": "Even if cold as ice, your light is ready to assist you",
-  "light.description.earthen": "Your light draws its power from the earth around you!",
-  "light.description.wind": "The wind is a good friend of your light!",
-  "light.description.aqua": "Your light best reflects upon watery surfaces!",
+  "light.description.frost": "Glimmering snows are home to your light",
+  "light.description.earthen": "Your light draws its power from the earth around you",
+  "light.description.wind": "Your light shines in the wind",
+  "light.description.aqua": "Your light best reflects upon watery surfaces",
   "light.description.frog": "*croak* Wait what?!",
 
-  "light.description.activation.heal.self": "Your light flowed trough you, sewing your wounds!",
-  "light.description.activation.heal.allies": "Your light flowed trough you and your allies, sewing your wounds!",
-  "light.description.activation.heal.other": "Your light flowed trough peaceful creatures, sewing their wounds!",
+  "light.description.activation.heal.self": "Your light flows trough you, sewing your wounds!",
+  "light.description.activation.heal.allies": "Your light flows trough you and your allies, sewing your wounds!",
+  "light.description.activation.heal.other": "Your light flows trough peaceful creatures, sewing their wounds!",
 
   "light.description.activation.defense.self": "Your light tensed up, shielding you from an hurtful future!",
   "light.description.activation.defense.allies": "Your light tensed up, shielding your allies from an hurtful future!",
   "light.description.activation.defense.other": "Your light tensed up, shielding peaceful creatures from an hurtful future!",
 
-  "light.description.activation.strength.self": "Your light shone bright, strengthening your soul!",
+  "light.description.activation.strength.self": "Your light shone bright, strengthening your attacks!",
   "light.description.activation.strength.allies": "Your light shone bright, strengthening your allies!",
   "light.description.activation.strength.other": "Your light shone bright, strengthening peaceful creatures around you!",
 
@@ -58,18 +58,18 @@
 
   "light.description.activation.frost.enemies": "All your enemies will be made into a statue of ice!",
   "light.description.activation.frost.all": "Everything will be frozen in ice!",
-  "light.description.activation.frost.self": "Go forth ice, and protect me!",
-  "light.description.activation.frost.allies": "Go forth ice, and protect us!",
+  "light.description.activation.frost.self": "A wall of ice shall protect you!",
+  "light.description.activation.frost.allies": "A wall of ice shall protect you!",
 
   "light.description.activation.earthen.enemies": "The earth shall split under the soles of the enemy!",
-  "light.description.activation.earthen.other": "Come forth my earthen golem!",
-  "light.description.activation.earthen.self": "Split and grow around me!",
+  "light.description.activation.earthen.other": "The light crystallized into an Earthen Golem!",
+  "light.description.activation.earthen.self": "Earth shall split and grow around you!",
   "light.description.activation.earthen.allies": "The Rock shall protect us!",
 
   "light.description.activation.frog": "Croak!",
   "light.description.activation.frog.damage": "You are confused, so confused that you hit yourself.",
 
-  "light.description.activation.wind.self": "The wind shall carry me onwards!",
+  "light.description.activation.wind.self": "The wind shall carry you onwards!",
   "light.description.activation.wind.allies": "Oh winds, aid our movements!",
   "light.description.activation.wind.other": "Blow them away!",
 

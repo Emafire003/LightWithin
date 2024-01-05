@@ -1,6 +1,6 @@
 Updated to 1.20.1
 Updated Renderer library
-TODO change in the config the possibility of chosing between health+armor or only health
+
 Now the low health checks the armor too, using this forumla: player.getArmor()+player.getHealth() <= (player.getMaxHealth())*health_percent/100;
 Not only that, but uses a new way to ""predict"" how much damage will be next, and if it is under the designated health percentage it will tick. (new way of triggering the light below)
 Compatibility with:
@@ -62,7 +62,7 @@ It is also non-solid, meaning it doesn't do suffocating damage. Like glass.
 (Now the statues are no longer supported, but still present for creative decoration)
 
 Wind Light:
-The checkWind now only checks for standard AIR, not CAVE_AIR or VOID_AIR. Since wind isn't supposed to be there
+The checkWind now only checks for standard AIR, not CAVE_AIR or VOID_AIR. Since wind isn't supposed to be there most of the time.
 
 Added new triggers:
 - Fall Trigger, when a living entity (aka player or mob) falls it triggers a check for a light (not necessarly triggering it). The minimum for firing is 5 blocks
@@ -84,5 +84,7 @@ Changed how the light types,targets,duration,cooldown,power ecc are determined s
 (You will be keeping your current light unless you use /light reset).
 Fixed an issue for determing the target type.
 
+Luxmutua berry now changes the target too. (I thought it did already, don't really remember, it's been like a year)
 
+Changed some Luxcognita messages, and some activation messages
 

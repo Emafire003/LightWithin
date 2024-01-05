@@ -56,7 +56,6 @@ public class LuxcognitaBerryItem extends Item {
             LightComponent component = LightWithin.LIGHT_COMPONENT.get(user);
             InnerLightType type = component.getType();
             user.playSound(LightSounds.LIGHT_READY, 1, 0.8f);
-            //TODO make them translatable
             if(type.equals(InnerLightType.NONE)){
                 ((ServerPlayerEntity) user).sendMessage(Text.translatable("light.description.error"), true);
             }else if(type.equals(InnerLightType.HEAL)){

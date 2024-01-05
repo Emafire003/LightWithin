@@ -1,20 +1,27 @@
 package me.emafire003.dev.lightwithin.util;
 
+import me.emafire003.dev.lightwithin.LightWithin;
 import me.emafire003.dev.lightwithin.compat.argonauts.ArgonautsChecker;
 import me.emafire003.dev.lightwithin.compat.factions.FactionChecker;
 import me.emafire003.dev.lightwithin.compat.open_parties_and_claims.OPACChecker;
 import me.emafire003.dev.lightwithin.config.Config;
+import net.fabricmc.fabric.mixin.event.lifecycle.LivingEntityMixin;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.entity.DamageUtil;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.entity.damage.DamageTypes;
 import net.minecraft.entity.effect.StatusEffectCategory;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.mob.HostileEntity;
+import net.minecraft.entity.mob.ZombieEntity;
+import net.minecraft.entity.passive.IronGolemEntity;
 import net.minecraft.entity.passive.PassiveEntity;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -23,11 +30,17 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.tag.BlockTags;
+import net.minecraft.registry.tag.DamageTypeTags;
 import net.minecraft.registry.tag.TagKey;
+import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.stat.Stats;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.event.GameEvent;
 import org.jetbrains.annotations.NotNull;
+import xaero.pac.common.server.api.OpenPACServerAPI;
 
 import java.util.*;
 
@@ -123,7 +136,70 @@ public class CheckUtils {
         return player.getArmor()+player.getHealth() <= (player.getMaxHealth())*health_percent/100;
     }
 
-    public static double getTotDamage(@NotNull PlayerEntity player, int health_percent){
+
+    private static float getModifyAppliedDamage(DamageSource source, float amount, PlayerEntity player){
+        if (source.isIn(DamageTypeTags.BYPASSES_EFFECTS)) {
+            return amount;
+        } else {
+            int i;
+            if (player.hasStatusEffect(StatusEffects.RESISTANCE) && !source.isIn(DamageTypeTags.BYPASSES_RESISTANCE)) {
+                i = (player.getStatusEffect(StatusEffects.RESISTANCE).getAmplifier() + 1) * 5;
+                int j = 25 - i;
+                float f = amount * (float)j;
+                amount = Math.max(f / 25.0F, 0.0F);
+            }
+
+            if (amount <= 0.0F) {
+                return 0.0F;
+            } else if (source.isIn(DamageTypeTags.BYPASSES_ENCHANTMENTS)) {
+                return amount;
+            } else {
+                i = EnchantmentHelper.getProtectionAmount(player.getArmorItems(), source);
+                if (i > 0) {
+                    amount = DamageUtil.getInflictedDamage(amount, (float)i);
+                }
+
+                return amount;
+            }
+        }
+    }
+
+    private static float getAppliedArmorToDamage(DamageSource source, float amount, PlayerEntity player){
+        if (!source.isIn(DamageTypeTags.BYPASSES_ARMOR)) {
+            amount = DamageUtil.getDamageLeft(amount, (float)player.getArmor(), (float)player.getAttributeValue(EntityAttributes.GENERIC_ARMOR_TOUGHNESS));
+        }
+
+        return amount;
+    }
+
+    //TODO Maybe i need to take into account the attack speed somehow
+    private static float getAttackDamage(LivingEntity attacker, LivingEntity target){
+        float dmg = (float)attacker.getAttributeValue(EntityAttributes.GENERIC_ATTACK_DAMAGE);
+        if (target instanceof LivingEntity) {
+            dmg += EnchantmentHelper.getAttackDamage(attacker.getMainHandStack(), ((LivingEntity)target).getGroup());
+        }
+        return dmg;
+    }
+
+    //TODO NEED to test it
+    private static float getAttackDamageWithSpeed(LivingEntity attacker, LivingEntity target){
+        float dmg = (float)attacker.getAttributeValue(EntityAttributes.GENERIC_ATTACK_DAMAGE);
+        if (target instanceof LivingEntity) {
+            dmg += EnchantmentHelper.getAttackDamage(attacker.getMainHandStack(), ((LivingEntity)target).getGroup());
+        }
+        if(attacker instanceof PlayerEntity){
+            float spd = (float)attacker.getAttributeValue(EntityAttributes.GENERIC_ATTACK_SPEED);
+            return dmg*spd;
+        }
+        return dmg;
+    }
+
+
+    /**
+     * Calculates the next attack damage of the last entity that attacked the player
+     * I can't just use the last attack variable because mixins refuse to work and
+     * I could only get the non-armor-filtered damage*/
+    public static float getTotDamage(@NotNull PlayerEntity player){
         DamageSource damage_source = player.getRecentDamageSource();
         if(damage_source == null){
             //Probably the player hasn't been hit by anything recently, so using the simpler checks
@@ -133,46 +209,20 @@ public class CheckUtils {
 
         //Checking if the attacker is (not null) a living entity
         if(player.getRecentDamageSource().getAttacker() != null && player.getRecentDamageSource().getAttacker() instanceof LivingEntity){
-            //Getting data for next attack damage (granted it's the same entity attacking the same way again)
-            //TODO MAY BE UNBALANCED
             LivingEntity attacker = (LivingEntity) player.getRecentDamageSource().getAttacker();
-            double attacker_damage = attacker.getAttributeValue(EntityAttributes.GENERIC_ATTACK_DAMAGE);
-            double armor = player.getAttributeValue(EntityAttributes.GENERIC_ARMOR);
-            double toughness = player.getAttributeValue(EntityAttributes.GENERIC_ARMOR_TOUGHNESS);
-            double tot_damaged = attacker_damage;
-            double tough1 = armor-((attacker_damage*4)/(toughness+8));
 
-            //TODO i need to actually make this work
-            player.sendMessage(Text.literal("Attacker damage: §d"+attacker_damage+" §fplayer armor: §b"+armor
-            + " §fplayer toughness: §a"+toughness+" §fthough1: §e"+tough1));
-            //Next attack damage calculation
-            if(armor/5 > tough1){
-                if(armor/5 > 20){
-                    tot_damaged = attacker_damage*(1-20/25);
-                    player.sendMessage(Text.literal("new tot damage: "));
-                }
-            }else{
-                player.sendMessage(Text.literal("In the else thing"));
-                if(tough1 > 20){
-                    player.sendMessage(Text.literal("new tot damage2: "));
-                    tot_damaged = attacker_damage*(1-tough1/25);
-
-                }
-            }
-            player.sendMessage(Text.literal("§d" + tot_damaged));
-            try{
-                if(attacker.getAttributeValue(EntityAttributes.GENERIC_ATTACK_SPEED) != 0){
-                    tot_damaged = tot_damaged*(attacker.getAttributeValue(EntityAttributes.GENERIC_ATTACK_SPEED)/2);
-                    player.sendMessage(Text.literal("modified again, §d" + tot_damaged));
-                }
-
-            }catch(Exception e){
-                LOGGER.debug("Attribute attack speed not found. Most likely normal");
+            float amount = getAttackDamage(attacker, player);
+            amount = getAppliedArmorToDamage(player.getRecentDamageSource(), amount, player);
+            amount = getModifyAppliedDamage(player.getRecentDamageSource(), amount, player);
+            amount = Math.max(amount - player.getAbsorptionAmount(), 0.0F);
+            try {
+                player.sendMessage(Text.literal("The damge*speed (no armor calcs) would be: §7§b: "+getAttackDamageWithSpeed(attacker, player)));
+            }catch (Exception e){
+                player.sendMessage(Text.literal("OOps, still an error"));
+                e.printStackTrace();;
             }
 
-            //TODO ok in realtà fa un return true. Solo che non viene gestito bene dopo
-            //If with the next hit the player would reach less than the health_percent activate
-            return tot_damaged;
+            return amount;
 
         }
 
@@ -191,8 +241,7 @@ public class CheckUtils {
      * @param health_percent The percentage (15, 25, 70) below which the target is in danger (hence light activatable)
      * */
     public static boolean checkSelfDanger(@NotNull PlayerEntity player, int health_percent){
-        double tot_damaged = getTotDamage(player, health_percent);
-
+        float tot_damaged = getTotDamage(player);
         if(tot_damaged == -1){
             return player.getArmor()+player.getHealth() <= (player.getMaxHealth())*health_percent/100;
         }
@@ -206,73 +255,7 @@ public class CheckUtils {
         return player.getArmor()+player.getHealth() <= (player.getMaxHealth())*health_percent/100;
     }
 
-    /**Checks to see if the player would be below a certain threshold
-     * after the next attack, if it is returns true.
-     *
-     * Alternatively, Checks both the health and armor of the player,
-     * and check if it is below a certain percentage.
-     * If it is, returns true
-     *
-     * @param player The player that could trigger their light
-     * @param health_percent The percentage (15, 25, 70) below which the target is in danger (hence light activatable)
-     * */
-    public static boolean checkSelfDanger(@NotNull PlayerEntity player, int health_percent, boolean surrounded){
-        double tot_damaged = getTotDamage(player, health_percent);
 
-        if(tot_damaged == -1){
-            return player.getArmor()+player.getHealth() <= (player.getMaxHealth())*health_percent/100;
-        }
-        //If the player is surrounded multiplies the tot damage by a factor of 1.3.
-        //TODO CONFIGURABLE aka how much should the multiplier be if the player is surrounded.
-        if(surrounded){
-            tot_damaged = tot_damaged*1.3;
-        }
-
-        if(player.getHealth()-tot_damaged <= (player.getMaxHealth())*health_percent/100){
-            return true;
-        }
-
-        //Simpler check TODO maybe make it a bit more precise
-        return player.getArmor()+player.getHealth() <= (player.getMaxHealth())*health_percent/100;
-    }
-
-    /**Checks to see if the player would be below a certain threshold
-     * after the next attack, if it is returns true.
-     *
-     * Alternatively, Checks both the health and armor of the player,
-     * and check if it is below a certain percentage.
-     * If it is, returns true
-     *
-     * @param player The player that could trigger their light
-     * @param health_percent The percentage (15, 25, 70) below which the target is in danger (hence light activatable)
-     * */
-    public static boolean checkSelfDanger(@NotNull PlayerEntity player, int health_percent, boolean surrounded, boolean low_armor){
-        double tot_damaged = getTotDamage(player, health_percent);
-
-        if(tot_damaged == -1){
-            player.sendMessage(Text.literal("Effettivamente è -1 il totdamage"));
-            return player.getArmor()+player.getHealth() <= (player.getMaxHealth())*health_percent/100;
-        }
-
-        //if the player has low armor multiplies by a factor of 1.15
-        //TODO CONFIGURABLE aka how much should the multiplier be if the player has low armor
-        if(low_armor){
-            tot_damaged = tot_damaged*1.1;
-        }
-
-        //If the player is surrounded multiplies the tot damage by a factor of 1.3.
-        //TODO CONFIGURABLE aka how much should the multiplier be if the player is surrounded.
-        if(surrounded){
-            tot_damaged = tot_damaged*1.3;
-        }
-
-        if(player.getHealth()-tot_damaged <= (player.getMaxHealth())*health_percent/100){
-            return true;
-        }
-
-        //Simpler check TODO maybe make it a bit more precise
-        return player.getArmor()+player.getHealth() <= (player.getMaxHealth())*health_percent/100;
-    }
 
     /**Just checks if the health of the player is below a certain percentage.
      * If it is, returns true
@@ -322,6 +305,7 @@ public class CheckUtils {
      * @param entity The entity that is attacking it
      * @param health_percent The percentage (15, 25, 70) below which the target is in danger (hence light activatable)
      * */
+    @Deprecated //TODO should try to find a use for this maybe
     public static boolean checkEnemyHealthHigh(@NotNull PlayerEntity player, Entity entity, int health_percent){
         List<LivingEntity> entities = player.getWorld().getEntitiesByClass(LivingEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amount), (entity1 -> true));
         int ent_number = 0;

@@ -1,6 +1,7 @@
 package me.emafire003.dev.lightwithin.lights;
 
 
+import me.emafire003.dev.lightwithin.LightWithin;
 import me.emafire003.dev.lightwithin.compat.coloredglowlib.CGLCompat;
 import me.emafire003.dev.lightwithin.component.LightComponent;
 import me.emafire003.dev.lightwithin.config.Config;
@@ -11,6 +12,8 @@ import me.emafire003.dev.lightwithin.status_effects.LightEffects;
 import me.emafire003.dev.lightwithin.util.CheckUtils;
 import me.emafire003.dev.lightwithin.util.TargetType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.effect.StatusEffect;
+import net.minecraft.entity.effect.StatusEffectCategory;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
@@ -18,6 +21,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -95,6 +99,22 @@ public class HealLight extends InnerLight {
         }
         caster.getWorld().playSound(caster, caster.getBlockPos(), LightSounds.HEAL_LIGHT, SoundCategory.AMBIENT, 1,1);
         for(LivingEntity target : this.targets){
+
+
+            if(LightWithin.LIGHT_COMPONENT.get(caster).getTargets().equals(TargetType.OTHER)){
+
+                List<StatusEffect> remove_status_list = new ArrayList<>();
+                target.getActiveStatusEffects().forEach((statusEffect, instance) -> {
+                    if(statusEffect.getCategory().equals(StatusEffectCategory.HARMFUL) && statusEffect != LightEffects.LIGHT_FATIGUE){
+                        remove_status_list.add(statusEffect);
+                    }
+                });
+                remove_status_list.forEach(statusEffect -> {
+                    target.removeStatusEffect(statusEffect);
+                });
+
+                remove_status_list.clear();
+            }
 
             if(target.hasStatusEffect(StatusEffects.POISON)){
                 target.removeStatusEffect(StatusEffects.POISON);
