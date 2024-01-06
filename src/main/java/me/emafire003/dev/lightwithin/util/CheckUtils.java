@@ -1,11 +1,10 @@
 package me.emafire003.dev.lightwithin.util;
 
-import me.emafire003.dev.lightwithin.LightWithin;
 import me.emafire003.dev.lightwithin.compat.argonauts.ArgonautsChecker;
 import me.emafire003.dev.lightwithin.compat.factions.FactionChecker;
 import me.emafire003.dev.lightwithin.compat.open_parties_and_claims.OPACChecker;
 import me.emafire003.dev.lightwithin.config.Config;
-import net.fabricmc.fabric.mixin.event.lifecycle.LivingEntityMixin;
+import me.emafire003.dev.lightwithin.status_effects.LightEffects;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
@@ -15,13 +14,11 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.damage.DamageTypes;
+import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectCategory;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.mob.HostileEntity;
-import net.minecraft.entity.mob.ZombieEntity;
-import net.minecraft.entity.passive.IronGolemEntity;
 import net.minecraft.entity.passive.PassiveEntity;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -32,19 +29,13 @@ import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.registry.tag.DamageTypeTags;
 import net.minecraft.registry.tag.TagKey;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.stat.Stats;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.event.GameEvent;
 import org.jetbrains.annotations.NotNull;
-import xaero.pac.common.server.api.OpenPACServerAPI;
 
 import java.util.*;
 
-import static me.emafire003.dev.lightwithin.LightWithin.LOGGER;
 import static me.emafire003.dev.lightwithin.LightWithin.box_expansion_amount;
 
 public class CheckUtils {
@@ -176,16 +167,20 @@ public class CheckUtils {
     private static float getAttackDamage(LivingEntity attacker, LivingEntity target){
         float dmg = (float)attacker.getAttributeValue(EntityAttributes.GENERIC_ATTACK_DAMAGE);
         if (target instanceof LivingEntity) {
-            dmg += EnchantmentHelper.getAttackDamage(attacker.getMainHandStack(), ((LivingEntity)target).getGroup());
+            dmg += EnchantmentHelper.getAttackDamage(attacker.getMainHandStack(), target.getGroup());
+        }
+        if(target instanceof PlayerEntity){
+            target.sendMessage(Text.literal("The non calcl damage is §6" +dmg));
+
         }
         return dmg;
     }
 
-    //TODO NEED to test it
+
     private static float getAttackDamageWithSpeed(LivingEntity attacker, LivingEntity target){
         float dmg = (float)attacker.getAttributeValue(EntityAttributes.GENERIC_ATTACK_DAMAGE);
         if (target instanceof LivingEntity) {
-            dmg += EnchantmentHelper.getAttackDamage(attacker.getMainHandStack(), ((LivingEntity)target).getGroup());
+            dmg += EnchantmentHelper.getAttackDamage(attacker.getMainHandStack(), target.getGroup());
         }
         if(attacker instanceof PlayerEntity){
             float spd = (float)attacker.getAttributeValue(EntityAttributes.GENERIC_ATTACK_SPEED);
@@ -203,26 +198,16 @@ public class CheckUtils {
         DamageSource damage_source = player.getRecentDamageSource();
         if(damage_source == null){
             //Probably the player hasn't been hit by anything recently, so using the simpler checks
-            player.sendMessage(Text.literal("§enull"));
             return -1;
         }
 
         //Checking if the attacker is (not null) a living entity
         if(player.getRecentDamageSource().getAttacker() != null && player.getRecentDamageSource().getAttacker() instanceof LivingEntity){
             LivingEntity attacker = (LivingEntity) player.getRecentDamageSource().getAttacker();
-
-            float amount = getAttackDamage(attacker, player);
+            float amount = getAttackDamageWithSpeed(attacker, player);
             amount = getAppliedArmorToDamage(player.getRecentDamageSource(), amount, player);
             amount = getModifyAppliedDamage(player.getRecentDamageSource(), amount, player);
             amount = Math.max(amount - player.getAbsorptionAmount(), 0.0F);
-            try {
-                player.sendMessage(Text.literal("The damge*speed (no armor calcs) would be: §7§b: "+getAttackDamageWithSpeed(attacker, player)));
-            }catch (Exception e){
-                player.sendMessage(Text.literal("OOps, still an error"));
-                e.printStackTrace();;
-            }
-
-            return amount;
 
         }
 
@@ -627,6 +612,15 @@ public class CheckUtils {
 
     public static boolean checkPoisoned(LivingEntity entity){
         return entity.hasStatusEffect(StatusEffects.POISON);
+    }
+
+    public static boolean checkHasHarmfulStatusEffect(LivingEntity entity){
+        for(StatusEffect status : entity.getActiveStatusEffects().keySet()){
+            if(status.getCategory().equals(StatusEffectCategory.HARMFUL) && !status.equals(LightEffects.LIGHT_FATIGUE)){
+                return true;
+            }
+        }
+        return false;
     }
 
     public static boolean checkAllyPoisoned(LivingEntity caster, LivingEntity target){

@@ -106,7 +106,7 @@ public class EarthenLight extends InnerLight {
         }
 
 
-        caster.getWorld().playSound(caster, caster.getBlockPos(), LightSounds.EARTHEN_LIGHT, SoundCategory.AMBIENT, 1, 1);
+        caster.getWorld().playSound(caster.getX(), caster.getY(), caster.getZ(), LightSounds.EARTHEN_LIGHT, SoundCategory.AMBIENT, 1, 1, true);
         if(caster.getWorld().isClient){
             return;
         }
@@ -136,7 +136,7 @@ public class EarthenLight extends InnerLight {
                     placer.loadStructure();
                 }
                 oldtarget = target;
-                target.playSound(LightSounds.EARTHEN_LIGHT, 0.9f, 1);
+                //target.playSound(LightSounds.EARTHEN_LIGHT, 0.9f, 1);
                 target.addStatusEffect(new StatusEffectInstance(StatusEffects.MINING_FATIGUE, caster.getStatusEffect(LightEffects.LIGHT_ACTIVE).getDuration(), (int) this.power_multiplier, false, true));
             }
             //It will spawn a wall around the allies and self, depending on the power level it could have a secret tunnel to escape underneath
@@ -145,7 +145,8 @@ public class EarthenLight extends InnerLight {
             LivingEntity oldtarget = null;
             for(LivingEntity target : this.targets){
 
-                target.playSound(LightSounds.EARTHEN_LIGHT, 0.9f, 1);
+                //TODO allies thign. Should i remove the sound regardless? Yes
+                //target.playSound(LightSounds.EARTHEN_LIGHT, 0.9f, 1);
                 LightParticlesUtil.spawnLightTypeParticle(LightParticles.EARTHENLIGHT_PARTICLE, (ServerWorld) target.getWorld(), target.getPos());
                 target.addStatusEffect(new StatusEffectInstance(LightEffects.STURDY_ROCK, caster.getStatusEffect(LightEffects.LIGHT_ACTIVE).getDuration(), (int) this.power_multiplier, false, false));
                 if(Config.STRUCTURE_GRIEFING && !caster.getWorld().isClient) {

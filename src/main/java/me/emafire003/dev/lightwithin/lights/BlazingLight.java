@@ -107,7 +107,7 @@ public class BlazingLight extends InnerLight {
                 CGLCompat.getLib().setColorToEntity(this.caster, CGLCompat.fromHex(this.color));
             }
         }
-        caster.getWorld().playSound(caster, caster.getBlockPos(), LightSounds.BLAZING_LIGHT, SoundCategory.AMBIENT, 1, 1);
+        caster.getWorld().playSound(caster.getX(), caster.getY(), caster.getZ(), LightSounds.BLAZING_LIGHT, SoundCategory.AMBIENT, 1, 1, true);
         caster.addStatusEffect(new StatusEffectInstance(StatusEffects.FIRE_RESISTANCE, caster.getStatusEffect(LightEffects.LIGHT_ACTIVE).getDuration(), 0, false, false));
 
         LightComponent component = LIGHT_COMPONENT.get(caster);
@@ -119,7 +119,7 @@ public class BlazingLight extends InnerLight {
             placer.loadStructure();
         }
         for(LivingEntity target : this.targets){
-            target.playSound(LightSounds.BLAZING_LIGHT, 1, 1);
+            //target.playSound(LightSounds.BLAZING_LIGHT, 1, 1);
 
             if(!caster.getWorld().isClient){
                 LightParticlesUtil.spawnLightTypeParticle(LightParticles.BLAZINGLIGHT_PARTICLE, (ServerWorld) caster.getWorld(), target.getPos());

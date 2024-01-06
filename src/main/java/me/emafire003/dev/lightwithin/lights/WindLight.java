@@ -91,8 +91,8 @@ public class WindLight extends InnerLight {
             }
         }
 
-
-        caster.getWorld().playSound(caster, caster.getBlockPos(), LightSounds.WIND_LIGHT, SoundCategory.AMBIENT, 1, 1);
+        caster.getWorld().playSound(caster.getX(), caster.getY(), caster.getZ(), LightSounds.WIND_LIGHT, SoundCategory.AMBIENT, 1, 1, true);
+        //caster.getWorld().playSound(caster, caster.getBlockPos(), LightSounds.WIND_LIGHT, SoundCategory.AMBIENT, 1, 1);
         LightComponent component = LIGHT_COMPONENT.get(caster);
         ServerWorld world = (ServerWorld) ((ServerPlayerEntity )caster).getWorld();
         //If the light target is OTHER it will blow away every entity in radious
@@ -110,7 +110,8 @@ public class WindLight extends InnerLight {
             //oldtarget and stuff prevent generating multiple structures in the same area
             for(LivingEntity target : this.targets){
 
-                target.playSound(LightSounds.WIND_LIGHT, 0.9f, 1);
+                //TODO these are allies, should i still play it? no
+                //target.playSound(LightSounds.WIND_LIGHT, 0.9f, 1);
                 target.addStatusEffect(new StatusEffectInstance(StatusEffects.SPEED, this.duration*20, (int) (this.power_multiplier), false, false));
                 target.addStatusEffect(new StatusEffectInstance(StatusEffects.JUMP_BOOST, this.duration*20, (int) (this.power_multiplier), false, false));
                 target.addStatusEffect(new StatusEffectInstance(StatusEffects.HASTE, this.duration*20, (int) (this.power_multiplier/2.5), false, false));
@@ -128,7 +129,7 @@ public class WindLight extends InnerLight {
             caster.addStatusEffect(new StatusEffectInstance(StatusEffects.SPEED, this.duration*20, (int) (this.power_multiplier/1.5), false, false));
             caster.addStatusEffect(new StatusEffectInstance(StatusEffects.JUMP_BOOST, this.duration*20, (int) (this.power_multiplier/1.5), false, false));
 
-            caster.playSound(LightSounds.WIND_LIGHT, 1, 1);
+            //caster.playSound(LightSounds.WIND_LIGHT, 1, 1);
         }
 
     }

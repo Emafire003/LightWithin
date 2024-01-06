@@ -89,9 +89,9 @@ public class DefenseLight extends InnerLight {
             }
         }
 
-        caster.getWorld().playSound(caster, caster.getBlockPos(), LightSounds.DEFENSE_LIGHT, SoundCategory.AMBIENT, 1, 1);
+        caster.getWorld().playSound(caster.getX(), caster.getY(), caster.getZ(), LightSounds.DEFENSE_LIGHT, SoundCategory.AMBIENT, 1, 1, true);
         for(LivingEntity target : this.targets){
-            target.playSound(LightSounds.DEFENSE_LIGHT, 1, 1);
+            //target.playSound(LightSounds.DEFENSE_LIGHT, 1, 1);
             //LightParticlesUtil.spawnLightTypeParticle(LightParticles.DEFENSELIGHT_PARTICLE, target);
             if(!caster.getWorld().isClient){
                 LightParticlesUtil.spawnLightTypeParticle(LightParticles.DEFENSELIGHT_PARTICLE, (ServerWorld) caster.getWorld(), target.getPos());

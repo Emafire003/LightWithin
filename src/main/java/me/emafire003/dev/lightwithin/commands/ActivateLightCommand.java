@@ -6,6 +6,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import me.emafire003.dev.lightwithin.LightWithin;
 import me.emafire003.dev.lightwithin.config.Config;
+import me.emafire003.dev.lightwithin.status_effects.LightEffects;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.minecraft.command.argument.EntityArgumentType;
 import net.minecraft.server.command.CommandManager;
@@ -60,6 +61,12 @@ public class ActivateLightCommand implements LightCommand{
 
         try{
             for(ServerPlayerEntity target : targets){
+                if(target.hasStatusEffect(LightEffects.LIGHT_ACTIVE)){
+                    target.removeStatusEffect(LightEffects.LIGHT_ACTIVE);
+                }
+                if(target.hasStatusEffect(LightEffects.LIGHT_FATIGUE)){
+                    target.removeStatusEffect(LightEffects.LIGHT_FATIGUE);
+                }
                 LightWithin.activateLight(target);
                 source.sendFeedback( () -> Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The InnerLight of §d" + target.getName().getString() + "§e has been triggered!" ).formatted(Formatting.YELLOW)), true);
                 if(Config.TARGET_FEEDBACK){

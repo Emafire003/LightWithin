@@ -97,9 +97,18 @@ public class HealLight extends InnerLight {
         }else{
             CGLCompat.getLib().setColorToEntity(this.caster, CGLCompat.fromHex(this.color));
         }
-        caster.getWorld().playSound(caster, caster.getBlockPos(), LightSounds.HEAL_LIGHT, SoundCategory.AMBIENT, 1,1);
+        caster.getWorld().playSound(caster.getX(), caster.getY(), caster.getZ(), LightSounds.HEAL_LIGHT, SoundCategory.AMBIENT, 1, 1, true);
+        //caster.getWorld().playSound(caster, caster.getBlockPos(), LightSounds.HEAL_LIGHT, SoundCategory.AMBIENT, 1,1);
         for(LivingEntity target : this.targets){
 
+
+            //TODO techincly are allies should I keep it? Nah
+            //target.playSound(LightSounds.HEAL_LIGHT, 1, 1);
+            if(!caster.getWorld().isClient){
+                LightParticlesUtil.spawnLightTypeParticle(LightParticles.HEALLIGHT_PARTICLE, (ServerWorld) caster.getWorld(), target.getPos());
+            }
+            //LightParticlesUtil.spawnLightTypeParticle(LightParticles.HEALLIGHT_PARTICLE, target);
+            target.addStatusEffect(new StatusEffectInstance(StatusEffects.REGENERATION, caster.getStatusEffect(LightEffects.LIGHT_ACTIVE).getDuration(), (int) this.power_multiplier, false, false));
 
             if(LightWithin.LIGHT_COMPONENT.get(caster).getTargets().equals(TargetType.OTHER)){
 
@@ -116,16 +125,6 @@ public class HealLight extends InnerLight {
                 remove_status_list.clear();
             }
 
-            if(target.hasStatusEffect(StatusEffects.POISON)){
-                target.removeStatusEffect(StatusEffects.POISON);
-            }
-
-            target.playSound(LightSounds.HEAL_LIGHT, 1, 1);
-            if(!caster.getWorld().isClient){
-                LightParticlesUtil.spawnLightTypeParticle(LightParticles.HEALLIGHT_PARTICLE, (ServerWorld) caster.getWorld(), target.getPos());
-            }
-            //LightParticlesUtil.spawnLightTypeParticle(LightParticles.HEALLIGHT_PARTICLE, target);
-            target.addStatusEffect(new StatusEffectInstance(StatusEffects.REGENERATION, caster.getStatusEffect(LightEffects.LIGHT_ACTIVE).getDuration(), (int) this.power_multiplier, false, false));
         }
     }
 

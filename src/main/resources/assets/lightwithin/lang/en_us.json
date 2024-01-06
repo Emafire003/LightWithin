@@ -43,7 +43,7 @@
 
   "light.description.activation.heal.self": "Your light flows trough you, sewing your wounds!",
   "light.description.activation.heal.allies": "Your light flows trough you and your allies, sewing your wounds!",
-  "light.description.activation.heal.other": "Your light flows trough peaceful creatures, sewing their wounds!",
+  "light.description.activation.heal.other": "Your light flows trough all friendly creatures, healing their sickness!",
 
   "light.description.activation.defense.self": "Your light tensed up, shielding you from an hurtful future!",
   "light.description.activation.defense.allies": "Your light tensed up, shielding your allies from an hurtful future!",

@@ -84,10 +84,19 @@ public class LightTriggerChecks {
         }
         else if(component.getTargets().equals(TargetType.OTHER)){
             if(CheckUtils.checkPassiveHealth(player, target, Config.HP_PERCENTAGE_OTHER)){
-                trigger_sum = 5;
+                trigger_sum = 2;
             }
-            if(CheckUtils.checkPoisoned(target)){
-                trigger_sum = 5;
+            if(CheckUtils.checkHasHarmfulStatusEffect(target)){
+                trigger_sum = 3;
+            }else if(CheckUtils.checkHasHarmfulStatusEffect(player)){
+                trigger_sum = 3;
+            }
+
+            if(CheckUtils.checkAllyHealth(player, target, Config.HP_PERCENTAGE_ALLIES)){
+                trigger_sum = trigger_sum + 2;
+            }
+            if(CheckUtils.checkSelfDanger(player, Config.HP_PERCENTAGE_SELF)){
+                trigger_sum = trigger_sum+2;
             }
 
             if(trigger_sum >= MIN_TRIGGER){

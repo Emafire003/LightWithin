@@ -1,8 +1,7 @@
 Updated to 1.20.1
 Updated Renderer library
 
-Now the low health checks the armor too, using this forumla: player.getArmor()+player.getHealth() <= (player.getMaxHealth())*health_percent/100;
-Not only that, but uses a new way to ""predict"" how much damage will be next, and if it is under the designated health percentage it will tick. (new way of triggering the light below)
+Now the low health checks a new way to ""predict"" how much damage will be recoved next (takes into account armor, status effects, and attacks speed), and if it is under the designated health percentage it will tick. (new way of triggering the light below)
 Compatibility with:
     - Open parties and claims
     - Factions (dependency updated, no substantial changes, fixed the fact that now it's an samef || alliedf instead of samef && alliedf
@@ -20,7 +19,7 @@ For the Heal light:
 - Again different weights:
     SELF: Low health, Very low health, Poisend, low armor
     ALLIES: Allies low health, surrounded, allies low armor, allies poisoned
-    OTHER: Other low health, other poisened (in this case either of the two triggers it)
+    OTHER: Peaceful/Self/Allies low health, same + harmful status effect
 For Defense light:
     SELF: Low health, Very low health, low armor, surrounded (for example, here it triggers with very low health only, or a combination of low health and either low armor or surrounded)
     ALLIES: ALlies low health, allies low armor, very low health (self), surrounded
@@ -87,4 +86,8 @@ Fixed an issue for determing the target type.
 Luxmutua berry now changes the target too. (I thought it did already, don't really remember, it's been like a year)
 
 Changed some Luxcognita messages, and some activation messages
+
+
+Updated the Heal light OTHER target:
+- Now instead of targeting "peaceful creatures" it instead targets everyone and removes harmful status effects (except the Light Fatigue!)
 

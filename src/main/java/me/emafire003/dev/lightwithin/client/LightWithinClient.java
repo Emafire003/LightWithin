@@ -126,9 +126,6 @@ public class LightWithinClient implements ClientModInitializer {
             client.execute(() -> {
                 try{
                     event_handler.renderRunes(results, client.player);
-                    if(results.equals(InnerLightType.HEAL)){
-                        client.player.playSound(LightSounds.HEAL_LIGHT, 1,1);
-                    }
                 }catch (NoSuchElementException e){
                     LOGGER.warn("No value in the packet, probably not a big problem");
                 }catch (Exception e){

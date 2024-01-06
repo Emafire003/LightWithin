@@ -227,12 +227,21 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 
 		}
 
-		//Same here
+		//Finds peaceful creatures and allies, also the player
 		else if(component.getTargets().equals(TargetType.OTHER)){
-			if(player.getHealth() <= (player.getMaxHealth())*50/100){
-				targets.add(player);
-			}
 			targets.addAll(player.getWorld().getEntitiesByClass(PassiveEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amount), (entity1 -> true)));
+			List<LivingEntity> entities = player.getWorld().getEntitiesByClass(LivingEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amount), (entity1 -> true));
+			targets.add(player);
+			for(LivingEntity ent : entities){
+				// may need this to prevent bugs EDIT i don't even remember what "this" referred to eheh
+				if(CheckUtils.CheckAllies.checkAlly(player, ent)){
+					targets.add(ent);
+				}else if(ent instanceof TameableEntity){
+					if(player.equals(((TameableEntity) ent).getOwner())){
+						targets.add(ent);
+					}
+				}
+			}
 			player.sendMessage(Text.translatable("light.description.activation.heal.other"), true);
 		}
 		if(debug){
