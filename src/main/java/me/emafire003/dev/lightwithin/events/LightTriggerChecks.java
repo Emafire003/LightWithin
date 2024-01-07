@@ -30,8 +30,6 @@ public class LightTriggerChecks {
         }
     }
 
-    //TODO probably it should be a mix of armor and hp. Like, no armor and HP = when player is under 50%HP, when high armor/defense triggers on 10%HP
-    //TODO nevermind, it should probably take into consideration the amount of the last attack damage. If the attack damage is s enough to send the player to the configured health it will trigger
     public static void checkHeal(PlayerEntity player, LightComponent component, LivingEntity attacker, LivingEntity target){
         double trigger_sum = 0;
         /**CHECKS for the self part*/

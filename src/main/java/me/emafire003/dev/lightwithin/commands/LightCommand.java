@@ -1,12 +1,8 @@
 package me.emafire003.dev.lightwithin.commands;
 
 import com.mojang.brigadier.tree.LiteralCommandNode;
-import io.icker.factions.api.persistents.Faction;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.server.command.ServerCommandSource;
-import net.minecraft.server.network.ServerPlayerEntity;
-
-import java.util.function.Predicate;
 
 
 //Based on Factions' code https://github.com/ickerio/factions

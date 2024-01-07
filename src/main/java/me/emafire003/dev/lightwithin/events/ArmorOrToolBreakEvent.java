@@ -2,7 +2,6 @@ package me.emafire003.dev.lightwithin.events;
 
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.EventFactory;
-import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 
 public interface ArmorOrToolBreakEvent {

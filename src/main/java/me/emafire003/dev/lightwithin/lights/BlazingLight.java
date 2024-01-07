@@ -13,8 +13,6 @@ import me.emafire003.dev.structureplacerapi.StructurePlacerAPI;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.boss.BossBar;
-import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
@@ -108,7 +106,7 @@ public class BlazingLight extends InnerLight {
             }
         }
         caster.getWorld().playSound(caster.getX(), caster.getY(), caster.getZ(), LightSounds.BLAZING_LIGHT, SoundCategory.AMBIENT, 1, 1, true);
-        caster.addStatusEffect(new StatusEffectInstance(StatusEffects.FIRE_RESISTANCE, caster.getStatusEffect(LightEffects.LIGHT_ACTIVE).getDuration(), 0, false, false));
+        caster.addStatusEffect(new StatusEffectInstance(StatusEffects.FIRE_RESISTANCE, caster.getStatusEffect(LightEffects. LIGHT_ACTIVE).getDuration(), 0, false, false));
 
         LightComponent component = LIGHT_COMPONENT.get(caster);
         if(component.getTargets().equals(TargetType.ALL)){

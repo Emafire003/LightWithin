@@ -4,10 +4,9 @@ import com.mojang.datafixers.util.Pair;
 import me.emafire003.dev.lightwithin.LightWithin;
 import me.emafire003.dev.lightwithin.component.LightComponent;
 import me.emafire003.dev.lightwithin.config.Config;
-import me.emafire003.dev.lightwithin.events.LightTriggeringAndEvents;
 import me.emafire003.dev.lightwithin.lights.InnerLightType;
 import me.emafire003.dev.lightwithin.sounds.LightSounds;
-import me.emafire003.dev.lightwithin.status_effects.LightEffects;
+import me.emafire003.dev.lightwithin.util.LightCreationAndEvent;
 import me.emafire003.dev.lightwithin.util.TargetType;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.item.TooltipContext;
@@ -64,11 +63,11 @@ public class LuxmutuaBerryItem extends Item {
 
             Pair<InnerLightType, TargetType> current = new Pair<>(component.getType(), component.getTargets());
             String[] id_bits = UUID.randomUUID().toString().toLowerCase().split("-");
-            Pair<InnerLightType, TargetType> newone = LightTriggeringAndEvents.determineTypeAndTarget(id_bits, 1,3);
+            Pair<InnerLightType, TargetType> newone = LightCreationAndEvent.determineTypeAndTarget(id_bits, 1,3);
 
             while(current.getFirst().equals(newone.getFirst())){
                 id_bits = UUID.randomUUID().toString().toLowerCase().split("-");
-                newone = LightTriggeringAndEvents.determineTypeAndTarget(id_bits, 1,3);
+                newone = LightCreationAndEvent.determineTypeAndTarget(id_bits, 1,3);
             }
 
             component.setType(newone.getFirst());

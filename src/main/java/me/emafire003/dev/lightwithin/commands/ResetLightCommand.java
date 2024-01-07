@@ -5,9 +5,8 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import me.emafire003.dev.lightwithin.LightWithin;
 import me.emafire003.dev.lightwithin.component.LightComponent;
-import me.emafire003.dev.lightwithin.events.LightTriggeringAndEvents;
 import me.emafire003.dev.lightwithin.lights.InnerLightType;
-import me.emafire003.dev.lightwithin.util.TargetType;
+import me.emafire003.dev.lightwithin.util.LightCreationAndEvent;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.minecraft.command.argument.EntityArgumentType;
 import net.minecraft.server.command.CommandManager;
@@ -15,7 +14,6 @@ import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
-import org.apache.logging.log4j.core.jmx.Server;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -40,7 +38,7 @@ public class ResetLightCommand implements LightCommand{
             for(ServerPlayerEntity target : targets){
                 LightComponent component = LightWithin.LIGHT_COMPONENT.get(target);
                 component.clear();
-                LightTriggeringAndEvents.createUniqueLight(target);
+                LightCreationAndEvent.createUniqueLight(target);
                 source.sendFeedback( () -> Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The InnerLight of §d" + target.getName().getString() + "§e has been resetted to its original values!" ).formatted(Formatting.YELLOW)), true);
             }
             return 1;

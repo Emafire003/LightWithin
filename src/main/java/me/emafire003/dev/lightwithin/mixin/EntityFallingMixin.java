@@ -4,14 +4,11 @@ import me.emafire003.dev.lightwithin.events.EntityFallingEvent;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
-import static me.emafire003.dev.lightwithin.LightWithin.LOGGER;
 
 @Mixin(LivingEntity.class)
 public abstract class EntityFallingMixin {

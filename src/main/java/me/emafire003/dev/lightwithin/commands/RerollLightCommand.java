@@ -6,8 +6,8 @@ import com.mojang.brigadier.tree.LiteralCommandNode;
 import com.mojang.datafixers.util.Pair;
 import me.emafire003.dev.lightwithin.LightWithin;
 import me.emafire003.dev.lightwithin.component.LightComponent;
-import me.emafire003.dev.lightwithin.events.LightTriggeringAndEvents;
 import me.emafire003.dev.lightwithin.lights.InnerLightType;
+import me.emafire003.dev.lightwithin.util.LightCreationAndEvent;
 import me.emafire003.dev.lightwithin.util.TargetType;
 import net.minecraft.command.argument.EntityArgumentType;
 import net.minecraft.server.command.CommandManager;
@@ -30,10 +30,10 @@ public class RerollLightCommand implements LightCommand{
                 LightComponent component = LightWithin.LIGHT_COMPONENT.get(target);
 
                 Pair<InnerLightType, TargetType> current = new Pair<>(component.getType(), component.getTargets());
-                Pair<InnerLightType, TargetType> newone = LightTriggeringAndEvents.determineTypeAndTarget(UUID.randomUUID().toString().toLowerCase().split("-"), 1,3);
+                Pair<InnerLightType, TargetType> newone = LightCreationAndEvent.determineTypeAndTarget(UUID.randomUUID().toString().toLowerCase().split("-"), 1,3);
 
                 while(current.getFirst().equals(newone.getFirst())){
-                    newone = LightTriggeringAndEvents.determineTypeAndTarget(UUID.randomUUID().toString().toLowerCase().split("-"), 1,3);
+                    newone = LightCreationAndEvent.determineTypeAndTarget(UUID.randomUUID().toString().toLowerCase().split("-"), 1,3);
                 }
 
                 InnerLightType type = newone.getFirst();
@@ -59,7 +59,7 @@ public class RerollLightCommand implements LightCommand{
         for(ServerPlayerEntity target : targets){
             LightComponent component = LightWithin.LIGHT_COMPONENT.get(target);
 
-            component.setPowerMultiplier(LightTriggeringAndEvents.determinePower(UUID.randomUUID().toString().toLowerCase().split("-"), 4));
+            component.setPowerMultiplier(LightCreationAndEvent.determinePower(UUID.randomUUID().toString().toLowerCase().split("-"), 4));
 
             source.sendFeedback( () -> Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("§eThe new power multiplier of " + target.getName().getString() + " is: §a" + component.getPowerMultiplier())), false);
 
@@ -74,7 +74,7 @@ public class RerollLightCommand implements LightCommand{
         for(ServerPlayerEntity target : targets){
             LightComponent component = LightWithin.LIGHT_COMPONENT.get(target);
 
-            component.setDuration(LightTriggeringAndEvents.determineDuration(UUID.randomUUID().toString().toLowerCase().split("-"), 2));
+            component.setDuration(LightCreationAndEvent.determineDuration(UUID.randomUUID().toString().toLowerCase().split("-"), 2));
 
             source.sendFeedback( () -> Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("§eThe new duration of " + target.getName().getString() + " is: §a" + component.getDuration())), false);
 
@@ -89,7 +89,7 @@ public class RerollLightCommand implements LightCommand{
         for(ServerPlayerEntity target : targets){
             LightComponent component = LightWithin.LIGHT_COMPONENT.get(target);
 
-            component.setMaxCooldown(LightTriggeringAndEvents.determineCooldown(UUID.randomUUID().toString().toLowerCase().split("-"), 0));
+            component.setMaxCooldown(LightCreationAndEvent.determineCooldown(UUID.randomUUID().toString().toLowerCase().split("-"), 0));
 
             source.sendFeedback( () -> Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("§eThe new max cooldown of " + target.getName().getString() + " is: §a" + component.getMaxCooldown())), false);
 

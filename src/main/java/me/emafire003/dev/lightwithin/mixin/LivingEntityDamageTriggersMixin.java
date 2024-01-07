@@ -4,9 +4,12 @@ import me.emafire003.dev.lightwithin.events.EntityBurningEvent;
 import me.emafire003.dev.lightwithin.events.EntityDrowningEvent;
 import me.emafire003.dev.lightwithin.events.EntityFreezingEvent;
 import me.emafire003.dev.lightwithin.status_effects.LightEffects;
+import net.minecraft.block.TntBlock;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.TntEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.damage.DamageTypes;
+import net.minecraft.entity.player.PlayerEntity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -31,6 +34,7 @@ public abstract class LivingEntityDamageTriggersMixin {
         }else if(source.isOf(DamageTypes.ON_FIRE)){
             EntityBurningEvent.EVENT.invoker().burning(entity);
         }else if(source.isOf(DamageTypes.EXPLOSION)){
+            //TODO add trigger for the explosion igniter if it's  a player, like a normal direct damage. (Aka, traps)
             //Trigger damage from explosion
         }else if(source.isOf(DamageTypes.FALLING_BLOCK)){
             //trigger anvil damage
