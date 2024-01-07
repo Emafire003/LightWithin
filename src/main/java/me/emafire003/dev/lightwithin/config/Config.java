@@ -41,6 +41,8 @@ public class Config {
     public static int DUR_PERCENTAGE_ALLIES;
     public static int DUR_PERCENTAGE_OTHER;
 
+    public static boolean ALWAYS_AFFECT_ALLIES;
+
     public static int HEAL_MAX_POWER;
     public static int HEAL_MAX_DURATION;
     public static int HEAL_MIN_POWER;
@@ -142,6 +144,8 @@ public class Config {
         configs.addKeyValuePair(new Pair<>("dur_percentage_self", 5), "The armor durability percentage below which the light will be triggerable if the target is SELF (like 15, 20, 50) (in some cases it may not apply)");
         configs.addKeyValuePair(new Pair<>("dur_percentage_allies", 10), "The armor durability percentage below which the light will be triggerable if the target is ALLIES (like 15, 20, 50) (in some cases it may not apply)");
         configs.addKeyValuePair(new Pair<>("dur_percentage_other", 10), "The armor durability percentage below which the light will be triggerable if the target is OTHER/Passive mobs (like 15, 20, 50) (in some cases it may not apply)");
+        configs.addKeyValuePair(new Pair<>("always_affect_allies", false), "Should every ally be affected by the effect of a light triggering? For example, should an ally at full health be healed by the heal light of the caster?");
+
 
         configs.addKeyValuePair(new Pair<>("heal_max_power", 8), "The maximum power multiplier (aka level of the effect)");
         configs.addKeyValuePair(new Pair<>("heal_max_duration", 10), "The maximum duration of the effect");
@@ -240,6 +244,8 @@ public class Config {
         DUR_PERCENTAGE_SELF = CONFIG.getOrDefault("dur_percentage_self", 5);
         DUR_PERCENTAGE_ALLIES = CONFIG.getOrDefault("dur_percentage_allies", 10);
         DUR_PERCENTAGE_OTHER = CONFIG.getOrDefault("dur_percentage_other", 10);
+        ALWAYS_AFFECT_ALLIES = CONFIG.getOrDefault("always_affect_allies", false);
+
 
         HEAL_MAX_POWER = CONFIG.getOrDefault("heal_max_power", 8);
         HEAL_MAX_DURATION = CONFIG.getOrDefault("heal_max_duration", 10);

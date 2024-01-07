@@ -128,13 +128,13 @@ public class CheckUtils {
     }
 
 
-    private static float getModifyAppliedDamage(DamageSource source, float amount, PlayerEntity player){
+    private static float getModifyAppliedDamage(DamageSource source, float amount, LivingEntity entity){
         if (source.isIn(DamageTypeTags.BYPASSES_EFFECTS)) {
             return amount;
         } else {
             int i;
-            if (player.hasStatusEffect(StatusEffects.RESISTANCE) && !source.isIn(DamageTypeTags.BYPASSES_RESISTANCE)) {
-                i = (player.getStatusEffect(StatusEffects.RESISTANCE).getAmplifier() + 1) * 5;
+            if (entity.hasStatusEffect(StatusEffects.RESISTANCE) && !source.isIn(DamageTypeTags.BYPASSES_RESISTANCE)) {
+                i = (entity.getStatusEffect(StatusEffects.RESISTANCE).getAmplifier() + 1) * 5;
                 int j = 25 - i;
                 float f = amount * (float)j;
                 amount = Math.max(f / 25.0F, 0.0F);
@@ -145,7 +145,7 @@ public class CheckUtils {
             } else if (source.isIn(DamageTypeTags.BYPASSES_ENCHANTMENTS)) {
                 return amount;
             } else {
-                i = EnchantmentHelper.getProtectionAmount(player.getArmorItems(), source);
+                i = EnchantmentHelper.getProtectionAmount(entity.getArmorItems(), source);
                 if (i > 0) {
                     amount = DamageUtil.getInflictedDamage(amount, (float)i);
                 }
@@ -155,9 +155,9 @@ public class CheckUtils {
         }
     }
 
-    private static float getAppliedArmorToDamage(DamageSource source, float amount, PlayerEntity player){
+    private static float getAppliedArmorToDamage(DamageSource source, float amount, LivingEntity entity){
         if (!source.isIn(DamageTypeTags.BYPASSES_ARMOR)) {
-            amount = DamageUtil.getDamageLeft(amount, (float)player.getArmor(), (float)player.getAttributeValue(EntityAttributes.GENERIC_ARMOR_TOUGHNESS));
+            amount = DamageUtil.getDamageLeft(amount, (float)entity.getArmor(), (float)entity.getAttributeValue(EntityAttributes.GENERIC_ARMOR_TOUGHNESS));
         }
 
         return amount;
@@ -194,7 +194,7 @@ public class CheckUtils {
      * Calculates the next attack damage of the last entity that attacked the player
      * I can't just use the last attack variable because mixins refuse to work and
      * I could only get the non-armor-filtered damage*/
-    public static float getTotDamage(@NotNull PlayerEntity player){
+    public static float getTotDamage(@NotNull LivingEntity player){
         DamageSource damage_source = player.getRecentDamageSource();
         if(damage_source == null){
             //Probably the player hasn't been hit by anything recently, so using the simpler checks
@@ -225,7 +225,7 @@ public class CheckUtils {
      * @param player The player that could trigger their light
      * @param health_percent The percentage (15, 25, 70) below which the target is in danger (hence light activatable)
      * */
-    public static boolean checkSelfDanger(@NotNull PlayerEntity player, int health_percent){
+    public static boolean checkSelfDanger(@NotNull LivingEntity player, int health_percent){
         float tot_damaged = getTotDamage(player);
         if(tot_damaged == -1){
             return player.getArmor()+player.getHealth() <= (player.getMaxHealth())*health_percent/100;

@@ -87,7 +87,9 @@ Luxmutua berry now changes the target too. (I thought it did already, don't real
 
 Changed some Luxcognita messages, and some activation messages
 
+Now by default, allies need to be below their HP percentage (config) in order to recive any buff from the triggering of
+a player. This can be brought back to always getting a buff in the config file. (Same thing for pets and such)
+
 
 Updated the Heal light OTHER target:
 - Now instead of targeting "peaceful creatures" it instead targets everyone and removes harmful status effects (except the Light Fatigue!)
-
