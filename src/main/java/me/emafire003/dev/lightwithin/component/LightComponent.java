@@ -22,7 +22,8 @@ public class LightComponent implements ComponentV3, AutoSyncedComponent {
     private PlayerEntity caster;
     protected InnerLightType type = InnerLightType.NONE;
     protected boolean incooldown = false;
-    private boolean debug = false;
+    private final boolean debug = false;
+    protected int max_increment_percent = -1;
 
     public LightComponent(PlayerEntity playerEntity) {
         this.caster = playerEntity;
@@ -94,9 +95,16 @@ public class LightComponent implements ComponentV3, AutoSyncedComponent {
         }else{
             this.incooldown = false;
         }
+
+        if(tag.contains("max_increment")){
+            if(debug){LOGGER.info("the max_increement got: " + tag.getInt("max_increment"));}
+            this.max_increment_percent= tag.getInt("max_increment");
+        }else{
+            this.max_increment_percent= -1;
+        }
+
     }
 
-    //TODO search when/how is this triggered.
     @Override
     public void writeToNbt(NbtCompound tag) {
         tag.putString("type", this.type.toString());
@@ -108,6 +116,7 @@ public class LightComponent implements ComponentV3, AutoSyncedComponent {
         tag.putString("prev_color", this.prev_color);
         tag.putBoolean("rainbow_col", this.rainbow_col);
         tag.putBoolean("incooldown", this.incooldown);
+        tag.putInt("max_increment", this.max_increment_percent);
     }
 
 
@@ -133,6 +142,10 @@ public class LightComponent implements ComponentV3, AutoSyncedComponent {
 
     public String getColor() {
         return this.color;
+    }
+
+    public int getMaxIncrementPercent() {
+        return this.max_increment_percent;
     }
 
     public String getPrevColor() {
@@ -197,7 +210,12 @@ public class LightComponent implements ComponentV3, AutoSyncedComponent {
         LightWithin.LIGHT_COMPONENT.sync(caster);
     }
 
-    public void setAll(InnerLightType type, TargetType targets, int cooldown, double power, int duration, String color, boolean b, boolean incooldown){
+    public void setMaxIncrementPercent(int max_increment) {
+        this.max_increment_percent = max_increment;
+        LightWithin.LIGHT_COMPONENT.sync(caster);
+    }
+
+    public void setAll(InnerLightType type, TargetType targets, int cooldown, double power, int duration, String color, boolean b, boolean incooldown, int max_increment){
         this.type = type;
         this.targets = targets;
         this.cooldown_time = cooldown;
@@ -206,6 +224,7 @@ public class LightComponent implements ComponentV3, AutoSyncedComponent {
         this.color = color;
         this.rainbow_col = b;
         this.incooldown = incooldown;
+        this.max_increment_percent = max_increment;
         LightWithin.LIGHT_COMPONENT.sync(caster);
     }
 
@@ -217,6 +236,7 @@ public class LightComponent implements ComponentV3, AutoSyncedComponent {
         this.color = "ffffff";
         this.rainbow_col = false;
         this.type = InnerLightType.NONE;
+        this.max_increment_percent = -1;
         LightWithin.LIGHT_COMPONENT.sync(caster);
     }
 

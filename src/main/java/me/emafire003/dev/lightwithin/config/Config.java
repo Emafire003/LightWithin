@@ -3,11 +3,16 @@ package me.emafire003.dev.lightwithin.config;
 import com.mojang.datafixers.util.Pair;
 import me.emafire003.dev.lightwithin.LightWithin;
 
+import java.io.File;
+
 import static me.emafire003.dev.lightwithin.LightWithin.LOGGER;
 
 public class Config {
     public static SimpleConfig CONFIG;
     private static ConfigProvider configs;
+
+    private static final int ver = 1;
+    public static int VERSION;
 
     //box expansion amount while searching for other entities, like when checking for allies or targets near the player
     public static int AREA_OF_SEARCH_FOR_ENTITIES;
@@ -108,11 +113,23 @@ public class Config {
 
         CONFIG = SimpleConfig.of(LightWithin.MOD_ID + "_config").provider(configs).request();
 
-        assignConfigs();
+        try{
+            assignConfigs();
+        }catch (Exception e){
+            e.printStackTrace();
+            LOGGER.warn("ERROR! The config could not be read, generating a new one...");
+            File old_conf = new File(LightWithin.PATH + LightWithin.MOD_ID + "_config.yml");
+            old_conf.renameTo(new File("ERROR" + LightWithin.MOD_ID + "_config.yml"));
+            CONFIG = SimpleConfig.of(LightWithin.MOD_ID + "_config").provider(configs).request();
+            assignConfigs();
+            LOGGER.warn("Generated a new config file, make sure to configure it again!");
+        }
+
         LOGGER.info("All " + configs.getConfigsList().size() + " have been set properly");
     }
 
     private static void createConfigs() {
+        configs.addKeyValuePair(new Pair<>("version", ver), "The version of the config. DO NOT CHANGE IT :D");
         configs.addKeyValuePair(new Pair<>("area_of_search_for_entities", 6), "The box radius in which other entities (such as allies or targets) will be searched");
         configs.addKeyValuePair(new Pair<>("cooldown_multiplier", 1.0), "Use this to extend or shorten the cooldown of the light powers effects in general (use <1 values to shorten the cooldown >1 to extend it)");
         //the max value for this is 21 now, 16*1.3 = 20.8. The min one is 1. Unless it's adjusted.
@@ -219,6 +236,7 @@ public class Config {
         LUXCOGNITA_BYPASS_COOLDOWN = !CONFIG.getOrDefault("luxcognita_bypass_cooldown", true);
         LUXIMUTUA_BYPASS_COOLDOWN = !CONFIG.getOrDefault("luxmutua_bypass_cooldown", false);
 
+        VERSION = CONFIG.getOrDefault("version", ver);
         AREA_OF_SEARCH_FOR_ENTITIES = CONFIG.getOrDefault("area_of_search_for_entities", 6);
         COOLDOWN_MULTIPLIER = CONFIG.getOrDefault("cooldown_multiplier", 1.0);
         DURATION_MULTIPLIER = CONFIG.getOrDefault("duration_multiplier", 1.3);

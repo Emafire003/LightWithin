@@ -6,6 +6,7 @@ Compatibility with:
     - Open parties and claims
     - Factions (dependency updated, no substantial changes, fixed the fact that now it's an samef || alliedf instead of samef && alliedf
     - Argonauts, both parties and guilds
+    - FTBTeams
 
 Now the drowneds summoned with the Aqua light will never attack the player who summoned them, not even after the light runs out, but they will attack everyone else even during the day
 
@@ -59,6 +60,7 @@ Unless they have freeze resistance.
 Added a new block, Clear Ice. It melts/breaks into a puff of snow and is more translucent than normal ice.
 It is also non-solid, meaning it doesn't do suffocating damage. Like glass.
 (Now the statues are no longer supported, but still present for creative decoration)
+It behaves similarly to frosted ice unless a player is present.
 
 Wind Light:
 The checkWind now only checks for standard AIR, not CAVE_AIR or VOID_AIR. Since wind isn't supposed to be there most of the time.

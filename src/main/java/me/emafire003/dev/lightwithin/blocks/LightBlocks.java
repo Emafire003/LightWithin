@@ -15,7 +15,8 @@ import net.minecraft.util.Identifier;
 public class LightBlocks {
 
     public static final Block CLEAR_ICE = registerBlock("clear_ice",
-            new ClearIce(FabricBlockSettings.create().dynamicBounds().strength(0.1f).nonOpaque().notSolid().slipperiness(0.9f).sounds(BlockSoundGroup.GLASS)), ItemGroups.NATURAL, Items.BLUE_ICE);
+            new ClearIce(FabricBlockSettings.create().ticksRandomly().dynamicBounds().strength(0.1f).nonOpaque().notSolid().slipperiness(0.9f).sounds(BlockSoundGroup.GLASS)), ItemGroups.NATURAL, Items.BLUE_ICE);
+
     public static final Block FROZEN_PLAYER_TOP_BLOCK = registerBlock("frozen_player_top",
             new FrozenPlayerTopBlock(FabricBlockSettings.create().strength(0.1f).collidable(true).slipperiness(0.9f).luminance(2).sounds(BlockSoundGroup.GLASS)), ItemGroups.NATURAL, Items.ICE);
 
@@ -32,8 +33,6 @@ public class LightBlocks {
             new WallBlock(FabricBlockSettings.create().sounds(BlockSoundGroup.GLASS).strength(0.05f).collidable(true).slipperiness(0.9f).sounds(BlockSoundGroup.GLASS).nonOpaque()), ItemGroups.NATURAL, Items.ICE);
 
     private static Block registerBlock(String name, Block block, RegistryKey<ItemGroup> tab, Item add_after) {
-        //TODO add to the right invenotry tab
-
         Block the_block = Registry.register(Registries.BLOCK, new Identifier(LightWithin.MOD_ID, name), block);
         Item the_item = Registry.register(Registries.ITEM, new Identifier(LightWithin.MOD_ID, name), new BlockItem(block, new FabricItemSettings()));
         ItemGroupEvents.modifyEntriesEvent(tab).register(content -> {

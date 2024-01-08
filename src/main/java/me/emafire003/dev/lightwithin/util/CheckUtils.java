@@ -2,6 +2,7 @@ package me.emafire003.dev.lightwithin.util;
 
 import me.emafire003.dev.lightwithin.compat.argonauts.ArgonautsChecker;
 import me.emafire003.dev.lightwithin.compat.factions.FactionChecker;
+import me.emafire003.dev.lightwithin.compat.ftb_teams.FTBTeamsChecker;
 import me.emafire003.dev.lightwithin.compat.open_parties_and_claims.OPACChecker;
 import me.emafire003.dev.lightwithin.config.Config;
 import me.emafire003.dev.lightwithin.status_effects.LightEffects;
@@ -134,10 +135,14 @@ public class CheckUtils {
         } else {
             int i;
             if (entity.hasStatusEffect(StatusEffects.RESISTANCE) && !source.isIn(DamageTypeTags.BYPASSES_RESISTANCE)) {
-                i = (entity.getStatusEffect(StatusEffects.RESISTANCE).getAmplifier() + 1) * 5;
-                int j = 25 - i;
-                float f = amount * (float)j;
-                amount = Math.max(f / 25.0F, 0.0F);
+                try{
+                    i = (entity.getStatusEffect(StatusEffects.RESISTANCE).getAmplifier() + 1) * 5;
+                    int j = 25 - i;
+                    float f = amount * (float)j;
+                    amount = Math.max(f / 25.0F, 0.0F);
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
             }
 
             if (amount <= 0.0F) {
@@ -166,7 +171,7 @@ public class CheckUtils {
     //TODO Maybe i need to take into account the attack speed somehow
     private static float getAttackDamage(LivingEntity attacker, LivingEntity target){
         float dmg = (float)attacker.getAttributeValue(EntityAttributes.GENERIC_ATTACK_DAMAGE);
-        if (target instanceof LivingEntity) {
+        if (target != null) {
             dmg += EnchantmentHelper.getAttackDamage(attacker.getMainHandStack(), target.getGroup());
         }
         if(target instanceof PlayerEntity){
@@ -208,6 +213,7 @@ public class CheckUtils {
             amount = getAppliedArmorToDamage(player.getRecentDamageSource(), amount, player);
             amount = getModifyAppliedDamage(player.getRecentDamageSource(), amount, player);
             amount = Math.max(amount - player.getAbsorptionAmount(), 0.0F);
+            return amount;
 
         }
 
@@ -361,6 +367,10 @@ public class CheckUtils {
             return OPACChecker.areInSameParty(player, player1) || OPACChecker.areInAlliedParties(player, player1);
         }
 
+        public static boolean checkFTBTeams(PlayerEntity player, PlayerEntity player1){
+            return FTBTeamsChecker.areInSameParty(player, player1);
+        }
+
         public static boolean checkPet(LivingEntity entity, LivingEntity ent){
             if(ent instanceof TameableEntity){
                 return entity.equals(((TameableEntity) ent).getOwner());
@@ -377,6 +387,9 @@ public class CheckUtils {
             }
             if(FabricLoader.getInstance().isModLoaded("open-parties-and-claims") && entity instanceof PlayerEntity && teammate instanceof PlayerEntity){
                 return checkOPACParty((PlayerEntity) entity, (PlayerEntity) teammate);
+            }
+            if(FabricLoader.getInstance().isModLoaded("ftbteams") && entity instanceof PlayerEntity && teammate instanceof PlayerEntity){
+                return checkFTBTeams((PlayerEntity) entity, (PlayerEntity) teammate);
             }
             return checkTeam(entity, teammate) || checkPet(entity, teammate);
 
@@ -604,8 +617,8 @@ public class CheckUtils {
 
     public static boolean checkFalling(LivingEntity entity) {
         if(entity instanceof PlayerEntity){
-            boolean b = ((PlayerEntity) entity).fallDistance > 5 && !entity.isFallFlying() && !entity.isOnGround() && !entity.isClimbing() && !((PlayerEntity) entity).getAbilities().flying && !entity.isSwimming();
-            return b;
+            return entity.fallDistance > 5 && !entity.isFallFlying() && !entity.isOnGround() && !entity.isClimbing() && !((PlayerEntity) entity).getAbilities().flying && !entity.isSwimming();
+
         }
         return entity.fallDistance > 5 && !entity.isFallFlying() && !entity.isOnGround() && !entity.isClimbing()  && !entity.isSwimming();
     }

@@ -144,7 +144,6 @@ public class RendererEventHandler {
     }
 
 
-    //TODO config for how much should the runes be rendered
     public void registerRunesRenderer(){
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             //This makes the runes appear only for a configured amount of time
