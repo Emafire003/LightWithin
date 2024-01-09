@@ -112,9 +112,15 @@ public class WindLight extends InnerLight {
 
                 //TODO these are allies, should i still play it? no
                 //target.playSound(LightSounds.WIND_LIGHT, 0.9f, 1);
-                target.addStatusEffect(new StatusEffectInstance(StatusEffects.SPEED, this.duration*20, (int) (this.power_multiplier/2.5), false, false));
-                target.addStatusEffect(new StatusEffectInstance(StatusEffects.JUMP_BOOST, this.duration*20, (int) (this.power_multiplier/2.5), false, false));
-                target.addStatusEffect(new StatusEffectInstance(StatusEffects.HASTE, this.duration*20, (int) (this.power_multiplier/2.5), false, false));
+                if(target.equals(caster)){
+                    target.addStatusEffect(new StatusEffectInstance(StatusEffects.SPEED, this.duration*20, (int) ((this.power_multiplier/2)/Config.DIV_SELF), false, false));
+                    target.addStatusEffect(new StatusEffectInstance(StatusEffects.JUMP_BOOST, this.duration*20, (int) ((this.power_multiplier/2)/Config.DIV_SELF), false, false));
+                    target.addStatusEffect(new StatusEffectInstance(StatusEffects.HASTE, this.duration*20, (int) ((this.power_multiplier/2)/Config.DIV_SELF), false, false));
+                }else{
+                    target.addStatusEffect(new StatusEffectInstance(StatusEffects.SPEED, this.duration*20, (int) (this.power_multiplier/2), false, false));
+                    target.addStatusEffect(new StatusEffectInstance(StatusEffects.JUMP_BOOST, this.duration*20, (int) (this.power_multiplier/2), false, false));
+                    target.addStatusEffect(new StatusEffectInstance(StatusEffects.HASTE, this.duration*20, (int) (this.power_multiplier/2), false, false));
+                }
 
                 LightParticlesUtil.spawnLightTypeParticle(LightParticles.WINDLIGHT_PARTICLE, (ServerWorld) target.getWorld(), target.getPos());
             }

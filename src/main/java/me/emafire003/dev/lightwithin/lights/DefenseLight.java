@@ -1,11 +1,13 @@
 package me.emafire003.dev.lightwithin.lights;
 
+import me.emafire003.dev.lightwithin.LightWithin;
 import me.emafire003.dev.lightwithin.compat.coloredglowlib.CGLCompat;
 import me.emafire003.dev.lightwithin.config.Config;
 import me.emafire003.dev.lightwithin.particles.LightParticles;
 import me.emafire003.dev.lightwithin.sounds.LightSounds;
 import me.emafire003.dev.lightwithin.particles.LightParticlesUtil;
 import me.emafire003.dev.lightwithin.status_effects.LightEffects;
+import me.emafire003.dev.lightwithin.util.TargetType;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
@@ -96,7 +98,11 @@ public class DefenseLight extends InnerLight {
             if(!caster.getWorld().isClient){
                 LightParticlesUtil.spawnLightTypeParticle(LightParticles.DEFENSELIGHT_PARTICLE, (ServerWorld) caster.getWorld(), target.getPos());
             }
-            target.addStatusEffect(new StatusEffectInstance(StatusEffects.RESISTANCE, caster.getStatusEffect(LightEffects.LIGHT_ACTIVE).getDuration(), (int) this.power_multiplier, false, false));
+            if(target.equals(caster) && LightWithin.LIGHT_COMPONENT.get(caster).getTargets().equals(TargetType.ALLIES)){
+                target.addStatusEffect(new StatusEffectInstance(StatusEffects.RESISTANCE, caster.getStatusEffect(LightEffects.LIGHT_ACTIVE).getDuration(), (int) (this.power_multiplier/Config.DIV_SELF), false, false));
+            }else{
+                target.addStatusEffect(new StatusEffectInstance(StatusEffects.RESISTANCE, caster.getStatusEffect(LightEffects.LIGHT_ACTIVE).getDuration(), (int) this.power_multiplier, false, false));
+            }
         }
 
     }

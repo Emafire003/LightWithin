@@ -3,6 +3,7 @@ package me.emafire003.dev.lightwithin.lights;
 
 import me.emafire003.dev.lightwithin.LightWithin;
 import me.emafire003.dev.lightwithin.compat.coloredglowlib.CGLCompat;
+import me.emafire003.dev.lightwithin.component.LightComponent;
 import me.emafire003.dev.lightwithin.config.Config;
 import me.emafire003.dev.lightwithin.particles.LightParticles;
 import me.emafire003.dev.lightwithin.sounds.LightSounds;
@@ -97,6 +98,7 @@ public class HealLight extends InnerLight {
         }
         caster.getWorld().playSound(caster.getX(), caster.getY(), caster.getZ(), LightSounds.HEAL_LIGHT, SoundCategory.AMBIENT, 1, 1, true);
         //caster.getWorld().playSound(caster, caster.getBlockPos(), LightSounds.HEAL_LIGHT, SoundCategory.AMBIENT, 1,1);
+        LightComponent component = LightWithin.LIGHT_COMPONENT.get(caster);
         for(LivingEntity target : this.targets){
 
 
@@ -106,9 +108,13 @@ public class HealLight extends InnerLight {
                 LightParticlesUtil.spawnLightTypeParticle(LightParticles.HEALLIGHT_PARTICLE, (ServerWorld) caster.getWorld(), target.getPos());
             }
             //LightParticlesUtil.spawnLightTypeParticle(LightParticles.HEALLIGHT_PARTICLE, target);
-            target.addStatusEffect(new StatusEffectInstance(StatusEffects.REGENERATION, caster.getStatusEffect(LightEffects.LIGHT_ACTIVE).getDuration(), (int) this.power_multiplier, false, false));
+            if(target.equals(caster) && component.getTargets().equals(TargetType.ALLIES)){
+                target.addStatusEffect(new StatusEffectInstance(StatusEffects.REGENERATION, caster.getStatusEffect(LightEffects.LIGHT_ACTIVE).getDuration(), (int) (this.power_multiplier/Config.DIV_SELF), false, false));
+            }else{
+                target.addStatusEffect(new StatusEffectInstance(StatusEffects.REGENERATION, caster.getStatusEffect(LightEffects.LIGHT_ACTIVE).getDuration(), (int) this.power_multiplier, false, false));
+            }
 
-            if(LightWithin.LIGHT_COMPONENT.get(caster).getTargets().equals(TargetType.VARIANT)){
+            if(component.getTargets().equals(TargetType.VARIANT)){
 
                 List<StatusEffect> remove_status_list = new ArrayList<>();
                 target.getActiveStatusEffects().forEach((statusEffect, instance) -> {

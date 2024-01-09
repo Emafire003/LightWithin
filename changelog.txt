@@ -105,3 +105,7 @@ Added suggestion providers for select a new light type / target as well
 
 Added an option to "Lock" a light, aka not being able to activate it from the get-go, but needing a command or eating a luxintus berry.
 By default this option is not active. You can still manually lock someone's light.
+
+Now the caster of a light with the ALLIES target will recive only a partial bonus from the effect, configurable from the config.
+
+Fixed Strength light using wrong max/min values

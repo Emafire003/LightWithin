@@ -147,7 +147,13 @@ public class EarthenLight extends InnerLight {
                 //TODO allies thign. Should i remove the sound regardless? Yes
                 //target.playSound(LightSounds.EARTHEN_LIGHT, 0.9f, 1);
                 LightParticlesUtil.spawnLightTypeParticle(LightParticles.EARTHENLIGHT_PARTICLE, (ServerWorld) target.getWorld(), target.getPos());
-                target.addStatusEffect(new StatusEffectInstance(LightEffects.STURDY_ROCK, caster.getStatusEffect(LightEffects.LIGHT_ACTIVE).getDuration(), (int) this.power_multiplier, false, false));
+
+                if(target.equals(caster)){
+                    target.addStatusEffect(new StatusEffectInstance(LightEffects.STURDY_ROCK, caster.getStatusEffect(LightEffects.LIGHT_ACTIVE).getDuration(), (int) (this.power_multiplier/Config.DIV_SELF), false, false));
+                }else{
+                    target.addStatusEffect(new StatusEffectInstance(LightEffects.STURDY_ROCK, caster.getStatusEffect(LightEffects.LIGHT_ACTIVE).getDuration(), (int) this.power_multiplier, false, false));
+                }
+
                 if(Config.STRUCTURE_GRIEFING && !caster.getWorld().isClient) {
                     if(oldtarget == null || oldtarget.distanceTo(target) > 3){
                         StructurePlacerAPI placer;

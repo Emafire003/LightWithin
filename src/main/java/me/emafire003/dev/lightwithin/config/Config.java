@@ -115,6 +115,9 @@ public class Config {
     public static boolean UNLOCK_WITH_LUXINTUS;
 
     public static boolean RESET_ON_JOIN;
+
+    public static double DIV_SELF;
+
     public static void registerConfigs() {
         configs = new ConfigProvider();
         createConfigs();
@@ -243,7 +246,7 @@ public class Config {
         configs.addKeyValuePair(new Pair<>("light_runes_duration", 3), "How many seconds should the runes last on screen?");
         configs.addKeyValuePair(new Pair<>("light_locked_default", false), "Should the light activation be locked by default? (Unless you use a command players won't be able to use lights)");
         configs.addKeyValuePair(new Pair<>("unlock_with_luxintus", true), "Should eating a Luxintus berry unlocked the light?");
-
+        configs.addKeyValuePair(new Pair<>("div_self", 2.5), "By how much should the power be divided for applying the effect of the ALLIES to the caster? Set to 1 to disable");
     }
 
     public static void reloadConfig(){
@@ -348,6 +351,7 @@ public class Config {
         LIGHT_LOCKED_DEFAULT = Config.CONFIG.getOrDefault("light_locked_default", false);
         UNLOCK_WITH_LUXINTUS = Config.CONFIG.getOrDefault("unlock_with_luxintus", true);
 
+        DIV_SELF = Config.CONFIG.getOrDefault("div_self", 2.5);
     }
 }
 

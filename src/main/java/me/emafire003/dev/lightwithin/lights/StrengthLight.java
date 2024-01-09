@@ -2,6 +2,7 @@ package me.emafire003.dev.lightwithin.lights;
 
 import me.emafire003.dev.lightwithin.LightWithin;
 import me.emafire003.dev.lightwithin.compat.coloredglowlib.CGLCompat;
+import me.emafire003.dev.lightwithin.component.LightComponent;
 import me.emafire003.dev.lightwithin.config.Config;
 import me.emafire003.dev.lightwithin.particles.LightParticles;
 import me.emafire003.dev.lightwithin.particles.LightParticlesUtil;
@@ -58,8 +59,8 @@ public class StrengthLight extends InnerLight {
     }
 
     private void checkSafety(){
-        if(this.power_multiplier > Config.DEFENSE_MAX_POWER){
-            power_multiplier = Config.DEFENSE_MAX_POWER;
+        if(this.power_multiplier > Config.STRENGTH_MAX_POWER){
+            power_multiplier = Config.STRENGTH_MAX_POWER;
         }
         int max_duration = Config.STRENGTH_MAX_DURATION;
         if(Config.MULTIPLY_DURATION_LIMIT){
@@ -68,14 +69,14 @@ public class StrengthLight extends InnerLight {
         if(this.duration > max_duration){
             this.duration = max_duration;
         }
-        if(this.power_multiplier > Config.DEFENSE_MAX_POWER*2/3 && this.duration > Config.DEFENSE_MAX_DURATION*7/10){
-            this.duration = Config.DEFENSE_MAX_DURATION*7/10;
+        if(this.power_multiplier > Config.STRENGTH_MAX_POWER*2/3 && this.duration > Config.STRENGTH_MAX_DURATION*7/10){
+            this.duration = Config.STRENGTH_MAX_DURATION*7/10;
         }
-        if(this.duration < Config.DEFENSE_MIN_DURATION){
-            this.duration = Config.DEFENSE_MIN_DURATION;
+        if(this.duration < Config.STRENGTH_MIN_DURATION){
+            this.duration = Config.STRENGTH_MIN_DURATION;
         }
-        if(this.power_multiplier < Config.DEFENSE_MIN_POWER){
-            this.power_multiplier = Config.DEFENSE_MIN_POWER;
+        if(this.power_multiplier < Config.STRENGTH_MIN_POWER){
+            this.power_multiplier = Config.STRENGTH_MIN_POWER;
         }
     }
 
@@ -83,7 +84,7 @@ public class StrengthLight extends InnerLight {
     @Override
     public void execute(){
         checkSafety();
-
+        LightComponent component = LightWithin.LIGHT_COMPONENT.get(caster);
         if(FabricLoader.getInstance().isModLoaded("coloredglowlib")){
             if(this.rainbow_col){
                 CGLCompat.getLib().setRainbowColorToEntity(this.caster, true);
@@ -98,10 +99,11 @@ public class StrengthLight extends InnerLight {
             if(!caster.getWorld().isClient){
                 LightParticlesUtil.spawnLightTypeParticle(LightParticles.STRENGTHLIGHT_PARTICLE, (ServerWorld) caster.getWorld(), target.getPos());
             }
-            if(LightWithin.LIGHT_COMPONENT.get(caster).getTargets().equals(TargetType.VARIANT)){
+            if(component.getTargets().equals(TargetType.VARIANT)){
                 target.addStatusEffect(new StatusEffectInstance(StatusEffects.HASTE, caster.getStatusEffect(LightEffects.LIGHT_ACTIVE).getDuration(), (int) this.power_multiplier, false, false));
-
-            }else{
+            }else if(target.equals(caster) && component.getTargets().equals(TargetType.ALLIES)){
+                target.addStatusEffect(new StatusEffectInstance(StatusEffects.STRENGTH, caster.getStatusEffect(LightEffects.LIGHT_ACTIVE).getDuration(), (int) (this.power_multiplier/Config.DIV_SELF), false, false));
+            } else{
                 target.addStatusEffect(new StatusEffectInstance(StatusEffects.STRENGTH, caster.getStatusEffect(LightEffects.LIGHT_ACTIVE).getDuration(), (int) this.power_multiplier, false, false));
             }
         }

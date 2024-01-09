@@ -109,7 +109,6 @@ public class FrostLight extends InnerLight {
 
         LightParticlesUtil.spawnSnowflake((ServerPlayerEntity) caster, caster.getPos().add(0, 2, 0));
 
-        boolean self_or_allies = (component.getTargets().equals(TargetType.SELF) || component.getTargets().equals(TargetType.ALLIES));
         for(LivingEntity target : this.targets){
             target.playSound(LightSounds.FROST_LIGHT, 1, 1);
 
@@ -123,8 +122,13 @@ public class FrostLight extends InnerLight {
                 state = 3;
             }
 
-            if(self_or_allies){
-                target.addStatusEffect(new StatusEffectInstance(LightEffects.FREEZE_RESISTANCE, (int) (this.duration*Config.FROST_FREEZE_RES_DURATION_MULTIPLIER)*20));
+            if((component.getTargets().equals(TargetType.SELF) || component.getTargets().equals(TargetType.ALLIES))){
+                if(target.equals(caster) && component.getTargets().equals(TargetType.ALLIES)){
+                    target.addStatusEffect(new StatusEffectInstance(LightEffects.FREEZE_RESISTANCE, (int) (this.duration/Config.DIV_SELF*Config.FROST_FREEZE_RES_DURATION_MULTIPLIER)*20));
+                }else{
+                    target.addStatusEffect(new StatusEffectInstance(LightEffects.FREEZE_RESISTANCE, (int) (this.duration*Config.FROST_FREEZE_RES_DURATION_MULTIPLIER)*20));
+                }
+
                 if(Config.STRUCTURE_GRIEFING && !caster.getWorld().isClient){
                     StructurePlacerAPI placer = new StructurePlacerAPI((ServerWorld) caster.getWorld(), new Identifier(MOD_ID, "frost_wall"), target.getBlockPos(), BlockMirror.NONE, BlockRotation.NONE, true, 1.0f, new BlockPos(-2, -1, -2));
                     if(state == 1){
