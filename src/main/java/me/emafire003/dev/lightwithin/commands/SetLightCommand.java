@@ -186,6 +186,7 @@ public class SetLightCommand implements LightCommand{
                                         CommandManager.argument("player", EntityArgumentType.players())
                                                 .then(
                                                         CommandManager.argument("light_type", LightTypeArgument.lightType())
+                                                                .suggests(LightCommand.Suggests.allLightTypes())
                                                                 .executes(this::changeType)
                                                 )
 
@@ -198,6 +199,7 @@ public class SetLightCommand implements LightCommand{
                                         CommandManager.argument("player", EntityArgumentType.players())
                                                 .then(
                                                         CommandManager.argument("light_target", LightTargetArgument.lightTarget())
+                                                                .suggests(LightCommand.Suggests.targetTypes())
                                                                 .executes(this::changeTarget)
                                                 )
 

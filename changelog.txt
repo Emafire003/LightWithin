@@ -99,3 +99,6 @@ Updated the Heal light VARIANT target:
 - Now instead of targeting "peaceful creatures" it instead targets everyone and removes harmful status effects (except the Light Fatigue!)
 Updated the STRENGTH light VARIANT target:
 - Now instead of targeting "peaceful creatures" it instead targets self and gives increased attacks speed!
+
+
+Added suggestion providers for select a new light type / target as well
