@@ -80,8 +80,8 @@ public class LightTriggerChecks {
             }
 
         }
-        else if(component.getTargets().equals(TargetType.OTHER)){
-            if(CheckUtils.checkPassiveHealth(player, target, Config.HP_PERCENTAGE_OTHER)){
+        else if(component.getTargets().equals(TargetType.VARIANT)){
+            if(CheckUtils.checkPassiveHealth(player, target, Config.HP_PERCENTAGE_VARIANT)){
                 trigger_sum = 2;
             }
             if(CheckUtils.checkHasHarmfulStatusEffect(target)){
@@ -146,8 +146,8 @@ public class LightTriggerChecks {
                 sendReadyPacket((ServerPlayerEntity) player, true);
             }
 
-        }else if(component.getTargets().equals(TargetType.OTHER)){
-            if(CheckUtils.checkPassiveHealth(player, target, Config.HP_PERCENTAGE_OTHER)){
+        }else if(component.getTargets().equals(TargetType.VARIANT)){
+            if(CheckUtils.checkPassiveHealth(player, target, Config.HP_PERCENTAGE_VARIANT)){
                 trigger_sum = trigger_sum + 5;
             }
 
@@ -161,7 +161,7 @@ public class LightTriggerChecks {
     public static void checkStrength(PlayerEntity player, LightComponent component, Entity attacker, Entity target){
         double trigger_sum = 0;
         /**CHECKS for the self part*/
-        if(component.getTargets().equals(TargetType.SELF)){
+        if(component.getTargets().equals(TargetType.SELF) || component.getTargets().equals(TargetType.VARIANT)){
             if(CheckUtils.checkSelfDanger(player, Config.HP_PERCENTAGE_SELF)){
                 trigger_sum = trigger_sum + 5;
             }else if(CheckUtils.checkSelfDanger(player, Config.HP_PERCENTAGE_SELF+30)){
@@ -199,11 +199,6 @@ public class LightTriggerChecks {
             if(trigger_sum >= MIN_TRIGGER){
                 sendReadyPacket((ServerPlayerEntity) player, true);
             }
-        }else if(component.getTargets().equals(TargetType.OTHER)
-                && CheckUtils.checkPassiveHealth(player, target, Config.HP_PERCENTAGE_OTHER)
-                && CheckUtils.checkArmorDurability(player, Config.DUR_PERCENTAGE_OTHER)
-        ){
-            sendReadyPacket((ServerPlayerEntity) player, true);
         }
     }
 
@@ -374,7 +369,7 @@ public class LightTriggerChecks {
     public static void checkEarthen(PlayerEntity player, LightComponent component, LivingEntity attacker, LivingEntity target){
         double trigger_sum = 0;
         /**If the player or their allies are on low health or surrounded, a golem will spawn if the player has the OTHER target*/
-        if(component.getTargets().equals(TargetType.OTHER)){
+        if(component.getTargets().equals(TargetType.VARIANT)){
             if(CheckUtils.checkAllyHealth(player, target, Config.HP_PERCENTAGE_ALLIES)){
                 trigger_sum = trigger_sum + 4;
             }
@@ -471,7 +466,7 @@ public class LightTriggerChecks {
             fall_trigger = 45;
         }
         /**If the player has ALL as target, he needs to be hurt (or an ally has to die, but that depends on the trigger)*/
-        if(component.getTargets().equals(TargetType.OTHER)){
+        if(component.getTargets().equals(TargetType.VARIANT)){
             if(CheckUtils.checkSelfDanger(player, Config.HP_PERCENTAGE_SELF+5) && player.equals(target)){
                 trigger_sum = trigger_sum+4;
             }

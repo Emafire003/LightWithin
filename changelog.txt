@@ -8,6 +8,8 @@ Compatibility with:
     - Argonauts, both parties and guilds
     - FTBTeams
 
+Renamed the OTHER targetype to VARIANT
+
 Now the drowneds summoned with the Aqua light will never attack the player who summoned them, not even after the light runs out, but they will attack everyone else even during the day
 
 (The armor and surrounded can be toggled for the count in the config. It is advised to set them on true)
@@ -20,13 +22,13 @@ For the Heal light:
 - Again different weights:
     SELF: Low health, Very low health, Poisend, low armor
     ALLIES: Allies low health, surrounded, allies low armor, allies poisoned
-    OTHER: Peaceful/Self/Allies low health, same + harmful status effect
+    VARIANT: Peaceful/Self/Allies low health, same + harmful status effect
 For Defense light:
     SELF: Low health, Very low health, low armor, surrounded (for example, here it triggers with very low health only, or a combination of low health and either low armor or surrounded)
     ALLIES: ALlies low health, allies low armor, very low health (self), surrounded
-    OTHER: Other low health (yes it's the only parameter)
+    VARIANT: VARIANT low health (yes it's the only parameter)
 For Strength light:
-    SELF: Low health, Very low health, low armor, surrounded
+    SELF/VARIANT: Low health, Very low health, low armor, surrounded
     ALLIES: Allies low health, self very low health, allies low armor, surrounded
 For frost light:
     ALL: Low health, very low health, surrunded, low armor, Frost conditions (for exmaple, frost conditions+low health triggers)
@@ -34,12 +36,12 @@ For frost light:
     SELF: Low health, very low health, surrounded low armor, frost conditions
     ALLIES: Allies low health, very low health (self),  frost conditions, allies low armor, surrounded.
 For Earthen light:
-    OTHER: Ally low health, very low health self, earthen conditions, surrounded
-    ENEMIES: same as Other (the weights vary tho)
+    VARIANT: Ally low health, very low health self, earthen conditions, surrounded
+    ENEMIES: same as VARIANT (the weights vary tho)
     SELF: Very low health, low health, surrounded, earthen conditions
     ALLIES: Ally low health, self very low health, earthen conditions, surrounded (again, weights vary)
 For Wind light:
-    OTHER: TODO subject to change: Very low health, surrounded, falling from a small height, falling from a higher height, wind conditions
+    VARIANT: TODO subject to change: Very low health, surrounded, falling from a small height, falling from a higher height, wind conditions
     SELF: Low health, Very low health, big fall, small fall, wind conditins, surrounded
     ALLIES: allies low health, self very low health, surrounded, self falling (10 blocks), wind conditions, allies falling (20 blocks TODO maybe change),
 For Aqua light:
@@ -71,7 +73,7 @@ Added new triggers:
 - Freeze Trigger, when an entity is freezing
 - Drowning Trigger, when an entity is drowning
 
-(separated the checkLights into another class from LightTriggeringAndEvents)
+(separated the checkLights into anVARIANT class from LightTriggeringAndEvents)
 
 Fixed a bug with the /reroll duration not working correctly and always giving the lowest amount.
 Fixed a similar bug, where using /light reroll cooldown would use a random power instead.
@@ -93,5 +95,7 @@ Now by default, allies need to be below their HP percentage (config) in order to
 a player. This can be brought back to always getting a buff in the config file. (Same thing for pets and such)
 
 
-Updated the Heal light OTHER target:
+Updated the Heal light VARIANT target:
 - Now instead of targeting "peaceful creatures" it instead targets everyone and removes harmful status effects (except the Light Fatigue!)
+Updated the STRENGTH light VARIANT target:
+- Now instead of targeting "peaceful creatures" it instead targets self and gives increased attacks speed!

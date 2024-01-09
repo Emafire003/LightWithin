@@ -42,7 +42,11 @@ public class LightComponent implements ComponentV3, AutoSyncedComponent {
 
         if(tag.contains("targets")){
             if(debug){LOGGER.info("the targets got: " + tag.getString("targets"));}
-            this.targets = TargetType.valueOf(tag.getString("targets"));
+            if(tag.getString("targets").equals("OTHER")){
+                this.targets = TargetType.VARIANT;
+            }else{
+                this.targets = TargetType.valueOf(tag.getString("targets"));
+            }
         }else{
             this.targets = TargetType.NONE;
         }

@@ -2,8 +2,14 @@ package me.emafire003.dev.lightwithin.config;
 
 import com.mojang.datafixers.util.Pair;
 import me.emafire003.dev.lightwithin.LightWithin;
+import org.apache.commons.io.FileUtils;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 
 import static me.emafire003.dev.lightwithin.LightWithin.LOGGER;
 
@@ -39,12 +45,12 @@ public class Config {
 
     public static int HP_PERCENTAGE_SELF;
     public static int HP_PERCENTAGE_ALLIES;
-    public static int HP_PERCENTAGE_OTHER;
+    public static int HP_PERCENTAGE_VARIANT;
 
     public static boolean CHECK_ARMOR_DURABILITY;
     public static int DUR_PERCENTAGE_SELF;
     public static int DUR_PERCENTAGE_ALLIES;
-    public static int DUR_PERCENTAGE_OTHER;
+    public static int DUR_PERCENTAGE_VARIANT;
 
     public static boolean ALWAYS_AFFECT_ALLIES;
 
@@ -118,8 +124,19 @@ public class Config {
         }catch (Exception e){
             e.printStackTrace();
             LOGGER.warn("ERROR! The config could not be read, generating a new one...");
-            File old_conf = new File(LightWithin.PATH + LightWithin.MOD_ID + "_config.yml");
-            old_conf.renameTo(new File("ERROR" + LightWithin.MOD_ID + "_config.yml"));
+
+            File source = LightWithin.PATH.resolve(LightWithin.MOD_ID + "_config.yml").toFile();
+            File target = LightWithin.PATH.resolve(LightWithin.MOD_ID + "_corrupted_config.yml").toFile();
+            try{
+                FileUtils.copyFile(source, target);
+                if(CONFIG.delete()){
+                    LOGGER.info("Config deleted successfully");
+                }else{
+                    LOGGER.error("The config could not be deleted");
+                }
+            } catch (IOException f) {
+                f.printStackTrace();
+            }
             CONFIG = SimpleConfig.of(LightWithin.MOD_ID + "_config").provider(configs).request();
             assignConfigs();
             LOGGER.warn("Generated a new config file, make sure to configure it again!");
@@ -155,12 +172,12 @@ public class Config {
 
         configs.addKeyValuePair(new Pair<>("hp_percentage_self", 30), "The hp percentage below which the light will be triggerable if the target is SELF (like 15, 20, 50) (in some cases it may not apply)");
         configs.addKeyValuePair(new Pair<>("hp_percentage_allies", 50), "The hp percentage below which the light will be triggerable if the target is ALLIES (like 15, 20, 50) (in some cases it may not apply)");
-        configs.addKeyValuePair(new Pair<>("hp_percentage_other", 50), "The hp percentage below which the light will be triggerable if the target is OTHER/Passive mobs (like 15, 20, 50) (in some cases it may not apply)");
+        configs.addKeyValuePair(new Pair<>("hp_percentage_variant", 50), "The hp percentage below which the light will be triggerable if the target is VARIANT/Passive mobs for example (like 15, 20, 50) (in some cases it may not apply)");
 
         configs.addKeyValuePair(new Pair<>("check_armor_durability", true), "Should the armor durability be considered to trigger light?");
         configs.addKeyValuePair(new Pair<>("dur_percentage_self", 5), "The armor durability percentage below which the light will be triggerable if the target is SELF (like 15, 20, 50) (in some cases it may not apply)");
         configs.addKeyValuePair(new Pair<>("dur_percentage_allies", 10), "The armor durability percentage below which the light will be triggerable if the target is ALLIES (like 15, 20, 50) (in some cases it may not apply)");
-        configs.addKeyValuePair(new Pair<>("dur_percentage_other", 10), "The armor durability percentage below which the light will be triggerable if the target is OTHER/Passive mobs (like 15, 20, 50) (in some cases it may not apply)");
+        configs.addKeyValuePair(new Pair<>("dur_percentage_variant", 10), "The armor durability percentage below which the light will be triggerable if the target is VARIANT/Passive mobs for example (like 15, 20, 50) (in some cases it may not apply)");
         configs.addKeyValuePair(new Pair<>("always_affect_allies", false), "Should every ally be affected by the effect of a light triggering? For example, should an ally at full health be healed by the heal light of the caster?");
 
 
@@ -256,12 +273,12 @@ public class Config {
 
         HP_PERCENTAGE_SELF = CONFIG.getOrDefault("hp_percentage_self", 25);
         HP_PERCENTAGE_ALLIES = CONFIG.getOrDefault("hp_percentage_allies", 50);
-        HP_PERCENTAGE_OTHER = CONFIG.getOrDefault("hp_percentage_other", 50);
+        HP_PERCENTAGE_VARIANT = CONFIG.getOrDefault("hp_percentage_variant", 50);
 
         CHECK_ARMOR_DURABILITY = CONFIG.getOrDefault("check_armor_durability", false);
         DUR_PERCENTAGE_SELF = CONFIG.getOrDefault("dur_percentage_self", 5);
         DUR_PERCENTAGE_ALLIES = CONFIG.getOrDefault("dur_percentage_allies", 10);
-        DUR_PERCENTAGE_OTHER = CONFIG.getOrDefault("dur_percentage_other", 10);
+        DUR_PERCENTAGE_VARIANT = CONFIG.getOrDefault("dur_percentage_variant", 10);
         ALWAYS_AFFECT_ALLIES = CONFIG.getOrDefault("always_affect_allies", false);
 
 

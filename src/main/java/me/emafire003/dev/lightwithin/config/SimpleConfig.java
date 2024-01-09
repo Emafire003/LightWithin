@@ -24,6 +24,7 @@ package me.emafire003.dev.lightwithin.config;
 //Modified by Emafire003
 
 import me.emafire003.dev.lightwithin.LightWithin;
+import org.apache.commons.io.FileDeleteStrategy;
 
 import java.io.File;
 import java.io.IOException;
@@ -121,6 +122,7 @@ public class SimpleConfig {
         for( int line = 1; reader.hasNextLine(); line ++ ) {
             parseConfigEntry( reader.nextLine(), line );
         }
+        reader.close();
     }
 
     // Modification by Kaupenjoe
@@ -250,9 +252,15 @@ public class SimpleConfig {
      *
      * @return true if the operation was successful
      */
-    public boolean delete() {
-        LOGGER.warn( "Config '" + request.filename + "' was removed from existence! Restart the game to regenerate it." );
-        return request.file.delete();
+    public boolean delete() throws IOException {
+        if(request.file.delete()){
+            return true;
+        }else{
+            LOGGER.warn("Normal deletion not possibile, force deleting the config file!");
+            FileDeleteStrategy.FORCE.delete(request.file);
+        }
+        LOGGER.warn( "Config '" + request.filename + "' was removed from existence!" );
+        return true;
     }
 
 }

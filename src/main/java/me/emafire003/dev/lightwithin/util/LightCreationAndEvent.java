@@ -161,14 +161,14 @@ public class LightCreationAndEvent {
         //TODO most likely for the other light i will need to
         //HEAL
         if(String.valueOf(id_bits[type_bit].charAt(i)).matches("[a-b]")){
-            return new Pair<>(InnerLightType.HEAL, determineTarget(id_bits, target_bit, Arrays.asList(TargetType.SELF, TargetType.ALLIES, TargetType.OTHER)));
+            return new Pair<>(InnerLightType.HEAL, determineTarget(id_bits, target_bit, Arrays.asList(TargetType.SELF, TargetType.ALLIES, TargetType.VARIANT)));
         }
         //DEFENCE
         else if(String.valueOf(id_bits[type_bit].charAt(i)).matches("[c-d]")){
-            return new Pair<InnerLightType, TargetType>(InnerLightType.DEFENCE, determineTarget(id_bits, target_bit, Arrays.asList(TargetType.SELF, TargetType.ALLIES, TargetType.OTHER)));
+            return new Pair<InnerLightType, TargetType>(InnerLightType.DEFENCE, determineTarget(id_bits, target_bit, Arrays.asList(TargetType.SELF, TargetType.ALLIES, TargetType.VARIANT)));
             //STRENGTH
         }else if(String.valueOf(id_bits[type_bit].charAt(i)).matches("[e-f]")){
-            return new Pair<InnerLightType, TargetType>(InnerLightType.STRENGTH, determineTarget(id_bits, target_bit, Arrays.asList(TargetType.SELF, TargetType.ALLIES, TargetType.OTHER)));
+            return new Pair<InnerLightType, TargetType>(InnerLightType.STRENGTH, determineTarget(id_bits, target_bit, Arrays.asList(TargetType.SELF, TargetType.ALLIES, TargetType.VARIANT)));
         }
         //Blazing
         else if(String.valueOf(id_bits[type_bit].charAt(i)).matches("[0-1]")){
@@ -180,11 +180,11 @@ public class LightCreationAndEvent {
         }
         //Earthen
         else if(String.valueOf(id_bits[type_bit].charAt(i)).matches("[4-5]")){
-            return new Pair<InnerLightType, TargetType>(InnerLightType.EARTHEN, determineTarget(id_bits, target_bit, Arrays.asList(TargetType.ENEMIES, TargetType.SELF, TargetType.ALLIES, TargetType.OTHER)));
+            return new Pair<InnerLightType, TargetType>(InnerLightType.EARTHEN, determineTarget(id_bits, target_bit, Arrays.asList(TargetType.ENEMIES, TargetType.SELF, TargetType.ALLIES, TargetType.VARIANT)));
         }
         //Wind
         else if(String.valueOf(id_bits[type_bit].charAt(i)).matches("[6-7]")){
-            return new Pair<InnerLightType, TargetType>(InnerLightType.WIND, determineTarget(id_bits, target_bit, Arrays.asList(TargetType.SELF, TargetType.ALLIES, TargetType.OTHER)));
+            return new Pair<InnerLightType, TargetType>(InnerLightType.WIND, determineTarget(id_bits, target_bit, Arrays.asList(TargetType.SELF, TargetType.ALLIES, TargetType.VARIANT)));
         }
         //Aqua
         else if(String.valueOf(id_bits[type_bit].charAt(i)).matches("[8-9]")){

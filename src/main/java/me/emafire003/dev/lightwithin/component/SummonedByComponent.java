@@ -31,7 +31,7 @@ public class SummonedByComponent implements ComponentV3, AutoSyncedComponent {
             LOGGER.error("Summoner not found in the NBT compound 'summoned_by_component' ");
             this.summoner_UUID = NO_SUMMONER_UUID;
         }
-//TODO for some reason now i can't attack unless I activate the light
+
         if(tag.contains("isSummoned")){
             this.isSummoned = tag.getBoolean("isSummoned");
         }else{

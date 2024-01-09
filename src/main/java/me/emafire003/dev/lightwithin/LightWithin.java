@@ -33,10 +33,8 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.mob.HostileEntity;
-import net.minecraft.entity.passive.FoxEntity;
 import net.minecraft.entity.passive.PassiveEntity;
 import net.minecraft.entity.passive.TameableEntity;
-import net.minecraft.entity.passive.WolfEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
@@ -59,17 +57,17 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 	public static int box_expansion_amount = 6;
 
-	private static boolean debug = false;
+	private static final boolean debug = false;
 	public static Path PATH = Path.of(FabricLoader.getInstance().getConfigDir() + "/" + MOD_ID + "/");
 
 	public static final Map<InnerLightType, List<TargetType>> possible_targets = Map.ofEntries(
-			entry(InnerLightType.HEAL, Arrays.asList(TargetType.SELF, TargetType.ALLIES, TargetType.OTHER)),
-			entry(InnerLightType.DEFENCE, Arrays.asList(TargetType.SELF, TargetType.ALLIES, TargetType.OTHER)),
-			entry(InnerLightType.STRENGTH, Arrays.asList(TargetType.SELF, TargetType.ALLIES, TargetType.OTHER)),
+			entry(InnerLightType.HEAL, Arrays.asList(TargetType.SELF, TargetType.ALLIES, TargetType.VARIANT)),
+			entry(InnerLightType.DEFENCE, Arrays.asList(TargetType.SELF, TargetType.ALLIES, TargetType.VARIANT)),
+			entry(InnerLightType.STRENGTH, Arrays.asList(TargetType.SELF, TargetType.ALLIES, TargetType.VARIANT)),
 			entry(InnerLightType.BLAZING, Arrays.asList(TargetType.ENEMIES, TargetType.ALL)),
 			entry(InnerLightType.FROST, Arrays.asList(TargetType.SELF, TargetType.ALLIES, TargetType.ENEMIES, TargetType.ALL)),
-			entry(InnerLightType.EARTHEN, Arrays.asList(TargetType.SELF, TargetType.ALLIES, TargetType.ENEMIES, TargetType.OTHER)),
-			entry(InnerLightType.WIND, Arrays.asList(TargetType.SELF, TargetType.ALLIES, TargetType.OTHER)),
+			entry(InnerLightType.EARTHEN, Arrays.asList(TargetType.SELF, TargetType.ALLIES, TargetType.ENEMIES, TargetType.VARIANT)),
+			entry(InnerLightType.WIND, Arrays.asList(TargetType.SELF, TargetType.ALLIES, TargetType.VARIANT)),
 			entry(InnerLightType.AQUA, Arrays.asList(TargetType.SELF, TargetType.ALLIES,  TargetType.ENEMIES, TargetType.ALL)),
 			entry(InnerLightType.FROG, List.of(TargetType.ALL))
 	);
@@ -223,7 +221,7 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 					}
 				}else if(ent instanceof TameableEntity){
 					if(player.equals(((TameableEntity) ent).getOwner())){
-						if(Config.ALWAYS_AFFECT_ALLIES || CheckUtils.checkSelfDanger(ent, Config.HP_PERCENTAGE_OTHER)){
+						if(Config.ALWAYS_AFFECT_ALLIES || CheckUtils.checkSelfDanger(ent, Config.HP_PERCENTAGE_VARIANT)){
 							targets.add(ent);
 						}
 					}
@@ -234,7 +232,7 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 		}
 
 		//Finds peaceful creatures and allies, also the player
-		else if(component.getTargets().equals(TargetType.OTHER)){
+		else if(component.getTargets().equals(TargetType.VARIANT)){
 			targets.addAll(player.getWorld().getEntitiesByClass(PassiveEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amount), (entity1 -> true)));
 			List<LivingEntity> entities = player.getWorld().getEntitiesByClass(LivingEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amount), (entity1 -> true));
 			targets.add(player);
@@ -246,13 +244,13 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 					}
 				}else if(ent instanceof TameableEntity){
 					if(player.equals(((TameableEntity) ent).getOwner())){
-						if(Config.ALWAYS_AFFECT_ALLIES || CheckUtils.checkSelfDanger(ent, Config.HP_PERCENTAGE_OTHER)){
+						if(Config.ALWAYS_AFFECT_ALLIES || CheckUtils.checkSelfDanger(ent, Config.HP_PERCENTAGE_VARIANT)){
 							targets.add(ent);
 						}
 					}
 				}
 			}
-			player.sendMessage(Text.translatable("light.description.activation.heal.other"), true);
+			player.sendMessage(Text.translatable("light.description.activation.heal.variant"), true);
 		}
 		if(debug){
 			player.sendMessage(Text.literal("Ok light triggered"), false);
@@ -278,7 +276,7 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 					}
 				}else if(ent instanceof TameableEntity){
 					if(player.equals(((TameableEntity) ent).getOwner())){
-						if(Config.ALWAYS_AFFECT_ALLIES || CheckUtils.checkSelfDanger(ent, Config.HP_PERCENTAGE_OTHER)){
+						if(Config.ALWAYS_AFFECT_ALLIES || CheckUtils.checkSelfDanger(ent, Config.HP_PERCENTAGE_VARIANT)){
 							targets.add(ent);
 						}
 					}
@@ -288,12 +286,12 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 		}
 
 		//Same here
-		else if(component.getTargets().equals(TargetType.OTHER)){
+		else if(component.getTargets().equals(TargetType.VARIANT)){
 			if(player.getHealth() <= (player.getMaxHealth())*50/100){
 				targets.add(player);
 			}
 			targets.addAll(player.getWorld().getEntitiesByClass(PassiveEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amount), (entity1 -> true)));
-			player.sendMessage(Text.translatable("light.description.activation.defense.other"), true);
+			player.sendMessage(Text.translatable("light.description.activation.defense.variant"), true);
 		}
 		if(debug){
 			player.sendMessage(Text.literal("Ok light triggered"), false);
@@ -309,6 +307,9 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 		if(component.getTargets().equals(TargetType.SELF)){
 			targets.add(player);
 			player.sendMessage(Text.translatable("light.description.activation.strength.self"), true);
+		}else if(component.getTargets().equals(TargetType.VARIANT)){
+			targets.add(player);
+			player.sendMessage(Text.translatable("light.description.activation.strength.variant"), true);
 		}
 		else if(component.getTargets().equals(TargetType.ALLIES)){
 			List<LivingEntity> entities = player.getWorld().getEntitiesByClass(LivingEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amount), (entity1 -> true));
@@ -319,7 +320,7 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 					}
 				}else if(ent instanceof TameableEntity){
 					if(player.equals(((TameableEntity) ent).getOwner())){
-						if(Config.ALWAYS_AFFECT_ALLIES || CheckUtils.checkSelfDanger(ent, Config.HP_PERCENTAGE_OTHER)){
+						if(Config.ALWAYS_AFFECT_ALLIES || CheckUtils.checkSelfDanger(ent, Config.HP_PERCENTAGE_VARIANT)){
 							targets.add(ent);
 						}
 					}
@@ -327,15 +328,6 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 			}
 			player.sendMessage(Text.translatable("light.description.activation.strength.allies"), true);
 
-		}
-
-		//Same here
-		else if(component.getTargets().equals(TargetType.OTHER)){
-			if(player.getHealth() <= (player.getMaxHealth())*50/100){
-				targets.add(player);
-			}
-			targets.addAll(player.getWorld().getEntitiesByClass(PassiveEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amount), (entity1 -> true)));
-			player.sendMessage(Text.translatable("light.description.activation.strength.other"), true);
 		}
 
 
@@ -404,7 +396,7 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 					}
 				}else if(ent instanceof TameableEntity){
 					if(player.equals(((TameableEntity) ent).getOwner())){
-						if(Config.ALWAYS_AFFECT_ALLIES || CheckUtils.checkSelfDanger(ent, Config.HP_PERCENTAGE_OTHER)){
+						if(Config.ALWAYS_AFFECT_ALLIES || CheckUtils.checkSelfDanger(ent, Config.HP_PERCENTAGE_VARIANT)){
 							targets.add(ent);
 						}
 					}
@@ -427,8 +419,8 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 	//=======================Earthen Light=======================
 	public static void activateEarthen(LightComponent component, PlayerEntity player){
 		List<LivingEntity> targets = new ArrayList<>();
-		if(component.getTargets().equals(TargetType.OTHER)){
-			player.sendMessage(Text.translatable("light.description.activation.earthen.other"), true);
+		if(component.getTargets().equals(TargetType.VARIANT)){
+			player.sendMessage(Text.translatable("light.description.activation.earthen.variant"), true);
 		}
 
 		else if(component.getTargets().equals(TargetType.ENEMIES)){
@@ -448,7 +440,7 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 					}
 				}else if(ent instanceof TameableEntity){
 					if(player.equals(((TameableEntity) ent).getOwner())){
-						if(Config.ALWAYS_AFFECT_ALLIES || CheckUtils.checkSelfDanger(ent, Config.HP_PERCENTAGE_OTHER)){
+						if(Config.ALWAYS_AFFECT_ALLIES || CheckUtils.checkSelfDanger(ent, Config.HP_PERCENTAGE_VARIANT)){
 							targets.add(ent);
 						}
 					}
@@ -480,7 +472,7 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 					}
 				}else if(ent instanceof TameableEntity){
 					if(player.equals(((TameableEntity) ent).getOwner())){
-						if(Config.ALWAYS_AFFECT_ALLIES || CheckUtils.checkSelfDanger(ent, Config.HP_PERCENTAGE_OTHER)){
+						if(Config.ALWAYS_AFFECT_ALLIES || CheckUtils.checkSelfDanger(ent, Config.HP_PERCENTAGE_VARIANT)){
 							targets.add(ent);
 						}
 					}
@@ -491,10 +483,10 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 		}else if(component.getTargets().equals(TargetType.SELF)){
 			targets.add(player);
 			player.sendMessage(Text.translatable("light.description.activation.wind.self"), true);
-		}else if(component.getTargets().equals(TargetType.OTHER)){
+		}else if(component.getTargets().equals(TargetType.VARIANT)){
 			targets.addAll(player.getWorld().getEntitiesByClass(LivingEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amount), (entity1 -> true)));
 			targets.remove(player);
-			player.sendMessage(Text.translatable("light.description.activation.wind.other"), true);
+			player.sendMessage(Text.translatable("light.description.activation.wind.variant"), true);
 		}
 
 		if(debug){
@@ -530,7 +522,7 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 					}
 				}else if(ent instanceof TameableEntity){
 					if(player.equals(((TameableEntity) ent).getOwner())){
-						if(Config.ALWAYS_AFFECT_ALLIES || CheckUtils.checkSelfDanger(ent, Config.HP_PERCENTAGE_OTHER)){
+						if(Config.ALWAYS_AFFECT_ALLIES || CheckUtils.checkSelfDanger(ent, Config.HP_PERCENTAGE_VARIANT)){
 							targets.add(ent);
 						}
 					}

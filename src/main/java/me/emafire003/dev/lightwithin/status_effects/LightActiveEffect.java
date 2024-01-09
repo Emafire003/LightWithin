@@ -53,9 +53,9 @@ public class LightActiveEffect extends StatusEffect {
         }
         if(entity instanceof ServerPlayerEntity){
             LightComponent component = LIGHT_COMPONENT.get(entity);
-            if(component.getType().equals(InnerLightType.WIND) && !component.getTargets().equals(TargetType.OTHER)){
+            if(component.getType().equals(InnerLightType.WIND) && !component.getTargets().equals(TargetType.VARIANT)){
 
-                ((ServerWorld) ((ServerPlayerEntity) entity).getWorld()).spawnParticles((ServerPlayerEntity) entity, ParticleTypes.CLOUD, false, entity.getX(), entity.getY(), entity.getZ(), 5, 0, 0, 0, 0.1);
+                ((ServerWorld) (entity).getWorld()).spawnParticles((ServerPlayerEntity) entity, ParticleTypes.CLOUD, false, entity.getX(), entity.getY(), entity.getZ(), 5, 0, 0, 0, 0.1);
             }
         }
     }

@@ -5,7 +5,7 @@ public enum TargetType {
     ALLIES,
     ENEMIES,
     ALL,
-    OTHER,
+    VARIANT,
     /*PASSIVE_MOBS,
     MOBS,
     PASSIVE_AND_SELF, //Might use other instead*/

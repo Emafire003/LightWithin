@@ -107,7 +107,7 @@ public class HealLight extends InnerLight {
             //LightParticlesUtil.spawnLightTypeParticle(LightParticles.HEALLIGHT_PARTICLE, target);
             target.addStatusEffect(new StatusEffectInstance(StatusEffects.REGENERATION, caster.getStatusEffect(LightEffects.LIGHT_ACTIVE).getDuration(), (int) this.power_multiplier, false, false));
 
-            if(LightWithin.LIGHT_COMPONENT.get(caster).getTargets().equals(TargetType.OTHER)){
+            if(LightWithin.LIGHT_COMPONENT.get(caster).getTargets().equals(TargetType.VARIANT)){
 
                 List<StatusEffect> remove_status_list = new ArrayList<>();
                 target.getActiveStatusEffects().forEach((statusEffect, instance) -> {

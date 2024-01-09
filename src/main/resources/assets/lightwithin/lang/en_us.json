@@ -43,15 +43,15 @@
 
   "light.description.activation.heal.self": "Your light flows trough you, sewing your wounds!",
   "light.description.activation.heal.allies": "Your light flows trough you and your allies, sewing your wounds!",
-  "light.description.activation.heal.other": "Your light flows trough all friendly creatures, healing their sickness!",
+  "light.description.activation.heal.variant": "Your light flows trough all friendly creatures, healing their sickness!",
 
   "light.description.activation.defense.self": "Your light tensed up, shielding you from an hurtful future!",
   "light.description.activation.defense.allies": "Your light tensed up, shielding your allies from an hurtful future!",
-  "light.description.activation.defense.other": "Your light tensed up, shielding peaceful creatures from an hurtful future!",
+  "light.description.activation.defense.variant": "Your light tensed up, shielding peaceful creatures from an hurtful future!",
 
   "light.description.activation.strength.self": "Your light shone bright, strengthening your attacks!",
   "light.description.activation.strength.allies": "Your light shone bright, strengthening your allies!",
-  "light.description.activation.strength.other": "Your light shone bright, strengthening peaceful creatures around you!",
+  "light.description.activation.strength.variant": "Your light shone bright, speeding up your attacks!",
 
   "light.description.activation.blazing.enemies": "Your light wants to incinerate the enemies that stand before you!",
   "light.description.activation.blazing.all": "Your light will incinerate everything that stands in your way!",
@@ -62,7 +62,7 @@
   "light.description.activation.frost.allies": "A wall of ice shall protect you!",
 
   "light.description.activation.earthen.enemies": "The earth shall split under the soles of the enemy!",
-  "light.description.activation.earthen.other": "The light crystallized into an Earthen Golem!",
+  "light.description.activation.earthen.variant": "The light crystallized into an Earthen Golem!",
   "light.description.activation.earthen.self": "Earth shall split and grow around you!",
   "light.description.activation.earthen.allies": "The Rock shall protect us!",
 
@@ -71,7 +71,7 @@
 
   "light.description.activation.wind.self": "The wind shall carry you onwards!",
   "light.description.activation.wind.allies": "Oh winds, aid our movements!",
-  "light.description.activation.wind.other": "Blow them away!",
+  "light.description.activation.wind.variant": "Blow them away!",
 
   "light.description.activation.aqua.enemies": "Your enemy shall drown in a watery cage!",
   "light.description.activation.aqua.all": "Inhabitants of the depths, hear my call and aid me!",

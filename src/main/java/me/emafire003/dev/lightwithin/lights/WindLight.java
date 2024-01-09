@@ -94,9 +94,9 @@ public class WindLight extends InnerLight {
         caster.getWorld().playSound(caster.getX(), caster.getY(), caster.getZ(), LightSounds.WIND_LIGHT, SoundCategory.AMBIENT, 1, 1, true);
         //caster.getWorld().playSound(caster, caster.getBlockPos(), LightSounds.WIND_LIGHT, SoundCategory.AMBIENT, 1, 1);
         LightComponent component = LIGHT_COMPONENT.get(caster);
-        ServerWorld world = (ServerWorld) ((ServerPlayerEntity )caster).getWorld();
+        ServerWorld world = (ServerWorld) (caster).getWorld();
         //If the light target is OTHER it will blow away every entity in radious
-        if(component.getTargets().equals(TargetType.OTHER)){
+        if(component.getTargets().equals(TargetType.VARIANT)){
             LightParticlesUtil.spawnLightTypeParticle(LightParticles.WINDLIGHT_PARTICLE, (ServerWorld) caster.getWorld(), caster.getPos());
             world.spawnParticles(((ServerPlayerEntity )caster), ParticleTypes.CLOUD, false, caster.getX(), caster.getY()+1, caster.getZ(), 65, 0, 0.2, 0, 0.35);
             for(LivingEntity target : this.targets){
@@ -112,8 +112,8 @@ public class WindLight extends InnerLight {
 
                 //TODO these are allies, should i still play it? no
                 //target.playSound(LightSounds.WIND_LIGHT, 0.9f, 1);
-                target.addStatusEffect(new StatusEffectInstance(StatusEffects.SPEED, this.duration*20, (int) (this.power_multiplier), false, false));
-                target.addStatusEffect(new StatusEffectInstance(StatusEffects.JUMP_BOOST, this.duration*20, (int) (this.power_multiplier), false, false));
+                target.addStatusEffect(new StatusEffectInstance(StatusEffects.SPEED, this.duration*20, (int) (this.power_multiplier/2.5), false, false));
+                target.addStatusEffect(new StatusEffectInstance(StatusEffects.JUMP_BOOST, this.duration*20, (int) (this.power_multiplier/2.5), false, false));
                 target.addStatusEffect(new StatusEffectInstance(StatusEffects.HASTE, this.duration*20, (int) (this.power_multiplier/2.5), false, false));
 
                 LightParticlesUtil.spawnLightTypeParticle(LightParticles.WINDLIGHT_PARTICLE, (ServerWorld) target.getWorld(), target.getPos());

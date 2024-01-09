@@ -196,7 +196,7 @@ public class EarthenLight extends InnerLight {
                 placer.loadStructure();
                 caster.playSound(LightSounds.EARTHEN_LIGHT, 1, 1);
             }
-        }else if(component.getTargets().equals(TargetType.OTHER)){
+        }else if(component.getTargets().equals(TargetType.VARIANT)){
             int rx = caster.getRandom().nextBetween(0, 5);
             int rz = caster.getRandom().nextBetween(0, 5);
             EarthGolemEntity entity = new EarthGolemEntity(LightEntities.EARTH_GOLEM, caster.getWorld());
