@@ -30,6 +30,8 @@
   "light.unknown": "No light named: ",
   "lighttype.unknown": "No light type named: ",
 
+  "light.activated": "Your light has awakened!",
+
   "light.description.error": "Uhm... your light is... an error? Light not found, report please! ",
   "light.description.heal": "Your light, yes, is a gentle and caring one indeed",
   "light.description.defense": "Resilience, that's what your light is made of",

@@ -111,6 +111,8 @@ public class Config {
     public static int LIGHT_RUNES_DURATION;
 
     public static boolean MULTIPLY_DURATION_LIMIT;
+    public static boolean LIGHT_LOCKED_DEFAULT;
+    public static boolean UNLOCK_WITH_LUXINTUS;
 
     public static boolean RESET_ON_JOIN;
     public static void registerConfigs() {
@@ -239,6 +241,8 @@ public class Config {
 
         configs.addKeyValuePair(new Pair<>("light_runes", true), "Should runes be rendered? (If true they will only render in first person)");
         configs.addKeyValuePair(new Pair<>("light_runes_duration", 3), "How many seconds should the runes last on screen?");
+        configs.addKeyValuePair(new Pair<>("light_locked_default", false), "Should the light activation be locked by default? (Unless you use a command players won't be able to use lights)");
+        configs.addKeyValuePair(new Pair<>("unlock_with_luxintus", true), "Should eating a Luxintus berry unlocked the light?");
 
     }
 
@@ -341,7 +345,8 @@ public class Config {
         LIGHT_RUNES_DURATION = Config.CONFIG.getOrDefault("light_runes_duration", 3);
 
         MULTIPLY_DURATION_LIMIT = Config.CONFIG.getOrDefault("multiply_duration_limit", true);
-
+        LIGHT_LOCKED_DEFAULT = Config.CONFIG.getOrDefault("light_locked_default", false);
+        UNLOCK_WITH_LUXINTUS = Config.CONFIG.getOrDefault("unlock_with_luxintus", true);
 
     }
 }

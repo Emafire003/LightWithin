@@ -102,6 +102,27 @@ public class GetLightCommand implements LightCommand{
         }
     }
 
+    private int getLocked(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
+        ServerPlayerEntity target = EntityArgumentType.getPlayer(context, "player");
+        ServerCommandSource source = context.getSource();
+
+        try{
+            boolean locked = LightWithin.LIGHT_COMPONENT.get(target).getLocked();
+            if(!locked){
+                source.sendFeedback(() -> Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The light for §d" + target.getName().getString() + "§e is: " ).formatted(Formatting.YELLOW)
+                        .append(Text.literal("§aUnlocked"))), true);
+            }else{
+                source.sendFeedback(() -> Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The light for §d" + target.getName().getString() + "§e is: " ).formatted(Formatting.YELLOW)
+                        .append(Text.literal("§cLocked"))), true);
+            }
+            return 1;
+        }catch(Exception e){
+            e.printStackTrace();
+            source.sendFeedback(() -> Text.literal("Error: " + e.toString()),false);
+            return 0;
+        }
+    }
+
     private int getCooldown(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
         ServerPlayerEntity target = EntityArgumentType.getPlayer(context, "player");
         ServerCommandSource source = context.getSource();
@@ -144,6 +165,9 @@ public class GetLightCommand implements LightCommand{
             int mcooldown = LightWithin.LIGHT_COMPONENT.get(target).getMaxCooldown();
             source.sendFeedback(() -> Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The max cooldown is: " ).formatted(Formatting.YELLOW)
                     .append(Text.literal("§a"+mcooldown))), true);
+            boolean locked = LightWithin.LIGHT_COMPONENT.get(target).getLocked();
+            source.sendFeedback(() -> Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("Locked: " ).formatted(Formatting.YELLOW)
+                    .append(Text.literal("§a"+locked))), true);
 
             Map<StatusEffect, StatusEffectInstance> effect_map = target.getActiveStatusEffects();
             if(effect_map.containsKey(LightEffects.LIGHT_FATIGUE)){
@@ -246,6 +270,16 @@ public class GetLightCommand implements LightCommand{
                                 .then(
                                         CommandManager.argument("player", EntityArgumentType.player())
                                                 .executes(this::getMaxCooldown)
+
+
+                                )
+                )
+                .then(
+                        CommandManager
+                                .literal("locked")
+                                .then(
+                                        CommandManager.argument("player", EntityArgumentType.player())
+                                                .executes(this::getLocked)
 
 
                                 )

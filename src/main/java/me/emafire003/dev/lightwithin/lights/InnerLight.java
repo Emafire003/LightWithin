@@ -19,7 +19,7 @@ public class InnerLight {
     //TODO set to playerentity
     protected PlayerEntity caster;
     protected boolean rainbow_col;
-    protected InnerLightType type = InnerLightType.GENERIC;
+    protected InnerLightType type = InnerLightType.NONE;
 
     public void execute(){
     }

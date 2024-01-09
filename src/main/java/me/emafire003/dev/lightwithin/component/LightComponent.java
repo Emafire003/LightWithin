@@ -3,27 +3,33 @@ package me.emafire003.dev.lightwithin.component;
 import dev.onyxstudios.cca.api.v3.component.ComponentV3;
 import dev.onyxstudios.cca.api.v3.component.sync.AutoSyncedComponent;
 import me.emafire003.dev.lightwithin.LightWithin;
+import me.emafire003.dev.lightwithin.config.Config;
 import me.emafire003.dev.lightwithin.lights.InnerLightType;
 import me.emafire003.dev.lightwithin.util.TargetType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.text.Text;
 
 import static me.emafire003.dev.lightwithin.LightWithin.LOGGER;
 
 public class LightComponent implements ComponentV3, AutoSyncedComponent {
 
+    protected InnerLightType type = InnerLightType.NONE;
     protected TargetType targets =  TargetType.NONE;
     protected int cooldown_time = -1;
     protected double power_multiplier = -1;
     protected int duration = -1;
+
+    protected boolean rainbow_col = false;
     protected String color = "ffffff";
     protected String prev_color = "ffffff";
-    protected boolean rainbow_col = false;
-    private PlayerEntity caster;
-    protected InnerLightType type = InnerLightType.NONE;
-    protected boolean incooldown = false;
-    private final boolean debug = false;
     protected int max_increment_percent = -1;
+
+    //As in can the player use the light? Either in a specif time or place (needs to be set)
+    protected boolean isLocked = Config.LIGHT_LOCKED_DEFAULT;
+
+    private final PlayerEntity caster;
+    private final boolean debug = false;
 
     public LightComponent(PlayerEntity playerEntity) {
         this.caster = playerEntity;
@@ -93,18 +99,18 @@ public class LightComponent implements ComponentV3, AutoSyncedComponent {
             this.rainbow_col = false;
         }
 
-        if(tag.contains("incooldown")){
-            if(debug){LOGGER.info("the incooldown got: " + tag.getBoolean("incooldown"));}
-            this.incooldown = tag.getBoolean("incooldown");
-        }else{
-            this.incooldown = false;
-        }
-
         if(tag.contains("max_increment")){
             if(debug){LOGGER.info("the max_increement got: " + tag.getInt("max_increment"));}
             this.max_increment_percent= tag.getInt("max_increment");
         }else{
             this.max_increment_percent= -1;
+        }
+
+        if(tag.contains("isLocked")){
+            if(debug){LOGGER.info("the isLocked got: " + tag.getBoolean("isLocked"));}
+            this.isLocked = tag.getBoolean("isLocked");
+        }else{
+            this.isLocked = Config.LIGHT_LOCKED_DEFAULT;
         }
 
     }
@@ -119,8 +125,8 @@ public class LightComponent implements ComponentV3, AutoSyncedComponent {
         tag.putString("color", this.color);
         tag.putString("prev_color", this.prev_color);
         tag.putBoolean("rainbow_col", this.rainbow_col);
-        tag.putBoolean("incooldown", this.incooldown);
         tag.putInt("max_increment", this.max_increment_percent);
+        tag.putBoolean("isLocked", this.isLocked);
     }
 
 
@@ -160,8 +166,8 @@ public class LightComponent implements ComponentV3, AutoSyncedComponent {
         return this.rainbow_col;
     }
 
-    public boolean getInCooldown() {
-        return incooldown;
+    public boolean getLocked() {
+        return this.isLocked;
     }
 
     public void setType(InnerLightType type) {
@@ -209,8 +215,9 @@ public class LightComponent implements ComponentV3, AutoSyncedComponent {
         LightWithin.LIGHT_COMPONENT.sync(caster);
     }
 
-    public void setInCooldown(boolean incooldown) {
-        this.incooldown = incooldown;
+    public void setIsLocked(boolean locked) {
+        this.isLocked = locked;
+        caster.sendMessage(Text.translatable("light.activated", true));
         LightWithin.LIGHT_COMPONENT.sync(caster);
     }
 
@@ -219,7 +226,7 @@ public class LightComponent implements ComponentV3, AutoSyncedComponent {
         LightWithin.LIGHT_COMPONENT.sync(caster);
     }
 
-    public void setAll(InnerLightType type, TargetType targets, int cooldown, double power, int duration, String color, boolean b, boolean incooldown, int max_increment){
+    public void setAll(InnerLightType type, TargetType targets, int cooldown, double power, int duration, String color, boolean b, boolean incooldown, int max_increment, boolean locked){
         this.type = type;
         this.targets = targets;
         this.cooldown_time = cooldown;
@@ -227,8 +234,8 @@ public class LightComponent implements ComponentV3, AutoSyncedComponent {
         this.duration = duration;
         this.color = color;
         this.rainbow_col = b;
-        this.incooldown = incooldown;
         this.max_increment_percent = max_increment;
+        this.isLocked = locked;
         LightWithin.LIGHT_COMPONENT.sync(caster);
     }
 
@@ -241,6 +248,7 @@ public class LightComponent implements ComponentV3, AutoSyncedComponent {
         this.rainbow_col = false;
         this.type = InnerLightType.NONE;
         this.max_increment_percent = -1;
+        this.isLocked = false;
         LightWithin.LIGHT_COMPONENT.sync(caster);
     }
 

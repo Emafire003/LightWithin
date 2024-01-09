@@ -29,7 +29,11 @@ public class LightTriggeringAndEvents {
         if(player.getWorld().isClient){
             return false;
         }
-        if(LIGHT_COMPONENT.get(player).getType().equals(InnerLightType.NONE)){
+        LightComponent component = LIGHT_COMPONENT.get(player);
+        if(component.getType().equals(InnerLightType.NONE)){
+            return false;
+        }
+        if(component.getLocked()){
             return false;
         }
         if(player.hasStatusEffect(LightEffects.LIGHT_FATIGUE)){
@@ -146,7 +150,7 @@ public class LightTriggeringAndEvents {
             //Checks if someone is attacked and if they are the one getting attacked
             //If the target is the player with the light, he is also the target
             if(target instanceof PlayerEntity){
-                entityAttackEntityTriggerCheck((PlayerEntity) target, attacker, (PlayerEntity) target);
+                entityAttackEntityTriggerCheck((PlayerEntity) target, attacker, target);
             }
             //if the target is a pet of someone with a light, the pet is the target. (He is also considered an ally)
             if(target instanceof TameableEntity){
@@ -357,7 +361,7 @@ public class LightTriggeringAndEvents {
                         checkWind(player, component, attacker, entity);
                     }
                     if(component.getType().equals(InnerLightType.AQUA) && entity instanceof LivingEntity){
-                        checkAqua(player, component, player, (LivingEntity) entity);
+                        checkAqua(player, component, player, entity);
                     }
                     /**End*/
                 }

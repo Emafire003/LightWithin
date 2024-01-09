@@ -1,5 +1,6 @@
 package me.emafire003.dev.lightwithin.commands;
 
+import com.mojang.brigadier.arguments.BoolArgumentType;
 import com.mojang.brigadier.arguments.DoubleArgumentType;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.context.CommandContext;
@@ -175,6 +176,39 @@ public class SetLightCommand implements LightCommand{
         return 1;
     }
 
+    private int changeLocked(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
+        Collection<ServerPlayerEntity> targets = EntityArgumentType.getPlayers(context, "player");
+        boolean lock = BoolArgumentType.getBool(context, "lock");
+        ServerCommandSource source = context.getSource();
+
+        for(ServerPlayerEntity target : targets){
+            LightComponent component = LightWithin.LIGHT_COMPONENT.get(target);
+            component.setIsLocked(lock);
+
+            if(Config.TARGET_FEEDBACK){
+                if(lock){
+                    target.sendMessage(Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("Your light was: "  ).formatted(Formatting.YELLOW)
+                            .append(Text.literal("Locked!").formatted(Formatting.RED))));
+                }else{
+                    target.sendMessage(Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("Your light was: " ).formatted(Formatting.YELLOW)
+                            .append(Text.literal("Unlocked!").formatted(Formatting.GREEN))));
+                    }
+            }
+
+            if(!Objects.requireNonNull(source.getPlayer()).equals(target) || !Config.TARGET_FEEDBACK){
+                if(lock){
+                    source.sendFeedback( () -> Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The light of §d" + target.getName().getString() + "§e has been " ).formatted(Formatting.YELLOW)
+                            .append(Text.literal("Unlocked!").formatted(Formatting.GREEN))), true);
+                }else{
+                    source.sendFeedback( () -> Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The light of §d" + target.getName().getString() + "§e has been " ).formatted(Formatting.YELLOW)
+                            .append(Text.literal("Locked!").formatted(Formatting.RED))), true);
+                }
+            }
+
+        }
+        return 1;
+    }
+
 
     public LiteralCommandNode<ServerCommandSource> getNode() {
         return CommandManager
@@ -237,6 +271,18 @@ public class SetLightCommand implements LightCommand{
                                                 .then(
                                                         CommandManager.argument("new_cooldown", IntegerArgumentType.integer(0, 100))
                                                                 .executes(this::changeCooldown)
+                                                )
+
+                                )
+                )
+                .then(
+                        CommandManager
+                                .literal("locked")
+                                .then(
+                                        CommandManager.argument("player", EntityArgumentType.players())
+                                                .then(
+                                                        CommandManager.argument("lock", BoolArgumentType.bool())
+                                                                .executes(this::changeLocked)
                                                 )
 
                                 )

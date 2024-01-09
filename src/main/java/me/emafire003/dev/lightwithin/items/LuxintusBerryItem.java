@@ -1,6 +1,7 @@
 package me.emafire003.dev.lightwithin.items;
 
 import me.emafire003.dev.lightwithin.LightWithin;
+import me.emafire003.dev.lightwithin.component.LightComponent;
 import me.emafire003.dev.lightwithin.config.Config;
 import me.emafire003.dev.lightwithin.sounds.LightSounds;
 import me.emafire003.dev.lightwithin.status_effects.LightEffects;
@@ -48,6 +49,14 @@ public class LuxintusBerryItem extends Item {
         if(user instanceof ServerPlayerEntity){
             if(LightWithin.isPlayerInCooldown((PlayerEntity) user) && Config.LUXINTUS_BYPASS_COOLDOWN){
                 return stack;
+            }
+            LightComponent component = LightWithin.LIGHT_COMPONENT.get(user);
+            if(component.getLocked()){
+                if(Config.UNLOCK_WITH_LUXINTUS){
+                    component.setIsLocked(false);
+                }else{
+                    return stack;
+                }
             }
             if(user.hasStatusEffect(LightEffects.LIGHT_FATIGUE)){
                 user.removeStatusEffect(LightEffects.LIGHT_FATIGUE);
