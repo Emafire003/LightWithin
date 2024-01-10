@@ -2,48 +2,26 @@ package me.emafire003.dev.lightwithin.commands;
 
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.tree.LiteralCommandNode;
+import io.icker.factions.util.Command;
 import me.emafire003.dev.lightwithin.LightWithin;
 import me.emafire003.dev.lightwithin.lights.InnerLightType;
 import me.emafire003.dev.lightwithin.util.TargetType;
+import me.lucko.fabric.api.permissions.v0.Permissions;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.command.argument.EntityArgumentType;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Text;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.function.Predicate;
 
 
-//Based on Factions' code https://github.com/ickerio/factions
+//Based on Factions' code https://github.com/ickerio/factions (MIT license)
 public interface LightCommand {
     public LiteralCommandNode<ServerCommandSource> getNode();
-    public static final boolean permissions = FabricLoader.getInstance().isModLoaded("fabric-permissions-api-v0");
-
 
     public interface Suggests {
-
-
-        /*public static SuggestionProvider<ServerCommandSource> openInvitedFactions() {
-            return suggest(user ->
-                    Faction.all()
-                            .stream()
-                            .filter(f -> f.isOpen() || f.isInvited(user.getID()))
-                            .map(f -> f.getName())
-                            .toArray(String[]::new)
-            );
-        }
-
-        public static SuggestionProvider<ServerCommandSource> suggest(Suggests sug) {
-            return (context, builder) -> {
-                ServerPlayerEntity entity = context.getSource().getPlayer();
-                User user = User.get(entity.getUuid());
-                for (String suggestion : sug.run(user)) {
-                    builder.suggest(suggestion);
-                }
-                return builder.buildFuture();
-            };
-        }*/
 
         static SuggestionProvider<ServerCommandSource> targetTypes() {
             return (context, builder) -> {

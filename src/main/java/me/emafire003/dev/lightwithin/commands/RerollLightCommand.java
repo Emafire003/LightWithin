@@ -5,6 +5,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import com.mojang.datafixers.util.Pair;
 import me.emafire003.dev.lightwithin.LightWithin;
+import me.emafire003.dev.lightwithin.compat.permissions.PermissionsChecker;
 import me.emafire003.dev.lightwithin.component.LightComponent;
 import me.emafire003.dev.lightwithin.lights.InnerLightType;
 import me.emafire003.dev.lightwithin.util.LightCreationAndEvent;
@@ -110,6 +111,7 @@ public class RerollLightCommand implements LightCommand{
     public LiteralCommandNode<ServerCommandSource> getNode() {
         return CommandManager
                 .literal("reroll")
+                .requires(PermissionsChecker.hasPerms("lightwithin.commands.reroll", 2))
                 .then(
                         CommandManager.argument("player", EntityArgumentType.players()).then(
                                 CommandManager.literal("all")

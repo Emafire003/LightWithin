@@ -112,16 +112,6 @@ public class FrostLight extends InnerLight {
         for(LivingEntity target : this.targets){
             target.playSound(LightSounds.FROST_LIGHT, 1, 1);
 
-            Direction facing = target.getHorizontalFacing();
-            int state = 0; //Defaults to North anyway
-            if(facing.equals(Direction.EAST)){
-                state = 1;
-            }else if(facing.equals(Direction.SOUTH)){
-                state = 2;
-            }else if(facing.equals(Direction.WEST)){
-                state = 3;
-            }
-
             if((component.getTargets().equals(TargetType.SELF) || component.getTargets().equals(TargetType.ALLIES))){
                 if(target.equals(caster) && component.getTargets().equals(TargetType.ALLIES)){
                     target.addStatusEffect(new StatusEffectInstance(LightEffects.FREEZE_RESISTANCE, (int) (this.duration/Config.DIV_SELF*Config.FROST_FREEZE_RES_DURATION_MULTIPLIER)*20));
@@ -129,13 +119,14 @@ public class FrostLight extends InnerLight {
                     target.addStatusEffect(new StatusEffectInstance(LightEffects.FREEZE_RESISTANCE, (int) (this.duration*Config.FROST_FREEZE_RES_DURATION_MULTIPLIER)*20));
                 }
 
+                Direction facing = target.getHorizontalFacing();
                 if(Config.STRUCTURE_GRIEFING && !caster.getWorld().isClient){
                     StructurePlacerAPI placer = new StructurePlacerAPI((ServerWorld) caster.getWorld(), new Identifier(MOD_ID, "frost_wall"), target.getBlockPos(), BlockMirror.NONE, BlockRotation.NONE, true, 1.0f, new BlockPos(-2, -1, -2));
-                    if(state == 1){
+                    if(facing.equals(Direction.EAST)){
                         placer = new StructurePlacerAPI((ServerWorld) caster.getWorld(), new Identifier(MOD_ID, "frost_wall"), target.getBlockPos(), BlockMirror.NONE, BlockRotation.CLOCKWISE_90, true, 1.0f, new BlockPos(2, -1, -2));
-                    }else if(state == 2){
+                    }else if(facing.equals(Direction.SOUTH)){
                         placer = new StructurePlacerAPI((ServerWorld) caster.getWorld(), new Identifier(MOD_ID, "frost_wall"), target.getBlockPos(), BlockMirror.NONE, BlockRotation.CLOCKWISE_180, true, 1.0f, new BlockPos(2, -1, 2));
-                    }else if(state == 3){
+                    }else if(facing.equals(Direction.WEST)){
                         placer = new StructurePlacerAPI((ServerWorld) caster.getWorld(), new Identifier(MOD_ID, "frost_wall"), target.getBlockPos(), BlockMirror.NONE, BlockRotation.COUNTERCLOCKWISE_90, true, 1.0f, new BlockPos(-2, -1, 2));
                     }
                     placer.loadStructure();

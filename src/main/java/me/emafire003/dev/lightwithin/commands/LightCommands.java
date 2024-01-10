@@ -5,6 +5,7 @@ import com.mojang.brigadier.tree.LiteralCommandNode;
 import me.emafire003.dev.lightwithin.LightWithin;
 import me.emafire003.dev.lightwithin.commands.arguments.LightTargetArgument;
 import me.emafire003.dev.lightwithin.commands.arguments.LightTypeArgument;
+import me.emafire003.dev.lightwithin.compat.permissions.PermissionsChecker;
 import net.fabricmc.fabric.api.command.v2.ArgumentTypeRegistry;
 import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.command.argument.serialize.ConstantArgumentSerializer;
@@ -24,16 +25,12 @@ public class LightCommands {
     public static void registerCommands(CommandDispatcher<ServerCommandSource> dispatcher, CommandRegistryAccess registryAccess, CommandManager.RegistrationEnvironment environment) {
         LiteralCommandNode<ServerCommandSource> lightcommands = CommandManager
                 .literal("light")
-                .requires(serverCommandSource -> {
-                    return serverCommandSource.hasPermissionLevel(2);
-                })
+                .requires(PermissionsChecker.hasPerms("lightwithin.commands", 2))
                 .build();
 
         LiteralCommandNode<ServerCommandSource> alias = CommandManager
                 .literal("lightwithin")
-                .requires(serverCommandSource -> {
-                    return serverCommandSource.hasPermissionLevel(2);
-                })
+                .requires(PermissionsChecker.hasPerms("lightwithin.commands", 2))
                 .build();
 
         dispatcher.getRoot().addChild(lightcommands);

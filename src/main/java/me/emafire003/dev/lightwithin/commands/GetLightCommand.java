@@ -4,6 +4,7 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import me.emafire003.dev.lightwithin.LightWithin;
+import me.emafire003.dev.lightwithin.compat.permissions.PermissionsChecker;
 import me.emafire003.dev.lightwithin.lights.InnerLightType;
 import me.emafire003.dev.lightwithin.status_effects.LightEffects;
 import me.emafire003.dev.lightwithin.util.TargetType;
@@ -202,6 +203,7 @@ public class GetLightCommand implements LightCommand{
     public LiteralCommandNode<ServerCommandSource> getNode() {
         return CommandManager
                 .literal("get")
+                .requires(PermissionsChecker.hasPerms("lightwithin.commands.get", 2))
                 .then(
                         CommandManager
                                 .literal("all")

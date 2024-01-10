@@ -5,6 +5,7 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import me.emafire003.dev.lightwithin.LightWithin;
+import me.emafire003.dev.lightwithin.compat.permissions.PermissionsChecker;
 import me.emafire003.dev.lightwithin.config.Config;
 import me.emafire003.dev.lightwithin.status_effects.LightEffects;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
@@ -86,6 +87,7 @@ public class ActivateLightCommand implements LightCommand{
     public LiteralCommandNode<ServerCommandSource> getNode() {
         return CommandManager
                 .literal("activate")
+                .requires(PermissionsChecker.hasPerms("lightwithin.commands.activate", 2))
                 .then(
                         CommandManager.argument("player", EntityArgumentType.players())
                                 .executes(this::activate)

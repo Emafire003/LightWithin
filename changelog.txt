@@ -109,3 +109,5 @@ By default this option is not active. You can still manually lock someone's ligh
 Now the caster of a light with the ALLIES target will recive only a partial bonus from the effect, configurable from the config.
 
 Fixed Strength light using wrong max/min values
+
+Added option to set permissions, check the permissions.txt file on github!

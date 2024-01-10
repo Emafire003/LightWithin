@@ -1,5 +1,6 @@
 package me.emafire003.dev.lightwithin.events;
 
+import me.emafire003.dev.lightwithin.compat.permissions.PermissionsChecker;
 import me.emafire003.dev.lightwithin.component.LightComponent;
 import me.emafire003.dev.lightwithin.lights.InnerLightType;
 import me.emafire003.dev.lightwithin.status_effects.LightEffects;

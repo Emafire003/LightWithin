@@ -9,6 +9,7 @@ import com.mojang.brigadier.tree.LiteralCommandNode;
 import me.emafire003.dev.lightwithin.LightWithin;
 import me.emafire003.dev.lightwithin.commands.arguments.LightTargetArgument;
 import me.emafire003.dev.lightwithin.commands.arguments.LightTypeArgument;
+import me.emafire003.dev.lightwithin.compat.permissions.PermissionsChecker;
 import me.emafire003.dev.lightwithin.component.LightComponent;
 import me.emafire003.dev.lightwithin.config.Config;
 import me.emafire003.dev.lightwithin.lights.InnerLightType;
@@ -213,6 +214,7 @@ public class SetLightCommand implements LightCommand{
     public LiteralCommandNode<ServerCommandSource> getNode() {
         return CommandManager
                 .literal("set")
+                .requires(PermissionsChecker.hasPerms("lightwithin.commands.set", 2))
                 .then(
                         CommandManager
                                 .literal("type")

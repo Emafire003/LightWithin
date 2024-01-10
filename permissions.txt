@@ -1,0 +1,10 @@
+"permission", OPerator level # Comment
+
+"lightwithin.commands.get", 2 # Allows for the use of /light get command
+"lightwithin.commands.set", 2 # Allows for the use of /light set command
+"lightwithin.commands.reroll", 2 # Allows for the use of /light reroll command
+"lightwithin.commands.reset", 2 # Allows for the use of /light reset command
+"lightwithin.commands.reload", 2 # Allows for the use of /light reload command
+"lightwithin.commands.activate", 2 # Allows for the use of /light activate command
+
+"lightwithin.commands", 2 # It allows a player to use light commands

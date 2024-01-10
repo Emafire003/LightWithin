@@ -44,6 +44,7 @@ repositories {
 		}
 	}
 
+	maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
 	maven { url 'https://jitpack.io' }
 
 }
@@ -94,6 +95,9 @@ dependencies {
 	//Stuff needed for ftbteams
 	modCompileOnly "curse.maven:architectury-419699:4663009"//home: https://www.curseforge.com/minecraft/mc-mods/architectury-api
 	modCompileOnly "curse.maven:ftblibrary-438495:4596510"//home: https://www.curseforge.com/minecraft/mc-mods/ftb-library-fabric
+
+	//Permissions
+	modImplementation "me.lucko:fabric-permissions-api:${project.luckoperms_version}"
 }
 
 processResources {
