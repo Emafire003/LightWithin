@@ -88,8 +88,6 @@ public class FrogLight extends InnerLight {
             frog.setVariant(variant);
             frog.setPos(caster.getX()+random.nextDouble(), caster.getY()+2, caster.getZ()+random.nextDouble());
             caster.getWorld().spawnEntity(frog);
-
-            //TODO add proper runes etc add to the proper light set thing etc
         }
 
     }

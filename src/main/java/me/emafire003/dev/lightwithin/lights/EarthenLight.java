@@ -34,28 +34,6 @@ import static me.emafire003.dev.lightwithin.LightWithin.*;
 
 public class EarthenLight extends InnerLight {
 
-    /*Possible triggers:
-       - self low health
-       - allies low health (checkable like this if type = Heal && target = allies do stuff
-       - surrounded++
-       - NEEDS to have in hand dirt/rock or be around them. 
-       - Ally dying?
-     */
-
-    /*Triggers when:
-     * - Low armor && less than 50% HP (whith dirt/nature stuff around)
-     * - Surrounded && less than 50% HP
-     * - Low armor && surrounded
-     * - Getting Hit by stalactite/falling blocks?
-     *
-     * - when y < 32 && HP < 75%
-     * */
-
-    /*Possible targets:
-    * - enemies -> Dripstone/Hole
-    * - ally/self -> moat around/wall depending on something i guess. Don't know what tho.
-    * - other -> TODO spawn golem. For now it could be a simple iron golem?*/
-
     public EarthenLight(List<LivingEntity> targets, double cooldown_time, double power_multiplier, int duration, String color, PlayerEntity caster, boolean rainbow_col) {
         super(targets, cooldown_time, power_multiplier, duration, color, caster, rainbow_col);
         type = InnerLightType.EARTHEN;

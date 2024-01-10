@@ -33,7 +33,6 @@ public class LuxmutuaBerryItem extends Item {
 
     @Override
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
-            //TODO make cooldown bypassable in config
         if(LightWithin.isPlayerInCooldown(user) && Config.LUXIMUTUA_BYPASS_COOLDOWN){
             return TypedActionResult.pass(user.getStackInHand(hand));
         }
@@ -73,8 +72,7 @@ public class LuxmutuaBerryItem extends Item {
             component.setType(newone.getFirst());
             component.setTargets(newone.getSecond());
 
-            //TODO config
-            ((ServerPlayerEntity) user).sendMessage(Text.literal("Your light resonated with you again and decided it was time to change"), true);
+            ((ServerPlayerEntity) user).sendMessage(Text.translatable("item.lightwithin.luxmutua_berry.lightchange"), true);
         }
         return this.isFood() ? user.eatFood(world, stack) : stack;
     }

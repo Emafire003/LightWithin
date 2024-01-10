@@ -22,7 +22,6 @@ public abstract class DrownedEntityMixin extends ZombieEntity implements RangedA
 
     @Inject(method = "canDrownedAttackTarget", at = @At("HEAD"), cancellable = true)
     public void canAttackIfNotAquaLight(LivingEntity target, CallbackInfoReturnable<Boolean> cir){
-        //TODO this does not work
         SummonedByComponent component = LightWithin.SUMMONED_BY_COMPONENT.get(((DrownedEntity)(Object)this));
         if(target != null && component.getIsSummoned()){
             //TODO if I will implement levels, maybe at low levels once the light has been triggered the drowned will get hostile

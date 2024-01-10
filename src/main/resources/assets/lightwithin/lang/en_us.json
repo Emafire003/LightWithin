@@ -18,6 +18,8 @@
   "item.lightwithin.luxcognita_berry.tooltip": "§eThe all-knowing light of this berry will",
   "item.lightwithin.luxcognita_berry.tooltip1": "§atell you the secrets§e of your §binner light§e!",
 
+  "item.lightwithin.luxmutua_berry.lightchange": "Your light resonated with you again and decided it was time to change",
+
   "entity.lightwithin.earth_golem": "Earth Golem",
 
   "block.lightwithin.frozen_player_top": "Frozen Player Torso",

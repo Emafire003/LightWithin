@@ -12,17 +12,13 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.state.StateManager;
 import net.minecraft.state.property.IntProperty;
 import net.minecraft.state.property.Properties;
-import net.minecraft.state.property.Property;
-import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.random.Random;
-import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
@@ -31,8 +27,6 @@ import java.util.List;
 
 import static me.emafire003.dev.lightwithin.LightWithin.box_expansion_amount;
 
-//TODO change the way it melts
-//TODO maybe change it so it behaves like frosted ice
 public class ClearIce extends FrostedIceBlock {
 
     public ClearIce(AbstractBlock.Settings settings) {

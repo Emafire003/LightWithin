@@ -13,7 +13,6 @@ public class LightFatigueEffect extends StatusEffect {
     //it's a cool way to make a cooldown visible for the player too. As lot's have said, it's not a bug it's a feature
     //just look at it the right way
     //xD
-    //TODO mixin into the GlowingEffect and make it so it can clear the CGLCompat.getLib() color
 
     public LightFatigueEffect() {
         super(StatusEffectCategory.HARMFUL, 0x9EC1BE);

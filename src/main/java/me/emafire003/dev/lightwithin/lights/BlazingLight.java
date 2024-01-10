@@ -32,27 +32,6 @@ import static me.emafire003.dev.lightwithin.LightWithin.MOD_ID;
 
 public class BlazingLight extends InnerLight {
 
-    /*Possible triggers:
-       - self low health
-       - allies low health (checkable like this if type = Heal && target = allies do stuff TODO include pets in this
-       - surrounded++
-       - NEEDS to be on fire, hold a torch, near heat emitting stuff.
-       - Ally dying?
-     */
-
-    /*Triggers:
-    * - When surrounded && HP < 50%
-    * - When facing a boss && HP < 50% ??
-    * - When on fire && HP < 75%
-    * - Ally dying
-    *
-    * - When attacked with fire aspect or something*/
-
-    /*Possible targets:
-    * - enemies
-    * - all (more powerful tho)
-*/
-
     public BlazingLight(List<LivingEntity> targets, double cooldown_time, double power_multiplier, int duration, String color, PlayerEntity caster, boolean rainbow_col) {
         super(targets, cooldown_time, power_multiplier, duration, color, caster, rainbow_col);
         type = InnerLightType.BLAZING;

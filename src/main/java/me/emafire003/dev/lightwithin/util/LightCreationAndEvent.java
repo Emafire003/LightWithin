@@ -34,7 +34,6 @@ public class LightCreationAndEvent {
 
         //3eec9f18-1d0e-3f17-917c-6994e7d034d1
 
-        //TODO remove DEBUG
         if(Config.RESET_ON_JOIN){
             component.clear();
         }
@@ -159,6 +158,7 @@ public class LightCreationAndEvent {
         }
 
         //TODO most likely for the other light i will need to
+        //10.01.2024 I don't have any idea what comes after the "i will need to"
         //HEAL
         if(String.valueOf(id_bits[type_bit].charAt(i)).matches("[a-b]")){
             return new Pair<>(InnerLightType.HEAL, determineTarget(id_bits, target_bit, Arrays.asList(TargetType.SELF, TargetType.ALLIES, TargetType.VARIANT)));

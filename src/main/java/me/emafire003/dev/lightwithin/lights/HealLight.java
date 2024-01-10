@@ -26,9 +26,11 @@ import java.util.List;
 
 public class HealLight extends InnerLight {
 
-    /*Possible triggers:
+    /*per memoria storica, i primi appunti sulle lights li prendevo cosi:
+
+    Possible triggers:
        - self low health
-       - allies low health (checkable like this if type = Heal && target = allies do stuff TODO include pets in this
+       - allies low health (checkable like this if type = Heal && target = allies do stuff TOD.O include pets in this
        - passive mobs on low health
      */
 
@@ -78,7 +80,7 @@ public class HealLight extends InnerLight {
         }
         if(this.duration > Config.HEAL_MAX_DURATION*4/5 && this.power_multiplier > Config.HEAL_MAX_POWER/2){ //maxdur-1/5 && multiplier > maxpow/2 = maxdur-1/5
             this.duration = Config.HEAL_MAX_DURATION*4/5;
-        }//TODO wtf is this
+        }
 
         if(this.power_multiplier < Config.HEAL_MIN_POWER){
             power_multiplier = Config.HEAL_MIN_POWER;
@@ -122,9 +124,7 @@ public class HealLight extends InnerLight {
                         remove_status_list.add(statusEffect);
                     }
                 });
-                remove_status_list.forEach(statusEffect -> {
-                    target.removeStatusEffect(statusEffect);
-                });
+                remove_status_list.forEach(target::removeStatusEffect);
 
                 remove_status_list.clear();
             }

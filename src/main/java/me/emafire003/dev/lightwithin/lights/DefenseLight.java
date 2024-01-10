@@ -20,25 +20,6 @@ import java.util.List;
 
 public class DefenseLight extends InnerLight {
 
-    /*Possible triggers:
-       - self low health
-       - allies low health (checkable like this if type = Heal && target = allies do stuff TODO include pets in this
-       - passive mobs on low health
-     */
-
-    /*Triggers when:
-    * - Low armor && less than 50% HP
-    * - Low armor && surrounded
-    * - Armor breaking && less than 50% HP
-    *
-    * - when facing a boss (a thing that has a > 150 HP) && HP < 55%
-    * Applies to allies*/
-
-    /*Possible targets:
-    * - self
-    * - allies
-    * - Passive mobs & self*/
-
     public DefenseLight(List<LivingEntity> targets, double cooldown_time, double power_multiplier, int duration, String color, PlayerEntity caster, boolean rainbow_col) {
         super(targets, cooldown_time, power_multiplier, duration, color, caster, rainbow_col);
         type = InnerLightType.DEFENCE;

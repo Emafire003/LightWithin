@@ -17,7 +17,7 @@ public class SummonedByComponent implements ComponentV3, AutoSyncedComponent {
     public static UUID NO_SUMMONER_UUID = UUID.fromString("00000000-0000-4000-8000-000000000000");
     protected UUID summoner_UUID = NO_SUMMONER_UUID;
     protected boolean isSummoned = false;
-    private LivingEntity self;
+    private final LivingEntity self;
 
     public SummonedByComponent(LivingEntity livingEntity) {
         this.self = livingEntity;
@@ -39,7 +39,6 @@ public class SummonedByComponent implements ComponentV3, AutoSyncedComponent {
         }
     }
 
-    //TODO search when/how is this triggered.
     @Override
     public void writeToNbt(NbtCompound tag) {
         tag.putUuid("summoner", this.summoner_UUID);

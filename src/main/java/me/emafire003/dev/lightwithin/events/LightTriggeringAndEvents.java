@@ -145,7 +145,7 @@ public class LightTriggeringAndEvents {
     public static void registerListeners(){
         LOGGER.info("Registering events listeners...");
 
-        //TODO may need to re-add those return statemes on every if
+        //may need to re-add those return statemes on every if
         //Player (or other entity) being attacked by something else
         EntityAttackEntityEvent.EVENT.register(((attacker, target) -> {
             //Checks if someone is attacked and if they are the one getting attacked
@@ -190,7 +190,6 @@ public class LightTriggeringAndEvents {
         // player but wasn't a wind light wielder, but one of teammate around him was and could not trigger a light}
         EntityFallingEvent.EVENT.register(((entity, diff, fallDistance) -> {
 
-            //TODO see if this works
             if(entity instanceof PlayerEntity){
                 entityFallingTriggerCheck((PlayerEntity) entity, entity, fallDistance);
             }
@@ -222,6 +221,7 @@ public class LightTriggeringAndEvents {
 
         //Triggers when someone/thing is burning
         EntityBurningEvent.EVENT.register(((burningEntity) -> {
+
             //TODO see if this works
             if(burningEntity instanceof PlayerEntity){
                 entityBlazingTriggerCheck((PlayerEntity) burningEntity, (PlayerEntity) burningEntity);
@@ -361,7 +361,7 @@ public class LightTriggeringAndEvents {
                     if(component.getType().equals(InnerLightType.WIND)){
                         checkWind(player, component, attacker, entity);
                     }
-                    if(component.getType().equals(InnerLightType.AQUA) && entity instanceof LivingEntity){
+                    if(component.getType().equals(InnerLightType.AQUA)){
                         checkAqua(player, component, player, entity);
                     }
                     /**End*/

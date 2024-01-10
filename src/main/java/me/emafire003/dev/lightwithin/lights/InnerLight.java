@@ -16,7 +16,6 @@ public class InnerLight {
     protected double power_multiplier;
     protected int duration;
     protected String color;
-    //TODO set to playerentity
     protected PlayerEntity caster;
     protected boolean rainbow_col;
     protected InnerLightType type = InnerLightType.NONE;

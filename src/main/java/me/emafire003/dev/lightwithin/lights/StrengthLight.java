@@ -21,26 +21,6 @@ import java.util.List;
 
 public class StrengthLight extends InnerLight {
 
-    /*Possible triggers:
-       - self low health
-       - allies low health (checkable like this if type = Heal && target = allies do stuff TODO include pets in this
-       - passive mobs on low health
-     */
-
-    /*Triggers:
-    * - When surrounded && hp < 50%
-    * - When HP < 25%
-    * - When weakened
-    * - when facing a boss (a thing that has more than 150 HP) && HP < 55% [self]
-    * - (upon attacking a more dangerous foe, aka either more life or more
-    *
-    * Applies to allies too*/
-
-    /*Possible targets:
-    * - self
-    * - allies
-    */
-
     public StrengthLight(List<LivingEntity> targets, double cooldown_time, double power_multiplier, int duration, String color, PlayerEntity caster, boolean rainbow_col) {
         super(targets, cooldown_time, power_multiplier, duration, color, caster, rainbow_col);
         type = InnerLightType.STRENGTH;

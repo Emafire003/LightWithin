@@ -22,6 +22,7 @@ public abstract class EntityFallingMixin {
     }
 
     //TODO make the min amount of blocks before triggering configurable
+    //As of 10.01.2024 i disagree with my past self, so i will let the TO.DO remain
     public boolean isFalling(LivingEntity entity) {
         if(!entity.isFallFlying() && !entity.isOnGround() && !entity.isSwimming() && !entity.isClimbing() ) {
             if(entity instanceof PlayerEntity){

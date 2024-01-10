@@ -117,6 +117,7 @@ public class Config {
     public static boolean RESET_ON_JOIN;
 
     public static double DIV_SELF;
+    public static boolean NOT_ALLY_THEN_ENEMY;
 
     public static void registerConfigs() {
         configs = new ConfigProvider();
@@ -247,6 +248,8 @@ public class Config {
         configs.addKeyValuePair(new Pair<>("light_locked_default", false), "Should the light activation be locked by default? (Unless you use a command players won't be able to use lights)");
         configs.addKeyValuePair(new Pair<>("unlock_with_luxintus", true), "Should eating a Luxintus berry unlocked the light?");
         configs.addKeyValuePair(new Pair<>("div_self", 2.5), "By how much should the power be divided for applying the effect of the ALLIES to the caster? Set to 1 to disable");
+        configs.addKeyValuePair(new Pair<>("not_ally_then_enemy", false), "Should a player that is not an explicit ALLY be considered an ENEMY?");
+
     }
 
     public static void reloadConfig(){
@@ -349,9 +352,10 @@ public class Config {
 
         MULTIPLY_DURATION_LIMIT = Config.CONFIG.getOrDefault("multiply_duration_limit", true);
         LIGHT_LOCKED_DEFAULT = Config.CONFIG.getOrDefault("light_locked_default", false);
-        UNLOCK_WITH_LUXINTUS = Config.CONFIG.getOrDefault("unlock_with_luxintus", true);
+
 
         DIV_SELF = Config.CONFIG.getOrDefault("div_self", 2.5);
+        NOT_ALLY_THEN_ENEMY = Config.CONFIG.getOrDefault("not_ally_then_enemy", false);
     }
 }
 

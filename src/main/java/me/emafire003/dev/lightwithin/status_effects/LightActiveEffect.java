@@ -27,6 +27,7 @@ public class LightActiveEffect extends StatusEffect {
     //just look at it the right way
     //xD
     //TODO mixin into the GlowingEffect and make it so it can clear the CGLCompat.getLib() color
+    //10.01.2024 I don't even know what I meant
 
     private String former_color = "ffffff";
     private boolean rainbow = false;

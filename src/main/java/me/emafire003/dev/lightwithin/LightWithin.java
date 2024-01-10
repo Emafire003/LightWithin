@@ -150,7 +150,7 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 			if(debug){
 				player.sendMessage(Text.literal("Ok not in cooldown, starting the ticking"), false);
 			}
-			player.addStatusEffect(new StatusEffectInstance(LightEffects.LIGHT_ACTIVE, (int) (20*LIGHT_COMPONENT.get(player).getDuration())));
+			player.addStatusEffect(new StatusEffectInstance(LightEffects.LIGHT_ACTIVE, (20*LIGHT_COMPONENT.get(player).getDuration())));
 		}else{
 			return;
 		}
@@ -341,7 +341,6 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 	//=======================Blazing Light=======================
 	public static void activateBlazing(LightComponent component, PlayerEntity player){
 		List<LivingEntity> targets = new ArrayList<>();
-		//TODO add config option for setting the amout before it triggers (look up)
 
 		if(component.getTargets().equals(TargetType.ALL)){
 			targets.addAll(player.getWorld().getEntitiesByClass(LivingEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amount), (entity1 -> true)));

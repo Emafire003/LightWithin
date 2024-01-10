@@ -41,29 +41,38 @@ import static me.emafire003.dev.lightwithin.LightWithin.box_expansion_amount;
 
 public class CheckUtils {
 
-    /**Checks if an entity is surrounded by hostile entities //TODO will need to check for hostile players in factions
+    /**Checks if an entity is surrounded by hostile entities
      *
      * If not enabled returns true to not mess with the &&
      *
      * @param entity The entity that could be surrounded*/
     public static boolean checkSurrounded(@NotNull LivingEntity entity){
         if(!Config.CHECK_SURROUNDED){
-            //returns true so it doesn't mess with the &&
-            return true;
+            return false;
         }
-        List<HostileEntity> entities = entity.getWorld().getEntitiesByClass(HostileEntity.class, new Box(entity.getBlockPos()).expand(Config.SURROUNDED_DISTANCE), (entity1 -> true));
-        //their strength level
 
+        List<PlayerEntity> players = entity.getWorld().getEntitiesByClass(PlayerEntity.class, new Box(entity.getBlockPos()).expand(Config.SURROUNDED_DISTANCE), (entity1 -> true));
+        int enemies = 0;
+        for(PlayerEntity p : players){
+            if(CheckAllies.checkEnemies(p, entity)){
+                enemies++;
+            }
+        }
+
+        List<HostileEntity> entities = entity.getWorld().getEntitiesByClass(HostileEntity.class, new Box(entity.getBlockPos()).expand(Config.SURROUNDED_DISTANCE), (entity1 -> true));
         //Should I check if two or more allies are surrounded or just do a bigger area search
         if(Config.CHECK_SURROUNDING_MOBS_HEALTH){
-            int mobs_number = 0;
             for (HostileEntity ent : entities){
                 if(!(ent.getHealth() <= (ent.getMaxHealth())*Config.SURROUNDING_HEALTH_THRESHOLD/100)){
-                    mobs_number++;
+                   enemies++;
                 }
             }
-            return mobs_number >= Config.SURROUNDED_AMOUNT;
-        }else return entities.size() >= Config.SURROUNDED_AMOUNT;
+        }else{
+            enemies = enemies + entities.size();
+        }
+
+        return enemies >= Config.SURROUNDED_AMOUNT;
+
     }
 
     /**Sums up all of the durability of the armor items and if it's below
@@ -168,8 +177,8 @@ public class CheckUtils {
         return amount;
     }
 
-    //TODO Maybe i need to take into account the attack speed somehow
-    private static float getAttackDamage(LivingEntity attacker, LivingEntity target){
+    /**Calculates the attack damage that an entity could do to another entity, not accounting for its speed*/
+    private static float getAttackDamage(@NotNull LivingEntity attacker, @NotNull LivingEntity target){
         float dmg = (float)attacker.getAttributeValue(EntityAttributes.GENERIC_ATTACK_DAMAGE);
         if (target != null) {
             dmg += EnchantmentHelper.getAttackDamage(attacker.getMainHandStack(), target.getGroup());
@@ -181,12 +190,10 @@ public class CheckUtils {
         return dmg;
     }
 
-
-    private static float getAttackDamageWithSpeed(LivingEntity attacker, LivingEntity target){
+    /**Calculates the attack damage that an entity could do to another entity, accounting for its speed*/
+    private static float getAttackDamageWithSpeed(@NotNull LivingEntity attacker,@NotNull LivingEntity target){
         float dmg = (float)attacker.getAttributeValue(EntityAttributes.GENERIC_ATTACK_DAMAGE);
-        if (target instanceof LivingEntity) {
-            dmg += EnchantmentHelper.getAttackDamage(attacker.getMainHandStack(), target.getGroup());
-        }
+        dmg += EnchantmentHelper.getAttackDamage(attacker.getMainHandStack(), target.getGroup());
         if(attacker instanceof PlayerEntity){
             float spd = (float)attacker.getAttributeValue(EntityAttributes.GENERIC_ATTACK_SPEED);
             return dmg*spd;
@@ -217,7 +224,6 @@ public class CheckUtils {
 
         }
 
-        //Simpler check TODO maybe make it a bit more precise
         return -1;
     }
 
@@ -395,9 +401,11 @@ public class CheckUtils {
 
         }
 
-        //TODO add option of "If in team but not allied, then enemy
         public static boolean checkEnemies(LivingEntity entity, LivingEntity enemy){
             if(FabricLoader.getInstance().isModLoaded("factions") && entity instanceof PlayerEntity && enemy instanceof PlayerEntity){
+                if(Config.NOT_ALLY_THEN_ENEMY){
+                    return !checkAlly(entity, enemy);
+                }
                 return checkEnemyFaction((PlayerEntity) entity, (PlayerEntity) enemy);
             }
             return false;
@@ -688,23 +696,6 @@ public class CheckUtils {
             }
         }
         return targets;
-    }
-
-    /**Rerturn true if the two player are enemies. If they are not allied, they are considered enemies
-     *
-     * @param player The player used as the center of the area to search of its enemies*/
-    public static boolean areEnemies(PlayerEntity player, PlayerEntity player1){
-        //TODO Config If Not allied == ENEMIES aka will be attacked
-        if(player.equals(player1)){
-            return false;
-        }
-        if(!CheckUtils.CheckAllies.checkAlly(player, player1)){
-            return true;
-        }
-        if(FabricLoader.getInstance().isModLoaded("factions")){
-            return FactionChecker.areEnemies(player, player1);
-        }
-        return false;
     }
 
 }

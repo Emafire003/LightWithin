@@ -260,7 +260,6 @@ public class LightTriggerChecks {
 
     }
 
-    //TODO check for freezing to trigger
     public static void checkFrost(PlayerEntity player, LightComponent component, Entity attacker, LivingEntity target){
         double trigger_sum = 0;
         /**If the player has ALL as target, he needs to be hurt (or an ally has to die, but that depends on the trigger)*/
@@ -475,26 +474,19 @@ public class LightTriggerChecks {
                 trigger_sum=trigger_sum+1;
             }
 
-            //TODO maybe remove the checkfalling for the OTHER target
             if(CheckUtils.checkFalling(player)){
                 trigger_sum=trigger_sum+1;
-            }
-
-            if(CheckUtils.checkFalling(player) && player.fallDistance > fall_trigger){
+            }else if(CheckUtils.checkFalling(player) && player.fallDistance > fall_trigger){
                 trigger_sum = trigger_sum+3;
             }
             if(CheckUtils.checkWind(player)){
                 trigger_sum = trigger_sum+3;
             }
 
-
-            //TODO quando c'è il falling check, se i blocchi sono più di 25 + 10 o boh ogni feather falling triggera sicuro. Sennò deve usare anche altro
-
             if(trigger_sum >= MIN_TRIGGER) {
                 sendReadyPacket((ServerPlayerEntity) player, true);
             }
         }
-        //TODO maybe remove player equals target
         else if(component.getTargets().equals(TargetType.SELF)&& player.equals(target)){
             if(CheckUtils.checkSelfDanger(player, Config.HP_PERCENTAGE_SELF+5)){
                 trigger_sum = trigger_sum + 4;
@@ -508,10 +500,7 @@ public class LightTriggerChecks {
 
             if(CheckUtils.checkFalling(player)){
                 trigger_sum = trigger_sum+1;
-            }
-
-            //boots.getEnchantments().contains() //TODO see how this works
-            if(CheckUtils.checkFalling(player) && player.fallDistance > fall_trigger){
+            }else if(CheckUtils.checkFalling(player) && player.fallDistance > fall_trigger){
                 trigger_sum = trigger_sum+4;
             }
             if(CheckUtils.checkWind(player)){
@@ -536,9 +525,8 @@ public class LightTriggerChecks {
             if(CheckUtils.checkFalling(player) && player.fallDistance > 10){
                 trigger_sum = trigger_sum + 2;
             }
-
             //TODO maybe check the height for the allies too?
-            if(CheckUtils.CheckAllies.checkAlly(player, target) && CheckUtils.checkFalling(target)){
+            else if(CheckUtils.CheckAllies.checkAlly(player, target) && CheckUtils.checkFalling(target)){
                 trigger_sum = trigger_sum + 2;
             }
 
