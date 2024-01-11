@@ -111,3 +111,6 @@ Now the caster of a light with the ALLIES target will recive only a partial bonu
 Fixed Strength light using wrong max/min values
 
 Added option to set permissions, check the permissions.txt file on github!
+Added option to consider non ALLIES as ENEMIES
+
+Restructured the config completely :}
