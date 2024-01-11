@@ -64,7 +64,12 @@ Or you can use my code on [BisectHosting](https://www.bisecthosting.com/LightDev
 ## Modpack use
 You are allowed to use this mod without directly asking, but you are required to credit me, as for most other mods. Also, I would appreciate if your modpack was hosted on Modrinth or Curseforge, which would actually increase the download count, something that other modpacks site don't do.
 
-Thanks to @FranzleOrange for the help with the Strength sound effect, and also some sounds have been sampled from https://mixkit.co !
+### Attributuons:
+Text logo: textstudio.com
+Some audio files: https://mixkit.co
+Other audio files: beepbox
+Some of the code for the commands: Factions mod
+Thanks to @FranzleOrange for the help with the Strength sound effect, and also some sounds have been sampled from  !
 
 
 
