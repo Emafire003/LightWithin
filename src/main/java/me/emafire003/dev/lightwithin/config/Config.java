@@ -36,6 +36,8 @@ public class Config {
 
     public static boolean PLAYER_GLOWS;
 
+    public static int MIN_ALLIES_LOW;
+
     public static boolean CHECK_SURROUNDED;
     public static int SURROUNDED_AMOUNT;
     public static double SURROUNDED_ALLIES_MULTIPLIER;
@@ -191,6 +193,7 @@ public class Config {
         configs.addKeyValuePair(new Pair<>("hp_percentage_self", 30), "The hp percentage below which the light will be triggerable if the target is SELF (like 15, 20, 50) (in some cases it may not apply)");
         configs.addKeyValuePair(new Pair<>("hp_percentage_allies", 50), "The hp percentage below which the light will be triggerable if the target is ALLIES (like 15, 20, 50) (in some cases it may not apply)");
         configs.addKeyValuePair(new Pair<>("hp_percentage_variant", 50), "The hp percentage below which the light will be triggerable if the target is VARIANT/Passive mobs for example (like 15, 20, 50) (in some cases it may not apply)");
+        configs.addKeyValuePair(new Pair<>("min_allies_low", 1), "How many allies near the player should be on low health for them to trigger a light activation?");
 
         configs.addKeyValuePair(new Pair<>("spacer", "spacer"), "");
 
@@ -365,7 +368,7 @@ public class Config {
         MULTIPLY_DURATION_LIMIT = Config.CONFIG.getOrDefault("multiply_duration_limit", true);
         LIGHT_LOCKED_DEFAULT = Config.CONFIG.getOrDefault("light_locked_default", false);
 
-
+        MIN_ALLIES_LOW = Config.CONFIG.getOrDefault("min_allies_low", 1);
         DIV_SELF = Config.CONFIG.getOrDefault("div_self", 2.5);
         NOT_ALLY_THEN_ENEMY = Config.CONFIG.getOrDefault("not_ally_then_enemy", false);
     }

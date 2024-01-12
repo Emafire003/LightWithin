@@ -97,6 +97,11 @@ public class EarthenLight extends InnerLight {
             for(LivingEntity target : this.targets){
                 float r = target.getDimensions(EntityPose.STANDING).width/2;
                 float h = target.getDimensions(EntityPose.STANDING).height;
+
+                //These are used to immobilize the target ad let it fall down TODO maybe remove
+                target.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, 1, 255, false, false));
+                target.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOW_FALLING, 1, 255, false, false));
+
                 target.damage(caster.getWorld().getDamageSources().inWall(), (float) this.power_multiplier);
                 LightParticlesUtil.spawnCylinder(target.getPos().add(0, 0.2, 0), r, 50, h, h/5, new BlockStateParticleEffect(ParticleTypes.BLOCK, Blocks.DIRT.getDefaultState()), (ServerWorld) caster.getWorld());
 
@@ -111,6 +116,8 @@ public class EarthenLight extends InnerLight {
                 if((oldtarget == null || oldtarget.distanceTo(target) > 3) && Config.STRUCTURE_GRIEFING){
                     StructurePlacerAPI placer = new StructurePlacerAPI((ServerWorld) caster.getWorld(), new Identifier(MOD_ID, "earth_hole"), target.getBlockPos(), BlockMirror.NONE, BlockRotation.NONE, true, 1f, new BlockPos(-3, -11, -3));
                     placer.loadStructure();
+                    //It also plays here since a hole opens under things TODO may need to change it
+                    caster.getWorld().playSound(target.getX(), target.getY(), target.getZ(), LightSounds.EARTHEN_LIGHT, SoundCategory.AMBIENT, 1, 1, true);
                 }
                 oldtarget = target;
                 //target.playSound(LightSounds.EARTHEN_LIGHT, 0.9f, 1);

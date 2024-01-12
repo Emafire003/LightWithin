@@ -272,7 +272,8 @@ public class CheckUtils {
      * @param attacker The entity that is attacking it
      * @param health_percent The percentage (15, 25, 70) below which the target is in danger (hence light activatable)
      * */
-    public static boolean checkAllyHealth(@NotNull PlayerEntity player, Entity attacker, int health_percent){
+    @Deprecated
+    public static boolean checkAllyHealthOld(@NotNull PlayerEntity player, Entity attacker, int health_percent){
         List<LivingEntity> entities = player.getWorld().getEntitiesByClass(LivingEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amount), (entity1 -> true));
         int ent_number = 0;
         //I need to this to prevent a ConcurrentModificationError
@@ -292,6 +293,37 @@ public class CheckUtils {
         //If the total team targets && the number of entities of team with the right health are true then
         //return true
         return team_entities.size() == ent_number;
+        //otherwise, false
+    }
+
+    /**Will check for nearby allies, if they are on low health
+     * it will return true. Depending on the configuration more than one ally may need to
+     * be on low health
+     *
+     * @param player The player that could trigger their light
+     * @param attacker The entity that is attacking the player-triggerer (in order to not count them in the allies/triggering)
+     * @param health_percent The percentage (15, 25, 70) below which the target is in danger (hence light activatable)
+     * */
+    public static boolean checkAllyHealth(@NotNull PlayerEntity player, Entity attacker, int health_percent){
+        List<LivingEntity> entities = player.getWorld().getEntitiesByClass(LivingEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amount), (entity1 -> true));
+        int n_allies_low_health = 0;
+        //I need to this to prevent a ConcurrentModificationError
+        List<LivingEntity> team_entities = new ArrayList<>();
+        //loops through the entities near the player, if the entities are in the same team as the player
+        //and they are not the entity that has been hit then add them to the team_entities and check if their health is ok
+        for(LivingEntity ent : entities){
+            //Checks if the entity in the list is in the same team/faction/party/pet or not
+            if(!attacker.equals(ent) && !player.equals(ent) && CheckAllies.checkAlly(player, ent) ){
+                //if it is, check the health
+                if(checkSelfDanger(ent, health_percent)){
+                    n_allies_low_health++;
+                }
+                team_entities.add(ent);
+            }
+        }
+        //If the total team targets && the number of entities of team with the right health are true then
+        //return true
+        return n_allies_low_health >= Config.MIN_ALLIES_LOW;
         //otherwise, false
     }
 
