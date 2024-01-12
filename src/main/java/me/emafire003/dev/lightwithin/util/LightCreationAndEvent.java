@@ -115,14 +115,14 @@ public class LightCreationAndEvent {
                 break;
             }
         }
-        if((cond1 == cond2) && targets_ordered.size() < 3){
+        if((cond1 == cond2) && targets_ordered.size() <= 3){
             return targets_ordered.get(2);
         }
         else if(cond1 || cond2 && targets_ordered.size() < 2){
             return targets_ordered.get(1);
-        }else if(String.valueOf(id_bits[target_bit].charAt(2)).matches("[a-c]") && Character.isDigit(id_bits[target_bit].charAt(3)) && targets_ordered.size() < 3){
+        }else if(targets_ordered.size() <=4 && String.valueOf(id_bits[target_bit].charAt(2)).matches("[a-c]") && Character.isDigit(id_bits[target_bit].charAt(3))){
             return targets_ordered.get(3);
-        }else if(String.valueOf(id_bits[target_bit].charAt(3)).matches("[e-f]") && Character.isDigit(id_bits[target_bit].charAt(2)) && targets_ordered.size() < 4){
+        }else if(targets_ordered.size() <=5 && String.valueOf(id_bits[target_bit].charAt(3)).matches("[e-f]") && Character.isDigit(id_bits[target_bit].charAt(2))){
             return targets_ordered.get(4);
         }
         else{

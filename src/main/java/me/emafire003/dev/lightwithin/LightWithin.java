@@ -12,6 +12,7 @@ import me.emafire003.dev.lightwithin.component.LightComponent;
 import me.emafire003.dev.lightwithin.component.SummonedByComponent;
 import me.emafire003.dev.lightwithin.config.Config;
 import me.emafire003.dev.lightwithin.entities.LightEntities;
+import me.emafire003.dev.lightwithin.entities.earth_golem.EarthGolemEntity;
 import me.emafire003.dev.lightwithin.events.LightTriggeringAndEvents;
 import me.emafire003.dev.lightwithin.items.LightItems;
 import me.emafire003.dev.lightwithin.lights.*;
@@ -32,6 +33,7 @@ import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.entity.mob.DrownedEntity;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.passive.PassiveEntity;
 import net.minecraft.entity.passive.TameableEntity;
@@ -115,7 +117,8 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 	@Override
 	public void registerEntityComponentFactories(EntityComponentFactoryRegistry registry) {
 		registry.registerForPlayers(LIGHT_COMPONENT, LightComponent::new, RespawnCopyStrategy.ALWAYS_COPY);
-		registry.registerFor(LivingEntity.class, SUMMONED_BY_COMPONENT, SummonedByComponent::new);
+		registry.registerFor(DrownedEntity.class, SUMMONED_BY_COMPONENT, SummonedByComponent::new);
+		registry.registerFor(EarthGolemEntity.class, SUMMONED_BY_COMPONENT, SummonedByComponent::new);
 
 	}
 
