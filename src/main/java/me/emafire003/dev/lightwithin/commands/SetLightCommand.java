@@ -259,7 +259,7 @@ public class SetLightCommand implements LightCommand{
                                 .then(
                                         CommandManager.argument("player", EntityArgumentType.players())
                                                 .then(
-                                                        CommandManager.argument("new_duration", IntegerArgumentType.integer(0, 18))
+                                                        CommandManager.argument("new_duration", IntegerArgumentType.integer(0, (int) (18*Config.DURATION_MULTIPLIER)))
                                                                 .executes(this::changeDuration)
                                                 )
 

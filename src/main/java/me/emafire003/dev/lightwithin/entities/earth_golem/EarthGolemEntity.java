@@ -24,6 +24,7 @@ import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.Difficulty;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
@@ -67,6 +68,18 @@ public class EarthGolemEntity extends IronGolemEntity {
 
     public static DefaultAttributeContainer.Builder createEarthGolemAttributes() {
         return MobEntity.createMobAttributes().add(EntityAttributes.GENERIC_ATTACK_SPEED, 5).add(EntityAttributes.GENERIC_MAX_HEALTH, 50.0).add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.28).add(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE, 0.6).add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 6.0);
+    }
+
+    @Override
+    public boolean shouldAngerAt(LivingEntity entity) {
+        if (!this.canTarget(entity)) {
+            return false;
+        } else {
+            if(!entity.getUuid().equals(summoner_id)){
+                return false;
+            }
+            return entity.getType() == EntityType.PLAYER && this.isUniversallyAngry(entity.getWorld()) ? true : entity.getUuid().equals(this.getAngryAt());
+        }
     }
 
     @Override

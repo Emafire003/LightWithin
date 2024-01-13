@@ -2,15 +2,23 @@ package me.emafire003.dev.lightwithin.mixin;
 
 import me.emafire003.dev.lightwithin.LightWithin;
 import me.emafire003.dev.lightwithin.component.SummonedByComponent;
+import me.emafire003.dev.lightwithin.entities.goals.AttackWithSummonerGoal;
+import me.emafire003.dev.lightwithin.entities.goals.TrackSummonerAttackerGoal;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.RangedAttackMob;
+import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.mob.DrownedEntity;
+import net.minecraft.entity.mob.VindicatorEntity;
 import net.minecraft.entity.mob.ZombieEntity;
+import net.minecraft.entity.mob.ZombifiedPiglinEntity;
+import net.minecraft.entity.passive.*;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(DrownedEntity.class)
@@ -18,6 +26,12 @@ public abstract class DrownedEntityMixin extends ZombieEntity implements RangedA
 
     public DrownedEntityMixin(EntityType<? extends ZombieEntity> entityType, World world) {
         super(entityType, world);
+    }
+
+    @Inject(method = "initCustomGoals", at = @At("TAIL"))
+    public void modifiedGoals(CallbackInfo ci){
+        this.targetSelector.add(1, new TrackSummonerAttackerGoal(this));
+        this.targetSelector.add(2, new AttackWithSummonerGoal(this));
     }
 
     @Inject(method = "canDrownedAttackTarget", at = @At("HEAD"), cancellable = true)

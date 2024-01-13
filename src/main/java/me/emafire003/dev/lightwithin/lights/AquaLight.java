@@ -167,11 +167,19 @@ public class AquaLight extends InnerLight {
                 target.playSound(LightSounds.AQUA_LIGHT, 0.9f, 1);
 
                 if(target.equals(caster) && component.getTargets().equals(TargetType.ALLIES)){
-                    target.addStatusEffect(new StatusEffectInstance(LightEffects.WATER_SLIDE, (int) (this.duration*20/Config.DIV_SELF), 0, false, false));
+                    if(this.power_multiplier < 4){
+                        target.addStatusEffect(new StatusEffectInstance(LightEffects.WATER_SLIDE, this.duration*20, 2, false, false));
+                    }else{
+                        target.addStatusEffect(new StatusEffectInstance(LightEffects.WATER_SLIDE, this.duration*20, 3, false, false));
+                    }
                     target.addStatusEffect(new StatusEffectInstance(StatusEffects.DOLPHINS_GRACE, this.duration*20, (int) (this.power_multiplier/Config.DIV_SELF), false, false));
                     target.addStatusEffect(new StatusEffectInstance(StatusEffects.CONDUIT_POWER, this.duration*20, (int) (this.power_multiplier/Config.DIV_SELF), false, false));
                 }else{
-                    target.addStatusEffect(new StatusEffectInstance(LightEffects.WATER_SLIDE, this.duration*20, 0, false, false));
+                    if(this.power_multiplier < 4){
+                        target.addStatusEffect(new StatusEffectInstance(LightEffects.WATER_SLIDE, this.duration*20, 2, false, false));
+                    }else{
+                        target.addStatusEffect(new StatusEffectInstance(LightEffects.WATER_SLIDE, this.duration*20, 3, false, false));
+                    }
                     target.addStatusEffect(new StatusEffectInstance(StatusEffects.DOLPHINS_GRACE, this.duration*20, (int) (this.power_multiplier), false, false));
                     target.addStatusEffect(new StatusEffectInstance(StatusEffects.CONDUIT_POWER, this.duration*20, (int) (this.power_multiplier), false, false));
                 }
