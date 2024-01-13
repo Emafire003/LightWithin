@@ -1,4 +1,4 @@
-package me.emafire003.dev.lightwithin.events;
+package me.emafire003.dev.lightwithin.util;
 
 import me.emafire003.dev.lightwithin.component.LightComponent;
 import me.emafire003.dev.lightwithin.config.Config;
@@ -289,7 +289,7 @@ public class LightTriggerChecks {
             }
 
         }
-        /**CHECKS if the player has ENEMIES as target, either his or his allies health needs to be low*/
+        /**CHECKS if the player has ENEMIES as target, either him or his allies health needs to be low*/
         else if(component.getTargets().equals(TargetType.ENEMIES) && (CheckUtils.CheckAllies.checkAlly(player, target) || player.equals(target))){
             if(CheckUtils.checkAllyHealth(player, target, Config.HP_PERCENTAGE_ALLIES)){
                 trigger_sum = trigger_sum + 4;
@@ -322,20 +322,24 @@ public class LightTriggerChecks {
         }else if(component.getTargets().equals(TargetType.SELF)){
             if(CheckUtils.checkSelfDanger(player, Config.HP_PERCENTAGE_SELF+5)){
                 trigger_sum = trigger_sum + 4;
+                player.sendMessage(Text.literal("Low  low health"));
             }else if(CheckUtils.checkSelfDanger(player, Config.HP_PERCENTAGE_SELF+30)){
                 trigger_sum = trigger_sum + 2;
+                player.sendMessage(Text.literal("Low health"));
             }
 
             //Checks if the player has low armor durability
             if(Config.CHECK_ARMOR_DURABILITY && CheckUtils.checkArmorDurability(player, Config.DUR_PERCENTAGE_SELF)){
                 trigger_sum=trigger_sum+1;
+                player.sendMessage(Text.literal("Armor"));
             }
 
             if(CheckUtils.checkFrost(player)){
                 trigger_sum = trigger_sum + 3;
+                player.sendMessage(Text.literal("Frost"));
             }
 
-            if(trigger_sum <= MIN_TRIGGER) {
+            if(trigger_sum >= MIN_TRIGGER) {
                 sendReadyPacket((ServerPlayerEntity) player, true);
             }
         }else if(component.getTargets().equals(TargetType.ALLIES)){
@@ -360,7 +364,7 @@ public class LightTriggerChecks {
                 trigger_sum = trigger_sum + 3;
             }
 
-            if(trigger_sum <= MIN_TRIGGER) {
+            if(trigger_sum >= MIN_TRIGGER) {
                 sendReadyPacket((ServerPlayerEntity) player, true);
             }
         }

@@ -1,6 +1,5 @@
 package me.emafire003.dev.lightwithin.events;
 
-import me.emafire003.dev.lightwithin.compat.permissions.PermissionsChecker;
 import me.emafire003.dev.lightwithin.component.LightComponent;
 import me.emafire003.dev.lightwithin.lights.InnerLightType;
 import me.emafire003.dev.lightwithin.status_effects.LightEffects;
@@ -18,7 +17,7 @@ import net.minecraft.util.math.Box;
 import java.util.List;
 
 import static me.emafire003.dev.lightwithin.LightWithin.*;
-import static me.emafire003.dev.lightwithin.events.LightTriggerChecks.*;
+import static me.emafire003.dev.lightwithin.util.LightTriggerChecks.*;
 
 public class LightTriggeringAndEvents {
 

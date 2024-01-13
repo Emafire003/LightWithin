@@ -1,13 +1,10 @@
 package me.emafire003.dev.lightwithin.lights;
 
-import me.emafire003.dev.lightwithin.status_effects.LightEffects;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static me.emafire003.dev.lightwithin.LightWithin.LIGHT_COMPONENT;
 
 public class InnerLight {
 
@@ -48,22 +45,6 @@ public class InnerLight {
         this.power_multiplier = power_multiplier;
         this.duration = duration;
         this.caster = caster;
-    }
-
-    public static boolean isTriggerable(PlayerEntity player){
-        if(player.getWorld().isClient){
-            return false;
-        }
-        if(LIGHT_COMPONENT.get(player).getType().equals(InnerLightType.NONE)){
-            return false;
-        }
-        if(player.hasStatusEffect(LightEffects.LIGHT_FATIGUE)){
-            return false;
-        }
-        if(player.hasStatusEffect(LightEffects.LIGHT_ACTIVE)){
-            return false;
-        }
-        return true;
     }
 
 

@@ -23,7 +23,7 @@ import me.emafire003.dev.lightwithin.sounds.LightSounds;
 import me.emafire003.dev.lightwithin.status_effects.LightEffects;
 import me.emafire003.dev.lightwithin.particles.LightParticlesUtil;
 import me.emafire003.dev.lightwithin.util.CheckUtils;
-import me.emafire003.dev.lightwithin.util.LightCreationAndEvent;
+import me.emafire003.dev.lightwithin.events.LightCreationAndEvent;
 import me.emafire003.dev.lightwithin.util.LootTableModifier;
 import me.emafire003.dev.lightwithin.util.TargetType;
 import net.fabricmc.api.ModInitializer;

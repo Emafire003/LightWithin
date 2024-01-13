@@ -8,7 +8,7 @@ import me.emafire003.dev.lightwithin.LightWithin;
 import me.emafire003.dev.lightwithin.compat.permissions.PermissionsChecker;
 import me.emafire003.dev.lightwithin.component.LightComponent;
 import me.emafire003.dev.lightwithin.lights.InnerLightType;
-import me.emafire003.dev.lightwithin.util.LightCreationAndEvent;
+import me.emafire003.dev.lightwithin.events.LightCreationAndEvent;
 import me.emafire003.dev.lightwithin.util.TargetType;
 import net.minecraft.command.argument.EntityArgumentType;
 import net.minecraft.server.command.CommandManager;

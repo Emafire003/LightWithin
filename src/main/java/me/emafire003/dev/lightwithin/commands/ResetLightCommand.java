@@ -7,7 +7,7 @@ import me.emafire003.dev.lightwithin.LightWithin;
 import me.emafire003.dev.lightwithin.compat.permissions.PermissionsChecker;
 import me.emafire003.dev.lightwithin.component.LightComponent;
 import me.emafire003.dev.lightwithin.lights.InnerLightType;
-import me.emafire003.dev.lightwithin.util.LightCreationAndEvent;
+import me.emafire003.dev.lightwithin.events.LightCreationAndEvent;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.minecraft.command.argument.EntityArgumentType;
 import net.minecraft.server.command.CommandManager;
@@ -23,7 +23,7 @@ import java.util.List;
 public class ResetLightCommand implements LightCommand{
 
     //Temporary, will remove once all lights have been implemented
-    private List<InnerLightType> currently_usable_lights = Arrays.asList(InnerLightType.HEAL, InnerLightType.DEFENCE, InnerLightType.STRENGTH, InnerLightType.BLAZING, InnerLightType.FROST);
+    private final List<InnerLightType> currently_usable_lights = Arrays.asList(InnerLightType.HEAL, InnerLightType.DEFENCE, InnerLightType.STRENGTH, InnerLightType.BLAZING, InnerLightType.FROST);
     private boolean confirming = false;
     private int tickCounter = 0;
 
@@ -45,13 +45,13 @@ public class ResetLightCommand implements LightCommand{
             return 1;
         }catch(Exception e){
             e.printStackTrace();
-            source.sendFeedback( () -> Text.literal("Error: " + e.toString()),false);
+            source.sendFeedback( () -> Text.literal("Error: " + e),false);
             return 0;
         }
 
     }
 
-    private int resetConfirm(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
+    private int resetConfirm(CommandContext<ServerCommandSource> context) {
         ServerCommandSource source = context.getSource();
         source.sendFeedback( () -> Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("§ePlease type §a/light reset <player/s> confirm §eto §c§lreset §etheir InnerLight")), false);
         confirming = true;

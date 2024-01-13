@@ -6,7 +6,7 @@ import me.emafire003.dev.lightwithin.component.LightComponent;
 import me.emafire003.dev.lightwithin.config.Config;
 import me.emafire003.dev.lightwithin.lights.InnerLightType;
 import me.emafire003.dev.lightwithin.sounds.LightSounds;
-import me.emafire003.dev.lightwithin.util.LightCreationAndEvent;
+import me.emafire003.dev.lightwithin.events.LightCreationAndEvent;
 import me.emafire003.dev.lightwithin.util.TargetType;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.item.TooltipContext;

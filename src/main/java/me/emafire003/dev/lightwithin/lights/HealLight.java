@@ -10,6 +10,7 @@ import me.emafire003.dev.lightwithin.sounds.LightSounds;
 import me.emafire003.dev.lightwithin.particles.LightParticlesUtil;
 import me.emafire003.dev.lightwithin.status_effects.LightEffects;
 import me.emafire003.dev.lightwithin.util.TargetType;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectCategory;
@@ -93,10 +94,12 @@ public class HealLight extends InnerLight {
 
     @Override
     public void execute(){
-        if(this.rainbow_col){
-            CGLCompat.getLib().setRainbowColorToEntity(this.caster, true);
-        }else{
-            CGLCompat.getLib().setColorToEntity(this.caster, CGLCompat.fromHex(this.color));
+        if(FabricLoader.getInstance().isModLoaded("coloredglowlib")){
+            if(this.rainbow_col){
+                CGLCompat.getLib().setRainbowColorToEntity(this.caster, true);
+            }else{
+                CGLCompat.getLib().setColorToEntity(this.caster, CGLCompat.fromHex(this.color));
+            }
         }
         caster.getWorld().playSound(caster.getX(), caster.getY(), caster.getZ(), LightSounds.HEAL_LIGHT, SoundCategory.AMBIENT, 1, 1, true);
         //caster.getWorld().playSound(caster, caster.getBlockPos(), LightSounds.HEAL_LIGHT, SoundCategory.AMBIENT, 1,1);
@@ -112,12 +115,7 @@ public class HealLight extends InnerLight {
             //LightParticlesUtil.spawnLightTypeParticle(LightParticles.HEALLIGHT_PARTICLE, target);
             if(target.equals(caster) && component.getTargets().equals(TargetType.ALLIES)){
                 target.addStatusEffect(new StatusEffectInstance(StatusEffects.REGENERATION, caster.getStatusEffect(LightEffects.LIGHT_ACTIVE).getDuration(), (int) (this.power_multiplier/Config.DIV_SELF), false, false));
-            }else{
-                target.addStatusEffect(new StatusEffectInstance(StatusEffects.REGENERATION, caster.getStatusEffect(LightEffects.LIGHT_ACTIVE).getDuration(), (int) this.power_multiplier, false, false));
-            }
-
-            if(component.getTargets().equals(TargetType.VARIANT)){
-
+            }else if(component.getTargets().equals(TargetType.VARIANT)){
                 List<StatusEffect> remove_status_list = new ArrayList<>();
                 target.getActiveStatusEffects().forEach((statusEffect, instance) -> {
                     if(statusEffect.getCategory().equals(StatusEffectCategory.HARMFUL) && statusEffect != LightEffects.LIGHT_FATIGUE){
@@ -127,7 +125,10 @@ public class HealLight extends InnerLight {
                 remove_status_list.forEach(target::removeStatusEffect);
 
                 remove_status_list.clear();
+            }else{
+                target.addStatusEffect(new StatusEffectInstance(StatusEffects.REGENERATION, caster.getStatusEffect(LightEffects.LIGHT_ACTIVE).getDuration(), (int) this.power_multiplier, false, false));
             }
+
 
         }
     }

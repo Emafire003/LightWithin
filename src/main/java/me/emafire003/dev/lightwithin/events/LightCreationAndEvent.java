@@ -1,10 +1,11 @@
-package me.emafire003.dev.lightwithin.util;
+package me.emafire003.dev.lightwithin.events;
 
 import com.mojang.datafixers.util.Pair;
 import me.emafire003.dev.lightwithin.component.LightComponent;
 import me.emafire003.dev.lightwithin.config.Config;
 import me.emafire003.dev.lightwithin.events.PlayerJoinEvent;
 import me.emafire003.dev.lightwithin.lights.InnerLightType;
+import me.emafire003.dev.lightwithin.util.TargetType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ActionResult;
 
@@ -228,6 +229,7 @@ public class LightCreationAndEvent {
             //It also adds the last digit from the previous bit
             id_bits[string_bit] = id_bits[string_bit].substring(1)+id_bits[string_bit-1].substring(id_bits[string_bit-1].length()-1);
         }
+        //TODO yep this does not loop since all of the thing are actually numeric values. Since a-f are 10-16 etc.
         for(int i = 0; i<id_bits[string_bit].length(); i++){
             //if(Character.isDigit(id_bits[string_bit].charAt(i))){
             if(Config.ADJUST_FOR_LOW_DURATION && Character.getNumericValue(id_bits[string_bit].charAt(i)) <= Config.ADJUST_DUR_THRESHOLD){
@@ -237,7 +239,6 @@ public class LightCreationAndEvent {
             }
             else{
                 return (int) (Character.getNumericValue(id_bits[string_bit].charAt(i))*Config.DURATION_MULTIPLIER);
-
             }
             //}
         }
