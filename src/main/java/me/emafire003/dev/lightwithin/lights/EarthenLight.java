@@ -9,6 +9,7 @@ import me.emafire003.dev.lightwithin.particles.LightParticles;
 import me.emafire003.dev.lightwithin.particles.LightParticlesUtil;
 import me.emafire003.dev.lightwithin.sounds.LightSounds;
 import me.emafire003.dev.lightwithin.status_effects.LightEffects;
+import me.emafire003.dev.lightwithin.util.SpawnUtils;
 import me.emafire003.dev.lightwithin.util.TargetType;
 import me.emafire003.dev.structureplacerapi.StructurePlacerAPI;
 import net.fabricmc.loader.api.FabricLoader;
@@ -22,6 +23,7 @@ import net.minecraft.particle.BlockStateParticleEffect;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
+import net.minecraft.text.Text;
 import net.minecraft.util.BlockMirror;
 import net.minecraft.util.BlockRotation;
 import net.minecraft.util.Identifier;
@@ -196,7 +198,7 @@ public class EarthenLight extends InnerLight {
             LightParticlesUtil.spawnCircle(caster.getPos().add(0, 1.45, 0), 2, 100, new BlockStateParticleEffect(ParticleTypes.BLOCK, Blocks.DIRT.getDefaultState()), (ServerWorld) caster.getWorld());
             LightParticlesUtil.spawnCircle(caster.getPos().add(0, 0.2, 0), 2, 100, new BlockStateParticleEffect(ParticleTypes.BLOCK, Blocks.DIRT.getDefaultState()), (ServerWorld) caster.getWorld());
             entity.setSummoner(caster);
-            caster.getWorld().spawnEntity(entity);
+            SpawnUtils.spawnAround(caster, 1, 6, entity, (ServerWorld) caster.getWorld());
         }
 
 

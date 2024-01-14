@@ -2,20 +2,17 @@ package me.emafire003.dev.lightwithin.lights;
 
 import me.emafire003.dev.lightwithin.compat.coloredglowlib.CGLCompat;
 import me.emafire003.dev.lightwithin.component.LightComponent;
-import me.emafire003.dev.lightwithin.component.SummonedByComponent;
 import me.emafire003.dev.lightwithin.config.Config;
 import me.emafire003.dev.lightwithin.particles.LightParticles;
 import me.emafire003.dev.lightwithin.particles.LightParticlesUtil;
 import me.emafire003.dev.lightwithin.sounds.LightSounds;
 import me.emafire003.dev.lightwithin.status_effects.LightEffects;
+import me.emafire003.dev.lightwithin.util.SpawnUtils;
 import me.emafire003.dev.lightwithin.util.TargetType;
 import me.emafire003.dev.structureplacerapi.StructurePlacerAPI;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.enchantment.Enchantments;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.LightningEntity;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.*;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.mob.DrownedEntity;
@@ -26,6 +23,7 @@ import net.minecraft.item.Items;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.text.Text;
 import net.minecraft.util.BlockMirror;
 import net.minecraft.util.BlockRotation;
 import net.minecraft.util.Identifier;
@@ -154,8 +152,8 @@ public class AquaLight extends InnerLight {
                 SUMMONED_BY_COMPONENT.get(drowned).setSummonerUUID(caster.getUuid());
                 SUMMONED_BY_COMPONENT.get(drowned).setIsSummoned(true);
 
-                drowned.setPos(caster.getX()+caster.getRandom().nextBetween(-3,3), caster.getY(), caster.getZ()+caster.getRandom().nextBetween(-3,3));
-                caster.getWorld().spawnEntity(drowned);
+                boolean b = SpawnUtils.spawnAround(caster, 1, 5, drowned, (ServerWorld) caster.getWorld(), SpawnRestriction.Location.NO_RESTRICTIONS);
+                caster.sendMessage(Text.literal("Spawned: "+b));
                 LightParticlesUtil.spawnLightTypeParticle(LightParticles.AQUALIGHT_PARTICLE, (ServerWorld) drowned.getWorld(), drowned.getPos());
             }
 
@@ -197,11 +195,11 @@ public class AquaLight extends InnerLight {
             for(LivingEntity target : this.targets){
                 target.playSound(LightSounds.AQUA_LIGHT, 0.9f, 1);
                 if(Config.STRUCTURE_GRIEFING && !caster.getWorld().isClient) {
+                    target.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, this.duration*10, (int) (this.power_multiplier*20), false, false));
                     StructurePlacerAPI placer = new StructurePlacerAPI((ServerWorld) caster.getWorld(), new Identifier(MOD_ID, "water_cage"), target.getBlockPos(), BlockMirror.NONE, BlockRotation.NONE, true, 1f, new BlockPos(-1, 0, -1));
                     placer.loadStructure();
+                    target.setAir(1);
 
-                    target.setAir(2);
-                    target.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, this.duration*10, (int) (this.power_multiplier*20), false, false));
 
                     if(this.power_multiplier >= 4){
                         ItemStack trident = new ItemStack(Items.TRIDENT);
