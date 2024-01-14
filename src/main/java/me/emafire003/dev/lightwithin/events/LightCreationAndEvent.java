@@ -247,13 +247,18 @@ public class LightCreationAndEvent {
     }
 
 
-    //Gets the first 2 digits ir finds and sums them up, then divides by 3, so the max is 9+9/3, so 6
-    public static double determinePower(String[] id_bits, int string_bit){
+    /**Gets the first 2 digits ir finds and sums them up, then divides by 3, so the max is 9+9/3, so 6
+     *
+     *
+     * Spoiler it never worked, since I forgot a parenthesis. WOW.*/
+    @Deprecated
+    public static double determinePowerOld(String[] id_bits, int string_bit){
         //The UUID stores constat bits in these parts here, which are the version and the variant.
         if(string_bit == 2 || string_bit == 3){
             //It also adds the last digit from the previous bit
             id_bits[string_bit] = id_bits[string_bit].substring(1)+id_bits[string_bit-1].substring(id_bits[string_bit-1].length()-1);
         }
+
         int n1 = -1;
         int n2 = 0;
         for(int i = 0; i<id_bits[string_bit].length(); i++){
@@ -271,5 +276,26 @@ public class LightCreationAndEvent {
             a = 1;
         }
         return a;
+    }
+
+    /**If it finds a digit (0-9) that's going to be the power +1 (so 1-10),
+     * If not, it will get the Numeric value (0-16) and divied by 2 so (10-16/2, aka 5-8)
+     *
+     * So having a power between 5/8 should be more common. I don't really know.*/
+    public static int determinePower(String[] id_bits, int string_bit){
+        //The UUID stores constat bits in these parts here, which are the version and the variant.
+        if(string_bit == 2 || string_bit == 3){
+            //It also adds the last digit from the previous bit
+            id_bits[string_bit] = id_bits[string_bit].substring(1)+id_bits[string_bit-1].substring(id_bits[string_bit-1].length()-1);
+        }
+
+        for(int i = 0; i<id_bits[string_bit].length(); i++){
+            if(Character.isDigit(id_bits[string_bit].charAt(i))){
+                return Character.getNumericValue(id_bits[string_bit].charAt(i))+1;
+            }else if(i == id_bits[string_bit].length()-1){
+                return Character.getNumericValue(id_bits[string_bit].charAt(i))/2;
+            }
+        }
+        return Character.getNumericValue(id_bits[string_bit].charAt(0))/2;
     }
 }

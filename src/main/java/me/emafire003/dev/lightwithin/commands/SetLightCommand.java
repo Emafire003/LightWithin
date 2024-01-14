@@ -247,7 +247,7 @@ public class SetLightCommand implements LightCommand{
                                 .then(
                                         CommandManager.argument("player", EntityArgumentType.players())
                                                 .then(
-                                                        CommandManager.argument("new_power", DoubleArgumentType.doubleArg(0, 9))
+                                                        CommandManager.argument("new_power", DoubleArgumentType.doubleArg(1, 10))
                                                                 .executes(this::changePower)
                                                 )
 
