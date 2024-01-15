@@ -1,19 +1,11 @@
 package me.emafire003.dev.lightwithin.client;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import me.emafire003.dev.lightwithin.LightWithin;
 import me.emafire003.dev.lightwithin.lights.InnerLightType;
 import me.emafire003.dev.lightwithin.sounds.LightSounds;
-/*import me.x150.renderer.event.EventListener;
-import me.x150.renderer.event.EventType;
-import me.x150.renderer.event.Shift;
-import me.x150.renderer.event.events.RenderEvent;
-import me.x150.renderer.renderer.ClipStack;
-import me.x150.renderer.renderer.MSAAFramebuffer;
-import me.x150.renderer.renderer.Rectangle;
-import me.x150.renderer.renderer.Renderer2d;*/
 import me.x150.renderer.event.RenderEvents;
 import me.x150.renderer.render.ClipStack;
-import me.x150.renderer.render.MSAAFramebuffer;
 import me.x150.renderer.render.Renderer2d;
 import me.x150.renderer.util.Rectangle;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
@@ -43,67 +35,68 @@ public class RendererEventHandler {
     int center_y = 0;
     double scale_factor;
 
+
     public void registerRenderEvent(){
         LOGGER.info("Registering runes renderer...");
         RenderEvents.HUD.register(matrixStack -> {
-            MSAAFramebuffer.use(MSAAFramebuffer.MAX_SAMPLES, () -> {
-                center_x = MinecraftClient.getInstance().getWindow().getScaledWidth()/2;
-                center_y = MinecraftClient.getInstance().getWindow().getScaledHeight()/2;
-                scale_factor = MinecraftClient.getInstance().getWindow().getScaleFactor();
+            center_x = MinecraftClient.getInstance().getWindow().getScaledWidth()/2;
+            center_y = MinecraftClient.getInstance().getWindow().getScaledHeight()/2;
+            scale_factor = MinecraftClient.getInstance().getWindow().getScaleFactor();
 
-                if(LightWithinClient.isLightReady()){
+            RenderSystem.enableBlend();
+            RenderSystem.defaultBlendFunc();
+            if(LightWithinClient.isLightReady()){
+                ClipStack.addWindow(matrixStack.getMatrices(),new Rectangle(1,1,1000,1000));
+                Renderer2d.renderTexture(matrixStack.getMatrices(), new Identifier(LightWithin.MOD_ID, "textures/lights/light.png"), x, y, 20, 20);
+                ClipStack.popWindow();
+            }
+            if(MinecraftClient.getInstance().options.getPerspective().equals(Perspective.FIRST_PERSON)){
+                if(heal_runes){
                     ClipStack.addWindow(matrixStack.getMatrices(),new Rectangle(1,1,1000,1000));
-                    Renderer2d.renderTexture(matrixStack.getMatrices(), new Identifier(LightWithin.MOD_ID, "textures/lights/light.png"), x, y, 20, 20);
+                    Renderer2d.renderTexture(matrixStack.getMatrices(), new Identifier(LightWithin.MOD_ID, "textures/lights/runes/heal_light_runes.png"), center_x-(400/scale_factor)/2, center_y-(160/scale_factor)/2, (400/scale_factor)*1.2, (160/scale_factor)*1.2);
                     ClipStack.popWindow();
                 }
-                if(MinecraftClient.getInstance().options.getPerspective().equals(Perspective.FIRST_PERSON)){
-                    if(heal_runes){
-                        ClipStack.addWindow(matrixStack.getMatrices(),new Rectangle(1,1,1000,1000));
-                        Renderer2d.renderTexture(matrixStack.getMatrices(), new Identifier(LightWithin.MOD_ID, "textures/lights/runes/heal_light_runes.png"), center_x-(400/scale_factor)/2, center_y-(160/scale_factor)/2, (400/scale_factor)*1.2, (160/scale_factor)*1.2);
-                        ClipStack.popWindow();
-                    }
-                    if(defense_runes){
-                        ClipStack.addWindow(matrixStack.getMatrices(),new Rectangle(1,1,1000,1000));
-                        Renderer2d.renderTexture(matrixStack.getMatrices(), new Identifier(LightWithin.MOD_ID, "textures/lights/runes/defense_light_runes.png"), center_x-(400/scale_factor)/2, center_y-(160/scale_factor)/2, (400/scale_factor)*1.2, (160/scale_factor)*1.2);
-                        ClipStack.popWindow();
-                    }
-                    if(strength_runes){
-                        ClipStack.addWindow(matrixStack.getMatrices(),new Rectangle(1,1,1000,1000));
-                        Renderer2d.renderTexture(matrixStack.getMatrices(), new Identifier(LightWithin.MOD_ID, "textures/lights/runes/strength_light_runes.png"), center_x-(400/scale_factor)/2, center_y-(160/scale_factor)/2, (400/scale_factor)*1.2, (160/scale_factor)*1.2);
-                        ClipStack.popWindow();
-                    }
-                    if(blazing_runes){
-                        ClipStack.addWindow(matrixStack.getMatrices(),new Rectangle(1,1,1000,1000));
-                        Renderer2d.renderTexture(matrixStack.getMatrices(), new Identifier(LightWithin.MOD_ID, "textures/lights/runes/blazing_light_runes.png"), center_x-(400/scale_factor)/2, center_y-(160/scale_factor)/2, (400/scale_factor)*1.2, (160/scale_factor)*1.2);
-                        ClipStack.popWindow();
-                    }
-                    if(frost_runes){
-                        ClipStack.addWindow(matrixStack.getMatrices(),new Rectangle(1,1,1000,1000));
-                        Renderer2d.renderTexture(matrixStack.getMatrices(), new Identifier(LightWithin.MOD_ID, "textures/lights/runes/frost_light_runes.png"), center_x-(435/scale_factor)/2, center_y-(160/scale_factor)/2, (400/scale_factor)*1.2, (160/scale_factor)*1.2);
-                        ClipStack.popWindow();
-                    }
-                    if(earthen_runes){
-                        ClipStack.addWindow(matrixStack.getMatrices(),new Rectangle(1,1,1000,1000));
-                        Renderer2d.renderTexture(matrixStack.getMatrices(), new Identifier(LightWithin.MOD_ID, "textures/lights/runes/earthen_light_runes.png"), center_x-(435/scale_factor)/2, center_y-(160/scale_factor)/2, (400/scale_factor)*1.2, (160/scale_factor)*1.2);
-                        ClipStack.popWindow();
-                    }
-                    if(wind_runes){
-                        ClipStack.addWindow(matrixStack.getMatrices(),new Rectangle(1,1,1000,1000));
-                        Renderer2d.renderTexture(matrixStack.getMatrices(), new Identifier(LightWithin.MOD_ID, "textures/lights/runes/wind_light_runes.png"), center_x-(435/scale_factor)/2, center_y-(160/scale_factor)/2, (400/scale_factor)*1.2, (160/scale_factor)*1.2);
-                        ClipStack.popWindow();
-                    }
-                    if(aqua_runes){
-                        ClipStack.addWindow(matrixStack.getMatrices(),new Rectangle(1,1,1000,1000));
-                        Renderer2d.renderTexture(matrixStack.getMatrices(), new Identifier(LightWithin.MOD_ID, "textures/lights/runes/aqua_light_runes.png"), center_x-(435/scale_factor)/2, center_y-(160/scale_factor)/2, (400/scale_factor)*1.2, (160/scale_factor)*1.2);
-                        ClipStack.popWindow();
-                    }
-                    if(frog_runes){
-                        ClipStack.addWindow(matrixStack.getMatrices(),new Rectangle(1,1,1000,1000));
-                        Renderer2d.renderTexture(matrixStack.getMatrices(), new Identifier(LightWithin.MOD_ID, "textures/lights/runes/frog_light_runes.png"), center_x-(435/scale_factor)/2, center_y-(160/scale_factor)/2, (400/scale_factor)*1.2, (160/scale_factor)*1.2);
-                        ClipStack.popWindow();
-                    }
+                if(defense_runes){
+                    ClipStack.addWindow(matrixStack.getMatrices(),new Rectangle(1,1,1000,1000));
+                    Renderer2d.renderTexture(matrixStack.getMatrices(), new Identifier(LightWithin.MOD_ID, "textures/lights/runes/defense_light_runes.png"), center_x-(400/scale_factor)/2, center_y-(160/scale_factor)/2, (400/scale_factor)*1.2, (160/scale_factor)*1.2);
+                    ClipStack.popWindow();
                 }
-            });
+                if(strength_runes){
+                    ClipStack.addWindow(matrixStack.getMatrices(),new Rectangle(1,1,1000,1000));
+                    Renderer2d.renderTexture(matrixStack.getMatrices(), new Identifier(LightWithin.MOD_ID, "textures/lights/runes/strength_light_runes.png"), center_x-(400/scale_factor)/2, center_y-(160/scale_factor)/2, (400/scale_factor)*1.2, (160/scale_factor)*1.2);
+                    ClipStack.popWindow();
+                }
+                if(blazing_runes){
+                    ClipStack.addWindow(matrixStack.getMatrices(),new Rectangle(1,1,1000,1000));
+                    Renderer2d.renderTexture(matrixStack.getMatrices(), new Identifier(LightWithin.MOD_ID, "textures/lights/runes/blazing_light_runes.png"), center_x-(400/scale_factor)/2, center_y-(160/scale_factor)/2, (400/scale_factor)*1.2, (160/scale_factor)*1.2);
+                    ClipStack.popWindow();
+                }
+                if(frost_runes){
+                    ClipStack.addWindow(matrixStack.getMatrices(),new Rectangle(1,1,1000,1000));
+                    Renderer2d.renderTexture(matrixStack.getMatrices(), new Identifier(LightWithin.MOD_ID, "textures/lights/runes/frost_light_runes.png"), center_x-(435/scale_factor)/2, center_y-(160/scale_factor)/2, (400/scale_factor)*1.2, (160/scale_factor)*1.2);
+                    ClipStack.popWindow();
+                }
+                if(earthen_runes){
+                    ClipStack.addWindow(matrixStack.getMatrices(),new Rectangle(1,1,1000,1000));
+                    Renderer2d.renderTexture(matrixStack.getMatrices(), new Identifier(LightWithin.MOD_ID, "textures/lights/runes/earthen_light_runes.png"), center_x-(435/scale_factor)/2, center_y-(160/scale_factor)/2, (400/scale_factor)*1.2, (160/scale_factor)*1.2);
+                    ClipStack.popWindow();
+                }
+                if(wind_runes){
+                    ClipStack.addWindow(matrixStack.getMatrices(),new Rectangle(1,1,1000,1000));
+                    Renderer2d.renderTexture(matrixStack.getMatrices(), new Identifier(LightWithin.MOD_ID, "textures/lights/runes/wind_light_runes.png"), center_x-(435/scale_factor)/2, center_y-(160/scale_factor)/2, (400/scale_factor)*1.2, (160/scale_factor)*1.2);
+                    ClipStack.popWindow();
+                }
+                if(aqua_runes){
+                    ClipStack.addWindow(matrixStack.getMatrices(),new Rectangle(1,1,1000,1000));
+                    Renderer2d.renderTexture(matrixStack.getMatrices(), new Identifier(LightWithin.MOD_ID, "textures/lights/runes/aqua_light_runes.png"), center_x-(435/scale_factor)/2, center_y-(160/scale_factor)/2, (400/scale_factor)*1.2, (160/scale_factor)*1.2);
+                    ClipStack.popWindow();
+                }
+                if(frog_runes){
+                    ClipStack.addWindow(matrixStack.getMatrices(),new Rectangle(1,1,1000,1000));
+                    Renderer2d.renderTexture(matrixStack.getMatrices(), new Identifier(LightWithin.MOD_ID, "textures/lights/runes/frog_light_runes.png"), center_x-(435/scale_factor)/2, center_y-(160/scale_factor)/2, (400/scale_factor)*1.2, (160/scale_factor)*1.2);
+                    ClipStack.popWindow();
+                }
+            }
         });
     }
 
