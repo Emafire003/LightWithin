@@ -1,5 +1,6 @@
 package me.emafire003.dev.lightwithin.lights;
 
+import me.emafire003.dev.lightwithin.LightWithin;
 import me.emafire003.dev.lightwithin.compat.coloredglowlib.CGLCompat;
 import me.emafire003.dev.lightwithin.component.LightComponent;
 import me.emafire003.dev.lightwithin.config.Config;
@@ -76,6 +77,7 @@ public class EarthenLight extends InnerLight {
     public void execute(){
         checkSafety();
 
+        LightComponent component = LightWithin.LIGHT_COMPONENT.get(caster);
         if(FabricLoader.getInstance().isModLoaded("coloredglowlib")){
             if(this.rainbow_col){
                 CGLCompat.getLib().setRainbowColorToEntity(this.caster, true);
@@ -89,7 +91,7 @@ public class EarthenLight extends InnerLight {
         if(caster.getWorld().isClient){
             return;
         }
-        LightComponent component = LIGHT_COMPONENT.get(caster);
+
         //Will create a ravine under the enemies feet, and will also damage them and apply mining fatigue
         if(component.getTargets().equals(TargetType.ENEMIES)){
             //TODO maybe create a boudler projectile in the future

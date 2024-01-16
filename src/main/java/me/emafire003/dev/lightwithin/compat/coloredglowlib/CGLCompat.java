@@ -16,6 +16,10 @@ public class CGLCompat {
         return Color.translateFromHEX(color);
     }
 
+    public static String getModID(){
+        return "coloredglowlib";
+    }
+
     public static String toHex(int r, int g, int b){
         return Color.translateToHEX(r, g, b);
     }

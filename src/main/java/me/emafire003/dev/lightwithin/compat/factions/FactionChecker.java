@@ -5,10 +5,15 @@ import io.icker.factions.api.persistents.User;
 import net.minecraft.entity.player.PlayerEntity;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 public class FactionChecker {
 
+
+    public static String getModId(){
+        return "factions";
+    }
     /**
      * Checks if two players share a faction together.
      * If one of the two is not in a faction, it will return false.
@@ -54,8 +59,8 @@ public class FactionChecker {
         User member = User.get(player.getUuid());
         User member1 = User.get(player1.getUuid());
         if (member.isInFaction() && member1.isInFaction()) {
-            List<Relationship> enemies = member.getFaction().getEnemiesWith();
-            UUID faction1 = member.getFaction().getID();
+            List<Relationship> enemies = Objects.requireNonNull(member.getFaction()).getEnemiesWith();
+            UUID faction1 = member1.getFaction().getID();
             for(Relationship en : enemies){
                 if(en.status.equals(Relationship.Status.ENEMY) && en.target.equals(faction1)){
                     return true;
@@ -77,6 +82,9 @@ public class FactionChecker {
         User member1 = User.get(player1_uuid);
         if (member.isInFaction() && member1.isInFaction()) {
             List<Relationship> enemies = member.getFaction().getEnemiesWith();
+            if(enemies == null){
+                return false;
+            }
             UUID faction1 = member.getFaction().getID();
             for(Relationship en : enemies){
                 if(en.status.equals(Relationship.Status.ENEMY) && en.target.equals(faction1)){

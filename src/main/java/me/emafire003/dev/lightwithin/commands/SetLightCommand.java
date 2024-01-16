@@ -1,7 +1,6 @@
 package me.emafire003.dev.lightwithin.commands;
 
 import com.mojang.brigadier.arguments.BoolArgumentType;
-import com.mojang.brigadier.arguments.DoubleArgumentType;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
@@ -15,7 +14,8 @@ import me.emafire003.dev.lightwithin.config.Config;
 import me.emafire003.dev.lightwithin.lights.InnerLightType;
 import me.emafire003.dev.lightwithin.util.TargetType;
 import net.minecraft.command.argument.EntityArgumentType;
-import net.minecraft.server.command.*;
+import net.minecraft.server.command.CommandManager;
+import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
@@ -31,6 +31,7 @@ public class SetLightCommand implements LightCommand{
     public static List<InnerLightType> currently_usable_lights = Arrays.asList(InnerLightType.HEAL, InnerLightType.DEFENCE,
             InnerLightType.STRENGTH, InnerLightType.BLAZING, InnerLightType.FROST, InnerLightType.EARTHEN,
             InnerLightType.WIND, InnerLightType.FROG, InnerLightType.AQUA);
+
 
     private int changeType(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
         Collection<ServerPlayerEntity> targets = EntityArgumentType.getPlayers(context, "player");
@@ -74,8 +75,6 @@ public class SetLightCommand implements LightCommand{
             return 0;
         }
 
-
-
     }
 
     private int changeTarget(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
@@ -110,7 +109,7 @@ public class SetLightCommand implements LightCommand{
 
     private int changePower(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
         Collection<ServerPlayerEntity> targets = EntityArgumentType.getPlayers(context, "player");
-        double power = DoubleArgumentType.getDouble(context, "new_power");
+        int power = IntegerArgumentType.getInteger(context, "new_power");
         ServerCommandSource source = context.getSource();
 
         for(ServerPlayerEntity target : targets){
@@ -210,7 +209,6 @@ public class SetLightCommand implements LightCommand{
         return 1;
     }
 
-
     public LiteralCommandNode<ServerCommandSource> getNode() {
         return CommandManager
                 .literal("set")
@@ -247,7 +245,7 @@ public class SetLightCommand implements LightCommand{
                                 .then(
                                         CommandManager.argument("player", EntityArgumentType.players())
                                                 .then(
-                                                        CommandManager.argument("new_power", DoubleArgumentType.doubleArg(1, 10))
+                                                        CommandManager.argument("new_power", IntegerArgumentType.integer(1, 10))
                                                                 .executes(this::changePower)
                                                 )
 
@@ -259,7 +257,7 @@ public class SetLightCommand implements LightCommand{
                                 .then(
                                         CommandManager.argument("player", EntityArgumentType.players())
                                                 .then(
-                                                        CommandManager.argument("new_duration", IntegerArgumentType.integer(0, (int) (18*Config.DURATION_MULTIPLIER)))
+                                                        CommandManager.argument("new_duration", IntegerArgumentType.integer(1))
                                                                 .executes(this::changeDuration)
                                                 )
 
@@ -271,7 +269,7 @@ public class SetLightCommand implements LightCommand{
                                 .then(
                                         CommandManager.argument("player", EntityArgumentType.players())
                                                 .then(
-                                                        CommandManager.argument("new_cooldown", IntegerArgumentType.integer(0, 100))
+                                                        CommandManager.argument("new_cooldown", IntegerArgumentType.integer(1, 120))
                                                                 .executes(this::changeCooldown)
                                                 )
 

@@ -59,7 +59,8 @@ public class LightTriggerChecks {
         }
         /**CHECKS for the allies part*/
         else if(component.getTargets().equals(TargetType.ALLIES)){
-            if(CheckUtils.checkAllyHealth(player, target, Config.HP_PERCENTAGE_ALLIES)){
+            //TODO set attacker in the other ones as well
+            if(CheckUtils.checkAllyHealth(player, attacker, Config.HP_PERCENTAGE_ALLIES)){
                 trigger_sum = trigger_sum + 4;
             }
             if(CheckUtils.checkSelfDanger(player, Config.HP_PERCENTAGE_SELF)){
@@ -91,7 +92,7 @@ public class LightTriggerChecks {
                 trigger_sum = 3;
             }
 
-            if(CheckUtils.checkAllyHealth(player, target, Config.HP_PERCENTAGE_ALLIES)){
+            if(CheckUtils.checkAllyHealth(player, attacker, Config.HP_PERCENTAGE_ALLIES)){
                 trigger_sum = trigger_sum + 2;
             }
             if(CheckUtils.checkSelfDanger(player, Config.HP_PERCENTAGE_SELF)){
@@ -184,7 +185,7 @@ public class LightTriggerChecks {
         }
         /**CHECKS for the allies part*/
         else if(component.getTargets().equals(TargetType.ALLIES)){
-            if(CheckUtils.checkAllyHealth(player, target, Config.HP_PERCENTAGE_ALLIES)){
+            if(CheckUtils.checkAllyHealth(player, attacker, Config.HP_PERCENTAGE_ALLIES)){
                 trigger_sum = trigger_sum + 4;
             }
             if(CheckUtils.checkSelfDanger(player, Config.HP_PERCENTAGE_SELF)){
@@ -291,7 +292,7 @@ public class LightTriggerChecks {
         }
         /**CHECKS if the player has ENEMIES as target, either him or his allies health needs to be low*/
         else if(component.getTargets().equals(TargetType.ENEMIES) && (CheckUtils.CheckAllies.checkAlly(player, target) || player.equals(target))){
-            if(CheckUtils.checkAllyHealth(player, target, Config.HP_PERCENTAGE_ALLIES)){
+            if(CheckUtils.checkAllyHealth(player, attacker, Config.HP_PERCENTAGE_ALLIES)){
                 trigger_sum = trigger_sum + 4;
             }
             if(CheckUtils.checkSelfDanger(player, Config.HP_PERCENTAGE_SELF+5)){
@@ -322,28 +323,24 @@ public class LightTriggerChecks {
         }else if(component.getTargets().equals(TargetType.SELF)){
             if(CheckUtils.checkSelfDanger(player, Config.HP_PERCENTAGE_SELF+5)){
                 trigger_sum = trigger_sum + 4;
-                player.sendMessage(Text.literal("Low  low health"));
             }else if(CheckUtils.checkSelfDanger(player, Config.HP_PERCENTAGE_SELF+30)){
                 trigger_sum = trigger_sum + 2;
-                player.sendMessage(Text.literal("Low health"));
             }
 
             //Checks if the player has low armor durability
             if(Config.CHECK_ARMOR_DURABILITY && CheckUtils.checkArmorDurability(player, Config.DUR_PERCENTAGE_SELF)){
                 trigger_sum=trigger_sum+1;
-                player.sendMessage(Text.literal("Armor"));
             }
 
             if(CheckUtils.checkFrost(player)){
                 trigger_sum = trigger_sum + 3;
-                player.sendMessage(Text.literal("Frost"));
             }
 
             if(trigger_sum >= MIN_TRIGGER) {
                 sendReadyPacket((ServerPlayerEntity) player, true);
             }
         }else if(component.getTargets().equals(TargetType.ALLIES)){
-            if(!player.equals(target) && CheckUtils.checkAllyHealth(player, target, Config.HP_PERCENTAGE_ALLIES+5)){
+            if(!player.equals(target) && CheckUtils.checkAllyHealth(player, attacker, Config.HP_PERCENTAGE_ALLIES+5)){
                 trigger_sum = trigger_sum + 4;
             }
             if(CheckUtils.checkSelfDanger(player, Config.HP_PERCENTAGE_SELF)){
@@ -374,7 +371,7 @@ public class LightTriggerChecks {
         double trigger_sum = 0;
         /**If the player or their allies are on low health or surrounded, a golem will spawn if the player has the OTHER target*/
         if(component.getTargets().equals(TargetType.VARIANT)){
-            if(CheckUtils.checkAllyHealth(player, target, Config.HP_PERCENTAGE_ALLIES)){
+            if(CheckUtils.checkAllyHealth(player, attacker, Config.HP_PERCENTAGE_ALLIES)){
                 trigger_sum = trigger_sum + 4;
             }
             if(CheckUtils.checkSelfDanger(player, Config.HP_PERCENTAGE_SELF+5)){
@@ -395,7 +392,7 @@ public class LightTriggerChecks {
         }
         /**CHECKS if the player has ENEMIES as target, either his or his allies health needs to be low*/
         else if(component.getTargets().equals(TargetType.ENEMIES) && (CheckUtils.CheckAllies.checkAlly(player, target) || player.equals(target))){
-            if(CheckUtils.checkAllyHealth(player, target, Config.HP_PERCENTAGE_ALLIES)){
+            if(CheckUtils.checkAllyHealth(player, attacker, Config.HP_PERCENTAGE_ALLIES)){
                 trigger_sum = trigger_sum + 3;
             }
             if(CheckUtils.checkSelfDanger(player, Config.HP_PERCENTAGE_SELF+5)){
@@ -433,7 +430,7 @@ public class LightTriggerChecks {
                 sendReadyPacket((ServerPlayerEntity) player, true);
             }
         }else if(component.getTargets().equals(TargetType.ALLIES)){
-            if(CheckUtils.checkAllyHealth(player, target, Config.HP_PERCENTAGE_ALLIES)){
+            if(CheckUtils.checkAllyHealth(player, attacker, Config.HP_PERCENTAGE_ALLIES)){
                 trigger_sum = trigger_sum+4;
             }
             if(CheckUtils.checkSelfDanger(player, Config.HP_PERCENTAGE_SELF)){
@@ -479,11 +476,12 @@ public class LightTriggerChecks {
                 trigger_sum=trigger_sum+1;
             }
 
-            if(CheckUtils.checkFalling(player)){
-                trigger_sum=trigger_sum+1;
-            }else if(CheckUtils.checkFalling(player) && player.fallDistance > fall_trigger){
-                trigger_sum = trigger_sum+3;
+            if(CheckUtils.checkFalling(player) && player.fallDistance > fall_trigger){
+                trigger_sum = trigger_sum+4;
+            }else  if(CheckUtils.checkFalling(player)){
+                trigger_sum = trigger_sum+1;
             }
+
             if(CheckUtils.checkWind(player)){
                 trigger_sum = trigger_sum+3;
             }
@@ -492,7 +490,7 @@ public class LightTriggerChecks {
                 sendReadyPacket((ServerPlayerEntity) player, true);
             }
         }
-        else if(component.getTargets().equals(TargetType.SELF)&& player.equals(target)){
+        else if(component.getTargets().equals(TargetType.SELF) && player.equals(target)){
             if(CheckUtils.checkSelfDanger(player, Config.HP_PERCENTAGE_SELF+5)){
                 trigger_sum = trigger_sum + 4;
             }else if(CheckUtils.checkSelfDanger(player, Config.HP_PERCENTAGE_SELF+30)){
@@ -503,11 +501,12 @@ public class LightTriggerChecks {
                 trigger_sum=trigger_sum+1;
             }
 
-            if(CheckUtils.checkFalling(player)){
-                trigger_sum = trigger_sum+1;
-            }else if(CheckUtils.checkFalling(player) && player.fallDistance > fall_trigger){
+            if(CheckUtils.checkFalling(player) && player.fallDistance > fall_trigger){
                 trigger_sum = trigger_sum+4;
+            }else  if(CheckUtils.checkFalling(player)){
+                trigger_sum = trigger_sum+1;
             }
+
             if(CheckUtils.checkWind(player)){
                 trigger_sum = trigger_sum+3;
             }
@@ -516,7 +515,7 @@ public class LightTriggerChecks {
                 sendReadyPacket((ServerPlayerEntity) player, true);
             }
         }else if(component.getTargets().equals(TargetType.ALLIES)){
-            if(CheckUtils.checkAllyHealth(player, target, Config.HP_PERCENTAGE_ALLIES+5)){
+            if(CheckUtils.checkAllyHealth(player, attacker, Config.HP_PERCENTAGE_ALLIES+5)){
                 trigger_sum = trigger_sum + 4;
             }
             if(CheckUtils.checkSelfDanger(player, Config.HP_PERCENTAGE_SELF)){
@@ -531,7 +530,7 @@ public class LightTriggerChecks {
                 trigger_sum = trigger_sum + 2;
             }
             //TODO maybe check the height for the allies too?
-            else if(CheckUtils.CheckAllies.checkAlly(player, target) && CheckUtils.checkFalling(target)){
+            if(CheckUtils.CheckAllies.checkAlly(player, target) && CheckUtils.checkFalling(target)){
                 trigger_sum = trigger_sum + 2;
             }
 
@@ -631,7 +630,7 @@ public class LightTriggerChecks {
                 sendReadyPacket((ServerPlayerEntity) player, true);
             }
         }else if(component.getTargets().equals(TargetType.ALLIES)){
-            if(!player.equals(target) && CheckUtils.checkAllyHealth(player, target, Config.HP_PERCENTAGE_ALLIES+5)){
+            if(!player.equals(target) && CheckUtils.checkAllyHealth(player, attacker, Config.HP_PERCENTAGE_ALLIES+5)){
                 trigger_sum = trigger_sum + 4;
             }
             if(CheckUtils.checkSelfDanger(player, Config.HP_PERCENTAGE_SELF)){

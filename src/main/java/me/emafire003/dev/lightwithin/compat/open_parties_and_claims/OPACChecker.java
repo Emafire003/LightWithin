@@ -3,6 +3,7 @@ package me.emafire003.dev.lightwithin.compat.open_parties_and_claims;
 import me.emafire003.dev.lightwithin.LightWithin;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.MinecraftServer;
+import xaero.pac.OpenPartiesAndClaimsFabric;
 import xaero.pac.common.parties.party.ally.api.IPartyAllyAPI;
 import xaero.pac.common.parties.party.api.IPartyPlayerInfoAPI;
 import xaero.pac.common.parties.party.member.api.IPartyMemberAPI;
@@ -13,6 +14,10 @@ import xaero.pac.common.server.parties.party.api.IServerPartyAPI;
 import java.util.UUID;
 
 public class OPACChecker {
+
+    public static String getModId(){
+        return "openpartiesandclaims";
+    }
 
     /**
      * Checks if two players share a OPAC party together.

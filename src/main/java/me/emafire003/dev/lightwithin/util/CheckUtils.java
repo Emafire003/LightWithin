@@ -4,6 +4,7 @@ import me.emafire003.dev.lightwithin.compat.argonauts.ArgonautsChecker;
 import me.emafire003.dev.lightwithin.compat.factions.FactionChecker;
 import me.emafire003.dev.lightwithin.compat.ftb_teams.FTBTeamsChecker;
 import me.emafire003.dev.lightwithin.compat.open_parties_and_claims.OPACChecker;
+import me.emafire003.dev.lightwithin.component.SummonedByComponent;
 import me.emafire003.dev.lightwithin.config.Config;
 import me.emafire003.dev.lightwithin.status_effects.LightEffects;
 import net.fabricmc.loader.api.FabricLoader;
@@ -30,6 +31,7 @@ import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.registry.tag.DamageTypeTags;
 import net.minecraft.registry.tag.TagKey;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
@@ -37,7 +39,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
-import static me.emafire003.dev.lightwithin.LightWithin.box_expansion_amount;
+import static me.emafire003.dev.lightwithin.LightWithin.*;
 
 public class CheckUtils {
 
@@ -312,8 +314,9 @@ public class CheckUtils {
         //loops through the entities near the player, if the entities are in the same team as the player
         //and they are not the entity that has been hit then add them to the team_entities and check if their health is ok
         for(LivingEntity ent : entities){
+            //TODO might be that another ally is the attacker
             //Checks if the entity in the list is in the same team/faction/party/pet or not
-            if(!attacker.equals(ent) && !player.equals(ent) && CheckAllies.checkAlly(player, ent) ){
+            if(!player.equals(attacker) && !attacker.equals(ent) && !player.equals(ent) && CheckAllies.checkAlly(player, ent) ){
                 //if it is, check the health
                 if(checkSelfDanger(ent, health_percent)){
                     n_allies_low_health++;
@@ -327,36 +330,6 @@ public class CheckUtils {
         //otherwise, false
     }
 
-    /**Will check for nearby enemies, if they are on high health and possibly surrounded
-     * it will return true
-     *
-     * @param player The player that could trigger their light
-     * @param entity The entity that is attacking it
-     * @param health_percent The percentage (15, 25, 70) below which the target is in danger (hence light activatable)
-     * */
-    @Deprecated //TODO should try to find a use for this maybe
-    public static boolean checkEnemyHealthHigh(@NotNull PlayerEntity player, Entity entity, int health_percent){
-        List<LivingEntity> entities = player.getWorld().getEntitiesByClass(LivingEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amount), (entity1 -> true));
-        int ent_number = 0;
-        //I need to this to prevent a ConcurrentModificationError
-        List<LivingEntity> team_entities = new ArrayList<>();
-        //loops through the entities near the player, if the entities are in the same team as the player
-        //and they are not the entity that has been hit then add them to the team_entities and check if their health is ok
-        for(LivingEntity ent : entities){
-            //Checks if the entity in the list is in the same team/faction/party/pet or not
-            if(!entity.equals(ent) && CheckAllies.checkAlly(player, ent) ){
-                //if it is, check the health
-                if(ent.getHealth() <= (ent.getMaxHealth())*health_percent/100){
-                    ent_number++;
-                }
-                team_entities.add(ent);
-            }
-        }
-        //If the total team targets && the number of entities of team with the right health are true then
-        //return true
-        return team_entities.size() == ent_number;
-        //otherwise, false
-    }
 
     /**Cheks if there are passive mobs nearby, if there are
      * checks the helath. If it is below the health_percent returns true
@@ -405,8 +378,8 @@ public class CheckUtils {
             return OPACChecker.areInSameParty(player, player1) || OPACChecker.areInAlliedParties(player, player1);
         }
 
-        public static boolean checkFTBTeams(PlayerEntity player, PlayerEntity player1){
-            return FTBTeamsChecker.areInSameParty(player, player1);
+        public static boolean checkFTBTeams(ServerPlayerEntity player, ServerPlayerEntity player1){
+            return FTBTeamsChecker.areInSameParty(player, player1) || FTBTeamsChecker.areInAlliedPartis(player, player1);
         }
 
         public static boolean checkPet(LivingEntity entity, LivingEntity ent){
@@ -416,20 +389,39 @@ public class CheckUtils {
             return false;
         }
 
+        public static boolean checkSummoned(LivingEntity summoner, LivingEntity ent){
+            SummonedByComponent component = SUMMONED_BY_COMPONENT.getNullable(ent);
+            if(component != null && component.getIsSummoned()){
+                return component.getSummonerUUID().equals(summoner.getUuid());
+            }
+            return false;
+        }
+
         public static boolean checkAlly(LivingEntity entity, LivingEntity teammate){
-            if(FabricLoader.getInstance().isModLoaded("factions") && entity instanceof PlayerEntity && teammate instanceof PlayerEntity){
-                return checkFaction((PlayerEntity) entity, (PlayerEntity) teammate);
+            if(entity.getWorld().isClient()){
+                return false;
             }
-            if(FabricLoader.getInstance().isModLoaded("argonauts") && entity instanceof PlayerEntity && teammate instanceof PlayerEntity){
-                return checkArgonauts((PlayerEntity) entity, (PlayerEntity) teammate);
+            if(FabricLoader.getInstance().isModLoaded(FactionChecker.getModId()) && entity instanceof PlayerEntity && teammate instanceof PlayerEntity){
+                if(checkFaction((PlayerEntity) entity, (PlayerEntity) teammate)){
+                    return true;
+                }
             }
-            if(FabricLoader.getInstance().isModLoaded("open-parties-and-claims") && entity instanceof PlayerEntity && teammate instanceof PlayerEntity){
-                return checkOPACParty((PlayerEntity) entity, (PlayerEntity) teammate);
+            if(FabricLoader.getInstance().isModLoaded(ArgonautsChecker.getModId()) && entity instanceof PlayerEntity && teammate instanceof PlayerEntity){
+                if(checkArgonauts((PlayerEntity) entity, (PlayerEntity) teammate)){
+                    return true;
+                }
             }
-            if(FabricLoader.getInstance().isModLoaded("ftbteams") && entity instanceof PlayerEntity && teammate instanceof PlayerEntity){
-                return checkFTBTeams((PlayerEntity) entity, (PlayerEntity) teammate);
+            if(FabricLoader.getInstance().isModLoaded(OPACChecker.getModId()) && entity instanceof PlayerEntity && teammate instanceof PlayerEntity){
+                if(checkOPACParty((PlayerEntity) entity, (PlayerEntity) teammate)){
+                    return true;
+                }
             }
-            return checkTeam(entity, teammate) || checkPet(entity, teammate);
+            if(FabricLoader.getInstance().isModLoaded(FTBTeamsChecker.getModId()) && entity instanceof PlayerEntity && teammate instanceof PlayerEntity){
+                if(checkFTBTeams((ServerPlayerEntity) entity, (ServerPlayerEntity) teammate)){
+                    return true;
+                }
+            }
+            return checkTeam(entity, teammate) || checkPet(entity, teammate) || checkSummoned(entity, teammate);
 
         }
 

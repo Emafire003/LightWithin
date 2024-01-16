@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class EntityFallingMixin {
 
     @Inject(method = "fall", at = @At("HEAD"))
-    public void injectOnAttacking(double heightDifference, boolean onGround, BlockState state, BlockPos landedPosition, CallbackInfo ci) {
+    public void injectEntityFalling(double heightDifference, boolean onGround, BlockState state, BlockPos landedPosition, CallbackInfo ci) {
 
         if(isFalling(((LivingEntity) (Object) this))){
             EntityFallingEvent.EVENT.invoker().falling(((LivingEntity)(Object)this), heightDifference, ((LivingEntity)(Object)this).fallDistance);

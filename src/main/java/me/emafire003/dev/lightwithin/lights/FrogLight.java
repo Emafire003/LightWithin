@@ -1,6 +1,8 @@
 package me.emafire003.dev.lightwithin.lights;
 
+import me.emafire003.dev.lightwithin.LightWithin;
 import me.emafire003.dev.lightwithin.compat.coloredglowlib.CGLCompat;
+import me.emafire003.dev.lightwithin.component.LightComponent;
 import me.emafire003.dev.lightwithin.particles.LightParticles;
 import me.emafire003.dev.lightwithin.particles.LightParticlesUtil;
 import net.fabricmc.loader.api.FabricLoader;
@@ -56,6 +58,7 @@ public class FrogLight extends InnerLight {
     @Override
     public void execute(){
         checkSafety();
+        LightComponent component = LightWithin.LIGHT_COMPONENT.get(caster);
         if(FabricLoader.getInstance().isModLoaded("coloredglowlib")){
             if(this.rainbow_col){
                 CGLCompat.getLib().setRainbowColorToEntity(this.caster, true);

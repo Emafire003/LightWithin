@@ -77,6 +77,7 @@ public class BlazingLight extends InnerLight {
     @Override
     public void execute(){
         checkSafety();
+        LightComponent component = LIGHT_COMPONENT.get(caster);
         if(FabricLoader.getInstance().isModLoaded("coloredglowlib")){
             if(this.rainbow_col){
                 CGLCompat.getLib().setRainbowColorToEntity(this.caster, true);
@@ -87,7 +88,7 @@ public class BlazingLight extends InnerLight {
         caster.getWorld().playSound(caster.getX(), caster.getY(), caster.getZ(), LightSounds.BLAZING_LIGHT, SoundCategory.AMBIENT, 1, 1, true);
         caster.addStatusEffect(new StatusEffectInstance(StatusEffects.FIRE_RESISTANCE, caster.getStatusEffect(LightEffects. LIGHT_ACTIVE).getDuration(), 0, false, false));
 
-        LightComponent component = LIGHT_COMPONENT.get(caster);
+
         if(component.getTargets().equals(TargetType.ALL)){
             power_multiplier = power_multiplier + Config.BLAZING_ALL_DAMAGE_BONUS;
         }

@@ -19,7 +19,6 @@ import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
-import net.minecraft.text.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,7 +63,7 @@ public class HealLight extends InnerLight {
     public HealLight(List<LivingEntity> targets, double cooldown_time, double power_multiplier, int duration, PlayerEntity caster) {
         super(targets, cooldown_time, power_multiplier, duration, caster);
         type = InnerLightType.HEAL;
-        color = "ff1443";
+        this.color = "ff1443";
         checkSafety();
     }
 
@@ -94,6 +93,7 @@ public class HealLight extends InnerLight {
 
     @Override
     public void execute(){
+        LightComponent component = LightWithin.LIGHT_COMPONENT.get(caster);
         if(FabricLoader.getInstance().isModLoaded("coloredglowlib")){
             if(this.rainbow_col){
                 CGLCompat.getLib().setRainbowColorToEntity(this.caster, true);
@@ -103,7 +103,7 @@ public class HealLight extends InnerLight {
         }
         caster.getWorld().playSound(caster.getX(), caster.getY(), caster.getZ(), LightSounds.HEAL_LIGHT, SoundCategory.AMBIENT, 1, 1, true);
         //caster.getWorld().playSound(caster, caster.getBlockPos(), LightSounds.HEAL_LIGHT, SoundCategory.AMBIENT, 1,1);
-        LightComponent component = LightWithin.LIGHT_COMPONENT.get(caster);
+
         for(LivingEntity target : this.targets){
 
 

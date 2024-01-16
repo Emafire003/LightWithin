@@ -102,7 +102,7 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 
 
 		ServerLifecycleEvents.SERVER_STARTED.register(minecraftServer -> {
-			if(FabricLoader.getInstance().isModLoaded("coloredglowlib")){
+			if(FabricLoader.getInstance().isModLoaded(CGLCompat.getModID())){
 				CGLCompat.getLib().setOverrideTeamColors(true);
 			}
 			box_expansion_amount = Config.AREA_OF_SEARCH_FOR_ENTITIES;
@@ -162,7 +162,8 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 		if(type.equals(InnerLightType.NONE)){
 			return;
 		}
-		if(FabricLoader.getInstance().isModLoaded("coloredglowlib")){
+		//TODO remove this from the lights
+		if(FabricLoader.getInstance().isModLoaded(CGLCompat.getModID())){
 			component.setPrevColor(CGLCompat.toHex(CGLCompat.getLib().getEntityColor(player)));
 		}
 
@@ -200,6 +201,57 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 
 	}
 
+	/** Gets all the enemies near a player and returns them in a list
+	 * Hostile-non allies (aka not summoned or pets) and Enemy players
+	 * count as Enemies
+	 *
+	 * @param player The player in question
+	 * @return A list of the player's enemies in the box_expansion_amount
+	 * */
+	private static List<LivingEntity> getEnemies(PlayerEntity player){
+		List<LivingEntity> targets = new ArrayList<>();
+		List<LivingEntity> entities = player.getWorld().getEntitiesByClass(LivingEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amount), (entity1 -> true));
+		for(LivingEntity ent : entities){
+			if(ent instanceof HostileEntity && !CheckUtils.CheckAllies.checkAlly(player, ent)){
+				targets.add(ent);
+			}
+			if(ent instanceof PlayerEntity && CheckUtils.CheckAllies.checkEnemies(player, ent)){
+				targets.add(ent);
+			}
+		}
+		return targets;
+	}
+
+	/** Gets all the allies near a player and returns them in a list
+	 * Allied players and pets and summoned mobs count as allies.
+	 * Also the player itself is counted
+	 *
+	 * They also need to be under a certain HP percentage (configurable in the config)
+	 *
+	 * @param player The player in question
+	 * @return A list of the player's enemies in the box_expansion_amount
+	 * */
+	public static List<LivingEntity> getAllies(PlayerEntity player){
+		List<LivingEntity> targets = new ArrayList<>();
+		List<LivingEntity> entities = player.getWorld().getEntitiesByClass(LivingEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amount), (entity1 -> true));
+		targets.add(player);
+		for(LivingEntity ent : entities){
+			//TODO may need this to prevent bugs
+			if(/*!entity.equals(ent) && */CheckUtils.CheckAllies.checkAlly(player, ent)){
+				if(Config.ALWAYS_AFFECT_ALLIES || CheckUtils.checkSelfDanger(ent, Config.HP_PERCENTAGE_ALLIES)){
+					targets.add(ent);
+				}
+			}else if(ent instanceof TameableEntity){
+				if(player.equals(((TameableEntity) ent).getOwner())){
+					if(Config.ALWAYS_AFFECT_ALLIES || CheckUtils.checkSelfDanger(ent, Config.HP_PERCENTAGE_VARIANT)){
+						targets.add(ent);
+					}
+				}
+			}
+		}
+		return targets;
+	}
+
 	//=======================HEAL LIGHT=======================
 	public static void activateHeal(LightComponent component, PlayerEntity player){
 		List<LivingEntity> targets = new ArrayList<>();
@@ -214,24 +266,8 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 		// It's not a bug, it's a feature now.
 		//Yay.
 		else if(component.getTargets().equals(TargetType.ALLIES)){
-			List<LivingEntity> entities = player.getWorld().getEntitiesByClass(LivingEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amount), (entity1 -> true));
-			targets.add(player);
-			for(LivingEntity ent : entities){
-				// may need this to prevent bugs EDIT i don't even remember what "this" referred to eheh
-				if(CheckUtils.CheckAllies.checkAlly(player, ent)){
-					if(Config.ALWAYS_AFFECT_ALLIES || CheckUtils.checkSelfDanger(ent, Config.HP_PERCENTAGE_ALLIES)){
-						targets.add(ent);
-					}
-				}else if(ent instanceof TameableEntity){
-					if(player.equals(((TameableEntity) ent).getOwner())){
-						if(Config.ALWAYS_AFFECT_ALLIES || CheckUtils.checkSelfDanger(ent, Config.HP_PERCENTAGE_VARIANT)){
-							targets.add(ent);
-						}
-					}
-				}
-			}
+			targets.addAll(getAllies(player));
 			player.sendMessage(Text.translatable("light.description.activation.heal.allies"), true);
-
 		}
 
 		//Finds peaceful creatures and allies, also the player
@@ -270,21 +306,7 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 			player.sendMessage(Text.translatable("light.description.activation.defense.self"), true);
 		}
 		else if(component.getTargets().equals(TargetType.ALLIES)){
-			List<LivingEntity> entities = player.getWorld().getEntitiesByClass(LivingEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amount), (entity1 -> true));
-			for(LivingEntity ent : entities){
-				//TODO may need this to prevent bugs
-				if(/*!entity.equals(ent) && */CheckUtils.CheckAllies.checkAlly(player, ent)){
-					if(Config.ALWAYS_AFFECT_ALLIES || CheckUtils.checkSelfDanger(ent, Config.HP_PERCENTAGE_ALLIES)){
-						targets.add(ent);
-					}
-				}else if(ent instanceof TameableEntity){
-					if(player.equals(((TameableEntity) ent).getOwner())){
-						if(Config.ALWAYS_AFFECT_ALLIES || CheckUtils.checkSelfDanger(ent, Config.HP_PERCENTAGE_VARIANT)){
-							targets.add(ent);
-						}
-					}
-				}
-			}
+			targets.addAll(getAllies(player));
 			player.sendMessage(Text.translatable("light.description.activation.defense.allies"), true);
 		}
 
@@ -315,24 +337,9 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 			player.sendMessage(Text.translatable("light.description.activation.strength.variant"), true);
 		}
 		else if(component.getTargets().equals(TargetType.ALLIES)){
-			List<LivingEntity> entities = player.getWorld().getEntitiesByClass(LivingEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amount), (entity1 -> true));
-			for(LivingEntity ent : entities){
-				if(/*!entity.equals(ent) && */CheckUtils.CheckAllies.checkAlly(player, ent)){
-					if(Config.ALWAYS_AFFECT_ALLIES || CheckUtils.checkSelfDanger(ent, Config.HP_PERCENTAGE_ALLIES)){
-						targets.add(ent);
-					}
-				}else if(ent instanceof TameableEntity){
-					if(player.equals(((TameableEntity) ent).getOwner())){
-						if(Config.ALWAYS_AFFECT_ALLIES || CheckUtils.checkSelfDanger(ent, Config.HP_PERCENTAGE_VARIANT)){
-							targets.add(ent);
-						}
-					}
-				}
-			}
+			targets.addAll(getAllies(player));
 			player.sendMessage(Text.translatable("light.description.activation.strength.allies"), true);
-
 		}
-
 
 		if(debug){
 			player.sendMessage(Text.literal("Ok light triggered"), false);
@@ -352,15 +359,7 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 		}
 
 		else if(component.getTargets().equals(TargetType.ENEMIES)){
-			List<LivingEntity> entities = player.getWorld().getEntitiesByClass(LivingEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amount), (entity1 -> true));
-			for(LivingEntity ent : entities){
-				//This just checks if the hostile entity is an ally. If it is, it won't be targeted
-				if(ent instanceof HostileEntity && !CheckUtils.CheckAllies.checkAlly(player, ent)){
-					targets.add(ent);
-				}else if(CheckUtils.CheckAllies.checkEnemies(player, ent)){
-					targets.add(ent);
-				}
-			}
+			targets.addAll(getEnemies(player));
 			player.sendMessage(Text.translatable("light.description.activation.blazing.enemies"), true);
 		}
 
@@ -382,35 +381,15 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 		}
 
 		else if(component.getTargets().equals(TargetType.ENEMIES)){
-			List<LivingEntity> entities = player.getWorld().getEntitiesByClass(LivingEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amount), (entity1 -> true));
-			for(LivingEntity ent : entities){
-				if(ent instanceof HostileEntity && !CheckUtils.CheckAllies.checkAlly(player, ent)){
-					targets.add(ent);
-				}
-			}
+			targets.addAll(getEnemies(player));
 			player.sendMessage(Text.translatable("light.description.activation.frost.enemies"), true);
 		}else if(component.getTargets().equals(TargetType.ALLIES)){
-			List<LivingEntity> entities = player.getWorld().getEntitiesByClass(LivingEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amount), (entity1 -> true));
-			for(LivingEntity ent : entities){
-				if(/*!entity.equals(ent) && */CheckUtils.CheckAllies.checkAlly(player, ent)){
-					if(Config.ALWAYS_AFFECT_ALLIES || CheckUtils.checkSelfDanger(ent, Config.HP_PERCENTAGE_ALLIES)){
-						targets.add(ent);
-					}
-				}else if(ent instanceof TameableEntity){
-					if(player.equals(((TameableEntity) ent).getOwner())){
-						if(Config.ALWAYS_AFFECT_ALLIES || CheckUtils.checkSelfDanger(ent, Config.HP_PERCENTAGE_VARIANT)){
-							targets.add(ent);
-						}
-					}
-				}
-			}
-			targets.add(player);
+			targets.addAll(getAllies(player));
 			player.sendMessage(Text.translatable("light.description.activation.frost.allies"), true);
 		}if(component.getTargets().equals(TargetType.SELF)){
 			targets.add(player);
 			player.sendMessage(Text.translatable("light.description.activation.frost.self"), true);
 		}
-
 		if(debug){
 			player.sendMessage(Text.literal("Ok light triggered"), false);
 		}
@@ -426,29 +405,10 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 		}
 
 		else if(component.getTargets().equals(TargetType.ENEMIES)){
-			List<LivingEntity> entities = player.getWorld().getEntitiesByClass(LivingEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amount), (entity1 -> true));
-			for(LivingEntity ent : entities){
-				if(ent instanceof HostileEntity && !CheckUtils.CheckAllies.checkAlly(player, ent)){
-					targets.add(ent);
-				}
-			}
+			targets.addAll(getEnemies(player));
 			player.sendMessage(Text.translatable("light.description.activation.earthen.enemies"), true);
 		}else if(component.getTargets().equals(TargetType.ALLIES)){
-			List<LivingEntity> entities = player.getWorld().getEntitiesByClass(LivingEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amount), (entity1 -> true));
-			for(LivingEntity ent : entities){
-				if(/*!entity.equals(ent) && */CheckUtils.CheckAllies.checkAlly(player, ent)){
-					if(Config.ALWAYS_AFFECT_ALLIES || CheckUtils.checkSelfDanger(ent, Config.HP_PERCENTAGE_ALLIES)){
-						targets.add(ent);
-					}
-				}else if(ent instanceof TameableEntity){
-					if(player.equals(((TameableEntity) ent).getOwner())){
-						if(Config.ALWAYS_AFFECT_ALLIES || CheckUtils.checkSelfDanger(ent, Config.HP_PERCENTAGE_VARIANT)){
-							targets.add(ent);
-						}
-					}
-				}
-			}
-			targets.add(player);
+			targets.addAll(getAllies(player));
 			player.sendMessage(Text.translatable("light.description.activation.earthen.allies"), true);
 		}if(component.getTargets().equals(TargetType.SELF)){
 			targets.add(player);
@@ -466,21 +426,7 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 	public static void activateWind(LightComponent component, PlayerEntity player){
 		List<LivingEntity> targets = new ArrayList<>();
 		if(component.getTargets().equals(TargetType.ALLIES)){
-			List<LivingEntity> entities = player.getWorld().getEntitiesByClass(LivingEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amount), (entity1 -> true));
-			for(LivingEntity ent : entities){
-				if(/*!entity.equals(ent) && */CheckUtils.CheckAllies.checkAlly(player, ent)){
-					if(Config.ALWAYS_AFFECT_ALLIES || CheckUtils.checkSelfDanger(ent, Config.HP_PERCENTAGE_ALLIES)){
-						targets.add(ent);
-					}
-				}else if(ent instanceof TameableEntity){
-					if(player.equals(((TameableEntity) ent).getOwner())){
-						if(Config.ALWAYS_AFFECT_ALLIES || CheckUtils.checkSelfDanger(ent, Config.HP_PERCENTAGE_VARIANT)){
-							targets.add(ent);
-						}
-					}
-				}
-			}
-			targets.add(player);
+			targets.addAll(getAllies(player));
 			player.sendMessage(Text.translatable("light.description.activation.wind.allies"), true);
 		}else if(component.getTargets().equals(TargetType.SELF)){
 			targets.add(player);
@@ -508,29 +454,10 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 		}
 
 		else if(component.getTargets().equals(TargetType.ENEMIES)){
-			List<LivingEntity> entities = player.getWorld().getEntitiesByClass(LivingEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amount), (entity1 -> true));
-			for(LivingEntity ent : entities){
-				if(ent instanceof HostileEntity && !CheckUtils.CheckAllies.checkAlly(player, ent)){
-					targets.add(ent);
-				}
-			}
+			targets.addAll(getEnemies(player));
 			player.sendMessage(Text.translatable("light.description.activation.aqua.enemies"), true);
 		}else if(component.getTargets().equals(TargetType.ALLIES)){
-			List<LivingEntity> entities = player.getWorld().getEntitiesByClass(LivingEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amount), (entity1 -> true));
-			for(LivingEntity ent : entities){
-				if(/*!entity.equals(ent) && */CheckUtils.CheckAllies.checkAlly(player, ent)){
-					if(Config.ALWAYS_AFFECT_ALLIES || CheckUtils.checkSelfDanger(ent, Config.HP_PERCENTAGE_ALLIES)){
-						targets.add(ent);
-					}
-				}else if(ent instanceof TameableEntity){
-					if(player.equals(((TameableEntity) ent).getOwner())){
-						if(Config.ALWAYS_AFFECT_ALLIES || CheckUtils.checkSelfDanger(ent, Config.HP_PERCENTAGE_VARIANT)){
-							targets.add(ent);
-						}
-					}
-				}
-			}
-			targets.add(player);
+			targets.addAll(getAllies(player));
 			player.sendMessage(Text.translatable("light.description.activation.aqua.allies"), true);
 		}if(component.getTargets().equals(TargetType.SELF)){
 			targets.add(player);

@@ -1,5 +1,6 @@
 package me.emafire003.dev.lightwithin.lights;
 
+import me.emafire003.dev.lightwithin.LightWithin;
 import me.emafire003.dev.lightwithin.compat.coloredglowlib.CGLCompat;
 import me.emafire003.dev.lightwithin.component.LightComponent;
 import me.emafire003.dev.lightwithin.config.Config;
@@ -82,7 +83,7 @@ public class WindLight extends InnerLight {
     @Override
     public void execute(){
         checkSafety();
-    caster.sendMessage(Text.literal("Light triggered"));
+        LightComponent component = LightWithin.LIGHT_COMPONENT.get(caster);
         if(FabricLoader.getInstance().isModLoaded("coloredglowlib")){
             if(this.rainbow_col){
                 CGLCompat.getLib().setRainbowColorToEntity(this.caster, true);
@@ -93,7 +94,6 @@ public class WindLight extends InnerLight {
 
         caster.getWorld().playSound(caster.getX(), caster.getY(), caster.getZ(), LightSounds.WIND_LIGHT, SoundCategory.AMBIENT, 1, 1, true);
         //caster.getWorld().playSound(caster, caster.getBlockPos(), LightSounds.WIND_LIGHT, SoundCategory.AMBIENT, 1, 1);
-        LightComponent component = LIGHT_COMPONENT.get(caster);
         ServerWorld world = (ServerWorld) (caster).getWorld();
         //If the light target is OTHER it will blow away every entity in radious
         if(component.getTargets().equals(TargetType.VARIANT)){
