@@ -6,10 +6,6 @@ import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 
 import static me.emafire003.dev.lightwithin.LightWithin.LOGGER;
 
@@ -84,7 +80,6 @@ public class Config {
     public static int FROST_MAX_DURATION;
     public static int FROST_MIN_POWER;
     public static int FROST_MIN_DURATION;
-    public static double FROST_FREEZE_RES_DURATION_MULTIPLIER;
 
     public static int EARTHEN_MAX_POWER;
     public static int EARTHEN_MAX_DURATION;
@@ -248,7 +243,6 @@ public class Config {
         configs.addKeyValuePair(new Pair<>("frost_max_duration", 18), "The maximum duration of the frost effect");
         configs.addKeyValuePair(new Pair<>("frost_min_power", 1), "The minimum power multiplier (aka the AMOUNT of freeze damage inflicted upon activation. 2 = 1 hearth)");
         configs.addKeyValuePair(new Pair<>("frost_min_duration", 5), "The minimum duration of the frost effect");
-        configs.addKeyValuePair(new Pair<>("frost_freeze_res_duration_multiplier", 2.0), "The multiplier of the duration of the Freeze Resistance status effect given to allies or self. Set to 1 to use the default duration.");
 
         configs.addKeyValuePair(new Pair<>("earthen_max_power", 9), "The maximum power multiplier (Used to determine the level of the structures spawned and the bonus damage done to enemies)");
         configs.addKeyValuePair(new Pair<>("earthen_min_power", 1), "The minimum power multiplier (see above)");
@@ -335,7 +329,6 @@ public class Config {
         FROST_MAX_DURATION = CONFIG.getOrDefault("frost_max_duration", 18);
         FROST_MIN_POWER = CONFIG.getOrDefault("frost_min_power", 1);
         FROST_MIN_DURATION = CONFIG.getOrDefault("frost_min_duration", 5);
-        FROST_FREEZE_RES_DURATION_MULTIPLIER = CONFIG.getOrDefault("frost_freeze_res_duration_multiplier", 2.0);
 
         EARTHEN_MAX_POWER = CONFIG.getOrDefault("earthen_max_power", 9);
         EARTHEN_MAX_DURATION = CONFIG.getOrDefault("earthen_max_duration", 18);

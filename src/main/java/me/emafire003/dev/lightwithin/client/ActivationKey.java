@@ -30,6 +30,7 @@ public class ActivationKey {
                 if(LightWithinClient.isLightReady()){
                     ClientPlayNetworking.send(LightUsedPacketC2S.ID, new LightUsedPacketC2S(true));
                     LightWithinClient.setLightReady(false);
+                    LightWithinClient.setWaitForNext(true);
                 }
 
             }

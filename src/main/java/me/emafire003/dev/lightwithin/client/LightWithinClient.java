@@ -33,6 +33,7 @@ import static me.emafire003.dev.lightwithin.LightWithin.LOGGER;
 public class LightWithinClient implements ClientModInitializer {
 
     private static boolean lightReady = false;
+    private static boolean waitForNext = false;
     int seconds = 10;
     int tickCounter = 0;
     RendererEventHandler event_handler = new RendererEventHandler();
@@ -67,20 +68,27 @@ public class LightWithinClient implements ClientModInitializer {
         BlockRenderLayerMap.INSTANCE.putBlock(LightBlocks.ICE_WALL, RenderLayer.getTranslucent());
         BlockRenderLayerMap.INSTANCE.putBlock(LightBlocks.CLEAR_ICE, RenderLayer.getTranslucent());
 
-        EntityRendererRegistry.register(LightEntities.EARTH_GOLEM, (context) -> {
-            return new EarthGolemEntityRenderer(context);
-        });
+        EntityRendererRegistry.register(LightEntities.EARTH_GOLEM, EarthGolemEntityRenderer::new);
 
         EntityModelLayerRegistry.registerModelLayer(MODEL_EARTH_GOLEM_LAYER, EarthGolemEntityModel::getTexturedModelData);
 
         ClientTickEvents.END_CLIENT_TICK.register((minecraftClient -> {
-            if(lightReady){
+            //This is done as to not display another Light Ready icon when it just triggered
+            if(waitForNext){
+                if(tickCounter == 20*seconds){
+                    waitForNext = false;
+                    tickCounter = 0;
+                }
+                tickCounter++;
+            }else if(lightReady){
                 if(tickCounter == 20*seconds){
                     lightReady = false;
                     tickCounter = 0;
                 }
                 tickCounter++;
             }
+
+
        }));
     }
 
@@ -90,6 +98,10 @@ public class LightWithinClient implements ClientModInitializer {
 
     public static void setLightReady(boolean b){
         lightReady = b;
+    }
+
+    public static void setWaitForNext(boolean b){
+        waitForNext = b;
     }
 
     /**How much should a player have the opportunity to press the button in seconds*/
@@ -105,6 +117,7 @@ public class LightWithinClient implements ClientModInitializer {
                 try{
                     if(!lightReady){
                         lightReady = results;
+                        assert client.player != null;
                         client.player.playSound(LightSounds.LIGHT_READY, 1f, 0.63f);
                     }
                     tickCounter = 0;
@@ -143,6 +156,7 @@ public class LightWithinClient implements ClientModInitializer {
 
             client.execute(() -> {
                 try{
+                    assert client.player != null;
                     client.player.setVelocity(results);
                     //client.player.move(MovementType.SELF, client.player.getVelocity());
 

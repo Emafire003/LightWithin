@@ -114,3 +114,6 @@ Added option to set permissions, check the permissions.txt file on github!
 Added option to consider non ALLIES as ENEMIES
 
 Restructured the config completely :}
+
+Updated the AQUA light ENEMIES target: Now instead of weird cages of mangrove roots the enemies will be launched
+into the air by a water column/geyser, hitting a trident (which is not pickup-able anymore) if the power level is high enough.
