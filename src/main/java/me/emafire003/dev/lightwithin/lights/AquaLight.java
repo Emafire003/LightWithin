@@ -11,15 +11,21 @@ import me.emafire003.dev.lightwithin.util.SpawnUtils;
 import me.emafire003.dev.lightwithin.util.TargetType;
 import me.emafire003.dev.structureplacerapi.StructurePlacerAPI;
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.BubbleColumnBlock;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.*;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.mob.DrownedEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.entity.projectile.TridentEntity;
+import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.registry.Registries;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
@@ -42,10 +48,10 @@ public class AquaLight extends InnerLight {
      */
 
     /* Triggers:
-    * - drowning && hp < 50%
-    * - surrounded && hp < 60%
-    * - hp < 35%
-    * */
+     * - drowning && hp < 50%
+     * - surrounded && hp < 60%
+     * - hp < 35%
+     * */
 
     /*Possible targets:
     Always apply conduit effect
@@ -86,7 +92,7 @@ public class AquaLight extends InnerLight {
             max_duration = (int) (Config.AQUA_MAX_DURATION * Config.DURATION_MULTIPLIER);
         }
         if(this.duration > max_duration){
-            this.duration = (int) max_duration;
+            this.duration = max_duration;
         }
         if(this.duration < Config.AQUA_MIN_DURATION){
             this.duration = Config.AQUA_MIN_DURATION;
@@ -195,23 +201,20 @@ public class AquaLight extends InnerLight {
             for(LivingEntity target : this.targets){
                 target.playSound(LightSounds.AQUA_LIGHT, 0.9f, 1);
                 if(Config.STRUCTURE_GRIEFING && !caster.getWorld().isClient) {
-                    target.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, this.duration*10, (int) (this.power_multiplier*20), false, false));
-                    StructurePlacerAPI placer = new StructurePlacerAPI((ServerWorld) caster.getWorld(), new Identifier(MOD_ID, "water_cage"), target.getBlockPos(), BlockMirror.NONE, BlockRotation.NONE, true, 1f, new BlockPos(-1, 0, -1));
-                    placer.loadStructure();
-                    target.setAir(1);
+                    target.addStatusEffect(new StatusEffectInstance(LightEffects.WATER_CASCADE, (int) (this.power_multiplier*3), 0, false, false));
 
-
-                    if(this.power_multiplier >= 4){
+                    if(this.power_multiplier >= 5){
                         ItemStack trident = new ItemStack(Items.TRIDENT);
                         trident.addEnchantment(Enchantments.CHANNELING, 1);
                         TridentEntity tridentEntity = new TridentEntity(caster.getWorld(), caster, trident);
                         tridentEntity.setPos(target.getX(), target.getY()+10, target.getZ());
                         tridentEntity.addVelocity(0, -1, 0);
-                        if(this.power_multiplier >= 7){
+                        if(this.power_multiplier >= 8){
                             LightningEntity lightning = new LightningEntity(EntityType.LIGHTNING_BOLT, caster.getWorld());
                             lightning.setPos(target.getX(), target.getY(), target.getZ());
                             target.getWorld().spawnEntity(lightning);
                         }
+                        tridentEntity.pickupType = PersistentProjectileEntity.PickupPermission.DISALLOWED;
                         target.playSound(SoundEvents.ITEM_TRIDENT_RETURN, 1, 0.7f);
                         target.getWorld().spawnEntity(tridentEntity);
                     }

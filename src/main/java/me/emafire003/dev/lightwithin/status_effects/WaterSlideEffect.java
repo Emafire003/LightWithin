@@ -34,15 +34,15 @@ public class WaterSlideEffect extends StatusEffect {
         return true;
     }
 
+    private final BlockState water_layer = Fluids.FLOWING_WATER.getFlowing(3, false).getBlockState();
+
     // This method is called when it applies the status effect. We implement custom functionality here.
     @Override
     public void applyUpdateEffect(LivingEntity entity, int amplifier) {
         if(Config.STRUCTURE_GRIEFING && !entity.getWorld().isClient && !entity.getWorld().getBlockState(entity.getBlockPos()).isOf(Blocks.WATER)){
-            /*StructurePlacerAPI placer = new StructurePlacerAPI((ServerWorld) entity.getWorld(), new Identifier(MOD_ID, "water_bit"), entity.getBlockPos(), BlockMirror.NONE, BlockRotation.NONE, true, 1f, new BlockPos(-1, 0, -1));
-            placer.loadStructure();*/
             Direction facing = entity.getHorizontalFacing();
             //TODO move this out of the method
-            BlockState water_layer = Fluids.FLOWING_WATER.getFlowing(3, false).getBlockState();
+
             BlockPos pos = entity.getBlockPos();
 
             for(int i = 1; i<=amplifier; i++){
