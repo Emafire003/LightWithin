@@ -52,13 +52,13 @@ public class WindLight extends InnerLight {
     public WindLight(List<LivingEntity> targets, double cooldown_time, double power_multiplier, int duration, PlayerEntity caster, boolean rainbow_col) {
         super(targets, cooldown_time, power_multiplier, duration, caster, rainbow_col);
         type = InnerLightType.WIND;
-        color = "d1f2ff";
+        color = "#d1f2ff";
     }
 
     public WindLight(List<LivingEntity> targets, double cooldown_time, double power_multiplier, int duration, PlayerEntity caster) {
         super(targets, cooldown_time, power_multiplier, duration, caster);
         type = InnerLightType.WIND;
-        color = "d1f2ff";
+        color = "#d1f2ff";
     }
 
     private void checkSafety(){

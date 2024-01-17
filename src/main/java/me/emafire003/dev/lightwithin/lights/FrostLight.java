@@ -67,7 +67,7 @@ public class FrostLight extends InnerLight {
     public FrostLight(List<LivingEntity> targets, double cooldown_time, double power_multiplier, int duration, PlayerEntity caster) {
         super(targets, cooldown_time, power_multiplier, duration, caster);
         type = InnerLightType.FROST;
-        color = "96fbff";
+        color = "#96fbff";
     }
 
     private void checkSafety(){
@@ -116,9 +116,9 @@ public class FrostLight extends InnerLight {
 
             if((component.getTargets().equals(TargetType.SELF) || component.getTargets().equals(TargetType.ALLIES))){
                 if(target.equals(caster) && component.getTargets().equals(TargetType.ALLIES)){
-                    target.addStatusEffect(new StatusEffectInstance(LightEffects.FREEZE_RESISTANCE, (int) (this.duration/Config.DIV_SELF*Config.FROST_FREEZE_RES_DURATION_MULTIPLIER)*20));
+                    target.addStatusEffect(new StatusEffectInstance(LightEffects.FREEZE_RESISTANCE, (int) (this.duration/Config.DIV_SELF)*20));
                 }else{
-                    target.addStatusEffect(new StatusEffectInstance(LightEffects.FREEZE_RESISTANCE, (int) (this.duration*Config.FROST_FREEZE_RES_DURATION_MULTIPLIER)*20));
+                    target.addStatusEffect(new StatusEffectInstance(LightEffects.FREEZE_RESISTANCE, (int) (this.duration)*20));
                 }
 
                 Direction facing = target.getHorizontalFacing();

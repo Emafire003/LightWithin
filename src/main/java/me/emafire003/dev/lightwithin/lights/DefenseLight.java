@@ -35,7 +35,7 @@ public class DefenseLight extends InnerLight {
     public DefenseLight(List<LivingEntity> targets, double cooldown_time, double power_multiplier, int duration, PlayerEntity caster) {
         super(targets, cooldown_time, power_multiplier, duration, caster);
         type = InnerLightType.DEFENCE;
-        color = "427f3b";
+        color = "#427f3b";
     }
 
     private void checkSafety(){

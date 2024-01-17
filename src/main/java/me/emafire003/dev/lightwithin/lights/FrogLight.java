@@ -48,7 +48,7 @@ public class FrogLight extends InnerLight {
     public FrogLight(List<LivingEntity> targets, double cooldown_time, double power_multiplier, int duration, PlayerEntity caster) {
         super(targets, cooldown_time, power_multiplier, duration, caster);
         type = InnerLightType.FROG;
-        color = "c46931";
+        color = "#c46931";
     }
 
     private void checkSafety(){

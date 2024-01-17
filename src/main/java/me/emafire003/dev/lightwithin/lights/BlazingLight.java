@@ -46,7 +46,7 @@ public class BlazingLight extends InnerLight {
     public BlazingLight(List<LivingEntity> targets, double cooldown_time, double power_multiplier, int duration, PlayerEntity caster) {
         super(targets, cooldown_time, power_multiplier, duration, caster);
         type = InnerLightType.BLAZING;
-        color = "ea4610";
+        color = "#ea4610";
     }
 
     private double crit_multiplier = 1.5;

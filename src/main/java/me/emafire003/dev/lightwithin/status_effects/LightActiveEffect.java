@@ -68,7 +68,7 @@ public class LightActiveEffect extends StatusEffect {
         }
         if(former_color != null && FabricLoader.getInstance().isModLoaded("coloredglowlib")){
             if(!former_color.equals("ffffff")){
-                CGLCompat.getLib().setColorToEntity(entity, CGLCompat.fromHex(former_color));
+                CGLCompat.getLib().setColorToEntity(entity, CGLCompat.fromHex("#"+former_color));
             }
             if(rainbow){
                 CGLCompat.getLib().setRainbowColorToEntity(entity, true);

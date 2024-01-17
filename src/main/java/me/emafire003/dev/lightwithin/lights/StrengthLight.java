@@ -29,13 +29,13 @@ public class StrengthLight extends InnerLight {
     public StrengthLight(List<LivingEntity> targets, double cooldown_time, double power_multiplier, int duration, PlayerEntity caster, boolean rainbow_col) {
         super(targets, cooldown_time, power_multiplier, duration, caster, rainbow_col);
         type = InnerLightType.STRENGTH;
-        color = "cc082c";
+        color = "#cc082c";
     }
 
     public StrengthLight(List<LivingEntity> targets, double cooldown_time, double power_multiplier, int duration, PlayerEntity caster) {
         super(targets, cooldown_time, power_multiplier, duration, caster);
         type = InnerLightType.STRENGTH;
-        color = "cc082c";
+        color = "#cc082c";
     }
 
     private void checkSafety(){

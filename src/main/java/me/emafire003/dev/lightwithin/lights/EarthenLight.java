@@ -51,7 +51,7 @@ public class EarthenLight extends InnerLight {
     public EarthenLight(List<LivingEntity> targets, double cooldown_time, double power_multiplier, int duration, PlayerEntity caster) {
         super(targets, cooldown_time, power_multiplier, duration, caster);
         type = InnerLightType.EARTHEN;
-        color = "72420b";
+        color = "#72420b";
     }
 
     private void checkSafety(){

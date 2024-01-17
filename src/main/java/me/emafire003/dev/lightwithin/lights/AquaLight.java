@@ -77,7 +77,7 @@ public class AquaLight extends InnerLight {
     public AquaLight(List<LivingEntity> targets, double cooldown_time, double power_multiplier, int duration, PlayerEntity caster) {
         super(targets, cooldown_time, power_multiplier, duration, caster);
         type = InnerLightType.AQUA;
-        color = "35f4d1";
+        color = "#35f4d1";
     }
 
     private void checkSafety(){
@@ -159,7 +159,6 @@ public class AquaLight extends InnerLight {
                 SUMMONED_BY_COMPONENT.get(drowned).setIsSummoned(true);
 
                 boolean b = SpawnUtils.spawnAround(caster, 1, 5, drowned, (ServerWorld) caster.getWorld(), SpawnRestriction.Location.NO_RESTRICTIONS);
-                caster.sendMessage(Text.literal("Spawned: "+b));
                 LightParticlesUtil.spawnLightTypeParticle(LightParticles.AQUALIGHT_PARTICLE, (ServerWorld) drowned.getWorld(), drowned.getPos());
             }
 
