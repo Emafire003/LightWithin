@@ -17,6 +17,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.text.Text;
 
 import static me.emafire003.dev.lightwithin.LightWithin.LIGHT_COMPONENT;
 
@@ -28,11 +29,6 @@ public class LightActiveEffect extends StatusEffect {
     //xD
     //TODO mixin into the GlowingEffect and make it so it can clear the CGLCompat.getLib() color
     //10.01.2024 I don't even know what I meant
-
-    private String former_color = "ffffff";
-    private boolean rainbow = false;
-    private boolean already_run = false;
-    private InnerLight type;
 
     public LightActiveEffect() {
         super(StatusEffectCategory.BENEFICIAL, 0xF3FF28);
@@ -47,11 +43,7 @@ public class LightActiveEffect extends StatusEffect {
     // This method is called when it applies the status effect. We implement custom functionality here.
     @Override
     public void applyUpdateEffect(LivingEntity entity, int amplifier) {
-        if(!already_run && FabricLoader.getInstance().isModLoaded("coloredglowlib")){
-            former_color = CGLCompat.toHex(CGLCompat.getLib().getEntityColor(entity));
-            rainbow = CGLCompat.getLib().getEntityRainbowColor(entity);
-            already_run = true;
-        }
+        //TODO why is this here?
         if(entity instanceof ServerPlayerEntity){
             LightComponent component = LIGHT_COMPONENT.get(entity);
             if(component.getType().equals(InnerLightType.WIND) && !component.getTargets().equals(TargetType.VARIANT)){
@@ -61,22 +53,22 @@ public class LightActiveEffect extends StatusEffect {
         }
     }
 
+    //TODO after updating CGL to 3.0.0 I'll need to remove this most likely
     @Override
     public void onRemoved(LivingEntity entity, AttributeContainer attributes, int amplifier){
         if(!entity.hasStatusEffect(StatusEffects.GLOWING)){
             entity.setGlowing(false);
         }
-        if(former_color != null && FabricLoader.getInstance().isModLoaded("coloredglowlib")){
-            if(!former_color.equals("ffffff")){
-                CGLCompat.getLib().setColorToEntity(entity, CGLCompat.fromHex("#"+former_color));
-            }
-            if(rainbow){
-                CGLCompat.getLib().setRainbowColorToEntity(entity, true);
+        LightComponent component = LIGHT_COMPONENT.get(entity);
+        if(component.getPrevColor() != null && FabricLoader.getInstance().isModLoaded("coloredglowlib")){
+            if(component.getPrevColor() == null){
+                CGLCompat.getLib().setColorToEntity(entity, CGLCompat.fromHex("#ffffff"));
+            }else{
+                CGLCompat.getLib().setColorToEntity(entity, CGLCompat.fromHex(component.getPrevColor()));
             }
         }
         if(entity instanceof PlayerEntity){
-            LightComponent component = LIGHT_COMPONENT.get(entity);
-            entity.addStatusEffect(new StatusEffectInstance(LightEffects.LIGHT_FATIGUE, (int) (Config.COOLDOWN_MULTIPLIER*20*(component.getMaxCooldown()-component.getDuration())), 1));
+            entity.addStatusEffect(new StatusEffectInstance(LightEffects.LIGHT_FATIGUE, (int) (Config.COOLDOWN_MULTIPLIER*20*component.getMaxCooldown()), 1));
         }
         super.onRemoved(entity, attributes, amplifier);
     }

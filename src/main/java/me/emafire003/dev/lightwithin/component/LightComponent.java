@@ -14,6 +14,8 @@ import static me.emafire003.dev.lightwithin.LightWithin.LOGGER;
 
 public class LightComponent implements ComponentV3, AutoSyncedComponent {
 
+    public static final int CURRENT_VERSION = 1;
+
     protected InnerLightType type = InnerLightType.NONE;
     protected TargetType targets =  TargetType.NONE;
     protected int cooldown_time = -1;
@@ -21,12 +23,12 @@ public class LightComponent implements ComponentV3, AutoSyncedComponent {
     protected int duration = -1;
 
     protected boolean rainbow_col = false;
-    protected String color = "ffffff";
     protected String prev_color = "ffffff";
     protected int max_increment_percent = -1;
 
     //As in can the player use the light? Either in a specif time or place (needs to be set)
     protected boolean isLocked = Config.LIGHT_LOCKED_DEFAULT;
+    protected int version = CURRENT_VERSION;
 
     private final PlayerEntity caster;
     private final boolean debug = false;
@@ -78,11 +80,11 @@ public class LightComponent implements ComponentV3, AutoSyncedComponent {
             this.duration = -1;
         }
 
-        if(tag.contains("color")){
-            if(debug){LOGGER.info("the color got: " + tag.getString("color"));}
-            this.color = tag.getString("color");
+        if(tag.contains("version")){
+            if(debug){LOGGER.info("the version got: " + tag.getString("version"));}
+            this.version = tag.getInt("version");
         }else{
-            this.color = "ffffff";
+            this.version = CURRENT_VERSION;
         }
 
         if(tag.contains("prev_color")){
@@ -122,11 +124,11 @@ public class LightComponent implements ComponentV3, AutoSyncedComponent {
         tag.putDouble("cooldown_time", this.cooldown_time);
         tag.putDouble("power_multiplier", this.power_multiplier);
         tag.putInt("duration", this.duration);
-        tag.putString("color", this.color);
         tag.putString("prev_color", this.prev_color);
         tag.putBoolean("rainbow_col", this.rainbow_col);
         tag.putInt("max_increment", this.max_increment_percent);
         tag.putBoolean("isLocked", this.isLocked);
+        tag.putInt("version", this.version);
     }
 
 
@@ -150,16 +152,12 @@ public class LightComponent implements ComponentV3, AutoSyncedComponent {
         return this.duration;
     }
 
-    public String getColor() {
-        return this.color;
-    }
-
     public int getMaxIncrementPercent() {
         return this.max_increment_percent;
     }
 
     public String getPrevColor() {
-        return this.color;
+        return this.prev_color;
     }
 
     public boolean getRainbow() {
@@ -168,6 +166,10 @@ public class LightComponent implements ComponentV3, AutoSyncedComponent {
 
     public boolean getLocked() {
         return this.isLocked;
+    }
+
+    public int getVersion() {
+        return this.version;
     }
 
     public void setType(InnerLightType type) {
@@ -200,8 +202,8 @@ public class LightComponent implements ComponentV3, AutoSyncedComponent {
         LightWithin.LIGHT_COMPONENT.sync(caster);
     }
 
-    public void setColor(String color) {
-        this.color = color;
+    public void setVersion(int ver) {
+        this.version = ver;
         LightWithin.LIGHT_COMPONENT.sync(caster);
     }
 
@@ -226,16 +228,16 @@ public class LightComponent implements ComponentV3, AutoSyncedComponent {
         LightWithin.LIGHT_COMPONENT.sync(caster);
     }
 
-    public void setAll(InnerLightType type, TargetType targets, int cooldown, double power, int duration, String color, boolean b, boolean incooldown, int max_increment, boolean locked){
+    public void setAll(InnerLightType type, TargetType targets, int cooldown, double power, int duration, boolean b, boolean incooldown, int max_increment, boolean locked, int version){
         this.type = type;
         this.targets = targets;
         this.cooldown_time = cooldown;
         this.power_multiplier = power;
         this.duration = duration;
-        this.color = color;
         this.rainbow_col = b;
         this.max_increment_percent = max_increment;
         this.isLocked = locked;
+        this.version = version;
         LightWithin.LIGHT_COMPONENT.sync(caster);
     }
 
@@ -244,7 +246,7 @@ public class LightComponent implements ComponentV3, AutoSyncedComponent {
         this.cooldown_time = -1;
         this.power_multiplier = -1;
         this.duration = -1;
-        this.color = "ffffff";
+        //this.version = CURRENT_VERSION;
         this.rainbow_col = false;
         this.type = InnerLightType.NONE;
         this.max_increment_percent = -1;
