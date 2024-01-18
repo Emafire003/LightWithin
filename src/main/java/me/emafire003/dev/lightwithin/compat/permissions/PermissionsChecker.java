@@ -5,7 +5,6 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.entity.Entity;
 import net.minecraft.server.command.ServerCommandSource;
 
-import java.util.UUID;
 import java.util.function.Predicate;
 
 //Based on Factions' code https://github.com/ickerio/factions (MIT license)

@@ -25,7 +25,6 @@ public class LightCommands {
     public static void registerCommands(CommandDispatcher<ServerCommandSource> dispatcher, CommandRegistryAccess registryAccess, CommandManager.RegistrationEnvironment environment) {
         LiteralCommandNode<ServerCommandSource> lightcommands = CommandManager
                 .literal("light")
-                .requires(PermissionsChecker.hasPerms("lightwithin.commands", 2))
                 .build();
 
         LiteralCommandNode<ServerCommandSource> alias = CommandManager
