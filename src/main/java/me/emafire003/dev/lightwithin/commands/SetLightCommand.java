@@ -49,7 +49,7 @@ public class SetLightCommand implements LightCommand{
                 component.setType(type);
                 TargetType target_type = component.getTargets();
 
-                List<TargetType> possible = LightWithin.possible_targets.get(type);
+                List<TargetType> possible = LightWithin.POSSIBLE_TARGETS.get(type);
 
                 if(!possible.contains(target_type)){
                     //TODO will need to rework this based on the light possibile targets and such
@@ -85,7 +85,7 @@ public class SetLightCommand implements LightCommand{
         for(ServerPlayerEntity target : targets){
             LightComponent component = LightWithin.LIGHT_COMPONENT.get(target);
             InnerLightType light = component.getType();
-            List<TargetType> possible = LightWithin.possible_targets.get(light);
+            List<TargetType> possible = LightWithin.POSSIBLE_TARGETS.get(light);
 
             if(!possible.contains(type)){
                 source.sendError(Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA)

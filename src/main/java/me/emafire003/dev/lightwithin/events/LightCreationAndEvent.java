@@ -1,16 +1,19 @@
 package me.emafire003.dev.lightwithin.events;
 
 import com.mojang.datafixers.util.Pair;
+import me.emafire003.dev.lightwithin.LightWithin;
 import me.emafire003.dev.lightwithin.component.LightComponent;
 import me.emafire003.dev.lightwithin.config.Config;
-import me.emafire003.dev.lightwithin.events.PlayerJoinEvent;
 import me.emafire003.dev.lightwithin.lights.InnerLightType;
 import me.emafire003.dev.lightwithin.util.TargetType;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 import static me.emafire003.dev.lightwithin.LightWithin.LIGHT_COMPONENT;
 import static me.emafire003.dev.lightwithin.LightWithin.LOGGER;
@@ -29,11 +32,23 @@ public class LightCreationAndEvent {
         });
     }
 
+    public static final int TYPE_BIT = 0;
+    public static final int COOLDOWN_BIT = 1;
+    public static final int DURATION_BIT = 2;
+    public static final int POWER_BIT = 3;
+    public static final int TARGET_BIT = 4;
+    
+    //TODO coming soon tm 
+    // public static final int INCREMENT_BIT = 1; //But flipped
+
     public static void createUniqueLight(PlayerEntity player){
         LightComponent component = LIGHT_COMPONENT.get(player);
         String id = player.getUuidAsString().toLowerCase();
 
+        //   0      1     2    3     4
+        //d5396476-b2b7-4d3e-9ddf-56e67177c4c2
         //3eec9f18-1d0e-3f17-917c-6994e7d034d1
+        // TYPE    CLDN  DUR PWR    TARGET
 
         if(Config.RESET_ON_JOIN){
             component.clear();
@@ -44,7 +59,7 @@ public class LightCreationAndEvent {
         String[] id_bits = id.split("-");
         //Type bit & target bit
         //If the second part of the UUID starts with a letter form a to h && the second character is a digit -> Heal
-        Pair<InnerLightType, TargetType> type_and_target = determineTypeAndTarget(id_bits, 1, 3);
+        Pair<InnerLightType, TargetType> type_and_target = determineTypeAndTarget(id_bits, TYPE_BIT, TARGET_BIT);
         //type
         component.setType(type_and_target.getFirst());
         //Target
@@ -52,98 +67,67 @@ public class LightCreationAndEvent {
 
         //Cooldown Bit
         //The max cooldown is 100
-        component.setMaxCooldown(determineCooldown(id_bits, 0));
+        component.setMaxCooldown(determineCooldown(id_bits, COOLDOWN_BIT));
 
         //Duration bit
-        component.setDuration(determineDuration(id_bits, 2));
+        component.setDuration(determineDuration(id_bits, DURATION_BIT));
 
         //Power bit
-        component.setPowerMultiplier(determinePower(id_bits, 4));
+        component.setPowerMultiplier(determinePower(id_bits, POWER_BIT));
 
         component.setRainbow(true);
     }
 
-    public static TargetType determineAttackTarget(String[] id_bits, int target_bit){
-        if(target_bit == 2 || target_bit == 3){
-            //It also adds the last digit from the previous bit
-            id_bits[target_bit] = id_bits[target_bit].substring(1)+id_bits[target_bit-1].substring(id_bits[target_bit-1].length()-1);
-        }
-        //If it's all letters or numbers, or if there is at least one number from 5-9 or e/f then all
-        //NOPE --if the char at the position 2 is abc && the nextone is a digit then it's other-- NOPE
-        //in the other cases it's enemies
-        boolean all_cond1 = id_bits[target_bit].matches("[0-9]+") || id_bits[target_bit].matches("[f-p]+");
-        boolean all_cond2 = false;
-        for(int i = 0; i<id_bits[target_bit].length()-1; i++){
-            if(all_cond1){
-                break;
-            }
-            char a = id_bits[target_bit].charAt(i);
-            if(String.valueOf(a).matches("[5-9]")){
-                all_cond2 = true;
-                break;
-            }
-        }
-        if(all_cond1 || all_cond2){
-            return TargetType.ALL;
-        }/*else if(String.valueOf(id_bits[target_bit].charAt(2)).matches("[a-c]") && Character.isDigit(id_bits[target_bit].charAt(3))){
-            return TargetType.OTHER;
-        }else*/{
-            return TargetType.ENEMIES;
-        }
-    }
 
     /**
-     *
+     * Returns a TargetType based on a list of more likely targets.
+     * The distribution is as it follows: 39% 21% 16% 14% 8%
      *
      * @param targets_ordered A list of targets. The first object on the list will be most likely and so on.*/
     public static TargetType determineTarget(String[] id_bits, int target_bit, List<TargetType> targets_ordered){
-        if(target_bit == 2 || target_bit == 3){
+        if(target_bit == 1 || target_bit == 2){
             //It also adds the last digit from the previous bit
             id_bits[target_bit] = id_bits[target_bit].substring(1)+id_bits[target_bit-1].substring(id_bits[target_bit-1].length()-1);
         }
-        //If it's all letters or numbers, or if there is at least one number from 5-9 or e/f then all
-        //NOPE --if the char at the position 2 is abc && the nextone is a digit then it's other-- NOPE
-        //in the other cases it's enemies
-        boolean cond1 = id_bits[target_bit].matches("[0-7]+") || id_bits[target_bit].matches("[d-f]+");
-        boolean cond2 = false;
-        for(int i = 0; i<id_bits[target_bit].length()-1; i++){
-            if(cond1){
-                break;
-            }
-            char a = id_bits[target_bit].charAt(i);
-            if(String.valueOf(a).matches("[5-9]")){
-                cond2 = true;
-                break;
-            }
+        String trg_str = id_bits[target_bit];
+        char char1 = trg_str.charAt(0);
+        char char2 = trg_str.charAt(1);
+        //If the first two characters are a letter (a-f) returns the FOURTH most likely. And if there is a FOURTH target
+        if(Character.isLetter(char1) && Character.isLetter(char2) && targets_ordered.size() > 3){
+            return targets_ordered.get(3);
         }
-        if((cond1 == cond2) && targets_ordered.size() <= 3){
+        //If the first two characters summed have a value above, returns the SECOND most likely one. (if there is one)
+        if(Character.getNumericValue(char1)+Character.getNumericValue(char2) > 17 && targets_ordered.size() > 1){
+            return targets_ordered.get(1);
+        }
+        //If the first char is between 3-5, retrun the THIRD most likely target (if there is one)
+        if(trg_str.matches("^[3-5].*") && targets_ordered.size() > 2){
             return targets_ordered.get(2);
         }
-        else if(cond1 || cond2 && targets_ordered.size() < 2){
-            return targets_ordered.get(1);
-        }else if(targets_ordered.size() <=4 && String.valueOf(id_bits[target_bit].charAt(2)).matches("[a-c]") && Character.isDigit(id_bits[target_bit].charAt(3))){
-            return targets_ordered.get(3);
-        }else if(targets_ordered.size() <=5 && String.valueOf(id_bits[target_bit].charAt(3)).matches("[e-f]") && Character.isDigit(id_bits[target_bit].charAt(2))){
+        //If the last char is between 1-3, retrunr the fifth most likely target (if there is one)
+        if(trg_str.matches(".*[1-3]$") && targets_ordered.size() > 4){
             return targets_ordered.get(4);
         }
-        else{
-            return targets_ordered.get(0);
-        }
+
+        //Returns the most likely if nothing has been found. Which is quite likely.
+        return targets_ordered.get(0);
     }
 
     //0,0015% of probabilty of gaining a legendary light? (well times 2)
     //
+    //TODO most likely need to rework this as well
     public static Pair<InnerLightType, TargetType> determineTypeAndTarget(String[] id_bits, int type_bit, int target_bit){
-        if(type_bit == 2 || type_bit == 3){
+        if(type_bit == 1 || type_bit == 2){
             //It also adds the last digit from the previous bit
             id_bits[target_bit] = id_bits[target_bit].substring(1)+id_bits[target_bit-1].substring(id_bits[target_bit-1].length()-1);
         }
-        if(target_bit == 2 || target_bit == 3){
+        if(target_bit == 1 || target_bit == 2){
             //It also adds the last digit from the previous bit
             id_bits[target_bit] = id_bits[target_bit].substring(1)+id_bits[target_bit-1].substring(id_bits[target_bit-1].length()-1);
         }
         int i;
         boolean notfound = false;
+        //TODO rework this
         for(i = 0; i<id_bits[type_bit].length()-1; i++){
             if(Character.isLetter(id_bits[type_bit].charAt(i))){
                 break;
@@ -162,121 +146,75 @@ public class LightCreationAndEvent {
         //10.01.2024 I don't have any idea what comes after the "i will need to"
         //HEAL
         if(String.valueOf(id_bits[type_bit].charAt(i)).matches("[a-b]")){
-            return new Pair<>(InnerLightType.HEAL, determineTarget(id_bits, target_bit, Arrays.asList(TargetType.SELF, TargetType.ALLIES, TargetType.VARIANT)));
+            return new Pair<InnerLightType, TargetType>(InnerLightType.HEAL, determineTarget(id_bits, target_bit, LightWithin.POSSIBLE_TARGETS.get(InnerLightType.HEAL)));
         }
         //DEFENCE
         else if(String.valueOf(id_bits[type_bit].charAt(i)).matches("[c-d]")){
-            return new Pair<InnerLightType, TargetType>(InnerLightType.DEFENCE, determineTarget(id_bits, target_bit, Arrays.asList(TargetType.SELF, TargetType.ALLIES, TargetType.VARIANT)));
+            return new Pair<>(InnerLightType.DEFENCE, determineTarget(id_bits, target_bit, LightWithin.POSSIBLE_TARGETS.get(InnerLightType.DEFENCE)));
             //STRENGTH
         }else if(String.valueOf(id_bits[type_bit].charAt(i)).matches("[e-f]")){
-            return new Pair<InnerLightType, TargetType>(InnerLightType.STRENGTH, determineTarget(id_bits, target_bit, Arrays.asList(TargetType.SELF, TargetType.ALLIES, TargetType.VARIANT)));
+            return new Pair<>(InnerLightType.STRENGTH, determineTarget(id_bits, target_bit, LightWithin.POSSIBLE_TARGETS.get(InnerLightType.STRENGTH)));
         }
         //Blazing
         else if(String.valueOf(id_bits[type_bit].charAt(i)).matches("[0-1]")){
-            return new Pair<InnerLightType, TargetType>(InnerLightType.BLAZING, determineTarget(id_bits, target_bit, Arrays.asList(TargetType.ENEMIES, TargetType.ALL)));
+            return new Pair<>(InnerLightType.BLAZING, determineTarget(id_bits, target_bit, LightWithin.POSSIBLE_TARGETS.get(InnerLightType.BLAZING)));
         }
         //Frost
         else if(String.valueOf(id_bits[type_bit].charAt(i)).matches("[2-3]")){
-            return new Pair<InnerLightType, TargetType>(InnerLightType.FROST, determineTarget(id_bits, target_bit, Arrays.asList(TargetType.ENEMIES, TargetType.ALLIES, TargetType.ALL, TargetType.SELF)));
+            return new Pair<>(InnerLightType.FROST, determineTarget(id_bits, target_bit, LightWithin.POSSIBLE_TARGETS.get(InnerLightType.FROST)));
         }
         //Earthen
         else if(String.valueOf(id_bits[type_bit].charAt(i)).matches("[4-5]")){
-            return new Pair<InnerLightType, TargetType>(InnerLightType.EARTHEN, determineTarget(id_bits, target_bit, Arrays.asList(TargetType.ENEMIES, TargetType.SELF, TargetType.ALLIES, TargetType.VARIANT)));
+            return new Pair<>(InnerLightType.EARTHEN, determineTarget(id_bits, target_bit, LightWithin.POSSIBLE_TARGETS.get(InnerLightType.EARTHEN)));
         }
         //Wind
         else if(String.valueOf(id_bits[type_bit].charAt(i)).matches("[6-7]")){
-            return new Pair<InnerLightType, TargetType>(InnerLightType.WIND, determineTarget(id_bits, target_bit, Arrays.asList(TargetType.SELF, TargetType.ALLIES, TargetType.VARIANT)));
+            return new Pair<>(InnerLightType.WIND, determineTarget(id_bits, target_bit, LightWithin.POSSIBLE_TARGETS.get(InnerLightType.WIND)));
         }
         //Aqua
         else if(String.valueOf(id_bits[type_bit].charAt(i)).matches("[8-9]")){
-            return new Pair<InnerLightType, TargetType>(InnerLightType.AQUA, determineAttackTarget(id_bits, target_bit));
+            return new Pair<>(InnerLightType.AQUA, determineTarget(id_bits, target_bit, LightWithin.POSSIBLE_TARGETS.get(InnerLightType.AQUA)));
         }
         //Frog? aka f = 6 r = 18 = F+2 o = 15 = E g = 7
-        else if(String.valueOf(id_bits[type_bit]).matches("6fe7")){
-            return new Pair<InnerLightType, TargetType>(InnerLightType.FROG, determineTarget(id_bits, target_bit, List.of(TargetType.ALL)));
+        else if(String.valueOf(id_bits[type_bit]).contains("6f2e7")){
+            return new Pair<>(InnerLightType.FROG, determineTarget(id_bits, target_bit, List.of(TargetType.ALL)));
         }
         LOGGER.info("[debug] nop not matched, UUID bit: " + id_bits[type_bit]);
-        return new Pair<InnerLightType, TargetType>(InnerLightType.HEAL, TargetType.SELF);
+        return new Pair<>(InnerLightType.HEAL, TargetType.SELF);
     }
 
     //id bits 0
-    //formula: 10+10*stufffoundintheid aka minimum value 10+10*1, so 20s
-    //max: 10+10*9 = 100
+    //formula: 10+10*stufffoundintheid aka minimum value 10+10*value, so 10s-170s
+    //max: 10+10*16 = 170
     public static int determineCooldown(String[] id_bits, int string_bit){
-        if(string_bit == 2 || string_bit == 3){
+        //TODO why also the string bit 1?
+        if(string_bit == 1 || string_bit == 2){
             //It also adds the last digit from the previous bit
             id_bits[string_bit] = id_bits[string_bit].substring(1)+id_bits[string_bit-1].substring(id_bits[string_bit-1].length()-1);
         }
-        //checks the first char digit that finds and multiplies it
-        for(int i = 0; i<id_bits[string_bit].length(); i++){
-            if(Character.isDigit(id_bits[string_bit].charAt(i))){
-                if(Character.getNumericValue(id_bits[string_bit].charAt(i)) == 0){
-                    return 93;
-                }else{
-                    return 10+10*Character.getNumericValue(id_bits[string_bit].charAt(i));
-                }
-            }
-
-        }
-        return 80;
+        return 10+10*Character.getNumericValue(id_bits[string_bit].charAt(0));
     }
 
     //id bit 2
     //max 18
     public static int determineDuration(String[] id_bits, int string_bit){
         //The UUID stores constat bits in these parts here, which are the version and the variant.
-        if(string_bit == 2 || string_bit == 3){
+        if(string_bit == 1 || string_bit == 2){
             //It also adds the last digit from the previous bit
             id_bits[string_bit] = id_bits[string_bit].substring(1)+id_bits[string_bit-1].substring(id_bits[string_bit-1].length()-1);
         }
-        //TODO yep this does not loop since all of the thing are actually numeric values. Since a-f are 10-16 etc.
-        for(int i = 0; i<id_bits[string_bit].length(); i++){
-            //if(Character.isDigit(id_bits[string_bit].charAt(i))){
-            if(Config.ADJUST_FOR_LOW_DURATION && Character.getNumericValue(id_bits[string_bit].charAt(i)) <= Config.ADJUST_DUR_THRESHOLD){
-                return (int) ((Character.getNumericValue(id_bits[string_bit].charAt(i))*Config.ADJUST_DUR_AMOUNT*Config.DURATION_MULTIPLIER));
-            }else if(Character.getNumericValue(id_bits[string_bit].charAt(i)) == 0){
-                return (int) ((Config.ADJUST_DUR_AMOUNT*Config.DURATION_MULTIPLIER));
-            }
-            else{
-                return (int) (Character.getNumericValue(id_bits[string_bit].charAt(i))*Config.DURATION_MULTIPLIER);
-            }
-            //}
+        int i = 0;
+        if(Config.ADJUST_FOR_LOW_DURATION && Character.getNumericValue(id_bits[string_bit].charAt(i)) <= Config.ADJUST_DUR_THRESHOLD){
+            return (int) ((Character.getNumericValue(id_bits[string_bit].charAt(i))*Config.ADJUST_DUR_AMOUNT*Config.DURATION_MULTIPLIER));
+        }else if(Character.getNumericValue(id_bits[string_bit].charAt(i)) == 0){
+            return (int) ((Config.ADJUST_DUR_AMOUNT*Config.DURATION_MULTIPLIER));
         }
-        return (int) ((Config.ADJUST_DUR_AMOUNT*Config.DURATION_MULTIPLIER));
+        else{
+            return (int) (Character.getNumericValue(id_bits[string_bit].charAt(i))*Config.DURATION_MULTIPLIER);
+        }
 
     }
 
-
-    /**Gets the first 2 digits ir finds and sums them up, then divides by 3, so the max is 9+9/3, so 6
-     *
-     *
-     * Spoiler it never worked, since I forgot a parenthesis. WOW.*/
-    @Deprecated
-    public static double determinePowerOld(String[] id_bits, int string_bit){
-        //The UUID stores constat bits in these parts here, which are the version and the variant.
-        if(string_bit == 2 || string_bit == 3){
-            //It also adds the last digit from the previous bit
-            id_bits[string_bit] = id_bits[string_bit].substring(1)+id_bits[string_bit-1].substring(id_bits[string_bit-1].length()-1);
-        }
-
-        int n1 = -1;
-        int n2 = 0;
-        for(int i = 0; i<id_bits[string_bit].length(); i++){
-            if(Character.isDigit(id_bits[string_bit].charAt(i))){
-                if(n1 == -1){
-                    n1 = Character.getNumericValue(id_bits[string_bit].charAt(i));
-                }else{
-                    n2 = Character.getNumericValue(id_bits[string_bit].charAt(i));
-                    break;
-                }
-            }
-        }
-        double a = n1+n2/3;
-        if(a < 1){
-            a = 1;
-        }
-        return a;
-    }
 
     /**If it finds a digit (0-9) that's going to be the power +1 (so 1-10),
      * If not, it will get the Numeric value (0-16) and divied by 2 so (10-16/2, aka 5-8)
@@ -284,7 +222,7 @@ public class LightCreationAndEvent {
      * So having a power between 5/8 should be more common. I don't really know.*/
     public static int determinePower(String[] id_bits, int string_bit){
         //The UUID stores constat bits in these parts here, which are the version and the variant.
-        if(string_bit == 2 || string_bit == 3){
+        if(string_bit == 1 || string_bit == 2){
             //It also adds the last digit from the previous bit
             id_bits[string_bit] = id_bits[string_bit].substring(1)+id_bits[string_bit-1].substring(id_bits[string_bit-1].length()-1);
         }

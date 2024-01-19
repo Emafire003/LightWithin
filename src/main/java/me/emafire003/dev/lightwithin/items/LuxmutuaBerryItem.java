@@ -62,11 +62,11 @@ public class LuxmutuaBerryItem extends Item {
 
             Pair<InnerLightType, TargetType> current = new Pair<>(component.getType(), component.getTargets());
             String[] id_bits = UUID.randomUUID().toString().toLowerCase().split("-");
-            Pair<InnerLightType, TargetType> newone = LightCreationAndEvent.determineTypeAndTarget(id_bits, 1,3);
+            Pair<InnerLightType, TargetType> newone = LightCreationAndEvent.determineTypeAndTarget(id_bits, LightCreationAndEvent.TYPE_BIT,LightCreationAndEvent.TARGET_BIT);
 
             while(current.getFirst().equals(newone.getFirst())){
                 id_bits = UUID.randomUUID().toString().toLowerCase().split("-");
-                newone = LightCreationAndEvent.determineTypeAndTarget(id_bits, 1,3);
+                newone = LightCreationAndEvent.determineTypeAndTarget(id_bits, LightCreationAndEvent.TYPE_BIT,LightCreationAndEvent.TARGET_BIT);
             }
 
             component.setType(newone.getFirst());
