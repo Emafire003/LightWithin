@@ -125,25 +125,9 @@ public class LightCreationAndEvent {
             //It also adds the last digit from the previous bit
             id_bits[target_bit] = id_bits[target_bit].substring(1)+id_bits[target_bit-1].substring(id_bits[target_bit-1].length()-1);
         }
-        int i;
-        boolean notfound = false;
-        //TODO rework this
-        for(i = 0; i<id_bits[type_bit].length()-1; i++){
-            if(Character.isLetter(id_bits[type_bit].charAt(i))){
-                break;
-            }else if(i == 4){
-                i = 3;
-                notfound = true;
-                break;
-            }
-        }
+        //The second character of the thing
+        int i = 1;
 
-        if(notfound){
-            //TODO do stuff
-        }
-
-        //TODO most likely for the other light i will need to
-        //10.01.2024 I don't have any idea what comes after the "i will need to"
         //HEAL
         if(String.valueOf(id_bits[type_bit].charAt(i)).matches("[a-b]")){
             return new Pair<InnerLightType, TargetType>(InnerLightType.HEAL, determineTarget(id_bits, target_bit, LightWithin.POSSIBLE_TARGETS.get(InnerLightType.HEAL)));
@@ -176,6 +160,7 @@ public class LightCreationAndEvent {
             return new Pair<>(InnerLightType.AQUA, determineTarget(id_bits, target_bit, LightWithin.POSSIBLE_TARGETS.get(InnerLightType.AQUA)));
         }
         //Frog? aka f = 6 r = 18 = F+2 o = 15 = E g = 7
+        //If there is "frog" spelled as numbers of the alphabet, then your light is frog. Happy?
         else if(String.valueOf(id_bits[type_bit]).contains("6f2e7")){
             return new Pair<>(InnerLightType.FROG, determineTarget(id_bits, target_bit, List.of(TargetType.ALL)));
         }
