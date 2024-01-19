@@ -81,7 +81,12 @@ public class LightCreationAndEvent {
 
     /**
      * Returns a TargetType based on a list of more likely targets.
-     * The distribution is as it follows: 39% 21% 16% 14% 8%
+     * The distribution is roughly as it follows:
+     * 5 targets: 39% 21% 16% 14% 8%
+     * 4 targets: 48% 21% 16% 14%
+     * 3 targets: 48% 35.5% 16%
+     * 2 targets: 64% 35.6%
+     * And well, 100% for 1 target
      *
      * @param targets_ordered A list of targets. The first object on the list will be most likely and so on.*/
     public static TargetType determineTarget(String[] id_bits, int target_bit, List<TargetType> targets_ordered){
@@ -128,6 +133,7 @@ public class LightCreationAndEvent {
         //The second character of the thing
         int i = 1;
 
+        //All of these realease 1.0.0 have roughly a 12.5% chance of appearing. Except the frog that tends very much to 0.
         //HEAL
         if(String.valueOf(id_bits[type_bit].charAt(i)).matches("[a-b]")){
             return new Pair<InnerLightType, TargetType>(InnerLightType.HEAL, determineTarget(id_bits, target_bit, LightWithin.POSSIBLE_TARGETS.get(InnerLightType.HEAL)));
