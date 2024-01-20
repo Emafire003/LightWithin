@@ -62,15 +62,20 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 	private static final boolean debug = false;
 	public static Path PATH = Path.of(FabricLoader.getInstance().getConfigDir() + "/" + MOD_ID + "/");
 
-	public static final Map<InnerLightType, List<TargetType>> possible_targets = Map.ofEntries(
+	/**
+	 * This is a map of the possibile targets for each target type
+	 *
+	 * It also used in determining the likelyhood of each target type being generated,
+	 * from left to right is more likely. The most probable is the one on the left*/
+	public static final Map<InnerLightType, List<TargetType>> POSSIBLE_TARGETS = Map.ofEntries(
 			entry(InnerLightType.HEAL, Arrays.asList(TargetType.SELF, TargetType.ALLIES, TargetType.VARIANT)),
 			entry(InnerLightType.DEFENCE, Arrays.asList(TargetType.SELF, TargetType.ALLIES, TargetType.VARIANT)),
 			entry(InnerLightType.STRENGTH, Arrays.asList(TargetType.SELF, TargetType.ALLIES, TargetType.VARIANT)),
 			entry(InnerLightType.BLAZING, Arrays.asList(TargetType.ENEMIES, TargetType.ALL)),
-			entry(InnerLightType.FROST, Arrays.asList(TargetType.SELF, TargetType.ALLIES, TargetType.ENEMIES, TargetType.ALL)),
-			entry(InnerLightType.EARTHEN, Arrays.asList(TargetType.SELF, TargetType.ALLIES, TargetType.ENEMIES, TargetType.VARIANT)),
+			entry(InnerLightType.FROST, Arrays.asList(TargetType.ENEMIES, TargetType.ALLIES, TargetType.ALL, TargetType.SELF)),
+			entry(InnerLightType.EARTHEN, Arrays.asList(TargetType.SELF, TargetType.ENEMIES, TargetType.ALLIES, TargetType.VARIANT)),
 			entry(InnerLightType.WIND, Arrays.asList(TargetType.SELF, TargetType.ALLIES, TargetType.VARIANT)),
-			entry(InnerLightType.AQUA, Arrays.asList(TargetType.SELF, TargetType.ALLIES,  TargetType.ENEMIES, TargetType.ALL)),
+			entry(InnerLightType.AQUA, Arrays.asList(TargetType.SELF, TargetType.ENEMIES, TargetType.ALLIES,  TargetType.ALL)),
 			entry(InnerLightType.FROG, List.of(TargetType.ALL))
 	);
 
@@ -162,7 +167,7 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 		if(type.equals(InnerLightType.NONE)){
 			return;
 		}
-		//TODO remove this from the lights
+		//TODO after updating CGL to 3.0.0 I'll need to remove this most likely
 		if(FabricLoader.getInstance().isModLoaded(CGLCompat.getModID())){
 			component.setPrevColor(CGLCompat.toHex(CGLCompat.getLib().getEntityColor(player)));
 		}
