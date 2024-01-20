@@ -35,17 +35,17 @@ public class HealLight extends InnerLight {
      */
 
     /*Triggers when:
-    * - On less that 25% hp
-    * - On being poisoned
-    * - (Optionally) when surrounded?
-    *
-    * - Those apply to allies as well
-    */
+     * - On less that 25% hp
+     * - On being poisoned
+     * - (Optionally) when surrounded?
+     *
+     * - Those apply to allies as well
+     */
 
     /*Possible targets:
-    * - self
-    * - allies
-    * - Passive mobs & self*/
+     * - self
+     * - allies
+     * - Passive mobs & self*/
 
     public HealLight(List<LivingEntity> targets, double cooldown_time, double power_multiplier, int duration, String color, PlayerEntity caster, boolean rainbow_col) {
         super(targets, cooldown_time, power_multiplier, duration, color, caster, rainbow_col);

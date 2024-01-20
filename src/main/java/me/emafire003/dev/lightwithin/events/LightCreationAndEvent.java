@@ -7,13 +7,9 @@ import me.emafire003.dev.lightwithin.config.Config;
 import me.emafire003.dev.lightwithin.lights.InnerLightType;
 import me.emafire003.dev.lightwithin.util.TargetType;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.UUID;
 
 import static me.emafire003.dev.lightwithin.LightWithin.LIGHT_COMPONENT;
 import static me.emafire003.dev.lightwithin.LightWithin.LOGGER;
@@ -90,7 +86,7 @@ public class LightCreationAndEvent {
      *
      * @param targets_ordered A list of targets. The first object on the list will be most likely and so on.*/
     public static TargetType determineTarget(String[] id_bits, int target_bit, List<TargetType> targets_ordered){
-        if(target_bit == 1 || target_bit == 2){
+        if(target_bit == 2 || target_bit == 3){
             //It also adds the last digit from the previous bit
             id_bits[target_bit] = id_bits[target_bit].substring(1)+id_bits[target_bit-1].substring(id_bits[target_bit-1].length()-1);
         }
@@ -119,14 +115,12 @@ public class LightCreationAndEvent {
     }
 
     //0,0015% of probabilty of gaining a legendary light? (well times 2)
-    //
-    //TODO most likely need to rework this as well
     public static Pair<InnerLightType, TargetType> determineTypeAndTarget(String[] id_bits, int type_bit, int target_bit){
-        if(type_bit == 1 || type_bit == 2){
+        if(type_bit == 2 || type_bit == 3){
             //It also adds the last digit from the previous bit
             id_bits[target_bit] = id_bits[target_bit].substring(1)+id_bits[target_bit-1].substring(id_bits[target_bit-1].length()-1);
         }
-        if(target_bit == 1 || target_bit == 2){
+        if(target_bit == 2 || target_bit == 3){
             //It also adds the last digit from the previous bit
             id_bits[target_bit] = id_bits[target_bit].substring(1)+id_bits[target_bit-1].substring(id_bits[target_bit-1].length()-1);
         }
@@ -178,8 +172,8 @@ public class LightCreationAndEvent {
     //formula: 10+10*stufffoundintheid aka minimum value 10+10*value, so 10s-170s
     //max: 10+10*16 = 170
     public static int determineCooldown(String[] id_bits, int string_bit){
-        //TODO why also the string bit 1?
-        if(string_bit == 1 || string_bit == 2){
+        //xxxxxxxx-xxxx-Axxx-Bxxx-xxxxxxxxxxxx where B is the variant, which sometimes does not change so
+        if(string_bit == 2 || string_bit == 3){
             //It also adds the last digit from the previous bit
             id_bits[string_bit] = id_bits[string_bit].substring(1)+id_bits[string_bit-1].substring(id_bits[string_bit-1].length()-1);
         }
@@ -190,7 +184,7 @@ public class LightCreationAndEvent {
     //max 18
     public static int determineDuration(String[] id_bits, int string_bit){
         //The UUID stores constat bits in these parts here, which are the version and the variant.
-        if(string_bit == 1 || string_bit == 2){
+        if(string_bit == 2 || string_bit == 3){
             //It also adds the last digit from the previous bit
             id_bits[string_bit] = id_bits[string_bit].substring(1)+id_bits[string_bit-1].substring(id_bits[string_bit-1].length()-1);
         }
@@ -213,7 +207,7 @@ public class LightCreationAndEvent {
      * So having a power between 5/8 should be more common. I don't really know.*/
     public static int determinePower(String[] id_bits, int string_bit){
         //The UUID stores constat bits in these parts here, which are the version and the variant.
-        if(string_bit == 1 || string_bit == 2){
+        if(string_bit == 2 || string_bit == 3){
             //It also adds the last digit from the previous bit
             id_bits[string_bit] = id_bits[string_bit].substring(1)+id_bits[string_bit-1].substring(id_bits[string_bit-1].length()-1);
         }
