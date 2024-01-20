@@ -7,15 +7,16 @@ player.
 
 ![demo_heal_brief](https://user-images.githubusercontent.com/29462910/171922554-e776af80-241a-4acc-a5f8-1d0b3f26211c.gif)
 
-There are serverl types of lights, and a lot more will be added in the future! 
+There a lots of lights, ranging from granting potent status effects like healing, to freezing all of your enemies on the spot, or even save your allies from falling from great heights by flying away! You can even summon creatures to defend yourself against dangers!
+Each light has a cool sound design and distinct effects, with particle, custom glowing effects, and misterious runes appearing on your screen!
 
-Some examples include lights that grant potent status effects if the player is in danger, like the Heal light. They even work with the player's allies as well!
-
-There are also what I like calling the "elemental lights", such as the Frost light capable of turning enemies into ice or even summoning an ice wall to protect the player and their allies. There's the Aqua light that creates a water carpet on which you can speed accross, or the Wind light that saves you from a falling from great heights!
+And all of this is different from player to player, so everyone will have their personal secret power!
 
 You can look at the video/images below or check the wiki for demos of these lights. Or you could preserve the surprise and just play with the mod and find out yourself!
 
 /////A fex example images go here //////
+
+[![bisecthosting](https://www.bisecthosting.com/partners/custom-banners/e9c85d2a-cafa-4e2f-98bf-4f62bd9e951c.png)](https://www.bisecthosting.com/LightDev)
 
 ## How is it unique?
 
@@ -27,8 +28,8 @@ There a few things that contribute to the uniqueness of a light:
 - Starting with some numerical values we have the **POWER** of your light, which determines how strong your light is. It is a value used in calculating a Status Effect level, the damage done when activating the light and so on
 - We have the **DURATION**, which, unsurpisingly specifies how much your light remains active
 - Lastly we have the **COOLDOWN** duration, which is how much time will need to pass between activating your light again! Your light will need some rest after spending all that energy no?
-
-// add something that with a graph some kind of example of the values above // TODO I may have forgetten something but not sure
+//maybe bisect here?
+// add something that with a graph some kind of example of the values above
 
 ## How can I activate them?
 In order to activate them you need to met specific conditions, which often vary between light types. Usually, it involves fighting with another mob/enemy player and being "in danger", for example on low health, or being surrounded by many enemies. To be more precise usally you need to meet more than one condition in order to trigger the activation. In my opinion it's better to just discover how to activate your light by playing, so I won't go in further detail here, look at the wiki instead.
@@ -39,11 +40,11 @@ Once you have met these conditions, an icon ![Senza titolo](https://user-images.
 
 There is also a magical item called **Luxintus Berry** which lets you activate the light regardless of the conditions. It's kind of an energy drink for your inner light! Another 2 "Lux" berry are present, allowing you to change your light type and knowing which light type you have without needing to trigger it or use commands. (Check the wiki for more info!)
 
-[![bisecthosting](https://www.bisecthosting.com/partners/custom-banners/e9c85d2a-cafa-4e2f-98bf-4f62bd9e951c.png)](https://www.bisecthosting.com/LightDev)
+//some kind of other image
 
 ## Compatibility and Hooks with other mods
 This mod is compatible with [ColoredGlowLib]() for adding a custom glow color while the light is active.
-For the Allies or Enemies you can use Faction, OPAC, Argonauts and Minecraft's teams.
+For the Allies or Enemies you can use Faction, OPAC, Argonauts, FTBTeams and Minecraft's teams.
 
 There are no currently know incompatiblities with other mods. Let me know if you find any!
 
@@ -62,9 +63,9 @@ You can directly support me by offering a coffe at this link:
 Or you can use my code on [BisectHosting](https://www.bisecthosting.com/LightDev) for a 25% discount on a 4GB Minecraft server to player with your friends!
 
 ## Modpack use
-You are allowed to use this mod without directly asking, but you are required to credit me, as for most other mods. Also, I would appreciate if your modpack was hosted on Modrinth or Curseforge, which would actually increase the download count, something that other modpacks site don't do.
+You are allowed to use this mod without directly asking, but you are asked to credit me, as for most other mods. Also, I would appreciate if your modpack was hosted on Modrinth or Curseforge, which would actually increase the download count of the mod, something that other modpacks sites don't do.
 
-### Attributuons:
+### Attributions:
 Text logo: textstudio.com
 Some audio files: https://mixkit.co
 Other audio files: beepbox
