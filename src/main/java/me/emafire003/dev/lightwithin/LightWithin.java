@@ -241,8 +241,7 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 		List<LivingEntity> entities = player.getWorld().getEntitiesByClass(LivingEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amount), (entity1 -> true));
 		targets.add(player);
 		for(LivingEntity ent : entities){
-			//TODO may need this to prevent bugs
-			if(/*!entity.equals(ent) && */CheckUtils.CheckAllies.checkAlly(player, ent)){
+			if(CheckUtils.CheckAllies.checkAlly(player, ent)){
 				if(Config.ALWAYS_AFFECT_ALLIES || CheckUtils.checkSelfDanger(ent, Config.HP_PERCENTAGE_ALLIES)){
 					targets.add(ent);
 				}
@@ -317,7 +316,7 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 
 		//Same here
 		else if(component.getTargets().equals(TargetType.VARIANT)){
-			if(player.getHealth() <= (player.getMaxHealth())*50/100){
+			if(CheckUtils.checkSelfDanger(player, Config.HP_PERCENTAGE_SELF)){
 				targets.add(player);
 			}
 			targets.addAll(player.getWorld().getEntitiesByClass(PassiveEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amount), (entity1 -> true)));

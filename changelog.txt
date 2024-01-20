@@ -52,8 +52,6 @@ For Aqua light:
 For Frog light: quite low health/surrounded (one of the two)
 
 Frost light:
-//TODO Subject to chage if I change all the durations
-Now the duration of the freeze resistance is multiplied by the power multiplier
 
 The ENEMIES & ALL targets have been changed. Now they will be encased in a box of clear ice, and internnaly,
 won't change looking direction anymore, and will not be able to attack or break blocks and will no longer be invisible.

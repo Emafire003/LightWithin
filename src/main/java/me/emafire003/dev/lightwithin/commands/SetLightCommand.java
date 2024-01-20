@@ -52,7 +52,6 @@ public class SetLightCommand implements LightCommand{
                 List<TargetType> possible = LightWithin.POSSIBLE_TARGETS.get(type);
 
                 if(!possible.contains(target_type)){
-                    //TODO will need to rework this based on the light possibile targets and such
                     int r = target.getRandom().nextBetween(0, possible.size()-1);
                     component.setTargets(possible.get(r));
                 }

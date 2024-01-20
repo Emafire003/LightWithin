@@ -41,7 +41,6 @@ public class WaterSlideEffect extends StatusEffect {
     public void applyUpdateEffect(LivingEntity entity, int amplifier) {
         if(Config.STRUCTURE_GRIEFING && !entity.getWorld().isClient && !entity.getWorld().getBlockState(entity.getBlockPos()).isOf(Blocks.WATER)){
             Direction facing = entity.getHorizontalFacing();
-            //TODO move this out of the method
 
             BlockPos pos = entity.getBlockPos();
 

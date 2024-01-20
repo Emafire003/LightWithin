@@ -33,12 +33,7 @@ public class OPACChecker {
             return false;
         }
 
-        //TODO remove
-        LightWithin.LOGGER.debug("[DEBUG] Checking xareos party...");
-        LightWithin.LOGGER.debug("XParty 1: " + party.getDefaultName()+ "ID: " + party.getId());
-        LightWithin.LOGGER.debug("XParty 2: " + party1.getDefaultName() + "ID: " + party1.getId());
         if (party.getId().equals(party.getId())) {
-            LightWithin.LOGGER.debug("Yep, the same");
             return true;
         }
         return false;
@@ -58,12 +53,7 @@ public class OPACChecker {
             return false;
         }
 
-        //TODO remove
-        LightWithin.LOGGER.info("[DEBUG] Checking xareos party...");
-        LightWithin.LOGGER.info("XParty 1: " + party.getDefaultName()+ "ID: " + party.getId());
-        LightWithin.LOGGER.info("XParty 2: " + party1.getDefaultName() + "ID: " + party1.getId());
         if (party.getId().equals(party.getId())) {
-            LightWithin.LOGGER.info("Yep, the same");
             return true;
         }
         return false;
@@ -84,12 +74,7 @@ public class OPACChecker {
             return false;
         }
 
-        //TODO remove
-        LightWithin.LOGGER.info("[DEBUG] Checking xareos party...");
-        LightWithin.LOGGER.info("XParty 1: " + party.getDefaultName()+ "ID: " + party.getId());
-        LightWithin.LOGGER.info("XParty 2: " + party1.getDefaultName() + "ID: " + party1.getId());
         if (party.isAlly(party1.getId())) {
-            LightWithin.LOGGER.info("Yep, allied");
             return true;
         }
         return false;

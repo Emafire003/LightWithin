@@ -27,7 +27,7 @@ public class LightActiveEffect extends StatusEffect {
     //it's a cool way to make a cooldown visible for the player too. As lot's have said, it's not a bug it's a feature
     //just look at it the right way
     //xD
-    //TODO mixin into the GlowingEffect and make it so it can clear the CGLCompat.getLib() color
+    //TO.DO mixin into the GlowingEffect and make it so it can clear the CGLCompat.getLib() color
     //10.01.2024 I don't even know what I meant
 
     public LightActiveEffect() {

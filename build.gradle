@@ -62,7 +62,7 @@ dependencies {
 	include modImplementation("dev.onyxstudios.cardinal-components-api:cardinal-components-base:${project.cardinal_components_version}")
 	include modImplementation("dev.onyxstudios.cardinal-components-api:cardinal-components-entity:${project.cardinal_components_version}")
 
-	//Renderer TODO will need updating back to master-SNAPSHOT for 1.19.2
+	//Renderer
 	//include modImplementation( 'com.github.0x3C50:Renderer:9804cf7d99' )c4faf83
 	//1.20.1
 	include modImplementation( 'com.github.0x3C50:Renderer:2273f5e562' )//2273f5e

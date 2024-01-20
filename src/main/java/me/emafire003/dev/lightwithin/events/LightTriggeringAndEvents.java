@@ -221,7 +221,6 @@ public class LightTriggeringAndEvents {
         //Triggers when someone/thing is burning
         EntityBurningEvent.EVENT.register(((burningEntity) -> {
 
-            //TODO see if this works
             if(burningEntity instanceof PlayerEntity){
                 entityBlazingTriggerCheck((PlayerEntity) burningEntity, (PlayerEntity) burningEntity);
             }
@@ -253,7 +252,6 @@ public class LightTriggeringAndEvents {
 
         //Triggers when someone/thing is freezing
         EntityFreezingEvent.EVENT.register(((freezingEntity) -> {
-            //TODO see if this works
             if(freezingEntity instanceof PlayerEntity){
                 entityFreezingTriggerCheck((PlayerEntity) freezingEntity, (PlayerEntity) freezingEntity);
             }
@@ -285,7 +283,6 @@ public class LightTriggeringAndEvents {
 
         //Triggers when someone/thing is drowining
         EntityDrowningEvent.EVENT.register(((drowningEntity) -> {
-            //TODO see if this works
             if(drowningEntity instanceof PlayerEntity){
                 entityDrowningTriggerCheck((PlayerEntity) drowningEntity, (PlayerEntity) drowningEntity);
             }
@@ -317,8 +314,6 @@ public class LightTriggeringAndEvents {
 
         //Player attacking something
         //Will need the stuff that is here to the other thingy up there
-        //TODO may need reworking. Currently if the ally gets attacked it will trigger the light of the allied player
-        //TODO so, it wouldn't actually be the player the one attaccking and then activating :/
         AttackEntityCallback.EVENT.register((player, world, hand, entity, hitResult) ->{
             if(!isTriggerable(player)){
                 return ActionResult.PASS;

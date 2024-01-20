@@ -59,7 +59,6 @@ public class LightTriggerChecks {
         }
         /**CHECKS for the allies part*/
         else if(component.getTargets().equals(TargetType.ALLIES)){
-            //TODO set attacker in the other ones as well
             if(CheckUtils.checkAllyHealth(player, attacker, Config.HP_PERCENTAGE_ALLIES)){
                 trigger_sum = trigger_sum + 4;
             }
@@ -130,7 +129,7 @@ public class LightTriggerChecks {
         }
         /**CHECKS for the allies part*/
         else if(component.getTargets().equals(TargetType.ALLIES)){
-            if(CheckUtils.checkAllyHealth(player, target, Config.HP_PERCENTAGE_ALLIES)){
+            if(CheckUtils.checkAllyHealth(player, attacker, Config.HP_PERCENTAGE_ALLIES)){
                 trigger_sum = trigger_sum + 4;
             }
             if(CheckUtils.checkSelfDanger(player, Config.HP_PERCENTAGE_SELF)){
