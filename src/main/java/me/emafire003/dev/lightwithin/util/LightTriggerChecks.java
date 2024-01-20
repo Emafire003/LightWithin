@@ -232,7 +232,7 @@ public class LightTriggerChecks {
             }
         }
         /**CHECKS if the player has ENEMIES as target, either his or his allies health needs to be low*/
-        else if(component.getTargets().equals(TargetType.ENEMIES)){
+        else if(component.getTargets().equals(TargetType.ENEMIES) || component.getTargets().equals(TargetType.VARIANT)){
 
 
             if(CheckUtils.checkSelfDanger(player, Config.HP_PERCENTAGE_SELF+10)){

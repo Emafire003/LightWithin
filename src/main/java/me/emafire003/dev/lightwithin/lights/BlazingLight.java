@@ -16,6 +16,8 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.particle.ParticleEffect;
+import net.minecraft.particle.ParticleType;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
@@ -78,6 +80,17 @@ public class BlazingLight extends InnerLight {
     public void execute(){
         checkSafety();
         LightComponent component = LIGHT_COMPONENT.get(caster);
+
+        String blazing_structure_id = "blazing_light";
+        String fire_ring_id = "fire_ring";
+        ParticleEffect flame_particle = ParticleTypes.FLAME;
+        if(component.getTargets().equals(TargetType.VARIANT)){
+            flame_particle = ParticleTypes.SOUL_FIRE_FLAME;
+            fire_ring_id = "soulfire_ring";
+            blazing_structure_id = "blazing_light_soul";
+            this.color = "#058c7a";
+        }
+
         if(FabricLoader.getInstance().isModLoaded("coloredglowlib")){
             if(this.rainbow_col){
                 CGLCompat.getLib().setRainbowColorToEntity(this.caster, true);
@@ -85,6 +98,7 @@ public class BlazingLight extends InnerLight {
                 CGLCompat.getLib().setColorToEntity(this.caster, CGLCompat.fromHex(this.color));
             }
         }
+
         caster.getWorld().playSound(caster.getX(), caster.getY(), caster.getZ(), LightSounds.BLAZING_LIGHT, SoundCategory.AMBIENT, 1, 1, true);
         caster.addStatusEffect(new StatusEffectInstance(StatusEffects.FIRE_RESISTANCE, caster.getStatusEffect(LightEffects. LIGHT_ACTIVE).getDuration(), 0, false, false));
 
@@ -93,15 +107,17 @@ public class BlazingLight extends InnerLight {
             power_multiplier = power_multiplier + Config.BLAZING_ALL_DAMAGE_BONUS;
         }
         if((Config.STRUCTURE_GRIEFING || Config.NON_FUNDAMENTAL_STRUCTURE_GRIEFING) && !caster.getWorld().isClient && (component.getTargets().equals(TargetType.ALL) || component.getTargets().equals(TargetType.ENEMIES))) {
-            StructurePlacerAPI placer = new StructurePlacerAPI((ServerWorld) caster.getWorld(), new Identifier(MOD_ID, "blazing_light"), caster.getBlockPos(), BlockMirror.NONE, BlockRotation.NONE, true, 1.0f, new BlockPos(-3, -4, -3));
+            StructurePlacerAPI placer = new StructurePlacerAPI((ServerWorld) caster.getWorld(), new Identifier(MOD_ID, blazing_structure_id), caster.getBlockPos(), BlockMirror.NONE, BlockRotation.NONE, true, 1.0f, new BlockPos(-3, -4, -3));
             placer.loadStructure();
+        }
+        if(!caster.getWorld().isClient) {
+            LightParticlesUtil.spawnLightTypeParticle(LightParticles.BLAZINGLIGHT_PARTICLE, (ServerWorld) caster.getWorld(), caster.getPos());
         }
         for(LivingEntity target : this.targets){
             //target.playSound(LightSounds.BLAZING_LIGHT, 1, 1);
 
             if(!caster.getWorld().isClient){
                 LightParticlesUtil.spawnLightTypeParticle(LightParticles.BLAZINGLIGHT_PARTICLE, (ServerWorld) caster.getWorld(), target.getPos());
-                LightParticlesUtil.spawnLightTypeParticle(LightParticles.BLAZINGLIGHT_PARTICLE, (ServerWorld) caster.getWorld(), caster.getPos());
             }
             
             //TODO make the chance configable EDIT: Maybe not
@@ -110,9 +126,9 @@ public class BlazingLight extends InnerLight {
                 target.damage(caster.getWorld().getDamageSources().inFire(), (float) (Config.BLAZING_DEFAULT_DAMAGE*this.power_multiplier*crit_multiplier));
                 target.setOnFireFor(this.duration*Config.BLAZING_CRIT_FIRE_MULTIPLIER);
                 target.playSound(LightSounds.LIGHT_CRIT, 1, 1);
-                LightParticlesUtil.spawnDescendingColumn((ServerPlayerEntity) caster, ParticleTypes.FLAME, target.getPos().add(0,3,0));
+                LightParticlesUtil.spawnDescendingColumn((ServerPlayerEntity) caster, flame_particle, target.getPos().add(0,3,0));
                 if(!caster.getWorld().isClient){
-                    StructurePlacerAPI placer = new StructurePlacerAPI((ServerWorld) caster.getWorld(), new Identifier(MOD_ID, "fire_ring"), caster.getBlockPos());
+                    StructurePlacerAPI placer = new StructurePlacerAPI((ServerWorld) caster.getWorld(), new Identifier(MOD_ID, fire_ring_id), caster.getBlockPos());
                     placer.loadStructure();
                 }
             }else{
@@ -122,10 +138,11 @@ public class BlazingLight extends InnerLight {
         }
 
         //to spawn the expanding circle of particles
+        ParticleEffect finalFlame_particle = flame_particle;
         ServerTickEvents.END_SERVER_TICK.register((server -> {
             if(r < LightWithin.box_expansion_amount){
                 r = r + 0.5;
-                LightParticlesUtil.spawnCircle(caster.getPos().add(0,0.7,0), r, 100, ParticleTypes.FLAME, (ServerWorld) caster.getWorld());
+                LightParticlesUtil.spawnCircle(caster.getPos().add(0,0.7,0), r, 100, finalFlame_particle, (ServerWorld) caster.getWorld());
             }
         }));
 

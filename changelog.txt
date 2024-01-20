@@ -30,6 +30,10 @@ For Defense light:
 For Strength light:
     SELF/VARIANT: Low health, Very low health, low armor, surrounded
     ALLIES: Allies low health, self very low health, allies low armor, surrounded
+For Blazing light:
+    - **`ENEMIES`**: `Very low Health`, `Low armor durability`, `Ally low armor durability`, `Surrounded`, `Blazing conditions`
+    - **`ALL`**: `Low Health`, `Very low Health`, `Low armor durability`, `Surrounded`, `Blazing conditions`
+    - VARIANT: Same as enemies
 For frost light:
     ALL: Low health, very low health, surrunded, low armor, Frost conditions (for exmaple, frost conditions+low health triggers)
     ENEMIES: Self Very low health, Allies low health, frost conditions, ally low armor,  self low armor, surrounded
@@ -112,6 +116,9 @@ Added option to set permissions, check the permissions.txt file on github!
 Added option to consider non ALLIES as ENEMIES
 
 Restructured the config completely :}
+
+Blazing light has a new target: Variant
+Identical to ENEMIES, but soul flame themed.
 
 Updated the AQUA light ENEMIES target: Now instead of weird cages of mangrove roots the enemies will be launched
 into the air by a water column/geyser, hitting a trident (which is not pickup-able anymore) if the power level is high enough.
