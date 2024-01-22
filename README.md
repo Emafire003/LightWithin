@@ -3,7 +3,7 @@
 ## WIP, I am rewrtiting most of the stuff.
 
 This mod adds a new mechanic, called *"InnerLights"* which are cool fancy magicalish powers present within player, and they are pretty much **UNIQUE** for every single
-player.
+player. It is also higly configurable, so you can customize it to your needs!
 
 ![demo_heal_brief](https://user-images.githubusercontent.com/29462910/171922554-e776af80-241a-4acc-a5f8-1d0b3f26211c.gif)
 
@@ -16,7 +16,8 @@ You can look at the video/images below or check the wiki for demos of these ligh
 
 /////A fex example images go here //////
 
-[![bisecthosting](https://www.bisecthosting.com/partners/custom-banners/e9c85d2a-cafa-4e2f-98bf-4f62bd9e951c.png)](https://www.bisecthosting.com/LightDev)
+[![bisecthosting](https://www.bisecthosting.com/partners/custom-banners/e9bbf36a-be01-4324-b393-dae88a01be66.webp)](https://www.bisecthosting.com/LightDev)
+The best way to enjoy this mod is with other people on a server, so you can use the code LIGHTDEV on [BisectHosting](https://www.bisecthosting.com/LightDev) to save 25% on a 4GB server!
 
 ## How is it unique?
 
@@ -34,7 +35,7 @@ There a few things that contribute to the uniqueness of a light:
 ## How can I activate them?
 In order to activate them you need to met specific conditions, which often vary between light types. Usually, it involves fighting with another mob/enemy player and being "in danger", for example on low health, or being surrounded by many enemies. To be more precise usally you need to meet more than one condition in order to trigger the activation. In my opinion it's better to just discover how to activate your light by playing, so I won't go in further detail here, look at the wiki instead.
 
-Once you have met these conditions, an icon ![Senza titolo](https://user-images.githubusercontent.com/29462910/171919382-d65f6f72-4a84-44f9-9ebb-62283755793e.png) will appear in the top left corner signaling that your light is ready to be released. Press the keybind **V** (default, you can change it) and activate your light!
+Once you have met these conditions, an icon ![light](https://github.com/Emafire003/LightWithin/assets/29462910/4453adb1-5c40-4fa6-8a96-94ad8f0d2579) will appear in the top left corner signaling that your light is ready to be released. Press the keybind **V** (default, you can change it) and activate your light!
 
 // ADD a gif of the icon appearing and also the light triggering//
 
@@ -72,42 +73,7 @@ Other audio files: beepbox
 Some of the code for the commands: Factions mod
 Thanks to @FranzleOrange for the help with the Strength sound effect, and also some sounds have been sampled from  !
 
-
-
-/// RANDOM STUFF FROM THE OLD README, WIP//
-## The "Lux" Berries
-They currently can't be obtained in survival, and when they will there are going to range in rarity from the golden apple to beyond the enchanted one.
-
-![berries](https://user-images.githubusercontent.com/29462910/171917861-fd2f614a-b691-4a2b-b596-eabe64e2ff65.gif)
-
-*From left to right, Luxmuta Berry, Luxintus Berry, Luxcognita Berry*
-
-### Luxmutua Berry ![luxmut_berry](https://user-images.githubusercontent.com/29462910/171920401-c0134016-6a9f-453d-8f4b-2afad5165b17.png)
-
-This one, will mix up your innerlight, allowing you to change it innerlight. The change is random, and it won't be the same one you had before eating it. It also changed the target randomly. This is probably going to be even more rare that an enchanted golden apple
-
-### Luxintus Berry ![sweet_berries](https://user-images.githubusercontent.com/29462910/171920163-2cdb1586-ded6-47ba-97ea-0d259be72187.png)
-
-This magical berry will refill your inner light, and trigger it right away. It will be as rare as an enchanted golden apple
-*Trivia: First berry to have developed, and the only one originally planned*
-
-### Luxcognita Berry ![luxcogni](https://user-images.githubusercontent.com/29462910/171920418-17c52b5a-0fa5-497b-94a8-7e5d3ea7c3c4.png) 
-
-This berry will read your innerlight, and tell you how it's made up, aka what does it do, before activating it. It will be useful once the mod is out of alpha... eheh. Anyway, it will be as rare as a normal golden apple. Maybe you could find it in the same places too.
-
-## Coming (soon tm) Features
-- QoL changes EDIT: some implementd
-- Way more light types such as Thunder, Shockawave, Elemental lights and such EDIT: Elementals coming
-- More complex targets
-- More complex triggers EDIT: Added a few
-- Legendary lights with an heavy lore behind them (For now i can say, "black white and ???"
-- Fix bugs
-- Oraganize this page a little better, maybe using a wiki. If you want to help, contact me.
-- Make the effects better
-- Modify the writings that appear on screen when triggering
-- Suggestions accepted but likely to be low in the roadmap
-
-  ## Coming (soon tm) Features
+## Coming (soon tm) Features (maybe)
 - More light types!
 - Maybe more targets, not sure!
 - More triggers maybe
