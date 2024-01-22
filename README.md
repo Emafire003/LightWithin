@@ -16,7 +16,8 @@ You can look at the video/images below or check the wiki for demos of these ligh
 
 /////A fex example images go here //////
 
-[![bisecthosting](https://www.bisecthosting.com/partners/custom-banners/e9c85d2a-cafa-4e2f-98bf-4f62bd9e951c.png)](https://www.bisecthosting.com/LightDev)
+[![bisecthosting](https://www.bisecthosting.com/partners/custom-banners/e9bbf36a-be01-4324-b393-dae88a01be66.webp)](https://www.bisecthosting.com/LightDev)
+The best way to enjoy this mod is with other people on a server, so you can use the code LIGHTDEV on [BisectHosting](https://www.bisecthosting.com/LightDev) to save 25% on a 4GB server!
 
 ## How is it unique?
 
