@@ -182,9 +182,7 @@ public class CheckUtils {
     /**Calculates the attack damage that an entity could do to another entity, not accounting for its speed*/
     private static float getAttackDamage(@NotNull LivingEntity attacker, @NotNull LivingEntity target){
         float dmg = (float)attacker.getAttributeValue(EntityAttributes.GENERIC_ATTACK_DAMAGE);
-        if (target != null) {
-            dmg += EnchantmentHelper.getAttackDamage(attacker.getMainHandStack(), target.getGroup());
-        }
+        dmg += EnchantmentHelper.getAttackDamage(attacker.getMainHandStack(), target.getGroup());
         if(target instanceof PlayerEntity){
             target.sendMessage(Text.literal("The non calcl damage is §6" +dmg));
 
@@ -309,8 +307,6 @@ public class CheckUtils {
     public static boolean checkAllyHealth(@NotNull PlayerEntity player, Entity attacker, int health_percent){
         List<LivingEntity> entities = player.getWorld().getEntitiesByClass(LivingEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amount), (entity1 -> true));
         int n_allies_low_health = 0;
-        //I need to this to prevent a ConcurrentModificationError
-        List<LivingEntity> team_entities = new ArrayList<>();
         //loops through the entities near the player, if the entities are in the same team as the player
         //and they are not the entity that has been hit then add them to the team_entities and check if their health is ok
         for(LivingEntity ent : entities){
@@ -321,7 +317,6 @@ public class CheckUtils {
                 if(checkSelfDanger(ent, health_percent)){
                     n_allies_low_health++;
                 }
-                team_entities.add(ent);
             }
         }
         //If the total team targets && the number of entities of team with the right health are true then
@@ -601,12 +596,16 @@ public class CheckUtils {
      * @param player The player to perform checks on*/
     public static boolean checkEarthen(PlayerEntity player){
 
+        //Moved this so it doesn't consume the dirt unless needed
+        if(checkMultipleBlocksWithTags(player, 3, 3, TagKey.of(RegistryKeys.BLOCK, BlockTags.LUSH_GROUND_REPLACEABLE.id()))){
+            return true;
+        }
         if(player.getInventory().contains(new ItemStack(Items.DIRT, 64))){
             player.getInventory().removeStack(player.getInventory().getSlotWithStack(new ItemStack(Items.DIRT, 64)));
             return true;
         }
 
-        return checkMultipleBlocksWithTags(player, 3, 3, TagKey.of(RegistryKeys.BLOCK, BlockTags.LUSH_GROUND_REPLACEABLE.id()));
+        return false;
     }
 
     /**Used to check if the player has something that can be considered a Cold Source
@@ -623,15 +622,16 @@ public class CheckUtils {
             return true;
         }
 
-        return checkMultipleBlocks(player, Arrays.asList(Blocks.AIR), 3, 7);
+        return checkMultipleBlocks(player, List.of(Blocks.AIR), 3, 7);
         //return checkMultipleBlocksWithTags(player, 3, 3, TagKey.of(Registry.BLOCK_KEY, BlockTags.AIR));
     }
 
-    private static final List<Item> aqua_items = Arrays.asList(Items.WATER_BUCKET, Items.GLASS_BOTTLE);
-    private static final List<Block> aqua_blocks = Arrays.asList(Blocks.WATER, Blocks.WATER_CAULDRON);
 
-    /**Used to check if the player has something that can be considered a Cold Source
-     * for the Frost Light
+    //TODO maybe add water logged blocks check.
+    private static final List<Item> aqua_items = Arrays.asList(Items.WATER_BUCKET, Items.GLASS_BOTTLE, Items.HEART_OF_THE_SEA, Items.NAUTILUS_SHELL, Items.CONDUIT);
+    private static final List<Block> aqua_blocks = Arrays.asList(Blocks.WATER, Blocks.WATER_CAULDRON, Blocks.CONDUIT, Blocks.WET_SPONGE);
+
+    /**Used to check if the player has something that can be considered a Aqua source
      *
      * @param player The player to perform checks on*/
     public static boolean checkAqua(PlayerEntity player){

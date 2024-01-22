@@ -76,7 +76,7 @@
 
   "light.description.activation.wind.self": "The wind shall carry you onwards!",
   "light.description.activation.wind.allies": "Oh winds, aid our movements!",
-  "light.description.activation.wind.variant": "Blow them away!",
+  "light.description.activation.wind.all": "Blow them away!",
 
   "light.description.activation.aqua.enemies": "Your enemy shall drown in a watery cage!",
   "light.description.activation.aqua.all": "Inhabitants of the depths, hear my call and aid me!",

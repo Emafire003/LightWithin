@@ -96,7 +96,7 @@ public class WindLight extends InnerLight {
         //caster.getWorld().playSound(caster, caster.getBlockPos(), LightSounds.WIND_LIGHT, SoundCategory.AMBIENT, 1, 1);
         ServerWorld world = (ServerWorld) (caster).getWorld();
         //If the light target is OTHER it will blow away every entity in radious
-        if(component.getTargets().equals(TargetType.VARIANT)){
+        if(component.getTargets().equals(TargetType.ALL)){
             LightParticlesUtil.spawnLightTypeParticle(LightParticles.WINDLIGHT_PARTICLE, (ServerWorld) caster.getWorld(), caster.getPos());
             world.spawnParticles(((ServerPlayerEntity )caster), ParticleTypes.CLOUD, false, caster.getX(), caster.getY()+1, caster.getZ(), 65, 0, 0.2, 0, 0.35);
             for(LivingEntity target : this.targets){

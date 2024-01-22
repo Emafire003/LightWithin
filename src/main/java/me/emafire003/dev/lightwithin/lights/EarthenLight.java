@@ -24,7 +24,6 @@ import net.minecraft.particle.BlockStateParticleEffect;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
-import net.minecraft.text.Text;
 import net.minecraft.util.BlockMirror;
 import net.minecraft.util.BlockRotation;
 import net.minecraft.util.Identifier;
@@ -168,7 +167,7 @@ public class EarthenLight extends InnerLight {
             caster.playSound(LightSounds.EARTHEN_LIGHT, 1, 1);
             if(Config.STRUCTURE_GRIEFING && !caster.getWorld().isClient) {
                 StructurePlacerAPI placer;
-                if(this.power_multiplier >= 6){
+                if(this.power_multiplier >= 7){
                     LightParticlesUtil.spawnCircle(caster.getPos().add(0, 0.45, 0), 7, 120, new BlockStateParticleEffect(ParticleTypes.BLOCK, Blocks.DIRT.getDefaultState()), (ServerWorld) caster.getWorld());
                     LightParticlesUtil.spawnCircle(caster.getPos().add(0, 1.45, 0), 5, 120, new BlockStateParticleEffect(ParticleTypes.BLOCK, Blocks.DIRT.getDefaultState()), (ServerWorld) caster.getWorld());
                     LightParticlesUtil.spawnCircle(caster.getPos().add(0, 3, 0), 3, 120, new BlockStateParticleEffect(ParticleTypes.BLOCK, Blocks.DIRT.getDefaultState()), (ServerWorld) caster.getWorld());
@@ -176,7 +175,7 @@ public class EarthenLight extends InnerLight {
                     placer = new StructurePlacerAPI((ServerWorld) caster.getWorld(), new Identifier(MOD_ID, "self_moat_pillar"), caster.getBlockPos(), BlockMirror.NONE, BlockRotation.NONE, true, 0.96f, new BlockPos(-7, -6, -7));
                     caster.teleport(caster.getX(), caster.getY()+5, caster.getZ());
 
-                }else if(this.power_multiplier < 6 && this.power_multiplier >= 3){
+                }else if(this.power_multiplier < 7 && this.power_multiplier >= 3){
                     LightParticlesUtil.spawnCircle(caster.getPos().add(0, 0.45, 0), 3, 120, new BlockStateParticleEffect(ParticleTypes.BLOCK, Blocks.DIRT.getDefaultState()), (ServerWorld) caster.getWorld());
                     LightParticlesUtil.spawnCircle(caster.getPos().add(0, 1.45, 0), 2.50, 120, new BlockStateParticleEffect(ParticleTypes.BLOCK, Blocks.DIRT.getDefaultState()), (ServerWorld) caster.getWorld());
                     LightParticlesUtil.spawnCircle(caster.getPos().add(0, 4.5, 0), 1.5, 120, new BlockStateParticleEffect(ParticleTypes.BLOCK, Blocks.DIRT.getDefaultState()), (ServerWorld) caster.getWorld());

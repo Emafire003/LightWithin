@@ -9,11 +9,7 @@ import me.emafire003.dev.lightwithin.sounds.LightSounds;
 import me.emafire003.dev.lightwithin.status_effects.LightEffects;
 import me.emafire003.dev.lightwithin.util.SpawnUtils;
 import me.emafire003.dev.lightwithin.util.TargetType;
-import me.emafire003.dev.structureplacerapi.StructurePlacerAPI;
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.BubbleColumnBlock;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.*;
 import net.minecraft.entity.effect.StatusEffectInstance;
@@ -22,18 +18,11 @@ import net.minecraft.entity.mob.DrownedEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.entity.projectile.TridentEntity;
-import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.registry.Registries;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
-import net.minecraft.text.Text;
-import net.minecraft.util.BlockMirror;
-import net.minecraft.util.BlockRotation;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.BlockPos;
 
 import java.util.List;
 
@@ -113,9 +102,8 @@ public class AquaLight extends InnerLight {
         }
 
 
-        caster.getWorld().playSound(caster, caster.getBlockPos(), LightSounds.AQUA_LIGHT, SoundCategory.AMBIENT, 1, 1);
+        caster.getWorld().playSound(caster, caster.getBlockPos(), LightSounds.AQUA_LIGHT, SoundCategory.PLAYERS, 1, 1);
         LightComponent component = LIGHT_COMPONENT.get(caster);
-
 
         //ALL section (drowneds)
         if(component.getTargets().equals(TargetType.ALL)){
@@ -124,22 +112,18 @@ public class AquaLight extends InnerLight {
             for(int i = 0; i<power_multiplier; i++){
                 DrownedEntity drowned = new DrownedEntity(EntityType.DROWNED, caster.getWorld());
 
-                ItemStack iron_chest = new ItemStack(Items.IRON_CHESTPLATE);
+                ItemStack iron_chest = new ItemStack(Items.CHAINMAIL_CHESTPLATE);
                 iron_chest.addEnchantment(Enchantments.PROTECTION, caster.getRandom().nextBetween(1, 3));
-                if(this.power_multiplier > 6){
-                    iron_chest.addEnchantment(Enchantments.THORNS, caster.getRandom().nextBetween(1, 2));
-                }
 
                 ItemStack turtle_helmet = new ItemStack(Items.TURTLE_HELMET);
                 turtle_helmet.addEnchantment(Enchantments.BINDING_CURSE, 1);
                 turtle_helmet.addEnchantment(Enchantments.PROJECTILE_PROTECTION, 3);
-                if(this.power_multiplier > 6){
-                    turtle_helmet.addEnchantment(Enchantments.THORNS, caster.getRandom().nextBetween(1, 2));
-                }
 
                 ItemStack trident = new ItemStack(Items.TRIDENT);
                 if(this.power_multiplier > 5){
                     trident.addEnchantment(Enchantments.CHANNELING, 1);
+                    turtle_helmet.addEnchantment(Enchantments.THORNS, caster.getRandom().nextBetween(1, 2));
+                    iron_chest.addEnchantment(Enchantments.THORNS, caster.getRandom().nextBetween(1, 2));
                 }
                 trident.addEnchantment(Enchantments.IMPALING, caster.getRandom().nextBetween(1,3));
 
@@ -167,22 +151,18 @@ public class AquaLight extends InnerLight {
         //Allies/self section (boosts & water slide)
         if(component.getTargets().equals(TargetType.ALLIES) || component.getTargets().equals(TargetType.SELF)){
             for(LivingEntity target : this.targets){
-                target.playSound(LightSounds.AQUA_LIGHT, 0.9f, 1);
+                //TODO ok not even for the allies
+                //target.playSound(LightSounds.AQUA_LIGHT, 0.9f, 1);
 
+                if(this.power_multiplier < 4){
+                    target.addStatusEffect(new StatusEffectInstance(LightEffects.WATER_SLIDE, this.duration*20, 2, false, false));
+                }else{
+                    target.addStatusEffect(new StatusEffectInstance(LightEffects.WATER_SLIDE, this.duration*20, 3, false, false));
+                }
                 if(target.equals(caster) && component.getTargets().equals(TargetType.ALLIES)){
-                    if(this.power_multiplier < 4){
-                        target.addStatusEffect(new StatusEffectInstance(LightEffects.WATER_SLIDE, this.duration*20, 2, false, false));
-                    }else{
-                        target.addStatusEffect(new StatusEffectInstance(LightEffects.WATER_SLIDE, this.duration*20, 3, false, false));
-                    }
                     target.addStatusEffect(new StatusEffectInstance(StatusEffects.DOLPHINS_GRACE, this.duration*20, (int) (this.power_multiplier/Config.DIV_SELF), false, false));
                     target.addStatusEffect(new StatusEffectInstance(StatusEffects.CONDUIT_POWER, this.duration*20, (int) (this.power_multiplier/Config.DIV_SELF), false, false));
                 }else{
-                    if(this.power_multiplier < 4){
-                        target.addStatusEffect(new StatusEffectInstance(LightEffects.WATER_SLIDE, this.duration*20, 2, false, false));
-                    }else{
-                        target.addStatusEffect(new StatusEffectInstance(LightEffects.WATER_SLIDE, this.duration*20, 3, false, false));
-                    }
                     target.addStatusEffect(new StatusEffectInstance(StatusEffects.DOLPHINS_GRACE, this.duration*20, (int) (this.power_multiplier), false, false));
                     target.addStatusEffect(new StatusEffectInstance(StatusEffects.CONDUIT_POWER, this.duration*20, (int) (this.power_multiplier), false, false));
                 }
@@ -198,7 +178,8 @@ public class AquaLight extends InnerLight {
             LightParticlesUtil.spawnLightTypeParticle(LightParticles.AQUALIGHT_PARTICLE, (ServerWorld) caster.getWorld(), caster.getPos());
 
             for(LivingEntity target : this.targets){
-                target.playSound(LightSounds.AQUA_LIGHT, 0.9f, 1);
+                //TODO should I play the sound for every enemy? Nah
+                //target.playSound(LightSounds.AQUA_LIGHT, 0.9f, 1);
                 if(Config.STRUCTURE_GRIEFING && !caster.getWorld().isClient) {
                     target.addStatusEffect(new StatusEffectInstance(LightEffects.WATER_CASCADE, (int) (this.power_multiplier*3), 0, false, false));
 

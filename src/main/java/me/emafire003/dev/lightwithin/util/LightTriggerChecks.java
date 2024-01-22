@@ -371,10 +371,10 @@ public class LightTriggerChecks {
         /**If the player or their allies are on low health or surrounded, a golem will spawn if the player has the OTHER target*/
         if(component.getTargets().equals(TargetType.VARIANT)){
             if(CheckUtils.checkAllyHealth(player, attacker, Config.HP_PERCENTAGE_ALLIES)){
-                trigger_sum = trigger_sum + 4;
+                trigger_sum = trigger_sum + 3;
             }
             if(CheckUtils.checkSelfDanger(player, Config.HP_PERCENTAGE_SELF+5)){
-                trigger_sum = trigger_sum + 3;
+                trigger_sum = trigger_sum + 4;
             }
             //Checks if the player is surrounded
             if(Config.CHECK_SURROUNDED && CheckUtils.checkSurrounded(player)){
@@ -462,11 +462,17 @@ public class LightTriggerChecks {
             fall_trigger = 30;
         }else if(fe_fa_level == 3){
             fall_trigger = 35;
-        }else if(fe_fa_level >= 4){
+        }else if(fe_fa_level == 4){
             fall_trigger = 45;
+        }else if(fe_fa_level > 4){
+            fall_trigger = 12*fe_fa_level;
+        }
+        //Moved the targetType variant to ALL so I need to make a compatibility from the old one to the new one
+        if(component.getTargets().equals(TargetType.VARIANT)){
+            component.setTargets(TargetType.ALL);
         }
         /**If the player has ALL as target, he needs to be hurt (or an ally has to die, but that depends on the trigger)*/
-        if(component.getTargets().equals(TargetType.VARIANT)){
+        if(component.getTargets().equals(TargetType.ALL)){
             if(CheckUtils.checkSelfDanger(player, Config.HP_PERCENTAGE_SELF+5) && player.equals(target)){
                 trigger_sum = trigger_sum+4;
             }
@@ -489,6 +495,7 @@ public class LightTriggerChecks {
                 sendReadyPacket((ServerPlayerEntity) player, true);
             }
         }
+        //TODO probably should remove && player equals target
         else if(component.getTargets().equals(TargetType.SELF) && player.equals(target)){
             if(CheckUtils.checkSelfDanger(player, Config.HP_PERCENTAGE_SELF+5)){
                 trigger_sum = trigger_sum + 4;
@@ -528,7 +535,6 @@ public class LightTriggerChecks {
             if(CheckUtils.checkFalling(player) && player.fallDistance > 10){
                 trigger_sum = trigger_sum + 2;
             }
-            //TODO maybe check the height for the allies too?
             if(CheckUtils.CheckAllies.checkAlly(player, target) && CheckUtils.checkFalling(target)){
                 trigger_sum = trigger_sum + 2;
             }
@@ -597,10 +603,6 @@ public class LightTriggerChecks {
             if(trigger_sum >= MIN_TRIGGER) {
                 sendReadyPacket((ServerPlayerEntity) player, true);
             }
-
-            if(trigger_sum >= MIN_TRIGGER) {
-                sendReadyPacket((ServerPlayerEntity) player, true);
-            }
         }else if(component.getTargets().equals(TargetType.SELF)){
             if(CheckUtils.checkSelfDanger(player, Config.HP_PERCENTAGE_SELF+5)){
                 trigger_sum = trigger_sum + 4;
@@ -612,8 +614,7 @@ public class LightTriggerChecks {
                 trigger_sum = trigger_sum + 1;
             }
 
-            //Checks if the player'sallies have low armor durability
-            if(!player.equals(target) && Config.CHECK_ARMOR_DURABILITY && CheckUtils.checkAllyArmor(player, target, Config.DUR_PERCENTAGE_ALLIES)){
+            if(Config.CHECK_ARMOR_DURABILITY && CheckUtils.checkArmorDurability(player, Config.DUR_PERCENTAGE_SELF)){
                 trigger_sum=trigger_sum+1;
             }
 
@@ -621,9 +622,6 @@ public class LightTriggerChecks {
                 trigger_sum = trigger_sum + 3;
             }
 
-            if(trigger_sum >= MIN_TRIGGER) {
-                sendReadyPacket((ServerPlayerEntity) player, true);
-            }
 
             if(trigger_sum >= MIN_TRIGGER) {
                 sendReadyPacket((ServerPlayerEntity) player, true);
@@ -657,7 +655,7 @@ public class LightTriggerChecks {
     }
 
     public static void checkFrog(PlayerEntity player, LightComponent component, LivingEntity attacker, Entity target){
-        if(CheckUtils.checkSelfDanger(player, Config.HP_PERCENTAGE_SELF+15)
+        if(CheckUtils.checkSelfDanger(player, Config.HP_PERCENTAGE_SELF+25)
                 || CheckUtils.checkSurrounded(player)
         ){
             sendReadyPacket((ServerPlayerEntity) player, true);
