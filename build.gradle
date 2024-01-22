@@ -97,7 +97,10 @@ dependencies {
 	modCompileOnly "curse.maven:ftblibrary-438495:4596510"//home: https://www.curseforge.com/minecraft/mc-mods/ftb-library-fabric
 
 	//Permissions
-	modImplementation "me.lucko:fabric-permissions-api:${project.luckoperms_version}"
+	modImplementation "me.lucko:fabric-permissions-api:${project.fabricperms_version}"
+
+	//ReplayMod (to fix the runes rendering)
+	modCompileOnly "maven.modrinth:replaymod:${project.replaymod_version}"
 }
 
 processResources {

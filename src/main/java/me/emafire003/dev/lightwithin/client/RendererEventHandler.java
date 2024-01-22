@@ -2,6 +2,7 @@ package me.emafire003.dev.lightwithin.client;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import me.emafire003.dev.lightwithin.LightWithin;
+import me.emafire003.dev.lightwithin.compat.replaymod.ReplayModCompat;
 import me.emafire003.dev.lightwithin.lights.InnerLightType;
 import me.emafire003.dev.lightwithin.sounds.LightSounds;
 import me.x150.renderer.event.RenderEvents;
@@ -50,7 +51,8 @@ public class RendererEventHandler {
                 Renderer2d.renderTexture(matrixStack.getMatrices(), new Identifier(LightWithin.MOD_ID, "textures/lights/light.png"), x, y, 20, 20);
                 ClipStack.popWindow();
             }
-            if(MinecraftClient.getInstance().options.getPerspective().equals(Perspective.FIRST_PERSON)){
+            //In the replay mod the player is by default in first person, so don't display the runes at all, since they are meant for first person.
+            if(MinecraftClient.getInstance().options.getPerspective().equals(Perspective.FIRST_PERSON) && !ReplayModCompat.isInReplayMode()){
                 if(heal_runes){
                     ClipStack.addWindow(matrixStack.getMatrices(),new Rectangle(1,1,1000,1000));
                     Renderer2d.renderTexture(matrixStack.getMatrices(), new Identifier(LightWithin.MOD_ID, "textures/lights/runes/heal_light_runes.png"), center_x-(400/scale_factor)/2, center_y-(160/scale_factor)/2, (400/scale_factor)*1.2, (160/scale_factor)*1.2);
