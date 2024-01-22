@@ -34,7 +34,7 @@ There a few things that contribute to the uniqueness of a light:
 ## How can I activate them?
 In order to activate them you need to met specific conditions, which often vary between light types. Usually, it involves fighting with another mob/enemy player and being "in danger", for example on low health, or being surrounded by many enemies. To be more precise usally you need to meet more than one condition in order to trigger the activation. In my opinion it's better to just discover how to activate your light by playing, so I won't go in further detail here, look at the wiki instead.
 
-Once you have met these conditions, an icon ![Senza titolo](https://user-images.githubusercontent.com/29462910/171919382-d65f6f72-4a84-44f9-9ebb-62283755793e.png) will appear in the top left corner signaling that your light is ready to be released. Press the keybind **V** (default, you can change it) and activate your light!
+Once you have met these conditions, an icon ![light](https://github.com/Emafire003/LightWithin/assets/29462910/4453adb1-5c40-4fa6-8a96-94ad8f0d2579) will appear in the top left corner signaling that your light is ready to be released. Press the keybind **V** (default, you can change it) and activate your light!
 
 // ADD a gif of the icon appearing and also the light triggering//
 
