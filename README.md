@@ -107,3 +107,13 @@ This berry will read your innerlight, and tell you how it's made up, aka what do
 - Modify the writings that appear on screen when triggering
 - Suggestions accepted but likely to be low in the roadmap
 
+  ## Coming (soon tm) Features
+- More light types!
+- Maybe more targets, not sure!
+- More triggers maybe
+- Legendary lights with an heavy lore behind them (For now i can say, "black white and ???"
+- Fix bugs
+- A proper API sort of
+- A way to make the numerical light types adjustable in-game
+- Suggestions accepted. But not guaranteed.
+
