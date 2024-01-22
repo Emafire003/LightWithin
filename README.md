@@ -3,7 +3,7 @@
 ## WIP, I am rewrtiting most of the stuff.
 
 This mod adds a new mechanic, called *"InnerLights"* which are cool fancy magicalish powers present within player, and they are pretty much **UNIQUE** for every single
-player.
+player. It is also higly configurable, so you can customize it to your needs!
 
 ![demo_heal_brief](https://user-images.githubusercontent.com/29462910/171922554-e776af80-241a-4acc-a5f8-1d0b3f26211c.gif)
 
