@@ -1,11 +1,10 @@
 # LightWithin Mod
-
-## WIP, I am rewrtiting most of the stuff.
+Still a bit WIP
 
 This mod adds a new mechanic, called *"InnerLights"* which are cool fancy magicalish powers present within player, and they are pretty much **UNIQUE** for every single
 player. It is also higly configurable, so you can customize it to your needs!
 
-![demo_heal_brief](https://user-images.githubusercontent.com/29462910/171922554-e776af80-241a-4acc-a5f8-1d0b3f26211c.gif)
+![banner_lighter](https://github.com/Emafire003/LightWithin/assets/29462910/95d1a6a7-e89a-4956-a148-b0bc215387e0)
 
 There a lots of lights, ranging from granting potent status effects like healing, to freezing all of your enemies on the spot, or even save your allies from falling from great heights by flying away! You can even summon creatures to defend yourself against dangers!
 Each light has a cool sound design and distinct effects, with particle, custom glowing effects, and misterious runes appearing on your screen!
@@ -14,10 +13,9 @@ And all of this is different from player to player, so everyone will have their 
 
 You can look at the video/images below or check the wiki for demos of these lights. Or you could preserve the surprise and just play with the mod and find out yourself!
 
-/////A fex example images go here //////
-
-[![bisecthosting](https://www.bisecthosting.com/partners/custom-banners/e9bbf36a-be01-4324-b393-dae88a01be66.webp)](https://www.bisecthosting.com/LightDev)
-The best way to enjoy this mod is with other people on a server, so you can use the code LIGHTDEV on [BisectHosting](https://www.bisecthosting.com/LightDev) to save 25% on a 4GB server!
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/29462910/171922554-e776af80-241a-4acc-a5f8-1d0b3f26211c.gif" />
+</p>
 
 ## How is it unique?
 
@@ -29,8 +27,9 @@ There a few things that contribute to the uniqueness of a light:
 - Starting with some numerical values we have the **POWER** of your light, which determines how strong your light is. It is a value used in calculating a Status Effect level, the damage done when activating the light and so on
 - We have the **DURATION**, which, unsurpisingly specifies how much your light remains active
 - Lastly we have the **COOLDOWN** duration, which is how much time will need to pass between activating your light again! Your light will need some rest after spending all that energy no?
-//maybe bisect here?
-// add something that with a graph some kind of example of the values above
+
+[![bisecthosting](https://www.bisecthosting.com/partners/custom-banners/e9bbf36a-be01-4324-b393-dae88a01be66.webp)](https://www.bisecthosting.com/LightDev)
+The best way to enjoy this mod is with other people on a server, so you can use the code LIGHTDEV on [BisectHosting](https://www.bisecthosting.com/LightDev) to save 25% on a 4GB server!
 
 ## How can I activate them?
 In order to activate them you need to met specific conditions, which often vary between light types. Usually, it involves fighting with another mob/enemy player and being "in danger", for example on low health, or being surrounded by many enemies. To be more precise usally you need to meet more than one condition in order to trigger the activation. In my opinion it's better to just discover how to activate your light by playing, so I won't go in further detail here, look at the wiki instead.
@@ -44,7 +43,7 @@ There is also a magical item called **Luxintus Berry** which lets you activate t
 //some kind of other image
 
 ## Compatibility and Hooks with other mods
-This mod is compatible with [ColoredGlowLib]() for adding a custom glow color while the light is active.
+This mod is compatible with [ColoredGlowLib](https://modrinth.com/mod/coloredglowlib) for adding a custom glow color while the light is active.
 For the Allies or Enemies you can use Faction, OPAC, Argonauts, FTBTeams and Minecraft's teams.
 
 There are no currently know incompatiblities with other mods. Let me know if you find any!
