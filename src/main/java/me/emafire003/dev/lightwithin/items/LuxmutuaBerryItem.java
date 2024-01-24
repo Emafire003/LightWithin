@@ -33,7 +33,7 @@ public class LuxmutuaBerryItem extends Item {
 
     @Override
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
-        if(LightWithin.isPlayerInCooldown(user) && Config.LUXIMUTUA_BYPASS_COOLDOWN){
+        if(LightWithin.isPlayerInCooldown(user) && Config.LUXMUTUA_BYPASS_COOLDOWN){
             return TypedActionResult.pass(user.getStackInHand(hand));
         }
         if (this.isFood()) {
@@ -55,7 +55,7 @@ public class LuxmutuaBerryItem extends Item {
             user.playSound(LightSounds.LIGHT_READY, 1, 1.3F);
         }
         if(user instanceof ServerPlayerEntity){
-            if(LightWithin.isPlayerInCooldown((PlayerEntity) user) && Config.LUXIMUTUA_BYPASS_COOLDOWN){
+            if(LightWithin.isPlayerInCooldown((PlayerEntity) user) && Config.LUXMUTUA_BYPASS_COOLDOWN){
                 return stack;
             }
             LightComponent component = LightWithin.LIGHT_COMPONENT.get(user);

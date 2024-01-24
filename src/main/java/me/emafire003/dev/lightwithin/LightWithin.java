@@ -10,7 +10,9 @@ import me.emafire003.dev.lightwithin.commands.LightCommands;
 import me.emafire003.dev.lightwithin.compat.coloredglowlib.CGLCompat;
 import me.emafire003.dev.lightwithin.component.LightComponent;
 import me.emafire003.dev.lightwithin.component.SummonedByComponent;
+import me.emafire003.dev.lightwithin.config.BalanceConfig;
 import me.emafire003.dev.lightwithin.config.Config;
+import me.emafire003.dev.lightwithin.config.TriggerConfig;
 import me.emafire003.dev.lightwithin.entities.LightEntities;
 import me.emafire003.dev.lightwithin.entities.earth_golem.EarthGolemEntity;
 import me.emafire003.dev.lightwithin.events.LightTriggeringAndEvents;
@@ -24,6 +26,7 @@ import me.emafire003.dev.lightwithin.status_effects.LightEffects;
 import me.emafire003.dev.lightwithin.particles.LightParticlesUtil;
 import me.emafire003.dev.lightwithin.util.CheckUtils;
 import me.emafire003.dev.lightwithin.events.LightCreationAndEvent;
+import me.emafire003.dev.lightwithin.util.LightTriggerChecks;
 import me.emafire003.dev.lightwithin.util.LootTableModifier;
 import me.emafire003.dev.lightwithin.util.TargetType;
 import net.fabricmc.api.ModInitializer;
@@ -115,6 +118,10 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 				box_expansion_amount = 6;
 			}
 			Config.reloadConfig();
+			BalanceConfig.reloadConfig();
+			TriggerConfig.reloadConfig();
+			LightTriggerChecks.MIN_TRIGGER = TriggerConfig.TRIGGER_THRESHOLD;
+			minecraftServer.getPlayerManager().getPlayerList();
 		});
 
 	}

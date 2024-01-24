@@ -4,6 +4,7 @@ import me.emafire003.dev.lightwithin.LightWithin;
 import me.emafire003.dev.lightwithin.blocks.LightBlocks;
 import me.emafire003.dev.lightwithin.compat.coloredglowlib.CGLCompat;
 import me.emafire003.dev.lightwithin.component.LightComponent;
+import me.emafire003.dev.lightwithin.config.BalanceConfig;
 import me.emafire003.dev.lightwithin.config.Config;
 import me.emafire003.dev.lightwithin.particles.LightParticles;
 import me.emafire003.dev.lightwithin.particles.LightParticlesUtil;
@@ -71,21 +72,21 @@ public class FrostLight extends InnerLight {
     }
 
     private void checkSafety(){
-        if(this.power_multiplier > Config.FROST_MAX_POWER){
-            power_multiplier = Config.FROST_MAX_POWER;
+        if(this.power_multiplier > BalanceConfig.FROST_MAX_POWER){
+            power_multiplier = BalanceConfig.FROST_MAX_POWER;
         }
-        if(this.power_multiplier < Config.FROST_MIN_POWER){
-            power_multiplier = Config.FROST_MIN_POWER;
+        if(this.power_multiplier < BalanceConfig.FROST_MIN_POWER){
+            power_multiplier = BalanceConfig.FROST_MIN_POWER;
         }
-        int max_duration = Config.FROST_MAX_DURATION;
+        int max_duration = BalanceConfig.FROST_MAX_DURATION;
         if(Config.MULTIPLY_DURATION_LIMIT){
-            max_duration = (int) (Config.FROST_MAX_DURATION * Config.DURATION_MULTIPLIER);
+            max_duration = (int) (BalanceConfig.FROST_MAX_DURATION * Config.DURATION_MULTIPLIER);
         }
         if(this.duration > max_duration){
             this.duration = max_duration;
         }
-        if(this.duration < Config.FROST_MIN_DURATION){
-            this.duration = Config.FROST_MIN_DURATION;
+        if(this.duration < BalanceConfig.FROST_MIN_DURATION){
+            this.duration = BalanceConfig.FROST_MIN_DURATION;
         }
     }
 
@@ -116,7 +117,7 @@ public class FrostLight extends InnerLight {
 
             if((component.getTargets().equals(TargetType.SELF) || component.getTargets().equals(TargetType.ALLIES))){
                 if(target.equals(caster) && component.getTargets().equals(TargetType.ALLIES)){
-                    target.addStatusEffect(new StatusEffectInstance(LightEffects.FREEZE_RESISTANCE, (int) (this.duration/Config.DIV_SELF)*20));
+                    target.addStatusEffect(new StatusEffectInstance(LightEffects.FREEZE_RESISTANCE, (int) (this.duration*20/Config.DIV_SELF)));
                 }else{
                     target.addStatusEffect(new StatusEffectInstance(LightEffects.FREEZE_RESISTANCE, (int) (this.duration)*20));
                 }

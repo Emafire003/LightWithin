@@ -3,6 +3,7 @@ package me.emafire003.dev.lightwithin.lights;
 import me.emafire003.dev.lightwithin.LightWithin;
 import me.emafire003.dev.lightwithin.compat.coloredglowlib.CGLCompat;
 import me.emafire003.dev.lightwithin.component.LightComponent;
+import me.emafire003.dev.lightwithin.config.BalanceConfig;
 import me.emafire003.dev.lightwithin.config.Config;
 import me.emafire003.dev.lightwithin.particles.LightParticles;
 import me.emafire003.dev.lightwithin.particles.LightParticlesUtil;
@@ -55,24 +56,24 @@ public class BlazingLight extends InnerLight {
     private double r = 0.5;
 
     private void checkSafety(){
-        if(this.power_multiplier > Config.BLAZING_MAX_POWER){
-            power_multiplier = Config.BLAZING_MAX_POWER;
+        if(this.power_multiplier > BalanceConfig.BLAZING_MAX_POWER){
+            power_multiplier = BalanceConfig.BLAZING_MAX_POWER;
         }
-        if(this.power_multiplier < Config.BLAZING_MIN_POWER){
-            power_multiplier = Config.BLAZING_MIN_POWER;
+        if(this.power_multiplier < BalanceConfig.BLAZING_MIN_POWER){
+            power_multiplier = BalanceConfig.BLAZING_MIN_POWER;
         }
-        int max_duration = Config.BLAZING_MAX_DURATION;
+        int max_duration = BalanceConfig.BLAZING_MAX_DURATION;
         if(Config.MULTIPLY_DURATION_LIMIT){
-            max_duration = (int) (Config.BLAZING_MAX_DURATION * Config.DURATION_MULTIPLIER);
+            max_duration = (int) (BalanceConfig.BLAZING_MAX_DURATION * Config.DURATION_MULTIPLIER);
         }
         if(this.duration > max_duration){
             this.duration = max_duration;
         }
-        if(this.duration < Config.BLAZING_MIN_DURATION){
-            this.duration = Config.BLAZING_MIN_DURATION;
+        if(this.duration < BalanceConfig.BLAZING_MIN_DURATION){
+            this.duration = BalanceConfig.BLAZING_MIN_DURATION;
         }
-        if(Config.BLAZING_CRIT_MULTIPLIER > 1){
-            crit_multiplier = Config.BLAZING_CRIT_MULTIPLIER;
+        if(BalanceConfig.BLAZING_CRIT_MULTIPLIER > 1){
+            crit_multiplier = BalanceConfig.BLAZING_CRIT_MULTIPLIER;
         }
     }
 
@@ -104,7 +105,7 @@ public class BlazingLight extends InnerLight {
 
 
         if(component.getTargets().equals(TargetType.ALL)){
-            power_multiplier = power_multiplier + Config.BLAZING_ALL_DAMAGE_BONUS;
+            power_multiplier = power_multiplier + BalanceConfig.BLAZING_ALL_DAMAGE_BONUS;
         }
         if((Config.STRUCTURE_GRIEFING || Config.NON_FUNDAMENTAL_STRUCTURE_GRIEFING) && !caster.getWorld().isClient && (component.getTargets().equals(TargetType.ALL) || component.getTargets().equals(TargetType.ENEMIES))) {
             StructurePlacerAPI placer = new StructurePlacerAPI((ServerWorld) caster.getWorld(), new Identifier(MOD_ID, blazing_structure_id), caster.getBlockPos(), BlockMirror.NONE, BlockRotation.NONE, true, 1.0f, new BlockPos(-3, -4, -3));
@@ -123,8 +124,8 @@ public class BlazingLight extends InnerLight {
             //TODO make the chance configable EDIT: Maybe not
             //it's basicly a crit, unique for now to the blazing light Currently 10 percent
             if(caster.getRandom().nextInt(10) == 1){
-                target.damage(caster.getWorld().getDamageSources().inFire(), (float) (Config.BLAZING_DEFAULT_DAMAGE*this.power_multiplier*crit_multiplier));
-                target.setOnFireFor(this.duration*Config.BLAZING_CRIT_FIRE_MULTIPLIER);
+                target.damage(caster.getWorld().getDamageSources().inFire(), (float) (BalanceConfig.BLAZING_DEFAULT_DAMAGE*this.power_multiplier*crit_multiplier));
+                target.setOnFireFor(this.duration*BalanceConfig.BLAZING_CRIT_FIRE_MULTIPLIER);
                 target.playSound(LightSounds.LIGHT_CRIT, 1, 1);
                 LightParticlesUtil.spawnDescendingColumn((ServerPlayerEntity) caster, flame_particle, target.getPos().add(0,3,0));
                 if(!caster.getWorld().isClient){
@@ -133,7 +134,7 @@ public class BlazingLight extends InnerLight {
                 }
             }else{
                 target.setOnFireFor(this.duration);
-                target.damage(caster.getWorld().getDamageSources().inFire(), (float) (Config.BLAZING_DEFAULT_DAMAGE*this.power_multiplier));
+                target.damage(caster.getWorld().getDamageSources().inFire(), (float) (BalanceConfig.BLAZING_DEFAULT_DAMAGE*this.power_multiplier));
             }
         }
 

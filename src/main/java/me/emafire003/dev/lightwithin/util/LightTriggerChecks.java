@@ -2,9 +2,8 @@ package me.emafire003.dev.lightwithin.util;
 
 import me.emafire003.dev.lightwithin.component.LightComponent;
 import me.emafire003.dev.lightwithin.config.Config;
+import me.emafire003.dev.lightwithin.config.TriggerConfig;
 import me.emafire003.dev.lightwithin.networking.LightReadyPacketS2C;
-import me.emafire003.dev.lightwithin.util.CheckUtils;
-import me.emafire003.dev.lightwithin.util.TargetType;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
@@ -14,13 +13,12 @@ import net.minecraft.entity.passive.FrogEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Text;
 
 import static me.emafire003.dev.lightwithin.LightWithin.LOGGER;
 
 public class LightTriggerChecks {
     //If the sum of the things happening to player is greater than this the light activates
-    public static double MIN_TRIGGER = 5; //TODO maybe adjustable. The weights of the individual things too
+    public static double MIN_TRIGGER = 5;
 
     public static void sendReadyPacket(ServerPlayerEntity player, boolean b){
         try{
@@ -37,20 +35,20 @@ public class LightTriggerChecks {
         if(component.getTargets().equals(TargetType.SELF)) {
             //Checks for very low and kinda low health
             if(CheckUtils.checkSelfDanger(player, Config.HP_PERCENTAGE_SELF)){
-                trigger_sum = trigger_sum+5;
+                trigger_sum = trigger_sum + TriggerConfig.HEAL_SELF_VERY_LOW_HEALTH;
             }else if(CheckUtils.checkSelfDanger(player, Config.HP_PERCENTAGE_SELF+20)){
-                trigger_sum = trigger_sum+2;
+                trigger_sum = trigger_sum + TriggerConfig.HEAL_SELF_LOW_HEALTH;
             }
 
             if(Config.CHECK_SURROUNDED && (CheckUtils.checkSurrounded(player))){
-                trigger_sum = trigger_sum+1;
+                trigger_sum = trigger_sum + TriggerConfig.HEAL_SELF_SURROUNDED;
             }
             if(Config.CHECK_ARMOR_DURABILITY && CheckUtils.checkArmorDurability(player, Config.DUR_PERCENTAGE_SELF)){
-                trigger_sum = trigger_sum+1;
+                trigger_sum = trigger_sum + TriggerConfig.HEAL_SELF_ARMOR_DURABILITY;
             }
 
             if(CheckUtils.checkPoisoned(player)){
-                trigger_sum = trigger_sum+3;
+                trigger_sum = trigger_sum + TriggerConfig.HEAL_SELF_POISONED;
             }
 
             if(trigger_sum >= MIN_TRIGGER){
@@ -60,21 +58,21 @@ public class LightTriggerChecks {
         /**CHECKS for the allies part*/
         else if(component.getTargets().equals(TargetType.ALLIES)){
             if(CheckUtils.checkAllyHealth(player, attacker, Config.HP_PERCENTAGE_ALLIES)){
-                trigger_sum = trigger_sum + 4;
+                trigger_sum = trigger_sum + TriggerConfig.HEAL_ALLIES_ALLY_LOW_HEALTH;
             }
             if(CheckUtils.checkSelfDanger(player, Config.HP_PERCENTAGE_SELF)){
-                trigger_sum = trigger_sum+1;
+                trigger_sum = trigger_sum + TriggerConfig.HEAL_ALLIES_VERY_LOW_HEALTH;
             }
 
             if(Config.CHECK_SURROUNDED && (CheckUtils.checkSurrounded(player))){
-                trigger_sum = trigger_sum+1;
+                trigger_sum = trigger_sum + TriggerConfig.HEAL_ALLIES_SURROUNDED;
             }
             if(Config.CHECK_ARMOR_DURABILITY && CheckUtils.checkAllyArmor(player, target, Config.DUR_PERCENTAGE_ALLIES)){
-                trigger_sum = trigger_sum+1;
+                trigger_sum = trigger_sum + TriggerConfig.HEAL_ALLIES_ALLY_ARMOR_DURABILITY;
             }
 
             if(CheckUtils.checkAllyPoisoned(player, target)){
-                trigger_sum = trigger_sum+2;
+                trigger_sum = trigger_sum + TriggerConfig.HEAL_ALLIES_ALLY_POISONED;
             }
             if(trigger_sum >= MIN_TRIGGER){
                 sendReadyPacket((ServerPlayerEntity) player, true);
@@ -83,19 +81,19 @@ public class LightTriggerChecks {
         }
         else if(component.getTargets().equals(TargetType.VARIANT)){
             if(CheckUtils.checkPassiveHealth(player, target, Config.HP_PERCENTAGE_VARIANT)){
-                trigger_sum = 2;
+                trigger_sum = trigger_sum + TriggerConfig.HEAL_VARIANT_PASSIVE_LOW_HEALTH;
             }
             if(CheckUtils.checkHasHarmfulStatusEffect(target)){
-                trigger_sum = 3;
+                trigger_sum = trigger_sum + TriggerConfig.HEAL_VARIANT_OTHER_HARMFUL_EFFECT;
             }else if(CheckUtils.checkHasHarmfulStatusEffect(player)){
-                trigger_sum = 3;
+                trigger_sum = trigger_sum + TriggerConfig.HEAL_VARIANT_HARMFUL_EFFECT;
             }
 
             if(CheckUtils.checkAllyHealth(player, attacker, Config.HP_PERCENTAGE_ALLIES)){
-                trigger_sum = trigger_sum + 2;
+                trigger_sum = trigger_sum + TriggerConfig.HEAL_VARIANT_ALLY_LOW_HEALTH;
             }
             if(CheckUtils.checkSelfDanger(player, Config.HP_PERCENTAGE_SELF)){
-                trigger_sum = trigger_sum+2;
+                trigger_sum = trigger_sum + TriggerConfig.HEAL_VARIANT_VERY_LOW_HEALTH;
             }
 
             if(trigger_sum >= MIN_TRIGGER){
@@ -104,6 +102,8 @@ public class LightTriggerChecks {
 
         }
     }
+
+    //TODO togliere valori strani per la health percent
 
     public static void checkDefense(PlayerEntity player, LightComponent component, LivingEntity attacker, LivingEntity target){
         double trigger_sum = 0;
@@ -209,10 +209,10 @@ public class LightTriggerChecks {
         if(component.getTargets().equals(TargetType.ALL)){
 
             //Checks if the player is very low health
-            if(CheckUtils.checkSelfDanger(player, Config.HP_PERCENTAGE_SELF+10)){
+            if(CheckUtils.checkSelfDanger(player, Config.HP_PERCENTAGE_SELF)){
                 trigger_sum = trigger_sum+4;
                 //Checks if the player has low health
-            }else if(CheckUtils.checkSelfDanger(player, Config.HP_PERCENTAGE_SELF+35)){
+            }else if(CheckUtils.checkSelfDanger(player, Config.HP_PERCENTAGE_SELF+30)){
                 trigger_sum=trigger_sum+2;
             }
             //Checks if the player is surrounded
@@ -233,7 +233,6 @@ public class LightTriggerChecks {
         }
         /**CHECKS if the player has ENEMIES as target, either his or his allies health needs to be low*/
         else if(component.getTargets().equals(TargetType.ENEMIES) || component.getTargets().equals(TargetType.VARIANT)){
-
 
             if(CheckUtils.checkSelfDanger(player, Config.HP_PERCENTAGE_SELF+10)){
                 trigger_sum = trigger_sum+2;
@@ -292,10 +291,10 @@ public class LightTriggerChecks {
         /**CHECKS if the player has ENEMIES as target, either him or his allies health needs to be low*/
         else if(component.getTargets().equals(TargetType.ENEMIES) && (CheckUtils.CheckAllies.checkAlly(player, target) || player.equals(target))){
             if(CheckUtils.checkAllyHealth(player, attacker, Config.HP_PERCENTAGE_ALLIES)){
-                trigger_sum = trigger_sum + 4;
+                trigger_sum = trigger_sum + 3;
             }
             if(CheckUtils.checkSelfDanger(player, Config.HP_PERCENTAGE_SELF+5)){
-                trigger_sum = trigger_sum + 2;
+                trigger_sum = trigger_sum + 1;
             }
 
             //Checks if the player'sallies have low armor durability
@@ -320,7 +319,7 @@ public class LightTriggerChecks {
                 sendReadyPacket((ServerPlayerEntity) player, true);
             }
         }else if(component.getTargets().equals(TargetType.SELF)){
-            if(CheckUtils.checkSelfDanger(player, Config.HP_PERCENTAGE_SELF+5)){
+            if(CheckUtils.checkSelfDanger(player, Config.HP_PERCENTAGE_SELF)){
                 trigger_sum = trigger_sum + 4;
             }else if(CheckUtils.checkSelfDanger(player, Config.HP_PERCENTAGE_SELF+30)){
                 trigger_sum = trigger_sum + 2;

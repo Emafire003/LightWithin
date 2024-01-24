@@ -3,6 +3,7 @@ package me.emafire003.dev.lightwithin.lights;
 import me.emafire003.dev.lightwithin.LightWithin;
 import me.emafire003.dev.lightwithin.compat.coloredglowlib.CGLCompat;
 import me.emafire003.dev.lightwithin.component.LightComponent;
+import me.emafire003.dev.lightwithin.config.BalanceConfig;
 import me.emafire003.dev.lightwithin.config.Config;
 import me.emafire003.dev.lightwithin.particles.LightParticles;
 import me.emafire003.dev.lightwithin.sounds.LightSounds;
@@ -39,24 +40,21 @@ public class DefenseLight extends InnerLight {
     }
 
     private void checkSafety(){
-        if(this.power_multiplier > Config.DEFENSE_MAX_POWER){
-            power_multiplier = Config.DEFENSE_MAX_POWER;
+        if(this.power_multiplier > BalanceConfig.DEFENSE_MAX_POWER){
+            power_multiplier = BalanceConfig.DEFENSE_MAX_POWER;
         }
-        if(this.duration > Config.DEFENSE_MAX_DURATION){
-            this.duration = Config.DEFENSE_MAX_DURATION;
+        if(this.duration > BalanceConfig.DEFENSE_MAX_DURATION){
+            this.duration = BalanceConfig.DEFENSE_MAX_DURATION;
         }
-        if(this.power_multiplier > Config.DEFENSE_MAX_POWER*2/3 && this.duration > Config.DEFENSE_MAX_DURATION*7/10){
-            this.duration = Config.DEFENSE_MAX_DURATION*7/10;
-        }
-        int max_duration = Config.DEFENSE_MAX_DURATION;
+        int max_duration = BalanceConfig.DEFENSE_MAX_DURATION;
         if(Config.MULTIPLY_DURATION_LIMIT){
-            max_duration = (int) (Config.DEFENSE_MAX_DURATION * Config.DURATION_MULTIPLIER);
+            max_duration = (int) (BalanceConfig.DEFENSE_MAX_DURATION * Config.DURATION_MULTIPLIER);
         }
         if(this.duration > max_duration){
             this.duration = max_duration;
         }
-        if(this.power_multiplier < Config.DEFENSE_MIN_POWER){
-            this.power_multiplier = Config.DEFENSE_MIN_POWER;
+        if(this.power_multiplier < BalanceConfig.DEFENSE_MIN_POWER){
+            this.power_multiplier = BalanceConfig.DEFENSE_MIN_POWER;
         }
     }
 

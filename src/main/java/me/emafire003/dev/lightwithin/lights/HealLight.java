@@ -4,6 +4,7 @@ package me.emafire003.dev.lightwithin.lights;
 import me.emafire003.dev.lightwithin.LightWithin;
 import me.emafire003.dev.lightwithin.compat.coloredglowlib.CGLCompat;
 import me.emafire003.dev.lightwithin.component.LightComponent;
+import me.emafire003.dev.lightwithin.config.BalanceConfig;
 import me.emafire003.dev.lightwithin.config.Config;
 import me.emafire003.dev.lightwithin.particles.LightParticles;
 import me.emafire003.dev.lightwithin.sounds.LightSounds;
@@ -68,25 +69,21 @@ public class HealLight extends InnerLight {
     }
 
     private void checkSafety(){
-        if(this.power_multiplier > Config.HEAL_MAX_POWER){
-            this.power_multiplier = Config.HEAL_MAX_POWER;
+        if(this.power_multiplier > BalanceConfig.HEAL_MAX_POWER){
+            this.power_multiplier = BalanceConfig.HEAL_MAX_POWER;
         }
-        int max_duration = Config.HEAL_MAX_DURATION;
+        int max_duration = BalanceConfig.HEAL_MAX_DURATION;
         if(Config.MULTIPLY_DURATION_LIMIT){
-            max_duration = (int) (Config.HEAL_MAX_DURATION * Config.DURATION_MULTIPLIER);
+            max_duration = (int) (BalanceConfig.HEAL_MAX_DURATION * Config.DURATION_MULTIPLIER);
         }
         if(this.duration > max_duration){
             this.duration = max_duration;
         }
-        if(this.duration > Config.HEAL_MAX_DURATION*4/5 && this.power_multiplier > Config.HEAL_MAX_POWER/2){ //maxdur-1/5 && multiplier > maxpow/2 = maxdur-1/5
-            this.duration = Config.HEAL_MAX_DURATION*4/5;
+        if(this.power_multiplier < BalanceConfig.HEAL_MIN_POWER){
+            power_multiplier = BalanceConfig.HEAL_MIN_POWER;
         }
-
-        if(this.power_multiplier < Config.HEAL_MIN_POWER){
-            power_multiplier = Config.HEAL_MIN_POWER;
-        }
-        if(this.duration < Config.HEAL_MIN_DURATION){
-            this.duration = Config.HEAL_MIN_DURATION;
+        if(this.duration < BalanceConfig.HEAL_MIN_DURATION){
+            this.duration = BalanceConfig.HEAL_MIN_DURATION;
         }
     }
 

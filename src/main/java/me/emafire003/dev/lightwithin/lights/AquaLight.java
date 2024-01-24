@@ -2,6 +2,7 @@ package me.emafire003.dev.lightwithin.lights;
 
 import me.emafire003.dev.lightwithin.compat.coloredglowlib.CGLCompat;
 import me.emafire003.dev.lightwithin.component.LightComponent;
+import me.emafire003.dev.lightwithin.config.BalanceConfig;
 import me.emafire003.dev.lightwithin.config.Config;
 import me.emafire003.dev.lightwithin.particles.LightParticles;
 import me.emafire003.dev.lightwithin.particles.LightParticlesUtil;
@@ -11,10 +12,14 @@ import me.emafire003.dev.lightwithin.util.SpawnUtils;
 import me.emafire003.dev.lightwithin.util.TargetType;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.enchantment.Enchantments;
-import net.minecraft.entity.*;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.SpawnRestriction;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.mob.DrownedEntity;
+import net.minecraft.entity.LightningEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.entity.projectile.TridentEntity;
@@ -70,21 +75,21 @@ public class AquaLight extends InnerLight {
     }
 
     private void checkSafety(){
-        if(this.power_multiplier > Config.AQUA_MAX_POWER){
-            power_multiplier = Config.AQUA_MAX_POWER;
+        if(this.power_multiplier > BalanceConfig.AQUA_MAX_POWER){
+            power_multiplier = BalanceConfig.AQUA_MAX_POWER;
         }
-        if(this.power_multiplier < Config.AQUA_MIN_POWER){
-            power_multiplier = Config.AQUA_MIN_POWER;
+        if(this.power_multiplier < BalanceConfig.AQUA_MIN_POWER){
+            power_multiplier = BalanceConfig.AQUA_MIN_POWER;
         }
-        int max_duration = Config.AQUA_MAX_DURATION;
+        int max_duration = BalanceConfig.AQUA_MAX_DURATION;
         if(Config.MULTIPLY_DURATION_LIMIT){
-            max_duration = (int) (Config.AQUA_MAX_DURATION * Config.DURATION_MULTIPLIER);
+            max_duration = (int) (BalanceConfig.AQUA_MAX_DURATION * Config.DURATION_MULTIPLIER);
         }
         if(this.duration > max_duration){
             this.duration = max_duration;
         }
-        if(this.duration < Config.AQUA_MIN_DURATION){
-            this.duration = Config.AQUA_MIN_DURATION;
+        if(this.duration < BalanceConfig.AQUA_MIN_DURATION){
+            this.duration = BalanceConfig.AQUA_MIN_DURATION;
         }
     }
 

@@ -3,6 +3,7 @@ package me.emafire003.dev.lightwithin.lights;
 import me.emafire003.dev.lightwithin.LightWithin;
 import me.emafire003.dev.lightwithin.compat.coloredglowlib.CGLCompat;
 import me.emafire003.dev.lightwithin.component.LightComponent;
+import me.emafire003.dev.lightwithin.config.BalanceConfig;
 import me.emafire003.dev.lightwithin.config.Config;
 import me.emafire003.dev.lightwithin.util.fabridash.FabriDash;
 import me.emafire003.dev.lightwithin.particles.LightParticles;
@@ -18,11 +19,8 @@ import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
-import net.minecraft.text.Text;
 
 import java.util.List;
-
-import static me.emafire003.dev.lightwithin.LightWithin.*;
 
 public class WindLight extends InnerLight {
 
@@ -62,21 +60,21 @@ public class WindLight extends InnerLight {
     }
 
     private void checkSafety(){
-        if(this.power_multiplier > Config.WIND_MAX_POWER){
-            power_multiplier = Config.WIND_MAX_POWER;
+        if(this.power_multiplier > BalanceConfig.WIND_MAX_POWER){
+            power_multiplier = BalanceConfig.WIND_MAX_POWER;
         }
-        if(this.power_multiplier < Config.WIND_MIN_POWER){
-            power_multiplier = Config.WIND_MIN_POWER;
+        if(this.power_multiplier < BalanceConfig.WIND_MIN_POWER){
+            power_multiplier = BalanceConfig.WIND_MIN_POWER;
         }
-        int max_duration = Config.WIND_MAX_DURATION;
+        int max_duration = BalanceConfig.WIND_MAX_DURATION;
         if(Config.MULTIPLY_DURATION_LIMIT){
-            max_duration = (int) (Config.WIND_MAX_DURATION * Config.DURATION_MULTIPLIER);
+            max_duration = (int) (BalanceConfig.WIND_MAX_DURATION * Config.DURATION_MULTIPLIER);
         }
         if(this.duration > max_duration){
             this.duration = max_duration;
         }
-        if(this.duration < Config.WIND_MIN_DURATION){
-            this.duration = Config.WIND_MIN_DURATION;
+        if(this.duration < BalanceConfig.WIND_MIN_DURATION){
+            this.duration = BalanceConfig.WIND_MIN_DURATION;
         }
     }
 
@@ -115,11 +113,11 @@ public class WindLight extends InnerLight {
                 if(target.equals(caster)){
                     target.addStatusEffect(new StatusEffectInstance(StatusEffects.SPEED, this.duration*20, (int) ((this.power_multiplier/2)/Config.DIV_SELF), false, false));
                     target.addStatusEffect(new StatusEffectInstance(StatusEffects.JUMP_BOOST, this.duration*20, (int) ((this.power_multiplier/2)/Config.DIV_SELF), false, false));
-                    target.addStatusEffect(new StatusEffectInstance(StatusEffects.HASTE, this.duration*20, (int) ((this.power_multiplier/2)/Config.DIV_SELF), false, false));
+                    target.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOW_FALLING, this.duration*20, 0, false, false));
                 }else{
                     target.addStatusEffect(new StatusEffectInstance(StatusEffects.SPEED, this.duration*20, (int) (this.power_multiplier/2), false, false));
                     target.addStatusEffect(new StatusEffectInstance(StatusEffects.JUMP_BOOST, this.duration*20, (int) (this.power_multiplier/2), false, false));
-                    target.addStatusEffect(new StatusEffectInstance(StatusEffects.HASTE, this.duration*20, (int) (this.power_multiplier/2), false, false));
+                    target.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOW_FALLING, this.duration*20, 0, false, false));
                 }
 
                 LightParticlesUtil.spawnLightTypeParticle(LightParticles.WINDLIGHT_PARTICLE, (ServerWorld) target.getWorld(), target.getPos());

@@ -3,6 +3,7 @@ package me.emafire003.dev.lightwithin.lights;
 import me.emafire003.dev.lightwithin.LightWithin;
 import me.emafire003.dev.lightwithin.compat.coloredglowlib.CGLCompat;
 import me.emafire003.dev.lightwithin.component.LightComponent;
+import me.emafire003.dev.lightwithin.config.BalanceConfig;
 import me.emafire003.dev.lightwithin.config.Config;
 import me.emafire003.dev.lightwithin.entities.LightEntities;
 import me.emafire003.dev.lightwithin.entities.earth_golem.EarthGolemEntity;
@@ -54,21 +55,21 @@ public class EarthenLight extends InnerLight {
     }
 
     private void checkSafety(){
-        if(this.power_multiplier > Config.EARTHEN_MAX_POWER){
-            power_multiplier = Config.EARTHEN_MAX_POWER;
+        if(this.power_multiplier > BalanceConfig.EARTHEN_MAX_POWER){
+            power_multiplier = BalanceConfig.EARTHEN_MAX_POWER;
         }
-        if(this.power_multiplier < Config.EARTHEN_MIN_POWER){
-            power_multiplier = Config.EARTHEN_MIN_POWER;
+        if(this.power_multiplier < BalanceConfig.EARTHEN_MIN_POWER){
+            power_multiplier = BalanceConfig.EARTHEN_MIN_POWER;
         }
-        int max_duration = Config.EARTHEN_MAX_DURATION;
+        int max_duration = BalanceConfig.EARTHEN_MAX_DURATION;
         if(Config.MULTIPLY_DURATION_LIMIT){
-            max_duration = (int) (Config.EARTHEN_MAX_DURATION * Config.DURATION_MULTIPLIER);
+            max_duration = (int) (BalanceConfig.EARTHEN_MAX_DURATION * Config.DURATION_MULTIPLIER);
         }
         if(this.duration > max_duration){
             this.duration = max_duration;
         }
-        if(this.duration < Config.EARTHEN_MIN_DURATION){
-            this.duration = Config.EARTHEN_MIN_DURATION;
+        if(this.duration < BalanceConfig.EARTHEN_MIN_DURATION){
+            this.duration = BalanceConfig.EARTHEN_MIN_DURATION;
         }
     }
 
@@ -86,6 +87,7 @@ public class EarthenLight extends InnerLight {
         }
 
 
+        LightParticlesUtil.spawnLightTypeParticle(LightParticles.EARTHENLIGHT_PARTICLE, (ServerWorld) caster.getWorld(), caster.getPos());
         caster.getWorld().playSound(caster.getX(), caster.getY(), caster.getZ(), LightSounds.EARTHEN_LIGHT, SoundCategory.AMBIENT, 1, 1, true);
         if(caster.getWorld().isClient){
             return;
@@ -95,7 +97,6 @@ public class EarthenLight extends InnerLight {
         if(component.getTargets().equals(TargetType.ENEMIES)){
             //TODO maybe create a boudler projectile in the future
             //TODO probably need to extend the enemy radius
-            LightParticlesUtil.spawnLightTypeParticle(LightParticles.EARTHENLIGHT_PARTICLE, (ServerWorld) caster.getWorld(), caster.getPos());
             LivingEntity oldtarget = null;
             for(LivingEntity target : this.targets){
                 float r = target.getDimensions(EntityPose.STANDING).width/2;
@@ -162,7 +163,6 @@ public class EarthenLight extends InnerLight {
             //Depending on the level it will spawn a small moat and pillar around the user, a big pillar only and a big pillar with a big moat.
             //And will also give Solid Rock effect to self, making the player more resistant to knokback
         }else if(component.getTargets().equals(TargetType.SELF)){
-            LightParticlesUtil.spawnLightTypeParticle(LightParticles.EARTHENLIGHT_PARTICLE, (ServerWorld) caster.getWorld(), caster.getPos());
             caster.addStatusEffect(new StatusEffectInstance(LightEffects.STURDY_ROCK, caster.getStatusEffect(LightEffects.LIGHT_ACTIVE).getDuration(), (int) this.power_multiplier, false, false));
             caster.playSound(LightSounds.EARTHEN_LIGHT, 1, 1);
             if(Config.STRUCTURE_GRIEFING && !caster.getWorld().isClient) {
@@ -189,6 +189,7 @@ public class EarthenLight extends InnerLight {
                 }
                 placer.loadStructure();
                 caster.playSound(LightSounds.EARTHEN_LIGHT, 1, 1);
+                LightParticlesUtil.spawnLightTypeParticle(LightParticles.EARTHENLIGHT_PARTICLE, (ServerWorld) caster.getWorld(), caster.getPos());
             }
         }else if(component.getTargets().equals(TargetType.VARIANT)){
             int rx = caster.getRandom().nextBetween(0, 5);

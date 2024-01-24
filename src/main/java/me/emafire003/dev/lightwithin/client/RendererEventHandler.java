@@ -40,6 +40,9 @@ public class RendererEventHandler {
     public void registerRenderEvent(){
         LOGGER.info("Registering runes renderer...");
         RenderEvents.HUD.register(matrixStack -> {
+            if(ReplayModCompat.isInReplayMode()){
+                return;
+            }
             center_x = MinecraftClient.getInstance().getWindow().getScaledWidth()/2;
             center_y = MinecraftClient.getInstance().getWindow().getScaledHeight()/2;
             scale_factor = MinecraftClient.getInstance().getWindow().getScaleFactor();
@@ -52,7 +55,7 @@ public class RendererEventHandler {
                 ClipStack.popWindow();
             }
             //In the replay mod the player is by default in first person, so don't display the runes at all, since they are meant for first person.
-            if(MinecraftClient.getInstance().options.getPerspective().equals(Perspective.FIRST_PERSON) && !ReplayModCompat.isInReplayMode()){
+            if(MinecraftClient.getInstance().options.getPerspective().equals(Perspective.FIRST_PERSON)){
                 if(heal_runes){
                     ClipStack.addWindow(matrixStack.getMatrices(),new Rectangle(1,1,1000,1000));
                     Renderer2d.renderTexture(matrixStack.getMatrices(), new Identifier(LightWithin.MOD_ID, "textures/lights/runes/heal_light_runes.png"), center_x-(400/scale_factor)/2, center_y-(160/scale_factor)/2, (400/scale_factor)*1.2, (160/scale_factor)*1.2);
