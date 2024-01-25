@@ -41,7 +41,8 @@ public class LightCommands {
                 new ResetLightCommand(),
                 new ActivateLightCommand(),
                 new RerollLightCommand(),
-                new ReloadConfigCommand()
+                new ReloadConfigCommand(),
+                new ReadyLightCommand()
         };
 
         for (LightCommand command : commands) {
