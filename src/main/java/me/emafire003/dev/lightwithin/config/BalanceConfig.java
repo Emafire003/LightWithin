@@ -65,7 +65,7 @@ public class BalanceConfig {
         configs = new ConfigProvider();
         createConfigs();
 
-        CONFIG = SimpleConfig.of(LightWithin.MOD_ID + config_name + ".yml").provider(configs).request();
+        CONFIG = SimpleConfig.of(LightWithin.MOD_ID + config_name).provider(configs).request();
 
         try{
             assignConfigs();
@@ -96,23 +96,33 @@ public class BalanceConfig {
     private static void createConfigs() {
         configs.addKeyValuePair(new Pair<>("version", ver), "The version of the config. DO NOT CHANGE IT :D");
 
+        configs.addKeyValuePair(new Pair<>("spacer", "spacer"), "");
+        configs.addKeyValuePair(new Pair<>("comment", "comment"), "This config file lets you modify how the max and min values of each light when it activates. Be very careful while changing these, they could be already multiplied by a setting in the main config file!");
+        configs.addKeyValuePair(new Pair<>("spacer", "spacer"), "");
+
         configs.addKeyValuePair(new Pair<>("heal_max_power", 8), "The maximum power multiplier (aka level of the effect)");
         configs.addKeyValuePair(new Pair<>("heal_max_duration", 10), "The maximum duration of the effect");
-        configs.addKeyValuePair(new Pair<>("heal_min_power", 2), "The minimum power multiplier (aka level of the effect)");
+        configs.addKeyValuePair(new Pair<>("heal_min_power", 1), "The minimum power multiplier (aka level of the effect)");
         configs.addKeyValuePair(new Pair<>("heal_min_duration", 4), "The minimum duration of the effect");
 
-        configs.addKeyValuePair(new Pair<>("defense_max_power", 6), "The maximum power multiplier (aka level of the effect)");
+        configs.addKeyValuePair(new Pair<>("spacer", "spacer"), "");
+
+        configs.addKeyValuePair(new Pair<>("defense_max_power", 8), "The maximum power multiplier (aka level of the effect)");
         configs.addKeyValuePair(new Pair<>("defense_max_duration", 10), "The maximum duration of the effect");
-        configs.addKeyValuePair(new Pair<>("defense_min_power", 2), "The minimum power multiplier (aka level of the effect)");
+        configs.addKeyValuePair(new Pair<>("defense_min_power", 1), "The minimum power multiplier (aka level of the effect)");
         configs.addKeyValuePair(new Pair<>("defense_min_duration", 5), "The minimum duration of the effect");
+
+        configs.addKeyValuePair(new Pair<>("spacer", "spacer"), "");
 
         configs.addKeyValuePair(new Pair<>("strength_max_power", 6), "The maximum power multiplier (aka level of the effect)");
         configs.addKeyValuePair(new Pair<>("strength_max_duration", 10), "The maximum duration of the effect");
-        configs.addKeyValuePair(new Pair<>("strength_min_power", 2), "The minimum power multiplier (aka level of the effect)");
+        configs.addKeyValuePair(new Pair<>("strength_min_power", 1), "The minimum power multiplier (aka level of the effect)");
         configs.addKeyValuePair(new Pair<>("strength_min_duration", 5), "The minimum duration of the effect");
 
+        configs.addKeyValuePair(new Pair<>("spacer", "spacer"), "");
+
         configs.addKeyValuePair(new Pair<>("blazing_default_damage", 2), "The default damage of the light when activates. It will be multiplied by the power multiplier, and also the target will be set on fire so be careful");
-        configs.addKeyValuePair(new Pair<>("blazing_max_power", 5), "The maximum power multiplier (aka by how much the default damage gets multiplied)");
+        configs.addKeyValuePair(new Pair<>("blazing_max_power", 10), "The maximum power multiplier (aka by how much the default damage gets multiplied)");
         configs.addKeyValuePair(new Pair<>("blazing_max_duration", 15), "The maximum duration of the fire");
         configs.addKeyValuePair(new Pair<>("blazing_min_power", 1), "The minimum power multiplier (aka by how much the default damage gets multiplied)");
         configs.addKeyValuePair(new Pair<>("blazing_min_duration", 5), "The minimum duration of the fire");
@@ -120,22 +130,30 @@ public class BalanceConfig {
         configs.addKeyValuePair(new Pair<>("blazing_crit_fire_multiplier", 2), "The multiplier of the duration in seconds, for which the target(s) will be set on fire (must be >= 1)");
         configs.addKeyValuePair(new Pair<>("blazing_all_damage_bonus", 3), "The damage bonus (2 = 1 hearth) when the target is ALL");
 
-        configs.addKeyValuePair(new Pair<>("frost_max_power", 8), "The maximum power multiplier (aka the AMOUNT of freeze damage inflicted upon activation. 2 = 1 hearth)");
+        configs.addKeyValuePair(new Pair<>("spacer", "spacer"), "");
+
+        configs.addKeyValuePair(new Pair<>("frost_max_power", 10), "The maximum power multiplier (aka the AMOUNT of freeze damage inflicted upon activation. 2 = 1 hearth)");
         configs.addKeyValuePair(new Pair<>("frost_max_duration", 18), "The maximum duration of the frost effect");
         configs.addKeyValuePair(new Pair<>("frost_min_power", 1), "The minimum power multiplier (aka the AMOUNT of freeze damage inflicted upon activation. 2 = 1 hearth)");
         configs.addKeyValuePair(new Pair<>("frost_min_duration", 5), "The minimum duration of the frost effect");
 
-        configs.addKeyValuePair(new Pair<>("earthen_max_power", 9), "The maximum power multiplier (Used to determine the level of the structures spawned and the bonus damage done to enemies)");
+        configs.addKeyValuePair(new Pair<>("spacer", "spacer"), "");
+
+        configs.addKeyValuePair(new Pair<>("earthen_max_power", 10), "The maximum power multiplier (Used to determine the level of the structures spawned and the bonus damage done to enemies)");
         configs.addKeyValuePair(new Pair<>("earthen_min_power", 1), "The minimum power multiplier (see above)");
         configs.addKeyValuePair(new Pair<>("earthen_max_duration", 18), "The maximum duration of some effects that can be applied (like solid rock, mining fatigue)");
         configs.addKeyValuePair(new Pair<>("earthen_min_duration", 1), "The minimum duration (see above)");
 
-        configs.addKeyValuePair(new Pair<>("wind_max_power", 9), "The maximum power multiplier (Used to determine the power of the status effects and the distance of the dash)");
+        configs.addKeyValuePair(new Pair<>("spacer", "spacer"), "");
+
+        configs.addKeyValuePair(new Pair<>("wind_max_power", 10), "The maximum power multiplier (Used to determine the power of the status effects and the distance of the dash)");
         configs.addKeyValuePair(new Pair<>("wind_min_power", 1), "The minimum power multiplier (see above)");
         configs.addKeyValuePair(new Pair<>("wind_max_duration", 18), "The maximum duration of some effects that can be applied (like speed, haste, slow falling)");
         configs.addKeyValuePair(new Pair<>("wind_min_duration", 1), "The minimum duration (see above)");
 
-        configs.addKeyValuePair(new Pair<>("aqua_max_power", 9), "The maximum power multiplier (Determines power of status effects, number of drowned spawned, if the cage will spawn a trident and lightning )");
+        configs.addKeyValuePair(new Pair<>("spacer", "spacer"), "");
+        
+        configs.addKeyValuePair(new Pair<>("aqua_max_power", 10), "The maximum power multiplier (Determines power of status effects, number of drowned spawned, if the cage will spawn a trident and lightning )");
         configs.addKeyValuePair(new Pair<>("aqua_min_power", 1), "The minimum power multiplier (see above)");
         configs.addKeyValuePair(new Pair<>("aqua_max_duration", 18), "The maximum duration of some effects that can be applied (like water slide, conduit, etc.)");
         configs.addKeyValuePair(new Pair<>("aqua_min_duration", 1), "The minimum duration (see above)");
@@ -152,20 +170,20 @@ public class BalanceConfig {
         VERSION = CONFIG.getOrDefault("version", ver);
         HEAL_MAX_POWER = CONFIG.getOrDefault("heal_max_power", 8);
         HEAL_MAX_DURATION = CONFIG.getOrDefault("heal_max_duration", 10);
-        HEAL_MIN_POWER = CONFIG.getOrDefault("heal_min_power", 2);
+        HEAL_MIN_POWER = CONFIG.getOrDefault("heal_min_power", 1);
         HEAL_MIN_DURATION = CONFIG.getOrDefault("heal_min_duration", 4);
 
-        DEFENSE_MAX_POWER = CONFIG.getOrDefault("defense_max_power", 6);
+        DEFENSE_MAX_POWER = CONFIG.getOrDefault("defense_max_power", 8);
         DEFENSE_MAX_DURATION = CONFIG.getOrDefault("defense_max_duration", 10);
-        DEFENSE_MIN_POWER = CONFIG.getOrDefault("defense_min_power", 2);
+        DEFENSE_MIN_POWER = CONFIG.getOrDefault("defense_min_power", 1);
         DEFENSE_MIN_DURATION = CONFIG.getOrDefault("defense_min_duration", 5);
 
         STRENGTH_MAX_POWER = CONFIG.getOrDefault("strength_max_power", 6);
         STRENGTH_MAX_DURATION = CONFIG.getOrDefault("strength_max_duration", 10);
-        STRENGTH_MIN_POWER = CONFIG.getOrDefault("strength_min_power", 2);
+        STRENGTH_MIN_POWER = CONFIG.getOrDefault("strength_min_power", 1);
         STRENGTH_MIN_DURATION = CONFIG.getOrDefault("strength_min_duration", 5);
 
-        BLAZING_MAX_POWER = CONFIG.getOrDefault("blazing_max_power", 5);
+        BLAZING_MAX_POWER = CONFIG.getOrDefault("blazing_max_power", 10);
         BLAZING_MAX_DURATION = CONFIG.getOrDefault("blazing_max_duration", 15);
         BLAZING_MIN_POWER = CONFIG.getOrDefault("blazing_min_power", 1);
         BLAZING_MIN_DURATION = CONFIG.getOrDefault("blazing_min_duration", 5);
@@ -174,22 +192,22 @@ public class BalanceConfig {
         BLAZING_ALL_DAMAGE_BONUS = CONFIG.getOrDefault("blazing_all_damage_bonus", 3);
         BLAZING_DEFAULT_DAMAGE = CONFIG.getOrDefault("blazing_default_damage", 2);
 
-        FROST_MAX_POWER = CONFIG.getOrDefault("frost_max_power", 8);
+        FROST_MAX_POWER = CONFIG.getOrDefault("frost_max_power", 10);
         FROST_MAX_DURATION = CONFIG.getOrDefault("frost_max_duration", 18);
         FROST_MIN_POWER = CONFIG.getOrDefault("frost_min_power", 1);
         FROST_MIN_DURATION = CONFIG.getOrDefault("frost_min_duration", 5);
 
-        EARTHEN_MAX_POWER = CONFIG.getOrDefault("earthen_max_power", 9);
+        EARTHEN_MAX_POWER = CONFIG.getOrDefault("earthen_max_power", 10);
         EARTHEN_MAX_DURATION = CONFIG.getOrDefault("earthen_max_duration", 18);
         EARTHEN_MIN_POWER = CONFIG.getOrDefault("earthen_min_power", 1);
         EARTHEN_MIN_DURATION = CONFIG.getOrDefault("earthen_min_duration", 1);
 
-        WIND_MAX_POWER = CONFIG.getOrDefault("wind_max_power", 9);
+        WIND_MAX_POWER = CONFIG.getOrDefault("wind_max_power", 10);
         WIND_MAX_DURATION = CONFIG.getOrDefault("wind_max_duration", 18);
         WIND_MIN_POWER = CONFIG.getOrDefault("wind_min_power", 1);
         WIND_MIN_DURATION = CONFIG.getOrDefault("wind_min_duration", 1);
 
-        AQUA_MAX_POWER = CONFIG.getOrDefault("aqua_max_power", 9);
+        AQUA_MAX_POWER = CONFIG.getOrDefault("aqua_max_power", 10);
         AQUA_MAX_DURATION = CONFIG.getOrDefault("aqua_max_duration", 18);
         AQUA_MIN_POWER = CONFIG.getOrDefault("aqua_min_power", 1);
         AQUA_MIN_DURATION = CONFIG.getOrDefault("aqua_min_duration", 1);

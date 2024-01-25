@@ -84,7 +84,7 @@ public class TriggerConfig {
     public static int BLAZING_ENEMIES_ARMOR_DURABILITY;
     public static int BLAZING_ENEMIES_CONDITIONS;
 
-    //Frostlight light
+    //Frost light
     //All
     public static int FROST_ALL_VERY_LOW_HEALTH;
     public static int FROST_ALL_LOW_HEALTH;
@@ -112,6 +112,84 @@ public class TriggerConfig {
     public static int FROST_ALLIES_SURROUNDED;
     public static int FROST_ALLIES_ALLY_ARMOR_DURABILITY;
     public static int FROST_ALLIES_CONDITIONS;
+
+    //Earthen light
+    //Variant
+    public static int EARTHEN_VARIANT_ALLY_LOW_HEALTH;
+    public static int EARTHEN_VARIANT_VERY_LOW_HEALTH;
+    public static int EARTHEN_VARIANT_SURROUNDED;
+    public static int EARTHEN_VARIANT_CONDITIONS;
+
+    //Enemies
+    public static int EARTHEN_ENEMIES_ALLY_LOW_HEALTH;
+    public static int EARTHEN_ENEMIES_VERY_LOW_HEALTH;
+    public static int EARTHEN_ENEMIES_SURROUNDED;
+    public static int EARTHEN_ENEMIES_CONDITIONS;
+
+    //SELF
+    public static int EARTHEN_SELF_VERY_LOW_HEALTH;
+    public static int EARTHEN_SELF_LOW_HEALTH;
+    public static int EARTHEN_SELF_SURROUNDED;
+    public static int EARTHEN_SELF_CONDITIONS;
+
+    //Allies
+    public static int EARTHEN_ALLIES_ALLY_LOW_HEALTH;
+    public static int EARTHEN_ALLIES_VERY_LOW_HEALTH;
+    public static int EARTHEN_ALLIES_SURROUNDED;
+    public static int EARTHEN_ALLIES_CONDITIONS;
+
+    //Wind light
+    //All
+    public static int WIND_ALL_VERY_LOW_HEALTH;
+    public static int WIND_ALL_SURROUNDED;
+    public static int WIND_ALL_FALLING;
+    public static int WIND_ALL_FALLING_HIGH;
+    public static int WIND_ALL_CONDITIONS;
+
+    //SELF
+    public static int WIND_SELF_VERY_LOW_HEALTH;
+    public static int WIND_SELF_LOW_HEALTH;
+    public static int WIND_SELF_SURROUNDED;
+    public static int WIND_SELF_FALLING;
+    public static int WIND_SELF_FALLING_HIGH;
+    public static int WIND_SELF_CONDITIONS;
+
+    //Allies
+    public static int WIND_ALLIES_ALLY_LOW_HEALTH;
+    public static int WIND_ALLIES_VERY_LOW_HEALTH;
+    public static int WIND_ALLIES_SURROUNDED;
+    public static int WIND_ALLIES_FALLING_HIGH;
+    public static int WIND_ALLIES_ALLY_FALLING;
+    public static int WIND_ALLIES_ALLY_FALLING_HIGH;
+    public static int WIND_ALLIES_CONDITIONS;
+
+    //Aqua light
+    //All
+    public static int AQUA_ALL_VERY_LOW_HEALTH;
+    public static int AQUA_ALL_SURROUNDED;
+    public static int AQUA_ALL_ALLY_ARMOR_DURABILITY;
+    public static int AQUA_ALL_CONDITIONS;
+
+    //Enemies
+    public static int AQUA_ENEMIES_VERY_LOW_HEALTH;
+    public static int AQUA_ENEMIES_LOW_HEALTH;
+    public static int AQUA_ENEMIES_SURROUNDED;
+    public static int AQUA_ENEMIES_ALLY_ARMOR_DURABILITY;
+    public static int AQUA_ENEMIES_CONDITIONS;
+
+    //SELF
+    public static int AQUA_SELF_VERY_LOW_HEALTH;
+    public static int AQUA_SELF_LOW_HEALTH;
+    public static int AQUA_SELF_SURROUNDED;
+    public static int AQUA_SELF_ARMOR_DURABILITY;
+    public static int AQUA_SELF_CONDITIONS;
+
+    //Allies
+    public static int AQUA_ALLIES_ALLY_LOW_HEALTH;
+    public static int AQUA_ALLIES_VERY_LOW_HEALTH;
+    public static int AQUA_ALLIES_SURROUNDED;
+    public static int AQUA_ALLIES_ALLY_ARMOR_DURABILITY;
+    public static int AQUA_ALLIES_CONDITIONS;
     
 
     private static final String config_name = "_trigger_balance";
@@ -119,7 +197,7 @@ public class TriggerConfig {
         configs = new ConfigProvider();
         createConfigs();
 
-        CONFIG = SimpleConfig.of(LightWithin.MOD_ID + config_name + ".yml").provider(configs).request();
+        CONFIG = SimpleConfig.of(LightWithin.MOD_ID + config_name).provider(configs).request();
 
         try{
             assignConfigs();
@@ -154,7 +232,6 @@ public class TriggerConfig {
     private static final String caster_poisoned = "The contribution to the trigger threshold when the caster is poisoned";
     private static final String caster_harmful = "The contribution to the trigger threshold when the caster has an harmful status effect";
 
-
     private static final String allies_low_health = "The contribution to the trigger threshold when the caster's ALLIES are in danger and on low health";
     private static final String allies_low_armor = "The contribution to the trigger threshold when the caster's allies have low durability armor. (If enabled)";
     private static final String allies_poisoned = "The contribution to the trigger threshold when the caster's allies are poisoned";
@@ -165,10 +242,19 @@ public class TriggerConfig {
     private static final String light_conditions_1 = "The contribution to the trigger threshold when the ";
     private static final String light_conditions_2 = " light conditions are met";
 
+    private static final String caster_falling = "The contribution to the trigger threshold made by the caster falling a few blocks";
+    private static final String caster_falling_high = "The contribution to the trigger threshold made by the caster falling a lot of blocks";
+    private static final String allies_falling = "The contribution to the trigger threshold made by the caster's allies falling a few blocks";
+    private static final String allies_falling_high = "The contribution to the trigger threshold made by the caster's allies falling a lot of blocks";
+
     private static void createConfigs() {
         configs.addKeyValuePair(new Pair<>("version", ver), "The version of the config. DO NOT CHANGE IT :D");
         
         configs.addKeyValuePair(new Pair<>("trigger_threshold", 5), "The threshold to reach in order to activate a light");
+
+        configs.addKeyValuePair(new Pair<>("spacer", "spacer"), "");
+        configs.addKeyValuePair(new Pair<>("comment", "comment"), "This config file lets you modify how the lights trigger. Be very careful if you really want to change this!");
+        configs.addKeyValuePair(new Pair<>("spacer", "spacer"), "");
 
         //==========================Heal==========================
         //Self
@@ -192,6 +278,8 @@ public class TriggerConfig {
         configs.addKeyValuePair(new Pair<>("heal_variant_other_harmful_effect", 3), other_harmful + " (excludes the check for the caster)");
         configs.addKeyValuePair(new Pair<>("heal_variant_harmful_effect", 3), caster_harmful);
 
+        configs.addKeyValuePair(new Pair<>("spacer", "spacer"), "");
+
         //==========================Defence==========================
         //Self
         configs.addKeyValuePair(new Pair<>("defence_self_very_low_health", 5), caster_very_low_health+" (excludes the low health)");
@@ -208,6 +296,8 @@ public class TriggerConfig {
         //Variant
         configs.addKeyValuePair(new Pair<>("defence_variant_passive_low_health", 5), "WARNING: This is the only check, so leave it equal to the Trigger" +passive_low_health);
 
+        configs.addKeyValuePair(new Pair<>("spacer", "spacer"), "");
+
         //==========================Strength==========================
         //Self
         configs.addKeyValuePair(new Pair<>("strength_self_variant_very_low_health", 5), caster_very_low_health+" (excludes the low health)");
@@ -220,6 +310,8 @@ public class TriggerConfig {
         configs.addKeyValuePair(new Pair<>("strength_allies_very_low_health", 1), caster_very_low_health);
         configs.addKeyValuePair(new Pair<>("strength_allies_surrounded", 1), caster_surrounded);
         configs.addKeyValuePair(new Pair<>("strength_allies_ally_armor_durability", 2), allies_low_armor);
+
+        configs.addKeyValuePair(new Pair<>("spacer", "spacer"), "");
 
         //==========================Blazing==========================
         //All
@@ -236,9 +328,11 @@ public class TriggerConfig {
         configs.addKeyValuePair(new Pair<>("blazing_enemies_ally_armor_durability", 2), allies_low_armor);
         configs.addKeyValuePair(new Pair<>("blazing_enemies_conditions", 3), light_conditions_1 + "blazing" + light_conditions_2);
 
+        configs.addKeyValuePair(new Pair<>("spacer", "spacer"), "");
+
         //==========================Frost==========================
         //All
-        configs.addKeyValuePair(new Pair<>("frost_all_very_low_health", 4), caster_very_low_health+" (excludes the low health)");
+        configs.addKeyValuePair(new Pair<>("frost_all_very_low_health", 4), caster_very_low_health);
         configs.addKeyValuePair(new Pair<>("frost_all_low_health", 2), caster_low_health);
         configs.addKeyValuePair(new Pair<>("frost_all_surrounded", 1), caster_surrounded);
         configs.addKeyValuePair(new Pair<>("frost_all_armor_durability", 1), caster_low_armor);
@@ -258,13 +352,96 @@ public class TriggerConfig {
         configs.addKeyValuePair(new Pair<>("frost_self_armor_durability", 2), caster_low_armor);
         configs.addKeyValuePair(new Pair<>("frost_self_conditions", 3), light_conditions_1 + "frost" + light_conditions_2);
 
-
         //Allies
         configs.addKeyValuePair(new Pair<>("frost_allies_ally_low_health", 4), allies_low_health);
         configs.addKeyValuePair(new Pair<>("frost_allies_very_low_health", 1), caster_low_health);
         configs.addKeyValuePair(new Pair<>("frost_allies_surrounded", 1), caster_surrounded);
         configs.addKeyValuePair(new Pair<>("frost_allies_ally_armor_durability", 1), allies_low_armor);
         configs.addKeyValuePair(new Pair<>("frost_allies_conditions", 3), light_conditions_1 + "frost" + light_conditions_2);
+
+        configs.addKeyValuePair(new Pair<>("spacer", "spacer"), "");
+
+        //==========================Earthen==========================
+        //Variant
+        configs.addKeyValuePair(new Pair<>("earthen_variant_very_low_health", 4), caster_very_low_health);
+        configs.addKeyValuePair(new Pair<>("earthen_variant_allies_low_healthy", 3), allies_low_health);
+        configs.addKeyValuePair(new Pair<>("earthen_variant_surrounded", 1), caster_surrounded);
+        configs.addKeyValuePair(new Pair<>("earthen_variant_conditions", 3), light_conditions_1 + "earthen" + light_conditions_2);
+
+        //Enemies
+        configs.addKeyValuePair(new Pair<>("earthen_enemies_ally_low_health", 3), allies_low_health);
+        configs.addKeyValuePair(new Pair<>("earthen_enemies_very_low_health", 4), caster_very_low_health);
+        configs.addKeyValuePair(new Pair<>("earthen_enemies_surrounded", 1), caster_surrounded);
+        configs.addKeyValuePair(new Pair<>("earthen_enemies_conditions", 3), light_conditions_1 + "earthen" + light_conditions_2);
+
+        //Self
+        configs.addKeyValuePair(new Pair<>("earthen_self_very_low_health", 3), caster_very_low_health+" (excludes the low health)");
+        configs.addKeyValuePair(new Pair<>("earthen_self_low_health", 2), caster_low_health);
+        configs.addKeyValuePair(new Pair<>("earthen_self_surrounded", 2), caster_surrounded);
+        configs.addKeyValuePair(new Pair<>("earthen_self_conditions", 3), light_conditions_1 + "frost" + light_conditions_2);
+
+        //Allies
+        configs.addKeyValuePair(new Pair<>("earthen_allies_ally_low_health", 4), allies_low_health);
+        configs.addKeyValuePair(new Pair<>("earthen_allies_very_low_health", 1), caster_low_health);
+        configs.addKeyValuePair(new Pair<>("earthen_allies_surrounded", 1), caster_surrounded);
+        configs.addKeyValuePair(new Pair<>("earthen_allies_conditions", 3), light_conditions_1 + "frost" + light_conditions_2);
+
+        configs.addKeyValuePair(new Pair<>("spacer", "spacer"), "");
+
+        //==========================Wind==========================
+        //All
+        configs.addKeyValuePair(new Pair<>("wind_all_very_low_health", 4), caster_very_low_health);
+        configs.addKeyValuePair(new Pair<>("wind_all_surrounded", 1), caster_surrounded);
+        configs.addKeyValuePair(new Pair<>("wind_all_falling", 1), caster_falling);
+        configs.addKeyValuePair(new Pair<>("wind_all_falling_high", 3), caster_falling_high);
+        configs.addKeyValuePair(new Pair<>("wind_all_conditions", 3), light_conditions_1 + "wind" + light_conditions_2);
+
+        //Self
+        configs.addKeyValuePair(new Pair<>("wind_self_very_low_health", 4), caster_very_low_health+" (excludes the low health)");
+        configs.addKeyValuePair(new Pair<>("wind_self_low_health", 2), caster_low_health);
+        configs.addKeyValuePair(new Pair<>("wind_self_surrounded", 1), caster_surrounded);
+        configs.addKeyValuePair(new Pair<>("wind_self_falling", 1), caster_falling);
+        configs.addKeyValuePair(new Pair<>("wind_self_falling_high", 3), caster_falling_high);
+        configs.addKeyValuePair(new Pair<>("wind_self_conditions", 3), light_conditions_1 + "wind" + light_conditions_2);
+
+        //Allies
+        configs.addKeyValuePair(new Pair<>("wind_allies_ally_low_health", 4), allies_low_health);
+        configs.addKeyValuePair(new Pair<>("wind_allies_very_low_health", 1), caster_low_health);
+        configs.addKeyValuePair(new Pair<>("wind_allies_surrounded", 1), caster_surrounded);
+        configs.addKeyValuePair(new Pair<>("wind_allies_ally_falling", 2), allies_falling);
+        configs.addKeyValuePair(new Pair<>("wind_allies_ally_falling_high", 4), allies_falling_high);
+        configs.addKeyValuePair(new Pair<>("wind_allies_falling", 2), caster_falling);
+        configs.addKeyValuePair(new Pair<>("wind_allies_conditions", 3), light_conditions_1 + "wind" + light_conditions_2);
+
+        configs.addKeyValuePair(new Pair<>("spacer", "spacer"), "");
+
+        //==========================Aqua==========================
+        //All
+        configs.addKeyValuePair(new Pair<>("aqua_all_very_low_health", 4), caster_very_low_health);
+        configs.addKeyValuePair(new Pair<>("aqua_all_surrounded", 1), caster_surrounded);
+        configs.addKeyValuePair(new Pair<>("aqua_all_ally_armor_durability", 1), allies_low_armor);
+        configs.addKeyValuePair(new Pair<>("aqua_all_conditions", 3), light_conditions_1 + "aqua" + light_conditions_2);
+
+        //Enemies
+        configs.addKeyValuePair(new Pair<>("aqua_enemies_very_low_health", 3), caster_very_low_health + " (excludes low health)");
+        configs.addKeyValuePair(new Pair<>("aqua_enemies_low_health", 2), caster_low_health);
+        configs.addKeyValuePair(new Pair<>("aqua_enemies_surrounded", 1), caster_surrounded);
+        configs.addKeyValuePair(new Pair<>("aqua_enemies_ally_armor_durability", 1), allies_low_armor);
+        configs.addKeyValuePair(new Pair<>("aqua_enemies_conditions", 3), light_conditions_1 + "aqua" + light_conditions_2);
+
+        //Self
+        configs.addKeyValuePair(new Pair<>("aqua_self_very_low_health", 4), caster_very_low_health+" (excludes the low health)");
+        configs.addKeyValuePair(new Pair<>("aqua_self_low_health", 2), caster_low_health);
+        configs.addKeyValuePair(new Pair<>("aqua_self_armor_durability", 1), caster_low_armor);
+        configs.addKeyValuePair(new Pair<>("aqua_self_surrounded", 1), caster_surrounded);
+        configs.addKeyValuePair(new Pair<>("aqua_self_conditions", 3), light_conditions_1 + "aqua" + light_conditions_2);
+
+        //Allies
+        configs.addKeyValuePair(new Pair<>("aqua_allies_ally_low_health", 4), allies_low_health);
+        configs.addKeyValuePair(new Pair<>("aqua_allies_very_low_health", 1), caster_low_health);
+        configs.addKeyValuePair(new Pair<>("aqua_allies_surrounded", 1), caster_surrounded);
+        configs.addKeyValuePair(new Pair<>("aqua_allies_ally_armor_durability", 1), allies_low_armor);
+        configs.addKeyValuePair(new Pair<>("aqua_allies_conditions", 3), light_conditions_1 + "aqua" + light_conditions_2);
 
     }
 
@@ -374,6 +551,85 @@ public class TriggerConfig {
         FROST_ALLIES_SURROUNDED = CONFIG.getOrDefault("frost_allies_surrounded", 1);
         FROST_ALLIES_ALLY_ARMOR_DURABILITY = CONFIG.getOrDefault("frost_allies_ally_armor_durability", 1);
         FROST_ALLIES_CONDITIONS = CONFIG.getOrDefault("frost_allies_conditions", 3);
+
+        //==========================Earthen==========================
+        //Variant
+        EARTHEN_VARIANT_ALLY_LOW_HEALTH = CONFIG.getOrDefault("earthen_variant_allies_low_healthy", 3);
+        EARTHEN_VARIANT_VERY_LOW_HEALTH = CONFIG.getOrDefault("earthen_variant_very_low_health", 4);
+        EARTHEN_VARIANT_SURROUNDED = CONFIG.getOrDefault("earthen_variant_surrounded", 1);
+        EARTHEN_VARIANT_CONDITIONS = CONFIG.getOrDefault("earthen_variant_conditions", 3);
+
+        //Enemies
+        EARTHEN_ENEMIES_ALLY_LOW_HEALTH = CONFIG.getOrDefault("earthen_enemies_ally_low_health", 3);
+        EARTHEN_ENEMIES_VERY_LOW_HEALTH = CONFIG.getOrDefault("earthen_enemies_very_low_health", 4);
+        EARTHEN_ENEMIES_SURROUNDED = CONFIG.getOrDefault("earthen_enemies_surrounded", 1);
+        EARTHEN_ENEMIES_CONDITIONS = CONFIG.getOrDefault("earthen_enemies_conditions", 3);
+
+        //Self
+        EARTHEN_SELF_VERY_LOW_HEALTH = CONFIG.getOrDefault("earthen_self_very_low_health", 3);
+        EARTHEN_SELF_LOW_HEALTH = CONFIG.getOrDefault("earthen_self_low_health", 2);
+        EARTHEN_SELF_SURROUNDED = CONFIG.getOrDefault("earthen_self_surrounded", 2);
+        EARTHEN_SELF_CONDITIONS = CONFIG.getOrDefault("earthen_self_conditions", 3);
+
+        //Allies
+        EARTHEN_ALLIES_ALLY_LOW_HEALTH = CONFIG.getOrDefault("earthen_allies_ally_low_health", 4);
+        EARTHEN_ALLIES_VERY_LOW_HEALTH = CONFIG.getOrDefault("earthen_allies_very_low_health", 1);
+        EARTHEN_ALLIES_SURROUNDED = CONFIG.getOrDefault("earthen_allies_surrounded", 1);
+        EARTHEN_ALLIES_CONDITIONS = CONFIG.getOrDefault("earthen_allies_conditions", 3);
+
+        //==========================Wind==========================
+        //All
+        WIND_ALL_VERY_LOW_HEALTH = CONFIG.getOrDefault("wind_all_very_low_health", 4);
+        WIND_ALL_SURROUNDED = CONFIG.getOrDefault("wind_all_surrounded", 1);
+        WIND_ALL_FALLING = CONFIG.getOrDefault("wind_all_falling", 1);
+        WIND_ALL_FALLING_HIGH = CONFIG.getOrDefault("wind_all_falling_high", 3);
+        WIND_ALL_CONDITIONS = CONFIG.getOrDefault("wind_all_conditions", 3);
+
+        //SELF
+        WIND_SELF_VERY_LOW_HEALTH = CONFIG.getOrDefault("wind_self_very_low_health", 4);
+        WIND_SELF_LOW_HEALTH = CONFIG.getOrDefault("wind_self_low_health", 2);
+        WIND_SELF_SURROUNDED = CONFIG.getOrDefault("wind_self_surrounded", 1);
+        WIND_SELF_FALLING = CONFIG.getOrDefault("wind_self_falling", 1);
+        WIND_SELF_FALLING_HIGH = CONFIG.getOrDefault("wind_self_falling_high", 3);
+        WIND_SELF_CONDITIONS = CONFIG.getOrDefault("wind_self_conditions", 3);
+
+        //Allies
+        WIND_ALLIES_ALLY_LOW_HEALTH = CONFIG.getOrDefault("wind_allies_ally_low_health", 4);
+        WIND_ALLIES_VERY_LOW_HEALTH = CONFIG.getOrDefault("wind_allies_very_low_health", 1);
+        WIND_ALLIES_SURROUNDED = CONFIG.getOrDefault("wind_allies_surrounded", 1);
+        WIND_ALLIES_FALLING_HIGH = CONFIG.getOrDefault("wind_allies_ally_falling", 2);
+        WIND_ALLIES_ALLY_FALLING_HIGH = CONFIG.getOrDefault("wind_allies_ally_falling_high", 4);
+        WIND_ALLIES_ALLY_FALLING = CONFIG.getOrDefault("wind_allies_falling", 2);
+        WIND_ALLIES_CONDITIONS = CONFIG.getOrDefault("wind_allies_conditions", 3);
+
+        //==========================Aqua==========================
+        //All
+        AQUA_ALL_VERY_LOW_HEALTH = CONFIG.getOrDefault("aqua_all_very_low_health", 4);
+        AQUA_ALL_SURROUNDED = CONFIG.getOrDefault("aqua_all_surrounded", 1);
+        AQUA_ALL_ALLY_ARMOR_DURABILITY = CONFIG.getOrDefault("aqua_all_ally_armor_durability", 1);
+        AQUA_ALL_CONDITIONS = CONFIG.getOrDefault("aqua_all_conditions", 3);
+
+        //Enemies
+        AQUA_ENEMIES_VERY_LOW_HEALTH = CONFIG.getOrDefault("aqua_enemies_very_low_health", 3);
+        AQUA_ENEMIES_LOW_HEALTH = CONFIG.getOrDefault("aqua_enemies_low_health", 2);
+        AQUA_ENEMIES_SURROUNDED = CONFIG.getOrDefault("aqua_enemies_surrounded", 1);
+        AQUA_ENEMIES_ALLY_ARMOR_DURABILITY = CONFIG.getOrDefault("aqua_enemies_ally_armor_durability", 1);
+        AQUA_ENEMIES_CONDITIONS = CONFIG.getOrDefault("aqua_enemies_conditions", 3);
+
+        //SELF
+        AQUA_SELF_VERY_LOW_HEALTH = CONFIG.getOrDefault("aqua_self_very_low_health", 4);
+        AQUA_SELF_LOW_HEALTH = CONFIG.getOrDefault("aqua_self_low_health", 2);
+        AQUA_SELF_SURROUNDED = CONFIG.getOrDefault("aqua_self_armor_durability", 1);
+        AQUA_SELF_ARMOR_DURABILITY = CONFIG.getOrDefault("aqua_self_surrounded", 1);
+        AQUA_SELF_CONDITIONS = CONFIG.getOrDefault("aqua_self_conditions", 3);
+
+        //Allies
+        AQUA_ALLIES_ALLY_LOW_HEALTH = CONFIG.getOrDefault("aqua_allies_ally_low_health", 4);
+        AQUA_ALLIES_VERY_LOW_HEALTH = CONFIG.getOrDefault("aqua_allies_very_low_health", 1);
+        AQUA_ALLIES_SURROUNDED = CONFIG.getOrDefault("aqua_allies_surrounded", 1);
+        AQUA_ALLIES_ALLY_ARMOR_DURABILITY = CONFIG.getOrDefault("aqua_allies_ally_armor_durability", 1);
+        AQUA_ALLIES_CONDITIONS = CONFIG.getOrDefault("aqua_allies_conditions", 3);
+
     }
 }
 

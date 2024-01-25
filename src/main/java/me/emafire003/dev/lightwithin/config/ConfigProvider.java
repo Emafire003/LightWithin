@@ -28,6 +28,10 @@ public class ConfigProvider implements SimpleConfig.DefaultConfig {
             configContents += "\n";
             return;
         }
+        if(keyValuePair.getFirst().equals("comment")){
+            configContents += "#" + comment + "\n";
+            return;
+        }
         configsList.add(keyValuePair);
         configContents += "#" + comment + " | default= " + keyValuePair.getSecond() +  " | type= " + keyValuePair.getSecond().getClass().getSimpleName() +"\n" +
         keyValuePair.getFirst() + ":" + keyValuePair.getSecond() +"\n";

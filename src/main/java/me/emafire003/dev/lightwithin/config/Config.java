@@ -44,6 +44,7 @@ public class Config {
     public static int HP_PERCENTAGE_SELF;
     public static int HP_PERCENTAGE_ALLIES;
     public static int HP_PERCENTAGE_VARIANT;
+    public static int HP_PERCENTAGE_INCREMENT;
 
     public static boolean CHECK_ARMOR_DURABILITY;
     public static int DUR_PERCENTAGE_SELF;
@@ -71,6 +72,8 @@ public class Config {
 
     public static double DIV_SELF;
     public static boolean NOT_ALLY_THEN_ENEMY;
+
+    public static int FALL_TRIGGER;
 
     public static void registerConfigs() {
         configs = new ConfigProvider();
@@ -144,6 +147,7 @@ public class Config {
         configs.addKeyValuePair(new Pair<>("hp_percentage_self", 30), "The hp percentage below which the light will be triggerable if the target is SELF (like 15, 20, 50) (in some cases it may not apply)");
         configs.addKeyValuePair(new Pair<>("hp_percentage_allies", 50), "The hp percentage below which the light will be triggerable if the target is ALLIES (like 15, 20, 50) (in some cases it may not apply)");
         configs.addKeyValuePair(new Pair<>("hp_percentage_variant", 50), "The hp percentage below which the light will be triggerable if the target is VARIANT/Passive mobs for example (like 15, 20, 50) (in some cases it may not apply)");
+        configs.addKeyValuePair(new Pair<>("hp_percentage_increment", 20), "The hp percentage to add to differentiante from very low and low health");
         configs.addKeyValuePair(new Pair<>("min_allies_low", 1), "How many allies near the player should be on low health for them to trigger a light activation?");
 
         configs.addKeyValuePair(new Pair<>("spacer", "spacer"), "");
@@ -169,7 +173,7 @@ public class Config {
         configs.addKeyValuePair(new Pair<>("light_locked_default", false), "Should the light activation be locked by default? (Unless you use a command players won't be able to use lights)");
         configs.addKeyValuePair(new Pair<>("unlock_with_luxintus", true), "Should eating a Luxintus berry unlocked the light?");configs.addKeyValuePair(new Pair<>("not_ally_then_enemy", false), "Should a player that is not an explicit ALLY be considered an ENEMY?");
 
-        configs.addKeyValuePair(new Pair<>("spacer", "spacer"), "");
+        configs.addKeyValuePair(new Pair<>("fall_trigger", 25), "How many blocks should be passed before a fall is considered very high? 10 blocks added per level of Feather Falling");
 
     }
 
@@ -205,6 +209,7 @@ public class Config {
         HP_PERCENTAGE_SELF = CONFIG.getOrDefault("hp_percentage_self", 25);
         HP_PERCENTAGE_ALLIES = CONFIG.getOrDefault("hp_percentage_allies", 50);
         HP_PERCENTAGE_VARIANT = CONFIG.getOrDefault("hp_percentage_variant", 50);
+        HP_PERCENTAGE_INCREMENT = CONFIG.getOrDefault("hp_percentage_increment", 20);
 
         CHECK_ARMOR_DURABILITY = CONFIG.getOrDefault("check_armor_durability", false);
         DUR_PERCENTAGE_SELF = CONFIG.getOrDefault("dur_percentage_self", 5);
@@ -231,6 +236,7 @@ public class Config {
         MIN_ALLIES_LOW = Config.CONFIG.getOrDefault("min_allies_low", 1);
         DIV_SELF = Config.CONFIG.getOrDefault("div_self", 2.5);
         NOT_ALLY_THEN_ENEMY = Config.CONFIG.getOrDefault("not_ally_then_enemy", false);
+        FALL_TRIGGER = Config.CONFIG.getOrDefault("fall_trigger", 25);
     }
 }
 
