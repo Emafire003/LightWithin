@@ -4,6 +4,7 @@ import me.emafire003.dev.lightwithin.events.PlayerFirstJoinEvent;
 import me.emafire003.dev.lightwithin.events.PlayerJoinEvent;
 import net.minecraft.network.ClientConnection;
 import net.minecraft.server.PlayerManager;
+import net.minecraft.server.network.ConnectedClientData;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.stat.Stats;
 import net.minecraft.util.ActionResult;
@@ -15,7 +16,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(PlayerManager.class)
 public abstract class PlayerJoinMixin {
     @Inject(at = @At(value = "TAIL"), method = "onPlayerConnect", cancellable = true)
-    private void cancelAttackIfFrozen(ClientConnection connection, ServerPlayerEntity player, CallbackInfo info) {
+    private void injectOnPlayerJoin(ClientConnection connection, ServerPlayerEntity player, ConnectedClientData clientData, CallbackInfo ci) {
         PlayerJoinEvent.EVENT.invoker().joinServer(player, player.getServer());
         if (player.getStatHandler().getStat(Stats.CUSTOM.getOrCreateStat(Stats.LEAVE_GAME)) < 1) {
             PlayerFirstJoinEvent.EVENT.invoker().joinServerForFirstTime(player, player.getServer());
@@ -23,7 +24,7 @@ public abstract class PlayerJoinMixin {
 
         ActionResult result1 = PlayerJoinEvent.EVENT.invoker().joinServer(player, player.getServer());
         if (result1 == ActionResult.FAIL) {
-            info.cancel();
+            ci.cancel();
         }
     }
 }

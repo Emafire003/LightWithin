@@ -63,10 +63,11 @@ dependencies {
 	include modImplementation("dev.onyxstudios.cardinal-components-api:cardinal-components-entity:${project.cardinal_components_version}")
 
 	//Renderer
+	//Uh I think it's 1.19.3
 	//include modImplementation( 'com.github.0x3C50:Renderer:9804cf7d99' )c4faf83
 	//1.20.1
-	include modImplementation( 'com.github.0x3C50:Renderer:2273f5e562' )//2273f5e
-	//include modImplementation("com.github.0x3C50:Renderer:master-SNAPSHOT")
+	//include modImplementation( 'com.github.0x3C50:Renderer:2273f5e562' )//2273f5e
+	include modImplementation("com.github.0x3C50:Renderer:master-SNAPSHOT")
 
 	//StructurePlacerAPI
 	modImplementation "maven.modrinth:structureplacerapi:${project.structureplacerapi_version}"
@@ -81,12 +82,12 @@ dependencies {
 	modImplementation "maven.modrinth:factions:${project.factions_version}"
 
 	//Argonauts
-	modImplementation "maven.modrinth:argonauts:${project.argonauts_version}"
-	modImplementation "maven.modrinth:resourceful-lib:${project.resourcefullib_version}"
+	modCompileOnly "maven.modrinth:argonauts:${project.argonauts_version}"
+	modCompileOnly "maven.modrinth:resourceful-lib:${project.resourcefullib_version}"
 	//Which requires maybe: resourceful-lib
 
 	//Open parties and claims aka OPAC
-	modImplementation "maven.modrinth:open-parties-and-claims:${project.opac_version}"
+	modCompileOnly "maven.modrinth:open-parties-and-claims:${project.opac_version}"
 	//Which require maybe: forge-config-api-port
 
 	//Ftbteams
