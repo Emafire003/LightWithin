@@ -16,19 +16,6 @@ public class LightFatigueEffect extends StatusEffect {
         super(StatusEffectCategory.HARMFUL, 0x9EC1BE);
     }
 
-    @Override
-    public boolean canApplyUpdateEffect(int duration, int amplifier) {
-        // In our case, we just make it return true so that it applies the status effect every tick.
-        return true;
-    }
 
-    // This method is called when it applies the status effect. We implement custom functionality here.
-    @Override
-    public void applyUpdateEffect(LivingEntity entity, int amplifier) {
-    }
 
-    @Override
-    public void onRemoved(LivingEntity entity, AttributeContainer attributes, int amplifier){
-        super.onRemoved(entity, attributes, amplifier);
-    }
 }

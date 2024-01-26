@@ -32,8 +32,15 @@ public class WaterCascadeEffect extends StatusEffect {
 
     BlockPos start_pos;
 
+    boolean run = false;
+    LivingEntity entity;
+    // This method is called when it applies the status effect. We implement custom functionality here.
     @Override
     public void applyUpdateEffect(LivingEntity entity, int amplifier) {
+        if(!run){
+            run = true;
+            this.entity = entity;
+        }
         if(Config.STRUCTURE_GRIEFING){
             BlockPos pos = entity.getBlockPos();
             if(block_map.isEmpty()){
@@ -55,7 +62,7 @@ public class WaterCascadeEffect extends StatusEffect {
     }
 
     @Override
-    public void onRemoved(LivingEntity entity, AttributeContainer attributes, int amplifier){
+    public void onRemoved(AttributeContainer attributes){
 
         block_map.forEach(((blockPos, blockState) -> {
             if(blockPos.equals(start_pos)){
@@ -65,7 +72,7 @@ public class WaterCascadeEffect extends StatusEffect {
         }));
 
         block_map.clear();
-        super.onRemoved(entity, attributes, amplifier);
+        super.onRemoved(attributes);
     }
 
 }
