@@ -1,5 +1,6 @@
 package me.emafire003.dev.lightwithin.events;
 
+import me.emafire003.dev.lightwithin.client.LightWithinClient;
 import me.emafire003.dev.lightwithin.component.LightComponent;
 import me.emafire003.dev.lightwithin.lights.InnerLightType;
 import me.emafire003.dev.lightwithin.status_effects.LightEffects;
@@ -10,6 +11,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.passive.PassiveEntity;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.math.Box;
@@ -331,7 +333,7 @@ public class LightTriggeringAndEvents {
             return ActionResult.PASS;
         } );
 
-        AllyDeathEvent.EVENT.register(((entity, source) -> {
+        EntityDeathEvent.EVENT.register(((entity, source) -> {
             List<PlayerEntity> players = entity.getWorld().getEntitiesByClass(PlayerEntity.class, new Box(entity.getBlockPos()).expand(box_expansion_amount), (entity1 -> true));
 
             for(PlayerEntity player : players){

@@ -14,6 +14,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.option.Perspective;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
 import static me.emafire003.dev.lightwithin.LightWithin.LOGGER;
@@ -50,6 +51,14 @@ public class RendererEventHandler {
             RenderSystem.enableBlend();
             RenderSystem.defaultBlendFunc();
             if(LightWithinClient.isLightReady()){
+                //Done to the bug of the light being avilable even after death
+                assert MinecraftClient.getInstance().player != null;
+                if(MinecraftClient.getInstance().player.isDead()){
+                    LOGGER.info("Player dead, setting light on false");
+                    MinecraftClient.getInstance().player.sendMessage(Text.literal("Hello, setting false"));
+                    LightWithinClient.setLightReady(false);
+                    return;
+                }
                 ClipStack.addWindow(matrixStack.getMatrices(),new Rectangle(1,1,1000,1000));
                 Renderer2d.renderTexture(matrixStack.getMatrices(), new Identifier(LightWithin.MOD_ID, "textures/lights/light.png"), x, y, 20, 20);
                 ClipStack.popWindow();

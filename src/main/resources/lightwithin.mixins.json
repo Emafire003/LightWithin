@@ -7,7 +7,7 @@
     "PlayerJoinMixin",
     "MilkNotCleanLightEffectsMixin",
     "EntityAttackEntityMixin",
-    "AllyDeathMixin",
+    "EntityDeathMixin",
     "FreezeEntityMixin",
     "DrownedEntityMixin",
     "EntityFallingMixin",

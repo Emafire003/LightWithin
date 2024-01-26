@@ -39,7 +39,7 @@ public class WaterSlideEffect extends StatusEffect {
     // This method is called when it applies the status effect. We implement custom functionality here.
     @Override
     public void applyUpdateEffect(LivingEntity entity, int amplifier) {
-        if(Config.STRUCTURE_GRIEFING && !entity.getWorld().isClient && !entity.getWorld().getBlockState(entity.getBlockPos()).isOf(Blocks.WATER)){
+        if(Config.STRUCTURE_GRIEFING && !entity.getWorld().getBlockState(entity.getBlockPos()).isOf(Blocks.WATER)){
             Direction facing = entity.getHorizontalFacing();
 
             BlockPos pos = entity.getBlockPos();

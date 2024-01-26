@@ -33,7 +33,6 @@ public class FabriDash {
     }
 
     public static void sendVelocityPacket(ServerPlayerEntity player, Vec3d vel){
-        LOGGER.info("Sending the packet, with this vel: "+ vel);
         try{
             ServerPlayNetworking.send(player, WindLightVelocityPacketS2C.ID, new WindLightVelocityPacketS2C(vel));
         }catch(Exception e){

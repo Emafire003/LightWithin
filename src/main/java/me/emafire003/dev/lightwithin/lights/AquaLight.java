@@ -10,7 +10,10 @@ import me.emafire003.dev.lightwithin.sounds.LightSounds;
 import me.emafire003.dev.lightwithin.status_effects.LightEffects;
 import me.emafire003.dev.lightwithin.util.SpawnUtils;
 import me.emafire003.dev.lightwithin.util.TargetType;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
@@ -23,12 +26,17 @@ import net.minecraft.entity.LightningEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.entity.projectile.TridentEntity;
+import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.text.Text;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 
+import java.util.HashMap;
 import java.util.List;
 
 import static me.emafire003.dev.lightwithin.LightWithin.*;
@@ -158,7 +166,6 @@ public class AquaLight extends InnerLight {
             for(LivingEntity target : this.targets){
                 //TODO ok not even for the allies
                 //target.playSound(LightSounds.AQUA_LIGHT, 0.9f, 1);
-
                 if(this.power_multiplier < 4){
                     target.addStatusEffect(new StatusEffectInstance(LightEffects.WATER_SLIDE, this.duration*20, 2, false, false));
                 }else{
@@ -185,9 +192,13 @@ public class AquaLight extends InnerLight {
             for(LivingEntity target : this.targets){
                 //TODO should I play the sound for every enemy? Nah
                 //target.playSound(LightSounds.AQUA_LIGHT, 0.9f, 1);
-                if(Config.STRUCTURE_GRIEFING && !caster.getWorld().isClient) {
-                    target.addStatusEffect(new StatusEffectInstance(LightEffects.WATER_CASCADE, (int) (this.power_multiplier*3), 0, false, false));
 
+                if(Config.STRUCTURE_GRIEFING && !caster.getWorld().isClient) {
+                    if(target instanceof PlayerEntity){
+                        applyWaterCascade(target, (int) (this.power_multiplier*3));
+                    }else{
+                        target.addStatusEffect(new StatusEffectInstance(LightEffects.WATER_CASCADE, (int) (this.power_multiplier*3), 0, false, false));
+                    }
                     if(this.power_multiplier >= 5){
                         ItemStack trident = new ItemStack(Items.TRIDENT);
                         trident.addEnchantment(Enchantments.CHANNELING, 1);
@@ -207,6 +218,57 @@ public class AquaLight extends InnerLight {
             }
         }
 
+    }
+
+    HashMap<BlockPos, BlockState> block_map = new HashMap();
+
+    BlockPos start_pos;
+    int tickCounter = 0;
+    int blockCounter = 0;
+
+    public void applyWaterCascade(LivingEntity entity, int blocks){
+        blockCounter = blocks;
+        ServerTickEvents.END_SERVER_TICK.register((server -> {
+            if(tickCounter > blocks || tickCounter == -1){
+                if(tickCounter == -1){
+                    return;
+                }
+                tickCounter = -1;
+                block_map.forEach(((blockPos, blockState) -> {
+                    if(blockPos.equals(start_pos)){
+                        entity.getWorld().setBlockState(start_pos, Blocks.SPONGE.getDefaultState());
+                    }
+                    entity.getWorld().setBlockState(blockPos, blockState);
+                }));
+                block_map.clear();
+                return;
+            }
+            tickCounter++;
+            //Skips a few ticks so it goes a little slower and is cooler. Hopefully
+            if(tickCounter%4 == 0){
+                blockCounter++;
+                return;
+            }
+            if(Config.STRUCTURE_GRIEFING){
+                entity.sendMessage(Text.literal("Ok getting pos inside the structre griefing if. Also, is client: " + entity.getWorld().isClient));
+                BlockPos pos = entity.getBlockPos();
+                if(block_map.isEmpty()){
+                    entity.sendMessage(Text.literal("BlockMap eempty"));
+                    start_pos = pos;
+                    block_map.put(pos, entity.getWorld().getBlockState(pos));
+                }else{
+                    if(block_map.containsKey(pos.up())){
+                        return;
+                    }
+                    block_map.put(pos.up(), entity.getWorld().getBlockState(pos.up()));
+                }
+
+                entity.getWorld().setBlockState(pos.up(), Fluids.WATER.getFlowing(7, true).getBlockState());
+                Vec3d posc = pos.toCenterPos();
+                entity.sendMessage(Text.literal("Teleporting to: "+ posc.getX() + " " + posc.getY()+1  + " " +posc.getZ()));
+                entity.teleport(posc.getX(), posc.getY()+1, posc.getZ());
+            }
+        }));
     }
 
 }

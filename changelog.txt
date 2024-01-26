@@ -120,5 +120,8 @@ Restructured the config completely :}
 Blazing light has a new target: Variant
 Identical to ENEMIES, but soul flame themed.
 
+Fixed a bug where the light was availbale after death.
+Fixed rendering or the runes and stuff
+
 Updated the AQUA light ENEMIES target: Now instead of weird cages of mangrove roots the enemies will be launched
 into the air by a water column/geyser, hitting a trident (which is not pickup-able anymore) if the power level is high enough.

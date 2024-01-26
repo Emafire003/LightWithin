@@ -5,9 +5,9 @@ import net.fabricmc.fabric.api.event.EventFactory;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 
-public interface AllyDeathEvent {
-    Event<AllyDeathEvent> EVENT = EventFactory.createArrayBacked(AllyDeathEvent.class, (listeners) -> (entity, source) -> {
-        for (AllyDeathEvent listener : listeners) {
+public interface EntityDeathEvent {
+    Event<EntityDeathEvent> EVENT = EventFactory.createArrayBacked(EntityDeathEvent.class, (listeners) -> (entity, source) -> {
+        for (EntityDeathEvent listener : listeners) {
            listener.dead(entity, source);
         }
     });

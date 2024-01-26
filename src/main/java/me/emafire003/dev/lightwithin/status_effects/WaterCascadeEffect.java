@@ -1,13 +1,16 @@
 package me.emafire003.dev.lightwithin.status_effects;
 
 import me.emafire003.dev.lightwithin.config.Config;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.AttributeContainer;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectCategory;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.Fluids;
+import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 
@@ -31,8 +34,7 @@ public class WaterCascadeEffect extends StatusEffect {
 
     @Override
     public void applyUpdateEffect(LivingEntity entity, int amplifier) {
-        if(Config.STRUCTURE_GRIEFING && !entity.getWorld().isClient){
-
+        if(Config.STRUCTURE_GRIEFING){
             BlockPos pos = entity.getBlockPos();
             if(block_map.isEmpty()){
                 start_pos = pos;
@@ -43,10 +45,12 @@ public class WaterCascadeEffect extends StatusEffect {
                 }
                 block_map.put(pos.up(), entity.getWorld().getBlockState(pos.up()));
             }
-            
+
             entity.getWorld().setBlockState(pos.up(), Fluids.WATER.getFlowing(7, true).getBlockState());
             Vec3d posc = pos.toCenterPos();
             entity.teleport(posc.getX(), posc.getY()+1, posc.getZ());
+
+
         }
     }
 
