@@ -45,7 +45,7 @@ For Earthen light:
     SELF: Very low health, low health, surrounded, earthen conditions
     ALLIES: Ally low health, self very low health, earthen conditions, surrounded (again, weights vary)
 For Wind light:
-    VARIANT: TODO subject to change: Very low health, surrounded, falling from a small height, falling from a higher height, wind conditions
+    VARIANT: very low health, surrounded, falling from a small height, falling from a higher height, wind conditions
     SELF: Low health, Very low health, big fall, small fall, wind conditins, surrounded
     ALLIES: allies low health, self very low health, surrounded, self falling (10 blocks), wind conditions, allies falling (20 blocks TODO maybe change),
 For Aqua light:

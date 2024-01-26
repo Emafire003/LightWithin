@@ -310,7 +310,6 @@ public class CheckUtils {
         //loops through the entities near the player, if the entities are in the same team as the player
         //and they are not the entity that has been hit then add them to the team_entities and check if their health is ok
         for(LivingEntity ent : entities){
-            //TODO might be that another ally is the attacker
             //Checks if the entity in the list is in the same team/faction/party/pet or not
             if(!player.equals(attacker) && !attacker.equals(ent) && !player.equals(ent) && CheckAllies.checkAlly(player, ent) ){
                 //if it is, check the health

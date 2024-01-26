@@ -9,7 +9,6 @@ import net.minecraft.util.Identifier;
 public class LightUsedPacketC2S extends PacketByteBuf {
     public static final Identifier ID = new Identifier(LightWithin.MOD_ID , "light_used_packet");
 
-    //TODO insert either the component or the player or the UUID if i can get the player from uuid from the server
     public LightUsedPacketC2S(boolean used) {
         super(Unpooled.buffer());
         this.writeBoolean(used);

@@ -104,8 +104,6 @@ public class LightTriggerChecks {
         }
     }
 
-    //TODO togliere valori strani per la health percent
-
     public static void checkDefense(PlayerEntity player, LightComponent component, LivingEntity attacker, LivingEntity target){
         double trigger_sum = 0;
         /**CHECKS for the self part*/
