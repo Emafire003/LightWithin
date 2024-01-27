@@ -1,8 +1,6 @@
 # LightWithin Mod
-Still a bit WIP
-
 This mod adds a new mechanic, called *"InnerLights"* which are cool fancy magicalish powers present within the player, and they are pretty much **UNIQUE** for every single
-one. It is also highly configurable, so you can customize it to your needs!
+one. And you can't just spam them, they will only help you if your are in danger! It is also highly configurable, and multiplayer friendly!
 
 ![banner_lighter](https://github.com/Emafire003/LightWithin/assets/29462910/95d1a6a7-e89a-4956-a148-b0bc215387e0)
 
@@ -11,8 +9,7 @@ Each light has a cool sound design and distinct effects, with particles, custom 
 
 And all of this is different from player to player, so everyone will have their personal secret power!
 
-You can look at the video/images below or check the wiki for demos of these lights. Or you could preserve the surprise and just play with the mod and find out yourself!
-
+Check the wiki for info about all of these lights. Or you could preserve the surprise and just play with the mod and find out yourself!
 <p align="center">
   <img src="https://user-images.githubusercontent.com/29462910/171922554-e776af80-241a-4acc-a5f8-1d0b3f26211c.gif" />
 </p>
@@ -35,8 +32,6 @@ The best way to enjoy this mod is with other people on a server, so you can use 
 In order to activate them you need to meet specific conditions, which often vary between light types. Usually, it involves fighting with another mob/enemy player and being "in danger", for example on low health, or being surrounded by many enemies. To be more precise, usally you need to meet more than one condition in order to trigger the activation. In my opinion it's better to just discover how to activate your light by playing, so I won't go in further detail here, look at the wiki instead.
 
 Once you have met these conditions, an icon ![light](https://github.com/Emafire003/LightWithin/assets/29462910/4453adb1-5c40-4fa6-8a96-94ad8f0d2579) will appear in the top left corner signaling that your light is ready to be released. Press the keybind **V** (default, you can change it) and activate your light!
-
-// ADD a gif of the icon appearing and also the light triggering//
 
 There is also a magical item called **Luxintus Berry** which lets you activate the light regardless of the conditions. It's kind of an energy drink for your inner light! Another 2 "Lux" berry are present, allowing you to change your light type and knowing which light type you have without needing to trigger it or use commands. (Check the wiki for more info!)
 
@@ -79,6 +74,6 @@ Some of the code for the commands: Factions mod (MIT license)
 - Legendary lights with an heavy lore behind them (For now i can say, "black white and ???"
 - Fix bugs
 - A proper API sort of
-- A way to make the numerical light types adjustable in-game
+- A way to make the adjust the power & duration & cooldown with game items
 - Suggestions accepted. But not guaranteed.
 
