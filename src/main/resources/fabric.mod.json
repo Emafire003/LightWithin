@@ -4,7 +4,7 @@
   "version": "${version}",
 
   "name": "LightWithin",
-  "description": "Adding new fancy and unique powers to every player, the 'InnerLights' which are going to help them in troubling times!",
+  "description": "Adding new fancy magialish and player-unique powers, the 'InnerLights' which are going to activate when the player is in danger!",
   "authors": [
     "Emafire003"
   ],
@@ -47,6 +47,6 @@
     ]
   },
   "recommends": {
-    "coloredglowlib": ">=2.0.1"
+    "coloredglowlib": ">=2.0.3"
   }
 }

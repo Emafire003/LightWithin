@@ -63,11 +63,10 @@ dependencies {
 	include modImplementation("dev.onyxstudios.cardinal-components-api:cardinal-components-entity:${project.cardinal_components_version}")
 
 	//Renderer
-	//Uh I think it's 1.19.3
 	//include modImplementation( 'com.github.0x3C50:Renderer:9804cf7d99' )c4faf83
 	//1.20.1
-	//include modImplementation( 'com.github.0x3C50:Renderer:2273f5e562' )//2273f5e
-	include modImplementation("com.github.0x3C50:Renderer:master-SNAPSHOT")
+	include modImplementation( 'com.github.0x3C50:Renderer:2273f5e562' )//2273f5e
+	//include modImplementation("com.github.0x3C50:Renderer:master-SNAPSHOT")
 
 	//StructurePlacerAPI
 	modImplementation "maven.modrinth:structureplacerapi:${project.structureplacerapi_version}"
@@ -98,7 +97,7 @@ dependencies {
 	modCompileOnly "curse.maven:ftblibrary-438495:4596510"//home: https://www.curseforge.com/minecraft/mc-mods/ftb-library-fabric
 
 	//Permissions
-	modImplementation "me.lucko:fabric-permissions-api:${project.fabricperms_version}"
+	modCompileOnly "me.lucko:fabric-permissions-api:${project.fabricperms_version}"
 
 	//ReplayMod (to fix the runes rendering)
 	modCompileOnly "maven.modrinth:replaymod:${project.replaymod_version}"
