@@ -7,7 +7,6 @@ import me.emafire003.dev.lightwithin.lights.InnerLight;
 import me.emafire003.dev.lightwithin.lights.InnerLightType;
 import me.emafire003.dev.lightwithin.util.TargetType;
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.AttributeContainer;
 import net.minecraft.entity.effect.StatusEffect;
@@ -41,15 +40,9 @@ public class LightActiveEffect extends StatusEffect {
         return true;
     }
 
-    boolean run = false;
-    LivingEntity entity;
     // This method is called when it applies the status effect. We implement custom functionality here.
     @Override
     public void applyUpdateEffect(LivingEntity entity, int amplifier) {
-        if(!run){
-            run = true;
-            this.entity = entity;
-        }
         //TODO why is this here?
         if(entity instanceof ServerPlayerEntity){
             LightComponent component = LIGHT_COMPONENT.get(entity);
@@ -62,7 +55,7 @@ public class LightActiveEffect extends StatusEffect {
 
     //TODO after updating CGL to 3.0.0 I'll need to remove this most likely
     @Override
-    public void onRemoved(AttributeContainer attributes){
+    public void onRemoved(LivingEntity entity, AttributeContainer attributes, int amplifier){
         if(!entity.hasStatusEffect(StatusEffects.GLOWING)){
             entity.setGlowing(false);
         }
@@ -77,6 +70,6 @@ public class LightActiveEffect extends StatusEffect {
         if(entity instanceof PlayerEntity){
             entity.addStatusEffect(new StatusEffectInstance(LightEffects.LIGHT_FATIGUE, (int) (Config.COOLDOWN_MULTIPLIER*20*component.getMaxCooldown()), 1));
         }
-        super.onRemoved(attributes);
+        super.onRemoved(entity, attributes, amplifier);
     }
 }
