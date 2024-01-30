@@ -110,7 +110,7 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 
 
 		ServerLifecycleEvents.SERVER_STARTED.register(minecraftServer -> {
-			if(FabricLoader.getInstance().isModLoaded(CGLCompat.getModID())){
+			if(FabricLoader.getInstance().isModLoaded("coloredglowlib")){
 				CGLCompat.getLib().setOverrideTeamColors(true);
 			}
 			box_expansion_amount = Config.AREA_OF_SEARCH_FOR_ENTITIES;
@@ -175,7 +175,7 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 			return;
 		}
 		//TODO after updating CGL to 3.0.0 I'll need to remove this most likely
-		if(FabricLoader.getInstance().isModLoaded(CGLCompat.getModID())){
+		if(FabricLoader.getInstance().isModLoaded("coloredglowlib")){
 			component.setPrevColor(CGLCompat.toHex(CGLCompat.getLib().getEntityColor(player)));
 		}
 

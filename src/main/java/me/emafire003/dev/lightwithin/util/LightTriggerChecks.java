@@ -217,6 +217,9 @@ public class LightTriggerChecks {
             if(Config.CHECK_SURROUNDED && CheckUtils.checkSurrounded(player)){
                 trigger_sum=trigger_sum+TriggerConfig.BLAZING_ALL_SURROUNDED;
             }
+            if(player.isOnFire()){
+                trigger_sum = trigger_sum+TriggerConfig.BLAZING_ALL_ONFIRE;
+            }
             //Checks if the player has low armor durability
             if(Config.CHECK_ARMOR_DURABILITY && CheckUtils.checkArmorDurability(player, Config.DUR_PERCENTAGE_SELF)){
                 trigger_sum=trigger_sum+TriggerConfig.BLAZING_ALL_ARMOR_DURABILITY;
@@ -238,6 +241,9 @@ public class LightTriggerChecks {
             //Checks if the player is surrounded
             if(Config.CHECK_SURROUNDED && CheckUtils.checkSurrounded(player)){
                 trigger_sum=trigger_sum+TriggerConfig.BLAZING_ENEMIES_SURROUNDED;
+            }
+            if(player.isOnFire()){
+                trigger_sum = trigger_sum+TriggerConfig.BLAZING_ENEMIES_ONFIRE;
             }
             //Checks if the player'sallies have low armor durability
             if(!player.equals(target) && Config.CHECK_ARMOR_DURABILITY && CheckUtils.checkAllyArmor(player, target, Config.DUR_PERCENTAGE_ALLIES)){
@@ -277,6 +283,9 @@ public class LightTriggerChecks {
                 trigger_sum=trigger_sum+TriggerConfig.FROST_ALL_ARMOR_DURABILITY;
             }
 
+            if(player.isFrozen()){
+                trigger_sum=trigger_sum+TriggerConfig.FROST_ALL_FREEZING;
+            }
             if(CheckUtils.checkFrost(player)){
                 trigger_sum = trigger_sum + TriggerConfig.FROST_ALL_CONDITIONS;
             }
@@ -294,7 +303,9 @@ public class LightTriggerChecks {
             if(CheckUtils.checkSelfDanger(player, Config.HP_PERCENTAGE_SELF+5)){
                 trigger_sum = trigger_sum + TriggerConfig.FROST_ENEMIES_VERY_LOW_HEALTH;
             }
-
+            if(player.isFrozen()){
+                trigger_sum=trigger_sum+TriggerConfig.FROST_ENEMIES_FREEZING;
+            }
             //Checks if the player'sallies have low armor durability
             if(Config.CHECK_ARMOR_DURABILITY && CheckUtils.checkAllyArmor(player, target, Config.DUR_PERCENTAGE_ALLIES)){
                 trigger_sum=trigger_sum+TriggerConfig.FROST_ENEMIES_ALLY_ARMOR_DURABILITY;
@@ -327,7 +338,9 @@ public class LightTriggerChecks {
             if(Config.CHECK_ARMOR_DURABILITY && CheckUtils.checkArmorDurability(player, Config.DUR_PERCENTAGE_SELF)){
                 trigger_sum=trigger_sum+TriggerConfig.FROST_SELF_ARMOR_DURABILITY;
             }
-
+            if(player.isFrozen()){
+                trigger_sum=trigger_sum+TriggerConfig.FROST_SELF_FREEZING;
+            }
             if(CheckUtils.checkFrost(player)){
                 trigger_sum = trigger_sum + TriggerConfig.FROST_SELF_CONDITIONS;
             }
@@ -342,7 +355,12 @@ public class LightTriggerChecks {
             if(CheckUtils.checkSelfDanger(player, Config.HP_PERCENTAGE_SELF)){
                 trigger_sum = trigger_sum + TriggerConfig.FROST_ALLIES_VERY_LOW_HEALTH;
             }
-
+            if(player.isFrozen()){
+                trigger_sum=trigger_sum+TriggerConfig.FROST_ALLIES_FREEZING;
+            }
+            if(target.isFrozen()){
+                trigger_sum=trigger_sum+TriggerConfig.FROST_ALLIES_ALLY_FREEZING;
+            }
             //Checks if the player'sallies have low armor durability
             if(Config.CHECK_ARMOR_DURABILITY && CheckUtils.checkAllyArmor(player, target, Config.DUR_PERCENTAGE_ALLIES)){
                 trigger_sum=trigger_sum+TriggerConfig.FROST_ALLIES_ALLY_ARMOR_DURABILITY;
@@ -561,6 +579,10 @@ public class LightTriggerChecks {
                 trigger_sum=trigger_sum+TriggerConfig.AQUA_ALL_ALLY_ARMOR_DURABILITY;
             }
 
+            if(player.getAir() == 0){
+                trigger_sum=trigger_sum+TriggerConfig.AQUA_ALL_DROWNING;
+            }
+
             if(CheckUtils.checkAqua(player)){
                 trigger_sum = trigger_sum + TriggerConfig.AQUA_ALL_CONDITIONS;
             }
@@ -579,6 +601,9 @@ public class LightTriggerChecks {
 
             if(Config.CHECK_SURROUNDED && (CheckUtils.checkSurrounded(player))){
                 trigger_sum = trigger_sum + TriggerConfig.AQUA_ENEMIES_SURROUNDED;
+            }
+            if(player.getAir() == 0){
+                trigger_sum=trigger_sum+TriggerConfig.AQUA_ENEMIES_DROWNING;
             }
 
             //Checks if the player'sallies have low armor durability
@@ -602,6 +627,9 @@ public class LightTriggerChecks {
 
             if(Config.CHECK_SURROUNDED && (CheckUtils.checkSurrounded(player))){
                 trigger_sum = trigger_sum + TriggerConfig.AQUA_SELF_SURROUNDED;
+            }
+            if(player.getAir() == 0){
+                trigger_sum=trigger_sum+TriggerConfig.AQUA_SELF_DROWNING;
             }
 
             if(Config.CHECK_ARMOR_DURABILITY && CheckUtils.checkArmorDurability(player, Config.DUR_PERCENTAGE_SELF)){
@@ -627,6 +655,12 @@ public class LightTriggerChecks {
             //Checks if the player'sallies have low armor durability
             if(!player.equals(target) && Config.CHECK_ARMOR_DURABILITY && CheckUtils.checkAllyArmor(player, target, Config.DUR_PERCENTAGE_ALLIES)){
                 trigger_sum=trigger_sum+TriggerConfig.AQUA_ALLIES_ALLY_ARMOR_DURABILITY;
+            }
+            if(player.getAir() == 0){
+                trigger_sum=trigger_sum+TriggerConfig.AQUA_ALLIES_DROWNING;
+            }
+            if(CheckUtils.CheckAllies.checkAlly(player, target) && target.getAir() == 0){
+                trigger_sum=trigger_sum+TriggerConfig.AQUA_ALLIES_ALLY_DROWNING;
             }
 
             //Checks if the player is surrounded

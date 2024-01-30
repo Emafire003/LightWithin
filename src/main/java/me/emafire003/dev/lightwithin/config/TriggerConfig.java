@@ -15,7 +15,7 @@ public class TriggerConfig {
 
     private static final int ver = 1;
     public static int VERSION;
-    
+
     public static int TRIGGER_THRESHOLD;
 
     //Heal light
@@ -76,6 +76,7 @@ public class TriggerConfig {
     public static int BLAZING_ALL_SURROUNDED;
     public static int BLAZING_ALL_ARMOR_DURABILITY;
     public static int BLAZING_ALL_CONDITIONS;
+    public static int BLAZING_ALL_ONFIRE;
 
     //Enemies
     public static int BLAZING_ENEMIES_VERY_LOW_HEALTH;
@@ -83,6 +84,7 @@ public class TriggerConfig {
     public static int BLAZING_ENEMIES_ALLY_ARMOR_DURABILITY;
     public static int BLAZING_ENEMIES_ARMOR_DURABILITY;
     public static int BLAZING_ENEMIES_CONDITIONS;
+    public static int BLAZING_ENEMIES_ONFIRE;
 
     //Frost light
     //All
@@ -91,6 +93,7 @@ public class TriggerConfig {
     public static int FROST_ALL_SURROUNDED;
     public static int FROST_ALL_ARMOR_DURABILITY;
     public static int FROST_ALL_CONDITIONS;
+    public static int FROST_ALL_FREEZING;
 
     //Enemies
     public static int FROST_ENEMIES_VERY_LOW_HEALTH;
@@ -99,12 +102,14 @@ public class TriggerConfig {
     public static int FROST_ENEMIES_ALLY_ARMOR_DURABILITY;
     public static int FROST_ENEMIES_ARMOR_DURABILITY;
     public static int FROST_ENEMIES_CONDITIONS;
+    public static int FROST_ENEMIES_FREEZING;
 
     //SELF
     public static int FROST_SELF_VERY_LOW_HEALTH;
     public static int FROST_SELF_LOW_HEALTH;
     public static int FROST_SELF_ARMOR_DURABILITY;
     public static int FROST_SELF_CONDITIONS;
+    public static int FROST_SELF_FREEZING;
 
     //Allies
     public static int FROST_ALLIES_ALLY_LOW_HEALTH;
@@ -112,6 +117,8 @@ public class TriggerConfig {
     public static int FROST_ALLIES_SURROUNDED;
     public static int FROST_ALLIES_ALLY_ARMOR_DURABILITY;
     public static int FROST_ALLIES_CONDITIONS;
+    public static int FROST_ALLIES_FREEZING;
+    public static int FROST_ALLIES_ALLY_FREEZING;
 
     //Earthen light
     //Variant
@@ -169,6 +176,7 @@ public class TriggerConfig {
     public static int AQUA_ALL_SURROUNDED;
     public static int AQUA_ALL_ALLY_ARMOR_DURABILITY;
     public static int AQUA_ALL_CONDITIONS;
+    public static int AQUA_ALL_DROWNING;
 
     //Enemies
     public static int AQUA_ENEMIES_VERY_LOW_HEALTH;
@@ -176,6 +184,7 @@ public class TriggerConfig {
     public static int AQUA_ENEMIES_SURROUNDED;
     public static int AQUA_ENEMIES_ALLY_ARMOR_DURABILITY;
     public static int AQUA_ENEMIES_CONDITIONS;
+    public static int AQUA_ENEMIES_DROWNING;
 
     //SELF
     public static int AQUA_SELF_VERY_LOW_HEALTH;
@@ -183,6 +192,7 @@ public class TriggerConfig {
     public static int AQUA_SELF_SURROUNDED;
     public static int AQUA_SELF_ARMOR_DURABILITY;
     public static int AQUA_SELF_CONDITIONS;
+    public static int AQUA_SELF_DROWNING;
 
     //Allies
     public static int AQUA_ALLIES_ALLY_LOW_HEALTH;
@@ -190,7 +200,9 @@ public class TriggerConfig {
     public static int AQUA_ALLIES_SURROUNDED;
     public static int AQUA_ALLIES_ALLY_ARMOR_DURABILITY;
     public static int AQUA_ALLIES_CONDITIONS;
-    
+    public static int AQUA_ALLIES_DROWNING;
+    public static int AQUA_ALLIES_ALLY_DROWNING;
+
 
     private static final String config_name = "_trigger_balance";
     public static void registerConfigs() {
@@ -235,9 +247,9 @@ public class TriggerConfig {
     private static final String allies_low_health = "The contribution to the trigger threshold when the caster's ALLIES are in danger and on low health";
     private static final String allies_low_armor = "The contribution to the trigger threshold when the caster's allies have low durability armor. (If enabled)";
     private static final String allies_poisoned = "The contribution to the trigger threshold when the caster's allies are poisoned";
-    
+
     private static final String passive_low_health = "The contribution to the trigger threshold when passive mobs are in danger and on low health";
-    private static final String other_harmful = "The contribution to the trigger threshold when another entity has an harmful status effect";        
+    private static final String other_harmful = "The contribution to the trigger threshold when another entity has an harmful status effect";
 
     private static final String light_conditions_1 = "The contribution to the trigger threshold when the ";
     private static final String light_conditions_2 = " light conditions are met";
@@ -247,9 +259,16 @@ public class TriggerConfig {
     private static final String allies_falling = "The contribution to the trigger threshold made by the caster's allies falling a few blocks";
     private static final String allies_falling_high = "The contribution to the trigger threshold made by the caster's allies falling a lot of blocks";
 
+    private static final String caster_burning = "The contribution to the trigger threshold made by the caster being on fire";
+    private static final String caster_freezing = "The contribution to the trigger threshold made by the caster freezing";
+    private static final String ally_freezing = "The contribution to the trigger threshold made by the caster's allies being freezing";
+    private static final String caster_drowning = "The contribution to the trigger threshold made by the caster drowning";
+    private static final String ally_drowning = "The contribution to the trigger threshold made by the caster's allies drowning";
+
+
     private static void createConfigs() {
         configs.addKeyValuePair(new Pair<>("version", ver), "The version of the config. DO NOT CHANGE IT :D");
-        
+
         configs.addKeyValuePair(new Pair<>("trigger_threshold", 5), "The threshold to reach in order to activate a light");
 
         configs.addKeyValuePair(new Pair<>("spacer", "spacer"), "");
@@ -319,6 +338,7 @@ public class TriggerConfig {
         configs.addKeyValuePair(new Pair<>("blazing_all_low_health", 2), caster_low_health);
         configs.addKeyValuePair(new Pair<>("blazing_all_surrounded", 1), caster_surrounded);
         configs.addKeyValuePair(new Pair<>("blazing_all_armor_durability", 1), caster_low_armor);
+        configs.addKeyValuePair(new Pair<>("blazing_all_onfire", 1), caster_burning);
         configs.addKeyValuePair(new Pair<>("blazing_all_conditions", 3), light_conditions_1 + "blazing" + light_conditions_2);
 
         //Enemies-Variant
@@ -326,6 +346,7 @@ public class TriggerConfig {
         configs.addKeyValuePair(new Pair<>("blazing_enemies_surrounded", 1), caster_surrounded);
         configs.addKeyValuePair(new Pair<>("blazing_all_armor_durability", 1), caster_low_armor);
         configs.addKeyValuePair(new Pair<>("blazing_enemies_ally_armor_durability", 2), allies_low_armor);
+        configs.addKeyValuePair(new Pair<>("blazing_enemies_onfire", 1), caster_burning);
         configs.addKeyValuePair(new Pair<>("blazing_enemies_conditions", 3), light_conditions_1 + "blazing" + light_conditions_2);
 
         configs.addKeyValuePair(new Pair<>("spacer", "spacer"), "");
@@ -336,6 +357,7 @@ public class TriggerConfig {
         configs.addKeyValuePair(new Pair<>("frost_all_low_health", 2), caster_low_health);
         configs.addKeyValuePair(new Pair<>("frost_all_surrounded", 1), caster_surrounded);
         configs.addKeyValuePair(new Pair<>("frost_all_armor_durability", 1), caster_low_armor);
+        configs.addKeyValuePair(new Pair<>("frost_all_freezing", 1), caster_freezing);
         configs.addKeyValuePair(new Pair<>("frost_all_conditions", 3), light_conditions_1 + "frost" + light_conditions_2);
 
         //Enemies
@@ -344,12 +366,14 @@ public class TriggerConfig {
         configs.addKeyValuePair(new Pair<>("frost_enemies_armor_durability", 1), caster_low_armor);
         configs.addKeyValuePair(new Pair<>("frost_enemies_surrounded", 1), caster_surrounded);
         configs.addKeyValuePair(new Pair<>("frost_enemies_ally_armor_durability", 2), allies_low_armor);
+        configs.addKeyValuePair(new Pair<>("frost_enemies_freezing", 1), caster_freezing);
         configs.addKeyValuePair(new Pair<>("frost_enemies_conditions", 3), light_conditions_1 + "frost" + light_conditions_2);
 
         //Self
         configs.addKeyValuePair(new Pair<>("frost_self_very_low_health", 4), caster_very_low_health+" (excludes the low health)");
         configs.addKeyValuePair(new Pair<>("frost_self_low_health", 2), caster_low_health);
         configs.addKeyValuePair(new Pair<>("frost_self_armor_durability", 2), caster_low_armor);
+        configs.addKeyValuePair(new Pair<>("frost_self_freezing", 1), caster_freezing);
         configs.addKeyValuePair(new Pair<>("frost_self_conditions", 3), light_conditions_1 + "frost" + light_conditions_2);
 
         //Allies
@@ -357,6 +381,8 @@ public class TriggerConfig {
         configs.addKeyValuePair(new Pair<>("frost_allies_very_low_health", 1), caster_low_health);
         configs.addKeyValuePair(new Pair<>("frost_allies_surrounded", 1), caster_surrounded);
         configs.addKeyValuePair(new Pair<>("frost_allies_ally_armor_durability", 1), allies_low_armor);
+        configs.addKeyValuePair(new Pair<>("frost_allies_freezing", 1), caster_freezing);
+        configs.addKeyValuePair(new Pair<>("frost_allies_ally_freezing", 1), ally_freezing);
         configs.addKeyValuePair(new Pair<>("frost_allies_conditions", 3), light_conditions_1 + "frost" + light_conditions_2);
 
         configs.addKeyValuePair(new Pair<>("spacer", "spacer"), "");
@@ -420,6 +446,7 @@ public class TriggerConfig {
         configs.addKeyValuePair(new Pair<>("aqua_all_very_low_health", 4), caster_very_low_health);
         configs.addKeyValuePair(new Pair<>("aqua_all_surrounded", 1), caster_surrounded);
         configs.addKeyValuePair(new Pair<>("aqua_all_ally_armor_durability", 1), allies_low_armor);
+        configs.addKeyValuePair(new Pair<>("aqua_all_drowning", 1), caster_drowning);
         configs.addKeyValuePair(new Pair<>("aqua_all_conditions", 3), light_conditions_1 + "aqua" + light_conditions_2);
 
         //Enemies
@@ -427,6 +454,7 @@ public class TriggerConfig {
         configs.addKeyValuePair(new Pair<>("aqua_enemies_low_health", 2), caster_low_health);
         configs.addKeyValuePair(new Pair<>("aqua_enemies_surrounded", 1), caster_surrounded);
         configs.addKeyValuePair(new Pair<>("aqua_enemies_ally_armor_durability", 1), allies_low_armor);
+        configs.addKeyValuePair(new Pair<>("aqua_enemies_drowning", 1), caster_drowning);
         configs.addKeyValuePair(new Pair<>("aqua_enemies_conditions", 3), light_conditions_1 + "aqua" + light_conditions_2);
 
         //Self
@@ -434,6 +462,7 @@ public class TriggerConfig {
         configs.addKeyValuePair(new Pair<>("aqua_self_low_health", 2), caster_low_health);
         configs.addKeyValuePair(new Pair<>("aqua_self_armor_durability", 1), caster_low_armor);
         configs.addKeyValuePair(new Pair<>("aqua_self_surrounded", 1), caster_surrounded);
+        configs.addKeyValuePair(new Pair<>("aqua_self_drowning", 1), caster_drowning);
         configs.addKeyValuePair(new Pair<>("aqua_self_conditions", 3), light_conditions_1 + "aqua" + light_conditions_2);
 
         //Allies
@@ -441,6 +470,8 @@ public class TriggerConfig {
         configs.addKeyValuePair(new Pair<>("aqua_allies_very_low_health", 1), caster_low_health);
         configs.addKeyValuePair(new Pair<>("aqua_allies_surrounded", 1), caster_surrounded);
         configs.addKeyValuePair(new Pair<>("aqua_allies_ally_armor_durability", 1), allies_low_armor);
+        configs.addKeyValuePair(new Pair<>("aqua_allies_drowning", 1), caster_drowning);
+        configs.addKeyValuePair(new Pair<>("aqua_allies_ally_drowning", 1), ally_drowning);
         configs.addKeyValuePair(new Pair<>("aqua_allies_conditions", 3), light_conditions_1 + "aqua" + light_conditions_2);
 
     }
@@ -463,14 +494,14 @@ public class TriggerConfig {
         HEAL_SELF_SURROUNDED = CONFIG.getOrDefault("heal_self_surrounded", 1);
         HEAL_SELF_ARMOR_DURABILITY = CONFIG.getOrDefault("heal_self_armor_durability", 1);
         HEAL_SELF_POISONED = CONFIG.getOrDefault("heal_self_poisoned", 3);
-        
+
         //Allies
         HEAL_ALLIES_ALLY_LOW_HEALTH = CONFIG.getOrDefault("heal_allies_ally_low_health", 4);
         HEAL_ALLIES_VERY_LOW_HEALTH = CONFIG.getOrDefault("heal_allies_very_low_health", 1);
         HEAL_ALLIES_SURROUNDED = CONFIG.getOrDefault("heal_allies_surrounded", 1);
         HEAL_ALLIES_ALLY_ARMOR_DURABILITY = CONFIG.getOrDefault("heal_allies_ally_armor_durability", 1);
         HEAL_ALLIES_ALLY_POISONED = CONFIG.getOrDefault("heal_allies_ally_poisoned", 2);
-        
+
         //Variant
         HEAL_VARIANT_PASSIVE_LOW_HEALTH = CONFIG.getOrDefault("heal_variant_passive_low_health", 2);
         HEAL_VARIANT_VERY_LOW_HEALTH = CONFIG.getOrDefault("heal_variant_very_low_health", 2);
@@ -513,12 +544,14 @@ public class TriggerConfig {
         BLAZING_ALL_VERY_LOW_HEALTH = CONFIG.getOrDefault("blazing_all_very_low_health", 4);
         BLAZING_ALL_LOW_HEALTH = CONFIG.getOrDefault("blazing_all_low_health", 2);
         BLAZING_ALL_SURROUNDED = CONFIG.getOrDefault("blazing_all_surrounded", 1);
+        BLAZING_ALL_ONFIRE = CONFIG.getOrDefault("blazing_all_onfire", 1);
         BLAZING_ALL_ARMOR_DURABILITY = CONFIG.getOrDefault("blazing_all_armor_durability", 1);
         BLAZING_ALL_CONDITIONS = CONFIG.getOrDefault("blazing_all_conditions", 3);
 
         //Enemies
         BLAZING_ENEMIES_VERY_LOW_HEALTH = CONFIG.getOrDefault("blazing_enemies_very_low_health", 2);
         BLAZING_ENEMIES_SURROUNDED = CONFIG.getOrDefault("blazing_enemies_surrounded", 1);
+        BLAZING_ENEMIES_ONFIRE = CONFIG.getOrDefault("blazing_enemies_onfire", 1);
         BLAZING_ENEMIES_ALLY_ARMOR_DURABILITY = CONFIG.getOrDefault("blazing_all_armor_durability", 1);
         BLAZING_ENEMIES_ARMOR_DURABILITY = CONFIG.getOrDefault("blazing_enemies_ally_armor_durability", 2);
         BLAZING_ENEMIES_CONDITIONS = CONFIG.getOrDefault("blazing_enemies_conditions", 2);
@@ -528,6 +561,7 @@ public class TriggerConfig {
         FROST_ALL_VERY_LOW_HEALTH = CONFIG.getOrDefault("frost_all_very_low_health", 4);
         FROST_ALL_LOW_HEALTH = CONFIG.getOrDefault("frost_all_low_health", 2);
         FROST_ALL_SURROUNDED = CONFIG.getOrDefault("frost_all_surrounded", 1);
+        FROST_ALL_FREEZING = CONFIG.getOrDefault("frost_all_freezing", 1);
         FROST_ALL_ARMOR_DURABILITY = CONFIG.getOrDefault("frost_all_armor_durability", 1);
         FROST_ALL_CONDITIONS = CONFIG.getOrDefault("frost_all_conditions", 3);
 
@@ -535,6 +569,7 @@ public class TriggerConfig {
         FROST_ENEMIES_ALLY_LOW_HEALTH = CONFIG.getOrDefault("frost_enemies_ally_low_health", 3);
         FROST_ENEMIES_VERY_LOW_HEALTH = CONFIG.getOrDefault("frost_enemies_very_low_health", 2);
         FROST_ENEMIES_SURROUNDED = CONFIG.getOrDefault("frost_enemies_surrounded", 1);
+        FROST_ENEMIES_FREEZING = CONFIG.getOrDefault("frost_enemies_freezing", 1);
         FROST_ENEMIES_ALLY_ARMOR_DURABILITY = CONFIG.getOrDefault("frost_enemies_ally_armor_durability", 1);
         FROST_ENEMIES_ARMOR_DURABILITY = CONFIG.getOrDefault("frost_enemies_armor_durability", 1);
         FROST_ENEMIES_CONDITIONS = CONFIG.getOrDefault("frost_enemies_conditions", 2);
@@ -542,6 +577,7 @@ public class TriggerConfig {
         //Self
         FROST_SELF_VERY_LOW_HEALTH = CONFIG.getOrDefault("frost_self_very_low_health", 4);
         FROST_SELF_LOW_HEALTH = CONFIG.getOrDefault("frost_self_low_health", 2);
+        FROST_SELF_FREEZING = CONFIG.getOrDefault("frost_self_freezing", 1);
         FROST_SELF_ARMOR_DURABILITY = CONFIG.getOrDefault("frost_self_armor_durability", 1);
         FROST_SELF_CONDITIONS = CONFIG.getOrDefault("frost_self_conditions", 3);
 
@@ -549,6 +585,8 @@ public class TriggerConfig {
         FROST_ALLIES_ALLY_LOW_HEALTH = CONFIG.getOrDefault("frost_allies_ally_low_health", 4);
         FROST_ALLIES_VERY_LOW_HEALTH = CONFIG.getOrDefault("frost_allies_very_low_health", 1);
         FROST_ALLIES_SURROUNDED = CONFIG.getOrDefault("frost_allies_surrounded", 1);
+        FROST_ALLIES_FREEZING = CONFIG.getOrDefault("frost_allies_freezing", 1);
+        FROST_ALLIES_ALLY_FREEZING = CONFIG.getOrDefault("frost_allies_ally_freezing", 1);
         FROST_ALLIES_ALLY_ARMOR_DURABILITY = CONFIG.getOrDefault("frost_allies_ally_armor_durability", 1);
         FROST_ALLIES_CONDITIONS = CONFIG.getOrDefault("frost_allies_conditions", 3);
 
@@ -606,6 +644,7 @@ public class TriggerConfig {
         //All
         AQUA_ALL_VERY_LOW_HEALTH = CONFIG.getOrDefault("aqua_all_very_low_health", 4);
         AQUA_ALL_SURROUNDED = CONFIG.getOrDefault("aqua_all_surrounded", 1);
+        AQUA_ALL_DROWNING = CONFIG.getOrDefault("aqua_all_drowning", 1);
         AQUA_ALL_ALLY_ARMOR_DURABILITY = CONFIG.getOrDefault("aqua_all_ally_armor_durability", 1);
         AQUA_ALL_CONDITIONS = CONFIG.getOrDefault("aqua_all_conditions", 3);
 
@@ -613,6 +652,7 @@ public class TriggerConfig {
         AQUA_ENEMIES_VERY_LOW_HEALTH = CONFIG.getOrDefault("aqua_enemies_very_low_health", 3);
         AQUA_ENEMIES_LOW_HEALTH = CONFIG.getOrDefault("aqua_enemies_low_health", 2);
         AQUA_ENEMIES_SURROUNDED = CONFIG.getOrDefault("aqua_enemies_surrounded", 1);
+        AQUA_ENEMIES_DROWNING = CONFIG.getOrDefault("aqua_enemies_drowning", 1);
         AQUA_ENEMIES_ALLY_ARMOR_DURABILITY = CONFIG.getOrDefault("aqua_enemies_ally_armor_durability", 1);
         AQUA_ENEMIES_CONDITIONS = CONFIG.getOrDefault("aqua_enemies_conditions", 3);
 
@@ -621,15 +661,17 @@ public class TriggerConfig {
         AQUA_SELF_LOW_HEALTH = CONFIG.getOrDefault("aqua_self_low_health", 2);
         AQUA_SELF_SURROUNDED = CONFIG.getOrDefault("aqua_self_armor_durability", 1);
         AQUA_SELF_ARMOR_DURABILITY = CONFIG.getOrDefault("aqua_self_surrounded", 1);
+        AQUA_SELF_DROWNING = CONFIG.getOrDefault("aqua_self_drowning", 1);
         AQUA_SELF_CONDITIONS = CONFIG.getOrDefault("aqua_self_conditions", 3);
 
         //Allies
         AQUA_ALLIES_ALLY_LOW_HEALTH = CONFIG.getOrDefault("aqua_allies_ally_low_health", 4);
         AQUA_ALLIES_VERY_LOW_HEALTH = CONFIG.getOrDefault("aqua_allies_very_low_health", 1);
         AQUA_ALLIES_SURROUNDED = CONFIG.getOrDefault("aqua_allies_surrounded", 1);
+        AQUA_ALLIES_DROWNING = CONFIG.getOrDefault("aqua_allies_drowning", 1);
+        AQUA_ALLIES_ALLY_DROWNING = CONFIG.getOrDefault("aqua_allies_ally_drowning", 1);
         AQUA_ALLIES_ALLY_ARMOR_DURABILITY = CONFIG.getOrDefault("aqua_allies_ally_armor_durability", 1);
         AQUA_ALLIES_CONDITIONS = CONFIG.getOrDefault("aqua_allies_conditions", 3);
 
     }
 }
-

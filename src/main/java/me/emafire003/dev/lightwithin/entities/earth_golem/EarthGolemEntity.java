@@ -3,6 +3,7 @@ package me.emafire003.dev.lightwithin.entities.earth_golem;
 import me.emafire003.dev.lightwithin.LightWithin;
 import me.emafire003.dev.lightwithin.entities.goals.AttackWithSummonerGoal;
 import me.emafire003.dev.lightwithin.entities.goals.EarthGolemRevengeGoal;
+import me.emafire003.dev.lightwithin.entities.goals.FollowSummonerGoal;
 import me.emafire003.dev.lightwithin.entities.goals.TrackEarthGolemTargetGoal;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.EntityType;
@@ -59,6 +60,7 @@ public class EarthGolemEntity extends IronGolemEntity {
         this.goalSelector.add(5, new IronGolemLookGoal(this));
         this.goalSelector.add(7, new LookAtEntityGoal(this, PlayerEntity.class, 6.0f));
         this.goalSelector.add(8, new LookAroundGoal(this));
+        this.goalSelector.add(6, new FollowSummonerGoal(this, 1.0D, 10.0F, 2.0F, false));
         this.targetSelector.add(1, new TrackEarthGolemTargetGoal(this));
         this.targetSelector.add(2, new EarthGolemRevengeGoal(this, new Class[0]));
         this.targetSelector.add(3, new ActiveTargetGoal<PlayerEntity>(this, PlayerEntity.class, 10, true, false, this::shouldAngerAt));

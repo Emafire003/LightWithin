@@ -5,6 +5,7 @@ import me.emafire003.dev.lightwithin.LightWithin;
 import me.emafire003.dev.lightwithin.compat.replaymod.ReplayModCompat;
 import me.emafire003.dev.lightwithin.lights.InnerLightType;
 import me.emafire003.dev.lightwithin.sounds.LightSounds;
+import me.emafire003.dev.lightwithin.status_effects.LightEffects;
 import me.x150.renderer.event.RenderEvents;
 import me.x150.renderer.render.ClipStack;
 import me.x150.renderer.render.Renderer2d;
@@ -41,6 +42,17 @@ public class RendererEventHandler {
     public void registerRenderEvent(){
         LOGGER.info("Registering runes renderer...");
         RenderEvents.HUD.register(matrixStack -> {
+            //Done to fix the bug of the light being avilable even after death or after triggering
+            assert MinecraftClient.getInstance().player != null;
+            if(MinecraftClient.getInstance().player.isDead()){
+                LightWithinClient.setLightReady(false);
+                return;
+            }
+            if(MinecraftClient.getInstance().player.hasStatusEffect(LightEffects.LIGHT_ACTIVE) || MinecraftClient.getInstance().player.hasStatusEffect(LightEffects.LIGHT_FATIGUE)){
+                LightWithinClient.setLightReady(false);
+                return;
+            }
+
             if(ReplayModCompat.isInReplayMode()){
                 return;
             }
@@ -51,14 +63,6 @@ public class RendererEventHandler {
             RenderSystem.enableBlend();
             RenderSystem.defaultBlendFunc();
             if(LightWithinClient.isLightReady()){
-                //Done to the bug of the light being avilable even after death
-                assert MinecraftClient.getInstance().player != null;
-                if(MinecraftClient.getInstance().player.isDead()){
-                    LOGGER.info("Player dead, setting light on false");
-                    MinecraftClient.getInstance().player.sendMessage(Text.literal("Hello, setting false"));
-                    LightWithinClient.setLightReady(false);
-                    return;
-                }
                 ClipStack.addWindow(matrixStack.getMatrices(),new Rectangle(1,1,1000,1000));
                 Renderer2d.renderTexture(matrixStack.getMatrices(), new Identifier(LightWithin.MOD_ID, "textures/lights/light.png"), x, y, 20, 20);
                 ClipStack.popWindow();
