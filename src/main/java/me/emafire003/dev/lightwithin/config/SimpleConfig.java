@@ -126,7 +126,7 @@ public class SimpleConfig {
         reader.close();
     }
 
-    String config_new;
+    private String config_new;
 
     //FINNALLY IT WORKS
     /**Updates from one config version to the other*/

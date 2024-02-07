@@ -18,7 +18,6 @@ import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.particle.ParticleEffect;
-import net.minecraft.particle.ParticleType;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
@@ -109,7 +108,11 @@ public class BlazingLight extends InnerLight {
         }
         if((Config.STRUCTURE_GRIEFING || Config.NON_FUNDAMENTAL_STRUCTURE_GRIEFING) && !caster.getWorld().isClient && (component.getTargets().equals(TargetType.ALL) || component.getTargets().equals(TargetType.ENEMIES))) {
             StructurePlacerAPI placer = new StructurePlacerAPI((ServerWorld) caster.getWorld(), new Identifier(MOD_ID, blazing_structure_id), caster.getBlockPos(), BlockMirror.NONE, BlockRotation.NONE, true, 1.0f, new BlockPos(-3, -4, -3));
-            placer.loadStructure();
+            if(Config.REPLACEABLE_STRUCTURES){
+                placer.loadAndRestoreStructureAnimated(caster.getStatusEffect(LightEffects.LIGHT_ACTIVE).getDuration(), 2, true);
+            }else{
+                placer.loadStructure();
+            }
         }
         if(!caster.getWorld().isClient) {
             LightParticlesUtil.spawnLightTypeParticle(LightParticles.BLAZINGLIGHT_PARTICLE, (ServerWorld) caster.getWorld(), caster.getPos());

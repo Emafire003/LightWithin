@@ -64,6 +64,7 @@ public class Config {
     public static boolean NON_FUNDAMENTAL_STRUCTURE_GRIEFING;
     //V2
     public static boolean REPLACEABLE_STRUCTURES;
+    public static boolean KEEP_ESSENTIALS_STRUCTURES;
 
     public static boolean TARGET_FEEDBACK;
 
@@ -93,9 +94,7 @@ public class Config {
                 CONFIG = SimpleConfig.of(LightWithin.MOD_ID + "_config").provider(configs).request();
                 HashMap<Pair<String, ?>, Pair<String, ?>> sub_map = new HashMap<>();
 
-                CONFIG.getConfigCopy().forEach((key, value) -> {
-                    sub_map.put(new Pair<>(key, value),  new Pair<>(key, config_old.get(key)));
-                });
+                CONFIG.getConfigCopy().forEach((key, value) -> sub_map.put(new Pair<>(key, value),  new Pair<>(key, config_old.get(key))));
                 CONFIG.updateValues(sub_map);
             } catch (IOException e) {
                 LOGGER.info("Could not delete config file");
@@ -195,6 +194,9 @@ public class Config {
         configs.addKeyValuePair(new Pair<>("non_fundamental_structure_griefing", true), "If set to false will prevent lights from spawning structures that are not fundamental for the light's effect. For example Earthen Light's structures will STILL SPAWN (I'd suggest leaving it to true)");
         //V2
         configs.addKeyValuePair(new Pair<>("replaceable_structures", true), "Should structures be replaced after a while by the old terrain? Setting this to true may impact performance!");
+        configs.addKeyValuePair(new Pair<>("keep_essentials_structures", true), "Should structures essential to the effect of the light, such as Earthen light's pillars and ravines be kept if replaceable_structures is true? (aka the terrain won't regenerate)");
+
+        configs.addKeyValuePair(new Pair<>("spacer", "spacer"), "");
 
         configs.addKeyValuePair(new Pair<>("command_target_feedback", true), "Should a message be sent the target of a command, such us when changing its innerlight?");
         configs.addKeyValuePair(new Pair<>("reset_on_join", false), "Should the InnerLight be completely resetted upon joining the server/world again? Useful after an update of the mod that added new Light Types");
@@ -274,6 +276,7 @@ public class Config {
 
         //Config version 2
         REPLACEABLE_STRUCTURES = CONFIG.getOrDefault("replaceable_structures", true);
+        KEEP_ESSENTIALS_STRUCTURES = CONFIG.getOrDefault("keep_essentials_structures", true);
     }
 }
 

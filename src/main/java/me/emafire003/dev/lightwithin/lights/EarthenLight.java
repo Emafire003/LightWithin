@@ -119,7 +119,11 @@ public class EarthenLight extends InnerLight {
                 //otherwise it will skip it, since probably they would end up in the same hole regardless
                 if((oldtarget == null || oldtarget.distanceTo(target) > 3) && Config.STRUCTURE_GRIEFING){
                     StructurePlacerAPI placer = new StructurePlacerAPI((ServerWorld) caster.getWorld(), new Identifier(MOD_ID, "earth_hole"), target.getBlockPos(), BlockMirror.NONE, BlockRotation.NONE, true, 1f, new BlockPos(-3, -11, -3));
-                    placer.loadStructure();
+                    if(Config.REPLACEABLE_STRUCTURES && !Config.KEEP_ESSENTIALS_STRUCTURES){
+                        placer.loadAndRestoreStructureAnimated(caster.getStatusEffect(LightEffects.LIGHT_ACTIVE).getDuration(), 2, true);
+                    }else{
+                        placer.loadStructure();
+                    }
                     //It also plays here since a hole opens under things
                     caster.getWorld().playSound(target.getX(), target.getY(), target.getZ(), LightSounds.EARTHEN_LIGHT, SoundCategory.AMBIENT, 1, 1, true);
                 }
@@ -151,7 +155,12 @@ public class EarthenLight extends InnerLight {
                         }else{
                             placer = new StructurePlacerAPI((ServerWorld) caster.getWorld(), new Identifier(MOD_ID, "earth_wall1"), caster.getBlockPos(), BlockMirror.NONE, BlockRotation.NONE, true, 1f, new BlockPos(-3, -1, -4));
                         }
-                        placer.loadStructure();
+
+                        if(Config.REPLACEABLE_STRUCTURES && !Config.KEEP_ESSENTIALS_STRUCTURES){
+                            placer.loadAndRestoreStructureAnimated(caster.getStatusEffect(LightEffects.LIGHT_ACTIVE).getDuration(), 2, true);
+                        }else{
+                            placer.loadStructure();
+                        }
                     }
                     oldtarget = target;
                     LightParticlesUtil.spawnCircle(target.getPos().add(0, 0.15, 0), 5, 120, new BlockStateParticleEffect(ParticleTypes.BLOCK, Blocks.DIRT.getDefaultState()), (ServerWorld) caster.getWorld());
@@ -187,7 +196,11 @@ public class EarthenLight extends InnerLight {
                     placer = new StructurePlacerAPI((ServerWorld) caster.getWorld(), new Identifier(MOD_ID, "small_moat"), caster.getBlockPos(), BlockMirror.NONE, BlockRotation.NONE, true, 0.9f, new BlockPos(-3, -5, -3));
                     caster.teleport(caster.getX(), caster.getY()+2, caster.getZ());
                 }
-                placer.loadStructure();
+                if(Config.REPLACEABLE_STRUCTURES && !Config.KEEP_ESSENTIALS_STRUCTURES){
+                    placer.loadAndRestoreStructureAnimated(caster.getStatusEffect(LightEffects.LIGHT_ACTIVE).getDuration(), 2, true);
+                }else{
+                    placer.loadStructure();
+                }
                 caster.playSound(LightSounds.EARTHEN_LIGHT, 1, 1);
                 LightParticlesUtil.spawnLightTypeParticle(LightParticles.EARTHENLIGHT_PARTICLE, (ServerWorld) caster.getWorld(), caster.getPos());
             }
