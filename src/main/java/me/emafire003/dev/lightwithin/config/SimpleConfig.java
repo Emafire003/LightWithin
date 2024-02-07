@@ -23,6 +23,7 @@ package me.emafire003.dev.lightwithin.config;
  */
 //Modified by Emafire003
 
+import com.mojang.datafixers.util.Pair;
 import me.emafire003.dev.lightwithin.LightWithin;
 import org.apache.commons.io.FileDeleteStrategy;
 
@@ -85,7 +86,7 @@ public class SimpleConfig {
             return new SimpleConfig( this );
         }
 
-        private String getConfig() {
+        public String getConfig() {
             return provider.get( filename ) + "\n";
         }
 
@@ -125,11 +126,38 @@ public class SimpleConfig {
         reader.close();
     }
 
-    // Modification by Kaupenjoe
-    private void parseConfigEntry( String entry, int line ) {
+    String config_new;
+
+    //FINNALLY IT WORKS
+    /**Updates from one config version to the other*/
+    public void updateValues(HashMap<Pair<String, ?>, Pair<String, ?>> sub_map) throws IOException {
+        config_new = request.getConfig();
+
+        sub_map.forEach((oldone, newone) -> {
+            String new_string = newone.getFirst() + ":" + newone.getSecond();
+            String old_string = oldone.getFirst() + ":" + oldone.getSecond();
+
+            if(!newone.getFirst().equalsIgnoreCase("version") && newone.getSecond() != null && oldone.getSecond() != null){
+                config_new = config_new.replaceAll(old_string, new_string);
+            }
+        });
+
+        // try creating missing files
+        request.file.delete();
+        request.file.getParentFile().mkdirs();
+        Files.createFile( request.file.toPath() );
+
+        PrintWriter writer = new PrintWriter(request.file, "UTF-8");
+        writer.write( config_new );
+        writer.close();
+    }
+
+    // Modification by Kaupenjoe & Emafire003
+    public void parseConfigEntry( String entry, int line ) {
         if( !entry.isEmpty() && !entry.startsWith( "#" )) {
             String[] parts = entry.split(":", 2);
             if( parts.length == 2) {
+                
                 // Recognizes comments after a value
                 String temp = parts[1].split(" #")[0];
                 config.put( parts[0], temp );
@@ -139,7 +167,7 @@ public class SimpleConfig {
         }
     }
 
-    private SimpleConfig(ConfigRequest request ) {
+    private SimpleConfig(ConfigRequest request) {
         this.request = request;
         String identifier = "Config '" + request.filename + "'";
 
@@ -188,6 +216,10 @@ public class SimpleConfig {
     public String getOrDefault( String key, String def ) {
         String val = get(key);
         return val == null ? def : val;
+    }
+
+    public HashMap<String, String> getConfigCopy(){
+        return config;
     }
 
     /**
