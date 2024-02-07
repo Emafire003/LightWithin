@@ -117,11 +117,16 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 			if(box_expansion_amount == 0){
 				box_expansion_amount = 6;
 			}
-			Config.reloadConfig();
-			BalanceConfig.reloadConfig();
-			TriggerConfig.reloadConfig();
+			try{
+				Config.reloadConfig();
+				BalanceConfig.reloadConfig();
+				TriggerConfig.reloadConfig();
+			}catch (Exception e){
+				LOGGER.error("There was an error while loading the config files!");
+				e.printStackTrace();
+			}
+
 			LightTriggerChecks.MIN_TRIGGER = TriggerConfig.TRIGGER_THRESHOLD;
-			minecraftServer.getPlayerManager().getPlayerList();
 		});
 
 	}
@@ -131,7 +136,6 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 		registry.registerForPlayers(LIGHT_COMPONENT, LightComponent::new, RespawnCopyStrategy.ALWAYS_COPY);
 		registry.registerFor(DrownedEntity.class, SUMMONED_BY_COMPONENT, SummonedByComponent::new);
 		registry.registerFor(EarthGolemEntity.class, SUMMONED_BY_COMPONENT, SummonedByComponent::new);
-
 	}
 
 	private static void registerLightUsedPacket(){
@@ -484,9 +488,8 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 
 	//=======================Frog Light=======================
 	public static void activateFrog(LightComponent component, PlayerEntity player){
-		List<LivingEntity> targets = new ArrayList<>();
 
-		targets.addAll(player.getWorld().getEntitiesByClass(LivingEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amount), (entity1 -> true)));
+		List<LivingEntity> targets = new ArrayList<>(player.getWorld().getEntitiesByClass(LivingEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amount), (entity1 -> true)));
 		player.sendMessage(Text.translatable("light.description.activation.frog"), true);
 
 		new FrogLight(targets, component.getMaxCooldown(), component.getPowerMultiplier(),

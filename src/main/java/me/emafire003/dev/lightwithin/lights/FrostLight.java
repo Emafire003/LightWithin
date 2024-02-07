@@ -29,30 +29,9 @@ import net.minecraft.util.math.Direction;
 import java.util.List;
 import java.util.stream.Stream;
 
-import static me.emafire003.dev.lightwithin.LightWithin.*;
+import static me.emafire003.dev.lightwithin.LightWithin.MOD_ID;
 
 public class FrostLight extends InnerLight {
-
-    /*Possible triggers:
-       - self low health
-       - allies low health (checkable like this if type = Heal && target = allies do stuff
-       - surrounded++
-       - Ally dying?
-     */
-
-    /*Triggers:
-    * - Snowing & HP < 75% (not ally)
-    * - Freezing & HP < 50%
-    * - HP < 25% (&& freeze stuff in hand/around)
-    * - Ally dying
-    *
-    * - When attacked by a snowball && HP <75%
-    * */
-
-    /*Possible targets:
-    * - enemies
-    * - all
-    * - ally/self -> protective wall and other things. Maybe a buff of some sort.*/
 
     public FrostLight(List<LivingEntity> targets, double cooldown_time, double power_multiplier, int duration, String color, PlayerEntity caster, boolean rainbow_col) {
         super(targets, cooldown_time, power_multiplier, duration, color, caster, rainbow_col);
@@ -107,7 +86,12 @@ public class FrostLight extends InnerLight {
         caster.getWorld().playSound(caster.getX(), caster.getY(), caster.getZ(), LightSounds.FROST_LIGHT, SoundCategory.AMBIENT, 1, 1, true);
         if((Config.STRUCTURE_GRIEFING || Config.NON_FUNDAMENTAL_STRUCTURE_GRIEFING) && !caster.getWorld().isClient && (component.getTargets().equals(TargetType.ALL) || component.getTargets().equals(TargetType.ENEMIES))) {
             StructurePlacerAPI placer = new StructurePlacerAPI((ServerWorld) caster.getWorld(), new Identifier(MOD_ID, "frost_light"), caster.getBlockPos(), BlockMirror.NONE, BlockRotation.NONE, true, 1.0f, new BlockPos(-4, -3, -3));
-            placer.loadStructure();
+            if(Config.REPLACEABLE_STRUCTURES){
+                placer.loadAndRestoreStructureAnimated(caster.getStatusEffect(LightEffects.LIGHT_ACTIVE).getDuration(), 2, true);
+            }else{
+                placer.loadStructure();
+            }
+
         }
 
         LightParticlesUtil.spawnSnowflake((ServerPlayerEntity) caster, caster.getPos().add(0, 2, 0));
@@ -132,7 +116,12 @@ public class FrostLight extends InnerLight {
                     }else if(facing.equals(Direction.WEST)){
                         placer = new StructurePlacerAPI((ServerWorld) caster.getWorld(), new Identifier(MOD_ID, "frost_wall"), target.getBlockPos(), BlockMirror.NONE, BlockRotation.COUNTERCLOCKWISE_90, true, 1.0f, new BlockPos(-2, -1, 2));
                     }
-                    placer.loadStructure();
+
+                    if(Config.REPLACEABLE_STRUCTURES && !Config.KEEP_ESSENTIALS_STRUCTURES){
+                        placer.loadAndRestoreStructureAnimated(caster.getStatusEffect(LightEffects.LIGHT_ACTIVE).getDuration(), 2, true);
+                    }else{
+                        placer.loadStructure();
+                    }
                 }
             }else{
                 if(!caster.getWorld().isClient){

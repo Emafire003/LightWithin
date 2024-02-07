@@ -70,8 +70,7 @@ dependencies {
 	include modImplementation("com.github.0x3C50:Renderer:master-SNAPSHOT")
 
 	//StructurePlacerAPI
-	modImplementation "maven.modrinth:structureplacerapi:${project.structureplacerapi_version}"
-	include "maven.modrinth:structureplacerapi:${project.structureplacerapi_version}"
+	include modImplementation("maven.modrinth:structureplacerapi:${project.structureplacerapi_version}")
 
 	//===========OPTIONAL DEPENDENCIES===========
 

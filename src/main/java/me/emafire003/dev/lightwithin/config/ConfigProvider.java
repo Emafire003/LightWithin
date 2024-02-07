@@ -37,6 +37,7 @@ public class ConfigProvider implements SimpleConfig.DefaultConfig {
         keyValuePair.getFirst() + ":" + keyValuePair.getSecond() +"\n";
     }
 
+
     @Override
     public String get(String namespace) {
         return configContents;

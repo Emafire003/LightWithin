@@ -6,6 +6,7 @@ import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 
 import static me.emafire003.dev.lightwithin.LightWithin.LOGGER;
 
@@ -13,7 +14,7 @@ public class Config {
     public static SimpleConfig CONFIG;
     private static ConfigProvider configs;
 
-    private static final int ver = 1;
+    private static final int ver = 2;
     public static int VERSION;
 
     //box expansion amount while searching for other entities, like when checking for allies or targets near the player
@@ -56,6 +57,9 @@ public class Config {
     public static boolean SHOULD_CHECK_BLOCKS;
     public static boolean STRUCTURE_GRIEFING;
     public static boolean NON_FUNDAMENTAL_STRUCTURE_GRIEFING;
+    //V2
+    public static boolean REPLACEABLE_STRUCTURES;
+    public static boolean KEEP_ESSENTIALS_STRUCTURES;
 
     public static boolean TARGET_FEEDBACK;
 
@@ -75,11 +79,32 @@ public class Config {
 
     public static int FALL_TRIGGER;
 
+    public static void handleVersionChange(){
+        int version_found = CONFIG.getOrDefault("version", ver);
+        if(version_found != ver){
+            LOGGER.warn("DIFFERENT CONFIG VERSION DETECTED, updating...");
+            HashMap<String, String> config_old = CONFIG.getConfigCopy();
+            try {
+                CONFIG.delete();
+                CONFIG = SimpleConfig.of(LightWithin.MOD_ID + "_config").provider(configs).request();
+                HashMap<Pair<String, ?>, Pair<String, ?>> sub_map = new HashMap<>();
+
+                CONFIG.getConfigCopy().forEach((key, value) -> sub_map.put(new Pair<>(key, value),  new Pair<>(key, config_old.get(key))));
+                CONFIG.updateValues(sub_map);
+            } catch (IOException e) {
+                LOGGER.info("Could not delete config file");
+                e.printStackTrace();
+            }
+        }
+    }
+
     public static void registerConfigs() {
         configs = new ConfigProvider();
         createConfigs();
 
         CONFIG = SimpleConfig.of(LightWithin.MOD_ID + "_config").provider(configs).request();
+
+        handleVersionChange();
 
         try{
             assignConfigs();
@@ -162,9 +187,14 @@ public class Config {
         configs.addKeyValuePair(new Pair<>("should_check_blocks", true), "Should the blocks near the player be checked for the light activation? Could impact on performance");
         configs.addKeyValuePair(new Pair<>("structure_griefing", true), "If set to false will prevent lights from spawning ANY KIND structures on activation (I'd suggest leaving it to true)");
         configs.addKeyValuePair(new Pair<>("non_fundamental_structure_griefing", true), "If set to false will prevent lights from spawning structures that are not fundamental for the light's effect. For example Earthen Light's structures will STILL SPAWN (I'd suggest leaving it to true)");
+        //V2
+        configs.addKeyValuePair(new Pair<>("replaceable_structures", true), "Should structures be replaced after a while by the old terrain? Setting this to true may impact performance!");
+        configs.addKeyValuePair(new Pair<>("keep_essentials_structures", true), "Should structures essential to the effect of the light, such as Earthen light's pillars and ravines be kept if replaceable_structures is true? (aka the terrain won't regenerate)");
+
+        configs.addKeyValuePair(new Pair<>("spacer", "spacer"), "");
 
         configs.addKeyValuePair(new Pair<>("command_target_feedback", true), "Should a message be sent the target of a command, such us when changing its innerlight?");
-        configs.addKeyValuePair(new Pair<>("reset_on_join", false), "Should the InnerLight be compleatly resetted upon joining the server/world again? Useful after an update of the mod that added new Light Types");
+        configs.addKeyValuePair(new Pair<>("reset_on_join", false), "Should the InnerLight be completely resetted upon joining the server/world again? Useful after an update of the mod that added new Light Types");
 
         configs.addKeyValuePair(new Pair<>("auto_light_activation", false), "Should the light be activated without the player needing to press the button? (Suggestion: keep it to false) CLIENT SIDE");
 
@@ -189,6 +219,7 @@ public class Config {
         LUXMUTUA_BYPASS_COOLDOWN = !CONFIG.getOrDefault("luxmutua_bypass_cooldown", false);
 
         VERSION = CONFIG.getOrDefault("version", ver);
+
         AREA_OF_SEARCH_FOR_ENTITIES = CONFIG.getOrDefault("area_of_search_for_entities", 6);
         COOLDOWN_MULTIPLIER = CONFIG.getOrDefault("cooldown_multiplier", 1.0);
         DURATION_MULTIPLIER = CONFIG.getOrDefault("duration_multiplier", 1.3);
@@ -237,6 +268,10 @@ public class Config {
         DIV_SELF = Config.CONFIG.getOrDefault("div_self", 2.5);
         NOT_ALLY_THEN_ENEMY = Config.CONFIG.getOrDefault("not_ally_then_enemy", false);
         FALL_TRIGGER = Config.CONFIG.getOrDefault("fall_trigger", 25);
+
+        //Config version 2
+        REPLACEABLE_STRUCTURES = CONFIG.getOrDefault("replaceable_structures", true);
+        KEEP_ESSENTIALS_STRUCTURES = CONFIG.getOrDefault("keep_essentials_structures", true);
     }
 }
 
