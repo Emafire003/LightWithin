@@ -1,9 +1,9 @@
 package me.emafire003.dev.lightwithin.status_effects;
 
+import me.emafire003.dev.lightwithin.LightWithin;
 import me.emafire003.dev.lightwithin.compat.coloredglowlib.CGLCompat;
 import me.emafire003.dev.lightwithin.component.LightComponent;
 import me.emafire003.dev.lightwithin.config.Config;
-import me.emafire003.dev.lightwithin.lights.InnerLight;
 import me.emafire003.dev.lightwithin.lights.InnerLightType;
 import me.emafire003.dev.lightwithin.util.TargetType;
 import net.fabricmc.loader.api.FabricLoader;
@@ -17,7 +17,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.text.Text;
 
 import static me.emafire003.dev.lightwithin.LightWithin.LIGHT_COMPONENT;
 
@@ -62,10 +61,12 @@ public class LightActiveEffect extends StatusEffect {
         LightComponent component = LIGHT_COMPONENT.get(entity);
         if(component.getPrevColor() != null && FabricLoader.getInstance().isModLoaded("coloredglowlib")){
             if(component.getPrevColor() == null){
-                CGLCompat.getLib().setColorToEntity(entity, CGLCompat.fromHex("#ffffff"));
+                CGLCompat.getLib().clearColor(entity, false);
             }else{
-                CGLCompat.getLib().setColorToEntity(entity, CGLCompat.fromHex(component.getPrevColor()));
+                CGLCompat.getLib().setColor(entity, component.getPrevColor());
             }
+            //A bit janky but should do the job. I hope.
+            CGLCompat.getLib().setOverrideTeamColors(LightWithin.overrideTeamColorsPrev);
         }
         if(entity instanceof PlayerEntity){
             entity.addStatusEffect(new StatusEffectInstance(LightEffects.LIGHT_FATIGUE, (int) (Config.COOLDOWN_MULTIPLIER*20*component.getMaxCooldown()), 1));
