@@ -69,9 +69,9 @@ public class LightActiveEffect extends StatusEffect {
         LightComponent component = LIGHT_COMPONENT.get(entity);
         if(component.getPrevColor() != null && FabricLoader.getInstance().isModLoaded("coloredglowlib")){
             if(component.getPrevColor() == null){
-                CGLCompat.getLib().setColorToEntity(entity, CGLCompat.fromHex("#ffffff"));
+                CGLCompat.getLib().setColor(entity, "#ffffff");
             }else{
-                CGLCompat.getLib().setColorToEntity(entity, CGLCompat.fromHex(component.getPrevColor()));
+                CGLCompat.getLib().setColor(entity, component.getPrevColor());
             }
         }
         if(entity instanceof PlayerEntity){
