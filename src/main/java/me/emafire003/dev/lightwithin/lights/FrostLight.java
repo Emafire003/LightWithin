@@ -29,7 +29,7 @@ import net.minecraft.util.math.Direction;
 import java.util.List;
 import java.util.stream.Stream;
 
-import static me.emafire003.dev.lightwithin.LightWithin.MOD_ID;
+import static me.emafire003.dev.lightwithin.LightWithin.*;
 
 public class FrostLight extends InnerLight {
 
@@ -76,9 +76,9 @@ public class FrostLight extends InnerLight {
         LightComponent component = LightWithin.LIGHT_COMPONENT.get(caster);
         if(FabricLoader.getInstance().isModLoaded("coloredglowlib")){
             if(this.rainbow_col){
-                CGLCompat.getLib().setRainbowColorToEntity(this.caster, true);
+                CGLCompat.getLib().setRainbowColor(this.caster);
             }else{
-                CGLCompat.getLib().setColorToEntity(this.caster, CGLCompat.fromHex(this.color));
+                CGLCompat.getLib().setColor(this.caster, this.color);
             }
         }
 

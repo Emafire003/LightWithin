@@ -65,6 +65,8 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 	private static final boolean debug = false;
 	public static Path PATH = Path.of(FabricLoader.getInstance().getConfigDir() + "/" + MOD_ID + "/");
 
+	public static boolean overrideTeamColorsPrev = false;
+
 	/**
 	 * This is a map of the possibile targets for each target type
 	 *
@@ -110,9 +112,6 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 
 
 		ServerLifecycleEvents.SERVER_STARTED.register(minecraftServer -> {
-			if(FabricLoader.getInstance().isModLoaded("coloredglowlib")){
-				CGLCompat.getLib().setOverrideTeamColors(true);
-			}
 			box_expansion_amount = Config.AREA_OF_SEARCH_FOR_ENTITIES;
 			if(box_expansion_amount == 0){
 				box_expansion_amount = 6;
@@ -165,7 +164,6 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 
 	public static void activateLight(PlayerEntity player){
 		if(!(player.hasStatusEffect(LightEffects.LIGHT_FATIGUE) || player.hasStatusEffect(LightEffects.LIGHT_ACTIVE))){
-
 			if(debug){
 				player.sendMessage(Text.literal("Ok not in cooldown, starting the ticking"), false);
 			}
@@ -173,14 +171,19 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 		}else{
 			return;
 		}
+		if(FabricLoader.getInstance().isModLoaded("coloredglowlib")){
+			//A bit janky but should do the job. I hope.
+			overrideTeamColorsPrev = CGLCompat.getLib().getOverrideTeamColors();
+			CGLCompat.getLib().setOverrideTeamColors(true);
+		}
 		LightComponent component = LIGHT_COMPONENT.get(player);
 		InnerLightType type = component.getType();
 		if(type.equals(InnerLightType.NONE)){
 			return;
 		}
-		//TODO after updating CGL to 3.0.0 I'll need to remove this most likely
+
 		if(FabricLoader.getInstance().isModLoaded("coloredglowlib")){
-			component.setPrevColor(CGLCompat.toHex(CGLCompat.getLib().getEntityColor(player)));
+			component.setPrevColor(CGLCompat.getLib().getColor(player));
 		}
 
 		if(type.equals(InnerLightType.HEAL)){

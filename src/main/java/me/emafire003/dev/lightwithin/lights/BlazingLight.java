@@ -93,9 +93,9 @@ public class BlazingLight extends InnerLight {
 
         if(FabricLoader.getInstance().isModLoaded("coloredglowlib")){
             if(this.rainbow_col){
-                CGLCompat.getLib().setRainbowColorToEntity(this.caster, true);
+                CGLCompat.getLib().setRainbowColor(this.caster);
             }else{
-                CGLCompat.getLib().setColorToEntity(this.caster, CGLCompat.fromHex(this.color));
+                CGLCompat.getLib().setColor(this.caster, this.color);
             }
         }
 
@@ -123,7 +123,7 @@ public class BlazingLight extends InnerLight {
             if(!caster.getWorld().isClient){
                 LightParticlesUtil.spawnLightTypeParticle(LightParticles.BLAZINGLIGHT_PARTICLE, (ServerWorld) caster.getWorld(), target.getPos());
             }
-            
+
             //TODO make the chance configable EDIT: Maybe not
             //it's basicly a crit, unique for now to the blazing light Currently 10 percent
             if(caster.getRandom().nextInt(10) == 1){

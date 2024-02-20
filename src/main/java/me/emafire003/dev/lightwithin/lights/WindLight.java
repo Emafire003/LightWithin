@@ -31,16 +31,16 @@ public class WindLight extends InnerLight {
      */
 
     /* Triggers:
-    * - Falling from more than 5 blocks
-    * - Surrounded && HP < 60%
-    * - HP < 25%
-    * - when at height of more than 128 blocks + HP < 50%
-    * */
+     * - Falling from more than 5 blocks
+     * - Surrounded && HP < 60%
+     * - HP < 25%
+     * - when at height of more than 128 blocks + HP < 50%
+     * */
 
     /*Possible targets:
-    * - self, -> dash away + enemis pushed away/high velocity and jump
-    * - ally/self -> launch up in the air and give jump boost velocity and
-    * - ALL MAYBE, but not sure. -> everything/one boosted away*/
+     * - self, -> dash away + enemis pushed away/high velocity and jump
+     * - ally/self -> launch up in the air and give jump boost velocity and
+     * - ALL MAYBE, but not sure. -> everything/one boosted away*/
 
     public WindLight(List<LivingEntity> targets, double cooldown_time, double power_multiplier, int duration, String color, PlayerEntity caster, boolean rainbow_col) {
         super(targets, cooldown_time, power_multiplier, duration, color, caster, rainbow_col);
@@ -84,9 +84,9 @@ public class WindLight extends InnerLight {
         LightComponent component = LightWithin.LIGHT_COMPONENT.get(caster);
         if(FabricLoader.getInstance().isModLoaded("coloredglowlib")){
             if(this.rainbow_col){
-                CGLCompat.getLib().setRainbowColorToEntity(this.caster, true);
+                CGLCompat.getLib().setRainbowColor(this.caster);
             }else{
-                CGLCompat.getLib().setColorToEntity(this.caster, CGLCompat.fromHex(this.color));
+                CGLCompat.getLib().setColor(this.caster, this.color);
             }
         }
 

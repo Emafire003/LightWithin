@@ -93,9 +93,9 @@ public class HealLight extends InnerLight {
         LightComponent component = LightWithin.LIGHT_COMPONENT.get(caster);
         if(FabricLoader.getInstance().isModLoaded("coloredglowlib")){
             if(this.rainbow_col){
-                CGLCompat.getLib().setRainbowColorToEntity(this.caster, true);
+                CGLCompat.getLib().setRainbowColor(this.caster);
             }else{
-                CGLCompat.getLib().setColorToEntity(this.caster, CGLCompat.fromHex(this.color));
+                CGLCompat.getLib().setColor(this.caster, this.color);
             }
         }
         caster.getWorld().playSound(caster.getX(), caster.getY(), caster.getZ(), LightSounds.HEAL_LIGHT, SoundCategory.AMBIENT, 1, 1, true);
