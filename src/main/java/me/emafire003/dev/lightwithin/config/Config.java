@@ -14,7 +14,7 @@ public class Config {
     public static SimpleConfig CONFIG;
     private static ConfigProvider configs;
 
-    private static final int ver = 2;
+    private static final int ver = 3;
     public static int VERSION;
 
     //box expansion amount while searching for other entities, like when checking for allies or targets near the player
@@ -71,6 +71,9 @@ public class Config {
     public static boolean MULTIPLY_DURATION_LIMIT;
     public static boolean LIGHT_LOCKED_DEFAULT;
     public static boolean UNLOCK_WITH_LUXINTUS;
+
+    //Added with version 3
+    public static boolean LIGHT_DEFAULT_STATUS;
 
     public static boolean RESET_ON_JOIN;
 
@@ -201,7 +204,10 @@ public class Config {
         configs.addKeyValuePair(new Pair<>("light_runes", true), "Should runes be rendered? (If true they will only render in first person)");
         configs.addKeyValuePair(new Pair<>("light_runes_duration", 3), "How many seconds should the runes last on screen?");
         configs.addKeyValuePair(new Pair<>("light_locked_default", false), "Should the light activation be locked by default? (Unless you use a command players won't be able to use lights)");
-        configs.addKeyValuePair(new Pair<>("unlock_with_luxintus", true), "Should eating a Luxintus berry unlocked the light?");configs.addKeyValuePair(new Pair<>("not_ally_then_enemy", false), "Should a player that is not an explicit ALLY be considered an ENEMY?");
+        configs.addKeyValuePair(new Pair<>("unlock_with_luxintus", true), "Should eating a Luxintus berry unlocked the light?");
+        configs.addKeyValuePair(new Pair<>("not_ally_then_enemy", false), "Should a player that is not an explicit ALLY be considered an ENEMY?");
+
+        configs.addKeyValuePair(new Pair<>("light_default_status", true), "When using world protector mods, should the light be activatable by default? If false, you'll need to create regions where the it's activatable through world protector mods' flags");
 
         configs.addKeyValuePair(new Pair<>("fall_trigger", 25), "How many blocks should be passed before a fall is considered very high? 10 blocks added per level of Feather Falling");
 
@@ -272,6 +278,10 @@ public class Config {
         //Config version 2
         REPLACEABLE_STRUCTURES = CONFIG.getOrDefault("replaceable_structures", true);
         KEEP_ESSENTIALS_STRUCTURES = CONFIG.getOrDefault("keep_essentials_structures", true);
+
+        //Config version 3
+        LIGHT_DEFAULT_STATUS = CONFIG.getOrDefault("light_default_status", true);
+
     }
 }
 

@@ -1,0 +1,77 @@
+{
+  "name": "defence",
+  "colors": [
+    {
+      "color": "#417e3a",
+      "active_for": 5
+    },
+    {
+      "color": "#3d7b35",
+      "active_for": 5
+    },
+    {
+      "color": "#387931",
+      "active_for": 5
+    },
+    {
+      "color": "#33762c",
+      "active_for": 5
+    },
+    {
+      "color": "#2e7427",
+      "active_for": 5
+    },
+    {
+      "color": "#297123",
+      "active_for": 5
+    },
+    {
+      "color": "#246f1d",
+      "active_for": 5
+    },
+    {
+      "color": "#1e6c18",
+      "active_for": 5
+    },
+    {
+      "color": "#176a12",
+      "active_for": 5
+    },
+    {
+      "color": "#0f670b",
+      "active_for": 5
+    },
+    {
+      "color": "#176a12",
+      "active_for": 5
+    },
+    {
+      "color": "#1e6c18",
+      "active_for": 5
+    },
+    {
+      "color": "#246f1d",
+      "active_for": 5
+    },
+    {
+      "color": "#297123",
+      "active_for": 5
+    },
+    {
+      "color": "#2e7427",
+      "active_for": 5
+    },
+    {
+      "color": "#33762c",
+      "active_for": 5
+    },
+    {
+      "color": "#387931",
+      "active_for": 5
+    },
+    {
+      "color": "#3d7b35",
+      "active_for": 5
+    }
+  ]
+}

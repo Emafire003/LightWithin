@@ -103,6 +103,17 @@ dependencies {
 
 	//ReplayMod (to fix the runes rendering)
 	modCompileOnly "maven.modrinth:replaymod:${project.replaymod_version}"
+
+	//Flan
+	modCompileOnly("maven.modrinth:flan:${project.flan_version}"){
+		transitive = false
+	}
+
+	//Yet another world protector (world protection)
+	//modImplementation("maven.modrinth:yawp:${project.yawp_version}")
+	modCompileOnly("curse.maven:yawp-663276:${project.yawp_version}"){
+		transitive = false
+	}
 }
 
 processResources {

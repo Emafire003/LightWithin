@@ -8,6 +8,7 @@ import me.emafire003.dev.lightwithin.particles.LightParticles;
 import me.emafire003.dev.lightwithin.particles.LightParticlesUtil;
 import me.emafire003.dev.lightwithin.sounds.LightSounds;
 import me.emafire003.dev.lightwithin.status_effects.LightEffects;
+import me.emafire003.dev.lightwithin.util.CheckUtils;
 import me.emafire003.dev.lightwithin.util.SpawnUtils;
 import me.emafire003.dev.lightwithin.util.TargetType;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
@@ -29,6 +30,7 @@ import net.minecraft.entity.projectile.TridentEntity;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
@@ -79,7 +81,8 @@ public class AquaLight extends InnerLight {
     public AquaLight(List<LivingEntity> targets, double cooldown_time, double power_multiplier, int duration, PlayerEntity caster) {
         super(targets, cooldown_time, power_multiplier, duration, caster);
         type = InnerLightType.AQUA;
-        color = "#35f4d1";
+        //color = "#35f4d1";
+        color = "aqua";
     }
 
     private void checkSafety(){
@@ -191,7 +194,7 @@ public class AquaLight extends InnerLight {
                 //TODO should I play the sound for every enemy? Nah
                 //target.playSound(LightSounds.AQUA_LIGHT, 0.9f, 1);
 
-                if(Config.STRUCTURE_GRIEFING && !caster.getWorld().isClient) {
+                if(!caster.getWorld().isClient && CheckUtils.checkGriefable((ServerPlayerEntity) caster)) {
                     if(target instanceof PlayerEntity){
                         applyWaterCascade(target, (int) (this.power_multiplier*3));
                     }else{

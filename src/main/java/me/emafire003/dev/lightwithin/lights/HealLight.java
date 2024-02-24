@@ -64,8 +64,8 @@ public class HealLight extends InnerLight {
     public HealLight(List<LivingEntity> targets, double cooldown_time, double power_multiplier, int duration, PlayerEntity caster) {
         super(targets, cooldown_time, power_multiplier, duration, caster);
         type = InnerLightType.HEAL;
-        this.color = "#ff4432";
-        checkSafety();
+        //this.color = "#ff4432";
+        this.color = "heal";
     }
 
     private void checkSafety(){
@@ -90,6 +90,7 @@ public class HealLight extends InnerLight {
 
     @Override
     public void execute(){
+        checkSafety();
         LightComponent component = LightWithin.LIGHT_COMPONENT.get(caster);
         if(FabricLoader.getInstance().isModLoaded("coloredglowlib")){
             if(this.rainbow_col){

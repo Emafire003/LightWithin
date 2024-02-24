@@ -1,0 +1,77 @@
+{
+  "name": "blazing_variant",
+  "colors": [
+    {
+      "color": "#088f91",
+      "active_for": 5
+    },
+    {
+      "color": "#199597",
+      "active_for": 5
+    },
+    {
+      "color": "#249b9d",
+      "active_for": 5
+    },
+    {
+      "color": "#2ea0a2",
+      "active_for": 5
+    },
+    {
+      "color": "#36a6a8",
+      "active_for": 5
+    },
+    {
+      "color": "#3eacae",
+      "active_for": 5
+    },
+    {
+      "color": "#46b2b4",
+      "active_for": 5
+    },
+    {
+      "color": "#4db8ba",
+      "active_for": 5
+    },
+    {
+      "color": "#54bec0",
+      "active_for": 5
+    },
+    {
+      "color": "#5bc4c6",
+      "active_for": 5
+    },
+    {
+      "color": "#54bec0",
+      "active_for": 5
+    },
+    {
+      "color": "#4db8ba",
+      "active_for": 5
+    },
+    {
+      "color": "#46b2b4",
+      "active_for": 5
+    },
+    {
+      "color": "#3eacae",
+      "active_for": 5
+    },
+    {
+      "color": "#36a6a8",
+      "active_for": 5
+    },
+    {
+      "color": "#2ea0a2",
+      "active_for": 5
+    },
+    {
+      "color": "#249b9d",
+      "active_for": 5
+    },
+    {
+      "color": "#199597",
+      "active_for": 5
+    }
+  ]
+}

@@ -1,0 +1,117 @@
+{
+  "name": "frost",
+  "colors": [
+    {
+      "color": "#a3fdff",
+      "active_for": 5
+    },
+    {
+      "color": "#9ffcfe",
+      "active_for": 5
+    },
+    {
+      "color": "#9afbfd",
+      "active_for": 5
+    },
+    {
+      "color": "#96f9fc",
+      "active_for": 5
+    },
+    {
+      "color": "#91f8fb",
+      "active_for": 5
+    },
+    {
+      "color": "#8cf7fa",
+      "active_for": 5
+    },
+    {
+      "color": "#88f6f9",
+      "active_for": 5
+    },
+    {
+      "color": "#83f5f8",
+      "active_for": 5
+    },
+    {
+      "color": "#7ef3f7",
+      "active_for": 5
+    },
+    {
+      "color": "#78f2f6",
+      "active_for": 5
+    },
+    {
+      "color": "#73f1f5",
+      "active_for": 5
+    },
+    {
+      "color": "#6df0f4",
+      "active_for": 5
+    },
+    {
+      "color": "#68eef3",
+      "active_for": 5
+    },
+    {
+      "color": "#61edf2",
+      "active_for": 5
+    },
+    {
+      "color": "#5becf1",
+      "active_for": 5
+    },
+    {
+      "color": "#61edf2",
+      "active_for": 5
+    },
+    {
+      "color": "#68eef3",
+      "active_for": 5
+    },
+    {
+      "color": "#6df0f4",
+      "active_for": 5
+    },
+    {
+      "color": "#73f1f5",
+      "active_for": 5
+    },
+    {
+      "color": "#78f2f6",
+      "active_for": 5
+    },
+    {
+      "color": "#7ef3f7",
+      "active_for": 5
+    },
+    {
+      "color": "#83f5f8",
+      "active_for": 5
+    },
+    {
+      "color": "#88f6f9",
+      "active_for": 5
+    },
+    {
+      "color": "#8cf7fa",
+      "active_for": 5
+    },
+    {
+      "color": "#91f8fb",
+      "active_for": 5
+    },
+    {
+      "color": "#96f9fc",
+      "active_for": 5
+    },
+    {
+      "color": "#9afbfd",
+      "active_for": 5
+    },
+    {
+      "color": "#9ffcfe",
+      "active_for": 5
+    }
+  ]
+}

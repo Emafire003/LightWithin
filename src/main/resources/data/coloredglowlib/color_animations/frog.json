@@ -1,0 +1,117 @@
+{
+  "name": "frog",
+  "colors": [
+    {
+      "color": "#c46931",
+      "active_for": 8
+    },
+    {
+      "color": "#c06c2a",
+      "active_for": 8
+    },
+    {
+      "color": "#bb6f24",
+      "active_for": 8
+    },
+    {
+      "color": "#b6821d",
+      "active_for": 8
+    },
+    {
+      "color": "#b08816",
+      "active_for": 8
+    },
+    {
+      "color": "#aa880e",
+      "active_for": 8
+    },
+    {
+      "color": "#a48b08",
+      "active_for": 8
+    },
+    {
+      "color": "#9e8d00",
+      "active_for": 8
+    },
+    {
+      "color": "#988000",
+      "active_for": 8
+    },
+    {
+      "color": "#908200",
+      "active_for": 8
+    },
+    {
+      "color": "#898800",
+      "active_for": 8
+    },
+    {
+      "color": "#818800",
+      "active_for": 8
+    },
+    {
+      "color": "#898900",
+      "active_for": 8
+    },
+    {
+      "color": "#818b00",
+      "active_for": 8
+    },
+    {
+      "color": "#688d02",
+      "active_for": 8
+    },
+    {
+      "color": "#818b00",
+      "active_for": 8
+    },
+    {
+      "color": "#898900",
+      "active_for": 8
+    },
+    {
+      "color": "#818800",
+      "active_for": 8
+    },
+    {
+      "color": "#898800",
+      "active_for": 8
+    },
+    {
+      "color": "#908200",
+      "active_for": 8
+    },
+    {
+      "color": "#988000",
+      "active_for": 8
+    },
+    {
+      "color": "#9e8d00",
+      "active_for": 8
+    },
+    {
+      "color": "#a48b08",
+      "active_for": 8
+    },
+    {
+      "color": "#aa880e",
+      "active_for": 8
+    },
+    {
+      "color": "#b08816",
+      "active_for": 8
+    },
+    {
+      "color": "#b6821d",
+      "active_for": 8
+    },
+    {
+      "color": "#bb6f24",
+      "active_for": 8
+    },
+    {
+      "color": "#c06c2a",
+      "active_for": 8
+    }
+  ]
+}
