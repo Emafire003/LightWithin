@@ -14,7 +14,6 @@ public class YawpCompat {
     public static boolean canActivateHere(ServerPlayerEntity player, BlockPos pos){
         DimensionRegionCache dimCache = RegionDataManager.get().cacheFor(player.getServerWorld().getRegistryKey());
         FlagCheckEvent flagCheckEvent = HandlerUtil.checkTargetEvent(pos, RegionFlag.NO_PVP, dimCache.getDimensionalRegion());
-        player.sendMessage(Text.literal("Flagcheck: " + flagCheckEvent.isDenied()));
         return !flagCheckEvent.isDenied();
 
     }

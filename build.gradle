@@ -110,13 +110,13 @@ dependencies {
 	modCompileOnly "maven.modrinth:replaymod:${project.replaymod_version}"
 
 	//Flan
-	modImplementation("maven.modrinth:flan:${project.flan_version}"){
+	modCompileOnly("maven.modrinth:flan:${project.flan_version}"){
 		transitive = false
 	}
 
 	//Yet another world protector (world protection)
 	//modImplementation("maven.modrinth:yawp:${project.yawp_version}")
-	modImplementation("curse.maven:yawp-663276:${project.yawp_version}"){
+	modCompileOnly("curse.maven:yawp-663276:${project.yawp_version}"){
 		transitive = false
 	}
 
