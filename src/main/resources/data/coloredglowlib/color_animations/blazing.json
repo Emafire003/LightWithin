@@ -1,0 +1,77 @@
+{
+  "name": "blazing",
+  "colors": [
+    {
+      "color": "#ea4710",
+      "active_for": 4
+    },
+    {
+      "color": "#e4410e",
+      "active_for": 4
+    },
+    {
+      "color": "#df3b0b",
+      "active_for": 4
+    },
+    {
+      "color": "#d93409",
+      "active_for": 4
+    },
+    {
+      "color": "#d42f07",
+      "active_for": 4
+    },
+    {
+      "color": "#ce2904",
+      "active_for": 4
+    },
+    {
+      "color": "#c92104",
+      "active_for": 4
+    },
+    {
+      "color": "#c31902",
+      "active_for": 4
+    },
+    {
+      "color": "#be0f01",
+      "active_for": 4
+    },
+    {
+      "color": "#b80000",
+      "active_for": 4
+    },
+    {
+      "color": "#be0f01",
+      "active_for": 4
+    },
+    {
+      "color": "#c31902",
+      "active_for": 4
+    },
+    {
+      "color": "#c92104",
+      "active_for": 4
+    },
+    {
+      "color": "#ce2904",
+      "active_for": 4
+    },
+    {
+      "color": "#d42f07",
+      "active_for": 4
+    },
+    {
+      "color": "#d93409",
+      "active_for": 4
+    },
+    {
+      "color": "#df3b0b",
+      "active_for": 4
+    },
+    {
+      "color": "#e4410e",
+      "active_for": 4
+    }
+  ]
+}

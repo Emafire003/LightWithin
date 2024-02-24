@@ -2,8 +2,10 @@ package me.emafire003.dev.lightwithin.util;
 
 import me.emafire003.dev.lightwithin.compat.argonauts.ArgonautsChecker;
 import me.emafire003.dev.lightwithin.compat.factions.FactionChecker;
+import me.emafire003.dev.lightwithin.compat.flan.FlanCompat;
 import me.emafire003.dev.lightwithin.compat.ftb_teams.FTBTeamsChecker;
 import me.emafire003.dev.lightwithin.compat.open_parties_and_claims.OPACChecker;
+import me.emafire003.dev.lightwithin.compat.yawp.YawpCompat;
 import me.emafire003.dev.lightwithin.component.SummonedByComponent;
 import me.emafire003.dev.lightwithin.config.Config;
 import me.emafire003.dev.lightwithin.status_effects.LightEffects;
@@ -704,7 +706,7 @@ public class CheckUtils {
     }
 
     /**Rerturn a list of an entity's enemies in the area
-     * for entity checks, also know as LightWithin.box_exapansion_amount
+     * for entity checks, also known as LightWithin.box_exapansion_amount
      *
      * @param entity The entity used as the center of the area to search of its enemies*/
     public static List<LivingEntity> getEnemies(LivingEntity entity){
@@ -719,6 +721,49 @@ public class CheckUtils {
             }
         }
         return targets;
+    }
+
+    /**
+     * Checks for regions/claims/world protection of sorts, and
+     * if the flags say the light can't be activated there, it
+     * will return false
+     * */
+    public static boolean canActivateHere(ServerPlayerEntity player){
+        if(FabricLoader.getInstance().isModLoaded("flan")){
+            boolean b = FlanCompat.canActivateHere(player, player.getBlockPos());
+            if(b != Config.LIGHT_DEFAULT_STATUS){
+                return b;
+            }
+        }
+        if(FabricLoader.getInstance().isModLoaded("yawp")){
+            boolean b = YawpCompat.canActivateHere(player, player.getBlockPos());
+            if(b != Config.LIGHT_DEFAULT_STATUS){
+                return b;
+            }
+        }
+        return Config.LIGHT_DEFAULT_STATUS;
+    }
+
+    /**
+     * Checks for regions/claims/world protection of sorts, and
+     * if the flags say the light that griefes the
+     * terrain can't be activated there, it will return false
+     * */
+    public static boolean canActivateHereGriefing(ServerPlayerEntity player){
+        if(FabricLoader.getInstance().isModLoaded("flan")){
+            return FlanCompat.canActivateHereGriefing(player, player.getBlockPos());
+        }
+        if(FabricLoader.getInstance().isModLoaded("yawp")){
+            return YawpCompat.canActivateHereGriefing(player, player.getBlockPos());
+        }
+        return true;
+    }
+
+    /**Checks to see if the light-griefing is enabled
+     *
+     * Checks the config option and for land claims/regions*/
+    public static boolean checkGriefable(ServerPlayerEntity player){
+        return Config.STRUCTURE_GRIEFING || canActivateHereGriefing(player);
     }
 
 }

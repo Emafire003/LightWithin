@@ -11,6 +11,7 @@ import me.emafire003.dev.lightwithin.particles.LightParticles;
 import me.emafire003.dev.lightwithin.particles.LightParticlesUtil;
 import me.emafire003.dev.lightwithin.sounds.LightSounds;
 import me.emafire003.dev.lightwithin.status_effects.LightEffects;
+import me.emafire003.dev.lightwithin.util.CheckUtils;
 import me.emafire003.dev.lightwithin.util.SpawnUtils;
 import me.emafire003.dev.lightwithin.util.TargetType;
 import me.emafire003.dev.structureplacerapi.StructurePlacerAPI;
@@ -23,6 +24,7 @@ import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.particle.BlockStateParticleEffect;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.util.BlockMirror;
@@ -51,7 +53,8 @@ public class EarthenLight extends InnerLight {
     public EarthenLight(List<LivingEntity> targets, double cooldown_time, double power_multiplier, int duration, PlayerEntity caster) {
         super(targets, cooldown_time, power_multiplier, duration, caster);
         type = InnerLightType.EARTHEN;
-        color = "#72420b";
+        //color = "#72420b";
+        color = "earthen";
     }
 
     private void checkSafety(){
@@ -117,7 +120,7 @@ public class EarthenLight extends InnerLight {
 
                 //If the oldtarget and the new one have a distance greater than 3 it will spawn a new hole,
                 //otherwise it will skip it, since probably they would end up in the same hole regardless
-                if((oldtarget == null || oldtarget.distanceTo(target) > 3) && Config.STRUCTURE_GRIEFING){
+                if((oldtarget == null || oldtarget.distanceTo(target) > 3) && CheckUtils.checkGriefable((ServerPlayerEntity) caster)){
                     StructurePlacerAPI placer = new StructurePlacerAPI((ServerWorld) caster.getWorld(), new Identifier(MOD_ID, "earth_hole"), target.getBlockPos(), BlockMirror.NONE, BlockRotation.NONE, true, 1f, new BlockPos(-3, -11, -3));
                     if(Config.REPLACEABLE_STRUCTURES && !Config.KEEP_ESSENTIALS_STRUCTURES){
                         placer.loadAndRestoreStructureAnimated(caster.getStatusEffect(LightEffects.LIGHT_ACTIVE).getDuration(), 2, true);
@@ -147,7 +150,7 @@ public class EarthenLight extends InnerLight {
                     target.addStatusEffect(new StatusEffectInstance(LightEffects.STURDY_ROCK, caster.getStatusEffect(LightEffects.LIGHT_ACTIVE).getDuration(), (int) this.power_multiplier, false, false));
                 }
 
-                if(Config.STRUCTURE_GRIEFING && !caster.getWorld().isClient) {
+                if(!caster.getWorld().isClient && CheckUtils.checkGriefable((ServerPlayerEntity) caster)) {
                     if(oldtarget == null || oldtarget.distanceTo(target) > 3){
                         StructurePlacerAPI placer;
                         if(this.power_multiplier > 4){
@@ -174,7 +177,7 @@ public class EarthenLight extends InnerLight {
         }else if(component.getTargets().equals(TargetType.SELF)){
             caster.addStatusEffect(new StatusEffectInstance(LightEffects.STURDY_ROCK, caster.getStatusEffect(LightEffects.LIGHT_ACTIVE).getDuration(), (int) this.power_multiplier, false, false));
             caster.playSound(LightSounds.EARTHEN_LIGHT, 1, 1);
-            if(Config.STRUCTURE_GRIEFING && !caster.getWorld().isClient) {
+            if(!caster.getWorld().isClient && CheckUtils.checkGriefable((ServerPlayerEntity) caster)) {
                 StructurePlacerAPI placer;
                 if(this.power_multiplier >= 7){
                     LightParticlesUtil.spawnCircle(caster.getPos().add(0, 0.45, 0), 7, 120, new BlockStateParticleEffect(ParticleTypes.BLOCK, Blocks.DIRT.getDefaultState()), (ServerWorld) caster.getWorld());

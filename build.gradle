@@ -50,6 +50,7 @@ repositories {
 }
 
 dependencies {
+
 	// To change the versions see the gradle.properties file
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
 	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
@@ -74,11 +75,14 @@ dependencies {
 	//StructurePlacerAPI
 	include modImplementation("maven.modrinth:structureplacerapi:${project.structureplacerapi_version}")
 
+
+
 	//===========OPTIONAL DEPENDENCIES===========
 
 	//ColoredGlowLib
 	modImplementation "maven.modrinth:coloredglowlib:${project.coloredglowlib_version}"
 
+	//For ALLIES & Enemies
 	//Factions
 	modImplementation "maven.modrinth:factions:${project.factions_version}"
 
@@ -101,8 +105,24 @@ dependencies {
 	//Permissions
 	modCompileOnly "me.lucko:fabric-permissions-api:${project.fabricperms_version}"
 
+	//Fixes
 	//ReplayMod (to fix the runes rendering)
 	modCompileOnly "maven.modrinth:replaymod:${project.replaymod_version}"
+
+	//Flan
+	modImplementation("maven.modrinth:flan:${project.flan_version}"){
+		transitive = false
+	}
+
+	//Yet another world protector (world protection)
+	//modImplementation("maven.modrinth:yawp:${project.yawp_version}")
+	modImplementation("curse.maven:yawp-663276:${project.yawp_version}"){
+		transitive = false
+	}
+
+	//Not really worth the effor at the moment
+	//Leukocyte (world protection)
+	//modImplementation("maven.modrinth:leukocyte:${project.leukocyte_version}")
 }
 
 processResources {

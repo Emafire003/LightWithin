@@ -1,0 +1,77 @@
+{
+  "name": "earthen",
+  "colors": [
+    {
+      "color": "#75430b",
+      "active_for": 10
+    },
+    {
+      "color": "#714212",
+      "active_for": 10
+    },
+    {
+      "color": "#6d4117",
+      "active_for": 10
+    },
+    {
+      "color": "#693f1c",
+      "active_for": 10
+    },
+    {
+      "color": "#643e20",
+      "active_for": 10
+    },
+    {
+      "color": "#603d24",
+      "active_for": 10
+    },
+    {
+      "color": "#5b3c27",
+      "active_for": 10
+    },
+    {
+      "color": "#563c2a",
+      "active_for": 10
+    },
+    {
+      "color": "#513b2d",
+      "active_for": 10
+    },
+    {
+      "color": "#4b3a30",
+      "active_for": 10
+    },
+    {
+      "color": "#513b2d",
+      "active_for": 10
+    },
+    {
+      "color": "#563c2a",
+      "active_for": 10
+    },
+    {
+      "color": "#5b3c27",
+      "active_for": 10
+    },
+    {
+      "color": "#603d24",
+      "active_for": 10
+    },
+    {
+      "color": "#643e20",
+      "active_for": 10
+    },
+    {
+      "color": "#693f1c",
+      "active_for": 10
+    },
+    {
+      "color": "#6d4117",
+      "active_for": 10
+    },
+    {
+      "color": "#714212",
+      "active_for": 10
+    }
+  ]
+}

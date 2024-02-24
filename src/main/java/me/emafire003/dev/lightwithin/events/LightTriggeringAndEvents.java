@@ -1,6 +1,5 @@
 package me.emafire003.dev.lightwithin.events;
 
-import me.emafire003.dev.lightwithin.client.LightWithinClient;
 import me.emafire003.dev.lightwithin.component.LightComponent;
 import me.emafire003.dev.lightwithin.lights.InnerLightType;
 import me.emafire003.dev.lightwithin.status_effects.LightEffects;
@@ -29,6 +28,9 @@ public class LightTriggeringAndEvents {
      * */
     public static boolean isTriggerable(PlayerEntity player){
         if(player.getWorld().isClient){
+            return false;
+        }
+        if(!CheckUtils.canActivateHere((ServerPlayerEntity) player)){
             return false;
         }
         LightComponent component = LIGHT_COMPONENT.get(player);

@@ -1,0 +1,77 @@
+{
+  "name": "heal",
+  "colors": [
+    {
+      "color": "#ff144c",
+      "active_for": 5
+    },
+    {
+      "color": "#ff0f46",
+      "active_for": 5
+    },
+    {
+      "color": "#ff0940",
+      "active_for": 5
+    },
+    {
+      "color": "#fe043a",
+      "active_for": 5
+    },
+    {
+      "color": "#fe0133",
+      "active_for": 5
+    },
+    {
+      "color": "#fd002d",
+      "active_for": 5
+    },
+    {
+      "color": "#fc0025",
+      "active_for": 5
+    },
+    {
+      "color": "#fb001d",
+      "active_for": 5
+    },
+    {
+      "color": "#fa0314",
+      "active_for": 5
+    },
+    {
+      "color": "#f80707",
+      "active_for": 5
+    },
+    {
+      "color": "#fa0314",
+      "active_for": 5
+    },
+    {
+      "color": "#fb001d",
+      "active_for": 5
+    },
+    {
+      "color": "#fc0025",
+      "active_for": 5
+    },
+    {
+      "color": "#fd002d",
+      "active_for": 5
+    },
+    {
+      "color": "#fe0133",
+      "active_for": 5
+    },
+    {
+      "color": "#fe043a",
+      "active_for": 5
+    },
+    {
+      "color": "#ff0940",
+      "active_for": 5
+    },
+    {
+      "color": "#ff0f46",
+      "active_for": 5
+    }
+  ]
+}

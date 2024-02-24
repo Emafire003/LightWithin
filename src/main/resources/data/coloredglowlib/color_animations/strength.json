@@ -1,0 +1,77 @@
+{
+  "name": "strength",
+  "colors": [
+    {
+      "color": "#bb0224",
+      "active_for": 10
+    },
+    {
+      "color": "#b60420",
+      "active_for": 10
+    },
+    {
+      "color": "#b0071c",
+      "active_for": 10
+    },
+    {
+      "color": "#ab0918",
+      "active_for": 10
+    },
+    {
+      "color": "#a60b15",
+      "active_for": 10
+    },
+    {
+      "color": "#a10c11",
+      "active_for": 10
+    },
+    {
+      "color": "#9b0d0d",
+      "active_for": 10
+    },
+    {
+      "color": "#960e09",
+      "active_for": 10
+    },
+    {
+      "color": "#910f04",
+      "active_for": 10
+    },
+    {
+      "color": "#8c1000",
+      "active_for": 10
+    },
+    {
+      "color": "#910f04",
+      "active_for": 10
+    },
+    {
+      "color": "#960e09",
+      "active_for": 10
+    },
+    {
+      "color": "#9b0d0d",
+      "active_for": 10
+    },
+    {
+      "color": "#a10c11",
+      "active_for": 10
+    },
+    {
+      "color": "#a60b15",
+      "active_for": 10
+    },
+    {
+      "color": "#ab0918",
+      "active_for": 10
+    },
+    {
+      "color": "#b0071c",
+      "active_for": 10
+    },
+    {
+      "color": "#b60420",
+      "active_for": 10
+    }
+  ]
+}

@@ -1,0 +1,77 @@
+{
+  "name": "wind",
+  "colors": [
+    {
+      "color": "#d1f2ff",
+      "active_for": 4
+    },
+    {
+      "color": "#c7e8f4",
+      "active_for": 4
+    },
+    {
+      "color": "#bdddea",
+      "active_for": 4
+    },
+    {
+      "color": "#b4d4e0",
+      "active_for": 4
+    },
+    {
+      "color": "#a9c9d6",
+      "active_for": 4
+    },
+    {
+      "color": "#9fbecc",
+      "active_for": 4
+    },
+    {
+      "color": "#94b4c2",
+      "active_for": 4
+    },
+    {
+      "color": "#8cabb8",
+      "active_for": 4
+    },
+    {
+      "color": "#82a1ae",
+      "active_for": 4
+    },
+    {
+      "color": "#7997a4",
+      "active_for": 4
+    },
+    {
+      "color": "#82a1ae",
+      "active_for": 4
+    },
+    {
+      "color": "#8cabb8",
+      "active_for": 4
+    },
+    {
+      "color": "#94b4c2",
+      "active_for": 4
+    },
+    {
+      "color": "#9fbecc",
+      "active_for": 4
+    },
+    {
+      "color": "#a9c9d6",
+      "active_for": 4
+    },
+    {
+      "color": "#b4d4e0",
+      "active_for": 4
+    },
+    {
+      "color": "#bdddea",
+      "active_for": 4
+    },
+    {
+      "color": "#c7e8f4",
+      "active_for": 4
+    }
+  ]
+}

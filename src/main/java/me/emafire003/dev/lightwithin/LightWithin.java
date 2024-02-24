@@ -8,6 +8,7 @@ import dev.onyxstudios.cca.api.v3.entity.RespawnCopyStrategy;
 import me.emafire003.dev.lightwithin.blocks.LightBlocks;
 import me.emafire003.dev.lightwithin.commands.LightCommands;
 import me.emafire003.dev.lightwithin.compat.coloredglowlib.CGLCompat;
+import me.emafire003.dev.lightwithin.compat.flan.FlanCompat;
 import me.emafire003.dev.lightwithin.component.LightComponent;
 import me.emafire003.dev.lightwithin.component.SummonedByComponent;
 import me.emafire003.dev.lightwithin.config.BalanceConfig;
@@ -108,6 +109,10 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 		LootTableModifier.modifyLootTables();
 		LightCommands.registerArguments();
 		LightEntities.registerEntities();
+
+		if(FabricLoader.getInstance().isModLoaded("flan")){
+			FlanCompat.registerFlan();
+		}
 		CommandRegistrationCallback.EVENT.register(LightCommands::registerCommands);
 
 
@@ -163,14 +168,15 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 	}
 
 	public static void activateLight(PlayerEntity player){
-		if(!(player.hasStatusEffect(LightEffects.LIGHT_FATIGUE) || player.hasStatusEffect(LightEffects.LIGHT_ACTIVE))){
-			if(debug){
-				player.sendMessage(Text.literal("Ok not in cooldown, starting the ticking"), false);
-			}
-			player.addStatusEffect(new StatusEffectInstance(LightEffects.LIGHT_ACTIVE, (20*LIGHT_COMPONENT.get(player).getDuration())));
-		}else{
+
+		if(player.getWorld().isClient() || player.hasStatusEffect(LightEffects.LIGHT_FATIGUE)
+				|| player.hasStatusEffect(LightEffects.LIGHT_ACTIVE)
+		 		|| !CheckUtils.canActivateHere((ServerPlayerEntity) player)) {
 			return;
 		}
+
+		player.addStatusEffect(new StatusEffectInstance(LightEffects.LIGHT_ACTIVE, (20*LIGHT_COMPONENT.get(player).getDuration())));
+
 		if(FabricLoader.getInstance().isModLoaded("coloredglowlib")){
 			//A bit janky but should do the job. I hope.
 			overrideTeamColorsPrev = CGLCompat.getLib().getOverrideTeamColors();

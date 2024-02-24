@@ -48,7 +48,8 @@ public class FrogLight extends InnerLight {
     public FrogLight(List<LivingEntity> targets, double cooldown_time, double power_multiplier, int duration, PlayerEntity caster) {
         super(targets, cooldown_time, power_multiplier, duration, caster);
         type = InnerLightType.FROG;
-        color = "#c46931";
+        //color = "#c46931";
+        color = "frog";
     }
 
     private void checkSafety(){
@@ -58,7 +59,6 @@ public class FrogLight extends InnerLight {
     @Override
     public void execute(){
         checkSafety();
-        LightComponent component = LightWithin.LIGHT_COMPONENT.get(caster);
         if(FabricLoader.getInstance().isModLoaded("coloredglowlib")){
             if(this.rainbow_col){
                 CGLCompat.getLib().setRainbowColor(this.caster);
