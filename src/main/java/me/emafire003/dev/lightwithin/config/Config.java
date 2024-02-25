@@ -82,6 +82,8 @@ public class Config {
 
     public static int FALL_TRIGGER;
 
+    public static int TRIGGER_BLOCK_RADIUS;
+
     public static void handleVersionChange(){
         int version_found = CONFIG.getOrDefault("version", ver);
         if(version_found != ver){
@@ -207,10 +209,13 @@ public class Config {
         configs.addKeyValuePair(new Pair<>("unlock_with_luxintus", true), "Should eating a Luxintus berry unlocked the light?");
         configs.addKeyValuePair(new Pair<>("not_ally_then_enemy", false), "Should a player that is not an explicit ALLY be considered an ENEMY?");
 
+        //V3
         configs.addKeyValuePair(new Pair<>("light_default_status", true), "When using world protector mods, should the light be activatable by default? If false, you'll need to create regions where the it's activatable through world protector mods' flags");
 
         configs.addKeyValuePair(new Pair<>("fall_trigger", 25), "How many blocks should be passed before a fall is considered very high? 10 blocks added per level of Feather Falling");
 
+        //V3
+        configs.addKeyValuePair(new Pair<>("trigger_block_radius", 3), "The radius of blocks to check when searching for blocks to fulfill light trigger conditions. Ex: checking fire blocks for triggering blazing light. WARNING! Could lead to a lot of lag at high values!");
     }
 
     public static void reloadConfig(){
@@ -281,7 +286,7 @@ public class Config {
 
         //Config version 3
         LIGHT_DEFAULT_STATUS = CONFIG.getOrDefault("light_default_status", true);
-
+        TRIGGER_BLOCK_RADIUS = Config.CONFIG.getOrDefault("trigger_block_radius", 3);
     }
 }
 
