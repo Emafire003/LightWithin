@@ -52,7 +52,6 @@ public class LightActiveEffect extends StatusEffect {
         }
     }
 
-    //TODO after updating CGL to 3.0.0 I'll need to remove this most likely
     @Override
     public void onRemoved(LivingEntity entity, AttributeContainer attributes, int amplifier){
         if(!entity.hasStatusEffect(StatusEffects.GLOWING)){

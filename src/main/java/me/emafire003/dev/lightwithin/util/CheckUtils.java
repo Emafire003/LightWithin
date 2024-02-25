@@ -8,10 +8,10 @@ import me.emafire003.dev.lightwithin.compat.open_parties_and_claims.OPACChecker;
 import me.emafire003.dev.lightwithin.compat.yawp.YawpCompat;
 import me.emafire003.dev.lightwithin.component.SummonedByComponent;
 import me.emafire003.dev.lightwithin.config.Config;
+import me.emafire003.dev.lightwithin.config.TriggerConfig;
 import me.emafire003.dev.lightwithin.status_effects.LightEffects;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.DamageUtil;
 import net.minecraft.entity.Entity;
@@ -29,12 +29,15 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.registry.Registries;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.registry.tag.DamageTypeTags;
 import net.minecraft.registry.tag.TagKey;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.state.property.Properties;
 import net.minecraft.text.Text;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import org.jetbrains.annotations.NotNull;
@@ -432,11 +435,39 @@ public class CheckUtils {
         }
     }
 
-    //TODO make list configable
-    private static final List<Item> fire_items = Arrays.asList(Items.TORCH, Items.FIRE_CHARGE, Items.FLINT_AND_STEEL, Items.CAMPFIRE, Items.SOUL_CAMPFIRE, Items.SOUL_TORCH, Items.LAVA_BUCKET);
-    private static final List<Block> fire_blocks = Arrays.asList(Blocks.LAVA, Blocks.MAGMA_BLOCK, Blocks.FIRE, Blocks.SOUL_FIRE, Blocks.TORCH, Blocks.SOUL_TORCH, Blocks.SOUL_WALL_TORCH, Blocks.WALL_TORCH, Blocks.CAMPFIRE, Blocks.SOUL_CAMPFIRE);
+    public static List<Item> toItemList(List<String> list){
+        List<Item> items = new ArrayList<>();
+        for(String id : list){
+            items.add(Registries.ITEM.get(new Identifier(id)));
+        }
+        return items;
+    }
 
-    public static boolean checkBlocksWithTags(PlayerEntity player, int rad, TagKey tag){
+    public static List<String> toItemStringList(List<Item> list){
+        List<String> items = new ArrayList<>();
+        for(Item item : list){
+            items.add(Registries.ITEM.getId(item).toString());
+        }
+        return items;
+    }
+
+    public static List<Block> toBlockList(List<String> list){
+        List<Block> blocks = new ArrayList<>();
+        for(String id : list){
+            blocks.add(Registries.BLOCK.get(new Identifier(id)));
+        }
+        return blocks;
+    }
+
+    public static List<String> toBlockStringList(List<Block> list){
+        List<String> blocks = new ArrayList<>();
+        for(Block block : list){
+            blocks.add(Registries.BLOCK.getId(block).toString());
+        }
+        return blocks;
+    }
+
+    public static boolean checkBlocksWithTags(PlayerEntity player, int rad, TagKey<?> tag){
         //If the terrain under the player's feet is natural block (times 3 aka 3 blocks down), will create a moat,  if not a wall.
         List<TagKey<Block>> tags = new ArrayList<>();
 
@@ -456,7 +487,15 @@ public class CheckUtils {
         return tags.contains(tag);
     }
 
-    public static boolean checkMultipleBlocksWithTags(PlayerEntity player, int rad, int block_number, TagKey tag){
+    /** Checks multiple blocks around a player
+     *  to see if more than a given number have a given tag
+     *
+     * @param player The player around which to check blocks
+     * @param rad The radius of blocks to check (radius not diameter!)
+     * @param block_number How many blocks should have the tag in order to be ok
+     * @param tag The tag that the blocks need to have
+     * */
+    public static boolean checkMultipleBlocksWithTags(PlayerEntity player, int rad, int block_number, TagKey<?> tag){
         //If the terrain under the player's feet is natural block (times 3 aka 3 blocks down), will create a moat,  if not a wall.
         List<TagKey<Block>> tags = new ArrayList<>();
         int number = 0;
@@ -515,6 +554,50 @@ public class CheckUtils {
         return false;
     }
 
+    /** Checks for blocks in a certain radius from the player pos
+     * if they match a waterlogged block or at least one from a given list.
+     *
+     * If SHOULD_CHECK_BLOCKS from the config it's on false, it will only check the block
+     * under the player's feet.
+     *
+     * @param player The player for which we are performing the check for
+     * @param blocks A list of blocks that if found, will return a positive match
+     * @param rad The radius in block in which to check (The lower, the better for the performance)
+     * */
+    public static boolean checkWaterLogggedOrListBlocks(PlayerEntity player, List<Block> blocks, int rad){
+        if(!Config.SHOULD_CHECK_BLOCKS){
+            BlockPos pos = player.getBlockPos().add(0, -1, 0);
+            if(player.getWorld().getBlockState(pos).getProperties().contains(Properties.WATERLOGGED)){
+                return player.getWorld().getBlockState(pos).get(Properties.WATERLOGGED);
+            }
+            return blocks.contains(player.getWorld().getBlockState(pos).getBlock());
+        }
+
+        BlockPos origin = player.getBlockPos();
+        for(int y = -rad; y <= rad; y++)
+        {
+            for(int x = -rad; x <= rad; x++)
+            {
+                for(int z = -rad; z <= rad; z++)
+                {
+                    BlockPos pos = origin.add(x, y, z);
+
+                    if(player.getWorld().getBlockState(pos).getProperties().contains(Properties.WATERLOGGED)){
+                        if(player.getWorld().getBlockState(pos).get(Properties.WATERLOGGED)){
+                            return true;
+                        }
+                    }
+                    if(blocks.contains(player.getWorld().getBlockState(pos).getBlock())){
+                        return true;
+                    }
+
+                }
+            }
+        }
+        //If no match has been found, return false.
+        return false;
+    }
+
     /** Checks for multiple blocks in a certain radius from the player pos
      * if they match at least one from the given list.
      *
@@ -533,6 +616,7 @@ public class CheckUtils {
                 return true;
             }
         }
+        int n = 0;
 
         BlockPos origin = player.getBlockPos();
         for(int y = -rad; y <= rad; y++)
@@ -543,14 +627,14 @@ public class CheckUtils {
                 {
                     BlockPos pos = origin.add(x, y, z);
                     if(blocks.contains(player.getWorld().getBlockState(pos).getBlock())){
-                        return true;
+                        n++;
                     }
 
                 }
             }
         }
+        return n >= number;
         //If no match has been found, return false.
-        return false;
     }
 
     /**Used to check if the player has something that can be considered a Heat Source
@@ -558,37 +642,36 @@ public class CheckUtils {
      *
      * @param player The player to perform checks on*/
     public static boolean checkBlazing(PlayerEntity player){
+        List<Item> items = toItemList(TriggerConfig.BLAZING_TRIGGER_ITEMS);
         if(player.isOnFire()){
             return true;
         }
 
         Item main = player.getMainHandStack().getItem();
         Item off = player.getOffHandStack().getItem();
-        if(fire_items.contains(main) || fire_items.contains(off)){
+        if(items.contains(main) || items.contains(off)){
             return true;
         }
-        //TODO make the rad configable?
-        return checkBlocks(player, fire_blocks, 3);
-    }
 
-    private static final List<Item> ice_items = Arrays.asList(Items.ICE, Items.PACKED_ICE, Items.BLUE_ICE, Items.SNOW, Items.SNOW_BLOCK, Items.SNOWBALL, Items.POWDER_SNOW_BUCKET);
-    private static final List<Block> ice_blocks = Arrays.asList(Blocks.POWDER_SNOW, Blocks.SNOW, Blocks.ICE, Blocks.PACKED_ICE, Blocks.BLUE_ICE, Blocks.SNOW, Blocks.SNOW_BLOCK, Blocks.POWDER_SNOW_CAULDRON);
+        return checkBlocks(player, toBlockList(TriggerConfig.BLAZING_TRIGGER_BLOCKS), Config.TRIGGER_BLOCK_RADIUS);
+    }
 
     /**Used to check if the player has something that can be considered a Cold Source
      * for the Frost Light
      *
      * @param player The player to perform checks on*/
     public static boolean checkFrost(PlayerEntity player){
+        List<Item> items = toItemList(TriggerConfig.FROST_TRIGGER_ITEMS);
         if(player.isFrozen()){
             return true;
         }
 
         Item main = player.getMainHandStack().getItem();
         Item off = player.getOffHandStack().getItem();
-        if(ice_items.contains(main) || ice_items.contains(off)){
+        if(items.contains(main) || items.contains(off)){
             return true;
         }
-        return checkBlocks(player, ice_blocks, 3);
+        return checkBlocks(player, toBlockList(TriggerConfig.FROST_TRIGGER_BLOCKS), Config.TRIGGER_BLOCK_RADIUS);
     }
 
     /**Used to check if the player can trigger the Earthen Light, aka if they have
@@ -598,7 +681,7 @@ public class CheckUtils {
     public static boolean checkEarthen(PlayerEntity player){
 
         //Moved this so it doesn't consume the dirt unless needed
-        if(checkMultipleBlocksWithTags(player, 3, 3, TagKey.of(RegistryKeys.BLOCK, BlockTags.LUSH_GROUND_REPLACEABLE.id()))){
+        if(checkMultipleBlocksWithTags(player, Config.TRIGGER_BLOCK_RADIUS, 3, TagKey.of(RegistryKeys.BLOCK, BlockTags.LUSH_GROUND_REPLACEABLE.id()))){
             return true;
         }
         if(player.getInventory().contains(new ItemStack(Items.DIRT, 64))){
@@ -614,7 +697,6 @@ public class CheckUtils {
      *
      * @param player The player to perform checks on*/
     public static boolean checkWind(PlayerEntity player){
-
         //If the player is above sea level and can see the sky winds are there right?
         if(player.getY() >= 64){
             if(!player.getEntityWorld().isSkyVisible(player.getBlockPos())){
@@ -623,29 +705,25 @@ public class CheckUtils {
             return true;
         }
 
-        return checkMultipleBlocks(player, List.of(Blocks.AIR), 3, 7);
-        //return checkMultipleBlocksWithTags(player, 3, 3, TagKey.of(Registry.BLOCK_KEY, BlockTags.AIR));
+        return checkMultipleBlocks(player, toBlockList(TriggerConfig.WIND_TRIGGER_BLOCKS), Config.TRIGGER_BLOCK_RADIUS, 7);
     }
 
-
-    //TODO maybe add water logged blocks check.
-    private static final List<Item> aqua_items = Arrays.asList(Items.WATER_BUCKET, Items.GLASS_BOTTLE, Items.HEART_OF_THE_SEA, Items.NAUTILUS_SHELL, Items.CONDUIT);
-    private static final List<Block> aqua_blocks = Arrays.asList(Blocks.WATER, Blocks.WATER_CAULDRON, Blocks.CONDUIT, Blocks.WET_SPONGE);
 
     /**Used to check if the player has something that can be considered a Aqua source
      *
      * @param player The player to perform checks on*/
     public static boolean checkAqua(PlayerEntity player){
+        List<Item> items = toItemList(TriggerConfig.AQUA_TRIGGER_ITEMS);
         if(player.isTouchingWaterOrRain()){
             return true;
         }
 
         Item main = player.getMainHandStack().getItem();
         Item off = player.getOffHandStack().getItem();
-        if(aqua_items.contains(main) || aqua_items.contains(off)){
+        if(items.contains(main) || items.contains(off)){
             return true;
         }
-        return checkBlocks(player, aqua_blocks, 3);
+        return checkWaterLogggedOrListBlocks(player, toBlockList(TriggerConfig.AQUA_TRIGGER_BLOCKS), Config.TRIGGER_BLOCK_RADIUS);
     }
 
     public static boolean checkFalling(LivingEntity entity) {

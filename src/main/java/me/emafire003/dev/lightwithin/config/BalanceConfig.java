@@ -6,6 +6,7 @@ import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 
 import static me.emafire003.dev.lightwithin.LightWithin.LOGGER;
 
@@ -61,11 +62,32 @@ public class BalanceConfig {
     public static int AQUA_MIN_DURATION;
 
     private static final String config_name = "_balancing";
+
+    public static void handleVersionChange(){
+        int version_found = CONFIG.getOrDefault("version", ver);
+        if(version_found != ver){
+            LOGGER.warn("DIFFERENT CONFIG VERSION DETECTED, updating...");
+            HashMap<String, String> config_old = CONFIG.getConfigCopy();
+            try {
+                CONFIG.delete();
+                CONFIG = SimpleConfig.of(LightWithin.MOD_ID + config_name).provider(configs).request();
+                HashMap<Pair<String, ?>, Pair<String, ?>> sub_map = new HashMap<>();
+
+                CONFIG.getConfigCopy().forEach((key, value) -> sub_map.put(new Pair<>(key, value),  new Pair<>(key, config_old.get(key))));
+                CONFIG.updateValues(sub_map);
+            } catch (IOException e) {
+                LOGGER.info("Could not delete config file");
+                e.printStackTrace();
+            }
+        }
+    }
     public static void registerConfigs() {
         configs = new ConfigProvider();
         createConfigs();
 
         CONFIG = SimpleConfig.of(LightWithin.MOD_ID + config_name).provider(configs).request();
+
+        handleVersionChange();
 
         try{
             assignConfigs();

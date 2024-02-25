@@ -2,10 +2,16 @@ package me.emafire003.dev.lightwithin.config;
 
 import com.mojang.datafixers.util.Pair;
 import me.emafire003.dev.lightwithin.LightWithin;
+import me.emafire003.dev.lightwithin.util.CheckUtils;
+import net.minecraft.block.Blocks;
+import net.minecraft.item.Items;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
 
 import static me.emafire003.dev.lightwithin.LightWithin.LOGGER;
 
@@ -13,7 +19,7 @@ public class TriggerConfig {
     public static SimpleConfig CONFIG;
     private static ConfigProvider configs;
 
-    private static final int ver = 1;
+    private static final int ver = 2;
     public static int VERSION;
     
     public static int TRIGGER_THRESHOLD;
@@ -86,6 +92,11 @@ public class TriggerConfig {
     public static int BLAZING_ENEMIES_CONDITIONS;
     public static int BLAZING_ENEMIES_ONFIRE;
 
+    public static List<String> BLAZING_TRIGGER_BLOCKS;
+    public static List<String> BLAZING_TRIGGER_ITEMS;
+    private static final List<String> fire_items = CheckUtils.toItemStringList(Arrays.asList(Items.TORCH, Items.FIRE_CHARGE, Items.FLINT_AND_STEEL, Items.CAMPFIRE, Items.SOUL_CAMPFIRE, Items.SOUL_TORCH, Items.LAVA_BUCKET));
+    private static final List<String> fire_blocks = CheckUtils.toBlockStringList(Arrays.asList(Blocks.LAVA, Blocks.MAGMA_BLOCK, Blocks.FIRE, Blocks.SOUL_FIRE, Blocks.TORCH, Blocks.SOUL_TORCH, Blocks.SOUL_WALL_TORCH, Blocks.WALL_TORCH, Blocks.CAMPFIRE, Blocks.SOUL_CAMPFIRE));
+
     //Frost light
     //All
     public static int FROST_ALL_VERY_LOW_HEALTH;
@@ -119,6 +130,12 @@ public class TriggerConfig {
     public static int FROST_ALLIES_CONDITIONS;
     public static int FROST_ALLIES_FREEZING;
     public static int FROST_ALLIES_ALLY_FREEZING;
+
+    public static List<String> FROST_TRIGGER_ITEMS;
+    public static List<String> FROST_TRIGGER_BLOCKS;
+    private static final List<String> ice_items = CheckUtils.toItemStringList(Arrays.asList(Items.ICE, Items.PACKED_ICE, Items.BLUE_ICE, Items.SNOW, Items.SNOW_BLOCK, Items.SNOWBALL, Items.POWDER_SNOW_BUCKET));
+    private static final List<String> ice_blocks = CheckUtils.toBlockStringList(Arrays.asList(Blocks.POWDER_SNOW, Blocks.SNOW, Blocks.ICE, Blocks.PACKED_ICE, Blocks.BLUE_ICE, Blocks.SNOW, Blocks.SNOW_BLOCK, Blocks.POWDER_SNOW_CAULDRON));
+
 
     //Earthen light
     //Variant
@@ -161,6 +178,10 @@ public class TriggerConfig {
     public static int WIND_SELF_FALLING_HIGH;
     public static int WIND_SELF_CONDITIONS;
 
+    //V2
+    public static List<String> WIND_TRIGGER_BLOCKS;
+    private static final List<String> air_blocks = CheckUtils.toBlockStringList(List.of(Blocks.AIR));
+
     //Allies
     public static int WIND_ALLIES_ALLY_LOW_HEALTH;
     public static int WIND_ALLIES_VERY_LOW_HEALTH;
@@ -202,14 +223,41 @@ public class TriggerConfig {
     public static int AQUA_ALLIES_CONDITIONS;
     public static int AQUA_ALLIES_DROWNING;
     public static int AQUA_ALLIES_ALLY_DROWNING;
-    
+    public static List<String> AQUA_TRIGGER_ITEMS;
+    public static List<String> AQUA_TRIGGER_BLOCKS;
+    private static final List<String> aqua_items = CheckUtils.toItemStringList(Arrays.asList(Items.WATER_BUCKET, Items.GLASS_BOTTLE, Items.HEART_OF_THE_SEA, Items.NAUTILUS_SHELL, Items.CONDUIT));
+    private static final List<String> aqua_blocks = CheckUtils.toBlockStringList(Arrays.asList(Blocks.WATER, Blocks.WATER_CAULDRON, Blocks.CONDUIT, Blocks.WET_SPONGE));
+
+
 
     private static final String config_name = "_trigger_balance";
+
+    public static void handleVersionChange(){
+        int version_found = CONFIG.getOrDefault("version", ver);
+        if(version_found != ver){
+            LOGGER.warn("DIFFERENT CONFIG VERSION DETECTED, updating...");
+            HashMap<String, String> config_old = CONFIG.getConfigCopy();
+            try {
+                CONFIG.delete();
+                CONFIG = SimpleConfig.of(LightWithin.MOD_ID + config_name).provider(configs).request();
+                HashMap<Pair<String, ?>, Pair<String, ?>> sub_map = new HashMap<>();
+
+                CONFIG.getConfigCopy().forEach((key, value) -> sub_map.put(new Pair<>(key, value),  new Pair<>(key, config_old.get(key))));
+                CONFIG.updateValues(sub_map);
+            } catch (IOException e) {
+                LOGGER.info("Could not delete config file");
+                e.printStackTrace();
+            }
+        }
+    }
+
     public static void registerConfigs() {
         configs = new ConfigProvider();
         createConfigs();
 
         CONFIG = SimpleConfig.of(LightWithin.MOD_ID + config_name).provider(configs).request();
+
+        handleVersionChange();
 
         try{
             assignConfigs();
@@ -265,6 +313,8 @@ public class TriggerConfig {
     private static final String caster_drowning = "The contribution to the trigger threshold made by the caster drowning";
     private static final String ally_drowning = "The contribution to the trigger threshold made by the caster's allies drowning";
 
+    private static final String items_required = "A list of items for the fulfillment of the light conditions";
+    private static final String blocks_required = "A list of blocks for the fulfillment of the light conditions";
 
     private static void createConfigs() {
         configs.addKeyValuePair(new Pair<>("version", ver), "The version of the config. DO NOT CHANGE IT :D");
@@ -333,6 +383,8 @@ public class TriggerConfig {
         configs.addKeyValuePair(new Pair<>("spacer", "spacer"), "");
 
         //==========================Blazing==========================
+        configs.addKeyValuePair(new Pair<>("blazing_trigger_items", fire_items), items_required);
+        configs.addKeyValuePair(new Pair<>("blazing_trigger_blocks", fire_blocks), blocks_required);
         //All
         configs.addKeyValuePair(new Pair<>("blazing_all_very_low_health", 4), caster_very_low_health+" (excludes the low health)");
         configs.addKeyValuePair(new Pair<>("blazing_all_low_health", 2), caster_low_health);
@@ -352,6 +404,8 @@ public class TriggerConfig {
         configs.addKeyValuePair(new Pair<>("spacer", "spacer"), "");
 
         //==========================Frost==========================
+        configs.addKeyValuePair(new Pair<>("frost_trigger_items", ice_items), items_required);
+        configs.addKeyValuePair(new Pair<>("frost_trigger_blocks", ice_blocks), blocks_required);
         //All
         configs.addKeyValuePair(new Pair<>("frost_all_very_low_health", 4), caster_very_low_health);
         configs.addKeyValuePair(new Pair<>("frost_all_low_health", 2), caster_low_health);
@@ -415,6 +469,7 @@ public class TriggerConfig {
         configs.addKeyValuePair(new Pair<>("spacer", "spacer"), "");
 
         //==========================Wind==========================
+        configs.addKeyValuePair(new Pair<>("wind_trigger_blocks", air_blocks), blocks_required);
         //All
         configs.addKeyValuePair(new Pair<>("wind_all_very_low_health", 4), caster_very_low_health);
         configs.addKeyValuePair(new Pair<>("wind_all_surrounded", 1), caster_surrounded);
@@ -442,6 +497,8 @@ public class TriggerConfig {
         configs.addKeyValuePair(new Pair<>("spacer", "spacer"), "");
 
         //==========================Aqua==========================
+        configs.addKeyValuePair(new Pair<>("aqua_trigger_items", aqua_items), items_required);
+        configs.addKeyValuePair(new Pair<>("aqua_trigger_blocks", aqua_blocks), blocks_required+ ". Waterlogged blocks will also be counted automatically");
         //All
         configs.addKeyValuePair(new Pair<>("aqua_all_very_low_health", 4), caster_very_low_health);
         configs.addKeyValuePair(new Pair<>("aqua_all_surrounded", 1), caster_surrounded);
@@ -556,6 +613,10 @@ public class TriggerConfig {
         BLAZING_ENEMIES_ARMOR_DURABILITY = CONFIG.getOrDefault("blazing_enemies_ally_armor_durability", 2);
         BLAZING_ENEMIES_CONDITIONS = CONFIG.getOrDefault("blazing_enemies_conditions", 2);
 
+        //V2
+        BLAZING_TRIGGER_ITEMS = CONFIG.getOrDefault("blazing_trigger_items", fire_items);
+        BLAZING_TRIGGER_BLOCKS = CONFIG.getOrDefault("blazing_trigger_blocks", fire_blocks);
+
         //========================Frost========================
         //All
         FROST_ALL_VERY_LOW_HEALTH = CONFIG.getOrDefault("frost_all_very_low_health", 4);
@@ -589,6 +650,10 @@ public class TriggerConfig {
         FROST_ALLIES_ALLY_FREEZING = CONFIG.getOrDefault("frost_allies_ally_freezing", 1);
         FROST_ALLIES_ALLY_ARMOR_DURABILITY = CONFIG.getOrDefault("frost_allies_ally_armor_durability", 1);
         FROST_ALLIES_CONDITIONS = CONFIG.getOrDefault("frost_allies_conditions", 3);
+
+        //V2
+        FROST_TRIGGER_ITEMS = CONFIG.getOrDefault("frost_trigger_items", ice_items);
+        FROST_TRIGGER_BLOCKS = CONFIG.getOrDefault("frost_trigger_blocks", ice_blocks);
 
         //==========================Earthen==========================
         //Variant
@@ -640,6 +705,9 @@ public class TriggerConfig {
         WIND_ALLIES_ALLY_FALLING = CONFIG.getOrDefault("wind_allies_falling", 2);
         WIND_ALLIES_CONDITIONS = CONFIG.getOrDefault("wind_allies_conditions", 3);
 
+        //V2
+        WIND_TRIGGER_BLOCKS = CONFIG.getOrDefault("wind_trigger_blocks", air_blocks);
+
         //==========================Aqua==========================
         //All
         AQUA_ALL_VERY_LOW_HEALTH = CONFIG.getOrDefault("aqua_all_very_low_health", 4);
@@ -672,6 +740,10 @@ public class TriggerConfig {
         AQUA_ALLIES_ALLY_DROWNING = CONFIG.getOrDefault("aqua_allies_ally_drowning", 1);
         AQUA_ALLIES_ALLY_ARMOR_DURABILITY = CONFIG.getOrDefault("aqua_allies_ally_armor_durability", 1);
         AQUA_ALLIES_CONDITIONS = CONFIG.getOrDefault("aqua_allies_conditions", 3);
+
+        //V2
+        AQUA_TRIGGER_ITEMS = CONFIG.getOrDefault("aqua_trigger_items", aqua_items);
+        AQUA_TRIGGER_BLOCKS = CONFIG.getOrDefault("aqua_trigger_blocks", aqua_blocks);
 
     }
 }

@@ -5,7 +5,9 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import me.emafire003.dev.lightwithin.LightWithin;
 import me.emafire003.dev.lightwithin.compat.permissions.PermissionsChecker;
+import me.emafire003.dev.lightwithin.config.BalanceConfig;
 import me.emafire003.dev.lightwithin.config.Config;
+import me.emafire003.dev.lightwithin.config.TriggerConfig;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.Text;
@@ -16,6 +18,8 @@ public class ReloadConfigCommand implements LightCommand{
     private int reloadConfig(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
         try{
             Config.reloadConfig();
+            TriggerConfig.reloadConfig();
+            BalanceConfig.reloadConfig();
             context.getSource().sendFeedback( () -> Text.literal(LightWithin.PREFIX_MSG).append("§aConfig successfully reloaded!"), false);
             return 1;
         }catch (Exception e){

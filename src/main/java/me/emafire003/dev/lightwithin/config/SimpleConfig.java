@@ -32,7 +32,9 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Scanner;
 
 import static me.emafire003.dev.lightwithin.LightWithin.LOGGER;
@@ -210,6 +212,22 @@ public class SimpleConfig {
     /**
      * Returns string value from config corresponding to the given
      * key, or the default string if the key is missing.
+     *
+     * @return  value corresponding to the given key, or the default value
+     */
+    public List<String> getOrDefault( String key, List<String> def ) {
+        String val = get(key);
+        if(val == null){
+            return def;
+        }
+        //Remove "[" and "]"
+        val = val.substring(1, val.length() - 1);
+        return Arrays.asList(val.split(", ", -1));
+    }
+
+    /**
+     * Returns string value from config corresponding to the given
+     * key, or the default string list if the key is missing.
      *
      * @return  value corresponding to the given key, or the default value
      */
