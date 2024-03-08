@@ -35,6 +35,7 @@ import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.block.Block;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.mob.DrownedEntity;
@@ -42,6 +43,10 @@ import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.passive.PassiveEntity;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.RegistryKeys;
+import net.minecraft.registry.entry.RegistryEntryList;
+import net.minecraft.registry.tag.TagKey;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
@@ -62,6 +67,8 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 	public static final String PREFIX_MSG = "[LightWithin] ";
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 	public static int box_expansion_amount = 6;
+
+	public static final TagKey<Block> FOREST_AURA_BLOCKS = TagKey.of(RegistryKeys.BLOCK, new Identifier(MOD_ID, "forest_aura_blocks"));
 
 	private static final boolean debug = false;
 	public static Path PATH = Path.of(FabricLoader.getInstance().getConfigDir() + "/" + MOD_ID + "/");
@@ -109,6 +116,7 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 		LootTableModifier.modifyLootTables();
 		LightCommands.registerArguments();
 		LightEntities.registerEntities();
+		RegistryEntryList.Named<Block> forest_blocks = Registries.BLOCK.getOrCreateEntryList(FOREST_AURA_BLOCKS);
 
 		if(FabricLoader.getInstance().isModLoaded("flan")){
 			FlanCompat.registerFlan();

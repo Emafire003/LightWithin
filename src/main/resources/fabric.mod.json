@@ -48,5 +48,6 @@
   },
   "recommends": {
     "coloredglowlib": ">=2.0.3"
-  }
+  },
+  "accessWidener" : "lightwithin.accesswidener"
 }

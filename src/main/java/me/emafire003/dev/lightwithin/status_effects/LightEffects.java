@@ -17,6 +17,9 @@ public class LightEffects {
             new FrostEffect().addAttributeModifier(EntityAttributes.GENERIC_ATTACK_SPEED, "4d5ca720-40c5-492f-b74a-f31771f2dacc", -1.0f, EntityAttributeModifier.Operation.MULTIPLY_TOTAL));
     public static final StatusEffect FREEZE_RESISTANCE = registerStatusEffect("freeze_resistance",
             new FreezeResistanceEffect());
+
+    public static final StatusEffect FOREST_AURA = registerStatusEffect("forest_aura",
+            new ForestAuraEffect());
     public static final StatusEffect STURDY_ROCK = registerStatusEffect("sturdy_rock",
             new SturdyRockEffect().addAttributeModifier(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE, "70d5f061-467c-430a-a9b6-48475f961db9", 0.15f, EntityAttributeModifier.Operation.ADDITION));
             //.addAttributeModifier(EntityAttributes.GENERIC_MOVEMENT_SPEED, "70d5f061-467c-430a-a9b6-48475f961db9", 0.5f, EntityAttributeModifier.Operation.MULTIPLY_TOTAL));

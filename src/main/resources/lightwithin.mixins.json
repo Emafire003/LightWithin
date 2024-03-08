@@ -4,21 +4,25 @@
   "package": "me.emafire003.dev.lightwithin.mixin",
   "compatibilityLevel": "JAVA_16",
   "mixins": [
-    "PlayerJoinMixin",
-    "MilkNotCleanLightEffectsMixin",
+    "DrownedEntityMixin",
+    "EditBlocksMixin",
     "EntityAttackEntityMixin",
     "EntityDeathMixin",
-    "FreezeEntityMixin",
-    "DrownedEntityMixin",
     "EntityFallingMixin",
+    "ForestBlocksMixin",
+    "FreezeEntityLookMixin",
+    "FreezeEntityMixin",
     "LivingEntityDamageTriggersMixin",
+    "MilkNotCleanLightEffectsMixin",
     "PlayerFreezeMixin",
-    "FreezeEntityLookMixin"
+    "PlayerJoinMixin"
   ],
   "client": [
+    "CameraMixin",
+    "BackgroundRenderForestMixin",
+    "ForestBlocksRenderTricksMixin"
   ],
-  "server":[
-
+  "server": [
   ],
   "injectors": {
     "defaultRequire": 1
