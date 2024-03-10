@@ -19,8 +19,7 @@
   ],
   "client": [
     "CameraMixin",
-    "BackgroundRenderForestMixin",
-    "ForestBlocksRenderTricksMixin"
+    "BackgroundRenderForestMixin"
   ],
   "server": [
   ],

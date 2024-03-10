@@ -36,6 +36,7 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.Block;
+import net.minecraft.block.Blocks;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.mob.DrownedEntity;
@@ -99,6 +100,12 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 	public static final ComponentKey<SummonedByComponent> SUMMONED_BY_COMPONENT =
 			ComponentRegistry.getOrCreate(new Identifier(MOD_ID, "summoned_by_component"), SummonedByComponent.class);
 
+	//These are the blocks that need to be modifed and in which the player will be "swimming" through. This are unmodifed natural occouring blocks, so no wood (maybe i'll add it later), no planks, no stripped things.
+	//Also leaves are counted but they already kind of work on their own.
+	//I can't use the tag beacuse it's not available at the start.
+	public static final List<Block> forest_solid_blocks = List.of(Blocks.GRASS_BLOCK, Blocks.OAK_LOG, Blocks.BIRCH_LOG, Blocks.SPRUCE_LOG,
+			Blocks.ACACIA_LOG, Blocks.CHERRY_LOG, Blocks.DARK_OAK_LOG, Blocks.DARK_OAK_LOG, Blocks.MANGROVE_LOG,
+			Blocks.MYCELIUM, Blocks.MUSHROOM_STEM, Blocks.BROWN_MUSHROOM_BLOCK, Blocks.RED_MUSHROOM_BLOCK);
 	@Override
 	public void onInitialize() {
 		// This code runs as soon as Minecraft is in a mod-load-ready state.

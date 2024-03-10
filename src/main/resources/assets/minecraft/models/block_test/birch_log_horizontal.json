@@ -1,8 +1,9 @@
 {
-  "parent": "minecraft:block/block",
+  "parent": "minecraft:block/cube_column_horizontal",
   "textures": {
-    "texture": "block/oak_log",
-    "particle": "#texture"
+    "end": "minecraft:block/birch_log_top",
+    "side": "minecraft:block/birch_log",
+    "texture": "minecraft:block/birch_log"
   },
   "elements": [
     {   "from": [ 0, 15.998, 0 ],
