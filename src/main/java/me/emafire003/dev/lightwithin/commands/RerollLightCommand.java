@@ -196,11 +196,32 @@ public class RerollLightCommand implements LightCommand{
         return  1;
     }
 
+    private int rerollLightCharges(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
+        Collection<ServerPlayerEntity> targets = EntityArgumentType.getPlayers(context, "player");
+        ServerCommandSource source = context.getSource();
+
+        for(ServerPlayerEntity target : targets){
+            LightComponent component = LightWithin.LIGHT_COMPONENT.get(target);
+
+            int lightCharges = LightCreationAndEvent.determineMaxLightStack(UUID.randomUUID().toString().toLowerCase().split("-"), LightCreationAndEvent.COOLDOWN_BIT);
+            component.setMaxLightStack(lightCharges);
+
+            if(Config.TARGET_FEEDBACK){
+                target.sendMessage(Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The number of max light charges of your InnerLight has been changed, your new one is: " ).formatted(Formatting.YELLOW)
+                        .append(Text.literal(String.valueOf(lightCharges)).formatted(Formatting.GREEN))));
+            }
+            source.sendFeedback( () -> Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("§eThe new number of max light charges of " + target.getName().getString() + " is: §a" + component.getMaxCooldown())), false);
+
+        }
+        return  1;
+    }
+
     private int rerollAll(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
         rerollCooldown(context);
         rerollDuration(context);
         rerollPower(context);
         rerollTypeTarget(context);
+        rerollLightCharges(context);
         return  1;
     }
 
@@ -256,7 +277,12 @@ public class RerollLightCommand implements LightCommand{
                                 CommandManager.literal("cooldown")
                                         .executes(this::rerollCooldown)
                         )
-
+                )
+                .then(
+                        CommandManager.argument("player", EntityArgumentType.players()).then(
+                                CommandManager.literal("lightCharges")
+                                        .executes(this::rerollLightCharges)
+                        )
                 )
                 .build();
     }

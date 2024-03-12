@@ -5,6 +5,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import me.emafire003.dev.lightwithin.LightWithin;
 import me.emafire003.dev.lightwithin.compat.permissions.PermissionsChecker;
+import me.emafire003.dev.lightwithin.component.LightComponent;
 import me.emafire003.dev.lightwithin.lights.InnerLightType;
 import me.emafire003.dev.lightwithin.status_effects.LightEffects;
 import me.emafire003.dev.lightwithin.util.TargetType;
@@ -103,6 +104,22 @@ public class GetLightCommand implements LightCommand{
         }
     }
 
+    private int getMaxLightCharges(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
+        ServerPlayerEntity target = EntityArgumentType.getPlayer(context, "player");
+        ServerCommandSource source = context.getSource();
+
+        try{
+            int maxLightStack = LightWithin.LIGHT_COMPONENT.get(target).getMaxLightStack();
+            source.sendFeedback(() -> Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The max number of light charges for §d" + target.getName().getString() + "§e is: " ).formatted(Formatting.YELLOW)
+                    .append(Text.literal("§a"+maxLightStack))), true);
+            return 1;
+        }catch(Exception e){
+            e.printStackTrace();
+            source.sendFeedback(() -> Text.literal("Error: " + e.toString()),false);
+            return 0;
+        }
+    }
+
     private int getLocked(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
         ServerPlayerEntity target = EntityArgumentType.getPlayer(context, "player");
         ServerCommandSource source = context.getSource();
@@ -151,22 +168,26 @@ public class GetLightCommand implements LightCommand{
         ServerCommandSource source = context.getSource();
 
         try{
-            InnerLightType type = LightWithin.LIGHT_COMPONENT.get(target).getType();
+            LightComponent component = LightWithin.LIGHT_COMPONENT.get(target);
+            InnerLightType type = component.getType();
             source.sendFeedback(() -> Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The InnerLight type of §d" + target.getName().getString() + "§e is: " ).formatted(Formatting.YELLOW)
                     .append(Text.literal(type.toString()).formatted(Formatting.GREEN))), true);
-            TargetType target_type = LightWithin.LIGHT_COMPONENT.get(target).getTargets();
+            TargetType target_type = component.getTargets();
             source.sendFeedback(() -> Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The TargetType is: " ).formatted(Formatting.YELLOW)
                     .append(Text.literal(target_type.toString()).formatted(Formatting.GREEN))), true);
-            double power = LightWithin.LIGHT_COMPONENT.get(target).getPowerMultiplier();
+            double power = component.getPowerMultiplier();
             source.sendFeedback(() -> Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The power multiplier is: " ).formatted(Formatting.YELLOW)
                     .append(Text.literal("§a"+power))), true);
-            int duration = LightWithin.LIGHT_COMPONENT.get(target).getDuration();
+            int duration = component.getDuration();
             source.sendFeedback(() -> Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The duration is: " ).formatted(Formatting.YELLOW)
                     .append(Text.literal("§a"+duration))), true);
-            int mcooldown = LightWithin.LIGHT_COMPONENT.get(target).getMaxCooldown();
+            int mcooldown = component.getMaxCooldown();
             source.sendFeedback(() -> Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The max cooldown is: " ).formatted(Formatting.YELLOW)
                     .append(Text.literal("§a"+mcooldown))), true);
-            boolean locked = LightWithin.LIGHT_COMPONENT.get(target).getLocked();
+            int maxLightStacks = component.getMaxLightStack();
+            source.sendFeedback(() -> Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The max light charges is: " ).formatted(Formatting.YELLOW)
+                    .append(Text.literal("§a"+maxLightStacks))), true);
+            boolean locked = component.getLocked();
             source.sendFeedback(() -> Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("Locked: " ).formatted(Formatting.YELLOW)
                     .append(Text.literal("§a"+locked))), true);
 
@@ -177,6 +198,8 @@ public class GetLightCommand implements LightCommand{
             }else{
                 source.sendFeedback(() -> Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("§d" + target.getName().getString() + "§e is not in cooldown" ).formatted(Formatting.YELLOW)), true);
             }
+            source.sendFeedback(() -> Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The current number of light charges is: " ).formatted(Formatting.YELLOW)
+                    .append(Text.literal("§a"+component.getCurrentLightCharges()))), true);
 
             return 1;
         }catch(Exception e){
@@ -272,6 +295,16 @@ public class GetLightCommand implements LightCommand{
                                 .then(
                                         CommandManager.argument("player", EntityArgumentType.player())
                                                 .executes(this::getMaxCooldown)
+
+
+                                )
+                )
+                .then(
+                        CommandManager
+                                .literal("max_light_charges")
+                                .then(
+                                        CommandManager.argument("player", EntityArgumentType.player())
+                                                .executes(this::getMaxLightCharges)
 
 
                                 )

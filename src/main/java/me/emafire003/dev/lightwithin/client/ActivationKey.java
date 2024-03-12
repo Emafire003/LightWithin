@@ -31,7 +31,8 @@ public class ActivationKey {
                     ClientPlayNetworking.send(LightUsedPacketC2S.ID, new LightUsedPacketC2S(true));
                     LightWithinClient.setLightReady(false);
                     LightWithinClient.setWaitForNext(true);
-                }
+                }//Else check for light stacks and consume one, then set light ready. Then check again for the keybind being pressed.
+                //TODO add a toggle for displaying the light charges counter thingy
 
             }
         }

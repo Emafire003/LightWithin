@@ -96,4 +96,60 @@ public class Tests {
         p.sendMessage(Text.literal(("Frog: §a" + frog + " §rpercent: §b" + (double) frog*100/run_times)));
         p.sendMessage(Text.literal(("Error: §c" + error)));
     }
+
+    public static void testDetermineMaxStack(int run_times, PlayerEntity p){
+        int f1 = 0;
+        int f2 = 0;
+        int f3 = 0;
+        int f4 = 0;
+        int f5 = 0;
+        int f6 = 0;
+        int f7 = 0;
+        int f8 = 0;
+        int f9 = 0;
+        int f0 = 0;
+        int error = 0;
+        UUID id = UUID.randomUUID();
+        for(int i = 0; i<run_times; i++){
+            String[] id_bits = id.toString().split("-");
+            int max_stack = determineMaxLightStack(id_bits, COOLDOWN_BIT);
+            if(max_stack == 1){
+                f1++;
+            }else if(max_stack == 2){
+                f2++;
+            }else if(max_stack == 3){
+                f3++;
+            }else if(max_stack == 4){
+                f4++;
+            }else if(max_stack == 5){
+                f5++;
+            }else if(max_stack == 6){
+                f6++;
+            }else if(max_stack == 7){
+                f7++;
+            }else if(max_stack == 8){
+                f8++;
+            }else if(max_stack == 9){
+                f9++;
+            }else if(max_stack == 0){
+                f0++;
+            }
+            else{
+                error++;
+            }
+            id = UUID.randomUUID();
+        }
+
+        p.sendMessage(Text.literal("One: §a" + f1 + " §rpercent: §b" + (double) f1*100/run_times));
+        p.sendMessage(Text.literal(("Two: §a" + f2 + " §rpercent: §b" + (double) f2*100/run_times)));
+        p.sendMessage(Text.literal(("Three: §a" + f3 + " §rpercent: §b" + (double) f3*100/run_times)));
+        p.sendMessage(Text.literal(("Four: §a" + f4 + " §rpercent: §b" + (double) f4*100/run_times)));
+        p.sendMessage(Text.literal(("Five: §a" + f5 + " §rpercent: §b" + (double) f5*100/run_times)));
+        p.sendMessage(Text.literal(("Six: §a" + f6 + " §rpercent: §b" + (double) f6*100/run_times)));
+        p.sendMessage(Text.literal(("Seven: §a" + f7 + " §rpercent: §b" + (double) f7*100/run_times)));
+        p.sendMessage(Text.literal(("Eight: §a" + f5 + " §rpercent: §b" + (double) f8*100/run_times)));
+        p.sendMessage(Text.literal(("Nine: §a" + f5 + " §rpercent: §b" + (double) f9*100/run_times)));
+        p.sendMessage(Text.literal(("Zero: §a" + f5 + " §rpercent: §b" + (double) f0*100/run_times)));
+        p.sendMessage(Text.literal(("Error: §c" + error)));
+    }
 }

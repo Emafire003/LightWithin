@@ -42,7 +42,8 @@ public class LightCommands {
                 new ActivateLightCommand(),
                 new RerollLightCommand(),
                 new ReloadConfigCommand(),
-                new ReadyLightCommand()
+                new ReadyLightCommand(),
+                new LightChargeCommand()
         };
 
         for (LightCommand command : commands) {

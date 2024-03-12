@@ -13,6 +13,7 @@ import me.emafire003.dev.lightwithin.component.LightComponent;
 import me.emafire003.dev.lightwithin.config.Config;
 import me.emafire003.dev.lightwithin.lights.InnerLightType;
 import me.emafire003.dev.lightwithin.util.TargetType;
+import me.emafire003.dev.lightwithin.util.Tests;
 import net.minecraft.command.argument.EntityArgumentType;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
@@ -175,6 +176,29 @@ public class SetLightCommand implements LightCommand{
         return 1;
     }
 
+    private int changeLightCharges(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
+        Collection<ServerPlayerEntity> targets = EntityArgumentType.getPlayers(context, "player");
+        int lightCharges = IntegerArgumentType.getInteger(context, "new_light_charges");
+        ServerCommandSource source = context.getSource();
+
+        for(ServerPlayerEntity target : targets){
+            LightComponent component = LightWithin.LIGHT_COMPONENT.get(target);
+            component.setMaxLightStack(lightCharges);
+
+            if(Config.TARGET_FEEDBACK){
+                target.sendMessage(Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The number of max light charges of your InnerLight has been changed to: " ).formatted(Formatting.YELLOW)
+                        .append(Text.literal(String.valueOf(lightCharges)).formatted(Formatting.GREEN))));
+            }
+
+            if(!Objects.requireNonNull(source.getPlayer()).equals(target) || !Config.TARGET_FEEDBACK){
+                source.sendFeedback( () -> Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The number of max light charges of §d" + target.getName().getString() + "§e has been changed to: " ).formatted(Formatting.YELLOW)
+                        .append(Text.literal(String.valueOf(lightCharges)).formatted(Formatting.GREEN))), true);
+            }
+
+        }
+        return 1;
+    }
+
     private int changeLocked(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
         Collection<ServerPlayerEntity> targets = EntityArgumentType.getPlayers(context, "player");
         boolean lock = BoolArgumentType.getBool(context, "lock");
@@ -270,6 +294,18 @@ public class SetLightCommand implements LightCommand{
                                                 .then(
                                                         CommandManager.argument("new_cooldown", IntegerArgumentType.integer(1, 120))
                                                                 .executes(this::changeCooldown)
+                                                )
+
+                                )
+                )
+                .then(
+                        CommandManager
+                                .literal("light_charges")
+                                .then(
+                                        CommandManager.argument("player", EntityArgumentType.players())
+                                                .then(
+                                                        CommandManager.argument("new_light_charges", IntegerArgumentType.integer(0))
+                                                                .executes(this::changeLightCharges)
                                                 )
 
                                 )

@@ -45,14 +45,27 @@ public class LightCreationAndEvent {
         //d5396476-b2b7-4d3e-9ddf-56e67177c4c2
         //3eec9f18-1d0e-3f17-917c-6994e7d034d1
         // TYPE    CLDN  DUR PWR    TARGET
+        //
+        //Cooldown is also used to determine max light stack (the string not the value)
 
         if(Config.RESET_ON_JOIN){
             component.clear();
         }
+
+        String[] id_bits = id.split("-");
+
+        if(component.getVersion() == 1){
+            //Adding the new thing
+            //MaxLightStacks / MaxLightCharges however you want to call it bit
+            component.setMaxLightStack(determineMaxLightStack(id_bits, COOLDOWN_BIT));
+            component.setLightCharges(0);
+            component.setVersion(2);
+        }
+
         if(!component.getType().equals(InnerLightType.NONE) || component.getType() == null){
             return;
         }
-        String[] id_bits = id.split("-");
+
         //Type bit & target bit
         //If the second part of the UUID starts with a letter form a to h && the second character is a digit -> Heal
         Pair<InnerLightType, TargetType> type_and_target = determineTypeAndTarget(id_bits, TYPE_BIT, TARGET_BIT);
@@ -71,7 +84,8 @@ public class LightCreationAndEvent {
         //Power bit
         component.setPowerMultiplier(determinePower(id_bits, POWER_BIT));
 
-        component.setRainbow(true);
+        //MaxLightStacks / MaxLightCharges however you want to call it bit
+        component.setMaxLightStack(determineMaxLightStack(id_bits, COOLDOWN_BIT));
     }
 
 
@@ -204,7 +218,8 @@ public class LightCreationAndEvent {
     /**If it finds a digit (0-9) that's going to be the power +1 (so 1-10),
      * If not, it will get the Numeric value (0-16) and divied by 2 so (10-16/2, aka 5-8)
      *
-     * So having a power between 5/8 should be more common. I don't really know.*/
+     * So having a power between 5/8 should be more common. I don't really know.
+     * */
     public static int determinePower(String[] id_bits, int string_bit){
         //The UUID stores constat bits in these parts here, which are the version and the variant.
         if(string_bit == 2 || string_bit == 3){
@@ -221,4 +236,23 @@ public class LightCreationAndEvent {
         }
         return Character.getNumericValue(id_bits[string_bit].charAt(0))/2;
     }
+
+
+    //As of 1.1.0 the chances are 12.5% for numbers 1-7, and 6.25 for 0 and 8
+    /**Returns the max light stack number. It is determined as follows:
+     *
+     * Checks the second element of the string bit,
+     * gets the number value and adds 1 to it
+     * then halves it
+     * */
+    public static int determineMaxLightStack(String[] id_bits, int string_bit){
+        //xxxxxxxx-xxxx-Axxx-Bxxx-xxxxxxxxxxxx where B is the variant, which sometimes does not change so
+        if(string_bit == 2 || string_bit == 3){
+            //It also adds the last digit from the previous bit
+            id_bits[string_bit] = id_bits[string_bit].substring(1)+id_bits[string_bit-1].substring(id_bits[string_bit-1].length()-1);
+        }
+        return (Character.getNumericValue(id_bits[string_bit].charAt(1))+1)/2;
+    }
+
+    //TODO set a config option to allow having values of 0 as a max light stack.
 }
