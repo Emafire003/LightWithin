@@ -6,18 +6,20 @@ import me.emafire003.dev.lightwithin.compat.replaymod.ReplayModCompat;
 import me.emafire003.dev.lightwithin.lights.InnerLightType;
 import me.emafire003.dev.lightwithin.sounds.LightSounds;
 import me.emafire003.dev.lightwithin.status_effects.LightEffects;
+
 import me.x150.renderer.event.RenderEvents;
 import me.x150.renderer.render.ClipStack;
 import me.x150.renderer.render.Renderer2d;
 import me.x150.renderer.util.Rectangle;
+
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.option.Perspective;
 import net.minecraft.sound.SoundEvents;
-import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
+import static me.emafire003.dev.lightwithin.LightWithin.LIGHT_COMPONENT;
 import static me.emafire003.dev.lightwithin.LightWithin.LOGGER;
 
 public class RendererEventHandler {
@@ -33,6 +35,7 @@ public class RendererEventHandler {
     private boolean wind_runes = false;
     private boolean aqua_runes = false;
     private boolean frog_runes = false;
+    private static boolean failed_to_use_charge = false;
     private int ticks = 0;
     int center_x = 0;
     int center_y = 0;
@@ -42,32 +45,54 @@ public class RendererEventHandler {
     public void registerRenderEvent(){
         LOGGER.info("Registering runes renderer...");
         RenderEvents.HUD.register(matrixStack -> {
+
             //Done to fix the bug of the light being avilable even after death or after triggering
-            assert MinecraftClient.getInstance().player != null;
+            if(MinecraftClient.getInstance().player == null){
+                return;
+            }
             if(MinecraftClient.getInstance().player.isDead()){
                 LightWithinClient.setLightReady(false);
                 return;
             }
+
             if(MinecraftClient.getInstance().player.hasStatusEffect(LightEffects.LIGHT_ACTIVE) || MinecraftClient.getInstance().player.hasStatusEffect(LightEffects.LIGHT_FATIGUE)){
                 LightWithinClient.setLightReady(false);
-                return;
             }
 
+            //In the replay mod the player is by default in first person, so don't display the runes at all, since they are meant for first person.
             if(ReplayModCompat.isInReplayMode()){
                 return;
             }
+
             center_x = MinecraftClient.getInstance().getWindow().getScaledWidth()/2;
             center_y = MinecraftClient.getInstance().getWindow().getScaledHeight()/2;
             scale_factor = MinecraftClient.getInstance().getWindow().getScaleFactor();
 
             RenderSystem.enableBlend();
             RenderSystem.defaultBlendFunc();
+
             if(LightWithinClient.isLightReady()){
-                ClipStack.addWindow(matrixStack.getMatrices(),new Rectangle(1,1,1000,1000));
+                ClipStack.addWindow(matrixStack.getMatrices(),new Rectangle(1,1,40,40));
                 Renderer2d.renderTexture(matrixStack.getMatrices(), new Identifier(LightWithin.MOD_ID, "textures/lights/light.png"), x, y, 20, 20);
                 ClipStack.popWindow();
+                //Be aware of the return here, may cause bugs in the future! 13.03.2024
+                return;
             }
-            //In the replay mod the player is by default in first person, so don't display the runes at all, since they are meant for first person.
+
+            if(failed_to_use_charge){
+                int charges_number = LIGHT_COMPONENT.get(MinecraftClient.getInstance().player).getCurrentLightCharges();
+                ClipStack.addWindow(matrixStack.getMatrices(),new Rectangle(1,1,40,40));
+                Renderer2d.renderTexture(matrixStack.getMatrices(), new Identifier(LightWithin.MOD_ID, "textures/lights/light_charge_base_error.png"), x, y, 20, 20);
+                Renderer2d.renderTexture(matrixStack.getMatrices(), new Identifier(LightWithin.MOD_ID, "textures/lights/light_charge_overlay_"+ charges_number +".png"), x, y, 20, 20);
+                ClipStack.popWindow();
+            } else if(LightWithinClient.shouldDrawChargesCount()){
+                int charges_number = LIGHT_COMPONENT.get(MinecraftClient.getInstance().player).getCurrentLightCharges();
+                ClipStack.addWindow(matrixStack.getMatrices(),new Rectangle(1,1,40,40));
+                Renderer2d.renderTexture(matrixStack.getMatrices(), new Identifier(LightWithin.MOD_ID, "textures/lights/light_charge_base.png"), x, y, 20, 20);
+                Renderer2d.renderTexture(matrixStack.getMatrices(), new Identifier(LightWithin.MOD_ID, "textures/lights/light_charge_overlay_"+ charges_number +".png"), x, y, 20, 20);
+                ClipStack.popWindow();
+            }
+
             if(MinecraftClient.getInstance().options.getPerspective().equals(Perspective.FIRST_PERSON)){
                 if(heal_runes){
                     ClipStack.addWindow(matrixStack.getMatrices(),new Rectangle(1,1,1000,1000));
@@ -157,6 +182,16 @@ public class RendererEventHandler {
 
     public void registerRunesRenderer(){
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
+
+            //Not a rune but this works
+            if(failed_to_use_charge){
+                ticks++;
+                if(ticks > 30){
+                    ticks = 0;
+                    failed_to_use_charge = false;
+                }
+            }
+
             //This makes the runes appear only for a configured amount of time
             if(heal_runes){
                 ticks++;
@@ -221,6 +256,11 @@ public class RendererEventHandler {
                     frog_runes = false;
                 }
             }
+
         });
+    }
+
+    public static void setFailedToUseCharge(){
+        failed_to_use_charge = true;
     }
 }

@@ -6,11 +6,10 @@ import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.Identifier;
 
 
-public class LightUsedPacketC2S extends PacketByteBuf {
-    public static final Identifier ID = new Identifier(LightWithin.MOD_ID , "light_used_packet");
+public class LightChargeConsumedPacketC2S extends PacketByteBuf {
+    public static final Identifier ID = new Identifier(LightWithin.MOD_ID , "light_charge_consumed_packet");
 
-    /**@param used Indicates weather or not the light has been activated by using a light charge*/
-    public LightUsedPacketC2S(boolean used) {
+    public LightChargeConsumedPacketC2S(boolean used) {
         super(Unpooled.buffer());
         this.writeBoolean(used);
     }

@@ -19,6 +19,7 @@ import me.emafire003.dev.lightwithin.entities.earth_golem.EarthGolemEntity;
 import me.emafire003.dev.lightwithin.events.LightTriggeringAndEvents;
 import me.emafire003.dev.lightwithin.items.LightItems;
 import me.emafire003.dev.lightwithin.lights.*;
+import me.emafire003.dev.lightwithin.networking.LightChargeConsumedPacketC2S;
 import me.emafire003.dev.lightwithin.networking.LightUsedPacketC2S;
 import me.emafire003.dev.lightwithin.networking.RenderRunePacketS2C;
 import me.emafire003.dev.lightwithin.particles.LightParticles;
@@ -68,6 +69,8 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 
 	public static boolean overrideTeamColorsPrev = false;
 
+	public static List<UUID> USED_CHARGE_PLAYER_CACHE = new ArrayList<>();
+
 	/**
 	 * This is a map of the possibile targets for each target type
 	 *
@@ -101,6 +104,7 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 		LightCreationAndEvent.registerCreationListener();
 		LightTriggeringAndEvents.registerListeners();
 		registerLightUsedPacket();
+		registerLightChargeConsumedPacket();
 		LightSounds.registerSounds();
 		LightEffects.registerModEffects();
 		LightItems.registerItems();
@@ -150,11 +154,39 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 			var results = LightUsedPacketC2S.read(buf);
 			server.execute(() -> {
 				try{
+					//TODO handle the light charge being used.
 					if(results){
-						activateLight(player);
+						//TODO play a particle animation of the light charge being used?
+
+						//TODO maybe also increase the max cooldown light-stat.
+						USED_CHARGE_PLAYER_CACHE.add(player.getUuid());
+						//TODO either make translatable or remove
+						player.sendMessage(Text.literal("You activated your light with a charge, the cooldown is going to be longer!"));
 					}
+					activateLight(player);
 				}catch (NoSuchElementException e){
-					LOGGER.warn("No value in the packet, probably not a big problem");
+					LOGGER.warn("No value in the packet!");
+				}catch (Exception e){
+					LOGGER.error("There was an error while getting the packet!");
+					e.printStackTrace();
+				}
+			});
+		})));
+	}
+
+	private static void registerLightChargeConsumedPacket(){
+		ServerPlayNetworking.registerGlobalReceiver(LightChargeConsumedPacketC2S.ID, (((server, player, handler, buf, responseSender) -> {
+			if(player.getWorld().isClient){
+				return;
+			}
+			//var results = LightUsedPacketC2S.read(buf);
+			server.execute(() -> {
+				try{
+					//Removes one light charges, consumed.
+					//TODO play a particle animation of the light charge being consumed?
+					LIGHT_COMPONENT.get(player).removeLightCharges();
+				}catch (NoSuchElementException e){
+					LOGGER.warn("No value in the packet!");
 				}catch (Exception e){
 					LOGGER.error("There was an error while getting the packet!");
 					e.printStackTrace();

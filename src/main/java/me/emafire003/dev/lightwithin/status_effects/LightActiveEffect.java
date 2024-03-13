@@ -68,7 +68,15 @@ public class LightActiveEffect extends StatusEffect {
             CGLCompat.getLib().setOverrideTeamColors(LightWithin.overrideTeamColorsPrev);
         }
         if(entity instanceof PlayerEntity){
-            entity.addStatusEffect(new StatusEffectInstance(LightEffects.LIGHT_FATIGUE, (int) (Config.COOLDOWN_MULTIPLIER*20*component.getMaxCooldown()), 1));
+            //TODO make this configurable maybe?
+            int USED_CHARGE_MULTIPLIER = 5;
+            if(LightWithin.USED_CHARGE_PLAYER_CACHE.contains(entity.getUuid())){
+                entity.addStatusEffect(new StatusEffectInstance(LightEffects.LIGHT_FATIGUE, (int) (Config.COOLDOWN_MULTIPLIER*20*component.getMaxCooldown()*USED_CHARGE_MULTIPLIER), 1));
+                LightWithin.USED_CHARGE_PLAYER_CACHE.remove(entity.getUuid());
+            }else{
+                entity.addStatusEffect(new StatusEffectInstance(LightEffects.LIGHT_FATIGUE, (int) (Config.COOLDOWN_MULTIPLIER*20*component.getMaxCooldown()), 1));
+            }
+
         }
         super.onRemoved(entity, attributes, amplifier);
     }

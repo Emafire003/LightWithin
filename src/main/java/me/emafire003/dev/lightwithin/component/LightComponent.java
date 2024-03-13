@@ -27,6 +27,7 @@ public class LightComponent implements ComponentV3, AutoSyncedComponent {
     protected int max_increment_percent = -1;
     protected int max_light_stack = 1;
     protected int current_light_charges = 0;
+    protected boolean has_triggered_naturally = false;
 
     //As in can the player use the light? Either in a specif time or place (needs to be set)
     protected boolean isLocked = Config.LIGHT_LOCKED_DEFAULT;
@@ -131,6 +132,13 @@ public class LightComponent implements ComponentV3, AutoSyncedComponent {
             this.isLocked = Config.LIGHT_LOCKED_DEFAULT;
         }
 
+        if(tag.contains("hasTriggeredNaturally")){
+            if(debug){LOGGER.info("the hasTriggeredNaturally got: " + tag.getBoolean("hasTriggeredNaturally"));}
+            this.has_triggered_naturally = tag.getBoolean("hasTriggeredNaturally");
+        }else{
+            this.has_triggered_naturally = false;
+        }
+
     }
 
     @Override
@@ -146,6 +154,7 @@ public class LightComponent implements ComponentV3, AutoSyncedComponent {
         tag.putInt("max_light_stack", this.max_light_stack);
         tag.putInt("light_charges", this.current_light_charges);
         tag.putBoolean("isLocked", this.isLocked);
+        tag.putBoolean("hasTriggeredNaturally", this.has_triggered_naturally);
         tag.putInt("version", this.version);
     }
 
@@ -188,6 +197,9 @@ public class LightComponent implements ComponentV3, AutoSyncedComponent {
     public boolean getLocked() {
         return this.isLocked;
     }
+    public boolean hasTriggeredNaturally() {
+        return this.has_triggered_naturally;
+    }
 
     public int getVersion() {
         return this.version;
@@ -210,6 +222,25 @@ public class LightComponent implements ComponentV3, AutoSyncedComponent {
 
     public void setLightCharges(int charges) {
         this.current_light_charges = charges;
+        //This only goes towards the client and not the server uh
+        LightWithin.LIGHT_COMPONENT.sync(caster);
+    }
+
+    public void addLightCharges(int charges) {
+        this.current_light_charges = this.current_light_charges + charges;
+        //This only goes towards the client and not the server uh
+        LightWithin.LIGHT_COMPONENT.sync(caster);
+    }
+
+    public void removeLightCharges(int charges) {
+        this.current_light_charges = this.current_light_charges - charges;
+        //This only goes towards the client and not the server uh
+        LightWithin.LIGHT_COMPONENT.sync(caster);
+    }
+
+    public void removeLightCharges() {
+        this.current_light_charges = this.current_light_charges-1;
+        //This only goes towards the client and not the server uh
         LightWithin.LIGHT_COMPONENT.sync(caster);
     }
 
@@ -240,7 +271,13 @@ public class LightComponent implements ComponentV3, AutoSyncedComponent {
 
     public void setIsLocked(boolean locked) {
         this.isLocked = locked;
-        caster.sendMessage(Text.translatable("light.activated", true));
+        caster.sendMessage(Text.translatable("light.unlocked"));
+        LightWithin.LIGHT_COMPONENT.sync(caster);
+    }
+
+    public void setTriggeredNaturally(boolean b) {
+        this.has_triggered_naturally = b;
+        caster.sendMessage(Text.translatable("light.triggered_naturally_first"));
         LightWithin.LIGHT_COMPONENT.sync(caster);
     }
 
@@ -255,7 +292,7 @@ public class LightComponent implements ComponentV3, AutoSyncedComponent {
         LightWithin.LIGHT_COMPONENT.sync(caster);
     }
 
-    public void setAll(InnerLightType type, TargetType targets, int max_cooldown, double power, int duration, boolean b, boolean incooldown, int max_increment, int max_light_stack, boolean locked, int version){
+    public void setAll(InnerLightType type, TargetType targets, int max_cooldown, double power, int duration, boolean b, int max_increment, int max_light_stack, boolean locked, int version){
         this.type = type;
         this.targets = targets;
         this.max_cooldown_time = max_cooldown;

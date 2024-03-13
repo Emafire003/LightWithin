@@ -5,7 +5,6 @@ import me.emafire003.dev.lightwithin.blocks.LightBlocks;
 import me.emafire003.dev.lightwithin.entities.LightEntities;
 import me.emafire003.dev.lightwithin.entities.earth_golem.EarthGolemEntityModel;
 import me.emafire003.dev.lightwithin.entities.earth_golem.EarthGolemEntityRenderer;
-import me.emafire003.dev.lightwithin.lights.InnerLightType;
 import me.emafire003.dev.lightwithin.networking.LightReadyPacketS2C;
 import me.emafire003.dev.lightwithin.networking.RenderRunePacketS2C;
 import me.emafire003.dev.lightwithin.networking.WindLightVelocityPacketS2C;
@@ -34,9 +33,13 @@ public class LightWithinClient implements ClientModInitializer {
 
     private static boolean lightReady = false;
     private static boolean waitForNext = false;
+    private static boolean usedCharge = false;
     int seconds = 10;
     int tickCounter = 0;
     RendererEventHandler event_handler = new RendererEventHandler();
+
+    //TODO make configurable
+    private static boolean shouldDrawChargesCount = true;
 
     public static final EntityModelLayer MODEL_EARTH_GOLEM_LAYER = new EntityModelLayer(new Identifier(LightWithin.MOD_ID, "earth_golem"), "main");
 
@@ -100,6 +103,21 @@ public class LightWithinClient implements ClientModInitializer {
         lightReady = b;
     }
 
+    public static boolean hasUsedCharge(){
+        return usedCharge;
+    }
+
+    public static void setUsedCharge(boolean b){
+        usedCharge = b;
+    }
+    public static boolean shouldDrawChargesCount(){
+        return shouldDrawChargesCount;
+    }
+
+    public static void setShouldDrawChargesCount(boolean b){
+        shouldDrawChargesCount = b;
+    }
+
     public static void setWaitForNext(boolean b){
         waitForNext = b;
     }
@@ -117,8 +135,10 @@ public class LightWithinClient implements ClientModInitializer {
                 try{
                     if(!lightReady){
                         lightReady = results;
-                        assert client.player != null;
-                        client.player.playSound(LightSounds.LIGHT_READY, 1f, 0.63f);
+                        if(client.player != null){
+                            client.player.playSound(LightSounds.LIGHT_READY, 1f, 0.63f);
+                        }
+
                     }
                     tickCounter = 0;
                 }catch (NoSuchElementException e){

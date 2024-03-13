@@ -13,7 +13,6 @@ import me.emafire003.dev.lightwithin.component.LightComponent;
 import me.emafire003.dev.lightwithin.config.Config;
 import me.emafire003.dev.lightwithin.lights.InnerLightType;
 import me.emafire003.dev.lightwithin.util.TargetType;
-import me.emafire003.dev.lightwithin.util.Tests;
 import net.minecraft.command.argument.EntityArgumentType;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
@@ -300,7 +299,7 @@ public class SetLightCommand implements LightCommand{
                 )
                 .then(
                         CommandManager
-                                .literal("light_charges")
+                                .literal("max_charges")
                                 .then(
                                         CommandManager.argument("player", EntityArgumentType.players())
                                                 .then(

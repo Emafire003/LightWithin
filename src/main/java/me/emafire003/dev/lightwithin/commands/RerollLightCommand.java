@@ -210,7 +210,7 @@ public class RerollLightCommand implements LightCommand{
                 target.sendMessage(Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The number of max light charges of your InnerLight has been changed, your new one is: " ).formatted(Formatting.YELLOW)
                         .append(Text.literal(String.valueOf(lightCharges)).formatted(Formatting.GREEN))));
             }
-            source.sendFeedback( () -> Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("§eThe new number of max light charges of " + target.getName().getString() + " is: §a" + component.getMaxCooldown())), false);
+            source.sendFeedback( () -> Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("§eThe new number of max light charges of " + target.getName().getString() + " is: §a" + lightCharges)), false);
 
         }
         return  1;

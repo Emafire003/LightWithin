@@ -33,7 +33,9 @@
   "light.unknown": "No light named: ",
   "lighttype.unknown": "No light type named: ",
 
-  "light.activated": "Your light has awakened!",
+  "light.unlocked": "Your light has awakened!",
+  "light.triggered_naturally_first": "You have now discovered your true inner light!",
+  "light.charge.used": "The light charged up inside of you has manifested!",
 
   "light.description.error": "Uhm... your light is... an error? Light not found, report please! ",
   "light.description.heal": "Your light, yes, is a gentle and caring one indeed",
