@@ -4,14 +4,12 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import me.emafire003.dev.lightwithin.LightWithin;
 import me.emafire003.dev.lightwithin.compat.replaymod.ReplayModCompat;
 import me.emafire003.dev.lightwithin.lights.InnerLightType;
+import me.emafire003.dev.lightwithin.util.renderer.ClipStack;
+import me.emafire003.dev.lightwithin.util.renderer.Rectangle;
+import me.emafire003.dev.lightwithin.util.renderer.RenderEvents;
+import me.emafire003.dev.lightwithin.util.renderer.Renderer2d;
 import me.emafire003.dev.lightwithin.sounds.LightSounds;
 import me.emafire003.dev.lightwithin.status_effects.LightEffects;
-
-import me.x150.renderer.event.RenderEvents;
-import me.x150.renderer.render.ClipStack;
-import me.x150.renderer.render.Renderer2d;
-import me.x150.renderer.util.Rectangle;
-
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;

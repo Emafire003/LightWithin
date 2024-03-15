@@ -17,6 +17,8 @@
     "PlayerJoinMixin"
   ],
   "client": [
+    "GameRendererMixin",
+    "InGameHudMixin"
   ],
   "server": [
   ],

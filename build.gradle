@@ -62,15 +62,17 @@ dependencies {
 	//CardinalComponents (old version 4.0.1)
 	include modImplementation("dev.onyxstudios.cardinal-components-api:cardinal-components-base:${project.cardinal_components_version}")
 	include modImplementation("dev.onyxstudios.cardinal-components-api:cardinal-components-entity:${project.cardinal_components_version}")
+	include modImplementation("dev.onyxstudios.cardinal-components-api:cardinal-components-item:${project.cardinal_components_version}")
 	//needed for CGL, adds 40kb
 	include modImplementation("dev.onyxstudios.cardinal-components-api:cardinal-components-scoreboard:${project.cardinal_components_version}")
 
 
 	//Renderer
+	//1.19 i think
 	//include modImplementation( 'com.github.0x3C50:Renderer:9804cf7d99' )c4faf83
 	//1.20.1
-	include modImplementation( 'com.github.0x3C50:Renderer:2273f5e562' )//2273f5e
-	//include modImplementation("com.github.0x3C50:Renderer:master-SNAPSHOT")
+	//Not needed anymore as of 1.1.0
+	//include modImplementation( 'com.github.0x3C50:Renderer:2273f5e562' )//2273f5e
 
 	//StructurePlacerAPI
 	include modImplementation("maven.modrinth:structureplacerapi:${project.structureplacerapi_version}")

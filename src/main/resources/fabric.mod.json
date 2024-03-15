@@ -4,7 +4,7 @@
   "version": "${version}",
 
   "name": "LightWithin",
-  "description": "Adding new fancy magialish and player-unique powers, the 'InnerLights' which are going to activate when the player is in danger!",
+  "description": "Adding new fancy magialish and player-unique powers, the 'InnerLights' which are going to activate when the player is in danger! Part of this mod use Renderer's code made by 0x3C50, https://github.com/0x3C50/Renderer",
   "authors": [
     "Emafire003"
   ],

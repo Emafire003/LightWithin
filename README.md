@@ -60,16 +60,17 @@ Or you can use my code on [BisectHosting](https://www.bisecthosting.com/LightDev
 Another thing you could is make videos and posts about the mod!
 
 ## Modpack use
-You are allowed to use this mod without directly asking, but you are asked to credit me, as for most other mods. Also, I would appreciate if your modpack was hosted on Modrinth or Curseforge, which would actually increase the download count of the mod, something that other modpacks sites don't do.
+You are allowed to use this mod without directly asking me, but you are asked to credit me, as for most other mods. Also, I would appreciate if your modpack was hosted on Modrinth or Curseforge, which would actually increase the download count of the mod, something that other modpacks sites don't do.
 
 ### Attributions:
 Text logo: textstudio.com
 
 Some audio files: https://mixkit.co
 
-Other audio files: beepbox
+Other audio files: https://www.beepbox.co/
 
 Some of the code for the commands: Factions mod (MIT license)
+Some of the code for the rendering: [Renderer mod](https://github.com/0x3C50/Renderer) (GNU GPL3 license)
 
 ## Coming (soon tm) Features (maybe)
 - More light types!
