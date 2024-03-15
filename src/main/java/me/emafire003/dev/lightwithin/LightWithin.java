@@ -34,6 +34,7 @@ import me.emafire003.dev.lightwithin.util.TargetType;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.entity.LivingEntity;
@@ -70,6 +71,7 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 	public static boolean overrideTeamColorsPrev = false;
 
 	public static List<UUID> USED_CHARGE_PLAYER_CACHE = new ArrayList<>();
+	public static HashMap<UUID, Integer> CURRENTLY_READY_LIGHT_PLAYER_CACHE = new HashMap<>();
 
 	/**
 	 * This is a map of the possibile targets for each target type
@@ -105,6 +107,7 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 		LightTriggeringAndEvents.registerListeners();
 		registerLightUsedPacket();
 		registerLightChargeConsumedPacket();
+		registerReadyLightCacheRemover();
 		LightSounds.registerSounds();
 		LightEffects.registerModEffects();
 		LightItems.registerItems();
@@ -179,6 +182,7 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 			if(player.getWorld().isClient){
 				return;
 			}
+			addToReadyList(player);
 			//var results = LightUsedPacketC2S.read(buf);
 			server.execute(() -> {
 				try{
@@ -206,6 +210,8 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 		 		|| !CheckUtils.canActivateHere((ServerPlayerEntity) player)) {
 			return;
 		}
+
+		CURRENTLY_READY_LIGHT_PLAYER_CACHE.remove(player.getUuid());
 
 		player.addStatusEffect(new StatusEffectInstance(LightEffects.LIGHT_ACTIVE, (20*LIGHT_COMPONENT.get(player).getDuration())));
 
@@ -544,6 +550,27 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 			LOGGER.error("FAILED to send data packets to the client!");
 			e.printStackTrace();
 		}
+	}
+
+	/**Adds the player to the list of players that are currently ready to
+	 * trigger a light. Automatically removes them after 10 seconds.
+	 * */
+	public static void addToReadyList(PlayerEntity player){
+		//TODO if changig the ready seconds becomes a thing, modify it here too.
+		CURRENTLY_READY_LIGHT_PLAYER_CACHE.put(player.getUuid(), 20*10);
+	}
+
+	public void registerReadyLightCacheRemover(){
+		ServerTickEvents.END_SERVER_TICK.register(server -> {
+			for( Map.Entry<UUID, Integer> entry : CURRENTLY_READY_LIGHT_PLAYER_CACHE.entrySet()){
+				if(entry.getValue() == 0){
+					CURRENTLY_READY_LIGHT_PLAYER_CACHE.remove(entry.getKey());
+				}else{
+					//If already removed should just return null i think, so it's ok.
+					CURRENTLY_READY_LIGHT_PLAYER_CACHE.replace(entry.getKey(), entry.getValue().intValue()-1);
+				}
+			}
+		});
 	}
 
 }

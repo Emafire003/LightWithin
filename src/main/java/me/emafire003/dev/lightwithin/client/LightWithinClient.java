@@ -122,7 +122,9 @@ public class LightWithinClient implements ClientModInitializer {
         waitForNext = b;
     }
 
-    /**How much should a player have the opportunity to press the button in seconds*/
+    /**How much should a player have the opportunity to press the button in seconds
+     *
+     * Currently fixed to 10s ish*/
     public void setDelay(int delay){
         seconds = delay;
     }
@@ -133,8 +135,11 @@ public class LightWithinClient implements ClientModInitializer {
 
             client.execute(() -> {
                 try{
-                    if(!lightReady){
-                        lightReady = results;
+                    if(!results){
+                        setLightReady(false);
+                    }
+                    if(!isLightReady()){
+                        setLightReady(true);
                         if(client.player != null){
                             client.player.playSound(LightSounds.LIGHT_READY, 1f, 0.63f);
                         }

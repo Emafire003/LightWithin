@@ -37,6 +37,8 @@ public class RendererEventHandler {
     private boolean frog_runes = false;
     private static boolean failed_to_use_charge = false;
     private int ticks = 0;
+    //Different from ticks which are used for rendering runes, so they don't overlap
+    private short error_ticks = 0;
     int center_x = 0;
     int center_y = 0;
     double scale_factor;
@@ -185,9 +187,9 @@ public class RendererEventHandler {
 
             //Not a rune but this works
             if(failed_to_use_charge){
-                ticks++;
-                if(ticks > 30){
-                    ticks = 0;
+                error_ticks++;
+                if(error_ticks > 30){
+                    error_ticks = 0;
                     failed_to_use_charge = false;
                 }
             }

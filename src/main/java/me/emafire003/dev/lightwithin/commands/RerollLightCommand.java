@@ -280,7 +280,7 @@ public class RerollLightCommand implements LightCommand{
                 )
                 .then(
                         CommandManager.argument("player", EntityArgumentType.players()).then(
-                                CommandManager.literal("lightCharges")
+                                CommandManager.literal("max_charges")
                                         .executes(this::rerollLightCharges)
                         )
                 )

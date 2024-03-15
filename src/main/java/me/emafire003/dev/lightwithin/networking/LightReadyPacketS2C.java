@@ -12,6 +12,8 @@ import static me.emafire003.dev.lightwithin.LightWithin.LOGGER;
 public class LightReadyPacketS2C extends PacketByteBuf {
     public static final Identifier ID = new Identifier(LightWithin.MOD_ID , "light_ready_packet");
 
+    /**True means make the light ready, while false means
+     * make the light no more ready if it was. Used when bottling up light*/
     public LightReadyPacketS2C(boolean ready) {
         super(Unpooled.buffer());
         this.writeBoolean(ready);

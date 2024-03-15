@@ -1,18 +1,13 @@
 package me.emafire003.dev.lightwithin.commands;
 
-import com.mojang.brigadier.arguments.BoolArgumentType;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import me.emafire003.dev.lightwithin.LightWithin;
-import me.emafire003.dev.lightwithin.commands.arguments.LightTargetArgument;
-import me.emafire003.dev.lightwithin.commands.arguments.LightTypeArgument;
 import me.emafire003.dev.lightwithin.compat.permissions.PermissionsChecker;
 import me.emafire003.dev.lightwithin.component.LightComponent;
 import me.emafire003.dev.lightwithin.config.Config;
-import me.emafire003.dev.lightwithin.lights.InnerLightType;
-import me.emafire003.dev.lightwithin.util.TargetType;
 import net.minecraft.command.argument.EntityArgumentType;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
@@ -20,9 +15,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.List;
 import java.util.Objects;
 
 public class LightChargeCommand implements LightCommand{
@@ -97,6 +90,48 @@ public class LightChargeCommand implements LightCommand{
         return 1;
     }
 
+    private int fillLightCharges(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
+        Collection<ServerPlayerEntity> targets = EntityArgumentType.getPlayers(context, "player");
+        ServerCommandSource source = context.getSource();
+
+        for(ServerPlayerEntity target : targets){
+            LightComponent component = LightWithin.LIGHT_COMPONENT.get(target);
+            component.setLightCharges(component.getMaxLightStack());
+
+            if(Config.TARGET_FEEDBACK){
+                target.sendMessage(Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The number of your light charges is now: " ).formatted(Formatting.YELLOW)
+                        .append(Text.literal(String.valueOf(component.getMaxLightStack())).formatted(Formatting.GREEN))));
+            }
+
+            if(!Objects.requireNonNull(source.getPlayer()).equals(target) || !Config.TARGET_FEEDBACK){
+                source.sendFeedback( () -> Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The number of light charges of " + target.getName().getString() + "§e has been changed to: " ).formatted(Formatting.YELLOW)
+                        .append(Text.literal(String.valueOf(component.getMaxLightStack())).formatted(Formatting.GREEN))), true);
+            }
+
+        }
+        return 1;
+    }
+
+    private int clearLightCharges(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
+        Collection<ServerPlayerEntity> targets = EntityArgumentType.getPlayers(context, "player");
+        ServerCommandSource source = context.getSource();
+
+        for(ServerPlayerEntity target : targets){
+            LightWithin.LIGHT_COMPONENT.get(target).setLightCharges(0);
+            if(Config.TARGET_FEEDBACK){
+                target.sendMessage(Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The number of your light charges is now: " ).formatted(Formatting.YELLOW)
+                        .append(Text.literal(String.valueOf(0)).formatted(Formatting.GREEN))));
+            }
+
+            if(!Objects.requireNonNull(source.getPlayer()).equals(target) || !Config.TARGET_FEEDBACK){
+                source.sendFeedback( () -> Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The number of light charges of " + target.getName().getString() + "§e has been changed to: " ).formatted(Formatting.YELLOW)
+                        .append(Text.literal(String.valueOf(0)).formatted(Formatting.GREEN))), true);
+            }
+
+        }
+        return 1;
+    }
+
     private int getLightCharges(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
         Collection<ServerPlayerEntity> targets = EntityArgumentType.getPlayers(context, "player");
         ServerCommandSource source = context.getSource();
@@ -143,6 +178,21 @@ public class LightChargeCommand implements LightCommand{
                                                                 .executes(this::removeLightCharges)
                                                 )
 
+                                )
+                )
+                .then(
+                        CommandManager
+                                .literal("fill")
+                                .then(
+                                        CommandManager.argument("player", EntityArgumentType.players())
+                                                .executes(this::fillLightCharges)
+                                )
+                ).then(
+                        CommandManager
+                                .literal("clear")
+                                .then(
+                                        CommandManager.argument("player", EntityArgumentType.players())
+                                                .executes(this::clearLightCharges)
                                 )
                 )
                 .then(

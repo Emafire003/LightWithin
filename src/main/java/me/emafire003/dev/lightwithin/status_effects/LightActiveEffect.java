@@ -74,7 +74,7 @@ public class LightActiveEffect extends StatusEffect {
                 entity.addStatusEffect(new StatusEffectInstance(LightEffects.LIGHT_FATIGUE, (int) (Config.COOLDOWN_MULTIPLIER*20*component.getMaxCooldown()*USED_CHARGE_MULTIPLIER), 1));
                 LightWithin.USED_CHARGE_PLAYER_CACHE.remove(entity.getUuid());
             }else{
-                entity.addStatusEffect(new StatusEffectInstance(LightEffects.LIGHT_FATIGUE, (int) (Config.COOLDOWN_MULTIPLIER*20*component.getMaxCooldown()), 1));
+                entity.addStatusEffect(new StatusEffectInstance(LightEffects.LIGHT_FATIGUE, (int) (Config.COOLDOWN_MULTIPLIER*20*component.getMaxCooldown())));
             }
 
         }

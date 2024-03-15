@@ -10,6 +10,7 @@
   "item.lightwithin.luxintus_berry": "Luxintus Berry",
   "item.lightwithin.luxmutua_berry": "Luxmutua Berry",
   "item.lightwithin.luxcognita_berry": "Luxcognita Berry",
+  "item.lightwithin.bottled_light": "Bottled Light",
 
   "item.lightwithin.berry.tooltip": "Press §dSHIFT§r to know what this berry does!",
   "item.lightwithin.luxintus_berry.tooltip": "§eThis light-dense berry will §aunleash§e your",
@@ -18,6 +19,7 @@
   "item.lightwithin.luxmutua_berry.tooltip1": "§achange§e your §binner light§e!",
   "item.lightwithin.luxcognita_berry.tooltip": "§eThe all-knowing light of this berry will",
   "item.lightwithin.luxcognita_berry.tooltip1": "§atell you the secrets§e of your §binner light§e!",
+  "item.lightwithin.bottled_light.tooltip": "§eA fresh charge of your own Inner Light!",
 
   "item.lightwithin.luxmutua_berry.lightchange": "Your light resonated with you again and decided it was time to change",
 
@@ -36,6 +38,7 @@
   "light.unlocked": "Your light has awakened!",
   "light.triggered_naturally_first": "You have now discovered your true inner light!",
   "light.charge.used": "The light charged up inside of you has manifested!",
+  "light.needs_natural_trigger": "You shall first discover what primes your light on your own!",
 
   "light.description.error": "Uhm... your light is... an error? Light not found, report please! ",
   "light.description.heal": "Your light, yes, is a gentle and caring one indeed",

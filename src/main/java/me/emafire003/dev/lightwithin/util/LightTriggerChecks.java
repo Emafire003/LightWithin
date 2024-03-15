@@ -13,9 +13,8 @@ import net.minecraft.entity.passive.FrogEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.test.TimedTaskRunner;
 
-import static me.emafire003.dev.lightwithin.LightWithin.LOGGER;
+import static me.emafire003.dev.lightwithin.LightWithin.*;
 
 public class LightTriggerChecks {
     //If the sum of the things happening to player is greater than this the light activates
@@ -24,6 +23,7 @@ public class LightTriggerChecks {
     public static void sendReadyPacket(ServerPlayerEntity player, boolean b){
         try{
             ServerPlayNetworking.send(player, LightReadyPacketS2C.ID, new LightReadyPacketS2C(b));
+            addToReadyList(player);
         }catch(Exception e){
             LOGGER.error("FAILED to send data packets to the client!");
             e.printStackTrace();
@@ -53,7 +53,7 @@ public class LightTriggerChecks {
             }
 
             if(trigger_sum >= MIN_TRIGGER){
-                sendReadyPacket((ServerPlayerEntity) player, true);
+                sendLightTriggered((ServerPlayerEntity) player);
             }
         }
         /**CHECKS for the allies part*/
@@ -76,7 +76,7 @@ public class LightTriggerChecks {
                 trigger_sum = trigger_sum + TriggerConfig.HEAL_ALLIES_ALLY_POISONED;
             }
             if(trigger_sum >= MIN_TRIGGER){
-                sendReadyPacket((ServerPlayerEntity) player, true);
+                sendLightTriggered((ServerPlayerEntity) player);
             }
 
         }
@@ -98,7 +98,7 @@ public class LightTriggerChecks {
             }
 
             if(trigger_sum >= MIN_TRIGGER){
-                sendReadyPacket((ServerPlayerEntity) player, true);
+                sendLightTriggered((ServerPlayerEntity) player);
             }
 
         }
@@ -122,7 +122,7 @@ public class LightTriggerChecks {
             }
 
             if(trigger_sum >= MIN_TRIGGER){
-                sendReadyPacket((ServerPlayerEntity) player, true);
+                sendLightTriggered((ServerPlayerEntity) player);
             }
 
         }
@@ -143,7 +143,7 @@ public class LightTriggerChecks {
             }
 
             if(trigger_sum >= MIN_TRIGGER){
-                sendReadyPacket((ServerPlayerEntity) player, true);
+                sendLightTriggered((ServerPlayerEntity) player);
             }
 
         }else if(component.getTargets().equals(TargetType.VARIANT)){
@@ -152,7 +152,7 @@ public class LightTriggerChecks {
             }
 
             if(trigger_sum >= MIN_TRIGGER){
-                sendReadyPacket((ServerPlayerEntity) player, true);
+                sendLightTriggered((ServerPlayerEntity) player);
             }
 
         }
@@ -176,7 +176,7 @@ public class LightTriggerChecks {
             }
 
             if(trigger_sum >= MIN_TRIGGER){
-                sendReadyPacket((ServerPlayerEntity) player, true);
+                sendLightTriggered((ServerPlayerEntity) player);
             }
 
         }
@@ -196,7 +196,7 @@ public class LightTriggerChecks {
             }
 
             if(trigger_sum >= MIN_TRIGGER){
-                sendReadyPacket((ServerPlayerEntity) player, true);
+                sendLightTriggered((ServerPlayerEntity) player);
             }
         }
     }
@@ -229,7 +229,7 @@ public class LightTriggerChecks {
                 trigger_sum=trigger_sum+TriggerConfig.BLAZING_ALL_CONDITIONS;
             }
             if(trigger_sum >= MIN_TRIGGER){
-                sendReadyPacket((ServerPlayerEntity) player, true);
+                sendLightTriggered((ServerPlayerEntity) player);
             }
         }
         /**CHECKS if the player has ENEMIES as target, either his or his allies health needs to be low*/
@@ -258,7 +258,7 @@ public class LightTriggerChecks {
                 trigger_sum=trigger_sum+TriggerConfig.BLAZING_ENEMIES_CONDITIONS;
             }
             if(trigger_sum >= MIN_TRIGGER){
-                sendReadyPacket((ServerPlayerEntity) player, true);
+                sendLightTriggered((ServerPlayerEntity) player);
             }
         }
 
@@ -291,7 +291,7 @@ public class LightTriggerChecks {
             }
 
             if(trigger_sum >= MIN_TRIGGER){
-                sendReadyPacket((ServerPlayerEntity) player, true);
+                sendLightTriggered((ServerPlayerEntity) player);
             }
 
         }
@@ -325,7 +325,7 @@ public class LightTriggerChecks {
             }
 
             if(trigger_sum >= MIN_TRIGGER) {
-                sendReadyPacket((ServerPlayerEntity) player, true);
+                sendLightTriggered((ServerPlayerEntity) player);
             }
         }else if(component.getTargets().equals(TargetType.SELF)){
             if(CheckUtils.checkSelfDanger(player, Config.HP_PERCENTAGE_SELF)){
@@ -346,7 +346,7 @@ public class LightTriggerChecks {
             }
 
             if(trigger_sum >= MIN_TRIGGER) {
-                sendReadyPacket((ServerPlayerEntity) player, true);
+                sendLightTriggered((ServerPlayerEntity) player);
             }
         }else if(component.getTargets().equals(TargetType.ALLIES)){
             if(!player.equals(target) && CheckUtils.checkAllyHealth(player, attacker, Config.HP_PERCENTAGE_ALLIES)){
@@ -376,7 +376,7 @@ public class LightTriggerChecks {
             }
 
             if(trigger_sum >= MIN_TRIGGER) {
-                sendReadyPacket((ServerPlayerEntity) player, true);
+                sendLightTriggered((ServerPlayerEntity) player);
             }
         }
     }
@@ -401,7 +401,7 @@ public class LightTriggerChecks {
             }
 
             if(trigger_sum >= MIN_TRIGGER) {
-                sendReadyPacket((ServerPlayerEntity) player, true);
+                sendLightTriggered((ServerPlayerEntity) player);
             }
         }
         /**CHECKS if the player has ENEMIES as target, either his or his allies health needs to be low*/
@@ -422,7 +422,7 @@ public class LightTriggerChecks {
             }
 
             if(trigger_sum >= MIN_TRIGGER) {
-                sendReadyPacket((ServerPlayerEntity) player, true);
+                sendLightTriggered((ServerPlayerEntity) player);
             }
         }else if(component.getTargets().equals(TargetType.SELF) && player.equals(target)){
 
@@ -441,7 +441,7 @@ public class LightTriggerChecks {
             }
 
             if(trigger_sum >= MIN_TRIGGER) {
-                sendReadyPacket((ServerPlayerEntity) player, true);
+                sendLightTriggered((ServerPlayerEntity) player);
             }
         }else if(component.getTargets().equals(TargetType.ALLIES)){
             if(CheckUtils.checkAllyHealth(player, attacker, Config.HP_PERCENTAGE_ALLIES)){
@@ -461,7 +461,7 @@ public class LightTriggerChecks {
             }
 
             if(trigger_sum >= MIN_TRIGGER) {
-                sendReadyPacket((ServerPlayerEntity) player, true);
+                sendLightTriggered((ServerPlayerEntity) player);
             }
         }
     }
@@ -501,7 +501,7 @@ public class LightTriggerChecks {
             }
 
             if(trigger_sum >= MIN_TRIGGER) {
-                sendReadyPacket((ServerPlayerEntity) player, true);
+                sendLightTriggered((ServerPlayerEntity) player);
             }
         }
         else if(component.getTargets().equals(TargetType.SELF)){
@@ -526,7 +526,7 @@ public class LightTriggerChecks {
             }
 
             if(trigger_sum >= MIN_TRIGGER) {
-                sendReadyPacket((ServerPlayerEntity) player, true);
+                sendLightTriggered((ServerPlayerEntity) player);
             }
         }else if(component.getTargets().equals(TargetType.ALLIES)){
             if(CheckUtils.checkAllyHealth(player, attacker, Config.HP_PERCENTAGE_ALLIES)){
@@ -556,7 +556,7 @@ public class LightTriggerChecks {
             }
 
             if(trigger_sum >= MIN_TRIGGER) {
-                sendReadyPacket((ServerPlayerEntity) player, true);
+                sendLightTriggered((ServerPlayerEntity) player);
             }
         }
     }
@@ -588,7 +588,7 @@ public class LightTriggerChecks {
             }
 
             if(trigger_sum >= MIN_TRIGGER) {
-                sendReadyPacket((ServerPlayerEntity) player, true);
+                sendLightTriggered((ServerPlayerEntity) player);
             }
         }
         /**CHECKS if the player has ENEMIES as target, either his or his allies health needs to be low*/
@@ -616,7 +616,7 @@ public class LightTriggerChecks {
             }
 
             if(trigger_sum >= MIN_TRIGGER) {
-                sendReadyPacket((ServerPlayerEntity) player, true);
+                sendLightTriggered((ServerPlayerEntity) player);
             }
         }else if(component.getTargets().equals(TargetType.SELF)){
             if(CheckUtils.checkSelfDanger(player, Config.HP_PERCENTAGE_SELF)){
@@ -641,7 +641,7 @@ public class LightTriggerChecks {
             }
 
             if(trigger_sum >= MIN_TRIGGER) {
-                sendReadyPacket((ServerPlayerEntity) player, true);
+                sendLightTriggered((ServerPlayerEntity) player);
             }
 
         }else if(component.getTargets().equals(TargetType.ALLIES)){
@@ -673,7 +673,7 @@ public class LightTriggerChecks {
             }
 
             if(trigger_sum >= MIN_TRIGGER) {
-                sendReadyPacket((ServerPlayerEntity) player, true);
+                sendLightTriggered((ServerPlayerEntity) player);
             }
         }
     }
@@ -682,12 +682,20 @@ public class LightTriggerChecks {
         if(CheckUtils.checkSelfDanger(player, Config.HP_PERCENTAGE_SELF+25)
                 || CheckUtils.checkSurrounded(player)
         ){
-            sendReadyPacket((ServerPlayerEntity) player, true);
+            sendLightTriggered((ServerPlayerEntity) player);
         }
         else if(target instanceof FrogEntity){
-            sendReadyPacket((ServerPlayerEntity) player, true);
+            sendLightTriggered((ServerPlayerEntity) player);
         }else if(attacker instanceof FrogEntity){
-            sendReadyPacket((ServerPlayerEntity) player, true);
+            sendLightTriggered((ServerPlayerEntity) player);
         }
+    }
+    
+    /**Send the ready packet and sets the light as naturally triggered*/
+    public static void sendLightTriggered(ServerPlayerEntity player){
+        if(!LIGHT_COMPONENT.get(player).hasTriggeredNaturally()){
+            LIGHT_COMPONENT.get(player).setTriggeredNaturally(true);
+        }
+        sendReadyPacket(player, true);
     }
 }
