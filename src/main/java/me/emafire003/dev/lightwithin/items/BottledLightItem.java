@@ -6,19 +6,23 @@ import me.emafire003.dev.lightwithin.config.Config;
 import me.emafire003.dev.lightwithin.sounds.LightSounds;
 import me.emafire003.dev.lightwithin.status_effects.LightEffects;
 import net.minecraft.block.Blocks;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.UUID;
 
 public class BottledLightItem extends Item {
 
@@ -32,13 +36,22 @@ public class BottledLightItem extends Item {
             return TypedActionResult.pass(user.getStackInHand(hand));
         }
         LightComponent component = LightWithin.LIGHT_COMPONENT.get(user);
+        //Checks if the player has triggered the light naturally before, if not the bottle won't activate.
         //TODO make configurable, and optional. Kinda.
         if(!component.hasTriggeredNaturally()){
             if(!world.isClient()){
-                user.sendMessage(Text.translatable("light.needs_natural_trigger"));
+                user.sendMessage(Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.translatable("light.needs_natural_trigger")).formatted(Formatting.YELLOW));
             }
             return TypedActionResult.pass(user.getStackInHand(hand));
         }
+        //Checks to see if the player and the bottle have the same light. Aka the player that created the bottle is the one using it.
+        if(!BottledLightItem.getCreatedBy(user.getStackInHand(hand)).equals(user.getUuid())){
+            if(!world.isClient()){
+                user.sendMessage(Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.translatable("light.not_your_light").formatted(Formatting.YELLOW)));
+            }
+            return TypedActionResult.pass(user.getStackInHand(hand));
+        }
+
         int charges = component.getCurrentLightCharges()+1;
         if(charges > component.getMaxLightStack()){
             //TODO or another error-sound
@@ -62,7 +75,23 @@ public class BottledLightItem extends Item {
     @Override
     public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
         tooltip.add(Text.translatable("item.lightwithin.bottled_light.tooltip"));
-        //TODO make the name of the player show up in here! Since it's unique. Or at least the
+        if(Screen.hasShiftDown()) {
+            tooltip.add(Text.literal("§bPlayer UUID: §a"+getCreatedBy(stack).toString()));
+            //TODO add the light type etc
+        }
+    }
+
+    public static void setCreatedBy(PlayerEntity player, ItemStack bottle_item){
+        NbtCompound nbt = new NbtCompound();
+        nbt.putUuid("lightwithin:playerUUID", player.getUuid());
+        bottle_item.setNbt(nbt);
+    }
+
+    public static UUID getCreatedBy(ItemStack bottle_item){
+        if(!bottle_item.hasNbt()){
+            return UUID.fromString("00000000-0000-0000-0000-000000000000");
+        }
+        return bottle_item.getNbt().getUuid("lightwithin:playerUUID");
     }
 
 

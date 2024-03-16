@@ -39,6 +39,7 @@
   "light.triggered_naturally_first": "You have now discovered your true inner light!",
   "light.charge.used": "The light charged up inside of you has manifested!",
   "light.needs_natural_trigger": "You shall first discover what primes your light on your own!",
+  "light.not_your_light": "This is not your light, it won't do anything!",
 
   "light.description.error": "Uhm... your light is... an error? Light not found, report please! ",
   "light.description.heal": "Your light, yes, is a gentle and caring one indeed",

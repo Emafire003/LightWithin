@@ -18,7 +18,7 @@ import net.minecraft.util.Formatting;
 import java.util.Collection;
 import java.util.Objects;
 
-public class LightChargeCommand implements LightCommand{
+public class ChargeCommand implements LightCommand{
 
     private int addLightCharges(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
         Collection<ServerPlayerEntity> targets = EntityArgumentType.getPlayers(context, "player");
@@ -112,7 +112,7 @@ public class LightChargeCommand implements LightCommand{
         return 1;
     }
 
-    private int clearLightCharges(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
+    private int emptyLightCharges(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
         Collection<ServerPlayerEntity> targets = EntityArgumentType.getPlayers(context, "player");
         ServerCommandSource source = context.getSource();
 
@@ -189,10 +189,10 @@ public class LightChargeCommand implements LightCommand{
                                 )
                 ).then(
                         CommandManager
-                                .literal("clear")
+                                .literal("empty")
                                 .then(
                                         CommandManager.argument("player", EntityArgumentType.players())
-                                                .executes(this::clearLightCharges)
+                                                .executes(this::emptyLightCharges)
                                 )
                 )
                 .then(

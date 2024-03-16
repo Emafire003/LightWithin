@@ -2,6 +2,7 @@ package me.emafire003.dev.lightwithin.mixin;
 
 import me.emafire003.dev.lightwithin.LightWithin;
 import me.emafire003.dev.lightwithin.config.Config;
+import me.emafire003.dev.lightwithin.items.BottledLightItem;
 import me.emafire003.dev.lightwithin.items.LightItems;
 import me.emafire003.dev.lightwithin.networking.LightReadyPacketS2C;
 import me.emafire003.dev.lightwithin.status_effects.LightEffects;
@@ -46,7 +47,9 @@ public abstract class BottleLightMixin {
             //TODO investigate why it plays the light ready sound effect
 
             user.addStatusEffect(new StatusEffectInstance(LightEffects.LIGHT_FATIGUE, (int) (Config.COOLDOWN_MULTIPLIER*20*LightWithin.LIGHT_COMPONENT.get(user).getMaxCooldown())));
-            cir.setReturnValue(TypedActionResult.success(fill(user.getStackInHand(hand), user, new ItemStack(LightItems.BOTTLED_LIGHT)), world.isClient()));
+            ItemStack bottled_light = fill(user.getStackInHand(hand), user, new ItemStack(LightItems.BOTTLED_LIGHT));
+            BottledLightItem.setCreatedBy(user, bottled_light);
+            cir.setReturnValue(TypedActionResult.success(bottled_light, world.isClient()));
 
         }
     }
