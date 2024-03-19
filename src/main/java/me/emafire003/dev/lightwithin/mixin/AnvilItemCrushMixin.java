@@ -2,6 +2,7 @@ package me.emafire003.dev.lightwithin.mixin;
 
 import me.emafire003.dev.lightwithin.LightWithin;
 import me.emafire003.dev.lightwithin.items.LightItems;
+import me.emafire003.dev.lightwithin.particles.LightParticles;
 import net.minecraft.block.AnvilBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.FallingBlock;
@@ -10,6 +11,7 @@ import net.minecraft.entity.ItemEntity;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.BlockPos;
@@ -58,6 +60,9 @@ public abstract class AnvilItemCrushMixin extends FallingBlock {
                     ItemEntity powder = new ItemEntity(world, pos.getX(), pos.getY(), pos.getZ(), new ItemStack(LightItems.LUXINTUS_BERRY_POWDER));
                     world.spawnEntity(powder);
                     world.playSoundAtBlockCenter(pos, SoundEvents.BLOCK_AMETHYST_BLOCK_PLACE, SoundCategory.BLOCKS, 1f, 1.5f, true);
+                    if(!entity.getWorld().isClient()){
+                        ((ServerWorld)entity.getWorld()).spawnParticles(LightParticles.LIGHT_PARTICLE, pos.getX(), pos.getY(), pos.getZ(), 30,0.01,0.01, 0.01, 0.1);
+                    }
                 }else{
                     world.playSoundAtBlockCenter(pos, SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS, 1f, 1.7f, true);
                     //If nothing triggered, then it just disappears! Woo!
@@ -73,7 +78,10 @@ public abstract class AnvilItemCrushMixin extends FallingBlock {
                     }
                 };
 
-                entity.getWorld().addParticle(ParticleTypes.FLASH, pos.getX(), pos.getY(), pos.getZ(), 0,0,0);
+                if(!entity.getWorld().isClient()){
+                    ((ServerWorld)entity.getWorld()).spawnParticles(ParticleTypes.FLASH, pos.getX(), pos.getY(), pos.getZ(), 1,0,0, 0, 0.1);
+                }
+                //entity.getWorld().addParticle(ParticleTypes.FLASH, pos.getX(), pos.getY(), pos.getZ(), 0,0,0);
                 //TODO maybe don't let it make explode obsidian and bedrock
                 entity.getWorld().createExplosion(entity, entity.getDamageSources().explosion(entity, fallingBlockEntity), explosionBehavior, entity.getPos(), 2f, true, World.ExplosionSourceType.BLOCK);
             }

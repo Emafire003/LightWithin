@@ -1,5 +1,6 @@
 package me.emafire003.dev.lightwithin.particles;
 
+import me.emafire003.dev.lightwithin.LightWithin;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.particle.AnimatedParticle;
