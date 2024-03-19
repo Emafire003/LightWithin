@@ -8,7 +8,8 @@ import me.emafire003.dev.lightwithin.entities.earth_golem.EarthGolemEntityRender
 import me.emafire003.dev.lightwithin.networking.LightReadyPacketS2C;
 import me.emafire003.dev.lightwithin.networking.RenderRunePacketS2C;
 import me.emafire003.dev.lightwithin.networking.WindLightVelocityPacketS2C;
-import me.emafire003.dev.lightwithin.particles.LightParticleV3;
+import me.emafire003.dev.lightwithin.particles.LightParticle;
+import me.emafire003.dev.lightwithin.particles.LightTypeParticleV3;
 import me.emafire003.dev.lightwithin.particles.LightParticles;
 import me.emafire003.dev.lightwithin.sounds.LightSounds;
 import net.fabricmc.api.ClientModInitializer;
@@ -52,17 +53,19 @@ public class LightWithinClient implements ClientModInitializer {
        registerWindLightVelocityPacket();
        event_handler.registerRenderEvent();
        event_handler.registerRunesRenderer();
-       ParticleFactoryRegistry.getInstance().register(LightParticles.HEALLIGHT_PARTICLE, LightParticleV3.Factory::new);
-       ParticleFactoryRegistry.getInstance().register(LightParticles.DEFENSELIGHT_PARTICLE, LightParticleV3.Factory::new);
-       ParticleFactoryRegistry.getInstance().register(LightParticles.STRENGTHLIGHT_PARTICLE, LightParticleV3.Factory::new);
+       ParticleFactoryRegistry.getInstance().register(LightParticles.HEALLIGHT_PARTICLE, LightTypeParticleV3.Factory::new);
+       ParticleFactoryRegistry.getInstance().register(LightParticles.DEFENSELIGHT_PARTICLE, LightTypeParticleV3.Factory::new);
+       ParticleFactoryRegistry.getInstance().register(LightParticles.STRENGTHLIGHT_PARTICLE, LightTypeParticleV3.Factory::new);
 
-        ParticleFactoryRegistry.getInstance().register(LightParticles.BLAZINGLIGHT_PARTICLE, LightParticleV3.Factory::new);
-        ParticleFactoryRegistry.getInstance().register(LightParticles.FROSTLIGHT_PARTICLE, LightParticleV3.Factory::new);
-        ParticleFactoryRegistry.getInstance().register(LightParticles.EARTHENLIGHT_PARTICLE, LightParticleV3.Factory::new);
-        ParticleFactoryRegistry.getInstance().register(LightParticles.WINDLIGHT_PARTICLE, LightParticleV3.Factory::new);
-        ParticleFactoryRegistry.getInstance().register(LightParticles.AQUALIGHT_PARTICLE, LightParticleV3.Factory::new);
+        ParticleFactoryRegistry.getInstance().register(LightParticles.BLAZINGLIGHT_PARTICLE, LightTypeParticleV3.Factory::new);
+        ParticleFactoryRegistry.getInstance().register(LightParticles.FROSTLIGHT_PARTICLE, LightTypeParticleV3.Factory::new);
+        ParticleFactoryRegistry.getInstance().register(LightParticles.EARTHENLIGHT_PARTICLE, LightTypeParticleV3.Factory::new);
+        ParticleFactoryRegistry.getInstance().register(LightParticles.WINDLIGHT_PARTICLE, LightTypeParticleV3.Factory::new);
+        ParticleFactoryRegistry.getInstance().register(LightParticles.AQUALIGHT_PARTICLE, LightTypeParticleV3.Factory::new);
 
-        ParticleFactoryRegistry.getInstance().register(LightParticles.FROGLIGHT_PARTICLE, LightParticleV3.Factory::new);
+        ParticleFactoryRegistry.getInstance().register(LightParticles.FROGLIGHT_PARTICLE, LightTypeParticleV3.Factory::new);
+
+        ParticleFactoryRegistry.getInstance().register(LightParticles.LIGHT_PARTICLE, LightParticle.Factory::new);
 
         BlockRenderLayerMap.INSTANCE.putBlock(LightBlocks.FROZEN_PLAYER_TOP_BLOCK, RenderLayer.getCutout());
         BlockRenderLayerMap.INSTANCE.putBlock(LightBlocks.FROZEN_PLAYER_BOTTOM_BLOCK, RenderLayer.getCutout());

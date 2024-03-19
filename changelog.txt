@@ -1,3 +1,6 @@
 Fixed a bug with runes rendering not showing up anymore.
 Added Light Charges, which allow the player to ready their light whenever they want, provided they have enough charges.
 They go from 0-9 before glitching currently. If a player attempts to use a light charge even if they don't have enough charges
+
+The items crushed by an anvil will have an increased chance of exploding if the anvil is dropped from a height
+

@@ -2,6 +2,7 @@ package me.emafire003.dev.lightwithin.items;
 
 import me.emafire003.dev.lightwithin.LightWithin;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
+import net.minecraft.client.particle.EndRodParticle;
 import net.minecraft.item.*;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
@@ -31,6 +32,10 @@ public class LightItems {
     public static final Item BOTTLED_LIGHT = registerItem("bottled_light",
             new BottledLightItem(new Item.Settings().rarity(Rarity.RARE).maxCount(1)),
             ItemGroups.FOOD_AND_DRINK, Items.GLOW_BERRIES);
+
+    public static final Item LUXINTUS_BERRY_POWDER = registerItem("luxintus_berry_powder",
+            new Item(new Item.Settings().rarity(Rarity.EPIC).maxCount(64)),
+            ItemGroups.INGREDIENTS, Items.BLAZE_POWDER);
 
     private static Item registerItem(String name, Item item, RegistryKey<ItemGroup> group, Item add_after){
         ItemGroupEvents.modifyEntriesEvent(group).register(content -> {

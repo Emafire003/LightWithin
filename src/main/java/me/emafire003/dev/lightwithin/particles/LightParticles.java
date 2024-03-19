@@ -18,6 +18,8 @@ public class LightParticles {
     public static final DefaultParticleType AQUALIGHT_PARTICLE = FabricParticleTypes.simple();
     public static final DefaultParticleType FROGLIGHT_PARTICLE = FabricParticleTypes.simple();
 
+    public static final DefaultParticleType LIGHT_PARTICLE = FabricParticleTypes.simple();
+
 
     public static void registerParticles() {
         Registry.register(Registries.PARTICLE_TYPE, new Identifier(LightWithin.MOD_ID, "heal_light_particle"),
@@ -38,5 +40,8 @@ public class LightParticles {
                 AQUALIGHT_PARTICLE);
         Registry.register(Registries.PARTICLE_TYPE, new Identifier(LightWithin.MOD_ID, "frog_light_particle"),
                 FROGLIGHT_PARTICLE);
+
+        Registry.register(Registries.PARTICLE_TYPE, new Identifier(LightWithin.MOD_ID, "light_particle"),
+                LIGHT_PARTICLE);
     }
 }
