@@ -6,6 +6,9 @@
   "mixins": [
     "AnvilItemCrushMixin",
     "BottleLightMixin",
+    "BrewingStandMixin",
+    "BrewingStandScreenHandlerMixin",
+    "CustomBrewRecipesMixin",
     "DrownedEntityMixin",
     "EntityAttackEntityMixin",
     "EntityDeathMixin",

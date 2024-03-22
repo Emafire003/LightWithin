@@ -18,6 +18,7 @@ import me.emafire003.dev.lightwithin.entities.LightEntities;
 import me.emafire003.dev.lightwithin.entities.earth_golem.EarthGolemEntity;
 import me.emafire003.dev.lightwithin.events.LightTriggeringAndEvents;
 import me.emafire003.dev.lightwithin.items.LightItems;
+import me.emafire003.dev.lightwithin.items.crafting.BrewRecipes;
 import me.emafire003.dev.lightwithin.lights.*;
 import me.emafire003.dev.lightwithin.networking.LightChargeConsumedPacketC2S;
 import me.emafire003.dev.lightwithin.networking.LightUsedPacketC2S;
@@ -116,6 +117,7 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 		LootTableModifier.modifyLootTables();
 		LightCommands.registerArguments();
 		LightEntities.registerEntities();
+		BrewRecipes.registerRecipes();
 
 		if(FabricLoader.getInstance().isModLoaded("flan")){
 			FlanCompat.registerFlan();

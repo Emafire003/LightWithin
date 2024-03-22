@@ -76,8 +76,11 @@ public class BottledLightItem extends Item {
     public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
         tooltip.add(Text.translatable("item.lightwithin.bottled_light.tooltip"));
         if(Screen.hasShiftDown()) {
+            if(stack.hasNbt() && stack.getNbt().getUuid("lightwithin:playerUUID").equals(UUID.fromString("00000000-0000-0000-0000-000000000000"))){
+                //TODO translatable
+                tooltip.add(Text.literal("§bIngredient-based! Highly unstable!"));
+            }
             tooltip.add(Text.literal("§bPlayer UUID: §a"+getCreatedBy(stack).toString()));
-            //TODO add the light type etc
         }
     }
 

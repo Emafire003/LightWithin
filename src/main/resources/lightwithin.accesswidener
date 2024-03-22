@@ -1,0 +1,5 @@
+accessWidener v2 named
+accessible class net/minecraft/recipe/BrewingRecipeRegistry$Recipe
+accessible field net/minecraft/recipe/BrewingRecipeRegistry$Recipe input Ljava/lang/Object;
+accessible field net/minecraft/recipe/BrewingRecipeRegistry$Recipe ingredient Lnet/minecraft/recipe/Ingredient;
+accessible field net/minecraft/recipe/BrewingRecipeRegistry$Recipe output Ljava/lang/Object;
