@@ -18,6 +18,8 @@ import net.minecraft.entity.effect.StatusEffectCategory;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Item;
+import net.minecraft.item.Items;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 
@@ -26,6 +28,8 @@ import java.util.List;
 
 
 public class HealLight extends InnerLight {
+
+    public static final Item INGREDIENT = Items.GOLDEN_APPLE;
 
     /*per memoria storica, i primi appunti sulle lights li prendevo cosi:
 

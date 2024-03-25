@@ -15,6 +15,8 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Item;
+import net.minecraft.item.Items;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
@@ -24,23 +26,8 @@ import java.util.List;
 
 public class WindLight extends InnerLight {
 
-    /*Possible triggers:
-       - self low health
-       - allies low health
-       - surrounded+++
-     */
-
-    /* Triggers:
-    * - Falling from more than 5 blocks
-    * - Surrounded && HP < 60%
-    * - HP < 25%
-    * - when at height of more than 128 blocks + HP < 50%
-    * */
-
-    /*Possible targets:
-    * - self, -> dash away + enemis pushed away/high velocity and jump
-    * - ally/self -> launch up in the air and give jump boost velocity and
-    * - ALL MAYBE, but not sure. -> everything/one boosted away*/
+    //TODO move to WIND_CHARGE for 1.21
+    public static final Item INGREDIENT = Items.FEATHER;
 
     public WindLight(List<LivingEntity> targets, double cooldown_time, double power_multiplier, int duration, String color, PlayerEntity caster, boolean rainbow_col) {
         super(targets, cooldown_time, power_multiplier, duration, color, caster, rainbow_col);

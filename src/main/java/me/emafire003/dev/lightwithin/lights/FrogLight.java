@@ -1,8 +1,6 @@
 package me.emafire003.dev.lightwithin.lights;
 
-import me.emafire003.dev.lightwithin.LightWithin;
 import me.emafire003.dev.lightwithin.compat.coloredglowlib.CGLCompat;
-import me.emafire003.dev.lightwithin.component.LightComponent;
 import me.emafire003.dev.lightwithin.particles.LightParticles;
 import me.emafire003.dev.lightwithin.particles.LightParticlesUtil;
 import net.fabricmc.loader.api.FabricLoader;
@@ -11,6 +9,8 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.passive.FrogEntity;
 import net.minecraft.entity.passive.FrogVariant;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Item;
+import net.minecraft.item.Items;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
@@ -21,6 +21,8 @@ import java.util.List;
 import static me.emafire003.dev.lightwithin.LightWithin.LOGGER;
 
 public class FrogLight extends InnerLight {
+
+    public static final List<Item> INGREDIENTS = List.of(Items.VERDANT_FROGLIGHT, Items.OCHRE_FROGLIGHT, Items.PEARLESCENT_FROGLIGHT);
 
     /*Possible triggers:
        - self low health

@@ -117,7 +117,6 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 		LootTableModifier.modifyLootTables();
 		LightCommands.registerArguments();
 		LightEntities.registerEntities();
-		BrewRecipes.registerRecipes();
 
 		if(FabricLoader.getInstance().isModLoaded("flan")){
 			FlanCompat.registerFlan();
@@ -126,6 +125,7 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 
 
 		ServerLifecycleEvents.SERVER_STARTED.register(minecraftServer -> {
+			BrewRecipes.registerRecipes();
 			box_expansion_amount = Config.AREA_OF_SEARCH_FOR_ENTITIES;
 			if(box_expansion_amount == 0){
 				box_expansion_amount = 6;

@@ -28,8 +28,11 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.entity.projectile.TridentEntity;
 import net.minecraft.fluid.Fluids;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.Potions;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
@@ -45,27 +48,8 @@ import static me.emafire003.dev.lightwithin.LightWithin.*;
 
 public class AquaLight extends InnerLight {
 
-    /*Possible triggers:
-       - self low health
-       - allies low health
-       - surrounded+++
-     */
-
-    /* Triggers:
-     * - drowning && hp < 50%
-     * - surrounded && hp < 60%
-     * - hp < 35%
-     * */
-
-    /*Possible targets:
-    Always apply conduit effect
-    * - self, ->
-    * - ally/self -> spawn water under the player's feet, and give dolphin grace
-    * - enemies -> encase tg their velocity to collide with the immobile player
-    * - ALL -> summon armored drowneds that don't attachem in a water bubble and apply veeeery high slowness to them + damage. see below
-    * - enemies v2 -> throw a lot of tridents to them, puttink the summoner (mixin) (this could also be self)
-    * (if not self maybe the player could be not attacked if they have the conduit effect. Or dolphin grace.
-    * - ALL MAYBE, but not sure. -> */
+    public static final Item INGREDIENT = Items.WATER_BUCKET;
+    public static final Potion INGREDIENT_V = Potions.WATER;
 
     public AquaLight(List<LivingEntity> targets, double cooldown_time, double power_multiplier, int duration, String color, PlayerEntity caster, boolean rainbow_col) {
         super(targets, cooldown_time, power_multiplier, duration, color, caster, rainbow_col);

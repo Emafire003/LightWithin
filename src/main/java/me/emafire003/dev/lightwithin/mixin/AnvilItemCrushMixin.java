@@ -1,6 +1,5 @@
 package me.emafire003.dev.lightwithin.mixin;
 
-import me.emafire003.dev.lightwithin.LightWithin;
 import me.emafire003.dev.lightwithin.items.LightItems;
 import me.emafire003.dev.lightwithin.particles.LightParticles;
 import net.minecraft.block.AnvilBlock;
@@ -37,10 +36,8 @@ public abstract class AnvilItemCrushMixin extends FallingBlock {
 
     @Inject(method = "onLanding", at = @At("HEAD"))
     private void checkAnvilDamage(World world, BlockPos pos, BlockState fallingBlockState, BlockState currentStateInPos, FallingBlockEntity fallingBlockEntity, CallbackInfo ci) {
-        List<ItemEntity> items = world.getEntitiesByClass(ItemEntity.class, new Box(pos), (entity1 -> {
-            return entity1.getStack().isOf(LightItems.LUXINTUS_BERRY);
-        }));
-        int luxintus_exploding = (int) (10+(fallingBlockEntity.timeFalling/10));
+        List<ItemEntity> items = world.getEntitiesByClass(ItemEntity.class, new Box(pos), (entity1 -> entity1.getStack().isOf(LightItems.LUXINTUS_BERRY)));
+        int luxintus_exploding = 10+(fallingBlockEntity.timeFalling/10);
         boolean explosion = false;
 
         for(ItemEntity entity : items){
@@ -74,6 +71,7 @@ public abstract class AnvilItemCrushMixin extends FallingBlock {
                     @Override
                     public Optional<Float> getBlastResistance(Explosion explosion, BlockView world, BlockPos pos, BlockState blockState, FluidState fluidState) {
                         return Optional.of(0.5f);
+                        //TODO this currently breaks bedrock obsidian and such. May just call it a feature and stop at that?
                         //return blockState.isAir() && fluidState.isEmpty() ? Optional.empty() : Optional.of(Math.max(blockState.getBlock().getBlastResistance(), fluidState.getBlastResistance()));
                     }
                 };
