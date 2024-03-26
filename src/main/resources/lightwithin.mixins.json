@@ -6,9 +6,6 @@
   "mixins": [
     "AnvilItemCrushMixin",
     "BottleLightMixin",
-    "BrewingStandMixin",
-    "BrewingStandScreenHandlerMixin",
-    "CustomBrewRecipesMixin",
     "DrownedEntityMixin",
     "EntityAttackEntityMixin",
     "EntityDeathMixin",
@@ -22,7 +19,8 @@
   ],
   "client": [
     "GameRendererMixin",
-    "InGameHudMixin"
+    "InGameHudMixin",
+    "PlayerChargedGlowRendererMixin"
   ],
   "server": [
   ],

@@ -3,6 +3,7 @@ package me.emafire003.dev.lightwithin.client;
 import com.mojang.blaze3d.systems.RenderSystem;
 import me.emafire003.dev.lightwithin.LightWithin;
 import me.emafire003.dev.lightwithin.compat.replaymod.ReplayModCompat;
+import me.emafire003.dev.lightwithin.config.ClientConfig;
 import me.emafire003.dev.lightwithin.lights.InnerLightType;
 import me.emafire003.dev.lightwithin.util.renderer.ClipStack;
 import me.emafire003.dev.lightwithin.util.renderer.Rectangle;
@@ -22,8 +23,11 @@ import static me.emafire003.dev.lightwithin.LightWithin.LOGGER;
 
 public class RendererEventHandler {
 
-    public static int x = 10;//333;
-    public static int y = 10;//305;
+    public static int light_active_x = 10;//333;
+    public static int light_active_y = 10;//305;
+    public static int light_charge_x = light_active_x;
+    public static int light_charge_y = light_active_y;
+    private static boolean draw_runes = true;
     private boolean heal_runes = false;
     private boolean defense_runes = false;
     private boolean strength_runes = false;
@@ -40,10 +44,23 @@ public class RendererEventHandler {
     int center_x = 0;
     int center_y = 0;
     double scale_factor;
+    static double charge_icon_scale = 1.0;
+    static double active_icon_scale = 1.0;
 
+    public static void updateFromConfig(){
+        light_active_x = ClientConfig.LIGHT_ACTIVE_ICON_X;
+        light_active_y = ClientConfig.LIGHT_ACTIVE_ICON_Y;
+        light_charge_x = ClientConfig.LIGHT_CHARGE_ICON_X;
+        light_charge_y = ClientConfig.LIGHT_CHARGE_ICON_Y;
+        active_icon_scale = ClientConfig.LIGHT_ACTIVE_SCALE_FACTOR;
+        charge_icon_scale = ClientConfig.LIGHT_CHARGE_SCALE_FACTOR;
+        LightWithinClient.setShouldDrawChargesCount(!ClientConfig.HIDE_LIGHT_CHARGE_ICON);
+        draw_runes = ClientConfig.SHOW_RUNES;
+    }
 
     public void registerRenderEvent(){
         LOGGER.info("Registering runes renderer...");
+        updateFromConfig();
         RenderEvents.HUD.register(matrixStack -> {
 
             //Done to fix the bug of the light being avilable even after death or after triggering
@@ -72,8 +89,8 @@ public class RendererEventHandler {
             RenderSystem.defaultBlendFunc();
 
             if(LightWithinClient.isLightReady()){
-                ClipStack.addWindow(matrixStack.getMatrices(),new Rectangle(1,1,40,40));
-                Renderer2d.renderTexture(matrixStack.getMatrices(), new Identifier(LightWithin.MOD_ID, "textures/lights/light.png"), x, y, 20, 20);
+                ClipStack.addWindow(matrixStack.getMatrices(),new Rectangle(light_active_x,light_active_y,light_active_x*active_icon_scale+40,light_active_y*active_icon_scale+40));
+                Renderer2d.renderTexture(matrixStack.getMatrices(), new Identifier(LightWithin.MOD_ID, "textures/lights/light.png"), light_active_x, light_active_y, 20* charge_icon_scale, 20* charge_icon_scale);
                 ClipStack.popWindow();
                 //Be aware of the return here, may cause bugs in the future! 13.03.2024
                 return;
@@ -81,19 +98,19 @@ public class RendererEventHandler {
 
             if(failed_to_use_charge){
                 int charges_number = LIGHT_COMPONENT.get(MinecraftClient.getInstance().player).getCurrentLightCharges();
-                ClipStack.addWindow(matrixStack.getMatrices(),new Rectangle(1,1,40,40));
-                Renderer2d.renderTexture(matrixStack.getMatrices(), new Identifier(LightWithin.MOD_ID, "textures/lights/light_charge_base_error.png"), x, y, 20, 20);
-                Renderer2d.renderTexture(matrixStack.getMatrices(), new Identifier(LightWithin.MOD_ID, "textures/lights/light_charge_overlay_"+ charges_number +".png"), x, y, 20, 20);
+                ClipStack.addWindow(matrixStack.getMatrices(),new Rectangle(light_charge_x,light_charge_y,light_charge_x* charge_icon_scale +40,light_charge_y* charge_icon_scale +40));
+                Renderer2d.renderTexture(matrixStack.getMatrices(), new Identifier(LightWithin.MOD_ID, "textures/lights/light_charge_base_error.png"), light_charge_x, light_charge_y, 20* charge_icon_scale, 20* charge_icon_scale);
+                Renderer2d.renderTexture(matrixStack.getMatrices(), new Identifier(LightWithin.MOD_ID, "textures/lights/light_charge_overlay_"+ charges_number +".png"), light_charge_x, light_charge_y, 20* charge_icon_scale, 20* charge_icon_scale);
                 ClipStack.popWindow();
             } else if(LightWithinClient.shouldDrawChargesCount()){
                 int charges_number = LIGHT_COMPONENT.get(MinecraftClient.getInstance().player).getCurrentLightCharges();
-                ClipStack.addWindow(matrixStack.getMatrices(),new Rectangle(1,1,40,40));
-                Renderer2d.renderTexture(matrixStack.getMatrices(), new Identifier(LightWithin.MOD_ID, "textures/lights/light_charge_base.png"), x, y, 20, 20);
-                Renderer2d.renderTexture(matrixStack.getMatrices(), new Identifier(LightWithin.MOD_ID, "textures/lights/light_charge_overlay_"+ charges_number +".png"), x, y, 20, 20);
+                ClipStack.addWindow(matrixStack.getMatrices(),new Rectangle(light_charge_x,light_charge_y,light_charge_x* charge_icon_scale +40,light_charge_y* charge_icon_scale +40));
+                Renderer2d.renderTexture(matrixStack.getMatrices(), new Identifier(LightWithin.MOD_ID, "textures/lights/light_charge_base.png"), light_charge_x, light_charge_y, 20* charge_icon_scale, 20* charge_icon_scale);
+                Renderer2d.renderTexture(matrixStack.getMatrices(), new Identifier(LightWithin.MOD_ID, "textures/lights/light_charge_overlay_"+ charges_number +".png"), light_charge_x, light_charge_y, 20* charge_icon_scale, 20* charge_icon_scale);
                 ClipStack.popWindow();
             }
 
-            if(MinecraftClient.getInstance().options.getPerspective().equals(Perspective.FIRST_PERSON)){
+            if(MinecraftClient.getInstance().options.getPerspective().equals(Perspective.FIRST_PERSON) && draw_runes){
                 if(heal_runes){
                     ClipStack.addWindow(matrixStack.getMatrices(),new Rectangle(1,1,1000,1000));
                     Renderer2d.renderTexture(matrixStack.getMatrices(), new Identifier(LightWithin.MOD_ID, "textures/lights/runes/heal_light_runes.png"), center_x-(400/scale_factor)/2, center_y-(160/scale_factor)/2, (400/scale_factor)*1.2, (160/scale_factor)*1.2);

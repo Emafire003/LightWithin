@@ -1,6 +1,5 @@
 package me.emafire003.dev.lightwithin.particles;
 
-import me.emafire003.dev.lightwithin.LightWithin;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.particle.AnimatedParticle;
@@ -18,7 +17,7 @@ public class LightParticle extends AnimatedParticle {
         this.velocityY = velocityY;
         this.velocityZ = velocityZ;
         this.scale *= 0.75F;
-        this.maxAge = 60 + this.random.nextInt(12);
+        this.maxAge = 45 + this.random.nextInt(12);
         this.setTargetColor(15916745);
         this.setSpriteForAge(spriteProvider);
     }

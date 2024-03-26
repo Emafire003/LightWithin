@@ -1,9 +1,11 @@
 package me.emafire003.dev.lightwithin.mixin;
 
+import me.emafire003.dev.lightwithin.LightWithin;
 import me.emafire003.dev.lightwithin.items.LightItems;
 import me.emafire003.dev.lightwithin.particles.LightParticles;
 import net.minecraft.block.AnvilBlock;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.block.FallingBlock;
 import net.minecraft.entity.FallingBlockEntity;
 import net.minecraft.entity.ItemEntity;
@@ -67,10 +69,33 @@ public abstract class AnvilItemCrushMixin extends FallingBlock {
 
             }
             if(explosion){
+                /*
+                * return blockState.isAir() && fluidState.isEmpty()
+			? Optional.empty()
+			: Optional.of(Math.max(blockState.getBlock().getBlastResistance(), fluidState.getBlastResistance()));
+			* TODO this but check if the item block is an anvil, if it is, check the block below for the blast resistance instead.
+			* */
+
+                //TODO it kind works but still deletes water and such
                 ExplosionBehavior explosionBehavior = new ExplosionBehavior() {
                     @Override
                     public Optional<Float> getBlastResistance(Explosion explosion, BlockView world, BlockPos pos, BlockState blockState, FluidState fluidState) {
-                        return Optional.of(0.5f);
+                        if(blockState.isAir() && fluidState.isEmpty()){
+                            return Optional.empty();
+                        }else{
+                            //Should be ignoring the anvil and checking the block below the anvil instead.
+                            if(blockState.isOf(Blocks.ANVIL)){
+                                BlockState below_state = world.getBlockState(pos.down());
+                                FluidState below_fluid = world.getFluidState(pos.down());
+                                if(below_state.isAir() && below_fluid.isEmpty()){
+                                    return Optional.empty();
+                                }else{
+                                    return Optional.of(Math.max(below_state.getBlock().getBlastResistance(), below_fluid.getBlastResistance()));
+                                }
+                            }
+                        }
+                        return Optional.of(Math.max(blockState.getBlock().getBlastResistance(), fluidState.getBlastResistance()));
+                        //return Optional.of(0.5f);
                         //TODO this currently breaks bedrock obsidian and such. May just call it a feature and stop at that?
                         //return blockState.isAir() && fluidState.isEmpty() ? Optional.empty() : Optional.of(Math.max(blockState.getBlock().getBlastResistance(), fluidState.getBlastResistance()));
                     }

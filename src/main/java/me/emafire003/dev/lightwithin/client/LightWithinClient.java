@@ -2,6 +2,8 @@ package me.emafire003.dev.lightwithin.client;
 
 import me.emafire003.dev.lightwithin.LightWithin;
 import me.emafire003.dev.lightwithin.blocks.LightBlocks;
+import me.emafire003.dev.lightwithin.commands.client.ClientLightCommands;
+import me.emafire003.dev.lightwithin.config.ClientConfig;
 import me.emafire003.dev.lightwithin.entities.LightEntities;
 import me.emafire003.dev.lightwithin.entities.earth_golem.EarthGolemEntityModel;
 import me.emafire003.dev.lightwithin.entities.earth_golem.EarthGolemEntityRenderer;
@@ -16,6 +18,7 @@ import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
+import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
@@ -39,7 +42,6 @@ public class LightWithinClient implements ClientModInitializer {
     int tickCounter = 0;
     RendererEventHandler event_handler = new RendererEventHandler();
 
-    //TODO make configurable
     private static boolean shouldDrawChargesCount = true;
 
     public static final EntityModelLayer MODEL_EARTH_GOLEM_LAYER = new EntityModelLayer(new Identifier(LightWithin.MOD_ID, "earth_golem"), "main");
@@ -51,6 +53,7 @@ public class LightWithinClient implements ClientModInitializer {
        registerLightReadyPacket();
        registerRenderRunesPacket();
        registerWindLightVelocityPacket();
+       ClientCommandRegistrationCallback.EVENT.register(ClientLightCommands::registerCommands);
        event_handler.registerRenderEvent();
        event_handler.registerRunesRenderer();
        ParticleFactoryRegistry.getInstance().register(LightParticles.HEALLIGHT_PARTICLE, LightTypeParticleV3.Factory::new);
@@ -77,6 +80,8 @@ public class LightWithinClient implements ClientModInitializer {
         EntityRendererRegistry.register(LightEntities.EARTH_GOLEM, EarthGolemEntityRenderer::new);
 
         EntityModelLayerRegistry.registerModelLayer(MODEL_EARTH_GOLEM_LAYER, EarthGolemEntityModel::getTexturedModelData);
+
+        ClientConfig.reloadConfig();
 
         ClientTickEvents.END_CLIENT_TICK.register((minecraftClient -> {
             //This is done as to not display another Light Ready icon when it just triggered
