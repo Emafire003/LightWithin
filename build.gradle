@@ -20,6 +20,7 @@ repositories {
 	// Loom adds the essential maven repositories to download Minecraft and libraries from automatically.
 	// See https://docs.gradle.org/current/userguide/declaring_repositories.html
 	// for more information about repositories.
+
 	maven {
 		name = "Modrinth"
 		url = "https://api.modrinth.com/maven"
@@ -37,6 +38,8 @@ repositories {
 		}
 	}
 
+	maven { url 'https://maven.terraformersmc.com/' }
+
 	exclusiveContent {
 		forRepository {
 			maven {
@@ -49,7 +52,6 @@ repositories {
 	}
 
 	maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
-	maven { url 'https://jitpack.io' }
 
 }
 
@@ -132,6 +134,16 @@ dependencies {
 	//Not really worth the effor at the moment
 	//Leukocyte (world protection)
 	//modImplementation("maven.modrinth:leukocyte:${project.leukocyte_version}")
+
+	//Yet Another Config Lib YACL
+	//TODO move to modcompileonly maybe
+	modImplementation "maven.modrinth:yacl:${project.yacl_version}"
+	//modImplementation "dev.isxander.yacl:yet-another-config-lib-fabric:$project.yacl_version"
+
+	//modmenu
+	modImplementation("com.terraformersmc:modmenu:${project.modmenu_version}") {
+		exclude(group: "net.fabricmc.fabric-api")
+	}
 }
 
 processResources {

@@ -3,6 +3,7 @@ package me.emafire003.dev.lightwithin.client;
 import me.emafire003.dev.lightwithin.LightWithin;
 import me.emafire003.dev.lightwithin.blocks.LightBlocks;
 import me.emafire003.dev.lightwithin.commands.client.ClientLightCommands;
+import me.emafire003.dev.lightwithin.compat.yacl.YaclScreenMaker;
 import me.emafire003.dev.lightwithin.config.ClientConfig;
 import me.emafire003.dev.lightwithin.entities.LightEntities;
 import me.emafire003.dev.lightwithin.entities.earth_golem.EarthGolemEntityModel;
@@ -24,10 +25,18 @@ import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
+import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.screen.ConfirmScreen;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.entity.model.EntityModelLayer;
+import net.minecraft.screen.ScreenTexts;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.Util;
 
+import java.net.URI;
 import java.util.NoSuchElementException;
 
 import static me.emafire003.dev.lightwithin.LightWithin.LOGGER;
@@ -180,6 +189,21 @@ public class LightWithinClient implements ClientModInitializer {
                 }
             });
         }));
+    }
+
+    /**Create a config screen for ModMenu if YACL is present*/
+    public static Screen createConfigScreen(Screen parent) {
+        if (FabricLoader.getInstance().isModLoaded("yacl")) {
+            return new ConfirmScreen((result) -> {
+                if (result) {
+                    Util.getOperatingSystem().open(URI.create("https://modrinth.com/mod/yacl/versions"));
+                }
+                MinecraftClient.getInstance().setScreen(parent);
+            },
+                    Text.literal("You need to install YACL"), Text.literal("Install YACL to be able to modify the config"), ScreenTexts.YES, ScreenTexts.NO);
+        } else {
+            return YaclScreenMaker.getScreen(parent);
+        }
     }
 
     private void registerWindLightVelocityPacket(){

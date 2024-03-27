@@ -27,6 +27,9 @@
     ],
     "cardinal-components-entity": [
       "me.emafire003.dev.lightwithin.LightWithin"
+    ],
+    "modmenu": [
+      "me.emafire003.dev.lightwithin.compat.modmenu.ModMenuIntegration"
     ]
   },
   "mixins": [

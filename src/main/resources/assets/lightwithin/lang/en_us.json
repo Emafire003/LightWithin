@@ -92,5 +92,32 @@
   "light.description.activation.aqua.enemies": "Your enemy shall be launched away by the waters!",
   "light.description.activation.aqua.all": "Inhabitants of the depths, hear my call and aid me!",
   "light.description.activation.aqua.self": "Let me swiftly move on a watery carpet!",
-  "light.description.activation.aqua.allies": "Let us swiftly move on a watery carpet!"
+  "light.description.activation.aqua.allies": "Let us swiftly move on a watery carpet!",
+
+  "config.lightwithin.name": "LightWithin client options",
+  "config.lightwithin.category_name": "Options",
+  "config.lightwithin.description": "A settings menu to manage what is rendered on the client",
+
+  "config.lightwithin.light_active_icon_x": "LightActive icon X coordinate",
+  "config.lightwithin.light_active_icon_x.tooltip": "Change this value to move the LightActive icon horizontally on your screen",
+  "config.lightwithin.light_active_icon_y": "LightActive icon Y coordinate",
+  "config.lightwithin.light_active_icon_y.tooltip": "Change this value to move the LightActive icon vertically on your screen",
+  "config.lightwithin.light_charge_icon_x": "LightCharge icon X coordinate",
+  "config.lightwithin.light_charge_icon_x.tooltip": "Change this value to move the LightCharge icon horizontally on your screen",
+  "config.lightwithin.light_charge_icon_y": "LightCharge icon Y coordinate",
+  "config.lightwithin.light_charge_icon_y.tooltip": "Change this value to move the LightCharge icon vertically on your screen",
+
+  "config.lightwithin.light_active_scale_factor": "LightActive icon scale factor",
+  "config.lightwithin.light_active_scale_factor.tooltip": "Change this value to make the icon bigger or smaller",
+  "config.lightwithin.light_charge_scale_factor": "LightCharge icon scale factor",
+  "config.lightwithin.light_charge_scale_factor.tooltip": "Change this value to make the icon bigger or smaller",
+
+  "config.lightwithin.hide_light_charge_icon": "Hide LightCharge icon",
+  "config.lightwithin.hide_light_charge_icon.tooltip": "Set this to true to hide the light charge icon. The Active and error one will still display",
+
+  "config.lightwithin.show_charged_player_glow": "Show players with Light Charges glowing",
+  "config.lightwithin.show_charged_player_glow.tooltip": "See players that have light charges ready glow like a GlowSquid",
+
+  "config.lightwithin.showrunes": "Show runes",
+  "config.lightwithin.showrunes.tooltip": "Setting this value to false will disable runes from rendering even in first person"
 }

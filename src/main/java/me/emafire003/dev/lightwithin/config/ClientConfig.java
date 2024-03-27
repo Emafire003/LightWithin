@@ -27,8 +27,13 @@ public class ClientConfig {
     public static double LIGHT_CHARGE_SCALE_FACTOR = 1.0;
     public static double LIGHT_ACTIVE_SCALE_FACTOR = 1.0;
     public static boolean HIDE_LIGHT_CHARGE_ICON = false;
+    public static final boolean HIDE_LIGHT_CHARGE_ICON_default = false;
     public static boolean SHOW_CHARGED_PLAYER_GLOW = true;
+    public static final boolean SHOW_CHARGED_PLAYER_GLOW_default = false;
     public static boolean SHOW_RUNES = true;
+    public static final boolean SHOW_RUNES_default = true;
+    public static final int light_icon_default_position = 10;
+    public static final double light_icon_default_scale = 1.0;
 
     private static final String config_name = "_client";
 
@@ -50,6 +55,21 @@ public class ClientConfig {
             }
         }
     }
+
+    public static void saveToFile(){
+        try {
+            CONFIG.delete();
+        } catch (IOException e) {
+            LOGGER.warn("Could not delete the config file before saving the new one!");
+        }
+        createConfigs();
+
+        CONFIG = SimpleConfig.of(LightWithin.MOD_ID + config_name).provider(configs).request();
+        RendererEventHandler.updateFromConfig();
+        LOGGER.debug("Config saved to disk correctly");
+
+    }
+
     public static void registerConfigs() {
         configs = new ConfigProvider();
         createConfigs();
@@ -100,20 +120,20 @@ public class ClientConfig {
 
         configs.addKeyValuePair(new Pair<>("spacer", "spacer"), "");
 
-        configs.addKeyValuePair(new Pair<>("light_active_icon_x", 10), "The x coordinate of the light active icon position on your screen. A value of 0 corresponds to left side.");
-        configs.addKeyValuePair(new Pair<>("light_active_icon_y", 10), "The y coordinate of the light active icon position on your screen. A value of 0 corresponds to top side.");
-        configs.addKeyValuePair(new Pair<>("light_charge_icon_x", 10), "The x coordinate of the light charge icon position on your screen. A value of 0 corresponds to left side.");
-        configs.addKeyValuePair(new Pair<>("light_charge_icon_y", 10), "The y coordinate of the light charge icon position on your screen. A value of 0 corresponds to top side.");
+        configs.addKeyValuePair(new Pair<>("light_active_icon_x", light_icon_default_position), "The x coordinate of the light active icon position on your screen. A value of 0 corresponds to left side.");
+        configs.addKeyValuePair(new Pair<>("light_active_icon_y", light_icon_default_position), "The y coordinate of the light active icon position on your screen. A value of 0 corresponds to top side.");
+        configs.addKeyValuePair(new Pair<>("light_charge_icon_x", light_icon_default_position), "The x coordinate of the light charge icon position on your screen. A value of 0 corresponds to left side.");
+        configs.addKeyValuePair(new Pair<>("light_charge_icon_y", light_icon_default_position), "The y coordinate of the light charge icon position on your screen. A value of 0 corresponds to top side.");
 
-        configs.addKeyValuePair(new Pair<>("light_active_scale_factor", 1.0), "Make this number bigger to make the light active icon bigger, make it smaller to have a smaller light icon!");
-        configs.addKeyValuePair(new Pair<>("light_charge_scale_factor", 1.0), "Make this number bigger to make the light charge icon bigger, make it smaller to have a smaller light icon!");
+        configs.addKeyValuePair(new Pair<>("light_active_scale_factor", light_icon_default_scale), "Make this number bigger to make the light active icon bigger, make it smaller to have a smaller light icon!");
+        configs.addKeyValuePair(new Pair<>("light_charge_scale_factor", light_icon_default_scale), "Make this number bigger to make the light charge icon bigger, make it smaller to have a smaller light icon!");
 
         configs.addKeyValuePair(new Pair<>("spacer", "spacer"), "");
 
-        configs.addKeyValuePair(new Pair<>("hide_light_charge_icon", false), "Hide the light charges icon, but still displays the light active one, or the error one if you do something that's not allowed");
-        configs.addKeyValuePair(new Pair<>("show_charged_player_glow", true), "See players that have light charges ready glow like a GlowSquid");
+        configs.addKeyValuePair(new Pair<>("hide_light_charge_icon", HIDE_LIGHT_CHARGE_ICON_default), "Hide the light charges icon, but still displays the light active one, or the error one if you do something that's not allowed");
+        configs.addKeyValuePair(new Pair<>("show_charged_player_glow", SHOW_CHARGED_PLAYER_GLOW_default), "See players that have light charges ready glow like a GlowSquid");
 
-        configs.addKeyValuePair(new Pair<>("show_runes", true), "Should light runes be rendered?");
+        configs.addKeyValuePair(new Pair<>("show_runes", SHOW_RUNES_default), "Setting this value to false will disable runes from rendering even in first person");
 
     }
 
@@ -127,15 +147,15 @@ public class ClientConfig {
     private static void assignConfigs() {
         VERSION = CONFIG.getOrDefault("version", ver);
 
-        LIGHT_ACTIVE_ICON_X = CONFIG.getOrDefault("light_active_icon_x", 10);
-        LIGHT_ACTIVE_ICON_Y = CONFIG.getOrDefault("light_active_icon_y", 10);
-        LIGHT_CHARGE_ICON_X = CONFIG.getOrDefault("light_charge_icon_x", LIGHT_ACTIVE_ICON_X);
-        LIGHT_CHARGE_ICON_Y = CONFIG.getOrDefault("light_charge_icon_y", LIGHT_ACTIVE_ICON_Y);
-        LIGHT_ACTIVE_SCALE_FACTOR = CONFIG.getOrDefault("light_active_scale_factor", 1.0);
-        LIGHT_CHARGE_SCALE_FACTOR = CONFIG.getOrDefault("light_charge_scale_factor", 1.0);
-        HIDE_LIGHT_CHARGE_ICON = CONFIG.getOrDefault("hide_light_charge_icon", false);
-        SHOW_CHARGED_PLAYER_GLOW = CONFIG.getOrDefault("show_charged_player_glow", true);
-        SHOW_RUNES = CONFIG.getOrDefault("show_runes", true);
+        LIGHT_ACTIVE_ICON_X = CONFIG.getOrDefault("light_active_icon_x", light_icon_default_position);
+        LIGHT_ACTIVE_ICON_Y = CONFIG.getOrDefault("light_active_icon_y", light_icon_default_position);
+        LIGHT_CHARGE_ICON_X = CONFIG.getOrDefault("light_charge_icon_x", light_icon_default_position);
+        LIGHT_CHARGE_ICON_Y = CONFIG.getOrDefault("light_charge_icon_y", light_icon_default_position);
+        LIGHT_ACTIVE_SCALE_FACTOR = CONFIG.getOrDefault("light_active_scale_factor", light_icon_default_scale);
+        LIGHT_CHARGE_SCALE_FACTOR = CONFIG.getOrDefault("light_charge_scale_factor", light_icon_default_scale);
+        HIDE_LIGHT_CHARGE_ICON = CONFIG.getOrDefault("hide_light_charge_icon", HIDE_LIGHT_CHARGE_ICON_default);
+        SHOW_CHARGED_PLAYER_GLOW = CONFIG.getOrDefault("show_charged_player_glow", SHOW_CHARGED_PLAYER_GLOW_default);
+        SHOW_RUNES = CONFIG.getOrDefault("show_runes", SHOW_RUNES_default);
     }
 }
 
