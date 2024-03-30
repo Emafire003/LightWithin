@@ -1,7 +1,7 @@
 package me.emafire003.dev.lightwithin.client;
 
 import me.emafire003.dev.lightwithin.LightWithin;
-import me.emafire003.dev.lightwithin.config.Config;
+import me.emafire003.dev.lightwithin.config.ClientConfig;
 import me.emafire003.dev.lightwithin.networking.LightChargeConsumedPacketC2S;
 import me.emafire003.dev.lightwithin.networking.LightUsedPacketC2S;
 import me.emafire003.dev.lightwithin.sounds.LightSounds;
@@ -32,14 +32,18 @@ public class ActivationKey {
 
     public static void update(MinecraftClient client) {
         if (client.player != null) {
-            if (lightActivationKey.wasPressed() || Config.AUTO_LIGHT_ACTIVATION) {
-                if(LightWithinClient.isLightReady()){
+            if(LightWithinClient.isLightReady()){
+                if(lightActivationKey.wasPressed() || (LightWithinClient.isAutoActivationAllowed() && ClientConfig.AUTO_LIGHT_ACTIVATION)){
                     ClientPlayNetworking.send(LightUsedPacketC2S.ID, new LightUsedPacketC2S(LightWithinClient.hasUsedCharge()));
                     LightWithinClient.setLightReady(false);
                     LightWithinClient.setWaitForNext(true);
                     //Reverts back the status of the used charge
                     LightWithinClient.setUsedCharge(false);
-                }else if(!LightWithin.isPlayerInCooldown(client.player) && LIGHT_COMPONENT.get(client.player).getCurrentLightCharges() != 0){
+                }
+            }
+
+            if (lightActivationKey.wasPressed()) {
+                if(!LightWithin.isPlayerInCooldown(client.player) && LIGHT_COMPONENT.get(client.player).getCurrentLightCharges() != 0){
                     ClientPlayNetworking.send(LightChargeConsumedPacketC2S.ID, new LightUsedPacketC2S(true));
 
                     client.player.playSound(LightSounds.LIGHT_READY, 1f, 0.63f);
@@ -54,9 +58,6 @@ public class ActivationKey {
                     //TODO change the sound maybe
                     client.player.playSound(SoundEvents.BLOCK_RESPAWN_ANCHOR_CHARGE, 0.5f, 1.76f);
                 }
-                //TODO set in the config the option to display or not the Light Charges number
-                //TODO set in the config the option for always requiring at least one natural trigger before activating the light.
-                //TODO or maybe just put the check above in the item and commands thing so the light can't be charged before you triggered it normally.
             }
         }
     }

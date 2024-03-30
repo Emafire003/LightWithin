@@ -136,7 +136,7 @@ dependencies {
 	//modImplementation("maven.modrinth:leukocyte:${project.leukocyte_version}")
 
 	//Yet Another Config Lib YACL
-	modCompileOnly "maven.modrinth:yacl:${project.yacl_version}"
+	modImplementation "maven.modrinth:yacl:${project.yacl_version}"
 	//modImplementation "dev.isxander.yacl:yet-another-config-lib-fabric:$project.yacl_version"
 
 	//modmenu

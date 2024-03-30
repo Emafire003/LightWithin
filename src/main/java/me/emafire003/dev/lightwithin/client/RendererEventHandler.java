@@ -28,6 +28,7 @@ public class RendererEventHandler {
     public static int light_charge_x = light_active_x;
     public static int light_charge_y = light_active_y;
     private static boolean draw_runes = true;
+    private static int show_runes_for = 3*20;
     private boolean heal_runes = false;
     private boolean defense_runes = false;
     private boolean strength_runes = false;
@@ -56,6 +57,7 @@ public class RendererEventHandler {
         charge_icon_scale = ClientConfig.LIGHT_CHARGE_SCALE_FACTOR;
         LightWithinClient.setShouldDrawChargesCount(!ClientConfig.HIDE_LIGHT_CHARGE_ICON);
         draw_runes = ClientConfig.SHOW_RUNES;
+        show_runes_for = ClientConfig.SHOW_RUNES_FOR*20;
     }
 
     public void registerRenderEvent(){
@@ -212,63 +214,63 @@ public class RendererEventHandler {
             //This makes the runes appear only for a configured amount of time
             if(heal_runes){
                 ticks++;
-                if(ticks > 20*3){
+                if(ticks > show_runes_for){
                     ticks = 0;
                     heal_runes = false;
                 }
             }
             if(defense_runes){
                 ticks++;
-                if(ticks > 20*3){
+                if(ticks > show_runes_for){
                     ticks = 0;
                     defense_runes = false;
                 }
             }
             if(strength_runes){
                 ticks++;
-                if(ticks > 20*3){
+                if(ticks > show_runes_for){
                     ticks = 0;
                     strength_runes = false;
                 }
             }
             if(blazing_runes){
                 ticks++;
-                if(ticks > 20*3){
+                if(ticks > show_runes_for){
                     ticks = 0;
                     blazing_runes = false;
                 }
             }
             if(frost_runes){
                 ticks++;
-                if(ticks > 20*3){
+                if(ticks > show_runes_for){
                     ticks = 0;
                     frost_runes = false;
                 }
             }
             if(earthen_runes){
                 ticks++;
-                if(ticks > 20*3){
+                if(ticks > show_runes_for){
                     ticks = 0;
                     earthen_runes = false;
                 }
             }
             if(wind_runes){
                 ticks++;
-                if(ticks > 20*3){
+                if(ticks > show_runes_for){
                     ticks = 0;
                     wind_runes = false;
                 }
             }
             if(aqua_runes){
                 ticks++;
-                if(ticks > 20*3){
+                if(ticks > show_runes_for){
                     ticks = 0;
                     aqua_runes = false;
                 }
             }
             if(frog_runes){
                 ticks++;
-                if(ticks > 20*3){
+                if(ticks > show_runes_for){
                     ticks = 0;
                     frog_runes = false;
                 }

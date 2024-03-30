@@ -32,6 +32,11 @@ public class ClientConfig {
     public static final boolean SHOW_CHARGED_PLAYER_GLOW_default = false;
     public static boolean SHOW_RUNES = true;
     public static final boolean SHOW_RUNES_default = true;
+    public static int SHOW_RUNES_FOR = 3;
+    public static final int SHOW_RUNES_FOR_default = 3;
+    public static boolean AUTO_LIGHT_ACTIVATION = false;
+    public static boolean AUTO_LIGHT_ACTIVATION_default = false;
+
     public static final int light_icon_default_position = 10;
     public static final double light_icon_default_scale = 1.0;
 
@@ -56,16 +61,24 @@ public class ClientConfig {
         }
     }
 
+
     public static void saveToFile(){
         try {
-            CONFIG.delete();
+            CONFIG.set("light_active_icon_x", LIGHT_ACTIVE_ICON_X);
+            CONFIG.set("light_active_icon_y", LIGHT_ACTIVE_ICON_Y);
+            CONFIG.set("light_charge_icon_x", LIGHT_CHARGE_ICON_X);
+            CONFIG.set("light_charge_icon_y", LIGHT_CHARGE_ICON_Y);
+            CONFIG.set("light_active_scale_factor", LIGHT_ACTIVE_SCALE_FACTOR);
+            CONFIG.set("light_charge_scale_factor", LIGHT_CHARGE_SCALE_FACTOR);
+            CONFIG.set("hide_light_charge_icon", HIDE_LIGHT_CHARGE_ICON_default);
+            CONFIG.set("show_charged_player_glow", SHOW_CHARGED_PLAYER_GLOW);
+            CONFIG.set("show_runes", SHOW_RUNES);
+            CONFIG.set("show_runes_for", SHOW_RUNES_FOR);
+            CONFIG.set("auto_light_activation", AUTO_LIGHT_ACTIVATION);
+            CONFIG.update();
         } catch (IOException e) {
             LOGGER.warn("Could not delete the config file before saving the new one!");
         }
-        createConfigs();
-
-        CONFIG = SimpleConfig.of(LightWithin.MOD_ID + config_name).provider(configs).request();
-        RendererEventHandler.updateFromConfig();
         LOGGER.debug("Config saved to disk correctly");
 
     }
@@ -133,7 +146,11 @@ public class ClientConfig {
         configs.addKeyValuePair(new Pair<>("hide_light_charge_icon", HIDE_LIGHT_CHARGE_ICON_default), "Hide the light charges icon, but still displays the light active one, or the error one if you do something that's not allowed");
         configs.addKeyValuePair(new Pair<>("show_charged_player_glow", SHOW_CHARGED_PLAYER_GLOW_default), "See players that have light charges ready glow like a GlowSquid");
 
+
         configs.addKeyValuePair(new Pair<>("show_runes", SHOW_RUNES_default), "Setting this value to false will disable runes from rendering even in first person");
+        configs.addKeyValuePair(new Pair<>("show_runes_for", SHOW_RUNES_FOR_default), "How many seconds should the runes last on screen?");
+
+        configs.addKeyValuePair(new Pair<>("auto_light_activation", AUTO_LIGHT_ACTIVATION_default), "Setting this value to true will activate your light as soon as it's ready. WARNING: it may be disabled by the server!");
 
     }
 
@@ -156,6 +173,8 @@ public class ClientConfig {
         HIDE_LIGHT_CHARGE_ICON = CONFIG.getOrDefault("hide_light_charge_icon", HIDE_LIGHT_CHARGE_ICON_default);
         SHOW_CHARGED_PLAYER_GLOW = CONFIG.getOrDefault("show_charged_player_glow", SHOW_CHARGED_PLAYER_GLOW_default);
         SHOW_RUNES = CONFIG.getOrDefault("show_runes", SHOW_RUNES_default);
+        SHOW_RUNES_FOR = CONFIG.getOrDefault("show_runes_for", SHOW_RUNES_FOR_default);
+        AUTO_LIGHT_ACTIVATION = CONFIG.getOrDefault("auto_light_activation", AUTO_LIGHT_ACTIVATION_default);
     }
 }
 

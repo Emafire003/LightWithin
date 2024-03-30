@@ -14,12 +14,12 @@ import net.minecraft.text.Text;
 
 public class ReloadConfigCommand implements LightCommand{
 
-
     private int reloadConfig(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
         try{
             Config.reloadConfig();
             TriggerConfig.reloadConfig();
             BalanceConfig.reloadConfig();
+            context.getSource().getServer().getPlayerManager().getPlayerList().forEach(LightWithin::syncCustomConfigOptions);
             context.getSource().sendFeedback( () -> Text.literal(LightWithin.PREFIX_MSG).append("§aConfig successfully reloaded!"), false);
             return 1;
         }catch (Exception e){

@@ -2,6 +2,7 @@ package me.emafire003.dev.lightwithin.compat.yacl;
 
 import dev.isxander.yacl3.api.*;
 import dev.isxander.yacl3.api.controller.DoubleSliderControllerBuilder;
+import dev.isxander.yacl3.api.controller.IntegerFieldControllerBuilder;
 import dev.isxander.yacl3.api.controller.IntegerSliderControllerBuilder;
 import dev.isxander.yacl3.api.controller.TickBoxControllerBuilder;
 import me.emafire003.dev.lightwithin.config.ClientConfig;
@@ -34,7 +35,7 @@ public class YaclScreenMaker {
 
         // The xy positions of the icons
         options.add(
-                Option.<Integer>createBuilder() // boolean is the type of option we'll be making
+                Option.<Integer>createBuilder() 
                         .name(Text.translatable("config.lightwithin.light_active_icon_x"))
                         .description(OptionDescription.of(Text.translatable("config.lightwithin.light_active_icon_x.tooltip")))
                         .binding(
@@ -52,7 +53,7 @@ public class YaclScreenMaker {
         );
 
         options.add(
-                Option.<Integer>createBuilder() // boolean is the type of option we'll be making
+                Option.<Integer>createBuilder() 
                         .name(Text.translatable("config.lightwithin.light_active_icon_y"))
                         .description(OptionDescription.of(Text.translatable("config.lightwithin.light_active_icon_y.tooltip")))
                         .binding(
@@ -70,7 +71,7 @@ public class YaclScreenMaker {
         );
 
         options.add(
-                Option.<Integer>createBuilder() // boolean is the type of option we'll be making
+                Option.<Integer>createBuilder() 
                         .name(Text.translatable("config.lightwithin.light_charge_icon_x"))
                         .description(OptionDescription.of(Text.translatable("config.lightwithin.light_charge_icon_x.tooltip")))
                         .binding(
@@ -88,7 +89,7 @@ public class YaclScreenMaker {
         );
 
         options.add(
-                Option.<Integer>createBuilder() // boolean is the type of option we'll be making
+                Option.<Integer>createBuilder() 
                         .name(Text.translatable("config.lightwithin.light_charge_icon_y"))
                         .description(OptionDescription.of(Text.translatable("config.lightwithin.light_charge_icon_y.tooltip")))
                         .binding(
@@ -106,7 +107,7 @@ public class YaclScreenMaker {
         );
 
         options.add(
-                Option.<Double>createBuilder() // boolean is the type of option we'll be making
+                Option.<Double>createBuilder() 
                         .name(Text.translatable("config.lightwithin.light_active_scale_factor"))
                         .description(OptionDescription.of(Text.translatable("config.lightwithin.light_active_scale_factor.tooltip")))
                         .binding(
@@ -124,7 +125,7 @@ public class YaclScreenMaker {
         );
 
         options.add(
-                Option.<Double>createBuilder() // boolean is the type of option we'll be making
+                Option.<Double>createBuilder() 
                         .name(Text.translatable("config.lightwithin.light_charge_scale_factor"))
                         .description(OptionDescription.of(Text.translatable("config.lightwithin.light_charge_scale_factor.tooltip")))
                         .binding(
@@ -142,7 +143,7 @@ public class YaclScreenMaker {
         );
 
         options.add(
-                Option.<Boolean>createBuilder() // boolean is the type of option we'll be making
+                Option.<Boolean>createBuilder() 
                         .name(Text.translatable("config.lightwithin.hide_light_charge_icon"))
                         .description(OptionDescription.of(Text.translatable("config.lightwithin.hide_light_charge_icon.tooltip")))
                         .binding(
@@ -158,7 +159,7 @@ public class YaclScreenMaker {
         );
 
         options.add(
-                Option.<Boolean>createBuilder() // boolean is the type of option we'll be making
+                Option.<Boolean>createBuilder() 
                         .name(Text.translatable("config.lightwithin.show_charged_player_glow"))
                         .description(OptionDescription.of(Text.translatable("config.lightwithin.show_charged_player_glow.tooltip")))
                         .binding(
@@ -175,7 +176,7 @@ public class YaclScreenMaker {
 
 
         options.add(
-                Option.<Boolean>createBuilder() // boolean is the type of option we'll be making
+                Option.<Boolean>createBuilder() 
                 .name(Text.translatable("config.lightwithin.showrunes"))
                 .description(OptionDescription.of(Text.translatable("config.lightwithin.showrunes.tooltip")))
                 .binding(
@@ -188,6 +189,40 @@ public class YaclScreenMaker {
                 )
                 .controller(TickBoxControllerBuilder::create)
                 .build()
+        );
+
+        options.add(
+                Option.<Integer>createBuilder()
+                        .name(Text.translatable("config.lightwithin.showrunes_for"))
+                        .description(OptionDescription.of(Text.translatable("config.lightwithin.showrunes_for.tooltip")))
+                        .binding(
+                                ClientConfig.SHOW_RUNES_FOR_default, // the default value
+                                () -> ClientConfig.SHOW_RUNES_FOR, // a field to get the current value from
+                                newVal -> {
+                                    ClientConfig.SHOW_RUNES_FOR = newVal;
+                                    ClientConfig.saveToFile();
+                                }
+                        )
+                        .controller(opt -> IntegerFieldControllerBuilder.create(opt)
+                                .range(0, 60)
+                        )
+                        .build()
+        );
+
+        options.add(
+                Option.<Boolean>createBuilder() 
+                        .name(Text.translatable("config.lightwithin.auto_light_activation"))
+                        .description(OptionDescription.of(Text.translatable("config.lightwithin.auto_light_activation.tooltip")))
+                        .binding(
+                                ClientConfig.AUTO_LIGHT_ACTIVATION_default, // the default value
+                                () -> ClientConfig.AUTO_LIGHT_ACTIVATION, // a field to get the current value from
+                                newVal -> {
+                                    ClientConfig.AUTO_LIGHT_ACTIVATION = newVal;
+                                    ClientConfig.saveToFile();
+                                }
+                        )
+                        .controller(TickBoxControllerBuilder::create)
+                        .build()
         );
 
         return options;

@@ -14,7 +14,7 @@ public class Config {
     public static SimpleConfig CONFIG;
     private static ConfigProvider configs;
 
-    private static final int ver = 3;
+    private static final int ver = 4;
     public static int VERSION;
 
     //box expansion amount while searching for other entities, like when checking for allies or targets near the player
@@ -64,9 +64,6 @@ public class Config {
     public static boolean TARGET_FEEDBACK;
 
     public static boolean AUTO_LIGHT_ACTIVATION;
-
-    public static boolean LIGHT_RUNES;
-    public static int LIGHT_RUNES_DURATION;
 
     public static boolean MULTIPLY_DURATION_LIMIT;
     public static boolean LIGHT_LOCKED_DEFAULT;
@@ -201,10 +198,8 @@ public class Config {
         configs.addKeyValuePair(new Pair<>("command_target_feedback", true), "Should a message be sent the target of a command, such us when changing its innerlight?");
         configs.addKeyValuePair(new Pair<>("reset_on_join", false), "Should the InnerLight be completely resetted upon joining the server/world again? Useful after an update of the mod that added new Light Types");
 
-        configs.addKeyValuePair(new Pair<>("auto_light_activation", false), "Should the light be activated without the player needing to press the button? (Suggestion: keep it to false) CLIENT SIDE");
+        configs.addKeyValuePair(new Pair<>("auto_light_activation", false), "Allow players to auto activate their light if they want to");
 
-        configs.addKeyValuePair(new Pair<>("light_runes", true), "Should runes be rendered? (If true they will only render in first person)");
-        configs.addKeyValuePair(new Pair<>("light_runes_duration", 3), "How many seconds should the runes last on screen?");
         configs.addKeyValuePair(new Pair<>("light_locked_default", false), "Should the light activation be locked by default? (Unless you use a command players won't be able to use lights)");
         configs.addKeyValuePair(new Pair<>("unlock_with_luxintus", true), "Should eating a Luxintus berry unlocked the light?");
         configs.addKeyValuePair(new Pair<>("not_ally_then_enemy", false), "Should a player that is not an explicit ALLY be considered an ENEMY?");
@@ -268,9 +263,6 @@ public class Config {
         RESET_ON_JOIN = CONFIG.getOrDefault("reset_on_join", false);
 
         AUTO_LIGHT_ACTIVATION = Config.CONFIG.getOrDefault("auto_light_activation", false);
-
-        LIGHT_RUNES = Config.CONFIG.getOrDefault("light_runes", true);
-        LIGHT_RUNES_DURATION = Config.CONFIG.getOrDefault("light_runes_duration", 3);
 
         MULTIPLY_DURATION_LIMIT = Config.CONFIG.getOrDefault("multiply_duration_limit", true);
         LIGHT_LOCKED_DEFAULT = Config.CONFIG.getOrDefault("light_locked_default", false);

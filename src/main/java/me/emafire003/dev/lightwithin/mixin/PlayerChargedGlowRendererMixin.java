@@ -16,9 +16,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(EntityRenderer.class)
 public abstract class PlayerChargedGlowRendererMixin<T extends Entity>   {
+
     @Inject(method = "getBlockLight", at = @At("TAIL"), cancellable = true)
-    protected void getBlockLight(T entity, BlockPos pos, CallbackInfoReturnable<Integer> cir) {
-        if(entity instanceof PlayerEntity && ClientConfig.SHOW_CHARGED_PLAYER_GLOW){
+    protected void injectLightGlow(T entity, BlockPos pos, CallbackInfoReturnable<Integer> cir) {
+        if(entity instanceof PlayerEntity){
+            if(!entity.getWorld().isClient() || !ClientConfig.SHOW_CHARGED_PLAYER_GLOW){
+                return;
+            }
             LightComponent component = LightWithin.LIGHT_COMPONENT.get(entity);
             if(component.getCurrentLightCharges() == 0){
                 return;

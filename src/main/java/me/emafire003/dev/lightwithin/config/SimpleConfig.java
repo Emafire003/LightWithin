@@ -30,6 +30,7 @@ import org.apache.commons.io.FileDeleteStrategy;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
@@ -109,12 +110,13 @@ public class SimpleConfig {
 
     private void createConfig() throws IOException {
 
+        LOGGER.info("Creating config " + request.filename);
         // try creating missing files
         request.file.getParentFile().mkdirs();
         Files.createFile( request.file.toPath() );
 
         // write default config data
-        PrintWriter writer = new PrintWriter(request.file, "UTF-8");
+        PrintWriter writer = new PrintWriter(request.file, StandardCharsets.UTF_8);
         writer.write( request.getConfig() );
         writer.close();
 
@@ -149,7 +151,26 @@ public class SimpleConfig {
         request.file.getParentFile().mkdirs();
         Files.createFile( request.file.toPath() );
 
-        PrintWriter writer = new PrintWriter(request.file, "UTF-8");
+        PrintWriter writer = new PrintWriter(request.file, StandardCharsets.UTF_8);
+        writer.write( config_new );
+        writer.close();
+    }
+
+    /**Used to write to file the updated values stored in the UPDATE MAP*/
+    /*public void update() throws IOException {
+        LOGGER.info("Trying to update!");
+        updateValues(UPDATE_MAP);
+    }*/
+
+    /**Used to write to file the updated values stored in the UPDATE MAP*/
+    public void update() throws IOException {
+        LOGGER.info("Trying to update!");
+        // try creating missing files
+        request.file.delete();
+        request.file.getParentFile().mkdirs();
+        Files.createFile( request.file.toPath() );
+
+        PrintWriter writer = new PrintWriter(request.file, StandardCharsets.UTF_8);
         writer.write( config_new );
         writer.close();
     }
@@ -312,6 +333,41 @@ public class SimpleConfig {
         LOGGER.warn( "Config '" + request.filename + "' was removed from existence!" );
         return true;
     }
+
+    /**Saves a new boolean value to the config file*/
+    public void set( String key, boolean def ) throws IOException {
+        if(config_new == null || config_new.isEmpty()){
+            config_new = request.getConfig();
+        }
+
+        String new_string = key + ":" + def;
+        String old_string = key + ":" + this.get(key);
+        config_new = config_new.replaceAll(old_string, new_string);
+    }
+
+    /**Saves a new int value to the config file*/
+    public void set( String key, int def ) throws IOException {
+        if(config_new == null || config_new.isEmpty()){
+            config_new = request.getConfig();
+        }
+
+        String new_string = key + ":" + def;
+        String old_string = key + ":" + this.get(key);
+        config_new = config_new.replaceAll(old_string, new_string);
+    }
+
+    /**Saves a new double value to the config file*/
+    public void set( String key, double def ) throws IOException {
+        if(config_new == null || config_new.isEmpty()){
+            config_new = request.getConfig();
+        }
+
+        String new_string = key + ":" + def;
+        String old_string = key + ":" + this.get(key);
+        config_new = config_new.replaceAll(old_string, new_string);
+    }
+
+
 
 }
 

@@ -8,6 +8,7 @@ import me.emafire003.dev.lightwithin.config.ClientConfig;
 import me.emafire003.dev.lightwithin.entities.LightEntities;
 import me.emafire003.dev.lightwithin.entities.earth_golem.EarthGolemEntityModel;
 import me.emafire003.dev.lightwithin.entities.earth_golem.EarthGolemEntityRenderer;
+import me.emafire003.dev.lightwithin.networking.ConfigOptionsSyncPacketS2C;
 import me.emafire003.dev.lightwithin.networking.LightReadyPacketS2C;
 import me.emafire003.dev.lightwithin.networking.RenderRunePacketS2C;
 import me.emafire003.dev.lightwithin.networking.WindLightVelocityPacketS2C;
@@ -15,6 +16,7 @@ import me.emafire003.dev.lightwithin.particles.LightParticle;
 import me.emafire003.dev.lightwithin.particles.LightTypeParticleV3;
 import me.emafire003.dev.lightwithin.particles.LightParticles;
 import me.emafire003.dev.lightwithin.sounds.LightSounds;
+import me.emafire003.dev.lightwithin.util.ConfigPacketConstants;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -37,6 +39,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.Util;
 
 import java.net.URI;
+import java.util.Map;
 import java.util.NoSuchElementException;
 
 import static me.emafire003.dev.lightwithin.LightWithin.LOGGER;
@@ -47,6 +50,7 @@ public class LightWithinClient implements ClientModInitializer {
     private static boolean lightReady = false;
     private static boolean waitForNext = false;
     private static boolean usedCharge = false;
+    private static boolean allowAutoActivation = false;
     int seconds = 10;
     int tickCounter = 0;
     RendererEventHandler event_handler = new RendererEventHandler();
@@ -62,6 +66,7 @@ public class LightWithinClient implements ClientModInitializer {
        registerLightReadyPacket();
        registerRenderRunesPacket();
        registerWindLightVelocityPacket();
+       registerConfigOptionsSyncPacket();
        ClientCommandRegistrationCallback.EVENT.register(ClientLightCommands::registerCommands);
        event_handler.registerRenderEvent();
        event_handler.registerRunesRenderer();
@@ -139,6 +144,10 @@ public class LightWithinClient implements ClientModInitializer {
         waitForNext = b;
     }
 
+    public static boolean isAutoActivationAllowed(){
+        return allowAutoActivation;
+    }
+
     /**How much should a player have the opportunity to press the button in seconds
      *
      * Currently fixed to 10s ish*/
@@ -163,6 +172,23 @@ public class LightWithinClient implements ClientModInitializer {
 
                     }
                     tickCounter = 0;
+                }catch (NoSuchElementException e){
+                    LOGGER.warn("No value in the packet, probably not a big problem");
+                }catch (Exception e){
+                    LOGGER.error("There was an error while getting the packet!");
+                    e.printStackTrace();
+                }
+            });
+        }));
+    }
+
+    private void registerConfigOptionsSyncPacket(){
+        ClientPlayNetworking.registerGlobalReceiver(ConfigOptionsSyncPacketS2C.ID, ((client, handler, buf, responseSender) -> {
+            Map<String, Boolean> results = ConfigOptionsSyncPacketS2C.readBooleans(buf);
+
+            client.execute(() -> {
+                try{
+                    allowAutoActivation = results.get(ConfigPacketConstants.AUTO_LIGHT_ACTIVATION);
                 }catch (NoSuchElementException e){
                     LOGGER.warn("No value in the packet, probably not a big problem");
                 }catch (Exception e){

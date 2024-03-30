@@ -119,5 +119,13 @@
   "config.lightwithin.show_charged_player_glow.tooltip": "See players that have light charges ready glow like a GlowSquid",
 
   "config.lightwithin.showrunes": "Show runes",
-  "config.lightwithin.showrunes.tooltip": "Setting this value to false will disable runes from rendering even in first person"
+  "config.lightwithin.showrunes.tooltip": "Setting this value to false will disable runes from rendering even in first person",
+
+  "config.lightwithin.showrunes_for": "Show runes for",
+  "config.lightwithin.showrunes_for.tooltip": "How many seconds should the runes last on screen?",
+
+
+  "config.lightwithin.auto_light_activation": "Automatic Light Activation",
+  "config.lightwithin.auto_light_activation.tooltip": "Enabling this will activate your light as soon as it's ready. WARNING: it may be disabled by the server!"
+
 }

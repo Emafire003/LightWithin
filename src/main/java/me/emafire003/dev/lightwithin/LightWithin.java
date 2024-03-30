@@ -17,9 +17,11 @@ import me.emafire003.dev.lightwithin.config.TriggerConfig;
 import me.emafire003.dev.lightwithin.entities.LightEntities;
 import me.emafire003.dev.lightwithin.entities.earth_golem.EarthGolemEntity;
 import me.emafire003.dev.lightwithin.events.LightTriggeringAndEvents;
+import me.emafire003.dev.lightwithin.events.PlayerJoinEvent;
 import me.emafire003.dev.lightwithin.items.LightItems;
 import me.emafire003.dev.lightwithin.items.crafting.BrewRecipes;
 import me.emafire003.dev.lightwithin.lights.*;
+import me.emafire003.dev.lightwithin.networking.ConfigOptionsSyncPacketS2C;
 import me.emafire003.dev.lightwithin.networking.LightChargeConsumedPacketC2S;
 import me.emafire003.dev.lightwithin.networking.LightUsedPacketC2S;
 import me.emafire003.dev.lightwithin.networking.RenderRunePacketS2C;
@@ -27,11 +29,8 @@ import me.emafire003.dev.lightwithin.particles.LightParticles;
 import me.emafire003.dev.lightwithin.sounds.LightSounds;
 import me.emafire003.dev.lightwithin.status_effects.LightEffects;
 import me.emafire003.dev.lightwithin.particles.LightParticlesUtil;
-import me.emafire003.dev.lightwithin.util.CheckUtils;
 import me.emafire003.dev.lightwithin.events.LightCreationAndEvent;
-import me.emafire003.dev.lightwithin.util.LightTriggerChecks;
-import me.emafire003.dev.lightwithin.util.LootTableModifier;
-import me.emafire003.dev.lightwithin.util.TargetType;
+import me.emafire003.dev.lightwithin.util.*;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
@@ -47,6 +46,7 @@ import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
+import net.minecraft.util.ActionResult;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Box;
 import org.slf4j.Logger;
@@ -109,6 +109,7 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 		registerLightUsedPacket();
 		registerLightChargeConsumedPacket();
 		registerReadyLightCacheRemover();
+		registerSyncOptionsOnJoin();
 		LightSounds.registerSounds();
 		LightEffects.registerModEffects();
 		LightItems.registerItems();
@@ -149,6 +150,26 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 		registry.registerForPlayers(LIGHT_COMPONENT, LightComponent::new, RespawnCopyStrategy.ALWAYS_COPY);
 		registry.registerFor(DrownedEntity.class, SUMMONED_BY_COMPONENT, SummonedByComponent::new);
 		registry.registerFor(EarthGolemEntity.class, SUMMONED_BY_COMPONENT, SummonedByComponent::new);
+	}
+
+	private static void registerSyncOptionsOnJoin(){
+		PlayerJoinEvent.EVENT.register((player, server) -> {
+			if(player.getWorld().isClient){
+				return ActionResult.PASS;
+			}
+			syncCustomConfigOptions(player);
+			return ActionResult.PASS;
+		});
+	}
+
+	/**Sends a packet with updated config options to the client
+	 * such as the auto light activation permission*/
+	public static void syncCustomConfigOptions(ServerPlayerEntity player){
+		Map<String, Boolean> booleanMap = new HashMap<>();
+		booleanMap.put(ConfigPacketConstants.AUTO_LIGHT_ACTIVATION, Config.AUTO_LIGHT_ACTIVATION);
+		//TODO if needed i'll add other settings ecct
+		ConfigOptionsSyncPacketS2C optionsPacket = new ConfigOptionsSyncPacketS2C(booleanMap);
+		ServerPlayNetworking.send(player, ConfigOptionsSyncPacketS2C.ID, optionsPacket);
 	}
 
 	private static void registerLightUsedPacket(){
