@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(EntityRenderer.class)
-public abstract class PlayerChargedGlowRendererMixin<T extends Entity>   {
+public abstract class PlayerChargedGlowRendererMixin<T extends Entity> {
 
     @Inject(method = "getBlockLight", at = @At("TAIL"), cancellable = true)
     protected void injectLightGlow(T entity, BlockPos pos, CallbackInfoReturnable<Integer> cir) {

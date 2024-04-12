@@ -26,8 +26,6 @@ public class ReloadClientConfigCommand implements ClientLightCommand {
     }
 
 
-
-
     public LiteralCommandNode<FabricClientCommandSource> getNode() {
         return ClientCommandManager
                 .literal("reload")

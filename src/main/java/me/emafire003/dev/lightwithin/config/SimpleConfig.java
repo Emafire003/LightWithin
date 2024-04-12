@@ -308,6 +308,22 @@ public class SimpleConfig {
     }
 
     /**
+     * Returns double value from config corresponding to the given
+     * key, or the default string if the key is missing or invalid.
+     * Returns the minimum value if the one specified is below it
+     *
+     * @return  value corresponding to the given key, or the default value
+     */
+    public double getOrDefaultOrMin( String key, double def , double min) {
+        try {
+            double d = Double.parseDouble( get(key) );
+            return Math.max(d, min);
+        } catch (Exception e) {
+            return def;
+        }
+    }
+
+    /**
      * If any error occurred during loading or reading from the config
      * a 'broken' flag is set, indicating that the config's state
      * is undefined and should be discarded using `delete()`

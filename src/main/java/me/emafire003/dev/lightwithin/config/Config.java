@@ -81,6 +81,9 @@ public class Config {
 
     public static int TRIGGER_BLOCK_RADIUS;
 
+    //Added with version 4
+    public static double USED_CHARGE_COOLDOWN_MULTIPLIER;
+
     public static void handleVersionChange(){
         int version_found = CONFIG.getOrDefault("version", ver);
         if(version_found != ver){
@@ -211,6 +214,10 @@ public class Config {
 
         //V3
         configs.addKeyValuePair(new Pair<>("trigger_block_radius", 3), "The radius of blocks to check when searching for blocks to fulfill light trigger conditions. Ex: checking fire blocks for triggering blazing light. WARNING! Could lead to a lot of lag at high values!");
+
+        //V4
+        configs.addKeyValuePair(new Pair<>("used_charge_cooldown_multiplier", 2.5), "Multiplies the duration of the cooldown when a light charge has been used to force activate a light. Cannot go below 1.2");
+
     }
 
     public static void reloadConfig(){
@@ -279,6 +286,9 @@ public class Config {
         //Config version 3
         LIGHT_DEFAULT_STATUS = CONFIG.getOrDefault("light_default_status", true);
         TRIGGER_BLOCK_RADIUS = Config.CONFIG.getOrDefault("trigger_block_radius", 3);
+
+        //Config version 4
+        USED_CHARGE_COOLDOWN_MULTIPLIER = CONFIG.getOrDefaultOrMin("used_charge_cooldown_multiplier", 2.5, 1.2);
     }
 }
 
