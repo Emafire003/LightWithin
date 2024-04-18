@@ -26,6 +26,8 @@ public class ClientConfig {
     public static int LIGHT_CHARGE_ICON_Y = 10;
     public static double LIGHT_CHARGE_SCALE_FACTOR = 1.0;
     public static double LIGHT_ACTIVE_SCALE_FACTOR = 1.0;
+    public static String LIGHT_ACTIVE_PRESET = "TOP_LEFT";
+    public static String LIGHT_CHARGE_PRESET = "TOP_LEFT";
     public static boolean HIDE_LIGHT_CHARGE_ICON = false;
     public static final boolean HIDE_LIGHT_CHARGE_ICON_default = false;
     public static boolean SHOW_CHARGED_PLAYER_GLOW = true;
@@ -68,6 +70,8 @@ public class ClientConfig {
             CONFIG.set("light_active_icon_y", LIGHT_ACTIVE_ICON_Y);
             CONFIG.set("light_charge_icon_x", LIGHT_CHARGE_ICON_X);
             CONFIG.set("light_charge_icon_y", LIGHT_CHARGE_ICON_Y);
+            CONFIG.set("light_active_preset", LIGHT_ACTIVE_PRESET);
+            CONFIG.set("light_charge_preset", LIGHT_CHARGE_PRESET);
             CONFIG.set("light_active_scale_factor", LIGHT_ACTIVE_SCALE_FACTOR);
             CONFIG.set("light_charge_scale_factor", LIGHT_CHARGE_SCALE_FACTOR);
             CONFIG.set("hide_light_charge_icon", HIDE_LIGHT_CHARGE_ICON_default);
@@ -76,6 +80,7 @@ public class ClientConfig {
             CONFIG.set("show_runes_for", SHOW_RUNES_FOR);
             CONFIG.set("auto_light_activation", AUTO_LIGHT_ACTIVATION);
             CONFIG.update();
+            RendererEventHandler.updateFromConfig();
         } catch (IOException e) {
             LOGGER.warn("Could not delete the config file before saving the new one!");
         }
@@ -141,6 +146,9 @@ public class ClientConfig {
         configs.addKeyValuePair(new Pair<>("light_active_scale_factor", light_icon_default_scale), "Make this number bigger to make the light active icon bigger, make it smaller to have a smaller light icon!");
         configs.addKeyValuePair(new Pair<>("light_charge_scale_factor", light_icon_default_scale), "Make this number bigger to make the light charge icon bigger, make it smaller to have a smaller light icon!");
 
+        configs.addKeyValuePair(new Pair<>("light_active_preset", "TOP_LEFT"), "The position of the light active icon using presets, such as CENTER, TOP/BOTTOM LEFT/RIGHT etc");
+        configs.addKeyValuePair(new Pair<>("light_charge_preset", "TOP_LEFT"), "The position of the light charge icon using presets, such as CENTER, TOP/BOTTOM LEFT/RIGHT etc");
+
         configs.addKeyValuePair(new Pair<>("spacer", "spacer"), "");
 
         configs.addKeyValuePair(new Pair<>("hide_light_charge_icon", HIDE_LIGHT_CHARGE_ICON_default), "Hide the light charges icon, but still displays the light active one, or the error one if you do something that's not allowed");
@@ -168,6 +176,8 @@ public class ClientConfig {
         LIGHT_ACTIVE_ICON_Y = CONFIG.getOrDefault("light_active_icon_y", light_icon_default_position);
         LIGHT_CHARGE_ICON_X = CONFIG.getOrDefault("light_charge_icon_x", light_icon_default_position);
         LIGHT_CHARGE_ICON_Y = CONFIG.getOrDefault("light_charge_icon_y", light_icon_default_position);
+        LIGHT_ACTIVE_PRESET = CONFIG.getOrDefault("light_active_preset", "TOP_LEFT");
+        LIGHT_CHARGE_PRESET = CONFIG.getOrDefault("light_charge_preset", "TOP_LEFT");
         LIGHT_ACTIVE_SCALE_FACTOR = CONFIG.getOrDefault("light_active_scale_factor", light_icon_default_scale);
         LIGHT_CHARGE_SCALE_FACTOR = CONFIG.getOrDefault("light_charge_scale_factor", light_icon_default_scale);
         HIDE_LIGHT_CHARGE_ICON = CONFIG.getOrDefault("hide_light_charge_icon", HIDE_LIGHT_CHARGE_ICON_default);

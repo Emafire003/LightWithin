@@ -1,10 +1,8 @@
 package me.emafire003.dev.lightwithin.compat.yacl;
 
+import com.mojang.datafixers.util.Pair;
 import dev.isxander.yacl3.api.*;
-import dev.isxander.yacl3.api.controller.DoubleSliderControllerBuilder;
-import dev.isxander.yacl3.api.controller.IntegerFieldControllerBuilder;
-import dev.isxander.yacl3.api.controller.IntegerSliderControllerBuilder;
-import dev.isxander.yacl3.api.controller.TickBoxControllerBuilder;
+import dev.isxander.yacl3.api.controller.*;
 import me.emafire003.dev.lightwithin.config.ClientConfig;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
@@ -14,6 +12,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 
 public class YaclScreenMaker {
@@ -30,10 +29,81 @@ public class YaclScreenMaker {
                 .build().generateScreen(parent);
     }
 
+
+    public static Pair<Integer, Integer> getXY(IconPositionPresets preset, double icon_scale){
+        if(preset.equals(IconPositionPresets.TOP_LEFT)){
+            return new Pair<>(10, 10);
+        }
+        if(preset.equals(IconPositionPresets.TOP_RIGHT)){
+            return new Pair<>((int) (MinecraftClient.getInstance().getWindow().getScaledWidth()-(10+20*icon_scale)), 10);
+        }
+        if(preset.equals(IconPositionPresets.BOTTOM_LEFT)){
+            return new Pair<>(10, (int)(MinecraftClient.getInstance().getWindow().getScaledHeight()-(10+20*icon_scale)));
+        }
+        if(preset.equals(IconPositionPresets.BOTTOM_RIGHT)){
+            return new Pair<>((int) (MinecraftClient.getInstance().getWindow().getScaledWidth()-(10+20*icon_scale)), (int)(MinecraftClient.getInstance().getWindow().getScaledHeight()-(10+20*icon_scale)));
+        }
+        if(preset.equals(IconPositionPresets.CENTER)){
+            return new Pair<>((int) (MinecraftClient.getInstance().getWindow().getScaledWidth()-(10+20*icon_scale))/2, (int)(MinecraftClient.getInstance().getWindow().getScaledHeight()-(10+20*icon_scale))/2);
+        }
+        if(preset.equals(IconPositionPresets.TOP_CENTER)){
+            return new Pair<>((int) (MinecraftClient.getInstance().getWindow().getScaledWidth()-(10+20*icon_scale))/2, 10);
+        }
+        return null;
+    }
+
+
     public static @NotNull Collection<? extends Option<?>> createOptions(){
         List<Option<?>> options = new ArrayList<>();
+        AtomicBoolean updatedFromActivePreset = new AtomicBoolean(false);
+        AtomicBoolean updatedFromChargePreset = new AtomicBoolean(false);
 
         // The xy positions of the icons
+        options.add(
+                Option.<IconPositionPresets>createBuilder()
+                        .name(Text.translatable("config.lightwithin.light_active_icon_preset"))
+                        .description(OptionDescription.of(Text.translatable("config.lightwithin.light_active_icon_preset.tooltip")))
+                        .binding(
+                                IconPositionPresets.TOP_LEFT, // the default value
+                                () -> IconPositionPresets.valueOf(ClientConfig.LIGHT_ACTIVE_PRESET), // a field to get the current value from
+                                newVal -> {
+                                    Pair<Integer, Integer> xy = getXY(newVal, ClientConfig.LIGHT_ACTIVE_SCALE_FACTOR);
+                                    if(xy != null){
+                                        ClientConfig.LIGHT_ACTIVE_ICON_X = xy.getFirst();
+                                        ClientConfig.LIGHT_ACTIVE_ICON_Y = xy.getSecond();
+                                        ClientConfig.LIGHT_ACTIVE_PRESET = newVal.name();
+                                        ClientConfig.saveToFile();
+                                        updatedFromActivePreset.set(true);
+                                    }
+                                }
+                        )
+                        .controller(opt -> EnumControllerBuilder.create(opt).enumClass(IconPositionPresets.class))
+                        .build()
+        );
+
+        // The xy positions of the icons
+        options.add(
+                Option.<IconPositionPresets>createBuilder()
+                        .name(Text.translatable("config.lightwithin.light_charge_icon_preset"))
+                        .description(OptionDescription.of(Text.translatable("config.lightwithin.light_charge_icon_preset.tooltip")))
+                        .binding(
+                                IconPositionPresets.TOP_LEFT, // the default value
+                                () -> IconPositionPresets.valueOf(ClientConfig.LIGHT_CHARGE_PRESET), // a field to get the current value from
+                                newVal -> {
+                                    Pair<Integer, Integer> xy = getXY(newVal, ClientConfig.LIGHT_CHARGE_SCALE_FACTOR);
+                                    if(xy != null){
+                                        ClientConfig.LIGHT_CHARGE_ICON_X = xy.getFirst();
+                                        ClientConfig.LIGHT_CHARGE_ICON_Y = xy.getSecond();
+                                        ClientConfig.LIGHT_CHARGE_PRESET = newVal.name();
+                                        ClientConfig.saveToFile();
+                                        updatedFromChargePreset.set(true);
+                                    }
+                                }
+                        )
+                        .controller(opt -> EnumControllerBuilder.create(opt).enumClass(IconPositionPresets.class))
+                        .build()
+        );
+
         options.add(
                 Option.<Integer>createBuilder() 
                         .name(Text.translatable("config.lightwithin.light_active_icon_x"))
@@ -42,6 +112,9 @@ public class YaclScreenMaker {
                                 ClientConfig.light_icon_default_position, // the default value
                                 () -> ClientConfig.LIGHT_ACTIVE_ICON_X, // a field to get the current value from
                                 newVal -> {
+                                    if(updatedFromActivePreset.get()){
+                                        return;
+                                    }
                                     ClientConfig.LIGHT_ACTIVE_ICON_X = newVal;
                                     ClientConfig.saveToFile();
                                 }
@@ -60,6 +133,9 @@ public class YaclScreenMaker {
                                 ClientConfig.light_icon_default_position, // the default value
                                 () -> ClientConfig.LIGHT_ACTIVE_ICON_Y, // a field to get the current value from
                                 newVal -> {
+                                    if(updatedFromActivePreset.get()){
+                                        return;
+                                    }
                                     ClientConfig.LIGHT_ACTIVE_ICON_Y = newVal;
                                     ClientConfig.saveToFile();
                                 }
@@ -78,6 +154,9 @@ public class YaclScreenMaker {
                                 ClientConfig.light_icon_default_position, // the default value
                                 () -> ClientConfig.LIGHT_CHARGE_ICON_X, // a field to get the current value from
                                 newVal -> {
+                                    if(updatedFromChargePreset.get()){
+                                        return;
+                                    }
                                     ClientConfig.LIGHT_CHARGE_ICON_X = newVal;
                                     ClientConfig.saveToFile();
                                 }
@@ -96,6 +175,9 @@ public class YaclScreenMaker {
                                 ClientConfig.light_icon_default_position, // the default value
                                 () -> ClientConfig.LIGHT_CHARGE_ICON_Y, // a field to get the current value from
                                 newVal -> {
+                                    if(updatedFromChargePreset.get()){
+                                        return;
+                                    }
                                     ClientConfig.LIGHT_CHARGE_ICON_Y = newVal;
                                     ClientConfig.saveToFile();
                                 }
@@ -225,6 +307,7 @@ public class YaclScreenMaker {
                         .build()
         );
 
+        updatedFromActivePreset.set(false);
         return options;
     }
 

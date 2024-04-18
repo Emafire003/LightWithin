@@ -107,6 +107,11 @@
   "config.lightwithin.light_charge_icon_y": "LightCharge icon Y coordinate",
   "config.lightwithin.light_charge_icon_y.tooltip": "Change this value to move the LightCharge icon vertically on your screen",
 
+  "config.lightwithin.light_active_icon_preset": "LightActive icon preset position",
+  "config.lightwithin.light_active_icon_preset.tooltip": "Change this value to move the LightActive icon to a new preset position",
+  "config.lightwithin.light_charge_icon_preset": "LightCharge icon preset position",
+  "config.lightwithin.light_charge_icon_preset.tooltip": "Change this value to move the LightCharge icon to a new preset position",
+
   "config.lightwithin.light_active_scale_factor": "LightActive icon scale factor",
   "config.lightwithin.light_active_scale_factor.tooltip": "Change this value to make the icon bigger or smaller",
   "config.lightwithin.light_charge_scale_factor": "LightCharge icon scale factor",

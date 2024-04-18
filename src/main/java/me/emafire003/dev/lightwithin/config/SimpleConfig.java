@@ -164,7 +164,6 @@ public class SimpleConfig {
 
     /**Used to write to file the updated values stored in the UPDATE MAP*/
     public void update() throws IOException {
-        LOGGER.info("Trying to update!");
         // try creating missing files
         request.file.delete();
         request.file.getParentFile().mkdirs();
@@ -254,7 +253,12 @@ public class SimpleConfig {
      */
     public String getOrDefault( String key, String def ) {
         String val = get(key);
-        return val == null ? def : val;
+        if(val == null){
+            LOGGER.info("Returing the default value!!!!!!");
+            return def;
+        }
+
+        return val;
     }
 
     public HashMap<String, String> getConfigCopy(){
@@ -351,7 +355,18 @@ public class SimpleConfig {
     }
 
     /**Saves a new boolean value to the config file*/
-    public void set( String key, boolean def ) throws IOException {
+    public void set( String key, boolean def ) {
+        if(config_new == null || config_new.isEmpty()){
+            config_new = request.getConfig();
+        }
+
+        String new_string = key + ":" + def;
+        String old_string = key + ":" + this.get(key);
+        config_new = config_new.replaceAll(old_string, new_string);
+    }
+
+    /**Saves a new String value to the config file*/
+    public void set( String key, String def ) {
         if(config_new == null || config_new.isEmpty()){
             config_new = request.getConfig();
         }
@@ -362,7 +377,7 @@ public class SimpleConfig {
     }
 
     /**Saves a new int value to the config file*/
-    public void set( String key, int def ) throws IOException {
+    public void set( String key, int def ) {
         if(config_new == null || config_new.isEmpty()){
             config_new = request.getConfig();
         }
@@ -373,7 +388,7 @@ public class SimpleConfig {
     }
 
     /**Saves a new double value to the config file*/
-    public void set( String key, double def ) throws IOException {
+    public void set( String key, double def ) {
         if(config_new == null || config_new.isEmpty()){
             config_new = request.getConfig();
         }
