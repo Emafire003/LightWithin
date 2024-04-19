@@ -144,7 +144,6 @@ public class EarthenLight extends InnerLight {
             LivingEntity oldtarget = null;
             for(LivingEntity target : this.targets){
 
-                //TODO allies thign. Should i remove the sound regardless? Yes
                 //target.playSound(LightSounds.EARTHEN_LIGHT, 0.9f, 1);
                 LightParticlesUtil.spawnLightTypeParticle(LightParticles.EARTHENLIGHT_PARTICLE, (ServerWorld) target.getWorld(), target.getPos());
 

@@ -149,7 +149,6 @@ public class AquaLight extends InnerLight {
         //Allies/self section (boosts & water slide)
         if(component.getTargets().equals(TargetType.ALLIES) || component.getTargets().equals(TargetType.SELF)){
             for(LivingEntity target : this.targets){
-                //TODO ok not even for the allies
                 //target.playSound(LightSounds.AQUA_LIGHT, 0.9f, 1);
                 if(this.power_multiplier < 4){
                     target.addStatusEffect(new StatusEffectInstance(LightEffects.WATER_SLIDE, this.duration*20, 2, false, false));

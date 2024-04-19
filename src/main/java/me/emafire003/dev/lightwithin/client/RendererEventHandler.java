@@ -3,6 +3,7 @@ package me.emafire003.dev.lightwithin.client;
 import com.mojang.blaze3d.systems.RenderSystem;
 import me.emafire003.dev.lightwithin.LightWithin;
 import me.emafire003.dev.lightwithin.compat.replaymod.ReplayModCompat;
+import me.emafire003.dev.lightwithin.component.LightComponent;
 import me.emafire003.dev.lightwithin.config.ClientConfig;
 import me.emafire003.dev.lightwithin.lights.InnerLightType;
 import me.emafire003.dev.lightwithin.util.renderer.ClipStack;
@@ -98,14 +99,16 @@ public class RendererEventHandler {
                 return;
             }
 
+            LightComponent component = LIGHT_COMPONENT.get(MinecraftClient.getInstance().player);
+
             if(failed_to_use_charge){
-                int charges_number = LIGHT_COMPONENT.get(MinecraftClient.getInstance().player).getCurrentLightCharges();
+                int charges_number = component.getCurrentLightCharges();
                 ClipStack.addWindow(matrixStack.getMatrices(),new Rectangle(light_charge_x,light_charge_y,light_charge_x* charge_icon_scale +40,light_charge_y* charge_icon_scale +40));
                 Renderer2d.renderTexture(matrixStack.getMatrices(), new Identifier(LightWithin.MOD_ID, "textures/lights/light_charge_base_error.png"), light_charge_x, light_charge_y, 20* charge_icon_scale, 20* charge_icon_scale);
                 Renderer2d.renderTexture(matrixStack.getMatrices(), new Identifier(LightWithin.MOD_ID, "textures/lights/light_charge_overlay_"+ charges_number +".png"), light_charge_x, light_charge_y, 20* charge_icon_scale, 20* charge_icon_scale);
                 ClipStack.popWindow();
-            } else if(LightWithinClient.shouldDrawChargesCount()){
-                int charges_number = LIGHT_COMPONENT.get(MinecraftClient.getInstance().player).getCurrentLightCharges();
+            } else if(LightWithinClient.shouldDrawChargesCount() && component.hasTriggeredNaturally()){
+                int charges_number = component.getCurrentLightCharges();
                 ClipStack.addWindow(matrixStack.getMatrices(),new Rectangle(light_charge_x,light_charge_y,light_charge_x* charge_icon_scale +40,light_charge_y* charge_icon_scale +40));
                 Renderer2d.renderTexture(matrixStack.getMatrices(), new Identifier(LightWithin.MOD_ID, "textures/lights/light_charge_base.png"), light_charge_x, light_charge_y, 20* charge_icon_scale, 20* charge_icon_scale);
                 Renderer2d.renderTexture(matrixStack.getMatrices(), new Identifier(LightWithin.MOD_ID, "textures/lights/light_charge_overlay_"+ charges_number +".png"), light_charge_x, light_charge_y, 20* charge_icon_scale, 20* charge_icon_scale);

@@ -109,7 +109,6 @@ public class HealLight extends InnerLight {
         for(LivingEntity target : this.targets){
 
 
-            //TODO techincly are allies should I keep it? Nah
             //target.playSound(LightSounds.HEAL_LIGHT, 1, 1);
             if(!caster.getWorld().isClient){
                 LightParticlesUtil.spawnLightTypeParticle(LightParticles.HEALLIGHT_PARTICLE, (ServerWorld) caster.getWorld(), target.getPos());
