@@ -52,7 +52,7 @@ public class BottledLightItem extends Item {
             return TypedActionResult.pass(stack);
         }
         
-        //Checks to see if the bottle is artifically brewd. If it is, the UUID of the player will be 0000000 etc
+        //Checks to see if the bottle is artificially brewed. If it is, the UUID of the player will be 0000000 etc
         if(BottledLightItem.getCreatedBy(stack).equals(UUID.fromString("00000000-0000-0000-0000-000000000000"))){
             NbtCompound nbt = stack.getNbt();
             if(!stack.hasNbt() || nbt == null){
@@ -141,7 +141,6 @@ public class BottledLightItem extends Item {
         tooltip.add(Text.translatable("item.lightwithin.bottled_light.tooltip"));
         if(Screen.hasShiftDown()) {
             if(stack.hasNbt() && stack.getNbt().getUuid(BrewRecipes.PLAYER_NBT_KEY).equals(UUID.fromString("00000000-0000-0000-0000-000000000000"))){
-                //TODO translatable
                 tooltip.add(Text.translatable("item.lightwithin.bottled_light.tooltip.warning").formatted(Formatting.AQUA).formatted(Formatting.ITALIC));
                 if(stack.getNbt().contains(BrewRecipes.TYPE_INGREDIENT_KEY)){
                     tooltip.add(Text.translatable("item.lightwithin.bottled_light.tooltip.type").formatted(Formatting.GREEN).append(Text.literal(stack.getNbt().getString(BrewRecipes.TYPE_INGREDIENT_KEY)).formatted(Formatting.LIGHT_PURPLE)));

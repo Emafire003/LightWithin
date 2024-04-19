@@ -5,6 +5,7 @@ import me.emafire003.dev.lightwithin.config.Config;
 import me.emafire003.dev.lightwithin.items.BottledLightItem;
 import me.emafire003.dev.lightwithin.items.LightItems;
 import me.emafire003.dev.lightwithin.networking.LightReadyPacketS2C;
+import me.emafire003.dev.lightwithin.particles.LightParticlesUtil;
 import me.emafire003.dev.lightwithin.status_effects.LightEffects;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.entity.effect.StatusEffectInstance;
@@ -37,14 +38,15 @@ public abstract class BottleLightMixin {
             return;
         }
         if(LightWithin.CURRENTLY_READY_LIGHT_PLAYER_CACHE.containsKey(user.getUuid())){
-            //TODO do fancy animations and or sounds
+            //TODO modify the "vloop" sound to be more recognizable maybe? or some other sound
+            if(!world.isClient()){
+                LightParticlesUtil.spawnLightBottledUpEffect((ServerPlayerEntity) user);
+            }
             world.playSound(null, user.getX(), user.getY(), user.getZ(), SoundEvents.ITEM_BOTTLE_FILL_DRAGONBREATH, SoundCategory.NEUTRAL, 1.0f, 1.3f);
             if(!world.isClient()){
                 ServerPlayNetworking.send((ServerPlayerEntity) user, LightReadyPacketS2C.ID, new LightReadyPacketS2C(false));
                 LightWithin.CURRENTLY_READY_LIGHT_PLAYER_CACHE.remove(user.getUuid());
             }
-
-            //TODO investigate why it plays the light ready sound effect
 
             user.addStatusEffect(new StatusEffectInstance(LightEffects.LIGHT_FATIGUE, (int) (Config.COOLDOWN_MULTIPLIER*20*LightWithin.LIGHT_COMPONENT.get(user).getMaxCooldown())));
             ItemStack bottled_light = fill(user.getStackInHand(hand), user, new ItemStack(LightItems.BOTTLED_LIGHT));

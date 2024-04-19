@@ -163,6 +163,9 @@ public class LightWithinClient implements ClientModInitializer {
                 try{
                     if(!results){
                         setLightReady(false);
+                        //TODO make sure it doesn't break anythin, added 18 04 2024
+                        tickCounter = 0;
+                        return;
                     }
                     if(!isLightReady()){
                         setLightReady(true);

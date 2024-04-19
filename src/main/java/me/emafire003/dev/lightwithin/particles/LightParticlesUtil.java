@@ -1,13 +1,12 @@
 package me.emafire003.dev.lightwithin.particles;
 
+import me.emafire003.dev.particleanimationlib.effects.VortexEffect;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.particle.DustParticleEffect;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.text.Text;
 import net.minecraft.util.math.Vec3d;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3f;
@@ -49,7 +48,6 @@ public class LightParticlesUtil {
     }
 
     public static void spawnColumn(ServerPlayerEntity player, ParticleEffect particle, Vec3d column_pos){
-        player.sendMessage(Text.literal("hello spawning coloumn, "));
         ServerWorld world = (ServerWorld) player.getWorld();
         world.spawnParticles(player, particle, true, column_pos.x, column_pos.y, column_pos.z, 100, 0.1, 1.10, 0.1, 0.01);
     }
@@ -121,20 +119,49 @@ public class LightParticlesUtil {
         }
     }*/
 
-    public static void spawnEffectParticles(LivingEntity entity){
+    /*public static void spawnEffectParticles(LivingEntity entity){
         Vec3d pos = entity.getPos();
         for(int i = 0; i<200; i++){
             entity.getWorld().addParticle(new DustParticleEffect(new Vector3f(Vec3d.unpackRgb(43758).toVector3f()), 1.0F), (double)pos.getX(), (double)pos.getY(), (double)pos.getZ(), 0.2D, 0.2D, 0.2D);
         }
-    }
+    }*/
 
-    public static void spawnDustParticles(ServerPlayerEntity player, Vector3f color){
+    /*public static void spawnDustParticles(ServerPlayerEntity player, Vector3f color){
+
         DustParticleEffect a = new DustParticleEffect(new Vector3f(0, 255, 255), 2);
         Vec3d pos = player.getPos();
         double speed = 0;
         ServerWorld world = (ServerWorld) player.getWorld();
         //world.spawnParticles(player, new Vec3f(Vec3d.unpackRgb(43758)), false, pos.x, pos.y, pos.z, 100, 0, 0, 0, speed);
         world.addParticle(new DustParticleEffect(new Vector3f(Vec3d.unpackRgb(43758).toVector3f()), 1.0F), pos.getX(), pos.getY(), pos.getZ(), 0.0D, 0.0D, 0.0D);
+
+    }*/
+
+    /**Spawns yellow and light blue particles that go from about the head of the player to
+     * the art in a small vorex*/
+    public static void spawnLightBottledUpEffect(ServerPlayerEntity player){
+        //Blueish color: 79f2de Yellowish color: f4f44b
+
+        Vector3f YELLOW = Vec3d.unpackRgb(16053323).toVector3f();
+        Vector3f BLUE = Vec3d.unpackRgb(7992030).toVector3f();
+        DustParticleEffect yellow = new DustParticleEffect(YELLOW, 0.7f);
+        DustParticleEffect light_blue = new DustParticleEffect( BLUE, 0.6f);
+
+        VortexEffect vortexYellow = VortexEffect.builder(player.getServerWorld(), yellow, player.getPos())
+                .yaw(90).pitch(-90f).radius(0.3f).radiusGrow(0.008f).lengthGrow(0.02f)
+                .entityOrigin(player).originOffset(new Vec3d(.0, 0.6, .0))
+                .updatePositions(true).shouldUpdateYPR(false)
+                .circles(3).helixes(1).radials(5)
+                .inverted(true).build();
+
+        double runFor = 1;
+        vortexYellow.runFor(runFor);
+        VortexEffect vortexBlue = VortexEffect.builder(player.getServerWorld(), yellow, player.getPos()).build();
+        VortexEffect.copy(vortexYellow, vortexBlue);
+        vortexBlue.setParticle(light_blue);
+        vortexBlue.setStartRange(3.14f);
+        vortexBlue.runFor(runFor);
+
     }
 
     //Generated using ParticleConverter. This is done not only because for me it's easier but also because it doesn't need to calculate each team the position of hunderds of particles.+
