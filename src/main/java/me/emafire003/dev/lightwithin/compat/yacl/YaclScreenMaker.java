@@ -61,17 +61,17 @@ public class YaclScreenMaker {
         // The xy positions of the icons
         options.add(
                 Option.<IconPositionPresets>createBuilder()
-                        .name(Text.translatable("config.lightwithin.light_active_icon_preset"))
-                        .description(OptionDescription.of(Text.translatable("config.lightwithin.light_active_icon_preset.tooltip")))
+                        .name(Text.translatable("config.lightwithin.light_ready_icon_preset"))
+                        .description(OptionDescription.of(Text.translatable("config.lightwithin.light_ready_icon_preset.tooltip")))
                         .binding(
                                 IconPositionPresets.TOP_LEFT, // the default value
-                                () -> IconPositionPresets.valueOf(ClientConfig.LIGHT_ACTIVE_PRESET), // a field to get the current value from
+                                () -> IconPositionPresets.valueOf(ClientConfig.LIGHT_READY_PRESET), // a field to get the current value from
                                 newVal -> {
-                                    Pair<Integer, Integer> xy = getXY(newVal, ClientConfig.LIGHT_ACTIVE_SCALE_FACTOR);
+                                    Pair<Integer, Integer> xy = getXY(newVal, ClientConfig.LIGHT_READY_SCALE_FACTOR);
                                     if(xy != null){
-                                        ClientConfig.LIGHT_ACTIVE_ICON_X = xy.getFirst();
-                                        ClientConfig.LIGHT_ACTIVE_ICON_Y = xy.getSecond();
-                                        ClientConfig.LIGHT_ACTIVE_PRESET = newVal.name();
+                                        ClientConfig.LIGHT_READY_ICON_X = xy.getFirst();
+                                        ClientConfig.LIGHT_READY_ICON_Y = xy.getSecond();
+                                        ClientConfig.LIGHT_READY_PRESET = newVal.name();
                                         ClientConfig.saveToFile();
                                         updatedFromActivePreset.set(true);
                                     }
@@ -106,16 +106,16 @@ public class YaclScreenMaker {
 
         options.add(
                 Option.<Integer>createBuilder() 
-                        .name(Text.translatable("config.lightwithin.light_active_icon_x"))
-                        .description(OptionDescription.of(Text.translatable("config.lightwithin.light_active_icon_x.tooltip")))
+                        .name(Text.translatable("config.lightwithin.light_ready_icon_x"))
+                        .description(OptionDescription.of(Text.translatable("config.lightwithin.light_ready_icon_x.tooltip")))
                         .binding(
                                 ClientConfig.light_icon_default_position, // the default value
-                                () -> ClientConfig.LIGHT_ACTIVE_ICON_X, // a field to get the current value from
+                                () -> ClientConfig.LIGHT_READY_ICON_X, // a field to get the current value from
                                 newVal -> {
                                     if(updatedFromActivePreset.get()){
                                         return;
                                     }
-                                    ClientConfig.LIGHT_ACTIVE_ICON_X = newVal;
+                                    ClientConfig.LIGHT_READY_ICON_X = newVal;
                                     ClientConfig.saveToFile();
                                 }
                         )
@@ -127,16 +127,16 @@ public class YaclScreenMaker {
 
         options.add(
                 Option.<Integer>createBuilder() 
-                        .name(Text.translatable("config.lightwithin.light_active_icon_y"))
-                        .description(OptionDescription.of(Text.translatable("config.lightwithin.light_active_icon_y.tooltip")))
+                        .name(Text.translatable("config.lightwithin.light_ready_icon_y"))
+                        .description(OptionDescription.of(Text.translatable("config.lightwithin.light_ready_icon_y.tooltip")))
                         .binding(
                                 ClientConfig.light_icon_default_position, // the default value
-                                () -> ClientConfig.LIGHT_ACTIVE_ICON_Y, // a field to get the current value from
+                                () -> ClientConfig.LIGHT_READY_ICON_Y, // a field to get the current value from
                                 newVal -> {
                                     if(updatedFromActivePreset.get()){
                                         return;
                                     }
-                                    ClientConfig.LIGHT_ACTIVE_ICON_Y = newVal;
+                                    ClientConfig.LIGHT_READY_ICON_Y = newVal;
                                     ClientConfig.saveToFile();
                                 }
                         )
@@ -190,13 +190,13 @@ public class YaclScreenMaker {
 
         options.add(
                 Option.<Double>createBuilder() 
-                        .name(Text.translatable("config.lightwithin.light_active_scale_factor"))
-                        .description(OptionDescription.of(Text.translatable("config.lightwithin.light_active_scale_factor.tooltip")))
+                        .name(Text.translatable("config.lightwithin.light_ready_scale_factor"))
+                        .description(OptionDescription.of(Text.translatable("config.lightwithin.light_ready_scale_factor.tooltip")))
                         .binding(
                                 ClientConfig.light_icon_default_scale, // the default value
-                                () -> ClientConfig.LIGHT_ACTIVE_SCALE_FACTOR, // a field to get the current value from
+                                () -> ClientConfig.LIGHT_READY_SCALE_FACTOR, // a field to get the current value from
                                 newVal -> {
-                                    ClientConfig.LIGHT_ACTIVE_SCALE_FACTOR = newVal;
+                                    ClientConfig.LIGHT_READY_SCALE_FACTOR = newVal;
                                     ClientConfig.saveToFile();
                                 }
                         )

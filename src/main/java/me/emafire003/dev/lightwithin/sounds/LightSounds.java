@@ -12,6 +12,8 @@ public class LightSounds {
 
     public static SoundEvent HEAL_LIGHT = registerSoundEvent("heal_light");
     public static SoundEvent LIGHT_READY = registerSoundEvent("light_ready");
+    public static SoundEvent LIGHT_CHARGED = registerSoundEvent("light_charged");
+    public static SoundEvent LIGHT_ERROR = registerSoundEvent("light_error");
     public static SoundEvent LIGHT_CRIT = registerSoundEvent("light_crit");
     public static SoundEvent DEFENSE_LIGHT = registerSoundEvent("defense_light");
     public static SoundEvent STRENGTH_LIGHT = registerSoundEvent("strength_light");

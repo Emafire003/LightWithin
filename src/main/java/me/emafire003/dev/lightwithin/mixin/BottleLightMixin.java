@@ -48,7 +48,7 @@ public abstract class BottleLightMixin {
                 LightWithin.CURRENTLY_READY_LIGHT_PLAYER_CACHE.remove(user.getUuid());
             }
 
-            user.addStatusEffect(new StatusEffectInstance(LightEffects.LIGHT_FATIGUE, (int) (Config.COOLDOWN_MULTIPLIER*20*LightWithin.LIGHT_COMPONENT.get(user).getMaxCooldown())));
+            user.addStatusEffect(new StatusEffectInstance(LightEffects.LIGHT_FATIGUE, (int) (Config.COOLDOWN_MULTIPLIER*20*LightWithin.LIGHT_COMPONENT.get(user).getMaxCooldown()/2)));
             ItemStack bottled_light = fill(user.getStackInHand(hand), user, new ItemStack(LightItems.BOTTLED_LIGHT));
             BottledLightItem.setCreatedBy(user, bottled_light);
             cir.setReturnValue(TypedActionResult.success(bottled_light, world.isClient()));

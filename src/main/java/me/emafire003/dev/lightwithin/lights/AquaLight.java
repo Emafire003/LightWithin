@@ -204,7 +204,7 @@ public class AquaLight extends InnerLight {
 
     }
 
-    HashMap<BlockPos, BlockState> block_map = new HashMap();
+    HashMap<BlockPos, BlockState> block_map = new HashMap<>();
 
     BlockPos start_pos;
     int tickCounter = 0;

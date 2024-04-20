@@ -55,8 +55,7 @@ public class ActivationKey {
                     LIGHT_COMPONENT.get(client.player).setLightCharges(LIGHT_COMPONENT.get(client.player).getCurrentLightCharges()-1);
                 }else{
                     RendererEventHandler.setFailedToUseCharge();
-                    //TODO change the sound maybe
-                    client.player.playSound(SoundEvents.BLOCK_RESPAWN_ANCHOR_CHARGE, 0.5f, 1.76f);
+                    client.player.playSound(LightSounds.LIGHT_ERROR, 0.5f, 1f);
                 }
             }
         }

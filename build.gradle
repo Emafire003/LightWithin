@@ -68,7 +68,7 @@ dependencies {
 	//CardinalComponents (old version 4.0.1)
 	include modImplementation("dev.onyxstudios.cardinal-components-api:cardinal-components-base:${project.cardinal_components_version}")
 	include modImplementation("dev.onyxstudios.cardinal-components-api:cardinal-components-entity:${project.cardinal_components_version}")
-	include modImplementation("dev.onyxstudios.cardinal-components-api:cardinal-components-item:${project.cardinal_components_version}")
+	//include modImplementation("dev.onyxstudios.cardinal-components-api:cardinal-components-item:${project.cardinal_components_version}")
 	//needed for CGL, adds 40kb
 	include modImplementation("dev.onyxstudios.cardinal-components-api:cardinal-components-scoreboard:${project.cardinal_components_version}")
 

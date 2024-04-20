@@ -75,9 +75,9 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 	public static HashMap<UUID, Integer> CURRENTLY_READY_LIGHT_PLAYER_CACHE = new HashMap<>();
 
 	/**
-	 * This is a map of the possibile targets for each target type
-	 *
-	 * It also used in determining the likelyhood of each target type being generated,
+	 * This is a map of the possible targets for each target type
+	 * <p>
+	 * It is also used in determining the likelihood of each target type being generated,
 	 * from left to right is more likely. The most probable is the one on the left*/
 	public static final Map<InnerLightType, List<TargetType>> POSSIBLE_TARGETS = Map.ofEntries(
 			entry(InnerLightType.HEAL, Arrays.asList(TargetType.SELF, TargetType.ALLIES, TargetType.VARIANT)),
@@ -180,9 +180,10 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 			var results = LightUsedPacketC2S.read(buf);
 			server.execute(() -> {
 				try{
-					//TODO handle the light charge being used.
+					//TODO handle the light charge being used. (yes this is the main thing i need to work on now)
+					// Well the longer cooldown has already been implemented. Do I want to add more?
 					if(results){
-						//TODO play a particle animation of the light charge being used?
+						//TODO play a particle animation of the light charge being used? Or maybe the dragon effect thingy too
 
 						//TODO maybe also increase the max cooldown light-stat.
 						USED_CHARGE_PLAYER_CACHE.add(player.getUuid());
@@ -310,8 +311,8 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 
 	/** Gets all the allies near a player and returns them in a list
 	 * Allied players and pets and summoned mobs count as allies.
-	 * Also the player itself is counted
-	 *
+	 * The player itself is counted as well
+	 *<p>
 	 * They also need to be under a certain HP percentage (configurable in the config)
 	 *
 	 * @param player The player in question
@@ -585,6 +586,9 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 
 	public void registerReadyLightCacheRemover(){
 		ServerTickEvents.END_SERVER_TICK.register(server -> {
+            if(CURRENTLY_READY_LIGHT_PLAYER_CACHE.isEmpty()){
+                return;
+            }
 			for( Map.Entry<UUID, Integer> entry : CURRENTLY_READY_LIGHT_PLAYER_CACHE.entrySet()){
 				if(entry.getValue() == 0){
 					CURRENTLY_READY_LIGHT_PLAYER_CACHE.remove(entry.getKey());

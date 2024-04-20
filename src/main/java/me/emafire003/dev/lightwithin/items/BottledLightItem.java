@@ -40,11 +40,16 @@ public class BottledLightItem extends Item {
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
         ItemStack stack = user.getStackInHand(hand);
         if(LightWithin.isPlayerInCooldown(user)){
+            user.playSound(LightSounds.LIGHT_ERROR, 0.5f, 1.2f);
+            return TypedActionResult.pass(stack);
+        }
+        //"Fails" silently if the player has the light ready but not active
+        if(LightWithin.CURRENTLY_READY_LIGHT_PLAYER_CACHE.containsKey(user.getUuid())){
             return TypedActionResult.pass(stack);
         }
         LightComponent component = LightWithin.LIGHT_COMPONENT.get(user);
         //Checks if the player has triggered the light naturally before, if not the bottle won't activate.
-        //TODO make configurable, and optional. Kinda.
+        //TO.DO make configurable, and optional. Kinda. 19.04.2024 Nah, it's cool to keep it this way to preserve the feeling of the mod
         if(!component.hasTriggeredNaturally()){
             if(!world.isClient()){
                 user.sendMessage(Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.translatable("light.needs_natural_trigger")).formatted(Formatting.YELLOW));
@@ -73,7 +78,7 @@ public class BottledLightItem extends Item {
                             }
                         }else{
                             user.getWorld().addBlockBreakParticles(user.getBlockPos().up(), Blocks.GLASS.getDefaultState());
-                            user.playSound(SoundEvents.BLOCK_GLASS_BREAK, 0.6f, 1.3f);
+                            user.playSound(SoundEvents.BLOCK_GLASS_BREAK, 0.43f, 1.3f);
                             //TODO maybe a better failed sound?
                             user.playSound(SoundEvents.BLOCK_FIRE_EXTINGUISH, 0.6f, 1.7f);
                             stack.decrement(1);
@@ -81,7 +86,7 @@ public class BottledLightItem extends Item {
                         }
                     }else{
                         user.getWorld().addBlockBreakParticles(user.getBlockPos().up(), Blocks.GLASS.getDefaultState());
-                        user.playSound(SoundEvents.BLOCK_GLASS_BREAK, 0.6f, 1.3f);
+                        user.playSound(SoundEvents.BLOCK_GLASS_BREAK, 0.43f, 1.3f);
                         //TODO maybe a better failed sound?
                         user.playSound(SoundEvents.BLOCK_FIRE_EXTINGUISH, 0.6f, 1.7f);
                         stack.decrement(1);
@@ -122,15 +127,21 @@ public class BottledLightItem extends Item {
 
         int charges = component.getCurrentLightCharges()+1;
         if(charges > component.getMaxLightStack()){
-            //TODO or another error-sound
+            //Or another error-sound. Nah i think this fits
+            if(!user.getWorld().isClient()){
+                user.sendMessage(Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.translatable("light.max_charges").formatted(Formatting.RED)));
+            }
             user.playSound(SoundEvents.BLOCK_RESPAWN_ANCHOR_CHARGE, 0.5f, 1.76f);
             return false;
         }
+
         component.setLightCharges(charges);
         //TODO add the fancy sound effects of charging up and the animation here as well
+
         user.getWorld().addBlockBreakParticles(user.getBlockPos().up(), Blocks.GLASS.getDefaultState());
-        user.playSound(SoundEvents.BLOCK_GLASS_BREAK, 0.6f, 1.3f);
-        user.playSound(LightSounds.LIGHT_READY, 1f, 1.5f);
+        user.playSound(SoundEvents.BLOCK_GLASS_BREAK, 0.3f, 1.3f);
+        //user.playSound(LightSounds.LIGHT_READY, 1f, 1.5f);
+        user.playSound(LightSounds.LIGHT_CHARGED, 1f, 1f);
         user.addStatusEffect(new StatusEffectInstance(LightEffects.LIGHT_FATIGUE, (int) (Config.COOLDOWN_MULTIPLIER*20*LightWithin.LIGHT_COMPONENT.get(user).getMaxCooldown())));
         stack.decrement(1);
         return true;

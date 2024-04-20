@@ -24,10 +24,10 @@ import static me.emafire003.dev.lightwithin.LightWithin.LOGGER;
 
 public class RendererEventHandler {
 
-    public static int light_active_x = 10;//333;
-    public static int light_active_y = 10;//305;
-    public static int light_charge_x = light_active_x;
-    public static int light_charge_y = light_active_y;
+    public static int light_ready_x = 10;//333;
+    public static int light_ready_y = 10;//305;
+    public static int light_charge_x = light_ready_x;
+    public static int light_charge_y = light_ready_y;
     private static boolean draw_runes = true;
     private static int show_runes_for = 3*20;
     private boolean heal_runes = false;
@@ -47,14 +47,14 @@ public class RendererEventHandler {
     int center_y = 0;
     double scale_factor;
     static double charge_icon_scale = 1.0;
-    static double active_icon_scale = 1.0;
+    static double ready_icon_scale = 1.0;
 
     public static void updateFromConfig(){
-        light_active_x = ClientConfig.LIGHT_ACTIVE_ICON_X;
-        light_active_y = ClientConfig.LIGHT_ACTIVE_ICON_Y;
+        light_ready_x = ClientConfig.LIGHT_READY_ICON_X;
+        light_ready_y = ClientConfig.LIGHT_READY_ICON_Y;
         light_charge_x = ClientConfig.LIGHT_CHARGE_ICON_X;
         light_charge_y = ClientConfig.LIGHT_CHARGE_ICON_Y;
-        active_icon_scale = ClientConfig.LIGHT_ACTIVE_SCALE_FACTOR;
+        ready_icon_scale = ClientConfig.LIGHT_READY_SCALE_FACTOR;
         charge_icon_scale = ClientConfig.LIGHT_CHARGE_SCALE_FACTOR;
         LightWithinClient.setShouldDrawChargesCount(!ClientConfig.HIDE_LIGHT_CHARGE_ICON);
         draw_runes = ClientConfig.SHOW_RUNES;
@@ -92,8 +92,8 @@ public class RendererEventHandler {
             RenderSystem.defaultBlendFunc();
 
             if(LightWithinClient.isLightReady()){
-                ClipStack.addWindow(matrixStack.getMatrices(),new Rectangle(light_active_x,light_active_y,light_active_x*active_icon_scale+40,light_active_y*active_icon_scale+40));
-                Renderer2d.renderTexture(matrixStack.getMatrices(), new Identifier(LightWithin.MOD_ID, "textures/lights/light.png"), light_active_x, light_active_y, 20* charge_icon_scale, 20* charge_icon_scale);
+                ClipStack.addWindow(matrixStack.getMatrices(),new Rectangle(light_ready_x,light_ready_y,light_ready_x*ready_icon_scale+40,light_ready_y*ready_icon_scale+40));
+                Renderer2d.renderTexture(matrixStack.getMatrices(), new Identifier(LightWithin.MOD_ID, "textures/lights/light.png"), light_ready_x, light_ready_y, 20* charge_icon_scale, 20* charge_icon_scale);
                 ClipStack.popWindow();
                 //Be aware of the return here, may cause bugs in the future! 13.03.2024
                 return;

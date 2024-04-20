@@ -11,6 +11,18 @@
       "lightwithin:light_ready"
     ]
   },
+  "light_charged": {
+    "subtitle": "lightwithin.light_used_charge",
+    "sounds": [
+      "lightwithin:light_charged"
+    ]
+  },
+  "light_error": {
+    "subtitle": "lightwithin.light_error",
+    "sounds": [
+      "lightwithin:light_error"
+    ]
+  },
   "light_crit": {
     "subtitle": "lightwithin.light_critical_hit",
     "sounds": [
