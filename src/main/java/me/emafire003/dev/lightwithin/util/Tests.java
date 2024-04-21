@@ -112,7 +112,7 @@ public class Tests {
         UUID id = UUID.randomUUID();
         for(int i = 0; i<run_times; i++){
             String[] id_bits = id.toString().split("-");
-            int max_stack = determineMaxLightStack(id_bits, COOLDOWN_BIT);
+            int max_stack = determineMaxLightCharges(id_bits, COOLDOWN_BIT);
             if(max_stack == 1){
                 f1++;
             }else if(max_stack == 2){

@@ -22,6 +22,7 @@ import java.util.Map;
 
 public class GetLightCommand implements LightCommand{
 
+    //TODO show the original/supposed values for the light
     private int getType(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
         ServerPlayerEntity target = EntityArgumentType.getPlayer(context, "player");
         ServerCommandSource source = context.getSource();

@@ -57,7 +57,7 @@ public class LightCreationAndEvent {
         if(component.getVersion() == 1){
             //Adding the new thing
             //MaxLightStacks / MaxLightCharges however you want to call it bit
-            component.setMaxLightStack(determineMaxLightStack(id_bits, COOLDOWN_BIT));
+            component.setMaxLightStack(determineMaxLightCharges(id_bits, COOLDOWN_BIT));
             component.setLightCharges(0);
             component.setVersion(2);
         }
@@ -85,7 +85,7 @@ public class LightCreationAndEvent {
         component.setPowerMultiplier(determinePower(id_bits, POWER_BIT));
 
         //MaxLightStacks / MaxLightCharges however you want to call it bit
-        component.setMaxLightStack(determineMaxLightStack(id_bits, COOLDOWN_BIT));
+        component.setMaxLightStack(determineMaxLightCharges(id_bits, COOLDOWN_BIT));
     }
 
 
@@ -217,7 +217,7 @@ public class LightCreationAndEvent {
 
     /**If it finds a digit (0-9) that's going to be the power +1 (so 1-10),
      * If not, it will get the Numeric value (0-16) and divied by 2 so (10-16/2, aka 5-8)
-     *
+     * <p>
      * So having a power between 5/8 should be more common. I don't really know.
      * */
     public static int determinePower(String[] id_bits, int string_bit){
@@ -240,19 +240,24 @@ public class LightCreationAndEvent {
 
     //As of 1.1.0 the chances are 12.5% for numbers 1-7, and 6.25 for 0 and 8
     /**Returns the max light stack number. It is determined as follows:
-     *
+     * <p>
      * Checks the second element of the string bit,
      * gets the number value and adds 1 to it
      * then halves it
      * */
-    public static int determineMaxLightStack(String[] id_bits, int string_bit){
+    public static int determineMaxLightCharges(String[] id_bits, int string_bit){
         //xxxxxxxx-xxxx-Axxx-Bxxx-xxxxxxxxxxxx where B is the variant, which sometimes does not change so
         if(string_bit == 2 || string_bit == 3){
             //It also adds the last digit from the previous bit
             id_bits[string_bit] = id_bits[string_bit].substring(1)+id_bits[string_bit-1].substring(id_bits[string_bit-1].length()-1);
         }
-        return (Character.getNumericValue(id_bits[string_bit].charAt(1))+1)/2;
+        int max = (Character.getNumericValue(id_bits[string_bit].charAt(1))+1)/2;
+        if(Config.ALLOW_MAX_CHARGE_0 && max == 0){
+            max = 1;
+        }
+        if(Config.ALLOW_MAX_CHARGE_8 && max == 8){
+            max = 7;
+        }
+        return max;
     }
-
-    //TODO set a config option to allow having values of 0 as a max light stack.
 }

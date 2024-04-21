@@ -83,6 +83,8 @@ public class Config {
 
     //Added with version 4
     public static double USED_CHARGE_COOLDOWN_MULTIPLIER;
+    public static boolean ALLOW_MAX_CHARGE_0;
+    public static boolean ALLOW_MAX_CHARGE_8;
 
     public static void handleVersionChange(){
         int version_found = CONFIG.getOrDefault("version", ver);
@@ -217,6 +219,8 @@ public class Config {
 
         //V4
         configs.addKeyValuePair(new Pair<>("used_charge_cooldown_multiplier", 2.5), "Multiplies the duration of the cooldown when a light charge has been used to force activate a light. Cannot go below 1.2");
+        configs.addKeyValuePair(new Pair<>("allow_max_charge_0", true), "Can a player have 0 as a max light charges value? Note: won't change for players that already have a light, they will need to reset it");
+        configs.addKeyValuePair(new Pair<>("allow_max_charge_8", true), "Can a player have 8 as a max light charges value? Note: won't change for players that already have a light, they will need to reset it");
 
     }
 
@@ -289,6 +293,8 @@ public class Config {
 
         //Config version 4
         USED_CHARGE_COOLDOWN_MULTIPLIER = CONFIG.getOrDefaultOrMin("used_charge_cooldown_multiplier", 2.5, 1.2);
+        ALLOW_MAX_CHARGE_0 = CONFIG.getOrDefault("allow_max_charge_0", true);
+        ALLOW_MAX_CHARGE_8 = CONFIG.getOrDefault("allow_max_charge_8", true);
     }
 }
 

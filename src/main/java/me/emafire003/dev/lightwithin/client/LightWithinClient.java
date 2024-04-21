@@ -149,7 +149,7 @@ public class LightWithinClient implements ClientModInitializer {
     }
 
     /**How much should a player have the opportunity to press the button in seconds
-     *
+     * <p>
      * Currently fixed to 10s ish*/
     public void setDelay(int delay){
         seconds = delay;
@@ -163,7 +163,6 @@ public class LightWithinClient implements ClientModInitializer {
                 try{
                     if(!results){
                         setLightReady(false);
-                        //TODO make sure it doesn't break anythin, added 18 04 2024
                         tickCounter = 0;
                         return;
                     }

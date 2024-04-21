@@ -203,7 +203,7 @@ public class RerollLightCommand implements LightCommand{
         for(ServerPlayerEntity target : targets){
             LightComponent component = LightWithin.LIGHT_COMPONENT.get(target);
 
-            int lightCharges = LightCreationAndEvent.determineMaxLightStack(UUID.randomUUID().toString().toLowerCase().split("-"), LightCreationAndEvent.COOLDOWN_BIT);
+            int lightCharges = LightCreationAndEvent.determineMaxLightCharges(UUID.randomUUID().toString().toLowerCase().split("-"), LightCreationAndEvent.COOLDOWN_BIT);
             component.setMaxLightStack(lightCharges);
 
             if(Config.TARGET_FEEDBACK){
