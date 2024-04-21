@@ -8,6 +8,7 @@ import me.emafire003.dev.lightwithin.config.BalanceConfig;
 import me.emafire003.dev.lightwithin.config.Config;
 import me.emafire003.dev.lightwithin.particles.LightParticles;
 import me.emafire003.dev.lightwithin.particles.LightParticlesUtil;
+import me.emafire003.dev.lightwithin.particles.PrecompiledParticleEffects;
 import me.emafire003.dev.lightwithin.sounds.LightSounds;
 import me.emafire003.dev.lightwithin.status_effects.LightEffects;
 import me.emafire003.dev.lightwithin.util.CheckUtils;
@@ -99,7 +100,7 @@ public class FrostLight extends InnerLight {
 
         }
 
-        LightParticlesUtil.spawnSnowflake((ServerPlayerEntity) caster, caster.getPos().add(0, 2, 0));
+        PrecompiledParticleEffects.spawnSnowflake((ServerPlayerEntity) caster, caster.getPos().add(0, 2, 0));
 
         for(LivingEntity target : this.targets){
             target.playSound(LightSounds.FROST_LIGHT, 1, 1);

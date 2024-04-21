@@ -8,6 +8,8 @@ import me.emafire003.dev.lightwithin.LightWithin;
 import me.emafire003.dev.lightwithin.compat.permissions.PermissionsChecker;
 import me.emafire003.dev.lightwithin.component.LightComponent;
 import me.emafire003.dev.lightwithin.config.Config;
+import me.emafire003.dev.lightwithin.particles.LightParticlesUtil;
+import me.emafire003.dev.lightwithin.sounds.LightSounds;
 import net.minecraft.command.argument.EntityArgumentType;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
@@ -32,6 +34,8 @@ public class ChargeCommand implements LightCommand{
                 if(Config.TARGET_FEEDBACK){
                     target.sendMessage(Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("Cannot add this many light charges, the max number of allowed light charges is: " ).formatted(Formatting.RED)
                             .append(Text.literal(String.valueOf(component.getMaxLightStack())).formatted(Formatting.GREEN))));
+                    LightParticlesUtil.spawnChargedParticles(target);
+                    target.playSound(LightSounds.LIGHT_CHARGED, 1f, 1f);
                 }
                 if(!Objects.requireNonNull(source.getPlayer()).equals(target) || !Config.TARGET_FEEDBACK){
                     source.sendError(Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The number of light charges of " + target.getName().getString() + "§e could not be changes, since it would exceed the max light stacking which is: " ).formatted(Formatting.RED)
@@ -101,6 +105,8 @@ public class ChargeCommand implements LightCommand{
             if(Config.TARGET_FEEDBACK){
                 target.sendMessage(Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The number of your light charges is now: " ).formatted(Formatting.YELLOW)
                         .append(Text.literal(String.valueOf(component.getMaxLightStack())).formatted(Formatting.GREEN))));
+                LightParticlesUtil.spawnChargedParticles(target);
+                target.playSound(LightSounds.LIGHT_CHARGED, 1f, 1f);
             }
 
             if(!Objects.requireNonNull(source.getPlayer()).equals(target) || !Config.TARGET_FEEDBACK){

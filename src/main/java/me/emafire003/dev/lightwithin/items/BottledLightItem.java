@@ -5,6 +5,7 @@ import me.emafire003.dev.lightwithin.component.LightComponent;
 import me.emafire003.dev.lightwithin.config.Config;
 import me.emafire003.dev.lightwithin.items.crafting.BrewRecipes;
 import me.emafire003.dev.lightwithin.lights.InnerLightType;
+import me.emafire003.dev.lightwithin.particles.LightParticlesUtil;
 import me.emafire003.dev.lightwithin.sounds.LightSounds;
 import me.emafire003.dev.lightwithin.status_effects.LightEffects;
 import me.emafire003.dev.lightwithin.util.TargetType;
@@ -18,6 +19,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
@@ -136,7 +138,10 @@ public class BottledLightItem extends Item {
         }
 
         component.setLightCharges(charges);
-        //TODO add the fancy sound effects of charging up and the animation here as well
+        //TODO maybe add some rendring fancy things here too?
+        if(!user.getWorld().isClient()){
+            LightParticlesUtil.spawnChargedParticles((ServerPlayerEntity) user);
+        }
 
         user.getWorld().addBlockBreakParticles(user.getBlockPos().up(), Blocks.GLASS.getDefaultState());
         user.playSound(SoundEvents.BLOCK_GLASS_BREAK, 0.3f, 1.3f);
