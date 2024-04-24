@@ -1,4 +1,4 @@
-package me.emafire003.dev.lightwithin.util.renderer;
+package me.x150.renderer;
 
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.MathHelper;

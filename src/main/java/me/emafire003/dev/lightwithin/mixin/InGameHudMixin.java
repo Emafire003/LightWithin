@@ -3,7 +3,7 @@ package me.emafire003.dev.lightwithin.mixin;
 // Copyright: https://github.com/0x3C50/Renderer/blob/master/LICENSE
 // Only needed the render events
 
-import me.emafire003.dev.lightwithin.util.renderer.RenderEvents;
+import me.x150.renderer.RenderEvents;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.hud.InGameHud;
 import org.spongepowered.asm.mixin.Mixin;

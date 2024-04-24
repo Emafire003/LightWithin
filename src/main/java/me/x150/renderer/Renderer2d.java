@@ -1,4 +1,4 @@
-package me.emafire003.dev.lightwithin.util.renderer;
+package me.x150.renderer;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MinecraftClient;
