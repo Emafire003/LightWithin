@@ -45,6 +45,8 @@ import net.minecraft.entity.passive.PassiveEntity;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.world.ServerWorld;
+import net.minecraft.sound.SoundCategory;
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Identifier;
@@ -184,9 +186,12 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 					// Well the longer cooldown has already been implemented. Do I want to add more?
 					if(results){
 						//TODO play a particle animation of the light charge being used? Or maybe the dragon effect thingy too
+						// only the dragon like effect here
 
 						//TODO maybe also increase the max cooldown light-stat.
 						USED_CHARGE_PLAYER_CACHE.add(player.getUuid());
+						player.playSound(LightSounds.LIGHT_CHARGED, 1f, 0.5f);
+						player.getWorld().playSoundAtBlockCenter(player.getBlockPos(), LightSounds.LIGHT_CHARGED,  SoundCategory.PLAYERS, 0.7f,  0.5f, false);
 						//TODO either make translatable or remove
 						player.sendMessage(Text.literal("You activated your light with a charge, the cooldown is going to be longer!"));
 					}
@@ -210,8 +215,14 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 			//var results = LightUsedPacketC2S.read(buf);
 			server.execute(() -> {
 				try{
-					//Removes one light charges, consumed.
-					//TODO play a particle animation of the light charge being consumed?
+
+					///particle lightwithin:shine_particle ~ ~1 ~ 0.1 0.1 0.1 0.15 25 force
+
+					((ServerWorld) player.getWorld()).spawnParticles(
+							LightParticles.SHINE_PARTICLE, player.getX(), player.getY()+player.getDimensions(player.getPose()).height/2, player.getZ(),
+							50, 0.1, 0.1, 0.1, 0.15
+					);
+
 					LIGHT_COMPONENT.get(player).removeLightCharges();
 				}catch (NoSuchElementException e){
 					LOGGER.warn("No value in the packet!");

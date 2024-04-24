@@ -101,7 +101,6 @@ public abstract class AnvilItemCrushMixin extends FallingBlock {
                     ((ServerWorld)entity.getWorld()).spawnParticles(ParticleTypes.FLASH, pos.getX(), pos.getY(), pos.getZ(), 1,0,0, 0, 0.1);
                 }
                 //entity.getWorld().addParticle(ParticleTypes.FLASH, pos.getX(), pos.getY(), pos.getZ(), 0,0,0);
-                //TODO maybe don't let it make explode obsidian and bedrock
                 entity.getWorld().createExplosion(entity, entity.getDamageSources().explosion(entity, fallingBlockEntity), explosionBehavior, entity.getPos(), 2f, true, World.ExplosionSourceType.BLOCK);
             }
         }

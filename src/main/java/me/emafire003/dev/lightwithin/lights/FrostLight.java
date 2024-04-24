@@ -100,7 +100,10 @@ public class FrostLight extends InnerLight {
 
         }
 
-        PrecompiledParticleEffects.spawnSnowflake((ServerPlayerEntity) caster, caster.getPos().add(0, 2, 0));
+        if(!caster.getWorld().isClient()){
+            PrecompiledParticleEffects.spawnSnowflake((ServerWorld) caster.getWorld(), caster.getPos().add(0, 2, 0));
+
+        }
 
         for(LivingEntity target : this.targets){
             target.playSound(LightSounds.FROST_LIGHT, 1, 1);

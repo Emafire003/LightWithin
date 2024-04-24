@@ -44,7 +44,7 @@ public class ActivationKey {
 
             if (lightActivationKey.wasPressed()) {
                 if(!LightWithin.isPlayerInCooldown(client.player) && LIGHT_COMPONENT.get(client.player).getCurrentLightCharges() != 0){
-                    ClientPlayNetworking.send(LightChargeConsumedPacketC2S.ID, new LightUsedPacketC2S(true));
+                    ClientPlayNetworking.send(LightChargeConsumedPacketC2S.ID, new LightChargeConsumedPacketC2S(true));
 
                     client.player.playSound(LightSounds.LIGHT_READY, 1f, 0.63f);
                     client.player.playSound(SoundEvents.BLOCK_RESPAWN_ANCHOR_DEPLETE.value(), 0.37f, 1.3f);

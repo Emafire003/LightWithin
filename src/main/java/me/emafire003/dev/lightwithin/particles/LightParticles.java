@@ -19,6 +19,7 @@ public class LightParticles {
     public static final DefaultParticleType FROGLIGHT_PARTICLE = FabricParticleTypes.simple();
 
     public static final DefaultParticleType LIGHT_PARTICLE = FabricParticleTypes.simple();
+    public static final DefaultParticleType SHINE_PARTICLE = FabricParticleTypes.simple();
 
 
     public static void registerParticles() {
@@ -43,5 +44,8 @@ public class LightParticles {
 
         Registry.register(Registries.PARTICLE_TYPE, new Identifier(LightWithin.MOD_ID, "light_particle"),
                 LIGHT_PARTICLE);
+
+        Registry.register(Registries.PARTICLE_TYPE, new Identifier(LightWithin.MOD_ID, "shine_particle"),
+                SHINE_PARTICLE);
     }
 }

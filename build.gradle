@@ -87,7 +87,7 @@ dependencies {
 	include modImplementation("maven.modrinth:custombrewrecipes:${project.custombrewrecipes_version}")
 
 	//ParticleAnimationLib
-	include modImplementation(files("libs/particleanimationlib-0.0.1.jar"))
+	include modImplementation("maven.modrinth:custombrewrecipes:${project.pal_version}")
 
 	//===========OPTIONAL DEPENDENCIES===========
 

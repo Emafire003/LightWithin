@@ -63,7 +63,6 @@ public class BottledLightItem extends Item {
         if(BottledLightItem.getCreatedBy(stack).equals(UUID.fromString("00000000-0000-0000-0000-000000000000"))){
             NbtCompound nbt = stack.getNbt();
             if(!stack.hasNbt() || nbt == null){
-                //TODO maybe explode?
                 return TypedActionResult.pass(stack);
             }
 
@@ -81,7 +80,6 @@ public class BottledLightItem extends Item {
                         }else{
                             user.getWorld().addBlockBreakParticles(user.getBlockPos().up(), Blocks.GLASS.getDefaultState());
                             user.playSound(SoundEvents.BLOCK_GLASS_BREAK, 0.43f, 1.3f);
-                            //TODO maybe a better failed sound?
                             user.playSound(SoundEvents.BLOCK_FIRE_EXTINGUISH, 0.6f, 1.7f);
                             stack.decrement(1);
                             return TypedActionResult.consume(stack);
@@ -89,7 +87,6 @@ public class BottledLightItem extends Item {
                     }else{
                         user.getWorld().addBlockBreakParticles(user.getBlockPos().up(), Blocks.GLASS.getDefaultState());
                         user.playSound(SoundEvents.BLOCK_GLASS_BREAK, 0.43f, 1.3f);
-                        //TODO maybe a better failed sound?
                         user.playSound(SoundEvents.BLOCK_FIRE_EXTINGUISH, 0.6f, 1.7f);
                         stack.decrement(1);
                         return TypedActionResult.consume(stack);
@@ -99,7 +96,6 @@ public class BottledLightItem extends Item {
                         ((ServerWorld)user.getWorld()).spawnParticles(ParticleTypes.FLASH, user.getX(), user.getY(), user.getZ(), 1,0,0, 0, 0.1);
                         user.sendMessage(Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.translatable("item.lightwithin.bottled_light.exploded").formatted(Formatting.YELLOW)));
                     }
-                    //TODO maybe don't let it make explode obsidian and bedrock
                     stack.decrement(stack.getCount());
                     ItemEntity item = new ItemEntity(world, user.getX(), user.getY()+1, user.getZ(), stack);
                     world.createExplosion(item, user.getX(), user.getY()+1, user.getZ(), 1.5f, false, World.ExplosionSourceType.MOB);
@@ -138,7 +134,8 @@ public class BottledLightItem extends Item {
         }
 
         component.setLightCharges(charges);
-        //TODO maybe add some rendring fancy things here too?
+        //TODO maybe add some rendring fancy things here too? (addCharge)
+
         if(!user.getWorld().isClient()){
             LightParticlesUtil.spawnChargedParticles((ServerPlayerEntity) user);
         }
