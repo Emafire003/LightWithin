@@ -3,9 +3,11 @@ package me.emafire003.dev.lightwithin.commands;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.tree.LiteralCommandNode;
+import com.mojang.datafixers.util.Pair;
 import me.emafire003.dev.lightwithin.LightWithin;
 import me.emafire003.dev.lightwithin.compat.permissions.PermissionsChecker;
 import me.emafire003.dev.lightwithin.component.LightComponent;
+import me.emafire003.dev.lightwithin.events.LightCreationAndEvent;
 import me.emafire003.dev.lightwithin.lights.InnerLightType;
 import me.emafire003.dev.lightwithin.status_effects.LightEffects;
 import me.emafire003.dev.lightwithin.util.TargetType;
@@ -22,7 +24,6 @@ import java.util.Map;
 
 public class GetLightCommand implements LightCommand{
 
-    //TODO show the original/supposed values for the light
     private int getType(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
         ServerPlayerEntity target = EntityArgumentType.getPlayer(context, "player");
         ServerCommandSource source = context.getSource();
@@ -84,7 +85,7 @@ public class GetLightCommand implements LightCommand{
             return 1;
         }catch(Exception e){
             e.printStackTrace();
-            source.sendFeedback(() -> Text.literal("Error: " + e.toString()),false);
+            source.sendFeedback(() -> Text.literal("Error: " + e),false);
             return 0;
         }
     }
@@ -100,7 +101,7 @@ public class GetLightCommand implements LightCommand{
             return 1;
         }catch(Exception e){
             e.printStackTrace();
-            source.sendFeedback(() -> Text.literal("Error: " + e.toString()),false);
+            source.sendFeedback(() -> Text.literal("Error: " + e),false);
             return 0;
         }
     }
@@ -116,7 +117,7 @@ public class GetLightCommand implements LightCommand{
             return 1;
         }catch(Exception e){
             e.printStackTrace();
-            source.sendFeedback(() -> Text.literal("Error: " + e.toString()),false);
+            source.sendFeedback(() -> Text.literal("Error: " + e),false);
             return 0;
         }
     }
@@ -137,7 +138,7 @@ public class GetLightCommand implements LightCommand{
             return 1;
         }catch(Exception e){
             e.printStackTrace();
-            source.sendFeedback(() -> Text.literal("Error: " + e.toString()),false);
+            source.sendFeedback(() -> Text.literal("Error: " + e),false);
             return 0;
         }
     }
@@ -159,7 +160,7 @@ public class GetLightCommand implements LightCommand{
             return 1;
         }catch(Exception e){
             e.printStackTrace();
-            source.sendFeedback(() -> Text.literal("Error: " + e.toString()),false);
+            source.sendFeedback(() -> Text.literal("Error: " + e),false);
             return 0;
         }
     }
@@ -169,25 +170,28 @@ public class GetLightCommand implements LightCommand{
         ServerCommandSource source = context.getSource();
 
         try{
+            String[] originalUUID = target.getUuid().toString().toLowerCase().split("-");
+            Pair<InnerLightType, TargetType> original_type_target = LightCreationAndEvent.determineTypeAndTarget(originalUUID, LightCreationAndEvent.TYPE_BIT, LightCreationAndEvent.TARGET_BIT);
+
             LightComponent component = LightWithin.LIGHT_COMPONENT.get(target);
             InnerLightType type = component.getType();
             source.sendFeedback(() -> Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The InnerLight type of §d" + target.getName().getString() + "§e is: " ).formatted(Formatting.YELLOW)
-                    .append(Text.literal(type.toString()).formatted(Formatting.GREEN))), true);
+                    .append(Text.literal(type.toString()).formatted(Formatting.GREEN)).append(Text.literal(", was: ").formatted(Formatting.YELLOW)).append(Text.literal(original_type_target.getFirst().toString()).formatted(Formatting.GREEN))), true);
             TargetType target_type = component.getTargets();
             source.sendFeedback(() -> Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The TargetType is: " ).formatted(Formatting.YELLOW)
-                    .append(Text.literal(target_type.toString()).formatted(Formatting.GREEN))), true);
+                    .append(Text.literal(target_type.toString()).formatted(Formatting.GREEN)).append(Text.literal(", was: ").formatted(Formatting.YELLOW)).append(Text.literal(original_type_target.getSecond().toString()).formatted(Formatting.GREEN))), true);
             double power = component.getPowerMultiplier();
             source.sendFeedback(() -> Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The power multiplier is: " ).formatted(Formatting.YELLOW)
-                    .append(Text.literal("§a"+power))), true);
+                    .append(Text.literal("§a"+power)).append(Text.literal(", was: ").formatted(Formatting.YELLOW)).append(Text.literal(String.valueOf(LightCreationAndEvent.determinePower(originalUUID, LightCreationAndEvent.POWER_BIT))).formatted(Formatting.GREEN))), true);
             int duration = component.getDuration();
             source.sendFeedback(() -> Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The duration is: " ).formatted(Formatting.YELLOW)
-                    .append(Text.literal("§a"+duration))), true);
+                    .append(Text.literal("§a"+duration)).append(Text.literal(", was: ").formatted(Formatting.YELLOW)).append(Text.literal(String.valueOf(LightCreationAndEvent.determineDuration(originalUUID, LightCreationAndEvent.DURATION_BIT))).formatted(Formatting.GREEN))), true);
             int mcooldown = component.getMaxCooldown();
             source.sendFeedback(() -> Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The max cooldown is: " ).formatted(Formatting.YELLOW)
-                    .append(Text.literal("§a"+mcooldown))), true);
+                    .append(Text.literal("§a"+mcooldown)).append(Text.literal(", was: ").formatted(Formatting.YELLOW)).append(Text.literal(String.valueOf(LightCreationAndEvent.determineCooldown(originalUUID, LightCreationAndEvent.COOLDOWN_BIT))).formatted(Formatting.GREEN))), true);
             int maxLightStacks = component.getMaxLightStack();
-            source.sendFeedback(() -> Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The max light charges is: " ).formatted(Formatting.YELLOW)
-                    .append(Text.literal("§a"+maxLightStacks))), true);
+            source.sendFeedback(() -> Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The max light charges number is: " ).formatted(Formatting.YELLOW)
+                    .append(Text.literal("§a"+maxLightStacks)).append(Text.literal(", was: ").formatted(Formatting.YELLOW)).append(Text.literal(String.valueOf(LightCreationAndEvent.determineMaxLightCharges(originalUUID, LightCreationAndEvent.COOLDOWN_BIT))).formatted(Formatting.GREEN))), true);
             boolean locked = component.getLocked();
             source.sendFeedback(() -> Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("Locked: " ).formatted(Formatting.YELLOW)
                     .append(Text.literal("§a"+locked))), true);
@@ -205,7 +209,7 @@ public class GetLightCommand implements LightCommand{
             return 1;
         }catch(Exception e){
             e.printStackTrace();
-            source.sendFeedback(() -> Text.literal("Error: " + e.toString()),false);
+            source.sendFeedback(() -> Text.literal("Error: " + e),false);
             return 0;
         }
     }
@@ -219,7 +223,7 @@ public class GetLightCommand implements LightCommand{
             return 1;
         }catch(Exception e){
             e.printStackTrace();
-            source.sendFeedback(() -> Text.literal("Error: " + e.toString()),false);
+            source.sendFeedback(() -> Text.literal("Error: " + e),false);
             return 0;
         }
     }

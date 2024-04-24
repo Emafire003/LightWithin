@@ -42,6 +42,7 @@ public class BottledLightItem extends Item {
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
         ItemStack stack = user.getStackInHand(hand);
         if(LightWithin.isPlayerInCooldown(user)){
+            user.sendMessage(Text.translatable("item.lightwithin.bottled_light.in_cooldown").formatted(Formatting.RED), true);
             user.playSound(LightSounds.LIGHT_ERROR, 0.5f, 1.2f);
             return TypedActionResult.pass(stack);
         }
@@ -127,7 +128,7 @@ public class BottledLightItem extends Item {
         if(charges > component.getMaxLightStack()){
             //Or another error-sound. Nah i think this fits
             if(!user.getWorld().isClient()){
-                user.sendMessage(Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.translatable("light.max_charges").formatted(Formatting.RED)));
+                user.sendMessage(Text.translatable("light.max_charges").formatted(Formatting.RED), true);
             }
             user.playSound(SoundEvents.BLOCK_RESPAWN_ANCHOR_CHARGE, 0.5f, 1.76f);
             return false;

@@ -244,6 +244,8 @@ public class LightCreationAndEvent {
      * Checks the second element of the string bit,
      * gets the number value and adds 1 to it
      * then halves it
+     *<p>
+     * Uses the {@link #COOLDOWN_BIT} usually
      * */
     public static int determineMaxLightCharges(String[] id_bits, int string_bit){
         //xxxxxxxx-xxxx-Axxx-Bxxx-xxxxxxxxxxxx where B is the variant, which sometimes does not change so

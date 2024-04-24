@@ -25,6 +25,7 @@
   "item.lightwithin.bottled_light.tooltip.type": "Type: ",
   "item.lightwithin.bottled_light.tooltip.target": "Target: ",
   "item.lightwithin.bottled_light.exploded": "Looks like it was not compatible with your light type... you ok?",
+  "item.lightwithin.bottled_light.in_cooldown": "You light is fatigued! You can't use this now!",
 
   "item.lightwithin.luxmutua_berry.lightchange": "Your light resonated with you again and decided it was time to change",
 
