@@ -1,15 +1,16 @@
 package me.emafire003.dev.lightwithin.mixin;
 
+import me.emafire003.dev.lightwithin.events.EntityAttackEntityEvent;
 import me.emafire003.dev.lightwithin.events.EntityBurningEvent;
 import me.emafire003.dev.lightwithin.events.EntityDrowningEvent;
 import me.emafire003.dev.lightwithin.events.EntityFreezingEvent;
 import me.emafire003.dev.lightwithin.status_effects.LightEffects;
-import net.minecraft.block.TntBlock;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.TntEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.damage.DamageTypes;
-import net.minecraft.entity.player.PlayerEntity;
+import org.slf4j.Logger;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -19,13 +20,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityDamageTriggersMixin {
 
-    @Shadow public abstract void enterCombat();
+    @Shadow @Final private static Logger LOGGER;
 
-    //Again, meant for the Freeze Resistance effect
     @Inject(
             method = "damage",
-            at = @At("HEAD"),
-            cancellable = true
+            at = @At("HEAD")
     )
     private void damageTriggers(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
         LivingEntity entity = (LivingEntity) (Object) this;
@@ -34,8 +33,14 @@ public abstract class LivingEntityDamageTriggersMixin {
         }else if(source.isOf(DamageTypes.ON_FIRE)){
             EntityBurningEvent.EVENT.invoker().burning(entity);
         }else if(source.isOf(DamageTypes.EXPLOSION)){
-            //TODO add trigger for the explosion igniter if it's  a player, like a normal direct damage. (Aka, traps)
             //Trigger damage from explosion
+        }else if(source.isOf(DamageTypes.PLAYER_EXPLOSION)){
+            //TODO test properly
+            Entity attacker = source.getAttacker();
+            if(attacker instanceof LivingEntity){
+                EntityAttackEntityEvent.EVENT.invoker().attack((LivingEntity) attacker, entity);
+            }
+            //Trigger damage from explosion ignited by player
         }else if(source.isOf(DamageTypes.FALLING_BLOCK)){
             //trigger anvil damage
         }else if(source.isOf(DamageTypes.MAGIC)){
