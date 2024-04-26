@@ -6,10 +6,14 @@ import com.mojang.brigadier.tree.LiteralCommandNode;
 import me.emafire003.dev.lightwithin.LightWithin;
 import me.emafire003.dev.lightwithin.compat.permissions.PermissionsChecker;
 import me.emafire003.dev.lightwithin.config.Config;
+import me.emafire003.dev.lightwithin.networking.PlayRenderEffectPacketS2C;
+import me.emafire003.dev.lightwithin.util.RenderEffect;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.command.argument.EntityArgumentType;
 import net.minecraft.entity.Entity;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
@@ -23,7 +27,10 @@ public class LightAnimationDebugCommand implements LightCommand{
 
         try{
             for(Entity target : targets){
-                //ServerPlayNetworking.send(player, LightReadyPacketS2C.ID, new LightReadyPacketS2C(b));
+                if(target instanceof ServerPlayerEntity){
+                    ServerPlayNetworking.send((ServerPlayerEntity) target, PlayRenderEffectPacketS2C.ID, new PlayRenderEffectPacketS2C(RenderEffect.LIGHT_RAYS));
+                }
+
                 source.sendFeedback( () -> Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The InnerLight of §d" + target.getName().getString() + "§e has been triggered!" ).formatted(Formatting.YELLOW)), true);
                 if(Config.TARGET_FEEDBACK){
                     source.sendFeedback( () -> Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("Your InnerLight was activated by force!" ).formatted(Formatting.YELLOW)), true);
@@ -32,7 +39,7 @@ public class LightAnimationDebugCommand implements LightCommand{
             return 1;
         }catch(Exception e){
             e.printStackTrace();
-            source.sendFeedback( () -> Text.literal("Error: " + e.toString()),false);
+            source.sendFeedback( () -> Text.literal("Error: " + e),false);
             return 0;
         }
 

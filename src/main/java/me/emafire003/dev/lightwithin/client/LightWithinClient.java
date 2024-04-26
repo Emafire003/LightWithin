@@ -218,7 +218,7 @@ public class LightWithinClient implements ClientModInitializer {
     }
 
     private void registerPlayRenderEffectPacket(){
-        LOGGER.info("Registering play render effect packet receiver on client...");
+        LOGGER.debug("Registering play render effect packet receiver on client...");
         ClientPlayNetworking.registerGlobalReceiver(PlayRenderEffectPacketS2C.ID, ((client, handler, buf, responseSender) -> {
             RenderEffect effect = PlayRenderEffectPacketS2C.read(buf);
 
