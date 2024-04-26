@@ -38,7 +38,7 @@ public abstract class CustomEffectsLivingRendererMixin<T extends LivingEntity, M
         if(renderEntity.lightWithin$shouldRender(RenderEffect.LIGHT_RAYS)){
             renderLightRaysEffect(vertexConsumers, matrices, tickDelta, entity);
             shouldRenderTicks++;
-            if(shouldRenderTicks > 4.5*20){
+            if(shouldRenderTicks > renderEntity.lightWithin$getRenderTicks(RenderEffect.LIGHT_RAYS)){
                 shouldRenderTicks = 0;
                 renderEntity.lightWithin$stopEffect(RenderEffect.LIGHT_RAYS);
             }

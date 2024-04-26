@@ -14,9 +14,14 @@ public abstract class RenderEffectsEntityMixin implements IRenderEffectsEntity {
     @Unique
     private final HashMap<RenderEffect, Boolean> shouldRenderEffects = new HashMap<>();
 
+    @Unique
+    private final HashMap<RenderEffect, Integer> ticksForRenderEffects = new HashMap<>();
+
+
     @Override
-    public void lightWithin$renderEffect(RenderEffect effect){
+    public void lightWithin$renderEffect(RenderEffect effect, int ticks){
         shouldRenderEffects.put(effect, true);
+        ticksForRenderEffects.put(effect, ticks);
     }
 
     @Override
@@ -25,6 +30,15 @@ public abstract class RenderEffectsEntityMixin implements IRenderEffectsEntity {
             return false;
         }
         return shouldRenderEffects.get(effect);
+    }
+
+    /**A return of -1 means the effect isn't in the map*/
+    @Override
+    public int lightWithin$getRenderTicks(RenderEffect effect){
+        if(!ticksForRenderEffects.containsKey(effect)){
+            return -1;
+        }
+        return ticksForRenderEffects.get(effect);
     }
 
     @Override
