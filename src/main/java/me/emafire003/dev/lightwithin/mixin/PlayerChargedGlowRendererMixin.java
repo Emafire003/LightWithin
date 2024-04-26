@@ -29,7 +29,7 @@ public abstract class PlayerChargedGlowRendererMixin<T extends Entity> {
             }
             double charge_fraction = (double) component.getCurrentLightCharges() /component.getMaxLightStack();
             if(charge_fraction == 1){
-                cir.setReturnValue(15);
+
                 Random random = ((PlayerEntity) entity).getRandom();
                 if(random.nextInt(170) == 1){
                     int filp_x = -1;
@@ -42,6 +42,7 @@ public abstract class PlayerChargedGlowRendererMixin<T extends Entity> {
                     }
                     entity.getWorld().addParticle(LightParticles.LIGHT_PARTICLE, false, entity.getX()+ (double) random.nextInt(15) /10*filp_x, entity.getY()+1, entity.getZ()+(double) random.nextInt(15)/10*filp_z, (double) random.nextInt(4) /100, (double) random.nextInt(4) /100, (double) random.nextInt(4) /100);
                 }
+                cir.setReturnValue(15);
                 return;
             }
             if(charge_fraction > 0.5){

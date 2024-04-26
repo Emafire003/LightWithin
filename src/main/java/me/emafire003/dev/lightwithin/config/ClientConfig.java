@@ -31,7 +31,7 @@ public class ClientConfig {
     public static boolean HIDE_LIGHT_CHARGE_ICON = false;
     public static final boolean HIDE_LIGHT_CHARGE_ICON_default = false;
     public static boolean SHOW_CHARGED_PLAYER_GLOW = true;
-    public static final boolean SHOW_CHARGED_PLAYER_GLOW_default = false;
+    public static final boolean SHOW_CHARGED_PLAYER_GLOW_default = true;
     public static boolean SHOW_RUNES = true;
     public static final boolean SHOW_RUNES_default = true;
     public static int SHOW_RUNES_FOR = 3;
