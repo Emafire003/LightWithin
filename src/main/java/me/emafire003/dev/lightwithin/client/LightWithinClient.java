@@ -8,15 +8,14 @@ import me.emafire003.dev.lightwithin.config.ClientConfig;
 import me.emafire003.dev.lightwithin.entities.LightEntities;
 import me.emafire003.dev.lightwithin.entities.earth_golem.EarthGolemEntityModel;
 import me.emafire003.dev.lightwithin.entities.earth_golem.EarthGolemEntityRenderer;
-import me.emafire003.dev.lightwithin.networking.ConfigOptionsSyncPacketS2C;
-import me.emafire003.dev.lightwithin.networking.LightReadyPacketS2C;
-import me.emafire003.dev.lightwithin.networking.RenderRunePacketS2C;
-import me.emafire003.dev.lightwithin.networking.WindLightVelocityPacketS2C;
+import me.emafire003.dev.lightwithin.networking.*;
 import me.emafire003.dev.lightwithin.particles.LightParticle;
 import me.emafire003.dev.lightwithin.particles.LightTypeParticleV3;
 import me.emafire003.dev.lightwithin.particles.LightParticles;
 import me.emafire003.dev.lightwithin.sounds.LightSounds;
 import me.emafire003.dev.lightwithin.util.ConfigPacketConstants;
+import me.emafire003.dev.lightwithin.util.IRenderEffectsEntity;
+import me.emafire003.dev.lightwithin.util.RenderEffect;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -67,6 +66,7 @@ public class LightWithinClient implements ClientModInitializer {
        registerRenderRunesPacket();
        registerWindLightVelocityPacket();
        registerConfigOptionsSyncPacket();
+       registerPlayRenderEffectPacket();
        ClientCommandRegistrationCallback.EVENT.register(ClientLightCommands::registerCommands);
        event_handler.registerRenderEvent();
        event_handler.registerRunesRenderer();
@@ -204,13 +204,36 @@ public class LightWithinClient implements ClientModInitializer {
     }
 
     private void registerRenderRunesPacket(){
-        LOGGER.info("Registering runes render packet reciver on client...");
+        LOGGER.debug("Registering runes render packet receiver on client...");
         ClientPlayNetworking.registerGlobalReceiver(RenderRunePacketS2C.ID, ((client, handler, buf, responseSender) -> {
             var results = RenderRunePacketS2C.read(buf);
 
             client.execute(() -> {
                 try{
                     event_handler.renderRunes(results, client.player);
+                }catch (NoSuchElementException e){
+                    LOGGER.warn("No value in the packet, probably not a big problem");
+                }catch (Exception e){
+                    LOGGER.error("There was an error while getting the packet!");
+                    e.printStackTrace();
+                }
+            });
+        }));
+    }
+
+    private void registerPlayRenderEffectPacket(){
+        LOGGER.debug("Registering play render effect packet receiver on client...");
+        ClientPlayNetworking.registerGlobalReceiver(PlayRenderEffectPacketS2C.ID, ((client, handler, buf, responseSender) -> {
+            RenderEffect effect = PlayRenderEffectPacketS2C.read(buf);
+
+            client.execute(() -> {
+                try{
+                    if(client.player != null && effect != null){
+                        IRenderEffectsEntity player = (IRenderEffectsEntity) client.player;
+                        player.lightWithin$renderEffect(effect, (int) (4.5*20));
+                    }else{
+                        LOGGER.warn("The client player was null can't play effect animation");
+                    }
                 }catch (NoSuchElementException e){
                     LOGGER.warn("No value in the packet, probably not a big problem");
                 }catch (Exception e){
