@@ -21,10 +21,7 @@ import me.emafire003.dev.lightwithin.events.PlayerJoinEvent;
 import me.emafire003.dev.lightwithin.items.LightItems;
 import me.emafire003.dev.lightwithin.items.crafting.BrewRecipes;
 import me.emafire003.dev.lightwithin.lights.*;
-import me.emafire003.dev.lightwithin.networking.ConfigOptionsSyncPacketS2C;
-import me.emafire003.dev.lightwithin.networking.LightChargeConsumedPacketC2S;
-import me.emafire003.dev.lightwithin.networking.LightUsedPacketC2S;
-import me.emafire003.dev.lightwithin.networking.RenderRunePacketS2C;
+import me.emafire003.dev.lightwithin.networking.*;
 import me.emafire003.dev.lightwithin.particles.LightParticles;
 import me.emafire003.dev.lightwithin.sounds.LightSounds;
 import me.emafire003.dev.lightwithin.status_effects.LightEffects;
@@ -182,16 +179,16 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 			var results = LightUsedPacketC2S.read(buf);
 			server.execute(() -> {
 				try{
-					//TODO handle the light charge being used. (yes this is the main thing i need to work on now)
-					// Well the longer cooldown has already been implemented. Do I want to add more?
+					//Handles the LightCharge being used. If it used, results will be true.
 					if(results){
-						//TODO play a particle animation of the light charge being used? Or maybe the dragon effect thingy too
-						// only the dragon like effect here
+						ServerPlayNetworking.send(player, PlayRenderEffectPacketS2C.ID, new PlayRenderEffectPacketS2C(RenderEffect.LIGHT_RAYS));
 
 						//TODO maybe also increase the max cooldown light-stat.
+						//Currently just increases the cooldown. But the actual charges are fairly hard to get.
 						USED_CHARGE_PLAYER_CACHE.add(player.getUuid());
-						player.playSound(LightSounds.LIGHT_CHARGED, 1f, 0.5f);
-						player.getWorld().playSoundAtBlockCenter(player.getBlockPos(), LightSounds.LIGHT_CHARGED,  SoundCategory.PLAYERS, 0.7f,  0.5f, false);
+
+						player.getWorld().playSound(player.getX(), player.getY(), player.getZ(), LightSounds.LIGHT_CHARGED, SoundCategory.PLAYERS, 1, 0.7f, true);
+
 						//TODO either make translatable or remove
 						player.sendMessage(Text.literal("You activated your light with a charge, the cooldown is going to be longer!"));
 					}

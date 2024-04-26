@@ -89,7 +89,7 @@ public class FrostLight extends InnerLight {
         }
 
 
-        caster.getWorld().playSound(caster.getX(), caster.getY(), caster.getZ(), LightSounds.FROST_LIGHT, SoundCategory.AMBIENT, 1, 1, true);
+        caster.getWorld().playSound(caster.getX(), caster.getY(), caster.getZ(), LightSounds.FROST_LIGHT, SoundCategory.PLAYERS, 1, 1, true);
         if(!caster.getWorld().isClient && (CheckUtils.checkGriefable((ServerPlayerEntity) caster) || Config.NON_FUNDAMENTAL_STRUCTURE_GRIEFING) && (component.getTargets().equals(TargetType.ALL) || component.getTargets().equals(TargetType.ENEMIES))) {
             StructurePlacerAPI placer = new StructurePlacerAPI((ServerWorld) caster.getWorld(), new Identifier(MOD_ID, "frost_light"), caster.getBlockPos(), BlockMirror.NONE, BlockRotation.NONE, true, 1.0f, new BlockPos(-4, -3, -3));
             if(Config.REPLACEABLE_STRUCTURES){

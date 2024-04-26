@@ -103,7 +103,7 @@ public class HealLight extends InnerLight {
                 CGLCompat.getLib().setColor(this.caster, this.color);
             }
         }
-        caster.getWorld().playSound(caster.getX(), caster.getY(), caster.getZ(), LightSounds.HEAL_LIGHT, SoundCategory.AMBIENT, 1, 1, true);
+        caster.getWorld().playSound(caster.getX(), caster.getY(), caster.getZ(), LightSounds.HEAL_LIGHT, SoundCategory.PLAYERS, 0.1f, 1, true);
         //caster.getWorld().playSound(caster, caster.getBlockPos(), LightSounds.HEAL_LIGHT, SoundCategory.AMBIENT, 1,1);
 
         for(LivingEntity target : this.targets){

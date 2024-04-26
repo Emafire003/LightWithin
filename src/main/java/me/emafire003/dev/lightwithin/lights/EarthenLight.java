@@ -95,7 +95,7 @@ public class EarthenLight extends InnerLight {
 
 
         LightParticlesUtil.spawnLightTypeParticle(LightParticles.EARTHENLIGHT_PARTICLE, (ServerWorld) caster.getWorld(), caster.getPos());
-        caster.getWorld().playSound(caster.getX(), caster.getY(), caster.getZ(), LightSounds.EARTHEN_LIGHT, SoundCategory.AMBIENT, 1, 1, true);
+        caster.getWorld().playSound(caster.getX(), caster.getY(), caster.getZ(), LightSounds.EARTHEN_LIGHT, SoundCategory.PLAYERS, 1, 1, true);
         if(caster.getWorld().isClient){
             return;
         }
@@ -132,7 +132,7 @@ public class EarthenLight extends InnerLight {
                         placer.loadStructure();
                     }
                     //It also plays here since a hole opens under things
-                    caster.getWorld().playSound(target.getX(), target.getY(), target.getZ(), LightSounds.EARTHEN_LIGHT, SoundCategory.AMBIENT, 1, 1, true);
+                    caster.getWorld().playSound(target.getX(), target.getY(), target.getZ(), LightSounds.EARTHEN_LIGHT, SoundCategory.PLAYERS, 1, 1, true);
                 }
                 oldtarget = target;
                 //target.playSound(LightSounds.EARTHEN_LIGHT, 0.9f, 1);

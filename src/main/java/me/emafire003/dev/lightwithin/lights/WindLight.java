@@ -78,10 +78,10 @@ public class WindLight extends InnerLight {
             }
         }
 
-        caster.getWorld().playSound(caster.getX(), caster.getY(), caster.getZ(), LightSounds.WIND_LIGHT, SoundCategory.AMBIENT, 1, 1, true);
-        //caster.getWorld().playSound(caster, caster.getBlockPos(), LightSounds.WIND_LIGHT, SoundCategory.AMBIENT, 1, 1);
+        caster.getWorld().playSound(caster.getX(), caster.getY(), caster.getZ(), LightSounds.WIND_LIGHT, SoundCategory.PLAYERS, 1, 1, true);
+        //caster.getWorld().playSound(caster, caster.getBlockPos(), LightSounds.WIND_LIGHT, SoundCategory.PLAYERS, 1, 1);
         ServerWorld world = (ServerWorld) (caster).getWorld();
-        //If the light target is OTHER it will blow away every entity in radious
+        //If the light target is OTHER it will blow away every entity in radius
         if(component.getTargets().equals(TargetType.ALL)){
             LightParticlesUtil.spawnLightTypeParticle(LightParticles.WINDLIGHT_PARTICLE, (ServerWorld) caster.getWorld(), caster.getPos());
             world.spawnParticles(((ServerPlayerEntity )caster), ParticleTypes.CLOUD, false, caster.getX(), caster.getY()+1, caster.getZ(), 65, 0, 0.2, 0, 0.35);

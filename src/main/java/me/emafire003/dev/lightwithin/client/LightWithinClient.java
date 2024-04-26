@@ -231,6 +231,8 @@ public class LightWithinClient implements ClientModInitializer {
                     if(client.player != null && effect != null){
                         IRenderEffectsEntity player = (IRenderEffectsEntity) client.player;
                         player.lightWithin$renderEffect(effect, (int) (4.5*20));
+                        client.player.playSound(LightSounds.LIGHT_CHARGED, 0.7f, 0.7f);
+
                     }else{
                         LOGGER.warn("The client player was null can't play effect animation");
                     }

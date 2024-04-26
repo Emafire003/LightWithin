@@ -105,7 +105,7 @@ public class BlazingLight extends InnerLight {
             }
         }
 
-        caster.getWorld().playSound(caster.getX(), caster.getY(), caster.getZ(), LightSounds.BLAZING_LIGHT, SoundCategory.AMBIENT, 1, 1, true);
+        caster.getWorld().playSound(caster.getX(), caster.getY(), caster.getZ(), LightSounds.BLAZING_LIGHT, SoundCategory.PLAYERS, 1, 1, true);
         caster.addStatusEffect(new StatusEffectInstance(StatusEffects.FIRE_RESISTANCE, caster.getStatusEffect(LightEffects. LIGHT_ACTIVE).getDuration(), 0, false, false));
 
 

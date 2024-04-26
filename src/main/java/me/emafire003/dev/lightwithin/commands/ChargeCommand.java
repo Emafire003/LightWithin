@@ -34,7 +34,6 @@ public class ChargeCommand implements LightCommand{
                 if(Config.TARGET_FEEDBACK){
                     target.sendMessage(Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("Cannot add this many light charges, the max number of allowed light charges is: " ).formatted(Formatting.RED)
                             .append(Text.literal(String.valueOf(component.getMaxLightStack())).formatted(Formatting.GREEN))));
-                    LightParticlesUtil.spawnChargedParticles(target);
                     target.playSound(LightSounds.LIGHT_CHARGED, 1f, 1f);
                 }
                 if(!Objects.requireNonNull(source.getPlayer()).equals(target) || !Config.TARGET_FEEDBACK){
@@ -45,6 +44,7 @@ public class ChargeCommand implements LightCommand{
             }else{
                 component.setLightCharges(total_charges);
                 if(Config.TARGET_FEEDBACK){
+                    LightParticlesUtil.spawnChargedParticles(target);
                     target.sendMessage(Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The number of your light charges is now: " ).formatted(Formatting.YELLOW)
                             .append(Text.literal(String.valueOf(total_charges)).formatted(Formatting.GREEN))));
                 }

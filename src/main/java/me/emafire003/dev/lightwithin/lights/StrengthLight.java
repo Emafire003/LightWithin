@@ -75,7 +75,7 @@ public class StrengthLight extends InnerLight {
             }
         }
 
-        caster.getWorld().playSound(caster.getX(), caster.getY(), caster.getZ(), LightSounds.STRENGTH_LIGHT, SoundCategory.AMBIENT, 1, 1, true);
+        caster.getWorld().playSound(caster.getX(), caster.getY(), caster.getZ(), LightSounds.STRENGTH_LIGHT, SoundCategory.PLAYERS, 1, 1, true);
         for(LivingEntity target : this.targets){
             //target.playSound(LightSounds.STRENGTH_LIGHT, 1, 1);
             if(!caster.getWorld().isClient){
