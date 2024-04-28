@@ -79,7 +79,7 @@ public class LuxcognitaBerryItem extends Item {
                 ((ServerPlayerEntity) user).sendMessage(Text.translatable("light.description.frog"), true);
             }
             else{
-                ((ServerPlayerEntity) user).sendMessage(Text.translatable("light.description.error "), true);
+                ((ServerPlayerEntity) user).sendMessage(Text.translatable("light.description.error"), true);
             }
             //((ServerPlayerEntity) user).sendMessage(Text.translatable("text.lightwithin.your_light_is"), true);
 

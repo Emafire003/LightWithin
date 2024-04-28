@@ -210,7 +210,7 @@ public class LightWithinClient implements ClientModInitializer {
 
             client.execute(() -> {
                 try{
-                    event_handler.renderRunes(results, client.player);
+                    event_handler.renderRunes(results);
                 }catch (NoSuchElementException e){
                     LOGGER.warn("No value in the packet, probably not a big problem");
                 }catch (Exception e){
@@ -229,9 +229,14 @@ public class LightWithinClient implements ClientModInitializer {
             client.execute(() -> {
                 try{
                     if(client.player != null && effect != null){
-                        IRenderEffectsEntity player = (IRenderEffectsEntity) client.player;
-                        player.lightWithin$renderEffect(effect, (int) (4.5*20));
-                        client.player.playSound(LightSounds.LIGHT_CHARGED, 0.7f, 0.7f);
+                        if(effect.equals(RenderEffect.LIGHT_RAYS)){
+                            IRenderEffectsEntity player = (IRenderEffectsEntity) client.player;
+                            player.lightWithin$renderEffect(effect, (int) (4.5*20));
+                            client.player.playSound(LightSounds.LIGHT_CHARGED, 0.7f, 0.7f);
+                        }else if(effect.equals(RenderEffect.LUXCOGNITA_SCREEN)){
+                            MinecraftClient.getInstance().setScreen(new LuxcognitaScreen(Text.literal("I don't know")));
+                        }
+
 
                     }else{
                         LOGGER.warn("The client player was null can't play effect animation");
