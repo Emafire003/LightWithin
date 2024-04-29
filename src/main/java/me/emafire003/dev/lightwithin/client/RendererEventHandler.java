@@ -2,6 +2,8 @@ package me.emafire003.dev.lightwithin.client;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import me.emafire003.dev.lightwithin.LightWithin;
+import me.emafire003.dev.lightwithin.client.renderers.RunesRenderer;
+import me.emafire003.dev.lightwithin.client.renderers.TypeItemRenderer;
 import me.emafire003.dev.lightwithin.compat.replaymod.ReplayModCompat;
 import me.emafire003.dev.lightwithin.component.LightComponent;
 import me.emafire003.dev.lightwithin.config.ClientConfig;
@@ -14,7 +16,6 @@ import me.emafire003.dev.lightwithin.sounds.LightSounds;
 import me.emafire003.dev.lightwithin.status_effects.LightEffects;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.option.Perspective;
 import net.minecraft.sound.SoundEvents;
@@ -30,10 +31,8 @@ public class RendererEventHandler {
     public static int light_charge_x = light_ready_x;
     public static int light_charge_y = light_ready_y;
     private static boolean allow_draw_runes = true;
-    private static int show_runes_for = 3*20;
     private static boolean failed_to_use_charge = false;
-    private boolean renderRunes = false;
-    private int runesTick = 0;
+
     //Different from ticks which are used for rendering runes, so they don't overlap
     private short error_ticks = 0;
     int center_x = 0;
@@ -41,10 +40,8 @@ public class RendererEventHandler {
     double scale_factor;
     static double charge_icon_scale = 1.0;
     static double ready_icon_scale = 1.0;
-
-    private boolean renderLuxcognitaItems = false;
+    //TODO config
     private boolean allowDrawLuxcognitaItems = true;
-    private int luxcognitaItemsTicks = 0;
 
     public static void updateFromConfig(){
         light_ready_x = ClientConfig.LIGHT_READY_ICON_X;
@@ -55,13 +52,29 @@ public class RendererEventHandler {
         charge_icon_scale = ClientConfig.LIGHT_CHARGE_SCALE_FACTOR;
         LightWithinClient.setShouldDrawChargesCount(!ClientConfig.HIDE_LIGHT_CHARGE_ICON);
         allow_draw_runes = ClientConfig.SHOW_RUNES;
-        show_runes_for = ClientConfig.SHOW_RUNES_FOR*20;
+        RunesRenderer.setShowRunesFor(ClientConfig.SHOW_RUNES_FOR*20);
     }
 
     public void registerRenderEvent(){
         LOGGER.info("Registering runes renderer...");
         updateFromConfig();
         RenderEvents.HUD.register(drawContext -> {
+
+            if(MinecraftClient.getInstance().player == null){
+                return;
+            }
+            LightComponent component = LIGHT_COMPONENT.get(MinecraftClient.getInstance().player);
+
+            if(MinecraftClient.getInstance().options.getPerspective().equals(Perspective.FIRST_PERSON)){
+                InnerLightType type = component.getType();
+                if(RunesRenderer.shouldRender() && allow_draw_runes){
+                    RunesRenderer.render(type, drawContext);
+                }
+                if(TypeItemRenderer.shouldRender() && allowDrawLuxcognitaItems){
+                    TypeItemRenderer.render(type, drawContext);
+                }
+
+            }
 
             //Done to fix the bug of the light being avilable even after death or after triggering
             //TODO couldn't this cause other visual bugs, like not displaying the runes?
@@ -97,7 +110,6 @@ public class RendererEventHandler {
                 return;
             }
 
-            LightComponent component = LIGHT_COMPONENT.get(MinecraftClient.getInstance().player);
 
             if(failed_to_use_charge){
                 int charges_number = component.getCurrentLightCharges();
@@ -113,76 +125,13 @@ public class RendererEventHandler {
                 ClipStack.popWindow();
             }
 
-            if(MinecraftClient.getInstance().options.getPerspective().equals(Perspective.FIRST_PERSON)){
-                InnerLightType type = component.getType();
-                if(renderRunes && allow_draw_runes){
-                    runes(type, drawContext);
-                }
-                if(renderLuxcognitaItems && allowDrawLuxcognitaItems){
-                    luxcognitaItems(type, drawContext);
-                }
-
-            }
-
         });
     }
 
-    public void renderLuxcognitaItem(){
-        renderLuxcognitaItems = true;
+    public void renderLuxTypeItem(){
+        TypeItemRenderer.start();
     }
 
-    public void runes(InnerLightType type, DrawContext drawContext){
-        ClientPlayerEntity player = MinecraftClient.getInstance().player;
-        if(player == null){
-            LOGGER.error("Can't display light runes renders! Client player is null!");
-            return;
-        }
-        if(type.equals(InnerLightType.HEAL)){
-            ClipStack.addWindow(drawContext.getMatrices(), new Rectangle(1,1,1000,1000));
-            Renderer2d.renderTexture(drawContext.getMatrices(), new Identifier(LightWithin.MOD_ID, "textures/lights/runes/heal_light_runes.png"), center_x-(400/scale_factor)/2, center_y-(160/scale_factor)/2, (400/scale_factor)*1.2, (160/scale_factor)*1.2);
-            ClipStack.popWindow();
-        }
-        if(type.equals(InnerLightType.DEFENCE)){
-            ClipStack.addWindow(drawContext.getMatrices(),new Rectangle(1,1,1000,1000));
-            Renderer2d.renderTexture(drawContext.getMatrices(), new Identifier(LightWithin.MOD_ID, "textures/lights/runes/defense_light_runes.png"), center_x-(400/scale_factor)/2, center_y-(160/scale_factor)/2, (400/scale_factor)*1.2, (160/scale_factor)*1.2);
-            ClipStack.popWindow();
-        }
-        if(type.equals(InnerLightType.STRENGTH)){
-            ClipStack.addWindow(drawContext.getMatrices(),new Rectangle(1,1,1000,1000));
-            Renderer2d.renderTexture(drawContext.getMatrices(), new Identifier(LightWithin.MOD_ID, "textures/lights/runes/strength_light_runes.png"), center_x-(400/scale_factor)/2, center_y-(160/scale_factor)/2, (400/scale_factor)*1.2, (160/scale_factor)*1.2);
-            ClipStack.popWindow();
-        }
-        if(type.equals(InnerLightType.BLAZING)){
-            ClipStack.addWindow(drawContext.getMatrices(),new Rectangle(1,1,1000,1000));
-            Renderer2d.renderTexture(drawContext.getMatrices(), new Identifier(LightWithin.MOD_ID, "textures/lights/runes/blazing_light_runes.png"), center_x-(400/scale_factor)/2, center_y-(160/scale_factor)/2, (400/scale_factor)*1.2, (160/scale_factor)*1.2);
-            ClipStack.popWindow();
-        }
-        if(type.equals(InnerLightType.FROST)){
-            ClipStack.addWindow(drawContext.getMatrices(),new Rectangle(1,1,1000,1000));
-            Renderer2d.renderTexture(drawContext.getMatrices(), new Identifier(LightWithin.MOD_ID, "textures/lights/runes/frost_light_runes.png"), center_x-(435/scale_factor)/2, center_y-(160/scale_factor)/2, (400/scale_factor)*1.2, (160/scale_factor)*1.2);
-            ClipStack.popWindow();
-        }
-        if(type.equals(InnerLightType.EARTHEN)){
-            ClipStack.addWindow(drawContext.getMatrices(),new Rectangle(1,1,1000,1000));
-            Renderer2d.renderTexture(drawContext.getMatrices(), new Identifier(LightWithin.MOD_ID, "textures/lights/runes/earthen_light_runes.png"), center_x-(435/scale_factor)/2, center_y-(160/scale_factor)/2, (400/scale_factor)*1.2, (160/scale_factor)*1.2);
-            ClipStack.popWindow();
-        }
-        if(type.equals(InnerLightType.WIND)){
-            ClipStack.addWindow(drawContext.getMatrices(),new Rectangle(1,1,1000,1000));
-            Renderer2d.renderTexture(drawContext.getMatrices(), new Identifier(LightWithin.MOD_ID, "textures/lights/runes/wind_light_runes.png"), center_x-(435/scale_factor)/2, center_y-(160/scale_factor)/2, (400/scale_factor)*1.2, (160/scale_factor)*1.2);
-            ClipStack.popWindow();
-        }
-        if(type.equals(InnerLightType.AQUA)){
-            ClipStack.addWindow(drawContext.getMatrices(),new Rectangle(1,1,1000,1000));
-            Renderer2d.renderTexture(drawContext.getMatrices(), new Identifier(LightWithin.MOD_ID, "textures/lights/runes/aqua_light_runes.png"), center_x-(435/scale_factor)/2, center_y-(160/scale_factor)/2, (400/scale_factor)*1.2, (160/scale_factor)*1.2);
-            ClipStack.popWindow();
-        }
-        if(type.equals(InnerLightType.FROG)){
-            ClipStack.addWindow(drawContext.getMatrices(),new Rectangle(1,1,1000,1000));
-            Renderer2d.renderTexture(drawContext.getMatrices(), new Identifier(LightWithin.MOD_ID, "textures/lights/runes/frog_light_runes.png"), center_x-(435/scale_factor)/2, center_y-(160/scale_factor)/2, (400/scale_factor)*1.2, (160/scale_factor)*1.2);
-            ClipStack.popWindow();
-        }
-    }
 
     public void playLightSound(InnerLightType type){
         ClientPlayerEntity player = MinecraftClient.getInstance().player;
@@ -203,7 +152,7 @@ public class RendererEventHandler {
             player.playSound(LightSounds.BLAZING_LIGHT, 1 ,1);
         }
         if(type.equals(InnerLightType.FROST)){
-                        player.playSound(LightSounds.FROST_LIGHT, 1 ,1);
+            player.playSound(LightSounds.FROST_LIGHT, 1 ,1);
         }
         if(type.equals(InnerLightType.EARTHEN)){
             player.playSound(LightSounds.EARTHEN_LIGHT, 1 ,1);
@@ -219,65 +168,11 @@ public class RendererEventHandler {
         }
     }
 
-    public void luxcognitaItems(InnerLightType type, DrawContext drawContext){
-        ClientPlayerEntity player = MinecraftClient.getInstance().player;
-        if(player == null){
-            LOGGER.error("Can't display Luxcognita items renders! Client player is null!");
-            return;
-        }
-        if(type.equals(InnerLightType.HEAL)){
-            //TODO get the item and render it
-            ClipStack.addWindow(drawContext.getMatrices(), new Rectangle(1,1,1000,1000));
-            Renderer2d.renderTexture(drawContext.getMatrices(), new Identifier(LightWithin.MOD_ID, "textures/lights/runes/heal_light_runes.png"), center_x-(400/scale_factor)/2, center_y-(160/scale_factor)/2, (400/scale_factor)*1.2, (160/scale_factor)*1.2);
-            ClipStack.popWindow();
-            //TODO maybe use a sound? Or maybe not. Maybe a general sound for each one. It's just an ingredient after all!
-        }
-        if(type.equals(InnerLightType.DEFENCE)){
-            ClipStack.addWindow(drawContext.getMatrices(),new Rectangle(1,1,1000,1000));
-            Renderer2d.renderTexture(drawContext.getMatrices(), new Identifier(LightWithin.MOD_ID, "textures/lights/runes/defense_light_runes.png"), center_x-(400/scale_factor)/2, center_y-(160/scale_factor)/2, (400/scale_factor)*1.2, (160/scale_factor)*1.2);
-            ClipStack.popWindow();
-        }
-        if(type.equals(InnerLightType.STRENGTH)){
-            ClipStack.addWindow(drawContext.getMatrices(),new Rectangle(1,1,1000,1000));
-            Renderer2d.renderTexture(drawContext.getMatrices(), new Identifier(LightWithin.MOD_ID, "textures/lights/runes/strength_light_runes.png"), center_x-(400/scale_factor)/2, center_y-(160/scale_factor)/2, (400/scale_factor)*1.2, (160/scale_factor)*1.2);
-            ClipStack.popWindow();
-        }
-        if(type.equals(InnerLightType.BLAZING)){
-            ClipStack.addWindow(drawContext.getMatrices(),new Rectangle(1,1,1000,1000));
-            Renderer2d.renderTexture(drawContext.getMatrices(), new Identifier(LightWithin.MOD_ID, "textures/lights/runes/blazing_light_runes.png"), center_x-(400/scale_factor)/2, center_y-(160/scale_factor)/2, (400/scale_factor)*1.2, (160/scale_factor)*1.2);
-            ClipStack.popWindow();
-        }
-        if(type.equals(InnerLightType.FROST)){
-            ClipStack.addWindow(drawContext.getMatrices(),new Rectangle(1,1,1000,1000));
-            Renderer2d.renderTexture(drawContext.getMatrices(), new Identifier(LightWithin.MOD_ID, "textures/lights/runes/frost_light_runes.png"), center_x-(435/scale_factor)/2, center_y-(160/scale_factor)/2, (400/scale_factor)*1.2, (160/scale_factor)*1.2);
-            ClipStack.popWindow();
-        }
-        if(type.equals(InnerLightType.EARTHEN)){
-            ClipStack.addWindow(drawContext.getMatrices(),new Rectangle(1,1,1000,1000));
-            Renderer2d.renderTexture(drawContext.getMatrices(), new Identifier(LightWithin.MOD_ID, "textures/lights/runes/earthen_light_runes.png"), center_x-(435/scale_factor)/2, center_y-(160/scale_factor)/2, (400/scale_factor)*1.2, (160/scale_factor)*1.2);
-            ClipStack.popWindow();
-        }
-        if(type.equals(InnerLightType.WIND)){
-            ClipStack.addWindow(drawContext.getMatrices(),new Rectangle(1,1,1000,1000));
-            Renderer2d.renderTexture(drawContext.getMatrices(), new Identifier(LightWithin.MOD_ID, "textures/lights/runes/wind_light_runes.png"), center_x-(435/scale_factor)/2, center_y-(160/scale_factor)/2, (400/scale_factor)*1.2, (160/scale_factor)*1.2);
-            ClipStack.popWindow();
-        }
-        if(type.equals(InnerLightType.AQUA)){
-            ClipStack.addWindow(drawContext.getMatrices(),new Rectangle(1,1,1000,1000));
-            Renderer2d.renderTexture(drawContext.getMatrices(), new Identifier(LightWithin.MOD_ID, "textures/lights/runes/aqua_light_runes.png"), center_x-(435/scale_factor)/2, center_y-(160/scale_factor)/2, (400/scale_factor)*1.2, (160/scale_factor)*1.2);
-            ClipStack.popWindow();
-        }
-        if(type.equals(InnerLightType.FROG)){
-            ClipStack.addWindow(drawContext.getMatrices(),new Rectangle(1,1,1000,1000));
-            Renderer2d.renderTexture(drawContext.getMatrices(), new Identifier(LightWithin.MOD_ID, "textures/lights/runes/frog_light_runes.png"), center_x-(435/scale_factor)/2, center_y-(160/scale_factor)/2, (400/scale_factor)*1.2, (160/scale_factor)*1.2);
-            ClipStack.popWindow();
-        }
-    }
-
     public void renderRunes(InnerLightType type){
-        renderRunes = true;
+        RunesRenderer.start();
         playLightSound(type);
     }
+
 
 
     public void registerRunesRenderer(){
@@ -292,14 +187,8 @@ public class RendererEventHandler {
                 }
             }
 
-            //This makes the runes appear only for a configured amount of time
-            if(renderRunes){
-                runesTick++;
-                if(runesTick > show_runes_for){
-                    runesTick = 0;
-                    renderRunes = false;
-                }
-            }
+            RunesRenderer.tick();
+            TypeItemRenderer.tick();
 
         });
     }

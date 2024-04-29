@@ -89,7 +89,7 @@ public class BrewRecipes {
             entry(TargetType.SELF, Items.APPLE),
             entry(TargetType.ALLIES, Items.GLOW_BERRIES),
             entry(TargetType.ENEMIES, Items.NETHER_WART),
-            entry(TargetType.ALL, Items.SEAGRASS),
+            entry(TargetType.ALL, Items.ALLIUM),
             entry(TargetType.VARIANT, Items.ECHO_SHARD)
     );
 

@@ -63,10 +63,10 @@ public class LightWithinClient implements ClientModInitializer {
     public void onInitializeClient() {
        ActivationKey.register();
        registerLightReadyPacket();
-       registerRenderRunesPacket();
+       registerPlayRenderEffectPacket();
        registerWindLightVelocityPacket();
        registerConfigOptionsSyncPacket();
-       registerPlayRenderEffectPacket();
+
        ClientCommandRegistrationCallback.EVENT.register(ClientLightCommands::registerCommands);
        event_handler.registerRenderEvent();
        event_handler.registerRunesRenderer();
@@ -203,23 +203,6 @@ public class LightWithinClient implements ClientModInitializer {
         }));
     }
 
-    private void registerRenderRunesPacket(){
-        LOGGER.debug("Registering runes render packet receiver on client...");
-        ClientPlayNetworking.registerGlobalReceiver(RenderRunePacketS2C.ID, ((client, handler, buf, responseSender) -> {
-            var results = RenderRunePacketS2C.read(buf);
-
-            client.execute(() -> {
-                try{
-                    event_handler.renderRunes(results);
-                }catch (NoSuchElementException e){
-                    LOGGER.warn("No value in the packet, probably not a big problem");
-                }catch (Exception e){
-                    LOGGER.error("There was an error while getting the packet!");
-                    e.printStackTrace();
-                }
-            });
-        }));
-    }
 
     private void registerPlayRenderEffectPacket(){
         LOGGER.debug("Registering play render effect packet receiver on client...");
@@ -235,6 +218,12 @@ public class LightWithinClient implements ClientModInitializer {
                             client.player.playSound(LightSounds.LIGHT_CHARGED, 0.7f, 0.7f);
                         }else if(effect.equals(RenderEffect.LUXCOGNITA_SCREEN)){
                             MinecraftClient.getInstance().setScreen(new LuxcognitaScreen(Text.literal("I don't know")));
+                        }else if(effect.equals(RenderEffect.RUNES)){
+                            event_handler.renderRunes(LightWithin.LIGHT_COMPONENT.get(client.player).getType());
+                        }
+                        else if(effect.equals(RenderEffect.LUXCOGNITA_TYPE_ITEM)){
+                            //TODO well. I'll kind of need to render it on the screen anyway I think. Otherwise it won't show up
+                            event_handler.renderLuxTypeItem();
                         }
 
 

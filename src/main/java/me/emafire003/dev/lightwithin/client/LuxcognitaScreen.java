@@ -56,12 +56,12 @@ public class LuxcognitaScreen extends Screen{
     @Override
     public void renderBackground(DrawContext context) {
         super.renderBackground(context);
-        fillWithLayer(context, RenderLayer.getEndPortal(), 0, 0, this.width, this.height, 0);
+        fillWithLayer(context, LightRenderLayer.getLightScreen(), 0, 0, this.width, this.height, 0);
     }
 
     @Override
     public void tick() {
-        if (this.shouldClose || System.currentTimeMillis() > this.loadStartTime + 30000L) {
+        if (this.shouldClose || System.currentTimeMillis() > this.loadStartTime + MIN_LOAD_TIME_MS) {
             this.close();
         }
     }

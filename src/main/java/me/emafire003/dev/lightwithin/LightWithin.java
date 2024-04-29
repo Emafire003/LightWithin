@@ -291,7 +291,7 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 		}
 		if(!player.getWorld().isClient){
 			LightParticlesUtil.spawnDefaultLightParticleSequence((ServerPlayerEntity) player);
-			sendRenderRunePacket((ServerPlayerEntity) player, type);
+			sendRenderRunePacket((ServerPlayerEntity) player);
 		}
 
 	}
@@ -575,9 +575,9 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 				component.getDuration(), player).execute();
 	}
 
-	public static void sendRenderRunePacket(ServerPlayerEntity player, InnerLightType type){
+	public static void sendRenderRunePacket(ServerPlayerEntity player){
 		try{
-			ServerPlayNetworking.send(player, RenderRunePacketS2C.ID, new RenderRunePacketS2C(type));
+			ServerPlayNetworking.send(player, PlayRenderEffectPacketS2C.ID, new PlayRenderEffectPacketS2C(RenderEffect.RUNES));
 		}catch(Exception e){
 			LOGGER.error("FAILED to send data packets to the client!");
 			e.printStackTrace();

@@ -41,7 +41,7 @@ import static me.emafire003.dev.lightwithin.LightWithin.*;
 
 public class EarthenLight extends InnerLight {
 
-    public static final Item INGREDIENT = Items.STONE;
+    public static final Item INGREDIENT = Items.MOSSY_COBBLESTONE;
 
     public EarthenLight(List<LivingEntity> targets, double cooldown_time, double power_multiplier, int duration, String color, PlayerEntity caster, boolean rainbow_col) {
         super(targets, cooldown_time, power_multiplier, duration, color, caster, rainbow_col);

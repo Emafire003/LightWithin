@@ -48,7 +48,7 @@ import static me.emafire003.dev.lightwithin.LightWithin.*;
 
 public class AquaLight extends InnerLight {
 
-    public static final Item INGREDIENT = Items.WATER_BUCKET;
+    public static final Item INGREDIENT = Items.SEAGRASS;
     public static final Potion INGREDIENT_V = Potions.WATER;
 
     public AquaLight(List<LivingEntity> targets, double cooldown_time, double power_multiplier, int duration, String color, PlayerEntity caster, boolean rainbow_col) {

@@ -37,7 +37,7 @@ import static me.emafire003.dev.lightwithin.LightWithin.*;
 
 public class FrostLight extends InnerLight {
 
-    public static final Item INGREDIENT = Items.PACKED_ICE;
+    public static final Item INGREDIENT = Items.SNOWBALL;
     public FrostLight(List<LivingEntity> targets, double cooldown_time, double power_multiplier, int duration, String color, PlayerEntity caster, boolean rainbow_col) {
         super(targets, cooldown_time, power_multiplier, duration, color, caster, rainbow_col);
         type = InnerLightType.FROST;
