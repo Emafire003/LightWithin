@@ -52,7 +52,7 @@ public class LightWithinClient implements ClientModInitializer {
     private static boolean allowAutoActivation = false;
     int seconds = 10;
     int tickCounter = 0;
-    RendererEventHandler event_handler = new RendererEventHandler();
+    static RendererEventHandler event_handler = new RendererEventHandler();
 
     private static boolean shouldDrawChargesCount = true;
 
@@ -157,6 +157,10 @@ public class LightWithinClient implements ClientModInitializer {
         seconds = delay;
     }
 
+    public static RendererEventHandler getRendererEventHandler(){
+        return event_handler;
+    }
+
     private void registerLightReadyPacket(){
         ClientPlayNetworking.registerGlobalReceiver(LightReadyPacketS2C.ID, ((client, handler, buf, responseSender) -> {
             var results = LightReadyPacketS2C.read(buf);
@@ -213,6 +217,7 @@ public class LightWithinClient implements ClientModInitializer {
                 try{
                     if(client.player != null && effect != null){
                         if(effect.equals(RenderEffect.LIGHT_RAYS)){
+                            //TODO verify it works for multiplayer (I don't think it does, so I will need to send the player entity in the packet as well)
                             IRenderEffectsEntity player = (IRenderEffectsEntity) client.player;
                             player.lightWithin$renderEffect(effect, (int) (4.5*20));
                             client.player.playSound(LightSounds.LIGHT_CHARGED, 0.7f, 0.7f);
@@ -223,6 +228,8 @@ public class LightWithinClient implements ClientModInitializer {
                         }
                         else if(effect.equals(RenderEffect.LUXCOGNITA_TYPE_ITEM)){
                             //TODO well. I'll kind of need to render it on the screen anyway I think. Otherwise it won't show up
+                            //TODO no i'm stupid, by then the conversation is finished so it renders in the normal worldview instead. Like it clicks a button and closes the screen then draws
+                            // I will need to delete the RenderSystems anyway.
                             event_handler.renderLuxTypeItem();
                         }
 

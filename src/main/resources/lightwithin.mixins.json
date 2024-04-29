@@ -15,14 +15,14 @@
     "LivingEntityDamageTriggersMixin",
     "MilkNotCleanLightEffectsMixin",
     "PlayerFreezeMixin",
-    "PlayerJoinMixin",
-    "RenderEffectsEntityMixin"
+    "PlayerJoinMixin"
   ],
   "client": [
     "CustomEffectsLivingRendererMixin",
     "GameRendererMixin",
     "InGameHudMixin",
-    "PlayerChargedGlowRendererMixin"
+    "PlayerChargedGlowRendererMixin",
+    "RenderEffectsEntityMixin"
   ],
   "server": [
   ],
