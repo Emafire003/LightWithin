@@ -131,8 +131,13 @@
   "config.lightwithin.showrunes_for": "Show runes for",
   "config.lightwithin.showrunes_for.tooltip": "How many seconds should the runes last on screen?",
 
-
   "config.lightwithin.auto_light_activation": "Automatic Light Activation",
-  "config.lightwithin.auto_light_activation.tooltip": "Enabling this will activate your light as soon as it's ready. WARNING: it may be disabled by the server!"
+  "config.lightwithin.auto_light_activation.tooltip": "Enabling this will activate your light as soon as it's ready. WARNING: it may be disabled by the server!",
+
+  "screen.luxcognita_dialogue.lightTypeButton": "About LightType",
+  "screen.luxcognita_dialogue.lightTypeIngredientButton": "About LightType Ingredient",
+  "screen.luxcognita_dialogue.lightTargetButton": "About LightTarget",
+  "screen.luxcognita_dialogue.lightTargetIngredientButton": "About LightTarget Ingredient",
+  "screen.luxcognita_dialogue.luxcognitaTalk": "What wisdom shall I bestow upon you?"
 
 }

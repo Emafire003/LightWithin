@@ -216,16 +216,22 @@ public class LightWithinClient implements ClientModInitializer {
             client.execute(() -> {
                 try{
                     if(client.player != null && effect != null){
+
                         if(effect.equals(RenderEffect.LIGHT_RAYS)){
                             //TODO verify it works for multiplayer (I don't think it does, so I will need to send the player entity in the packet as well)
                             IRenderEffectsEntity player = (IRenderEffectsEntity) client.player;
                             player.lightWithin$renderEffect(effect, (int) (4.5*20));
                             client.player.playSound(LightSounds.LIGHT_CHARGED, 0.7f, 0.7f);
-                        }else if(effect.equals(RenderEffect.LUXCOGNITA_SCREEN)){
-                            MinecraftClient.getInstance().setScreen(new LuxcognitaScreen(Text.literal("I don't know")));
-                        }else if(effect.equals(RenderEffect.RUNES)){
+                        }
+
+                        else if(effect.equals(RenderEffect.LUXCOGNITA_SCREEN)){
+                            MinecraftClient.getInstance().setScreen(new LuxcognitaScreen(Text.literal("LightWithin - Luxcognita Dialogue")));
+                        }
+
+                        else if(effect.equals(RenderEffect.RUNES)){
                             event_handler.renderRunes(LightWithin.LIGHT_COMPONENT.get(client.player).getType());
                         }
+
                         else if(effect.equals(RenderEffect.LUXCOGNITA_TYPE_ITEM)){
                             //TODO well. I'll kind of need to render it on the screen anyway I think. Otherwise it won't show up
                             //TODO no i'm stupid, by then the conversation is finished so it renders in the normal worldview instead. Like it clicks a button and closes the screen then draws

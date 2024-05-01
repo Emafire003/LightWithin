@@ -3,6 +3,7 @@ package me.emafire003.dev.lightwithin.client;
 import com.mojang.blaze3d.systems.RenderSystem;
 import me.emafire003.dev.lightwithin.LightWithin;
 import me.emafire003.dev.lightwithin.client.renderers.RunesRenderer;
+import me.emafire003.dev.lightwithin.client.renderers.TargetItemRenderer;
 import me.emafire003.dev.lightwithin.client.renderers.TypeItemRenderer;
 import me.emafire003.dev.lightwithin.compat.replaymod.ReplayModCompat;
 import me.emafire003.dev.lightwithin.component.LightComponent;
@@ -63,6 +64,9 @@ public class RendererEventHandler {
             if(MinecraftClient.getInstance().player == null){
                 return;
             }
+            RenderSystem.enableBlend();
+            RenderSystem.defaultBlendFunc();
+
             LightComponent component = LIGHT_COMPONENT.get(MinecraftClient.getInstance().player);
 
             if(MinecraftClient.getInstance().options.getPerspective().equals(Perspective.FIRST_PERSON)){
@@ -72,6 +76,9 @@ public class RendererEventHandler {
                 }
                 if(TypeItemRenderer.shouldRender() && allowDrawLuxcognitaItems){
                     TypeItemRenderer.render(type, drawContext);
+                }
+                if(TargetItemRenderer.shouldRender() && allowDrawLuxcognitaItems){
+                    TargetItemRenderer.render(component.getTargets(), drawContext);
                 }
 
             }
@@ -99,9 +106,6 @@ public class RendererEventHandler {
             center_y = MinecraftClient.getInstance().getWindow().getScaledHeight()/2;
             scale_factor = MinecraftClient.getInstance().getWindow().getScaleFactor();
 
-            RenderSystem.enableBlend();
-            RenderSystem.defaultBlendFunc();
-
             if(LightWithinClient.isLightReady()){
                 ClipStack.addWindow(drawContext.getMatrices(),new Rectangle(light_ready_x,light_ready_y,light_ready_x*ready_icon_scale+40,light_ready_y*ready_icon_scale+40));
                 Renderer2d.renderTexture(drawContext.getMatrices(), new Identifier(LightWithin.MOD_ID, "textures/lights/light.png"), light_ready_x, light_ready_y, 20* charge_icon_scale, 20* charge_icon_scale);
@@ -109,7 +113,6 @@ public class RendererEventHandler {
                 //Be aware of the return here, may cause bugs in the future! 13.03.2024
                 return;
             }
-
 
             if(failed_to_use_charge){
                 int charges_number = component.getCurrentLightCharges();
@@ -128,8 +131,15 @@ public class RendererEventHandler {
         });
     }
 
+    public void renderRunes(InnerLightType type){
+        RunesRenderer.start();
+        playLightSound(type);
+    }
     public void renderLuxTypeItem(){
         TypeItemRenderer.start();
+    }
+    public void renderLuxTargetItem(){
+        TargetItemRenderer.start();
     }
 
 
@@ -168,13 +178,6 @@ public class RendererEventHandler {
         }
     }
 
-    public void renderRunes(InnerLightType type){
-        RunesRenderer.start();
-        playLightSound(type);
-    }
-
-
-
     public void registerRunesRenderer(){
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
 
@@ -187,8 +190,15 @@ public class RendererEventHandler {
                 }
             }
 
-            RunesRenderer.tick();
-            TypeItemRenderer.tick();
+            if(RunesRenderer.shouldRender()){
+                RunesRenderer.tick();
+            }
+            if(TypeItemRenderer.shouldRender()){
+                TypeItemRenderer.tick();
+            }
+            if(TargetItemRenderer.shouldRender()){
+                TargetItemRenderer.tick();
+            }
 
         });
     }

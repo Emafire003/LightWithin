@@ -1,18 +1,24 @@
 package me.emafire003.dev.lightwithin.client;
 
+import me.emafire003.dev.lightwithin.LightWithin;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.client.gui.widget.GridWidget;
+import net.minecraft.client.gui.widget.SimplePositioningWidget;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexConsumer;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import org.joml.Matrix4f;
 
+import java.util.Objects;
+
+
 public class LuxcognitaScreen extends Screen{
     private static final long MIN_LOAD_TIME_MS = 30000L;
-    private boolean ready = false;
-    private boolean closeOnNextTick = false;
     private final boolean shouldClose = false;
     private final long loadStartTime;
 
@@ -22,25 +28,139 @@ public class LuxcognitaScreen extends Screen{
 
     }
 
-
     @Override
-    public boolean shouldCloseOnEsc() {
-        MinecraftClient.getInstance().player.sendMessage(Text.literal("Ok but this should show a warning first!"));
-        return true;
+    public void init(){
+        int center_x = MinecraftClient.getInstance().getWindow().getScaledWidth()/2;
+
+        GridWidget gridWidget = new GridWidget();
+        gridWidget.getMainPositioner().margin(4, this.height/2, 4, 0);
+        gridWidget.setSpacing(10);
+        GridWidget.Adder adder = gridWidget.createAdder(4);
+
+        ButtonWidget lightTypeButton = ButtonWidget
+                .builder(Text.translatable("screen.luxcognita_dialogue.lightTypeButton").formatted(Formatting.YELLOW),
+                        this::lightTypeAction
+                        //(buttonWidget) -> this.close()
+                )
+                .size((int) (center_x/2.3), 20)
+                //.dimensions(0 + center_x/5, center_y, (int) (center_x/2.7), 20)
+                /*.size(center_x/3, 20)
+                .position(center_x-(50-(center_x/5))/2, center_y-20/2)*/
+                .build();
+
+        ButtonWidget lightTypeIngredientButton = ButtonWidget.builder(Text.translatable("screen.luxcognita_dialogue.lightTypeIngredientButton").formatted(Formatting.YELLOW), this::lightTypeIngredientAction)
+                /*.size(center_x/3, 20)
+                .position(center_x-(center_x/5)/2, center_y-(50-20)/2)*/
+                .size((int) (center_x/2.3), 20)
+                .build();
+
+        ButtonWidget lightTargetButton = ButtonWidget.builder(Text.translatable("screen.luxcognita_dialogue.lightTargetButton").formatted(Formatting.YELLOW), this::lightTargetAction)
+                //.size(center_x/3, 20)
+                //.position(center_x+(50-(center_x/5))/2, center_y-20/2)
+                .size((int) (center_x/2.3), 20)
+                .build();
+
+        ButtonWidget lightTargetIngredientButton = ButtonWidget.builder(Text.translatable("screen.luxcognita_dialogue.lightTargetIngredientButton").formatted(Formatting.YELLOW), this::lightTargetIngredientAction)
+                //.size(center_x/3, 20)
+                //.position(center_x-((center_x/5)/2), center_y+(50-20)/2)
+                .size((int) (center_x/2.3), 20)
+                .build();
+
+        adder.add(lightTypeButton);
+        adder.add(lightTargetButton);
+        adder.add(lightTypeIngredientButton);
+        adder.add(lightTargetIngredientButton);
+
+        gridWidget.refreshPositions();
+        SimplePositioningWidget.setPos(gridWidget, 0, 0, this.width, this.height, 0.5F, 0.25F);
+        gridWidget.forEachChild(this::addDrawableChild);
+
+        /*this.addDrawable(lightTypeIngredientButton);
+        this.addDrawable(lightTargetButton);
+        this.addDrawable(lightTargetIngredientButton);*/
     }
 
-    @Override
-    protected boolean hasUsageText() {
-        return false;
+    public void lightTypeAction(ButtonWidget buttonWidget) {
+        LightWithinClient.getRendererEventHandler().renderRunes(LightWithin.LIGHT_COMPONENT.get(Objects.requireNonNull(MinecraftClient.getInstance().player)).getType());
+        this.close();
+    }
+
+    public void lightTypeIngredientAction(ButtonWidget buttonWidget) {
+        LightWithinClient.getRendererEventHandler().renderLuxTypeItem();
+        this.close();
+    }
+
+    public void lightTargetAction(ButtonWidget buttonWidget) {
+        MinecraftClient.getInstance().player.sendMessage(Text.literal("Boop! Implement!"));
+        this.close();
+    }
+
+    public void lightTargetIngredientAction(ButtonWidget buttonWidget) {
+        LightWithinClient.getRendererEventHandler().renderLuxTargetItem();
+        this.close();
+    }
+
+    private int colorTicks = 0;
+
+    /**Periodically changes the color, to make a little animation thing.
+     * It remains in the greens anyway*/
+    private int getTextColor(){
+        //#3ad94f #31c83f #28b72f #1ea71e #129706
+        //TODO ok i will need to make my animation steps myself yeah it kinda sucks regardless
+        colorTicks++;
+        if(colorTicks < 10){
+            return 3856719;
+        }
+        if(colorTicks < 20){
+            return 3262527;
+        }
+        if(colorTicks < 30){
+            return 2668335;
+        }
+        if(colorTicks < 40){
+            return 2008862;
+        }
+        if(colorTicks < 50){
+            return 1218310;
+        }
+        if(colorTicks < 60){
+            return 2008862;
+        }
+        if(colorTicks < 70){
+            return 2668335;
+        }
+        if(colorTicks < 80){
+            return 3262527;
+        }
+        if(colorTicks < 90){
+            return 3856719;
+        }
+        colorTicks = 0;
+        return 3856719;
+        /*Random r = MinecraftClient.getInstance().player.getRandom();
+        LightWithin.LOGGER.info("Returning new color! " + (2415936 - r.nextBetween(50, 100)));
+        if(r.nextBoolean()){
+            return 2415936 - r.nextBetween(50, 100);
+        }
+        return 2415936 + r.nextBetween(50, 100);*/
     }
 
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-        super.render(context, mouseX, mouseY, delta);
+        //TODO draw the LuxCognita berry at the center of the screen
         this.renderBackground(context);
-        context.drawCenteredTextWithShadow(this.textRenderer, Text.literal("Whatever the berry is going to say").formatted(Formatting.AQUA), this.width / 2, this.height / 2 - 50, 16777215);
-        //TODO i will need to add clickable buttons, so they can choose what they want to see, if it's the item, the type, or target, or target item
-        //TODO change the renderlayer to something like the Seedlight Riftways one.
+        super.render(context, mouseX, mouseY, delta);
+        //TODO use hex for the text and change it around a bit randomly
+        // Low (lighter) 3735330
+        //Middle 2415936
+        // Top (darker) 2406703
+        MatrixStack matrixStack = context.getMatrices();
+        matrixStack.push();
+        float textScale = 1.5f;
+        matrixStack.scale(textScale, textScale, textScale);
+        context.drawCenteredTextWithShadow(this.textRenderer, Text.translatable("screen.luxcognita_dialogue.luxcognitaTalk"), (int) ((this.width / 2)/textScale), (int) ((this.height / 2 - 70)/textScale), getTextColor()/*2406703 16777215*/);
+        matrixStack.pop();
+
     }
 
     public void fillWithLayer(DrawContext context, RenderLayer layer, int startX, int startY, int endX, int endY, int z) {
@@ -61,6 +181,7 @@ public class LuxcognitaScreen extends Screen{
 
     @Override
     public void tick() {
+        super.tick();
         if (this.shouldClose || System.currentTimeMillis() > this.loadStartTime + MIN_LOAD_TIME_MS) {
             this.close();
         }
@@ -68,13 +189,24 @@ public class LuxcognitaScreen extends Screen{
 
     @Override
     public void close() {
+        //TODO playsound
         super.close();
     }
 
+    /*@Override
+    public boolean shouldCloseOnEsc() {
+        MinecraftClient.getInstance().player.sendMessage(Text.literal("Ok but this should show a warning first!"));
+        return true;
+    }
+
+    @Override
+    protected boolean hasUsageText() {
+        return false;
+    }
     @Override
     public boolean shouldPause() {
         return false;
-    }
+    }*/
 }
 
 
