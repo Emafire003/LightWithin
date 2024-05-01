@@ -4,11 +4,13 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import me.emafire003.dev.lightwithin.LightWithin;
 import me.emafire003.dev.lightwithin.client.renderers.RunesRenderer;
 import me.emafire003.dev.lightwithin.client.renderers.TargetItemRenderer;
+import me.emafire003.dev.lightwithin.client.renderers.TargetRenderer;
 import me.emafire003.dev.lightwithin.client.renderers.TypeItemRenderer;
 import me.emafire003.dev.lightwithin.compat.replaymod.ReplayModCompat;
 import me.emafire003.dev.lightwithin.component.LightComponent;
 import me.emafire003.dev.lightwithin.config.ClientConfig;
 import me.emafire003.dev.lightwithin.lights.InnerLightType;
+import me.emafire003.dev.lightwithin.util.TargetType;
 import me.x150.renderer.ClipStack;
 import me.x150.renderer.Rectangle;
 import me.x150.renderer.RenderEvents;
@@ -71,6 +73,7 @@ public class RendererEventHandler {
 
             if(MinecraftClient.getInstance().options.getPerspective().equals(Perspective.FIRST_PERSON)){
                 InnerLightType type = component.getType();
+                TargetType targetType = component.getTargets();
                 if(RunesRenderer.shouldRender() && allow_draw_runes){
                     RunesRenderer.render(type, drawContext);
                 }
@@ -78,7 +81,11 @@ public class RendererEventHandler {
                     TypeItemRenderer.render(type, drawContext);
                 }
                 if(TargetItemRenderer.shouldRender() && allowDrawLuxcognitaItems){
-                    TargetItemRenderer.render(component.getTargets(), drawContext);
+                    TargetItemRenderer.render(targetType, drawContext);
+                }
+                //TODO maybe don't link it to the items? Or yes? yes.
+                if(TargetRenderer.shouldRender() && allowDrawLuxcognitaItems){
+                    TargetRenderer.render(targetType, drawContext);
                 }
 
             }
@@ -134,6 +141,9 @@ public class RendererEventHandler {
     public void renderRunes(InnerLightType type){
         RunesRenderer.start();
         playLightSound(type);
+    }
+    public void renderTargetIcon(){
+        TargetRenderer.start();
     }
     public void renderLuxTypeItem(){
         TypeItemRenderer.start();
@@ -198,6 +208,9 @@ public class RendererEventHandler {
             }
             if(TargetItemRenderer.shouldRender()){
                 TargetItemRenderer.tick();
+            }
+            if(TargetRenderer.shouldRender()){
+                TargetRenderer.tick();
             }
 
         });

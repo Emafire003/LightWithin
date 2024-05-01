@@ -12,12 +12,12 @@ import net.minecraft.util.Identifier;
 
 import static me.emafire003.dev.lightwithin.LightWithin.LOGGER;
 
-public class TargetItemRenderer {
+public class TargetRenderer {
 
     private static boolean rendering = false;
     private static int ticks = 0;
     //TODO make configurable
-    private static int show_for = 5*20;
+    private static int show_for = 3*20;
     
     public static boolean shouldRender(){
         return rendering;
@@ -56,32 +56,32 @@ public class TargetItemRenderer {
         
         if(targetType.equals(TargetType.SELF)){
             ClipStack.addWindow(drawContext.getMatrices(), new Rectangle((center_x-length/2)-40,(center_y-length/2),(center_x+length/2)+40,(center_y+length/2)));
-            Renderer2d.renderTexture(drawContext.getMatrices(), new Identifier(LightWithin.MOD_ID, "textures/lights/ingredients/target/self.png"), center_x-length/2, center_y-length/2, length, length);
+            Renderer2d.renderTexture(drawContext.getMatrices(), new Identifier(LightWithin.MOD_ID, "textures/lights/target_icons/self.png"), center_x-length/2, center_y-length/2, length, length);
             renderOverlay(drawContext, center_x, center_y, length);
             ClipStack.popWindow();
             //TODO maybe use a sound? Or maybe not. Maybe a general sound for each one. It's just an ingredient after all!
         }
         if(targetType.equals(TargetType.ALLIES)){
             ClipStack.addWindow(drawContext.getMatrices(), new Rectangle((center_x-length/2)-40,(center_y-length/2),(center_x+length/2)+40,(center_y+length/2)));
-            Renderer2d.renderTexture(drawContext.getMatrices(), new Identifier(LightWithin.MOD_ID, "textures/lights/ingredients/target/allies.png"), center_x-length/2, center_y-length/2, length, length);
+            Renderer2d.renderTexture(drawContext.getMatrices(), new Identifier(LightWithin.MOD_ID, "textures/lights/target_icons/allies.png"), center_x-length/2, center_y-length/2, length, length);
             renderOverlay(drawContext, center_x, center_y, length);
             ClipStack.popWindow();
         }
         if(targetType.equals(TargetType.ENEMIES)){
             ClipStack.addWindow(drawContext.getMatrices(), new Rectangle((center_x-length/2)-40,(center_y-length/2),(center_x+length/2)+40,(center_y+length/2)));
-            Renderer2d.renderTexture(drawContext.getMatrices(), new Identifier(LightWithin.MOD_ID, "textures/lights/ingredients/target/enemies.png"), center_x-length/2, center_y-length/2, length, length);
+            Renderer2d.renderTexture(drawContext.getMatrices(), new Identifier(LightWithin.MOD_ID, "textures/lights/target_icons/enemies.png"), center_x-length/2, center_y-length/2, length, length);
             renderOverlay(drawContext, center_x, center_y, length);
             ClipStack.popWindow();
         }
         if(targetType.equals(TargetType.ALL)){
             ClipStack.addWindow(drawContext.getMatrices(), new Rectangle((center_x-length/2)-40,(center_y-length/2),(center_x+length/2)+40,(center_y+length/2)));
-            Renderer2d.renderTexture(drawContext.getMatrices(), new Identifier(LightWithin.MOD_ID, "textures/lights/ingredients/target/all.png"), center_x-length/2, center_y-length/2, length, length);
+            Renderer2d.renderTexture(drawContext.getMatrices(), new Identifier(LightWithin.MOD_ID, "textures/lights/target_icons/all.png"), center_x-length/2, center_y-length/2, length, length);
             renderOverlay(drawContext, center_x, center_y, length);
             ClipStack.popWindow();
         }
         if(targetType.equals(TargetType.VARIANT)){
             ClipStack.addWindow(drawContext.getMatrices(), new Rectangle((center_x-length/2)-40,(center_y-length/2),(center_x+length/2)+40,(center_y+length/2)));
-            Renderer2d.renderTexture(drawContext.getMatrices(), new Identifier(LightWithin.MOD_ID, "textures/lights/ingredients/target/variant.png"), center_x-length/2, center_y-length/2, length, length);
+            Renderer2d.renderTexture(drawContext.getMatrices(), new Identifier(LightWithin.MOD_ID, "textures/lights/target_icons/variant.png"), center_x-length/2, center_y-length/2, length, length);
             renderOverlay(drawContext, center_x, center_y, length);
             ClipStack.popWindow();
         }

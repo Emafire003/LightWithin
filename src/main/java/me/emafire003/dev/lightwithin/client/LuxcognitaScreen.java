@@ -74,10 +74,6 @@ public class LuxcognitaScreen extends Screen{
         gridWidget.refreshPositions();
         SimplePositioningWidget.setPos(gridWidget, 0, 0, this.width, this.height, 0.5F, 0.25F);
         gridWidget.forEachChild(this::addDrawableChild);
-
-        /*this.addDrawable(lightTypeIngredientButton);
-        this.addDrawable(lightTargetButton);
-        this.addDrawable(lightTargetIngredientButton);*/
     }
 
     public void lightTypeAction(ButtonWidget buttonWidget) {
@@ -91,7 +87,7 @@ public class LuxcognitaScreen extends Screen{
     }
 
     public void lightTargetAction(ButtonWidget buttonWidget) {
-        MinecraftClient.getInstance().player.sendMessage(Text.literal("Boop! Implement!"));
+        LightWithinClient.getRendererEventHandler().renderTargetIcon();
         this.close();
     }
 
