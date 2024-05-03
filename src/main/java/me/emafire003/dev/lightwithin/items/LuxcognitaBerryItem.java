@@ -4,7 +4,10 @@ import me.emafire003.dev.lightwithin.LightWithin;
 import me.emafire003.dev.lightwithin.component.LightComponent;
 import me.emafire003.dev.lightwithin.config.Config;
 import me.emafire003.dev.lightwithin.lights.InnerLightType;
+import me.emafire003.dev.lightwithin.networking.PlayRenderEffectPacketS2C;
 import me.emafire003.dev.lightwithin.sounds.LightSounds;
+import me.emafire003.dev.lightwithin.util.RenderEffect;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.LivingEntity;
@@ -47,15 +50,19 @@ public class LuxcognitaBerryItem extends Item {
     @Override
     public ItemStack finishUsing(ItemStack stack, World world, LivingEntity user) {
         if(world.isClient){
-            user.playSound(LightSounds.LIGHT_READY, 1, 1);
+            user.playSound(LightSounds.LIGHT_READY, 1, 0.8f);
         }
-        if(user instanceof ServerPlayerEntity){
+        if(user instanceof ServerPlayerEntity && !world.isClient){
             if(LightWithin.isPlayerInCooldown((PlayerEntity) user) && Config.LUXCOGNITA_BYPASS_COOLDOWN){
                 return stack;
             }
             LightComponent component = LightWithin.LIGHT_COMPONENT.get(user);
             InnerLightType type = component.getType();
             user.playSound(LightSounds.LIGHT_READY, 1, 0.8f);
+
+            ServerPlayNetworking.send((ServerPlayerEntity) user, PlayRenderEffectPacketS2C.ID, new PlayRenderEffectPacketS2C(RenderEffect.LUXCOGNITA_SCREEN));
+
+            //TODO move these to the button press. And also make ones for the target types
             if(type.equals(InnerLightType.NONE)){
                 ((ServerPlayerEntity) user).sendMessage(Text.translatable("light.description.error"), true);
             }else if(type.equals(InnerLightType.HEAL)){

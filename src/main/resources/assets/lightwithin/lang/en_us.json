@@ -57,7 +57,7 @@
   "light.description.earthen": "Your light draws its power from the earth around you",
   "light.description.wind": "Your light shines in the wind",
   "light.description.aqua": "Your light best reflects upon watery surfaces",
-  "light.description.frog": "*croak* Wait what?!",
+  "light.description.frog": "*croak* Wait what?! Frogs?!",
 
   "light.description.activation.heal.self": "Your light flows trough you, sewing your wounds!",
   "light.description.activation.heal.allies": "Your light flows trough you and your allies, sewing your wounds!",
@@ -130,6 +130,12 @@
 
   "config.lightwithin.showrunes_for": "Show runes for",
   "config.lightwithin.showrunes_for.tooltip": "How many seconds should the runes last on screen?",
+
+  "config.lightwithin.ingredient_and_item_scale": "Ingredient or Target icon scale",
+  "config.lightwithin.ingredient_and_item_scale.tooltip": "Scale of the ingredient item or target icons displayed after interacting with the Luxcognita berry",
+
+  "config.lightwithin.show_ingredient_target_for": "Show ingredient or target icon for",
+  "config.lightwithin.show_ingredient_target_for.tooltip": "How many seconds should the ingredient item or target icon last on screen?",
 
   "config.lightwithin.auto_light_activation": "Automatic Light Activation",
   "config.lightwithin.auto_light_activation.tooltip": "Enabling this will activate your light as soon as it's ready. WARNING: it may be disabled by the server!",

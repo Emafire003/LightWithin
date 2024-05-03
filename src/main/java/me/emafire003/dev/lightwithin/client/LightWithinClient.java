@@ -229,14 +229,8 @@ public class LightWithinClient implements ClientModInitializer {
                         }
 
                         else if(effect.equals(RenderEffect.RUNES)){
-                            event_handler.renderRunes(LightWithin.LIGHT_COMPONENT.get(client.player).getType());
-                        }
-
-                        else if(effect.equals(RenderEffect.LUXCOGNITA_TYPE_ITEM)){
-                            //TODO well. I'll kind of need to render it on the screen anyway I think. Otherwise it won't show up
-                            //TODO no i'm stupid, by then the conversation is finished so it renders in the normal worldview instead. Like it clicks a button and closes the screen then draws
-                            // I will need to delete the RenderSystems anyway.
-                            event_handler.renderLuxTypeItem();
+                            event_handler.renderRunes();
+                            event_handler.playLightSound(LightWithin.LIGHT_COMPONENT.get(client.player).getType());
                         }
 
 

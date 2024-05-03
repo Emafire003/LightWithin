@@ -1,6 +1,5 @@
 package me.emafire003.dev.lightwithin.client;
 
-import me.emafire003.dev.lightwithin.LightWithin;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
@@ -13,8 +12,6 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import org.joml.Matrix4f;
-
-import java.util.Objects;
 
 
 public class LuxcognitaScreen extends Screen{
@@ -43,26 +40,17 @@ public class LuxcognitaScreen extends Screen{
                         //(buttonWidget) -> this.close()
                 )
                 .size((int) (center_x/2.3), 20)
-                //.dimensions(0 + center_x/5, center_y, (int) (center_x/2.7), 20)
-                /*.size(center_x/3, 20)
-                .position(center_x-(50-(center_x/5))/2, center_y-20/2)*/
                 .build();
 
         ButtonWidget lightTypeIngredientButton = ButtonWidget.builder(Text.translatable("screen.luxcognita_dialogue.lightTypeIngredientButton").formatted(Formatting.YELLOW), this::lightTypeIngredientAction)
-                /*.size(center_x/3, 20)
-                .position(center_x-(center_x/5)/2, center_y-(50-20)/2)*/
                 .size((int) (center_x/2.3), 20)
                 .build();
 
         ButtonWidget lightTargetButton = ButtonWidget.builder(Text.translatable("screen.luxcognita_dialogue.lightTargetButton").formatted(Formatting.YELLOW), this::lightTargetAction)
-                //.size(center_x/3, 20)
-                //.position(center_x+(50-(center_x/5))/2, center_y-20/2)
                 .size((int) (center_x/2.3), 20)
                 .build();
 
         ButtonWidget lightTargetIngredientButton = ButtonWidget.builder(Text.translatable("screen.luxcognita_dialogue.lightTargetIngredientButton").formatted(Formatting.YELLOW), this::lightTargetIngredientAction)
-                //.size(center_x/3, 20)
-                //.position(center_x-((center_x/5)/2), center_y+(50-20)/2)
                 .size((int) (center_x/2.3), 20)
                 .build();
 
@@ -77,7 +65,7 @@ public class LuxcognitaScreen extends Screen{
     }
 
     public void lightTypeAction(ButtonWidget buttonWidget) {
-        LightWithinClient.getRendererEventHandler().renderRunes(LightWithin.LIGHT_COMPONENT.get(Objects.requireNonNull(MinecraftClient.getInstance().player)).getType());
+        LightWithinClient.getRendererEventHandler().renderRunes();
         this.close();
     }
 
@@ -146,7 +134,7 @@ public class LuxcognitaScreen extends Screen{
         //TODO draw the LuxCognita berry at the center of the screen
         this.renderBackground(context);
         super.render(context, mouseX, mouseY, delta);
-        //TODO use hex for the text and change it around a bit randomly
+
         // Low (lighter) 3735330
         //Middle 2415936
         // Top (darker) 2406703
@@ -154,7 +142,8 @@ public class LuxcognitaScreen extends Screen{
         matrixStack.push();
         float textScale = 1.5f;
         matrixStack.scale(textScale, textScale, textScale);
-        context.drawCenteredTextWithShadow(this.textRenderer, Text.translatable("screen.luxcognita_dialogue.luxcognitaTalk"), (int) ((this.width / 2)/textScale), (int) ((this.height / 2 - 70)/textScale), getTextColor()/*2406703 16777215*/);
+        //2406703 16777215
+        context.drawCenteredTextWithShadow(this.textRenderer, Text.translatable("screen.luxcognita_dialogue.luxcognitaTalk"), (int) ((this.width / 2)/textScale), (int) ((this.height / 2 - 70)/textScale), getTextColor());
         matrixStack.pop();
 
     }
@@ -171,7 +160,9 @@ public class LuxcognitaScreen extends Screen{
 
     @Override
     public void renderBackground(DrawContext context) {
-        super.renderBackground(context);
+        //super.renderBackground(context);
+        //TODO its not really moving tho :/
+        //fillWithLayer(context, RenderLayer.getEndGateway(), 0, 0, this.width, this.height, 0);
         fillWithLayer(context, LightRenderLayer.getLightScreen(), 0, 0, this.width, this.height, 0);
     }
 

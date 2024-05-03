@@ -16,7 +16,6 @@ public class TargetItemRenderer {
 
     private static boolean rendering = false;
     private static int ticks = 0;
-    //TODO make configurable
     private static int show_for = 5*20;
     
     public static boolean shouldRender(){
@@ -33,13 +32,16 @@ public class TargetItemRenderer {
         show_for = ticks;
     }
 
-    //TODO config
-    private static double item_scale = 5;
+    private static double scale = 5;
     private static float item_animation_multiplier = 1;
 
     /** Clipstack stuff must be called before this!*/
     private static void renderOverlay(DrawContext drawContext, int center_x, int center_y, double length){
         Renderer2d.renderTexture(drawContext.getMatrices(), new Identifier(LightWithin.MOD_ID, "textures/lights/ingredients/overlay.png"), center_x-length/2, center_y-length/2, length, length);
+    }
+
+    public static void setScale(double value){
+        scale = value;
     }
 
     public static void render(TargetType targetType, DrawContext drawContext){
@@ -52,7 +54,7 @@ public class TargetItemRenderer {
         int center_x = MinecraftClient.getInstance().getWindow().getScaledWidth()/2;
         int center_y = MinecraftClient.getInstance().getWindow().getScaledHeight()/2;
 
-        double length = 16* item_scale * item_animation_multiplier;
+        double length = 16* scale * item_animation_multiplier;
         
         if(targetType.equals(TargetType.SELF)){
             ClipStack.addWindow(drawContext.getMatrices(), new Rectangle((center_x-length/2)-40,(center_y-length/2),(center_x+length/2)+40,(center_y+length/2)));

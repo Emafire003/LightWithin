@@ -292,6 +292,42 @@ public class YaclScreenMaker {
         );
 
         options.add(
+                Option.<Double>createBuilder()
+                        .name(Text.translatable("config.lightwithin.ingredient_and_item_scale"))
+                        .description(OptionDescription.of(Text.translatable("config.lightwithin.ingredient_and_item_scale.tooltip")))
+                        .binding(
+                                ClientConfig.ingredient_target_scale_default, // the default value
+                                () -> ClientConfig.INGREDIENT_TARGET_SCALE, // a field to get the current value from
+                                newVal -> {
+                                    ClientConfig.INGREDIENT_TARGET_SCALE = newVal;
+                                    ClientConfig.saveToFile();
+                                }
+                        )
+                        .controller(opt -> DoubleSliderControllerBuilder.create(opt)
+                                .range((double) 0, 50.0)
+                                .step(0.1))
+                        .build()
+        );
+
+        options.add(
+                Option.<Integer>createBuilder()
+                        .name(Text.translatable("config.lightwithin.show_ingredient_target_for"))
+                        .description(OptionDescription.of(Text.translatable("config.lightwithin.show_ingredient_target_for.tooltip")))
+                        .binding(
+                                ClientConfig.show_ingredient_target_for_default, // the default value
+                                () -> ClientConfig.SHOW_INGREDIENT_TARGET_FOR, // a field to get the current value from
+                                newVal -> {
+                                    ClientConfig.SHOW_INGREDIENT_TARGET_FOR = newVal;
+                                    ClientConfig.saveToFile();
+                                }
+                        )
+                        .controller(opt -> IntegerFieldControllerBuilder.create(opt)
+                                .range(0, 60)
+                        )
+                        .build()
+        );
+
+        options.add(
                 Option.<Boolean>createBuilder() 
                         .name(Text.translatable("config.lightwithin.auto_light_activation"))
                         .description(OptionDescription.of(Text.translatable("config.lightwithin.auto_light_activation.tooltip")))

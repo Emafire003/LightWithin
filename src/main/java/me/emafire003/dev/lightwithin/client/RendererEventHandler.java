@@ -43,8 +43,6 @@ public class RendererEventHandler {
     double scale_factor;
     static double charge_icon_scale = 1.0;
     static double ready_icon_scale = 1.0;
-    //TODO config
-    private boolean allowDrawLuxcognitaItems = true;
 
     public static void updateFromConfig(){
         light_ready_x = ClientConfig.LIGHT_READY_ICON_X;
@@ -56,6 +54,12 @@ public class RendererEventHandler {
         LightWithinClient.setShouldDrawChargesCount(!ClientConfig.HIDE_LIGHT_CHARGE_ICON);
         allow_draw_runes = ClientConfig.SHOW_RUNES;
         RunesRenderer.setShowRunesFor(ClientConfig.SHOW_RUNES_FOR*20);
+        TargetRenderer.setScale(ClientConfig.INGREDIENT_TARGET_SCALE);
+        TargetRenderer.setShowFor(ClientConfig.SHOW_INGREDIENT_TARGET_FOR*20);
+        TypeItemRenderer.setScale(ClientConfig.INGREDIENT_TARGET_SCALE);
+        TypeItemRenderer.setShowFor(ClientConfig.SHOW_INGREDIENT_TARGET_FOR*20);
+        TargetItemRenderer.setScale(ClientConfig.INGREDIENT_TARGET_SCALE);
+        TargetItemRenderer.setShowFor(ClientConfig.SHOW_INGREDIENT_TARGET_FOR*20);
     }
 
     public void registerRenderEvent(){
@@ -77,14 +81,13 @@ public class RendererEventHandler {
                 if(RunesRenderer.shouldRender() && allow_draw_runes){
                     RunesRenderer.render(type, drawContext);
                 }
-                if(TypeItemRenderer.shouldRender() && allowDrawLuxcognitaItems){
+                if(TypeItemRenderer.shouldRender()){
                     TypeItemRenderer.render(type, drawContext);
                 }
-                if(TargetItemRenderer.shouldRender() && allowDrawLuxcognitaItems){
+                if(TargetItemRenderer.shouldRender()){
                     TargetItemRenderer.render(targetType, drawContext);
                 }
-                //TODO maybe don't link it to the items? Or yes? yes.
-                if(TargetRenderer.shouldRender() && allowDrawLuxcognitaItems){
+                if(TargetRenderer.shouldRender()){
                     TargetRenderer.render(targetType, drawContext);
                 }
 
@@ -138,9 +141,8 @@ public class RendererEventHandler {
         });
     }
 
-    public void renderRunes(InnerLightType type){
+    public void renderRunes(){
         RunesRenderer.start();
-        playLightSound(type);
     }
     public void renderTargetIcon(){
         TargetRenderer.start();

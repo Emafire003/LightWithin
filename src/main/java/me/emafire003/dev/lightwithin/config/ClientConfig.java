@@ -28,6 +28,10 @@ public class ClientConfig {
     public static double LIGHT_READY_SCALE_FACTOR = 1.0;
     public static String LIGHT_READY_PRESET = "TOP_LEFT";
     public static String LIGHT_CHARGE_PRESET = "TOP_LEFT";
+    public static double INGREDIENT_TARGET_SCALE = 5.0;
+    public static double ingredient_target_scale_default = 5.0;
+    public static int SHOW_INGREDIENT_TARGET_FOR = 5;
+    public static int show_ingredient_target_for_default = 5;
     public static boolean HIDE_LIGHT_CHARGE_ICON = false;
     public static final boolean HIDE_LIGHT_CHARGE_ICON_default = false;
     public static boolean SHOW_CHARGED_PLAYER_GLOW = true;
@@ -79,6 +83,8 @@ public class ClientConfig {
             CONFIG.set("show_runes", SHOW_RUNES);
             CONFIG.set("show_runes_for", SHOW_RUNES_FOR);
             CONFIG.set("auto_light_activation", AUTO_LIGHT_ACTIVATION);
+            CONFIG.set("ingredient_target_scale", INGREDIENT_TARGET_SCALE);
+            CONFIG.set("show_ingredient_target_for", SHOW_INGREDIENT_TARGET_FOR);
             CONFIG.update();
             RendererEventHandler.updateFromConfig();
         } catch (IOException e) {
@@ -154,9 +160,11 @@ public class ClientConfig {
         configs.addKeyValuePair(new Pair<>("hide_light_charge_icon", HIDE_LIGHT_CHARGE_ICON_default), "Hide the light charges icon, but still displays the light ready one, or the error one if you do something that's not allowed");
         configs.addKeyValuePair(new Pair<>("show_charged_player_glow", SHOW_CHARGED_PLAYER_GLOW_default), "See players that have light charges ready glow like a GlowSquid");
 
-
         configs.addKeyValuePair(new Pair<>("show_runes", SHOW_RUNES_default), "Setting this value to false will disable runes from rendering even in first person");
         configs.addKeyValuePair(new Pair<>("show_runes_for", SHOW_RUNES_FOR_default), "How many seconds should the runes last on screen?");
+
+        configs.addKeyValuePair(new Pair<>("ingredient_target_scale", ingredient_target_scale_default), "Scale of the item or target icons displayed after interacting with the Luxcognita berry");
+        configs.addKeyValuePair(new Pair<>("show_ingredient_target_for", show_ingredient_target_for_default), "How many seconds should the item and target icons last on screen?");
 
         configs.addKeyValuePair(new Pair<>("auto_light_activation", AUTO_LIGHT_ACTIVATION_default), "Setting this value to true will activate your light as soon as it's ready. WARNING: it may be disabled by the server!");
 
@@ -184,6 +192,8 @@ public class ClientConfig {
         SHOW_CHARGED_PLAYER_GLOW = CONFIG.getOrDefault("show_charged_player_glow", SHOW_CHARGED_PLAYER_GLOW_default);
         SHOW_RUNES = CONFIG.getOrDefault("show_runes", SHOW_RUNES_default);
         SHOW_RUNES_FOR = CONFIG.getOrDefault("show_runes_for", SHOW_RUNES_FOR_default);
+        INGREDIENT_TARGET_SCALE = CONFIG.getOrDefault("ingredient_target_scale", ingredient_target_scale_default);
+        SHOW_INGREDIENT_TARGET_FOR = CONFIG.getOrDefault("show_ingredient_target_for", show_ingredient_target_for_default);
         AUTO_LIGHT_ACTIVATION = CONFIG.getOrDefault("auto_light_activation", AUTO_LIGHT_ACTIVATION_default);
     }
 }

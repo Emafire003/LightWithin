@@ -64,6 +64,7 @@ public class ReadyLightCommand implements LightCommand{
 
         try{
             for(ServerPlayerEntity target : targets){
+
                 if(target.hasStatusEffect(LightEffects.LIGHT_ACTIVE)){
                     target.removeStatusEffect(LightEffects.LIGHT_ACTIVE);
                 }

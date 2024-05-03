@@ -16,7 +16,6 @@ public class TargetRenderer {
 
     private static boolean rendering = false;
     private static int ticks = 0;
-    //TODO make configurable
     private static int show_for = 3*20;
     
     public static boolean shouldRender(){
@@ -33,8 +32,11 @@ public class TargetRenderer {
         show_for = ticks;
     }
 
-    //TODO config
-    private static double item_scale = 5;
+    public static void setScale(double value){
+        scale = value;
+    }
+
+    private static double scale = 5;
     private static float item_animation_multiplier = 1;
 
     /** Clipstack stuff must be called before this!*/
@@ -52,7 +54,7 @@ public class TargetRenderer {
         int center_x = MinecraftClient.getInstance().getWindow().getScaledWidth()/2;
         int center_y = MinecraftClient.getInstance().getWindow().getScaledHeight()/2;
 
-        double length = 16* item_scale * item_animation_multiplier;
+        double length = 16* scale * item_animation_multiplier;
         
         if(targetType.equals(TargetType.SELF)){
             ClipStack.addWindow(drawContext.getMatrices(), new Rectangle((center_x-length/2)-40,(center_y-length/2),(center_x+length/2)+40,(center_y+length/2)));
@@ -96,7 +98,7 @@ public class TargetRenderer {
                 item_animation_multiplier = item_animation_multiplier + (float) animationTicks /1500;
                 animationTicks++;
             }else if(animationTicks < 30){
-                //This makes the item appear slightly smaller each time
+                //This should make the item appear slightly smaller each time
                 item_animation_multiplier = item_animation_multiplier - (float) (animationTicks-20) /1500;
                 animationTicks++;
             }else{
