@@ -1,5 +1,7 @@
 package me.emafire003.dev.lightwithin.client;
 
+import me.emafire003.dev.lightwithin.LightWithin;
+import me.emafire003.dev.lightwithin.sounds.LightSounds;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
@@ -64,23 +66,34 @@ public class LuxcognitaScreen extends Screen{
         gridWidget.forEachChild(this::addDrawableChild);
     }
 
+    public void playLuxcognitaDisplaySound(){
+        if(MinecraftClient.getInstance().player == null){
+            LightWithin.LOGGER.error("Error! Can't play the Luxcognita sound the ClientPlayerEntity is null");
+            return;
+        }
+        MinecraftClient.getInstance().player.playSound(LightSounds.LUXCOGNITA_DISPLAY, 1f, 1f);
+    }
     public void lightTypeAction(ButtonWidget buttonWidget) {
         LightWithinClient.getRendererEventHandler().renderRunes();
+        playLuxcognitaDisplaySound();
         this.close();
     }
 
     public void lightTypeIngredientAction(ButtonWidget buttonWidget) {
         LightWithinClient.getRendererEventHandler().renderLuxTypeItem();
+        playLuxcognitaDisplaySound();
         this.close();
     }
 
     public void lightTargetAction(ButtonWidget buttonWidget) {
         LightWithinClient.getRendererEventHandler().renderTargetIcon();
+        playLuxcognitaDisplaySound();
         this.close();
     }
 
     public void lightTargetIngredientAction(ButtonWidget buttonWidget) {
         LightWithinClient.getRendererEventHandler().renderLuxTargetItem();
+        playLuxcognitaDisplaySound();
         this.close();
     }
 

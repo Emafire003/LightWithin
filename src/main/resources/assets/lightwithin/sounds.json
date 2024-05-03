@@ -23,6 +23,12 @@
       "lightwithin:light_error"
     ]
   },
+  "luxcognita_display": {
+    "subtitle": "lightwithin.luxcognita_display",
+    "sounds": [
+      "lightwithin:luxcognita_display"
+    ]
+  },
   "light_crit": {
     "subtitle": "lightwithin.light_critical_hit",
     "sounds": [

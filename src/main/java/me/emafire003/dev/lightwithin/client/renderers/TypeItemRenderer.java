@@ -8,7 +8,6 @@ import me.x150.renderer.Renderer2d;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.network.ClientPlayerEntity;
-import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
 import static me.emafire003.dev.lightwithin.LightWithin.LOGGER;
@@ -47,6 +46,8 @@ public class TypeItemRenderer {
         Renderer2d.renderTexture(drawContext.getMatrices(), new Identifier(LightWithin.MOD_ID, "textures/lights/ingredients/overlay.png"), center_x-length/2, center_y-length/2, length, length);
     }
 
+    private static int frog_number = 0;
+
     public static void render(InnerLightType type, DrawContext drawContext){
         ClientPlayerEntity player = MinecraftClient.getInstance().player;
         if(player == null){
@@ -66,13 +67,20 @@ public class TypeItemRenderer {
             Renderer2d.renderTexture(drawContext.getMatrices(), new Identifier(LightWithin.MOD_ID, "textures/lights/ingredients/type/earthen.png"), center_x-blockLength/2, center_y-blockLength/2, blockLength, blockLength);
             renderOverlay(drawContext, center_x, center_y, length);
             ClipStack.popWindow();
+            return;
         }
         if(type.equals(InnerLightType.FROG)){
+            if(ticks%15 == 0){
+                frog_number++;
+                if(frog_number > 2){
+                    frog_number = 0;
+                }
+            }
             ClipStack.addWindow(drawContext.getMatrices(), new Rectangle((center_x-blockLength/2)-40,(center_y-blockLength/2),(center_x+blockLength/2)+40,(center_y+blockLength/2)));
-            Renderer2d.renderTexture(drawContext.getMatrices(), new Identifier(LightWithin.MOD_ID, "textures/lights/ingredients/type/frog_" + String.valueOf(player.getRandom().nextBetween(0, 2)) + ".png"), center_x-blockLength/2, center_y-blockLength/2, blockLength, blockLength);
-            player.sendMessage(Text.literal("Searching for: " + ("textures/lights/ingredients/type/frog" + String.valueOf(player.getRandom().nextBetween(0, 2)) + ".png")));
+            Renderer2d.renderTexture(drawContext.getMatrices(), new Identifier(LightWithin.MOD_ID, "textures/lights/ingredients/type/frog_" + frog_number + ".png"), center_x-blockLength/2, center_y-blockLength/2, blockLength, blockLength);
             renderOverlay(drawContext, center_x, center_y, length);
             ClipStack.popWindow();
+            return;
         }
 
         ClipStack.addWindow(drawContext.getMatrices(), new Rectangle((center_x-length/2)-40,(center_y-length/2),(center_x+length/2)+40,(center_y+length/2)));

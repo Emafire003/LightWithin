@@ -55,38 +55,11 @@ public class TargetRenderer {
         int center_y = MinecraftClient.getInstance().getWindow().getScaledHeight()/2;
 
         double length = 16* scale * item_animation_multiplier;
-        
-        if(targetType.equals(TargetType.SELF)){
-            ClipStack.addWindow(drawContext.getMatrices(), new Rectangle((center_x-length/2)-40,(center_y-length/2),(center_x+length/2)+40,(center_y+length/2)));
-            Renderer2d.renderTexture(drawContext.getMatrices(), new Identifier(LightWithin.MOD_ID, "textures/lights/target_icons/self.png"), center_x-length/2, center_y-length/2, length, length);
-            renderOverlay(drawContext, center_x, center_y, length);
-            ClipStack.popWindow();
-            //TODO maybe use a sound? Or maybe not. Maybe a general sound for each one. It's just an ingredient after all!
-        }
-        if(targetType.equals(TargetType.ALLIES)){
-            ClipStack.addWindow(drawContext.getMatrices(), new Rectangle((center_x-length/2)-40,(center_y-length/2),(center_x+length/2)+40,(center_y+length/2)));
-            Renderer2d.renderTexture(drawContext.getMatrices(), new Identifier(LightWithin.MOD_ID, "textures/lights/target_icons/allies.png"), center_x-length/2, center_y-length/2, length, length);
-            renderOverlay(drawContext, center_x, center_y, length);
-            ClipStack.popWindow();
-        }
-        if(targetType.equals(TargetType.ENEMIES)){
-            ClipStack.addWindow(drawContext.getMatrices(), new Rectangle((center_x-length/2)-40,(center_y-length/2),(center_x+length/2)+40,(center_y+length/2)));
-            Renderer2d.renderTexture(drawContext.getMatrices(), new Identifier(LightWithin.MOD_ID, "textures/lights/target_icons/enemies.png"), center_x-length/2, center_y-length/2, length, length);
-            renderOverlay(drawContext, center_x, center_y, length);
-            ClipStack.popWindow();
-        }
-        if(targetType.equals(TargetType.ALL)){
-            ClipStack.addWindow(drawContext.getMatrices(), new Rectangle((center_x-length/2)-40,(center_y-length/2),(center_x+length/2)+40,(center_y+length/2)));
-            Renderer2d.renderTexture(drawContext.getMatrices(), new Identifier(LightWithin.MOD_ID, "textures/lights/target_icons/all.png"), center_x-length/2, center_y-length/2, length, length);
-            renderOverlay(drawContext, center_x, center_y, length);
-            ClipStack.popWindow();
-        }
-        if(targetType.equals(TargetType.VARIANT)){
-            ClipStack.addWindow(drawContext.getMatrices(), new Rectangle((center_x-length/2)-40,(center_y-length/2),(center_x+length/2)+40,(center_y+length/2)));
-            Renderer2d.renderTexture(drawContext.getMatrices(), new Identifier(LightWithin.MOD_ID, "textures/lights/target_icons/variant.png"), center_x-length/2, center_y-length/2, length, length);
-            renderOverlay(drawContext, center_x, center_y, length);
-            ClipStack.popWindow();
-        }
+
+        ClipStack.addWindow(drawContext.getMatrices(), new Rectangle((center_x-length/2)-40,(center_y-length/2),(center_x+length/2)+40,(center_y+length/2)));
+        Renderer2d.renderTexture(drawContext.getMatrices(), new Identifier(LightWithin.MOD_ID, "textures/lights/target_icons/blurred/" + targetType.toString().toLowerCase() + ".png"), center_x-length/2, center_y-length/2, length, length);
+        renderOverlay(drawContext, center_x, center_y, length);
+        ClipStack.popWindow();
     }
 
     private static int animationTicks = 0;
