@@ -27,6 +27,7 @@ import java.util.Objects;
 
 public class SetLightCommand implements LightCommand{
 
+    //TODO add command to set the naturally triggered state
     //Temporary, will remove once all lights have been implemented
     public static List<InnerLightType> currently_usable_lights = Arrays.asList(InnerLightType.HEAL, InnerLightType.DEFENCE,
             InnerLightType.STRENGTH, InnerLightType.BLAZING, InnerLightType.FROST, InnerLightType.EARTHEN,

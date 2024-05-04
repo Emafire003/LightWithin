@@ -7,12 +7,8 @@ import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.EntityRenderer;
-import net.minecraft.client.render.entity.EntityRendererFactory;
-import net.minecraft.client.render.entity.LivingEntityRenderer;
-import net.minecraft.client.render.entity.feature.FeatureRendererContext;
-import net.minecraft.client.render.entity.model.EntityModel;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.Entity;
 import net.minecraft.util.math.RotationAxis;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.util.math.random.Random;
@@ -23,12 +19,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(LivingEntityRenderer.class)
-public abstract class CustomEffectsLivingRendererMixin<T extends LivingEntity, M extends EntityModel<T>> extends EntityRenderer<T> implements FeatureRendererContext<T, M> {
-
-    protected CustomEffectsLivingRendererMixin(EntityRendererFactory.Context ctx) {
-        super(ctx);
-    }
+@Mixin(EntityRenderer.class)
+public abstract class CustomEffectsLivingRendererMixin<T extends Entity> {
 
     @Unique
     private short shouldRenderTicks = 0;
@@ -79,13 +71,6 @@ public abstract class CustomEffectsLivingRendererMixin<T extends LivingEntity, M
             putLightNegativeXTerminalVertex(vertexConsumer4, matrix4f, radius, width);
             putLightPositiveXTerminalVertex(vertexConsumer4, matrix4f, radius, width/2);
             putLightPositiveZTerminalVertex(vertexConsumer4, matrix4f, radius, width);
-
-            /*putLightSourceVertex(vertexConsumer4, matrix4f, alpha);
-            putLightPositiveXTerminalVertex(vertexConsumer4, matrix4f, radius, width/2);
-            putLightPositiveZTerminalVertex(vertexConsumer4, matrix4f, radius, width);
-            putLightSourceVertex(vertexConsumer4, matrix4f, alpha);
-            putLightPositiveZTerminalVertex(vertexConsumer4, matrix4f, radius, width);
-            putLightNegativeXTerminalVertex(vertexConsumer4, matrix4f, radius, width);*/
         }
 
         matrixStack.pop();

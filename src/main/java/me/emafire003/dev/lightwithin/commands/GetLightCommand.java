@@ -24,6 +24,8 @@ import java.util.Map;
 
 public class GetLightCommand implements LightCommand{
 
+    //TODO add has naturally triggred info
+
     private int getType(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
         ServerPlayerEntity target = EntityArgumentType.getPlayer(context, "player");
         ServerCommandSource source = context.getSource();

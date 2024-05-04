@@ -106,7 +106,10 @@ public class BottledLightItem extends Item {
             return TypedActionResult.pass(stack);
             //TODO what to do if there is no type or target? Explosion?
         }
-        
+
+
+        //TODO it seems the charge bottling up in multiplayer gives a 00000 uuid without making the thing work
+
         //Checks to see if the player and the bottle have the same light. Aka the player that created the bottle is the one using it.
         if(!BottledLightItem.getCreatedBy(stack).equals(user.getUuid())){
             if(!world.isClient()){

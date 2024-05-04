@@ -1,5 +1,6 @@
 package me.emafire003.dev.lightwithin.client;
 
+import com.mojang.datafixers.util.Pair;
 import me.emafire003.dev.lightwithin.LightWithin;
 import me.emafire003.dev.lightwithin.blocks.LightBlocks;
 import me.emafire003.dev.lightwithin.client.screens.LuxcognitaScreen;
@@ -33,7 +34,9 @@ import net.minecraft.client.gui.screen.ConfirmScreen;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.entity.model.EntityModelLayer;
+import net.minecraft.entity.Entity;
 import net.minecraft.screen.ScreenTexts;
+import net.minecraft.sound.SoundCategory;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Util;
@@ -212,17 +215,40 @@ public class LightWithinClient implements ClientModInitializer {
     private void registerPlayRenderEffectPacket(){
         LOGGER.debug("Registering play render effect packet receiver on client...");
         ClientPlayNetworking.registerGlobalReceiver(PlayRenderEffectPacketS2C.ID, ((client, handler, buf, responseSender) -> {
-            RenderEffect effect = PlayRenderEffectPacketS2C.read(buf);
+            Pair<RenderEffect, Integer> effectAndTarget = PlayRenderEffectPacketS2C.readTarget(buf);
+            if(effectAndTarget == null){
+                LOGGER.error("Error! The PlayRenderEffectPacket had a null pair payload!");
+                return;
+            }
+            RenderEffect effect = effectAndTarget.getFirst();
+            int targetId = effectAndTarget.getSecond();
 
             client.execute(() -> {
                 try{
                     if(client.player != null && effect != null){
 
                         if(effect.equals(RenderEffect.LIGHT_RAYS)){
-                            //TODO verify it works for multiplayer (I don't think it does, so I will need to send the player entity in the packet as well)
-                            IRenderEffectsEntity player = (IRenderEffectsEntity) client.player;
-                            player.lightWithin$renderEffect(effect, (int) (4.5*20));
-                            client.player.playSound(LightSounds.LIGHT_CHARGED, 0.7f, 0.7f);
+                            if(targetId == -1){
+                                IRenderEffectsEntity player = (IRenderEffectsEntity) client.player;
+                                player.lightWithin$renderEffect(effect, (int) (4.5*20));
+                                client.player.playSound(LightSounds.LIGHT_CHARGED, 0.7f, 0.7f);
+                            }else{
+                                Entity target = client.player.getWorld().getEntityById(targetId);
+                                if(target == null){
+                                    LOGGER.error("Error! The entity got from the ID in the PlayRenderEffectPacket is null!");
+                                    return;
+                                }
+                                ((IRenderEffectsEntity)target).lightWithin$renderEffect(effect, (int) (4.5*20));
+                                if(client.world != null){
+                                    //TODO this doesn't really work apparently
+                                    client.world.playSoundFromEntity(null, target, LightSounds.LIGHT_CHARGED, SoundCategory.PLAYERS, 0.7f, 0.7f);
+                                }
+                                if(target.equals(client.player)){
+                                    client.player.playSound(LightSounds.LIGHT_CHARGED, 0.7f, 0.7f);
+                                }
+
+                            }
+
                         }
 
                         else if(effect.equals(RenderEffect.LUXCOGNITA_SCREEN)){

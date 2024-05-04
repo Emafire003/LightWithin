@@ -2,7 +2,7 @@ package me.emafire003.dev.lightwithin.mixin;
 
 import me.emafire003.dev.lightwithin.util.IRenderEffectsEntity;
 import me.emafire003.dev.lightwithin.util.RenderEffect;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -11,7 +11,7 @@ import java.util.HashMap;
 
 import static me.emafire003.dev.lightwithin.LightWithin.LIGHT_COMPONENT;
 
-@Mixin(LivingEntity.class)
+@Mixin(Entity.class)
 public abstract class RenderEffectsEntityMixin implements IRenderEffectsEntity {
 
     @Unique
@@ -33,9 +33,9 @@ public abstract class RenderEffectsEntityMixin implements IRenderEffectsEntity {
 
     @Override
     public boolean lightWithin$shouldRender(RenderEffect effect){
-        if(((LivingEntity) (Object) this) instanceof PlayerEntity){
+        if(((Entity) (Object) this) instanceof PlayerEntity){
             if(startTimeEffect.get(effect) != null){
-                if(System.currentTimeMillis() > (startTimeEffect.get(effect) + LIGHT_COMPONENT.get(((LivingEntity) (Object) this)).getDuration()* 1000L)){
+                if(System.currentTimeMillis() > (startTimeEffect.get(effect) + LIGHT_COMPONENT.get(((Entity) (Object) this)).getDuration()* 1000L)){
                     return false;
                 }
             }

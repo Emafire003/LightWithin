@@ -182,7 +182,12 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 				try{
 					//Handles the LightCharge being used. If it used, results will be true.
 					if(results){
-						ServerPlayNetworking.send(player, PlayRenderEffectPacketS2C.ID, new PlayRenderEffectPacketS2C(RenderEffect.LIGHT_RAYS));
+
+						//TODO verify it doesn't lag and also try the getEntitiesByClass
+						List<ServerPlayerEntity> players = player.getServerWorld().getPlayers();
+						for(ServerPlayerEntity p : players){
+							ServerPlayNetworking.send(p, PlayRenderEffectPacketS2C.ID, new PlayRenderEffectPacketS2C(RenderEffect.LIGHT_RAYS, player));
+						}
 
 						//TODO maybe also increase the max cooldown light-stat?
 						//Currently just increases the cooldown. But the actual charges are fairly hard to get.

@@ -9,6 +9,7 @@ import me.emafire003.dev.lightwithin.util.TargetType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 
 import static me.emafire003.dev.lightwithin.LightWithin.LOGGER;
 
@@ -267,7 +268,7 @@ public class LightComponent implements ComponentV3, AutoSyncedComponent {
 
     public void setTriggeredNaturally(boolean b) {
         this.has_triggered_naturally = b;
-        caster.sendMessage(Text.translatable("light.triggered_naturally_first"));
+        caster.sendMessage(Text.translatable("light.triggered_naturally_first").formatted(Formatting.GREEN), true);
         LightWithin.LIGHT_COMPONENT.sync(caster);
     }
 
