@@ -16,7 +16,6 @@ public class TypeItemRenderer {
 
     private static boolean rendering = false;
     private static int ticks = 0;
-    //TODO make configurable
     private static int show_for = 5*20;
 
     public static boolean shouldRender(){
@@ -84,7 +83,7 @@ public class TypeItemRenderer {
         }
 
         ClipStack.addWindow(drawContext.getMatrices(), new Rectangle((center_x-length/2)-40,(center_y-length/2),(center_x+length/2)+40,(center_y+length/2)));
-        Renderer2d.renderTexture(drawContext.getMatrices(), new Identifier(LightWithin.MOD_ID, "textures/lights/ingredients/type/" + type.toString().toLowerCase() + ".png"), center_x-length/2, center_y-length/2-5, length, length);
+        Renderer2d.renderTexture(drawContext.getMatrices(), new Identifier(LightWithin.MOD_ID, "textures/lights/ingredients/type/" + type.toString().toLowerCase() + ".png"), center_x-length/2, center_y-length/2, length, length);
         renderOverlay(drawContext, center_x, center_y, length);
         ClipStack.popWindow();
     }

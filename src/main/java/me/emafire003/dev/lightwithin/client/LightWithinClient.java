@@ -2,6 +2,7 @@ package me.emafire003.dev.lightwithin.client;
 
 import me.emafire003.dev.lightwithin.LightWithin;
 import me.emafire003.dev.lightwithin.blocks.LightBlocks;
+import me.emafire003.dev.lightwithin.client.screens.LuxcognitaScreen;
 import me.emafire003.dev.lightwithin.commands.client.ClientLightCommands;
 import me.emafire003.dev.lightwithin.compat.yacl.YaclScreenMaker;
 import me.emafire003.dev.lightwithin.config.ClientConfig;

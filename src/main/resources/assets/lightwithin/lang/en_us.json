@@ -48,7 +48,7 @@
   "light.not_your_light": "This is not your light, it won't do anything!",
   "light.max_charges": "You have reached your maximum number of light charges!",
 
-  "light.description.error": "Uhm... your light is... an error? Light not found, report please! ",
+  "light.description.error": "Uhm... your light is... an error? Light not found, report please!",
   "light.description.heal": "Your light, yes, is a gentle and caring one indeed",
   "light.description.defense": "Resilience, that's what your light is made of",
   "light.description.strength": "You have a strong light, ready to land its strength to you",
@@ -58,6 +58,12 @@
   "light.description.wind": "Your light shines in the wind",
   "light.description.aqua": "Your light best reflects upon watery surfaces",
   "light.description.frog": "*croak* Wait what?! Frogs?!",
+
+  "light.description.target.self": "Your light shall guide you and you alone!",
+  "light.description.target.allies": "Your light is a friend to your friends and companions!",
+  "light.description.target.enemies": "Your light will punish those who turn against you!",
+  "light.description.target.all": "Your light won't discern from good and evil, lighting all things!",
+  "light.description.target.variant": "Your light is very peculiar and strange indeed!",
 
   "light.description.activation.heal.self": "Your light flows trough you, sewing your wounds!",
   "light.description.activation.heal.allies": "Your light flows trough you and your allies, sewing your wounds!",

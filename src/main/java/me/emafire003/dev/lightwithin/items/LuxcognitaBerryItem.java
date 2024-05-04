@@ -1,12 +1,12 @@
 package me.emafire003.dev.lightwithin.items;
 
 import me.emafire003.dev.lightwithin.LightWithin;
-import me.emafire003.dev.lightwithin.component.LightComponent;
 import me.emafire003.dev.lightwithin.config.Config;
 import me.emafire003.dev.lightwithin.lights.InnerLightType;
 import me.emafire003.dev.lightwithin.networking.PlayRenderEffectPacketS2C;
 import me.emafire003.dev.lightwithin.sounds.LightSounds;
 import me.emafire003.dev.lightwithin.util.RenderEffect;
+import me.emafire003.dev.lightwithin.util.TargetType;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.item.TooltipContext;
@@ -15,7 +15,9 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.text.Style;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
@@ -36,7 +38,7 @@ public class LuxcognitaBerryItem extends Item {
         }
         if (this.isFood()) {
             ItemStack itemStack = user.getStackInHand(hand);
-            if (user.canConsume(this.getFoodComponent().isAlwaysEdible())) {
+            if (this.getFoodComponent() != null && user.canConsume(this.getFoodComponent().isAlwaysEdible())) {
                 user.setCurrentHand(hand);
                 return TypedActionResult.consume(itemStack);
             } else {
@@ -56,40 +58,9 @@ public class LuxcognitaBerryItem extends Item {
             if(LightWithin.isPlayerInCooldown((PlayerEntity) user) && Config.LUXCOGNITA_BYPASS_COOLDOWN){
                 return stack;
             }
-            LightComponent component = LightWithin.LIGHT_COMPONENT.get(user);
-            InnerLightType type = component.getType();
             user.playSound(LightSounds.LIGHT_READY, 1, 0.8f);
 
             ServerPlayNetworking.send((ServerPlayerEntity) user, PlayRenderEffectPacketS2C.ID, new PlayRenderEffectPacketS2C(RenderEffect.LUXCOGNITA_SCREEN));
-
-            //TODO move these to the button press. And also make ones for the target types
-            if(type.equals(InnerLightType.NONE)){
-                ((ServerPlayerEntity) user).sendMessage(Text.translatable("light.description.error"), true);
-            }else if(type.equals(InnerLightType.HEAL)){
-                ((ServerPlayerEntity) user).sendMessage(Text.translatable("light.description.heal"), true);
-            }else if(type.equals(InnerLightType.DEFENCE)){
-                ((ServerPlayerEntity) user).sendMessage(Text.translatable("light.description.defense"), true);
-            }else if(type.equals(InnerLightType.STRENGTH)){
-                ((ServerPlayerEntity) user).sendMessage(Text.translatable("light.description.strength"), true);
-            }else if(type.equals(InnerLightType.BLAZING)){
-                ((ServerPlayerEntity) user).sendMessage(Text.translatable("light.description.blazing"), true);
-            }else if(type.equals(InnerLightType.FROST)){
-                ((ServerPlayerEntity) user).sendMessage(Text.translatable("light.description.frost"), true);
-            }else if(type.equals(InnerLightType.EARTHEN)){
-                ((ServerPlayerEntity) user).sendMessage(Text.translatable("light.description.earthen"), true);
-            }else if(type.equals(InnerLightType.WIND)){
-                ((ServerPlayerEntity) user).sendMessage(Text.translatable("light.description.wind"), true);
-            }else if(type.equals(InnerLightType.AQUA)){
-                ((ServerPlayerEntity) user).sendMessage(Text.translatable("light.description.aqua"), true);
-            }
-            else if(type.equals(InnerLightType.FROG)){
-                ((ServerPlayerEntity) user).sendMessage(Text.translatable("light.description.frog"), true);
-            }
-            else{
-                ((ServerPlayerEntity) user).sendMessage(Text.translatable("light.description.error"), true);
-            }
-            //((ServerPlayerEntity) user).sendMessage(Text.translatable("text.lightwithin.your_light_is"), true);
-
         }
         return this.isFood() ? user.eatFood(world, stack) : stack;
     }
@@ -104,5 +75,41 @@ public class LuxcognitaBerryItem extends Item {
         }
     }
 
+
+
+    // Utility methods not necessarily used in here but in the screen class
+
+    //#f1f657
+    private static final Style style = Style.EMPTY.withColor(15857239);
+
+    /**Sends a player the description of their InnerLight type*/
+    public static void sendLightTypeMessage(PlayerEntity user){
+        if(user == null){
+            LightWithin.LOGGER.error("Error! Can't send light type messages, the player is null!");
+            return;
+        }
+        //light blue is 6288592
+        InnerLightType type = LightWithin.LIGHT_COMPONENT.get(user).getType();
+        if(type.equals(InnerLightType.NONE)){
+            user.sendMessage(Text.translatable("light.description.error").formatted(Formatting.RED), true);
+            return;
+        }
+        user.sendMessage(Text.translatable("light.description." + type.toString().toLowerCase()).setStyle(style), true);
+    }
+
+    /**Sends a player the description of their InnerLight type*/
+    public static void sendLightTargetMessage(PlayerEntity user){
+        if(user == null){
+            LightWithin.LOGGER.error("Error! Can't send light target messages, the player is null!");
+            return;
+        }
+        //TODO see what can be done with custom fonts maybe?
+        TargetType type = LightWithin.LIGHT_COMPONENT.get(user).getTargets();
+        if(type.equals(TargetType.NONE)){
+            user.sendMessage(Text.translatable("light.description.error").formatted(Formatting.RED), true);
+            return;
+        }
+        user.sendMessage(Text.translatable("light.description.target." + type.toString().toLowerCase()).setStyle(style), true);
+    }
 
 }

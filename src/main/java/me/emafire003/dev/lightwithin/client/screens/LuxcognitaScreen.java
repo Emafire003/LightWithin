@@ -1,6 +1,10 @@
-package me.emafire003.dev.lightwithin.client;
+package me.emafire003.dev.lightwithin.client.screens;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import me.emafire003.dev.lightwithin.LightWithin;
+import me.emafire003.dev.lightwithin.client.LightRenderLayer;
+import me.emafire003.dev.lightwithin.client.LightWithinClient;
+import me.emafire003.dev.lightwithin.items.LuxcognitaBerryItem;
 import me.emafire003.dev.lightwithin.sounds.LightSounds;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
@@ -17,11 +21,10 @@ import org.joml.Matrix4f;
 
 
 public class LuxcognitaScreen extends Screen{
-    private static final long MIN_LOAD_TIME_MS = 30000L;
-    private final boolean shouldClose = false;
+    private static final long MIN_LOAD_TIME_MS = 60000L;
     private final long loadStartTime;
 
-    protected LuxcognitaScreen(Text title) {
+    public LuxcognitaScreen(Text title) {
         super(title);
         this.loadStartTime = System.currentTimeMillis();
 
@@ -75,25 +78,23 @@ public class LuxcognitaScreen extends Screen{
     }
     public void lightTypeAction(ButtonWidget buttonWidget) {
         LightWithinClient.getRendererEventHandler().renderRunes();
-        playLuxcognitaDisplaySound();
+        LuxcognitaBerryItem.sendLightTypeMessage(MinecraftClient.getInstance().player);
         this.close();
     }
 
     public void lightTypeIngredientAction(ButtonWidget buttonWidget) {
         LightWithinClient.getRendererEventHandler().renderLuxTypeItem();
-        playLuxcognitaDisplaySound();
         this.close();
     }
 
     public void lightTargetAction(ButtonWidget buttonWidget) {
         LightWithinClient.getRendererEventHandler().renderTargetIcon();
-        playLuxcognitaDisplaySound();
+        LuxcognitaBerryItem.sendLightTargetMessage(MinecraftClient.getInstance().player);
         this.close();
     }
 
     public void lightTargetIngredientAction(ButtonWidget buttonWidget) {
         LightWithinClient.getRendererEventHandler().renderLuxTargetItem();
-        playLuxcognitaDisplaySound();
         this.close();
     }
 
@@ -103,7 +104,7 @@ public class LuxcognitaScreen extends Screen{
      * It remains in the greens anyway*/
     private int getTextColor(){
         //#3ad94f #31c83f #28b72f #1ea71e #129706
-        //TODO ok i will need to make my animation steps myself yeah it kinda sucks regardless
+        //TODO make better?
         colorTicks++;
         if(colorTicks < 10){
             return 3856719;
@@ -134,12 +135,6 @@ public class LuxcognitaScreen extends Screen{
         }
         colorTicks = 0;
         return 3856719;
-        /*Random r = MinecraftClient.getInstance().player.getRandom();
-        LightWithin.LOGGER.info("Returning new color! " + (2415936 - r.nextBetween(50, 100)));
-        if(r.nextBoolean()){
-            return 2415936 - r.nextBetween(50, 100);
-        }
-        return 2415936 + r.nextBetween(50, 100);*/
     }
 
     @Override
@@ -173,40 +168,41 @@ public class LuxcognitaScreen extends Screen{
 
     @Override
     public void renderBackground(DrawContext context) {
-        //super.renderBackground(context);
-        //TODO its not really moving tho :/
-        //fillWithLayer(context, RenderLayer.getEndGateway(), 0, 0, this.width, this.height, 0);
+        super.renderBackground(context);
+        RenderSystem.enableBlend();
+        RenderSystem.defaultBlendFunc();
         fillWithLayer(context, LightRenderLayer.getLightScreen(), 0, 0, this.width, this.height, 0);
     }
 
     @Override
     public void tick() {
         super.tick();
-        if (this.shouldClose || System.currentTimeMillis() > this.loadStartTime + MIN_LOAD_TIME_MS) {
+        if (System.currentTimeMillis() > this.loadStartTime + MIN_LOAD_TIME_MS) {
             this.close();
         }
     }
 
     @Override
     public void close() {
-        //TODO playsound
+        playLuxcognitaDisplaySound();
         super.close();
     }
 
-    /*@Override
+    @Override
     public boolean shouldCloseOnEsc() {
-        MinecraftClient.getInstance().player.sendMessage(Text.literal("Ok but this should show a warning first!"));
-        return true;
+        return false;
     }
 
-    @Override
+    /*@Override
     protected boolean hasUsageText() {
-        return false;
-    }
+        //TODO remvoe
+        return true;
+    }*/
     @Override
     public boolean shouldPause() {
+        //This is the thing that allows the screen to keep being animated by the way.
         return false;
-    }*/
+    }
 }
 
 
