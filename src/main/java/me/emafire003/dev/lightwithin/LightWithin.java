@@ -46,6 +46,7 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Box;
 import org.slf4j.Logger;
@@ -183,14 +184,15 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 					if(results){
 						ServerPlayNetworking.send(player, PlayRenderEffectPacketS2C.ID, new PlayRenderEffectPacketS2C(RenderEffect.LIGHT_RAYS));
 
-						//TODO maybe also increase the max cooldown light-stat.
+						//TODO maybe also increase the max cooldown light-stat?
 						//Currently just increases the cooldown. But the actual charges are fairly hard to get.
 						USED_CHARGE_PLAYER_CACHE.add(player.getUuid());
 
 						player.getWorld().playSound(player.getX(), player.getY(), player.getZ(), LightSounds.LIGHT_CHARGED, SoundCategory.PLAYERS, 1, 0.7f, true);
 
-						//TODO either make translatable or remove
-						player.sendMessage(Text.literal("You activated your light with a charge, the cooldown is going to be longer!"));
+						if(Config.TARGET_FEEDBACK && Config.USED_CHARGE_COOLDOWN_MULTIPLIER > 1){
+							player.sendMessage(Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.translatable("light.charge.cooldown_message").formatted(Formatting.YELLOW)));
+						}
 					}
 					activateLight(player);
 				}catch (NoSuchElementException e){

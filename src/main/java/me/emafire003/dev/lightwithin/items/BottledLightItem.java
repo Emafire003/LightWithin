@@ -135,7 +135,6 @@ public class BottledLightItem extends Item {
         }
 
         component.setLightCharges(charges);
-        //TODO maybe add some rendring fancy things here too? (addCharge)
 
         if(!user.getWorld().isClient()){
             LightParticlesUtil.spawnChargedParticles((ServerPlayerEntity) user);

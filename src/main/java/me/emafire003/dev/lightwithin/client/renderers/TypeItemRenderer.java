@@ -35,8 +35,6 @@ public class TypeItemRenderer {
     public static void setScale(double value){
         scale = value;
     }
-
-    //TODO config
     private static double scale = 5;
     private static float item_animation_multiplier = 1;
 

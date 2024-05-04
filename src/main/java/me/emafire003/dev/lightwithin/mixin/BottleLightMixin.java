@@ -33,7 +33,6 @@ public abstract class BottleLightMixin {
     @Inject(method = "use", at = @At("HEAD"), cancellable = true)
     public void injectRefillLightOnUse(World world, PlayerEntity user, Hand hand, CallbackInfoReturnable<TypedActionResult<ItemStack>> cir){
         //This is done to prevent the player from bottling up their first naturally triggered light
-        //TODO make configurable
         if(!LightWithin.LIGHT_COMPONENT.get(user).hasTriggeredNaturally()){
             return;
         }

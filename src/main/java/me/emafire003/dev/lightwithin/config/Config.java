@@ -85,6 +85,7 @@ public class Config {
     public static double USED_CHARGE_COOLDOWN_MULTIPLIER;
     public static boolean ALLOW_MAX_CHARGE_0;
     public static boolean ALLOW_MAX_CHARGE_8;
+    public static boolean BYPASS_NATURAL_TRIGGER;
 
     public static void handleVersionChange(){
         int version_found = CONFIG.getOrDefault("version", ver);
@@ -222,6 +223,8 @@ public class Config {
         configs.addKeyValuePair(new Pair<>("allow_max_charge_0", true), "Can a player have 0 as a max light charges value? Note: won't change for players that already have a light, they will need to reset it");
         configs.addKeyValuePair(new Pair<>("allow_max_charge_8", true), "Can a player have 8 as a max light charges value? Note: won't change for players that already have a light, they will need to reset it");
 
+        configs.addKeyValuePair(new Pair<>("bypass_natural_trigger", false), "If true will bypass the requirement of having to activate the light naturally before using a light charge");
+
     }
 
     public static void reloadConfig(){
@@ -295,6 +298,7 @@ public class Config {
         USED_CHARGE_COOLDOWN_MULTIPLIER = CONFIG.getOrDefaultOrMin("used_charge_cooldown_multiplier", 2.5, 1.2);
         ALLOW_MAX_CHARGE_0 = CONFIG.getOrDefault("allow_max_charge_0", true);
         ALLOW_MAX_CHARGE_8 = CONFIG.getOrDefault("allow_max_charge_8", true);
+        BYPASS_NATURAL_TRIGGER = CONFIG.getOrDefault("bypass_natural_trigger", false);
     }
 }
 

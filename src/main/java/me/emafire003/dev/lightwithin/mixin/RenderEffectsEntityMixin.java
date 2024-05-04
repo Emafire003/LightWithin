@@ -20,7 +20,6 @@ public abstract class RenderEffectsEntityMixin implements IRenderEffectsEntity {
     @Unique
     private final HashMap<RenderEffect, Integer> ticksForRenderEffects = new HashMap<>();
 
-    //TODO verify this works
     @Unique
     private final HashMap<RenderEffect, Long> startTimeEffect = new HashMap<>();
 

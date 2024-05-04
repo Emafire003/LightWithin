@@ -68,23 +68,6 @@ public abstract class AnvilItemCrushMixin extends FallingBlock {
 
             }
             if(explosion){
-                //TODO remove
-                /*if(blockState.isAir() && fluidState.isEmpty()){
-                            return Optional.empty();
-                        }else{
-                            //Should be ignoring the anvil and checking the block below the anvil instead.
-                            if(blockState.isOf(Blocks.ANVIL)){
-                                BlockState below_state = world.getBlockState(pos.down());
-                                FluidState below_fluid = world.getFluidState(pos.down());
-                                if(below_state.isAir() && below_fluid.isEmpty()){
-                                    return Optional.empty();
-                                }else {
-                                    return Optional.of(Math.max(below_state.getBlock().getBlastResistance(), below_fluid.getBlastResistance()));
-                                }
-                            }
-                        }
-                        return Optional.of(Math.max(blockState.getBlock().getBlastResistance(), fluidState.getBlastResistance()));
-                        */
                 ExplosionBehavior explosionBehavior = new ExplosionBehavior() {
                     @Override
                     public Optional<Float> getBlastResistance(Explosion explosion, BlockView world, BlockPos pos, BlockState blockState, FluidState fluidState) {

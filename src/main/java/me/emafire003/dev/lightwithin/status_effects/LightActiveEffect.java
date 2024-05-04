@@ -42,7 +42,6 @@ public class LightActiveEffect extends StatusEffect {
     // This method is called when it applies the status effect. We implement custom functionality here.
     @Override
     public void applyUpdateEffect(LivingEntity entity, int amplifier) {
-        //TODO why is this here?
         if(entity instanceof ServerPlayerEntity){
             LightComponent component = LIGHT_COMPONENT.get(entity);
             if(component.getType().equals(InnerLightType.WIND) && !component.getTargets().equals(TargetType.ALL)){

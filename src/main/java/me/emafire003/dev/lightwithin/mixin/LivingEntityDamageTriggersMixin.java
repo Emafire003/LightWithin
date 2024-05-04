@@ -20,8 +20,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityDamageTriggersMixin {
 
-    @Shadow @Final private static Logger LOGGER;
-
     @Inject(
             method = "damage",
             at = @At("HEAD")
@@ -35,7 +33,7 @@ public abstract class LivingEntityDamageTriggersMixin {
         }else if(source.isOf(DamageTypes.EXPLOSION)){
             //Trigger damage from explosion
         }else if(source.isOf(DamageTypes.PLAYER_EXPLOSION)){
-            //TODO test properly
+            //TODO test properly in multiplayer
             Entity attacker = source.getAttacker();
             if(attacker instanceof LivingEntity){
                 EntityAttackEntityEvent.EVENT.invoker().attack((LivingEntity) attacker, entity);

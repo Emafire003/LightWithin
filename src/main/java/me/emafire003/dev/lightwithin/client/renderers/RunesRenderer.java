@@ -16,7 +16,6 @@ public class RunesRenderer {
 
     private static boolean renderRunes = false;
     private static int runesTick = 0;
-    //TODO make configurable
     private static int show_runes_for = 3*20;
     
     public static boolean shouldRender(){

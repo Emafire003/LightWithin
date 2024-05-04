@@ -22,7 +22,6 @@ public class LightComponent implements ComponentV3, AutoSyncedComponent {
     protected double power_multiplier = -1;
     protected int duration = -1;
 
-    protected boolean rainbow_col = false;
     protected String prev_color = "ffffff";
     protected int max_increment_percent = -1;
     protected int max_light_stack = 1;
@@ -97,12 +96,6 @@ public class LightComponent implements ComponentV3, AutoSyncedComponent {
             this.prev_color = "ffffff";
         }
 
-        if(tag.contains("rainbow_col")){
-            if(debug){LOGGER.info("the rainbow_col got: " + tag.getBoolean("rainbow_col"));}
-            this.rainbow_col = tag.getBoolean("rainbow_col");
-        }else{
-            this.rainbow_col = false;
-        }
 
         if(tag.contains("max_increment")){
             if(debug){LOGGER.info("the max_increement got: " + tag.getInt("max_increment"));}
@@ -149,7 +142,6 @@ public class LightComponent implements ComponentV3, AutoSyncedComponent {
         tag.putDouble("power_multiplier", this.power_multiplier);
         tag.putInt("duration", this.duration);
         tag.putString("prev_color", this.prev_color);
-        tag.putBoolean("rainbow_col", this.rainbow_col);
         tag.putInt("max_increment", this.max_increment_percent);
         tag.putInt("max_light_stack", this.max_light_stack);
         tag.putInt("light_charges", this.current_light_charges);
@@ -198,6 +190,9 @@ public class LightComponent implements ComponentV3, AutoSyncedComponent {
         return this.isLocked;
     }
     public boolean hasTriggeredNaturally() {
+        if(Config.BYPASS_NATURAL_TRIGGER){
+            return true;
+        }
         return this.has_triggered_naturally;
     }
 
@@ -264,11 +259,6 @@ public class LightComponent implements ComponentV3, AutoSyncedComponent {
         LightWithin.LIGHT_COMPONENT.sync(caster);
     }
 
-    public void setRainbow(boolean b) {
-        this.rainbow_col = b;
-        LightWithin.LIGHT_COMPONENT.sync(caster);
-    }
-
     public void setIsLocked(boolean locked) {
         this.isLocked = locked;
         caster.sendMessage(Text.translatable("light.unlocked"));
@@ -292,13 +282,12 @@ public class LightComponent implements ComponentV3, AutoSyncedComponent {
         LightWithin.LIGHT_COMPONENT.sync(caster);
     }
 
-    public void setAll(InnerLightType type, TargetType targets, int max_cooldown, double power, int duration, boolean b, int max_increment, int max_light_stack, boolean locked, int version){
+    public void setAll(InnerLightType type, TargetType targets, int max_cooldown, double power, int duration, int max_increment, int max_light_stack, boolean locked, int version){
         this.type = type;
         this.targets = targets;
         this.max_cooldown_time = max_cooldown;
         this.power_multiplier = power;
         this.duration = duration;
-        this.rainbow_col = b;
         this.max_increment_percent = max_increment;
         this.max_light_stack = max_light_stack;
         this.isLocked = locked;
@@ -312,7 +301,6 @@ public class LightComponent implements ComponentV3, AutoSyncedComponent {
         this.power_multiplier = -1;
         this.duration = -1;
         //this.version = CURRENT_VERSION;
-        this.rainbow_col = false;
         this.type = InnerLightType.NONE;
         this.max_increment_percent = -1;
         this.max_light_stack = 1;
