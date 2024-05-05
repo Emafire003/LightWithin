@@ -1,6 +1,7 @@
 package me.emafire003.dev.lightwithin.client;
 
 import me.emafire003.dev.lightwithin.LightWithin;
+import me.emafire003.dev.lightwithin.component.LightComponent;
 import me.emafire003.dev.lightwithin.config.ClientConfig;
 import me.emafire003.dev.lightwithin.networking.LightChargeConsumedPacketC2S;
 import me.emafire003.dev.lightwithin.networking.LightUsedPacketC2S;
@@ -42,8 +43,9 @@ public class ActivationKey {
                 }
             }
 
-            if (lightActivationKey.wasPressed()) {
-                if(!LightWithin.isPlayerInCooldown(client.player) && LIGHT_COMPONENT.get(client.player).getCurrentLightCharges() != 0){
+            LightComponent component = LIGHT_COMPONENT.get(client.player);
+            if (lightActivationKey.wasPressed() && component.hasTriggeredNaturally()) {
+                if(!LightWithin.isPlayerInCooldown(client.player) && component.getCurrentLightCharges() != 0){
                     ClientPlayNetworking.send(LightChargeConsumedPacketC2S.ID, new LightChargeConsumedPacketC2S(true));
 
                     client.player.playSound(LightSounds.LIGHT_READY, 1f, 0.63f);

@@ -193,11 +193,6 @@ public class LuxcognitaScreen extends Screen{
         return false;
     }
 
-    /*@Override
-    protected boolean hasUsageText() {
-        //TODO remvoe
-        return true;
-    }*/
     @Override
     public boolean shouldPause() {
         //This is the thing that allows the screen to keep being animated by the way.

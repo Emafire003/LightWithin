@@ -9,10 +9,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.damage.DamageTypes;
-import org.slf4j.Logger;
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
@@ -33,7 +30,6 @@ public abstract class LivingEntityDamageTriggersMixin {
         }else if(source.isOf(DamageTypes.EXPLOSION)){
             //Trigger damage from explosion
         }else if(source.isOf(DamageTypes.PLAYER_EXPLOSION)){
-            //TODO test properly in multiplayer
             Entity attacker = source.getAttacker();
             if(attacker instanceof LivingEntity){
                 EntityAttackEntityEvent.EVENT.invoker().attack((LivingEntity) attacker, entity);

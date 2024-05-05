@@ -27,7 +27,6 @@ import java.util.Objects;
 
 public class SetLightCommand implements LightCommand{
 
-    //TODO add command to set the naturally triggered state
     //Temporary, will remove once all lights have been implemented
     public static List<InnerLightType> currently_usable_lights = Arrays.asList(InnerLightType.HEAL, InnerLightType.DEFENCE,
             InnerLightType.STRENGTH, InnerLightType.BLAZING, InnerLightType.FROST, InnerLightType.EARTHEN,
@@ -232,6 +231,39 @@ public class SetLightCommand implements LightCommand{
         return 1;
     }
 
+    private int changeTriggeredNaturally(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
+        Collection<ServerPlayerEntity> targets = EntityArgumentType.getPlayers(context, "player");
+        boolean triggeredNaturally = BoolArgumentType.getBool(context, "triggeredNaturally");
+        ServerCommandSource source = context.getSource();
+
+        for(ServerPlayerEntity target : targets){
+            LightComponent component = LightWithin.LIGHT_COMPONENT.get(target);
+            component.setTriggeredNaturally(triggeredNaturally);
+
+            if(Config.TARGET_FEEDBACK){
+                if(triggeredNaturally){
+                    target.sendMessage(Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("Your light was set as "  ).formatted(Formatting.YELLOW)
+                            .append(Text.literal("Naturally triggered!").formatted(Formatting.GREEN))));
+                }else{
+                    target.sendMessage(Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("Your light was set as " ).formatted(Formatting.YELLOW)
+                            .append(Text.literal("not yet naturally triggered!").formatted(Formatting.RED))));
+                }
+            }
+
+            if(!Objects.requireNonNull(source.getPlayer()).equals(target) || !Config.TARGET_FEEDBACK){
+                if(triggeredNaturally){
+                    source.sendFeedback( () -> Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The light of §d" + target.getName().getString() + "§e has been set to " ).formatted(Formatting.YELLOW)
+                            .append(Text.literal("Naturally triggered!").formatted(Formatting.GREEN))), true);
+                }else{
+                    source.sendFeedback( () -> Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The light of §d" + target.getName().getString() + "§e has been set to " ).formatted(Formatting.YELLOW)
+                            .append(Text.literal("Not yet naturally triggered!").formatted(Formatting.RED))), true);
+                }
+            }
+
+        }
+        return 1;
+    }
+
     public LiteralCommandNode<ServerCommandSource> getNode() {
         return CommandManager
                 .literal("set")
@@ -318,6 +350,18 @@ public class SetLightCommand implements LightCommand{
                                                 .then(
                                                         CommandManager.argument("lock", BoolArgumentType.bool())
                                                                 .executes(this::changeLocked)
+                                                )
+
+                                )
+                )
+                .then(
+                        CommandManager
+                                .literal("hasTriggeredNaturally")
+                                .then(
+                                        CommandManager.argument("player", EntityArgumentType.players())
+                                                .then(
+                                                        CommandManager.argument("triggeredNaturally", BoolArgumentType.bool())
+                                                                .executes(this::changeTriggeredNaturally)
                                                 )
 
                                 )

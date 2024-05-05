@@ -24,7 +24,28 @@ import java.util.Map;
 
 public class GetLightCommand implements LightCommand{
 
-    //TODO add has naturally triggred info
+    private int getNaturallyTriggered(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
+        ServerPlayerEntity target = EntityArgumentType.getPlayer(context, "player");
+        ServerCommandSource source = context.getSource();
+
+        try{
+            boolean b = LightWithin.LIGHT_COMPONENT.get(target).hasTriggeredNaturally();
+            if(b){
+                source.sendFeedback(() -> Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The InnerLight of §d" + target.getName().getString() + "has ").formatted(Formatting.YELLOW)
+                        .append(Text.literal("already triggered naturally!").formatted(Formatting.GREEN))), true);
+            }else{
+                source.sendFeedback(() -> Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The InnerLight of §d" + target.getName().getString() + "has ").formatted(Formatting.YELLOW)
+                        .append(Text.literal("not yet triggered naturally!").formatted(Formatting.RED))), true);
+            }
+
+            return 1;
+        }catch(Exception e){
+            e.printStackTrace();
+            source.sendFeedback(() -> Text.literal("Error: " + e.toString()),false);
+            return 0;
+        }
+
+    }
 
     private int getType(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
         ServerPlayerEntity target = EntityArgumentType.getPlayer(context, "player");
@@ -194,9 +215,21 @@ public class GetLightCommand implements LightCommand{
             int maxLightStacks = component.getMaxLightStack();
             source.sendFeedback(() -> Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The max light charges number is: " ).formatted(Formatting.YELLOW)
                     .append(Text.literal("§a"+maxLightStacks)).append(Text.literal(", was: ").formatted(Formatting.YELLOW)).append(Text.literal(String.valueOf(LightCreationAndEvent.determineMaxLightCharges(originalUUID, LightCreationAndEvent.COOLDOWN_BIT))).formatted(Formatting.GREEN))), true);
-            boolean locked = component.getLocked();
-            source.sendFeedback(() -> Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("Locked: " ).formatted(Formatting.YELLOW)
-                    .append(Text.literal("§a"+locked))), true);
+
+            if(component.getLocked()){
+                source.sendFeedback(() -> Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("Locked: " ).formatted(Formatting.YELLOW)
+                        .append(Text.literal("true").formatted(Formatting.GREEN))), true);
+            }else{
+                source.sendFeedback(() -> Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("Locked: " ).formatted(Formatting.YELLOW)
+                        .append(Text.literal("false").formatted(Formatting.RED))), true);
+            }
+            if(component.hasTriggeredNaturally()){
+                source.sendFeedback(() -> Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("Has triggered naturally: " ).formatted(Formatting.YELLOW)
+                        .append(Text.literal("true").formatted(Formatting.GREEN))), true);
+            }else{
+                source.sendFeedback(() -> Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("Has triggered naturally: " ).formatted(Formatting.YELLOW)
+                        .append(Text.literal("false").formatted(Formatting.RED))), true);
+            }
 
             Map<StatusEffect, StatusEffectInstance> effect_map = target.getActiveStatusEffects();
             if(effect_map.containsKey(LightEffects.LIGHT_FATIGUE)){
@@ -323,6 +356,15 @@ public class GetLightCommand implements LightCommand{
                                         CommandManager.argument("player", EntityArgumentType.player())
                                                 .executes(this::getLocked)
 
+
+                                )
+                )
+                .then(
+                        CommandManager
+                                .literal("hasTriggeredNaturally")
+                                .then(
+                                        CommandManager.argument("player", EntityArgumentType.player())
+                                                .executes(this::getNaturallyTriggered)
 
                                 )
                 )

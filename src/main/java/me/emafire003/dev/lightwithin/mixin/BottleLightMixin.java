@@ -36,22 +36,22 @@ public abstract class BottleLightMixin {
         if(!LightWithin.LIGHT_COMPONENT.get(user).hasTriggeredNaturally()){
             return;
         }
-        if(LightWithin.CURRENTLY_READY_LIGHT_PLAYER_CACHE.containsKey(user.getUuid())){
+
+        if(LightWithin.CURRENTLY_READY_LIGHT_PLAYER_CACHE.containsKey(user.getUuid()) && !world.isClient()){
             //TODO modify the "vloop" sound to be more recognizable maybe? or some other sound
             if(!world.isClient()){
                 LightParticlesUtil.spawnLightBottledUpEffect((ServerPlayerEntity) user);
-            }
-            world.playSound(null, user.getX(), user.getY(), user.getZ(), SoundEvents.ITEM_BOTTLE_FILL_DRAGONBREATH, SoundCategory.NEUTRAL, 1.0f, 1.3f);
-            if(!world.isClient()){
                 ServerPlayNetworking.send((ServerPlayerEntity) user, LightReadyPacketS2C.ID, new LightReadyPacketS2C(false));
                 LightWithin.CURRENTLY_READY_LIGHT_PLAYER_CACHE.remove(user.getUuid());
             }
+            world.playSound(null, user.getX(), user.getY(), user.getZ(), SoundEvents.ITEM_BOTTLE_FILL_DRAGONBREATH, SoundCategory.NEUTRAL, 1.0f, 1.3f);
 
             user.addStatusEffect(new StatusEffectInstance(LightEffects.LIGHT_FATIGUE, (int) (Config.COOLDOWN_MULTIPLIER*20*LightWithin.LIGHT_COMPONENT.get(user).getMaxCooldown()/2)));
-            ItemStack bottled_light = fill(user.getStackInHand(hand), user, new ItemStack(LightItems.BOTTLED_LIGHT));
-            BottledLightItem.setCreatedBy(user, bottled_light);
-            cir.setReturnValue(TypedActionResult.success(bottled_light, world.isClient()));
 
+            ItemStack bottledLight = new ItemStack(LightItems.BOTTLED_LIGHT);
+            BottledLightItem.setCreatedBy(user, bottledLight);
+
+            cir.setReturnValue(TypedActionResult.success(fill(user.getStackInHand(hand), user, bottledLight), world.isClient()));
         }
     }
 }

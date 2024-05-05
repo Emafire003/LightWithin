@@ -1,8 +1,8 @@
 package me.emafire003.dev.lightwithin.events;
 
+import me.emafire003.dev.lightwithin.LightWithin;
 import me.emafire003.dev.lightwithin.component.LightComponent;
 import me.emafire003.dev.lightwithin.lights.InnerLightType;
-import me.emafire003.dev.lightwithin.status_effects.LightEffects;
 import me.emafire003.dev.lightwithin.util.CheckUtils;
 import net.fabricmc.fabric.api.event.player.AttackEntityCallback;
 import net.minecraft.entity.Entity;
@@ -40,10 +40,7 @@ public class LightTriggeringAndEvents {
         if(component.getLocked()){
             return false;
         }
-        if(player.hasStatusEffect(LightEffects.LIGHT_FATIGUE)){
-            return false;
-        }
-        if(player.hasStatusEffect(LightEffects.LIGHT_ACTIVE)){
+        if(LightWithin.isPlayerInCooldown(player)){
             return false;
         }
         return true;
@@ -146,7 +143,7 @@ public class LightTriggeringAndEvents {
     }
 
     public static void registerListeners(){
-        LOGGER.info("Registering events listeners...");
+        LOGGER.debug("Registering events listeners...");
 
         //may need to re-add those return statemes on every if
         //Player (or other entity) being attacked by something else
