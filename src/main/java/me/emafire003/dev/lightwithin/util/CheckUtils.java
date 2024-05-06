@@ -819,6 +819,9 @@ public class CheckUtils {
                 return b;
             }
         }
+        if(FabricLoader.getInstance().isModLoaded("factions")){
+            return FactionChecker.canActivateHere(player, player.getBlockPos());
+        }
         return Config.LIGHT_DEFAULT_STATUS;
     }
 

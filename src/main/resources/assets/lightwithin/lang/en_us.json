@@ -48,6 +48,7 @@
   "light.not_your_light": "This is not your light, it won't do anything!",
   "light.max_charges": "You have reached your maximum number of light charges!",
   "light.charge.cooldown_message": "You activated your light with a charge, the cooldown will be longer!",
+  "light.charge.cant_use_here": "You are not allowed to use your InnerLight here!",
 
   "light.description.error": "Uhm... your light is... an error? Light not found, report please!",
   "light.description.heal": "Your light, yes, is a gentle and caring one indeed",

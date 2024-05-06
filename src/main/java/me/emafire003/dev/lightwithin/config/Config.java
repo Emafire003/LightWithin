@@ -86,6 +86,19 @@ public class Config {
     public static boolean ALLOW_MAX_CHARGE_0;
     public static boolean ALLOW_MAX_CHARGE_8;
     public static boolean BYPASS_NATURAL_TRIGGER;
+    public static String LIGHT_USABLE_IN_FACTION = UsableInFactionOptions.EVERYONE.toString();
+
+    public enum UsableInFactionOptions{
+        EVERYONE,
+        ENEMIES,
+        ALLIES,
+        OWNER,
+        LEADER,
+        COMMANDER,
+        MEMBER,
+        GUEST
+    }
+
 
     public static void handleVersionChange(){
         int version_found = CONFIG.getOrDefault("version", ver);
@@ -224,7 +237,7 @@ public class Config {
         configs.addKeyValuePair(new Pair<>("allow_max_charge_8", true), "Can a player have 8 as a max light charges value? Note: won't change for players that already have a light, they will need to reset it");
 
         configs.addKeyValuePair(new Pair<>("bypass_natural_trigger", false), "If true will bypass the requirement of having to activate the light naturally before using a light charge");
-
+        configs.addKeyValuePair(new Pair<>("light_usable_in_faction", UsableInFactionOptions.EVERYONE.toString()), "If Factions is installed, who can activate a light in a faction territory? Options: EVERYONE, MEMBER, OWNER, LEADER, COMMANDER, GUEST, ALLIES, ENEMIES. The last two include members as well.");
     }
 
     public static void reloadConfig(){
@@ -299,6 +312,7 @@ public class Config {
         ALLOW_MAX_CHARGE_0 = CONFIG.getOrDefault("allow_max_charge_0", true);
         ALLOW_MAX_CHARGE_8 = CONFIG.getOrDefault("allow_max_charge_8", true);
         BYPASS_NATURAL_TRIGGER = CONFIG.getOrDefault("bypass_natural_trigger", false);
+        LIGHT_USABLE_IN_FACTION = CONFIG.getOrDefault("light_usable_in_faction", UsableInFactionOptions.EVERYONE.toString());
     }
 }
 

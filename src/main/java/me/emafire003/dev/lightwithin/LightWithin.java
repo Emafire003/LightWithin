@@ -183,6 +183,11 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 					//Handles the LightCharge being used. If it used, results will be true.
 					if(results){
 
+						if(!CheckUtils.canActivateHere(player)){
+							player.sendMessage(Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.translatableWithFallback("light.charge.cant_use_here", "You are not allowed to use you InnerLight here!").formatted(Formatting.RED)));
+							return;
+						}
+
 						//This could be laggy? Maybe?
 						List<ServerPlayerEntity> players = player.getServerWorld().getPlayers();
 						for(ServerPlayerEntity p : players){
@@ -221,6 +226,10 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 				try{
 
 					///particle lightwithin:shine_particle ~ ~1 ~ 0.1 0.1 0.1 0.15 25 force
+					if(!CheckUtils.canActivateHere(player)){
+						return;
+					}
+					player.sendMessage(Text.translatable("light.charge.used").formatted(Formatting.YELLOW), true);
 
 					((ServerWorld) player.getWorld()).spawnParticles(
 							LightParticles.SHINE_PARTICLE, player.getX(), player.getY()+player.getDimensions(player.getPose()).height/2, player.getZ(),

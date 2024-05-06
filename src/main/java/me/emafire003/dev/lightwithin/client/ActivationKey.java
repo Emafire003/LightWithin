@@ -13,7 +13,6 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.sound.SoundEvents;
-import net.minecraft.text.Text;
 import org.lwjgl.glfw.GLFW;
 
 import static me.emafire003.dev.lightwithin.LightWithin.LIGHT_COMPONENT;
@@ -48,13 +47,12 @@ public class ActivationKey {
                 if(!LightWithin.isPlayerInCooldown(client.player) && component.getCurrentLightCharges() != 0){
                     ClientPlayNetworking.send(LightChargeConsumedPacketC2S.ID, new LightChargeConsumedPacketC2S(true));
 
+                    //TODO improvement Maybe I should also wait for the server to see if i can actually trigger a light here. Like only send the packet and wait for the response. But meh.
                     client.player.playSound(LightSounds.LIGHT_READY, 1f, 0.63f);
                     client.player.playSound(SoundEvents.BLOCK_RESPAWN_ANCHOR_DEPLETE.value(), 0.37f, 1.3f);
                     LightWithinClient.setLightReady(true);
                     //Used to tell the server that the light has been activated by using a light charge.
                     LightWithinClient.setUsedCharge(true);
-                    client.player.sendMessage(Text.translatable("light.charge.used"), true);
-                    LIGHT_COMPONENT.get(client.player).setLightCharges(LIGHT_COMPONENT.get(client.player).getCurrentLightCharges()-1);
                 }else{
                     RendererEventHandler.setFailedToUseCharge();
                     client.player.playSound(LightSounds.LIGHT_ERROR, 0.5f, 1f);
