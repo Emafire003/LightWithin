@@ -240,11 +240,10 @@ public class LightWithinClient implements ClientModInitializer {
                                 }
                                 ((IRenderEffectsEntity)target).lightWithin$renderEffect(effect, (int) (4.5*20));
                                 if(client.world != null){
-                                    //TODO this doesn't really work apparently
-                                    client.world.playSoundFromEntity(null, target, LightSounds.LIGHT_CHARGED, SoundCategory.PLAYERS, 0.7f, 0.7f);
+                                    client.world.playSound(target.getPos().getX(), target.getPos().getY(), target.getPos().getZ(), LightSounds.LIGHT_CHARGED, SoundCategory.PLAYERS, 0.5f, 0.7f, true);
                                 }
                                 if(target.equals(client.player)){
-                                    client.player.playSound(LightSounds.LIGHT_CHARGED, 0.7f, 0.7f);
+                                    client.player.playSound(LightSounds.LIGHT_CHARGED, 0.5f, 0.7f);
                                 }
 
                             }

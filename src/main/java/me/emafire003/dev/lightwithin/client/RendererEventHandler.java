@@ -94,7 +94,6 @@ public class RendererEventHandler {
             }
 
             //Done to fix the bug of the light being avilable even after death or after triggering
-            //TODO couldn't this cause other visual bugs, like not displaying the runes?
             if(MinecraftClient.getInstance().player == null){
                 return;
             }

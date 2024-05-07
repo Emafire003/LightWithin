@@ -25,7 +25,6 @@ public class PlayRenderEffectPacketS2C extends PacketByteBuf {
     public PlayRenderEffectPacketS2C(RenderEffect effect) {
         super(Unpooled.buffer());
         this.writeEnumConstant(effect);
-        //TODO verify it doesn't exist by default
         this.writeInt(-1);
     }
 

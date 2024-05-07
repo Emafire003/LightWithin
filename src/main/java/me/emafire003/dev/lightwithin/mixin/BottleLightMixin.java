@@ -38,7 +38,6 @@ public abstract class BottleLightMixin {
         }
 
         if(LightWithin.CURRENTLY_READY_LIGHT_PLAYER_CACHE.containsKey(user.getUuid()) && !world.isClient()){
-            //TODO modify the "vloop" sound to be more recognizable maybe? or some other sound
             if(!world.isClient()){
                 LightParticlesUtil.spawnLightBottledUpEffect((ServerPlayerEntity) user);
                 ServerPlayNetworking.send((ServerPlayerEntity) user, LightReadyPacketS2C.ID, new LightReadyPacketS2C(false));

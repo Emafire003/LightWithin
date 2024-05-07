@@ -104,7 +104,6 @@ public class BottledLightItem extends Item {
                 }
             }
             return TypedActionResult.pass(stack);
-            //TODO what to do if there is no type or target? Explosion?
         }
 
         //Checks to see if the player and the bottle have the same light. Aka the player that created the bottle is the one using it.
