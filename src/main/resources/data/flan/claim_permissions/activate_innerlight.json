@@ -1,0 +1,11 @@
+{
+  "defaultDescription": [
+    "Permission to activate an InnerLight"
+  ],
+  "defaultVal": true,
+  "global": false,
+  "guiItem": {
+    "id": "lightwithin:luxintus_berry"
+  },
+  "order": 64
+}

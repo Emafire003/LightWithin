@@ -1,0 +1,11 @@
+{
+  "defaultDescription": [
+    "Permission to modify the terrain during a light activation"
+  ],
+  "defaultVal": true,
+  "global": true,
+  "guiItem": {
+    "id": "minecraft:redstone_lamp"
+  },
+  "order": 65
+}
