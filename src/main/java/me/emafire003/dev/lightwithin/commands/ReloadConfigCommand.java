@@ -20,7 +20,7 @@ public class ReloadConfigCommand implements LightCommand{
             TriggerConfig.reloadConfig();
             BalanceConfig.reloadConfig();
             context.getSource().getServer().getPlayerManager().getPlayerList().forEach(LightWithin::syncCustomConfigOptions);
-            context.getSource().sendFeedback( () -> Text.literal(LightWithin.PREFIX_MSG).append("§aConfig successfully reloaded!"), false);
+            context.getSource().sendFeedback(Text.literal(LightWithin.PREFIX_MSG).append("§aConfig successfully reloaded!"), false);
             return 1;
         }catch (Exception e){
             context.getSource().sendError(Text.literal(LightWithin.PREFIX_MSG).append("§cThere has been an error while reloading the config, check the logs"));

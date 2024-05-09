@@ -99,9 +99,8 @@ dependencies {
 	modImplementation "maven.modrinth:factions:${project.factions_version}"
 
 	//Argonauts
-	modCompileOnly "maven.modrinth:argonauts:${project.argonauts_version}"
-	modCompileOnly "maven.modrinth:resourceful-lib:${project.resourcefullib_version}"
-	//Which requires maybe: resourceful-lib
+	//modCompileOnly "maven.modrinth:argonauts:${project.argonauts_version}"
+	//modCompileOnly "maven.modrinth:resourceful-lib:${project.resourcefullib_version}"
 
 	//Open parties and claims aka OPAC
 	modCompileOnly "maven.modrinth:open-parties-and-claims:${project.opac_version}"
@@ -122,9 +121,9 @@ dependencies {
 	modCompileOnly "maven.modrinth:replaymod:${project.replaymod_version}"
 
 	//Flan
-	modCompileOnly("maven.modrinth:flan:${project.flan_version}"){
+	/*modCompileOnly("maven.modrinth:flan:${project.flan_version}"){
 		transitive = false
-	}
+	}*/
 
 	//Yet another world protector (world protection)
 	//modImplementation("maven.modrinth:yawp:${project.yawp_version}")

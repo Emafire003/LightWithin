@@ -12,14 +12,14 @@ import net.minecraft.util.math.BlockPos;
 public class YawpCompat {
 
     public static boolean canActivateHere(ServerPlayerEntity player, BlockPos pos){
-        DimensionRegionCache dimCache = RegionDataManager.get().cacheFor(player.getServerWorld().getRegistryKey());
+        DimensionRegionCache dimCache = RegionDataManager.get().cacheFor(player.getWorld().getRegistryKey());
         FlagCheckEvent flagCheckEvent = HandlerUtil.checkTargetEvent(pos, RegionFlag.NO_PVP, dimCache.getDimensionalRegion());
         return !flagCheckEvent.isDenied();
 
     }
 
     public static boolean canActivateHereGriefing(ServerPlayerEntity player, BlockPos pos){
-        DimensionRegionCache dimCache = RegionDataManager.get().cacheFor(player.getServerWorld().getRegistryKey());
+        DimensionRegionCache dimCache = RegionDataManager.get().cacheFor(player.getWorld().getRegistryKey());
         FlagCheckEvent flagCheckEvent = HandlerUtil.checkTargetEvent(pos, RegionFlag.BREAK_BLOCKS, dimCache.getDimensionalRegion());
         return !flagCheckEvent.isDenied();
     }

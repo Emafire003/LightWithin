@@ -6,8 +6,8 @@ import me.x150.renderer.ClipStack;
 import me.x150.renderer.Rectangle;
 import me.x150.renderer.Renderer2d;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.network.ClientPlayerEntity;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
 
 import static me.emafire003.dev.lightwithin.LightWithin.LOGGER;
@@ -40,11 +40,11 @@ public class TargetRenderer {
     private static float item_animation_multiplier = 1;
 
     /** Clipstack stuff must be called before this!*/
-    private static void renderOverlay(DrawContext drawContext, int center_x, int center_y, double length){
-        Renderer2d.renderTexture(drawContext.getMatrices(), new Identifier(LightWithin.MOD_ID, "textures/lights/ingredients/overlay.png"), center_x-length/2, center_y-length/2, length, length);
+    private static void renderOverlay(MatrixStack matrixStack, int center_x, int center_y, double length){
+        Renderer2d.renderTexture(matrixStack, new Identifier(LightWithin.MOD_ID, "textures/lights/ingredients/overlay.png"), center_x-length/2, center_y-length/2, length, length);
     }
 
-    public static void render(TargetType targetType, DrawContext drawContext){
+    public static void render(TargetType targetType, MatrixStack matrixStack){
         ClientPlayerEntity player = MinecraftClient.getInstance().player;
         if(player == null){
             LOGGER.error("Can't display Luxcognita items renders! Client player is null!");
@@ -56,9 +56,9 @@ public class TargetRenderer {
 
         double length = 16* scale * item_animation_multiplier;
 
-        ClipStack.addWindow(drawContext.getMatrices(), new Rectangle((center_x-length/2)-40,(center_y-length/2),(center_x+length/2)+40,(center_y+length/2)));
-        Renderer2d.renderTexture(drawContext.getMatrices(), new Identifier(LightWithin.MOD_ID, "textures/lights/target_icons/blurred/" + targetType.toString().toLowerCase() + ".png"), center_x-length/2, center_y-length/2, length, length);
-        renderOverlay(drawContext, center_x, center_y, length);
+        ClipStack.addWindow(matrixStack, new Rectangle((center_x-length/2)-40,(center_y-length/2),(center_x+length/2)+40,(center_y+length/2)));
+        Renderer2d.renderTexture(matrixStack, new Identifier(LightWithin.MOD_ID, "textures/lights/target_icons/blurred/" + targetType.toString().toLowerCase() + ".png"), center_x-length/2, center_y-length/2, length, length);
+        renderOverlay(matrixStack, center_x, center_y, length);
         ClipStack.popWindow();
     }
 

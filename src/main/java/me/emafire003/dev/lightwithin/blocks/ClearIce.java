@@ -77,12 +77,12 @@ public class ClearIce extends FrostedIceBlock {
                 mutable.set(pos, direction);
                 BlockState blockState = world.getBlockState(mutable);
                 if (blockState.isOf(this) && !this.increaseAge(blockState, world, mutable)) {
-                    world.scheduleBlockTick(mutable, this, MathHelper.nextInt(random, 20, 40));
+                    world.createAndScheduleBlockTick(mutable, this, MathHelper.nextInt(random, 20, 40));
                 }
             }
 
         } else {
-            world.scheduleBlockTick(pos, this, MathHelper.nextInt(random, 20, 40));
+            world.createAndScheduleBlockTick(pos, this, MathHelper.nextInt(random, 20, 40));
         }
     }
 
@@ -124,14 +124,14 @@ public class ClearIce extends FrostedIceBlock {
                 return;
             }
 
-            BlockState blockState = world.getBlockState(pos.down());
-            if (blockState.blocksMovement() || blockState.isLiquid()) {
-                world.setBlockState(pos, getMeltedState());
+            Material material = world.getBlockState(pos.down()).getMaterial();
+            if (material.blocksMovement() || material.isLiquid()) {
+                world.setBlockState(pos, Blocks.WATER.getDefaultState());
             }
         }
         if(!world.isClient()){
             ((ServerWorld) world).spawnParticles(ParticleTypes.SNOWFLAKE,
-                    pos.toCenterPos().getX(), pos.toCenterPos().getY()+0.5, pos.toCenterPos().getZ(),
+                    pos.getX(), pos.getY()+0.5, pos.getZ(),
                     150, 0.00001, 0.00001, 0.00001, 0.015);
         }
     }

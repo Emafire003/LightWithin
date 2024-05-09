@@ -4,6 +4,7 @@ import me.emafire003.dev.lightwithin.LightWithin;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.render.RenderLayer;
+import net.minecraft.client.render.RenderPhase;
 import net.minecraft.client.render.VertexFormat;
 import net.minecraft.client.render.VertexFormats;
 import net.minecraft.util.Identifier;
@@ -26,7 +27,7 @@ public class LightRenderLayer extends RenderLayer {
     static {
         LIGHT_SCREEN = RenderLayer.of("LIGHT_SCREEN", VertexFormats.POSITION, VertexFormat.DrawMode.QUADS, 256, false, false,
                 MultiPhaseParameters.builder()
-                        .program(END_GATEWAY_PROGRAM)
+                        .shader(RenderPhase.END_GATEWAY_SHADER)
                         .texture(Textures.create()
                                 .add(SKY_TEXTURE, true, false)
                                 .add(LIGHT_SCREEN_TEXTURE, true, false)

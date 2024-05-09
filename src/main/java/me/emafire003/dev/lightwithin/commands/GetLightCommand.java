@@ -31,17 +31,17 @@ public class GetLightCommand implements LightCommand{
         try{
             boolean b = LightWithin.LIGHT_COMPONENT.get(target).hasTriggeredNaturally();
             if(b){
-                source.sendFeedback(() -> Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The InnerLight of §d" + target.getName().getString() + "has ").formatted(Formatting.YELLOW)
+                source.sendFeedback(Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The InnerLight of §d" + target.getName().getString() + "has ").formatted(Formatting.YELLOW)
                         .append(Text.literal("already triggered naturally!").formatted(Formatting.GREEN))), true);
             }else{
-                source.sendFeedback(() -> Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The InnerLight of §d" + target.getName().getString() + "has ").formatted(Formatting.YELLOW)
+                source.sendFeedback(Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The InnerLight of §d" + target.getName().getString() + "has ").formatted(Formatting.YELLOW)
                         .append(Text.literal("not yet triggered naturally!").formatted(Formatting.RED))), true);
             }
 
             return 1;
         }catch(Exception e){
             e.printStackTrace();
-            source.sendFeedback(() -> Text.literal("Error: " + e.toString()),false);
+            source.sendFeedback(Text.literal("Error: " + e.toString()),false);
             return 0;
         }
 
@@ -53,12 +53,12 @@ public class GetLightCommand implements LightCommand{
 
         try{
             InnerLightType type = LightWithin.LIGHT_COMPONENT.get(target).getType();
-            source.sendFeedback(() -> Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The InnerLight type of §d" + target.getName().getString() + "§e is: " ).formatted(Formatting.YELLOW)
+            source.sendFeedback(Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The InnerLight type of §d" + target.getName().getString() + "§e is: " ).formatted(Formatting.YELLOW)
                         .append(Text.literal(type.toString()).formatted(Formatting.GREEN))), true);
             return 1;
         }catch(Exception e){
             e.printStackTrace();
-            source.sendFeedback(() -> Text.literal("Error: " + e.toString()),false);
+            source.sendFeedback(Text.literal("Error: " + e.toString()),false);
             return 0;
         }
 
@@ -70,12 +70,12 @@ public class GetLightCommand implements LightCommand{
 
         try{
             TargetType type = LightWithin.LIGHT_COMPONENT.get(target).getTargets();
-            source.sendFeedback(() -> Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The TargetType of §d" + target.getName().getString() + "§e is: " ).formatted(Formatting.YELLOW)
+            source.sendFeedback(Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The TargetType of §d" + target.getName().getString() + "§e is: " ).formatted(Formatting.YELLOW)
                     .append(Text.literal(type.toString()).formatted(Formatting.GREEN))), true);
             return 1;
         }catch(Exception e){
             e.printStackTrace();
-            source.sendFeedback(() -> Text.literal("Error: " + e.toString()),false);
+            source.sendFeedback(Text.literal("Error: " + e.toString()),false);
             return 0;
         }
 
@@ -87,12 +87,12 @@ public class GetLightCommand implements LightCommand{
 
         try{
             double power = LightWithin.LIGHT_COMPONENT.get(target).getPowerMultiplier();
-            source.sendFeedback(() -> Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The power multiplier of §d" + target.getName().getString() + "§e is: " ).formatted(Formatting.YELLOW)
+            source.sendFeedback(Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The power multiplier of §d" + target.getName().getString() + "§e is: " ).formatted(Formatting.YELLOW)
                     .append(Text.literal("§a"+power))), true);
             return 1;
         }catch(Exception e){
             e.printStackTrace();
-            source.sendFeedback(() -> Text.literal("Error: " + e.toString()),false);
+            source.sendFeedback(Text.literal("Error: " + e.toString()),false);
             return 0;
         }
     }
@@ -103,12 +103,12 @@ public class GetLightCommand implements LightCommand{
 
         try{
             int duration = LightWithin.LIGHT_COMPONENT.get(target).getDuration();
-            source.sendFeedback(() -> Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The duration of §d" + target.getName().getString() + "§e is: " ).formatted(Formatting.YELLOW)
+            source.sendFeedback(Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The duration of §d" + target.getName().getString() + "§e is: " ).formatted(Formatting.YELLOW)
                     .append(Text.literal("§a"+duration))), true);
             return 1;
         }catch(Exception e){
             e.printStackTrace();
-            source.sendFeedback(() -> Text.literal("Error: " + e),false);
+            source.sendFeedback(Text.literal("Error: " + e),false);
             return 0;
         }
     }
@@ -119,12 +119,12 @@ public class GetLightCommand implements LightCommand{
 
         try{
             int cooldown = LightWithin.LIGHT_COMPONENT.get(target).getMaxCooldown();
-            source.sendFeedback(() -> Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The max cooldown of §d" + target.getName().getString() + "§e is: " ).formatted(Formatting.YELLOW)
+            source.sendFeedback(Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The max cooldown of §d" + target.getName().getString() + "§e is: " ).formatted(Formatting.YELLOW)
                     .append(Text.literal("§a"+cooldown))), true);
             return 1;
         }catch(Exception e){
             e.printStackTrace();
-            source.sendFeedback(() -> Text.literal("Error: " + e),false);
+            source.sendFeedback(Text.literal("Error: " + e),false);
             return 0;
         }
     }
@@ -135,12 +135,12 @@ public class GetLightCommand implements LightCommand{
 
         try{
             int maxLightStack = LightWithin.LIGHT_COMPONENT.get(target).getMaxLightStack();
-            source.sendFeedback(() -> Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The max number of light charges for §d" + target.getName().getString() + "§e is: " ).formatted(Formatting.YELLOW)
+            source.sendFeedback(Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The max number of light charges for §d" + target.getName().getString() + "§e is: " ).formatted(Formatting.YELLOW)
                     .append(Text.literal("§a"+maxLightStack))), true);
             return 1;
         }catch(Exception e){
             e.printStackTrace();
-            source.sendFeedback(() -> Text.literal("Error: " + e),false);
+            source.sendFeedback(Text.literal("Error: " + e),false);
             return 0;
         }
     }
@@ -152,16 +152,16 @@ public class GetLightCommand implements LightCommand{
         try{
             boolean locked = LightWithin.LIGHT_COMPONENT.get(target).getLocked();
             if(!locked){
-                source.sendFeedback(() -> Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The light for §d" + target.getName().getString() + "§e is: " ).formatted(Formatting.YELLOW)
+                source.sendFeedback(Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The light for §d" + target.getName().getString() + "§e is: " ).formatted(Formatting.YELLOW)
                         .append(Text.literal("§aUnlocked"))), true);
             }else{
-                source.sendFeedback(() -> Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The light for §d" + target.getName().getString() + "§e is: " ).formatted(Formatting.YELLOW)
+                source.sendFeedback(Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The light for §d" + target.getName().getString() + "§e is: " ).formatted(Formatting.YELLOW)
                         .append(Text.literal("§cLocked"))), true);
             }
             return 1;
         }catch(Exception e){
             e.printStackTrace();
-            source.sendFeedback(() -> Text.literal("Error: " + e),false);
+            source.sendFeedback(Text.literal("Error: " + e),false);
             return 0;
         }
     }
@@ -174,16 +174,16 @@ public class GetLightCommand implements LightCommand{
             Map<StatusEffect, StatusEffectInstance> effect_map = target.getActiveStatusEffects();
             if(effect_map.containsKey(LightEffects.LIGHT_FATIGUE)){
                 int cooldown = effect_map.get(LightEffects.LIGHT_FATIGUE).getDuration()/20;
-                source.sendFeedback(() -> Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The current cooldown of §d" + target.getName().getString() + "§e is: " ).formatted(Formatting.YELLOW)
+                source.sendFeedback(Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The current cooldown of §d" + target.getName().getString() + "§e is: " ).formatted(Formatting.YELLOW)
                         .append(Text.literal("§a"+cooldown))), true);
             }else{
-                source.sendFeedback(() -> Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("§d " + target.getName().getString() + "§eis not in cooldown" ).formatted(Formatting.YELLOW)), true);
+                source.sendFeedback(Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("§d " + target.getName().getString() + "§eis not in cooldown" ).formatted(Formatting.YELLOW)), true);
             }
 
             return 1;
         }catch(Exception e){
             e.printStackTrace();
-            source.sendFeedback(() -> Text.literal("Error: " + e),false);
+            source.sendFeedback(Text.literal("Error: " + e),false);
             return 0;
         }
     }
@@ -198,53 +198,53 @@ public class GetLightCommand implements LightCommand{
 
             LightComponent component = LightWithin.LIGHT_COMPONENT.get(target);
             InnerLightType type = component.getType();
-            source.sendFeedback(() -> Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The InnerLight type of §d" + target.getName().getString() + "§e is: " ).formatted(Formatting.YELLOW)
+            source.sendFeedback(Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The InnerLight type of §d" + target.getName().getString() + "§e is: " ).formatted(Formatting.YELLOW)
                     .append(Text.literal(type.toString()).formatted(Formatting.GREEN)).append(Text.literal(", was: ").formatted(Formatting.YELLOW)).append(Text.literal(original_type_target.getFirst().toString()).formatted(Formatting.GREEN))), true);
             TargetType target_type = component.getTargets();
-            source.sendFeedback(() -> Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The TargetType is: " ).formatted(Formatting.YELLOW)
+            source.sendFeedback(Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The TargetType is: " ).formatted(Formatting.YELLOW)
                     .append(Text.literal(target_type.toString()).formatted(Formatting.GREEN)).append(Text.literal(", was: ").formatted(Formatting.YELLOW)).append(Text.literal(original_type_target.getSecond().toString()).formatted(Formatting.GREEN))), true);
             double power = component.getPowerMultiplier();
-            source.sendFeedback(() -> Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The power multiplier is: " ).formatted(Formatting.YELLOW)
+            source.sendFeedback(Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The power multiplier is: " ).formatted(Formatting.YELLOW)
                     .append(Text.literal("§a"+power)).append(Text.literal(", was: ").formatted(Formatting.YELLOW)).append(Text.literal(String.valueOf(LightCreationAndEvent.determinePower(originalUUID, LightCreationAndEvent.POWER_BIT))).formatted(Formatting.GREEN))), true);
             int duration = component.getDuration();
-            source.sendFeedback(() -> Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The duration is: " ).formatted(Formatting.YELLOW)
+            source.sendFeedback(Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The duration is: " ).formatted(Formatting.YELLOW)
                     .append(Text.literal("§a"+duration)).append(Text.literal(", was: ").formatted(Formatting.YELLOW)).append(Text.literal(String.valueOf(LightCreationAndEvent.determineDuration(originalUUID, LightCreationAndEvent.DURATION_BIT))).formatted(Formatting.GREEN))), true);
             int mcooldown = component.getMaxCooldown();
-            source.sendFeedback(() -> Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The max cooldown is: " ).formatted(Formatting.YELLOW)
+            source.sendFeedback(Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The max cooldown is: " ).formatted(Formatting.YELLOW)
                     .append(Text.literal("§a"+mcooldown)).append(Text.literal(", was: ").formatted(Formatting.YELLOW)).append(Text.literal(String.valueOf(LightCreationAndEvent.determineCooldown(originalUUID, LightCreationAndEvent.COOLDOWN_BIT))).formatted(Formatting.GREEN))), true);
             int maxLightStacks = component.getMaxLightStack();
-            source.sendFeedback(() -> Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The max light charges number is: " ).formatted(Formatting.YELLOW)
+            source.sendFeedback(Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The max light charges number is: " ).formatted(Formatting.YELLOW)
                     .append(Text.literal("§a"+maxLightStacks)).append(Text.literal(", was: ").formatted(Formatting.YELLOW)).append(Text.literal(String.valueOf(LightCreationAndEvent.determineMaxLightCharges(originalUUID, LightCreationAndEvent.COOLDOWN_BIT))).formatted(Formatting.GREEN))), true);
 
             if(component.getLocked()){
-                source.sendFeedback(() -> Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("Locked: " ).formatted(Formatting.YELLOW)
+                source.sendFeedback(Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("Locked: " ).formatted(Formatting.YELLOW)
                         .append(Text.literal("true").formatted(Formatting.GREEN))), true);
             }else{
-                source.sendFeedback(() -> Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("Locked: " ).formatted(Formatting.YELLOW)
+                source.sendFeedback(Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("Locked: " ).formatted(Formatting.YELLOW)
                         .append(Text.literal("false").formatted(Formatting.RED))), true);
             }
             if(component.hasTriggeredNaturally()){
-                source.sendFeedback(() -> Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("Has triggered naturally: " ).formatted(Formatting.YELLOW)
+                source.sendFeedback(Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("Has triggered naturally: " ).formatted(Formatting.YELLOW)
                         .append(Text.literal("true").formatted(Formatting.GREEN))), true);
             }else{
-                source.sendFeedback(() -> Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("Has triggered naturally: " ).formatted(Formatting.YELLOW)
+                source.sendFeedback(Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("Has triggered naturally: " ).formatted(Formatting.YELLOW)
                         .append(Text.literal("false").formatted(Formatting.RED))), true);
             }
 
             Map<StatusEffect, StatusEffectInstance> effect_map = target.getActiveStatusEffects();
             if(effect_map.containsKey(LightEffects.LIGHT_FATIGUE)){
                 int cooldown = effect_map.get(LightEffects.LIGHT_FATIGUE).getDuration()/20;
-                source.sendFeedback(() -> Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The current cooldown is: ").formatted(Formatting.YELLOW).append(Text.literal("§a"+cooldown))), true);
+                source.sendFeedback(Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The current cooldown is: ").formatted(Formatting.YELLOW).append(Text.literal("§a"+cooldown))), true);
             }else{
-                source.sendFeedback(() -> Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("§d" + target.getName().getString() + "§e is not in cooldown" ).formatted(Formatting.YELLOW)), true);
+                source.sendFeedback(Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("§d" + target.getName().getString() + "§e is not in cooldown" ).formatted(Formatting.YELLOW)), true);
             }
-            source.sendFeedback(() -> Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The current number of light charges is: " ).formatted(Formatting.YELLOW)
+            source.sendFeedback(Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The current number of light charges is: " ).formatted(Formatting.YELLOW)
                     .append(Text.literal("§a"+component.getCurrentLightCharges()))), true);
 
             return 1;
         }catch(Exception e){
             e.printStackTrace();
-            source.sendFeedback(() -> Text.literal("Error: " + e),false);
+            source.sendFeedback(Text.literal("Error: " + e),false);
             return 0;
         }
     }
@@ -253,12 +253,12 @@ public class GetLightCommand implements LightCommand{
         ServerCommandSource source = context.getSource();
 
         try{
-            source.sendFeedback(() -> Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The light-types available at this moment are: " ).formatted(Formatting.YELLOW)
+            source.sendFeedback(Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The light-types available at this moment are: " ).formatted(Formatting.YELLOW)
                     .append(Text.literal(SetLightCommand.currently_usable_lights.toString()).formatted(Formatting.GREEN))), true);
             return 1;
         }catch(Exception e){
             e.printStackTrace();
-            source.sendFeedback(() -> Text.literal("Error: " + e),false);
+            source.sendFeedback(Text.literal("Error: " + e),false);
             return 0;
         }
     }

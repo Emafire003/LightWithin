@@ -47,7 +47,7 @@ public class RerollLightCommand implements LightCommand{
                     target.sendMessage(Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The target type, and the type of your InnerLight have been changed, your new ones are: " ).formatted(Formatting.YELLOW)
                             .append(Text.literal(type.toString()).formatted(Formatting.GREEN)).append(" and ").formatted(Formatting.YELLOW).append(Text.literal(targets_new.toString()).formatted(Formatting.GREEN))));
                 }
-                source.sendFeedback( () -> Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("§eThe new light type and target type for " + target.getName().getString() + " are: §a" + type + " §eand §a" + targets_new)), false);
+                source.sendFeedback(Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("§eThe new light type and target type for " + target.getName().getString() + " are: §a" + type + " §eand §a" + targets_new)), false);
 
             }
         }catch (Exception e){
@@ -81,7 +81,7 @@ public class RerollLightCommand implements LightCommand{
                     target.sendMessage(Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The target type of your InnerLight has been changed, your new one is: " ).formatted(Formatting.YELLOW)
                             .append(Text.literal(targets_new.toString()).formatted(Formatting.GREEN))));
                 }
-                source.sendFeedback( () -> Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("§eThe new target type for " + target.getName().getString() + " is: §a" + targets_new)), false);
+                source.sendFeedback(Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("§eThe new target type for " + target.getName().getString() + " is: §a" + targets_new)), false);
 
             }
         }catch (Exception e){
@@ -108,7 +108,7 @@ public class RerollLightCommand implements LightCommand{
 
                 InnerLightType type = newone.getFirst();
                 component.setType(newone.getFirst());
-                source.sendFeedback( () -> Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("§eThe new light type for " + target.getName().getString() + " is: §a" + type )), false);
+                source.sendFeedback(Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("§eThe new light type for " + target.getName().getString() + " is: §a" + type )), false);
                 if(Config.TARGET_FEEDBACK){
                     target.sendMessage(Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The type of your InnerLight has been changed, your new one is: " ).formatted(Formatting.YELLOW)
                             .append(Text.literal(type.toString()).formatted(Formatting.GREEN))));
@@ -121,7 +121,7 @@ public class RerollLightCommand implements LightCommand{
                         target.sendMessage(Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The target type of your InnerLight has been changed, your new one is: " ).formatted(Formatting.YELLOW)
                                 .append(Text.literal(targets_new.toString()).formatted(Formatting.GREEN))));
                     }
-                    source.sendFeedback( () -> Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("§eThe new target type for " + target.getName().getString() + " is: §a" + targets_new )), false);
+                    source.sendFeedback(Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("§eThe new target type for " + target.getName().getString() + " is: §a" + targets_new )), false);
                 }
 
 
@@ -150,7 +150,7 @@ public class RerollLightCommand implements LightCommand{
                 target.sendMessage(Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The power multiplier of your InnerLight has been changed, your new one is: " ).formatted(Formatting.YELLOW)
                         .append(Text.literal(String.valueOf(power)).formatted(Formatting.GREEN))));
             }
-            source.sendFeedback( () -> Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("§eThe new power multiplier of " + target.getName().getString() + " is: §a" + component.getPowerMultiplier())), false);
+            source.sendFeedback(Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("§eThe new power multiplier of " + target.getName().getString() + " is: §a" + component.getPowerMultiplier())), false);
 
         }
         return  1;
@@ -170,7 +170,7 @@ public class RerollLightCommand implements LightCommand{
                 target.sendMessage(Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The duration of your InnerLight has been changed, your new one is: " ).formatted(Formatting.YELLOW)
                         .append(Text.literal(String.valueOf(duration)).formatted(Formatting.GREEN))));
             }
-            source.sendFeedback( () -> Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("§eThe new duration of " + target.getName().getString() + " is: §a" + component.getDuration())), false);
+            source.sendFeedback(Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("§eThe new duration of " + target.getName().getString() + " is: §a" + component.getDuration())), false);
 
         }
         return  1;
@@ -190,7 +190,7 @@ public class RerollLightCommand implements LightCommand{
                 target.sendMessage(Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The max cooldown of your InnerLight has been changed, your new one is: " ).formatted(Formatting.YELLOW)
                         .append(Text.literal(String.valueOf(cooldown)).formatted(Formatting.GREEN))));
             }
-            source.sendFeedback( () -> Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("§eThe new max cooldown of " + target.getName().getString() + " is: §a" + component.getMaxCooldown())), false);
+            source.sendFeedback(Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("§eThe new max cooldown of " + target.getName().getString() + " is: §a" + component.getMaxCooldown())), false);
 
         }
         return  1;
@@ -210,7 +210,7 @@ public class RerollLightCommand implements LightCommand{
                 target.sendMessage(Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The number of max light charges of your InnerLight has been changed, your new one is: " ).formatted(Formatting.YELLOW)
                         .append(Text.literal(String.valueOf(lightCharges)).formatted(Formatting.GREEN))));
             }
-            source.sendFeedback( () -> Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("§eThe new number of max light charges of " + target.getName().getString() + " is: §a" + lightCharges)), false);
+            source.sendFeedback(Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("§eThe new number of max light charges of " + target.getName().getString() + " is: §a" + lightCharges)), false);
 
         }
         return  1;

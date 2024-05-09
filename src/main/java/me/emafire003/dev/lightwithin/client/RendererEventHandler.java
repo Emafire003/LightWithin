@@ -65,7 +65,7 @@ public class RendererEventHandler {
     public void registerRenderEvent(){
         LOGGER.info("Registering runes renderer...");
         updateFromConfig();
-        RenderEvents.HUD.register(drawContext -> {
+        RenderEvents.HUD.register(matrixStack -> {
 
             if(MinecraftClient.getInstance().player == null){
                 return;
@@ -79,16 +79,16 @@ public class RendererEventHandler {
                 InnerLightType type = component.getType();
                 TargetType targetType = component.getTargets();
                 if(RunesRenderer.shouldRender() && allow_draw_runes){
-                    RunesRenderer.render(type, drawContext);
+                    RunesRenderer.render(type, matrixStack);
                 }
                 if(TypeItemRenderer.shouldRender()){
-                    TypeItemRenderer.render(type, drawContext);
+                    TypeItemRenderer.render(type, matrixStack);
                 }
                 if(TargetItemRenderer.shouldRender()){
-                    TargetItemRenderer.render(targetType, drawContext);
+                    TargetItemRenderer.render(targetType, matrixStack);
                 }
                 if(TargetRenderer.shouldRender()){
-                    TargetRenderer.render(targetType, drawContext);
+                    TargetRenderer.render(targetType, matrixStack);
                 }
 
             }
@@ -116,8 +116,8 @@ public class RendererEventHandler {
             scale_factor = MinecraftClient.getInstance().getWindow().getScaleFactor();
 
             if(LightWithinClient.isLightReady()){
-                ClipStack.addWindow(drawContext.getMatrices(),new Rectangle(light_ready_x,light_ready_y,light_ready_x*ready_icon_scale+40,light_ready_y*ready_icon_scale+40));
-                Renderer2d.renderTexture(drawContext.getMatrices(), new Identifier(LightWithin.MOD_ID, "textures/lights/light.png"), light_ready_x, light_ready_y, 20* charge_icon_scale, 20* charge_icon_scale);
+                ClipStack.addWindow(matrixStack,new Rectangle(light_ready_x,light_ready_y,light_ready_x*ready_icon_scale+40,light_ready_y*ready_icon_scale+40));
+                Renderer2d.renderTexture(matrixStack, new Identifier(LightWithin.MOD_ID, "textures/lights/light.png"), light_ready_x, light_ready_y, 20* charge_icon_scale, 20* charge_icon_scale);
                 ClipStack.popWindow();
                 //Be aware of the return here, may cause bugs in the future! 13.03.2024
                 return;
@@ -125,15 +125,15 @@ public class RendererEventHandler {
 
             if(failed_to_use_charge){
                 int charges_number = component.getCurrentLightCharges();
-                ClipStack.addWindow(drawContext.getMatrices(),new Rectangle(light_charge_x,light_charge_y,light_charge_x* charge_icon_scale +40,light_charge_y* charge_icon_scale +40));
-                Renderer2d.renderTexture(drawContext.getMatrices(), new Identifier(LightWithin.MOD_ID, "textures/lights/light_charge_base_error.png"), light_charge_x, light_charge_y, 20* charge_icon_scale, 20* charge_icon_scale);
-                Renderer2d.renderTexture(drawContext.getMatrices(), new Identifier(LightWithin.MOD_ID, "textures/lights/light_charge_overlay_"+ charges_number +".png"), light_charge_x, light_charge_y, 20* charge_icon_scale, 20* charge_icon_scale);
+                ClipStack.addWindow(matrixStack,new Rectangle(light_charge_x,light_charge_y,light_charge_x* charge_icon_scale +40,light_charge_y* charge_icon_scale +40));
+                Renderer2d.renderTexture(matrixStack, new Identifier(LightWithin.MOD_ID, "textures/lights/light_charge_base_error.png"), light_charge_x, light_charge_y, 20* charge_icon_scale, 20* charge_icon_scale);
+                Renderer2d.renderTexture(matrixStack, new Identifier(LightWithin.MOD_ID, "textures/lights/light_charge_overlay_"+ charges_number +".png"), light_charge_x, light_charge_y, 20* charge_icon_scale, 20* charge_icon_scale);
                 ClipStack.popWindow();
             } else if(LightWithinClient.shouldDrawChargesCount() && component.hasTriggeredNaturally()){
                 int charges_number = component.getCurrentLightCharges();
-                ClipStack.addWindow(drawContext.getMatrices(),new Rectangle(light_charge_x,light_charge_y,light_charge_x* charge_icon_scale +40,light_charge_y* charge_icon_scale +40));
-                Renderer2d.renderTexture(drawContext.getMatrices(), new Identifier(LightWithin.MOD_ID, "textures/lights/light_charge_base.png"), light_charge_x, light_charge_y, 20* charge_icon_scale, 20* charge_icon_scale);
-                Renderer2d.renderTexture(drawContext.getMatrices(), new Identifier(LightWithin.MOD_ID, "textures/lights/light_charge_overlay_"+ charges_number +".png"), light_charge_x, light_charge_y, 20* charge_icon_scale, 20* charge_icon_scale);
+                ClipStack.addWindow(matrixStack,new Rectangle(light_charge_x,light_charge_y,light_charge_x* charge_icon_scale +40,light_charge_y* charge_icon_scale +40));
+                Renderer2d.renderTexture(matrixStack, new Identifier(LightWithin.MOD_ID, "textures/lights/light_charge_base.png"), light_charge_x, light_charge_y, 20* charge_icon_scale, 20* charge_icon_scale);
+                Renderer2d.renderTexture(matrixStack, new Identifier(LightWithin.MOD_ID, "textures/lights/light_charge_overlay_"+ charges_number +".png"), light_charge_x, light_charge_y, 20* charge_icon_scale, 20* charge_icon_scale);
                 ClipStack.popWindow();
             }
 

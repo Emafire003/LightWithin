@@ -47,7 +47,7 @@ public class WaterCascadeEffect extends StatusEffect {
             }
 
             entity.getWorld().setBlockState(pos.up(), Fluids.WATER.getFlowing(7, true).getBlockState());
-            Vec3d posc = pos.toCenterPos();
+            Vec3d posc = Vec3d.ofCenter(pos);
             entity.teleport(posc.getX(), posc.getY()+1, posc.getZ());
 
 

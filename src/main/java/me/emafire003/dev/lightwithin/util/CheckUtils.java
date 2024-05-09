@@ -1,8 +1,6 @@
 package me.emafire003.dev.lightwithin.util;
 
-import me.emafire003.dev.lightwithin.compat.argonauts.ArgonautsChecker;
 import me.emafire003.dev.lightwithin.compat.factions.FactionChecker;
-import me.emafire003.dev.lightwithin.compat.flan.FlanCompat;
 import me.emafire003.dev.lightwithin.compat.ftb_teams.FTBTeamsChecker;
 import me.emafire003.dev.lightwithin.compat.open_parties_and_claims.OPACChecker;
 import me.emafire003.dev.lightwithin.compat.yawp.YawpCompat;
@@ -29,17 +27,15 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.tag.BlockTags;
-import net.minecraft.registry.tag.DamageTypeTags;
-import net.minecraft.registry.tag.TagKey;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.state.property.Properties;
+import net.minecraft.tag.BlockTags;
+import net.minecraft.tag.TagKey;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
+import net.minecraft.util.registry.Registry;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -146,38 +142,34 @@ public class CheckUtils {
 
 
     private static float getModifyAppliedDamage(DamageSource source, float amount, LivingEntity entity){
-        if (source.isIn(DamageTypeTags.BYPASSES_EFFECTS)) {
+        int i;
+        if (entity.hasStatusEffect(StatusEffects.RESISTANCE)) {
+            try{
+                i = (entity.getStatusEffect(StatusEffects.RESISTANCE).getAmplifier() + 1) * 5;
+                int j = 25 - i;
+                float f = amount * (float)j;
+                amount = Math.max(f / 25.0F, 0.0F);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+
+        if (amount <= 0.0F) {
+            return 0.0F;
+        } else if (source.bypassesProtection()) {
             return amount;
         } else {
-            int i;
-            if (entity.hasStatusEffect(StatusEffects.RESISTANCE) && !source.isIn(DamageTypeTags.BYPASSES_RESISTANCE)) {
-                try{
-                    i = (entity.getStatusEffect(StatusEffects.RESISTANCE).getAmplifier() + 1) * 5;
-                    int j = 25 - i;
-                    float f = amount * (float)j;
-                    amount = Math.max(f / 25.0F, 0.0F);
-                }catch (Exception e){
-                    e.printStackTrace();
-                }
+            i = EnchantmentHelper.getProtectionAmount(entity.getArmorItems(), source);
+            if (i > 0) {
+                amount = DamageUtil.getInflictedDamage(amount, (float)i);
             }
 
-            if (amount <= 0.0F) {
-                return 0.0F;
-            } else if (source.isIn(DamageTypeTags.BYPASSES_ENCHANTMENTS)) {
-                return amount;
-            } else {
-                i = EnchantmentHelper.getProtectionAmount(entity.getArmorItems(), source);
-                if (i > 0) {
-                    amount = DamageUtil.getInflictedDamage(amount, (float)i);
-                }
-
-                return amount;
-            }
+            return amount;
         }
     }
 
     private static float getAppliedArmorToDamage(DamageSource source, float amount, LivingEntity entity){
-        if (!source.isIn(DamageTypeTags.BYPASSES_ARMOR)) {
+        if (!source.bypassesArmor()) {
             amount = DamageUtil.getDamageLeft(amount, (float)entity.getArmor(), (float)entity.getAttributeValue(EntityAttributes.GENERIC_ARMOR_TOUGHNESS));
         }
 
@@ -360,18 +352,7 @@ public class CheckUtils {
         public static boolean checkEnemyFaction(PlayerEntity player, PlayerEntity player1){
             return FactionChecker.areEnemies(player, player1);
         }
-
-        public static boolean checkPartyArgo(PlayerEntity player, PlayerEntity player1){
-            return ArgonautsChecker.areInSameParty(player,player1);
-        }
-
-        public static boolean checkGuildArgo(PlayerEntity player, PlayerEntity player1){
-            return ArgonautsChecker.areInSameGuild(player,player1);
-        }
-
-        public static boolean checkArgonauts(PlayerEntity player, PlayerEntity player1){
-            return checkPartyArgo(player,player1) || checkGuildArgo(player,player1);
-        }
+        
 
         public static boolean checkOPACParty(PlayerEntity player, PlayerEntity player1){
             return OPACChecker.areInSameParty(player, player1) || OPACChecker.areInAlliedParties(player, player1);
@@ -405,11 +386,6 @@ public class CheckUtils {
                     return true;
                 }
             }
-            if(FabricLoader.getInstance().isModLoaded(ArgonautsChecker.getModId()) && entity instanceof PlayerEntity && teammate instanceof PlayerEntity){
-                if(checkArgonauts((PlayerEntity) entity, (PlayerEntity) teammate)){
-                    return true;
-                }
-            }
             if(FabricLoader.getInstance().isModLoaded(OPACChecker.getModId()) && entity instanceof PlayerEntity && teammate instanceof PlayerEntity){
                 if(checkOPACParty((PlayerEntity) entity, (PlayerEntity) teammate)){
                     return true;
@@ -438,7 +414,7 @@ public class CheckUtils {
     public static List<Item> toItemList(List<String> list){
         List<Item> items = new ArrayList<>();
         for(String id : list){
-            items.add(Registries.ITEM.get(new Identifier(id)));
+            items.add(Registry.ITEM.get(new Identifier(id)));
         }
         return items;
     }
@@ -446,7 +422,7 @@ public class CheckUtils {
     public static List<String> toItemStringList(List<Item> list){
         List<String> items = new ArrayList<>();
         for(Item item : list){
-            items.add(Registries.ITEM.getId(item).toString());
+            items.add(Registry.ITEM.getId(item).toString());
         }
         return items;
     }
@@ -454,7 +430,7 @@ public class CheckUtils {
     public static List<Block> toBlockList(List<String> list){
         List<Block> blocks = new ArrayList<>();
         for(String id : list){
-            blocks.add(Registries.BLOCK.get(new Identifier(id)));
+            blocks.add(Registry.BLOCK.get(new Identifier(id)));
         }
         return blocks;
     }
@@ -462,7 +438,7 @@ public class CheckUtils {
     public static List<String> toBlockStringList(List<Block> list){
         List<String> blocks = new ArrayList<>();
         for(Block block : list){
-            blocks.add(Registries.BLOCK.getId(block).toString());
+            blocks.add(Registry.BLOCK.getId(block).toString());
         }
         return blocks;
     }
@@ -681,7 +657,7 @@ public class CheckUtils {
     public static boolean checkEarthen(PlayerEntity player){
 
         //Moved this so it doesn't consume the dirt unless needed
-        if(checkMultipleBlocksWithTags(player, Config.TRIGGER_BLOCK_RADIUS, 3, TagKey.of(RegistryKeys.BLOCK, BlockTags.LUSH_GROUND_REPLACEABLE.id()))){
+        if(checkMultipleBlocksWithTags(player, Config.TRIGGER_BLOCK_RADIUS, 3, TagKey.of(Registry.BLOCK.getKey(), BlockTags.LUSH_GROUND_REPLACEABLE.id()))){
             return true;
         }
         if(player.getInventory().contains(new ItemStack(Items.DIRT, 64))){
@@ -807,12 +783,6 @@ public class CheckUtils {
      * will return false
      * */
     public static boolean canActivateHere(ServerPlayerEntity player){
-        if(FabricLoader.getInstance().isModLoaded("flan")){
-            boolean b = FlanCompat.canActivateHere(player, player.getBlockPos());
-            if(b != Config.LIGHT_DEFAULT_STATUS){
-                return b;
-            }
-        }
         if(FabricLoader.getInstance().isModLoaded("yawp")){
             boolean b = YawpCompat.canActivateHere(player, player.getBlockPos());
             if(b != Config.LIGHT_DEFAULT_STATUS){
@@ -831,9 +801,6 @@ public class CheckUtils {
      * terrain can't be activated there, it will return false
      * */
     public static boolean canActivateHereGriefing(ServerPlayerEntity player){
-        if(FabricLoader.getInstance().isModLoaded("flan")){
-            return FlanCompat.canActivateHereGriefing(player, player.getBlockPos());
-        }
         if(FabricLoader.getInstance().isModLoaded("yawp")){
             return YawpCompat.canActivateHereGriefing(player, player.getBlockPos());
         }

@@ -1,8 +1,10 @@
 package me.emafire003.dev.lightwithin.compat.yacl;
 
 import com.mojang.datafixers.util.Pair;
-import dev.isxander.yacl3.api.*;
-import dev.isxander.yacl3.api.controller.*;
+import dev.isxander.yacl.api.ConfigCategory;
+import dev.isxander.yacl.api.Option;
+import dev.isxander.yacl.api.YetAnotherConfigLib;
+import dev.isxander.yacl.gui.controllers.cycling.EnumController;
 import me.emafire003.dev.lightwithin.config.ClientConfig;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
@@ -58,9 +60,10 @@ public class YaclScreenMaker {
         AtomicBoolean updatedFromActivePreset = new AtomicBoolean(false);
         AtomicBoolean updatedFromChargePreset = new AtomicBoolean(false);
 
+
         // The xy positions of the icons
         options.add(
-                Option.<IconPositionPresets>createBuilder()
+                Option.createBuilder(EnumController.class)
                         .name(Text.translatable("config.lightwithin.light_ready_icon_preset"))
                         .description(OptionDescription.of(Text.translatable("config.lightwithin.light_ready_icon_preset.tooltip")))
                         .binding(
@@ -77,7 +80,7 @@ public class YaclScreenMaker {
                                     }
                                 }
                         )
-                        .controller(opt -> EnumControllerBuilder.create(opt).enumClass(IconPositionPresets.class))
+                        .controller(opt -> EnumController.create(opt).enumClass(IconPositionPresets.class))
                         .build()
         );
 

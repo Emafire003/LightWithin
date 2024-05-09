@@ -8,7 +8,7 @@ import net.minecraft.client.render.entity.MobEntityRenderer;
 import net.minecraft.client.render.entity.model.EntityModelLayers;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.math.RotationAxis;
+import net.minecraft.util.math.Vec3f;
 
 @Environment(value= EnvType.CLIENT)
 @SuppressWarnings("all")
@@ -29,12 +29,13 @@ public class EarthGolemEntityRenderer extends MobEntityRenderer<EarthGolemEntity
     @Override
     protected void setupTransforms(EarthGolemEntity earthGolemEntity, MatrixStack matrixStack, float f, float g, float h) {
         super.setupTransforms(earthGolemEntity, matrixStack, f, g, h);
-        if (!((double)earthGolemEntity.limbAnimator.getSpeed() < 0.01D)) {
-            float i = 13.0F;
-            float j = earthGolemEntity.limbAnimator.getPos(h) + 6.0F;
-            float k = (Math.abs(j % 13.0F - 6.5F) - 3.25F) / 3.25F;
-            matrixStack.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(6.5F * k));
+        if ((double)earthGolemEntity.limbDistance < 0.01) {
+            return;
         }
+        float i = 13.0f;
+        float j = earthGolemEntity.limbAngle - earthGolemEntity.limbDistance * (1.0f - h) + 6.0f;
+        float k = (Math.abs(j % 13.0f - 6.5f) - 3.25f) / 3.25f;
+        matrixStack.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(6.5f * k));
     }
 }
 

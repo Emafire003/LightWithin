@@ -8,7 +8,8 @@ import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.Vec3d;
-import org.joml.Vector3f;
+import net.minecraft.util.math.Vec3f;
+import org.joml.Vec3f;
 
 import java.util.ArrayList;
 
@@ -121,18 +122,18 @@ public class LightParticlesUtil {
     /*public static void spawnEffectParticles(LivingEntity entity){
         Vec3d pos = entity.getPos();
         for(int i = 0; i<200; i++){
-            entity.getWorld().addParticle(new DustParticleEffect(new Vector3f(Vec3d.unpackRgb(43758).toVector3f()), 1.0F), (double)pos.getX(), (double)pos.getY(), (double)pos.getZ(), 0.2D, 0.2D, 0.2D);
+            entity.getWorld().addParticle(new DustParticleEffect(new Vec3f(Vec3d.unpackRgb(43758).toVec3f()), 1.0F), (double)pos.getX(), (double)pos.getY(), (double)pos.getZ(), 0.2D, 0.2D, 0.2D);
         }
     }*/
 
-    /*public static void spawnDustParticles(ServerPlayerEntity player, Vector3f color){
+    /*public static void spawnDustParticles(ServerPlayerEntity player, Vec3f color){
 
-        DustParticleEffect a = new DustParticleEffect(new Vector3f(0, 255, 255), 2);
+        DustParticleEffect a = new DustParticleEffect(new Vec3f(0, 255, 255), 2);
         Vec3d pos = player.getPos();
         double speed = 0;
         ServerWorld world = (ServerWorld) player.getWorld();
         //world.spawnParticles(player, new Vec3f(Vec3d.unpackRgb(43758)), false, pos.x, pos.y, pos.z, 100, 0, 0, 0, speed);
-        world.addParticle(new DustParticleEffect(new Vector3f(Vec3d.unpackRgb(43758).toVector3f()), 1.0F), pos.getX(), pos.getY(), pos.getZ(), 0.0D, 0.0D, 0.0D);
+        world.addParticle(new DustParticleEffect(new Vec3f(Vec3d.unpackRgb(43758).toVec3f()), 1.0F), pos.getX(), pos.getY(), pos.getZ(), 0.0D, 0.0D, 0.0D);
 
     }*/
 
@@ -141,12 +142,12 @@ public class LightParticlesUtil {
     public static void spawnLightBottledUpEffect(ServerPlayerEntity player){
         //Blueish color: 79f2de Yellowish color: f4f44b
 
-        Vector3f YELLOW = Vec3d.unpackRgb(16053323).toVector3f();
-        Vector3f BLUE = Vec3d.unpackRgb(7992030).toVector3f();
+        Vec3f YELLOW = new Vec3f(Vec3d.unpackRgb(16053323));
+        Vec3f BLUE = new Vec3f(Vec3d.unpackRgb(7992030));
         DustParticleEffect yellow = new DustParticleEffect(YELLOW, 0.7f);
         DustParticleEffect light_blue = new DustParticleEffect( BLUE, 0.6f);
 
-        VortexEffect vortexYellow = VortexEffect.builder(player.getServerWorld(), yellow, player.getPos())
+        VortexEffect vortexYellow = VortexEffect.builder(player.getWorld(), yellow, player.getPos())
                 .yaw(90).pitch(-90f).radius(0.3f).radiusGrow(0.008f).lengthGrow(0.02f)
                 .entityOrigin(player).originOffset(new Vec3d(.0, 0.6, .0))
                 .updatePositions(true).shouldUpdateYPR(false)
@@ -155,7 +156,7 @@ public class LightParticlesUtil {
 
         double runFor = 1;
         vortexYellow.runFor(runFor);
-        VortexEffect vortexBlue = VortexEffect.builder(player.getServerWorld(), yellow, player.getPos()).build();
+        VortexEffect vortexBlue = VortexEffect.builder(player.getWorld(), yellow, player.getPos()).build();
         VortexEffect.copy(vortexYellow, vortexBlue);
         vortexBlue.setParticle(light_blue);
         vortexBlue.setStartRange(3.14f);

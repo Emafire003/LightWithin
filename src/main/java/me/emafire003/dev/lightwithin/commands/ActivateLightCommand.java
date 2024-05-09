@@ -30,14 +30,14 @@ public class ActivateLightCommand implements LightCommand{
 
         try{
             for(ServerPlayerEntity target : targets){
-                source.sendFeedback( () -> Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The InnerLight of §d" + target.getName().getString() + "§e will be activated in §d" + delay + " seconds!" ).formatted(Formatting.YELLOW)), true);
+                source.sendFeedback(Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The InnerLight of §d" + target.getName().getString() + "§e will be activated in §d" + delay + " seconds!" ).formatted(Formatting.YELLOW)), true);
                 ServerTickEvents.END_SERVER_TICK.register(server -> {
                     if(!stopped){
                         tickCounter++;
                     }
                     if(tickCounter > 20*delay){
                         LightWithin.activateLight(target);
-                        source.sendFeedback( () -> Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The InnerLight of §d" + target.getName().getString() + "§e has been triggered!" ).formatted(Formatting.YELLOW)), true);
+                        source.sendFeedback(Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The InnerLight of §d" + target.getName().getString() + "§e has been triggered!" ).formatted(Formatting.YELLOW)), true);
                         if(Config.TARGET_FEEDBACK){
                             target.sendMessage(Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("Your InnerLight was activated by force!" ).formatted(Formatting.YELLOW)));
                         }
@@ -51,7 +51,7 @@ public class ActivateLightCommand implements LightCommand{
             return 1;
         }catch(Exception e){
             e.printStackTrace();
-            source.sendFeedback( () -> Text.literal("Error: " + e.toString()),false);
+            source.sendFeedback(Text.literal("Error: " + e.toString()),false);
             return 0;
         }
     }
@@ -69,15 +69,15 @@ public class ActivateLightCommand implements LightCommand{
                     target.removeStatusEffect(LightEffects.LIGHT_FATIGUE);
                 }
                 LightWithin.activateLight(target);
-                source.sendFeedback( () -> Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The InnerLight of §d" + target.getName().getString() + "§e has been triggered!" ).formatted(Formatting.YELLOW)), true);
+                source.sendFeedback(Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The InnerLight of §d" + target.getName().getString() + "§e has been triggered!" ).formatted(Formatting.YELLOW)), true);
                 if(Config.TARGET_FEEDBACK){
-                    source.sendFeedback( () -> Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("Your InnerLight was activated by force!" ).formatted(Formatting.YELLOW)), true);
+                    source.sendFeedback(Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("Your InnerLight was activated by force!" ).formatted(Formatting.YELLOW)), true);
                 }
             }
             return 1;
         }catch(Exception e){
             e.printStackTrace();
-            source.sendFeedback( () -> Text.literal("Error: " + e.toString()),false);
+            source.sendFeedback(Text.literal("Error: " + e.toString()),false);
             return 0;
         }
 

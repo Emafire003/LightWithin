@@ -8,7 +8,6 @@ import dev.onyxstudios.cca.api.v3.entity.RespawnCopyStrategy;
 import me.emafire003.dev.lightwithin.blocks.LightBlocks;
 import me.emafire003.dev.lightwithin.commands.LightCommands;
 import me.emafire003.dev.lightwithin.compat.coloredglowlib.CGLCompat;
-import me.emafire003.dev.lightwithin.compat.flan.FlanCompat;
 import me.emafire003.dev.lightwithin.component.LightComponent;
 import me.emafire003.dev.lightwithin.component.SummonedByComponent;
 import me.emafire003.dev.lightwithin.config.BalanceConfig;
@@ -118,10 +117,6 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 		LootTableModifier.modifyLootTables();
 		LightCommands.registerArguments();
 		LightEntities.registerEntities();
-
-		if(FabricLoader.getInstance().isModLoaded("flan")){
-			FlanCompat.registerFlan();
-		}
 		CommandRegistrationCallback.EVENT.register(LightCommands::registerCommands);
 
 
@@ -184,12 +179,12 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 					if(results){
 
 						if(!CheckUtils.canActivateHere(player)){
-							player.sendMessage(Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.translatableWithFallback("light.charge.cant_use_here", "You are not allowed to use you InnerLight here!").formatted(Formatting.RED)));
+							player.sendMessage(Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.translatable("light.charge.cant_use_here").formatted(Formatting.RED)));
 							return;
 						}
 
 						//This could be laggy? Maybe?
-						List<ServerPlayerEntity> players = player.getServerWorld().getPlayers();
+						List<ServerPlayerEntity> players = player.getWorld().getPlayers();
 						for(ServerPlayerEntity p : players){
 							ServerPlayNetworking.send(p, PlayRenderEffectPacketS2C.ID, new PlayRenderEffectPacketS2C(RenderEffect.LIGHT_RAYS, player));
 						}

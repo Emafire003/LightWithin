@@ -8,6 +8,7 @@ import net.minecraft.block.Blocks;
 import net.minecraft.block.FallingBlock;
 import net.minecraft.entity.FallingBlockEntity;
 import net.minecraft.entity.ItemEntity;
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.particle.ParticleTypes;
@@ -42,7 +43,7 @@ public abstract class AnvilItemCrushMixin extends FallingBlock {
         boolean explosion = false;
 
         for(ItemEntity entity : items){
-            entity.damage(entity.getDamageSources().fallingAnvil(fallingBlockEntity), 20);
+            entity.damage(DamageSource.ANVIL, 20);
             //Luxintus berry chances: 75% you get the powder, 15%, too crushed the item disappears, 10% way to crushed the item explodes
             //For every 5 blocks the % of exploding is increased by one
             for(int i = 0; i < entity.getStack().getCount(); i++){
@@ -57,12 +58,12 @@ public abstract class AnvilItemCrushMixin extends FallingBlock {
                 if(chance > luxintus_exploding+15){
                     ItemEntity powder = new ItemEntity(world, pos.getX(), pos.getY(), pos.getZ(), new ItemStack(LightItems.LUXINTUS_BERRY_POWDER));
                     world.spawnEntity(powder);
-                    world.playSoundAtBlockCenter(pos, SoundEvents.BLOCK_AMETHYST_BLOCK_PLACE, SoundCategory.BLOCKS, 1f, 1.5f, true);
+                    world.playSound(pos.getX(), pos.getY(), pos.getZ(), SoundEvents.BLOCK_AMETHYST_BLOCK_PLACE, SoundCategory.BLOCKS, 1f, 1.5f, true);
                     if(!entity.getWorld().isClient()){
                         ((ServerWorld)entity.getWorld()).spawnParticles(LightParticles.LIGHT_PARTICLE, pos.getX(), pos.getY(), pos.getZ(), 30,0.01,0.01, 0.01, 0.1);
                     }
                 }else{
-                    world.playSoundAtBlockCenter(pos, SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS, 1f, 1.7f, true);
+                    world.playSound(pos.getX(), pos.getY(), pos.getZ(), SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS, 1f, 1.7f, true);
                     //If nothing triggered, then it just disappears! Woo!
                 }
 
@@ -84,7 +85,7 @@ public abstract class AnvilItemCrushMixin extends FallingBlock {
                     ((ServerWorld)entity.getWorld()).spawnParticles(ParticleTypes.FLASH, pos.getX(), pos.getY(), pos.getZ(), 1,0,0, 0, 0.1);
                 }
                 //entity.getWorld().addParticle(ParticleTypes.FLASH, pos.getX(), pos.getY(), pos.getZ(), 0,0,0);
-                entity.getWorld().createExplosion(entity, entity.getDamageSources().explosion(entity, fallingBlockEntity), explosionBehavior, entity.getPos(), 2f, true, World.ExplosionSourceType.BLOCK);
+                entity.getWorld().createExplosion(entity, DamageSource.GENERIC, explosionBehavior, entity.getX(), entity.getY(), entity.getZ(), 2f, true, Explosion.DestructionType.DESTROY);
             }
         }
 

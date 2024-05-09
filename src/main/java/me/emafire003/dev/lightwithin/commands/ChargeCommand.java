@@ -50,7 +50,7 @@ public class ChargeCommand implements LightCommand{
                 }
 
                 if(!Objects.requireNonNull(source.getPlayer()).equals(target) || !Config.TARGET_FEEDBACK){
-                    source.sendFeedback( () -> Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The number of light charges of " + target.getName().getString() + "§e has been changed to: " ).formatted(Formatting.YELLOW)
+                    source.sendFeedback(Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The number of light charges of " + target.getName().getString() + "§e has been changed to: " ).formatted(Formatting.YELLOW)
                             .append(Text.literal(String.valueOf(total_charges)).formatted(Formatting.GREEN))), true);
                 }
             }
@@ -85,7 +85,7 @@ public class ChargeCommand implements LightCommand{
                 }
 
                 if(!Objects.requireNonNull(source.getPlayer()).equals(target) || !Config.TARGET_FEEDBACK){
-                    source.sendFeedback( () -> Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The number of light charges of " + target.getName().getString() + "§e has been changed to: " ).formatted(Formatting.YELLOW)
+                    source.sendFeedback(Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The number of light charges of " + target.getName().getString() + "§e has been changed to: " ).formatted(Formatting.YELLOW)
                             .append(Text.literal(String.valueOf(total_charges)).formatted(Formatting.GREEN))), true);
                 }
             }
@@ -110,7 +110,7 @@ public class ChargeCommand implements LightCommand{
             }
 
             if(!Objects.requireNonNull(source.getPlayer()).equals(target) || !Config.TARGET_FEEDBACK){
-                source.sendFeedback( () -> Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The number of light charges of " + target.getName().getString() + "§e has been changed to: " ).formatted(Formatting.YELLOW)
+                source.sendFeedback(Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The number of light charges of " + target.getName().getString() + "§e has been changed to: " ).formatted(Formatting.YELLOW)
                         .append(Text.literal(String.valueOf(component.getMaxLightStack())).formatted(Formatting.GREEN))), true);
             }
 
@@ -130,7 +130,7 @@ public class ChargeCommand implements LightCommand{
             }
 
             if(!Objects.requireNonNull(source.getPlayer()).equals(target) || !Config.TARGET_FEEDBACK){
-                source.sendFeedback( () -> Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The number of light charges of " + target.getName().getString() + "§e has been changed to: " ).formatted(Formatting.YELLOW)
+                source.sendFeedback(Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The number of light charges of " + target.getName().getString() + "§e has been changed to: " ).formatted(Formatting.YELLOW)
                         .append(Text.literal(String.valueOf(0)).formatted(Formatting.GREEN))), true);
             }
 
@@ -150,7 +150,7 @@ public class ChargeCommand implements LightCommand{
             }
 
             if(!Objects.requireNonNull(source.getPlayer()).equals(target) || !Config.TARGET_FEEDBACK){
-                source.sendFeedback( () -> Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The number of light charges of " + target.getName().getString() + "§e is: " ).formatted(Formatting.YELLOW)
+                source.sendFeedback(Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The number of light charges of " + target.getName().getString() + "§e is: " ).formatted(Formatting.YELLOW)
                         .append(Text.literal(String.valueOf(charges)).formatted(Formatting.GREEN))), true);
             }
 

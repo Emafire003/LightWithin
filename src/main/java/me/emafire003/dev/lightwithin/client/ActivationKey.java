@@ -49,7 +49,7 @@ public class ActivationKey {
 
                     //TODO improvement Maybe I should also wait for the server to see if i can actually trigger a light here. Like only send the packet and wait for the response. But meh.
                     client.player.playSound(LightSounds.LIGHT_READY, 1f, 0.63f);
-                    client.player.playSound(SoundEvents.BLOCK_RESPAWN_ANCHOR_DEPLETE.value(), 0.37f, 1.3f);
+                    client.player.playSound(SoundEvents.BLOCK_RESPAWN_ANCHOR_DEPLETE, 0.37f, 1.3f);
                     LightWithinClient.setLightReady(true);
                     //Used to tell the server that the light has been activated by using a light charge.
                     LightWithinClient.setUsedCharge(true);

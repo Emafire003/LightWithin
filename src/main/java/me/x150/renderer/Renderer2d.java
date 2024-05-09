@@ -6,8 +6,7 @@ import net.minecraft.client.render.*;
 import net.minecraft.client.render.VertexFormat.DrawMode;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
-import org.joml.Math;
-import org.joml.Matrix4f;
+import net.minecraft.util.math.Matrix4f;
 
 //Removed unnecessary methods to make the jar size smaller
 
@@ -78,8 +77,8 @@ public class Renderer2d {
         buffer.vertex(matrix, (float) x1, (float) y0, (float) z).texture(u1, v0).next();
         buffer.vertex(matrix, (float) x0, (float) y0, (float) z).texture(u0, v0).next();
 
-        RenderSystem.setShader(GameRenderer::getPositionTexProgram);
-        BufferRenderer.drawWithGlobalProgram(buffer.end());
+        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+        BufferRenderer.drawWithShader(buffer.end());
     }
 
 

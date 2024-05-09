@@ -32,14 +32,14 @@ public class ReadyLightCommand implements LightCommand{
 
         try{
             for(ServerPlayerEntity target : targets){
-                source.sendFeedback( () -> Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The InnerLight of §d" + target.getName().getString() + "§e will be activated in §d" + delay + " seconds!" ).formatted(Formatting.YELLOW)), true);
+                source.sendFeedback(Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The InnerLight of §d" + target.getName().getString() + "§e will be activated in §d" + delay + " seconds!" ).formatted(Formatting.YELLOW)), true);
                 ServerTickEvents.END_SERVER_TICK.register(server -> {
                     if(!stopped){
                         tickCounter++;
                     }
                     if(tickCounter > 20*delay){
                         sendReadyPacket(target, true);
-                        source.sendFeedback( () -> Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The InnerLight of §d" + target.getName().getString() + "§e has been readied!" ).formatted(Formatting.YELLOW)), true);
+                        source.sendFeedback(Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The InnerLight of §d" + target.getName().getString() + "§e has been readied!" ).formatted(Formatting.YELLOW)), true);
                         if(Config.TARGET_FEEDBACK){
                             target.sendMessage(Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("Your InnerLight was made ready by force!" ).formatted(Formatting.YELLOW)));
                         }
@@ -53,7 +53,7 @@ public class ReadyLightCommand implements LightCommand{
             return 1;
         }catch(Exception e){
             e.printStackTrace();
-            source.sendFeedback( () -> Text.literal("Error: " + e),false);
+            source.sendFeedback(Text.literal("Error: " + e),false);
             return 0;
         }
     }
@@ -72,7 +72,7 @@ public class ReadyLightCommand implements LightCommand{
                     target.removeStatusEffect(LightEffects.LIGHT_FATIGUE);
                 }
                 sendReadyPacket(target, true);
-                source.sendFeedback( () -> Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The InnerLight of §d" + target.getName().getString() + "§e has been readied!" ).formatted(Formatting.YELLOW)), true);
+                source.sendFeedback(Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The InnerLight of §d" + target.getName().getString() + "§e has been readied!" ).formatted(Formatting.YELLOW)), true);
                 if(Config.TARGET_FEEDBACK){
                     target.sendMessage(Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("Your InnerLight was made ready by force!" ).formatted(Formatting.YELLOW)));
                 }
@@ -80,7 +80,7 @@ public class ReadyLightCommand implements LightCommand{
             return 1;
         }catch(Exception e){
             e.printStackTrace();
-            source.sendFeedback( () -> Text.literal("Error: " + e),false);
+            source.sendFeedback(Text.literal("Error: " + e),false);
             return 0;
         }
 

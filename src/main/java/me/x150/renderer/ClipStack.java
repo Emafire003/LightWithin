@@ -2,8 +2,8 @@ package me.x150.renderer;
 
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.MathHelper;
-import org.joml.Matrix4f;
-import org.joml.Vector4f;
+import net.minecraft.util.math.Matrix4f;
+import net.minecraft.util.math.Vector4f;
 
 import java.util.Stack;
 
@@ -18,32 +18,32 @@ public class ClipStack {
      * @param stack The context MatrixStack
      * @param rect  The new clipping rectangle to enlist
      */
-    public static void addWindow(MatrixStack stack, Rectangle rect) {
+    public static void addWindow(MatrixStack stack, Rectangle r1) {
         Matrix4f matrix = stack.peek().getPositionMatrix();
-        Vector4f start = new Vector4f((float) rect.getX(), (float) rect.getY(), 0, 1);
-        Vector4f end = new Vector4f((float) rect.getX1(), (float) rect.getY1(), 0, 1);
-        start.mul(matrix);
-        end.mul(matrix);
-        double x0 = start.x();
-        double y0 = start.y();
-        double x1 = end.x();
-        double y1 = end.y();
-        Rectangle transformed = new Rectangle(x0, y0, x1, y1);
+        Vector4f coord = new Vector4f((float) r1.getX(), (float) r1.getY(), 0, 1);
+        Vector4f end = new Vector4f((float) r1.getX1(), (float) r1.getY1(), 0, 1);
+        coord.transform(matrix);
+        end.transform(matrix);
+        double x = coord.getX();
+        double y = coord.getY();
+        double endX = end.getX();
+        double endY = end.getY();
+        Rectangle r = new Rectangle(x, y, endX, endY);
         if (clipStack.empty()) {
-            clipStack.push(transformed);
-            Renderer2d.beginScissor(transformed.getX(), transformed.getY(), transformed.getX1(), transformed.getY1());
+            clipStack.push(r);
+            Renderer2d.beginScissor(r.getX(), r.getY(), r.getX1(), r.getY1());
         } else {
             Rectangle lastClip = clipStack.peek();
-            double lx0 = lastClip.getX();
-            double ly0 = lastClip.getY();
-            double lx1 = lastClip.getX1();
-            double ly1 = lastClip.getY1();
-            double nx0 = MathHelper.clamp(transformed.getX(), lx0, lx1);
-            double ny0 = MathHelper.clamp(transformed.getY(), ly0, ly1);
-            double nx1 = MathHelper.clamp(transformed.getX1(), nx0, lx1);
-            double ny1 = MathHelper.clamp(transformed.getY1(), ny0, ly1);
-            clipStack.push(new Rectangle(nx0, ny0, nx1, ny1));
-            Renderer2d.beginScissor(nx0, ny0, nx1, ny1);
+            double lsx = lastClip.getX();
+            double lsy = lastClip.getY();
+            double lstx = lastClip.getX1();
+            double lsty = lastClip.getY1();
+            double nsx = MathHelper.clamp(r.getX(), lsx, lstx);
+            double nsy = MathHelper.clamp(r.getY(), lsy, lsty);
+            double nstx = MathHelper.clamp(r.getX1(), nsx, lstx);
+            double nsty = MathHelper.clamp(r.getY1(), nsy, lsty); // totally intended varname
+            clipStack.push(new Rectangle(nsx, nsy, nstx, nsty));
+            Renderer2d.beginScissor(nsx, nsy, nstx, nsty);
         }
     }
 

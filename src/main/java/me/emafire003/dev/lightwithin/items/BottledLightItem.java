@@ -27,6 +27,7 @@ import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
+import net.minecraft.world.explosion.Explosion;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -99,7 +100,7 @@ public class BottledLightItem extends Item {
                     }
                     stack.decrement(stack.getCount());
                     ItemEntity item = new ItemEntity(world, user.getX(), user.getY()+1, user.getZ(), stack);
-                    world.createExplosion(item, user.getX(), user.getY()+1, user.getZ(), 1.5f, false, World.ExplosionSourceType.MOB);
+                    world.createExplosion(item, user.getX(), user.getY()+1, user.getZ(), 1.5f, false, Explosion.DestructionType.DESTROY);
                     return TypedActionResult.consume(stack);
                 }
             }
