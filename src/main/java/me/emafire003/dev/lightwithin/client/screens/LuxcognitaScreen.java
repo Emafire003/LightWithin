@@ -6,18 +6,18 @@ import me.emafire003.dev.lightwithin.client.LightRenderLayer;
 import me.emafire003.dev.lightwithin.client.LightWithinClient;
 import me.emafire003.dev.lightwithin.items.LuxcognitaBerryItem;
 import me.emafire003.dev.lightwithin.sounds.LightSounds;
-import me.x150.renderer.ClipStack;
-import me.x150.renderer.Rectangle;
-import me.x150.renderer.Renderer2d;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.render.*;
+import net.minecraft.client.render.RenderLayer;
+import net.minecraft.client.render.Tessellator;
+import net.minecraft.client.render.VertexConsumer;
+import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
-import net.minecraft.util.Identifier;
+import net.minecraft.util.math.Matrix4f;
 
 
 public class LuxcognitaScreen extends Screen{
@@ -34,7 +34,6 @@ public class LuxcognitaScreen extends Screen{
     public void init(){
         int center_x = MinecraftClient.getInstance().getWindow().getScaledWidth()/2;
 
-        //width
         int scaled_width = MinecraftClient.getInstance().getWindow().getScaledWidth();
         int button_width = (int) (center_x/2.3);
         int spacing = (scaled_width-4*button_width)/5;
@@ -51,18 +50,6 @@ public class LuxcognitaScreen extends Screen{
         ButtonWidget lightTargetIngredientButton = new ButtonWidget(4*spacing+3*button_width, this.height/2, button_width, 20, Text.translatable("screen.luxcognita_dialogue.lightTargetIngredientButton").formatted(Formatting.YELLOW),
                 this::lightTargetIngredientAction);
 
-        /*TODO remove
-        ButtonWidget lightTypeButton = new ButtonWidget((this.width/6)*2, this.height/2, button_width, 20, Text.translatable("screen.luxcognita_dialogue.lightTypeButton").formatted(Formatting.YELLOW),
-                this::lightTypeAction);
-
-        ButtonWidget lightTypeIngredientButton = new ButtonWidget((this.width/6)*3, this.height/2, button_width, 20, Text.translatable("screen.luxcognita_dialogue.lightTypeIngredientButton").formatted(Formatting.YELLOW),
-                this::lightTypeIngredientAction);
-
-        ButtonWidget lightTargetButton = new ButtonWidget((this.width/6)*3, this.height/2, button_width, 20, Text.translatable("screen.luxcognita_dialogue.lightTargetButton").formatted(Formatting.YELLOW),
-                this::lightTargetAction);
-
-        ButtonWidget lightTargetIngredientButton = new ButtonWidget((this.width/6)*3, this.height/2, button_width, 20, Text.translatable("screen.luxcognita_dialogue.lightTargetIngredientButton").formatted(Formatting.YELLOW),
-                this::lightTargetIngredientAction);*/
 
 
         this.addDrawableChild(lightTypeButton);
@@ -140,39 +127,33 @@ public class LuxcognitaScreen extends Screen{
     }
 
     @Override
-    public void render(MatrixStack context, int mouseX, int mouseY, float delta) {
+    public void render(MatrixStack matrixStack, int mouseX, int mouseY, float delta) {
         //TODO draw the LuxCognita berry at the center of the screen
-        this.renderBackground(context);
-        super.render(context, mouseX, mouseY, delta);
+        this.renderBackground(matrixStack);
+        super.render(matrixStack, mouseX, mouseY, delta);
 
         // Low (lighter) 3735330
         //Middle 2415936
         // Top (darker) 2406703
-        MatrixStack matrixStack = context;
         matrixStack.push();
         float textScale = 1.5f;
         matrixStack.scale(textScale, textScale, textScale);
         //2406703 16777215
-        DrawableHelper.drawCenteredTextWithShadow(context, this.textRenderer, Text.translatable("screen.luxcognita_dialogue.luxcognitaTalk").asOrderedText(), (int) ((this.width / 2)/textScale), (int) ((this.height / 2 - 70)/textScale), getTextColor());
+        DrawableHelper.drawCenteredTextWithShadow(matrixStack, this.textRenderer, Text.translatable("screen.luxcognita_dialogue.luxcognitaTalk").asOrderedText(), (int) ((this.width / 2)/textScale), (int) ((this.height / 2 - 70)/textScale), getTextColor());
         matrixStack.pop();
 
     }
 
     //TODO this does not work :(
     public void fillWithLayer(MatrixStack matrixStack, RenderLayer layer, int startX, int startY, int endX, int endY, int z) {
-        /*Matrix4f matrix4f = matrixStack.peek().getPositionMatrix();
-        Tessellator tessellator = Tessellator.getInstance();
+        Matrix4f matrix4f = matrixStack.peek().getPositionMatrix();
         VertexConsumerProvider.Immediate immediate = VertexConsumerProvider.immediate(Tessellator.getInstance().getBuffer());
         VertexConsumer vertexConsumer = immediate.getBuffer(layer);
         vertexConsumer.vertex(matrix4f, (float)startX, (float)startY, (float)z).next();
         vertexConsumer.vertex(matrix4f, (float)startX, (float)endY, (float)z).next();
         vertexConsumer.vertex(matrix4f, (float)endX, (float)endY, (float)z).next();
         vertexConsumer.vertex(matrix4f, (float)endX, (float)startY, (float)z).next();
-        tessellator.draw();*/
-        //It's static but will do the job
-        ClipStack.addWindow(matrixStack, new Rectangle(0,0,MinecraftClient.getInstance().getWindow().getScaledWidth(), MinecraftClient.getInstance().getWindow().getScaledHeight()));
-        Renderer2d.renderTexture(matrixStack, new Identifier(LightWithin.MOD_ID, "textures/gui/light_screen.png"), 0,0, MinecraftClient.getInstance().getWindow().getScaledWidth(), MinecraftClient.getInstance().getWindow().getScaledHeight());
-        ClipStack.popWindow();
+        immediate.draw();
     }
 
     @Override
