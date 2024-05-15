@@ -4,7 +4,11 @@ import com.mojang.datafixers.util.Pair;
 import dev.isxander.yacl.api.ConfigCategory;
 import dev.isxander.yacl.api.Option;
 import dev.isxander.yacl.api.YetAnotherConfigLib;
+import dev.isxander.yacl.gui.controllers.TickBoxController;
 import dev.isxander.yacl.gui.controllers.cycling.EnumController;
+import dev.isxander.yacl.gui.controllers.slider.DoubleSliderController;
+import dev.isxander.yacl.gui.controllers.slider.IntegerSliderController;
+import dev.isxander.yacl.gui.controllers.string.number.IntegerFieldController;
 import me.emafire003.dev.lightwithin.config.ClientConfig;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
@@ -55,7 +59,7 @@ public class YaclScreenMaker {
     }
 
 
-    public static @NotNull Collection<? extends Option<?>> createOptions(){
+    public static @NotNull Collection<Option<?>> createOptions(){
         List<Option<?>> options = new ArrayList<>();
         AtomicBoolean updatedFromActivePreset = new AtomicBoolean(false);
         AtomicBoolean updatedFromChargePreset = new AtomicBoolean(false);
@@ -63,9 +67,10 @@ public class YaclScreenMaker {
 
         // The xy positions of the icons
         options.add(
-                Option.createBuilder(EnumController.class)
+                
+                Option.createBuilder(IconPositionPresets.class)
                         .name(Text.translatable("config.lightwithin.light_ready_icon_preset"))
-                        .description(OptionDescription.of(Text.translatable("config.lightwithin.light_ready_icon_preset.tooltip")))
+                        .tooltip(Text.translatable("config.lightwithin.light_ready_icon_preset.tooltip"))
                         .binding(
                                 IconPositionPresets.TOP_LEFT, // the default value
                                 () -> IconPositionPresets.valueOf(ClientConfig.LIGHT_READY_PRESET), // a field to get the current value from
@@ -80,15 +85,15 @@ public class YaclScreenMaker {
                                     }
                                 }
                         )
-                        .controller(opt -> EnumController.create(opt).enumClass(IconPositionPresets.class))
+                        .controller(EnumController::new)
                         .build()
         );
 
         // The xy positions of the icons
         options.add(
-                Option.<IconPositionPresets>createBuilder()
+                Option.createBuilder(IconPositionPresets.class)
                         .name(Text.translatable("config.lightwithin.light_charge_icon_preset"))
-                        .description(OptionDescription.of(Text.translatable("config.lightwithin.light_charge_icon_preset.tooltip")))
+                        .tooltip(Text.translatable("config.lightwithin.light_charge_icon_preset.tooltip"))
                         .binding(
                                 IconPositionPresets.TOP_LEFT, // the default value
                                 () -> IconPositionPresets.valueOf(ClientConfig.LIGHT_CHARGE_PRESET), // a field to get the current value from
@@ -103,14 +108,14 @@ public class YaclScreenMaker {
                                     }
                                 }
                         )
-                        .controller(opt -> EnumControllerBuilder.create(opt).enumClass(IconPositionPresets.class))
+                        .controller(EnumController::new)
                         .build()
         );
 
         options.add(
-                Option.<Integer>createBuilder() 
+                Option.createBuilder(int.class)
                         .name(Text.translatable("config.lightwithin.light_ready_icon_x"))
-                        .description(OptionDescription.of(Text.translatable("config.lightwithin.light_ready_icon_x.tooltip")))
+                        .tooltip(Text.translatable("config.lightwithin.light_ready_icon_x.tooltip"))
                         .binding(
                                 ClientConfig.light_icon_default_position, // the default value
                                 () -> ClientConfig.LIGHT_READY_ICON_X, // a field to get the current value from
@@ -122,16 +127,14 @@ public class YaclScreenMaker {
                                     ClientConfig.saveToFile();
                                 }
                         )
-                        .controller(opt -> IntegerSliderControllerBuilder.create(opt)
-                                .range(0, MinecraftClient.getInstance().getWindow().getScaledWidth())
-                                .step(1))
+                        .controller(opt -> new IntegerSliderController(opt, 0, MinecraftClient.getInstance().getWindow().getScaledWidth(), 1))
                         .build()
         );
 
         options.add(
-                Option.<Integer>createBuilder() 
+                Option.createBuilder(int.class)
                         .name(Text.translatable("config.lightwithin.light_ready_icon_y"))
-                        .description(OptionDescription.of(Text.translatable("config.lightwithin.light_ready_icon_y.tooltip")))
+                        .tooltip(Text.translatable("config.lightwithin.light_ready_icon_y.tooltip"))
                         .binding(
                                 ClientConfig.light_icon_default_position, // the default value
                                 () -> ClientConfig.LIGHT_READY_ICON_Y, // a field to get the current value from
@@ -143,16 +146,14 @@ public class YaclScreenMaker {
                                     ClientConfig.saveToFile();
                                 }
                         )
-                        .controller(opt -> IntegerSliderControllerBuilder.create(opt)
-                                .range(0, MinecraftClient.getInstance().getWindow().getScaledHeight())
-                                .step(1))
+                        .controller(opt -> new IntegerSliderController(opt, 0, MinecraftClient.getInstance().getWindow().getScaledHeight(), 1))
                         .build()
         );
 
         options.add(
-                Option.<Integer>createBuilder() 
+                Option.createBuilder(int.class)
                         .name(Text.translatable("config.lightwithin.light_charge_icon_x"))
-                        .description(OptionDescription.of(Text.translatable("config.lightwithin.light_charge_icon_x.tooltip")))
+                        .tooltip(Text.translatable("config.lightwithin.light_charge_icon_x.tooltip"))
                         .binding(
                                 ClientConfig.light_icon_default_position, // the default value
                                 () -> ClientConfig.LIGHT_CHARGE_ICON_X, // a field to get the current value from
@@ -164,16 +165,14 @@ public class YaclScreenMaker {
                                     ClientConfig.saveToFile();
                                 }
                         )
-                        .controller(opt -> IntegerSliderControllerBuilder.create(opt)
-                                .range(0, MinecraftClient.getInstance().getWindow().getScaledWidth())
-                                .step(1))
+                        .controller(opt -> new IntegerSliderController(opt, 0, MinecraftClient.getInstance().getWindow().getScaledWidth(), 1))
                         .build()
         );
 
         options.add(
-                Option.<Integer>createBuilder() 
+                Option.createBuilder(int.class)
                         .name(Text.translatable("config.lightwithin.light_charge_icon_y"))
-                        .description(OptionDescription.of(Text.translatable("config.lightwithin.light_charge_icon_y.tooltip")))
+                        .tooltip(Text.translatable("config.lightwithin.light_charge_icon_y.tooltip"))
                         .binding(
                                 ClientConfig.light_icon_default_position, // the default value
                                 () -> ClientConfig.LIGHT_CHARGE_ICON_Y, // a field to get the current value from
@@ -185,16 +184,14 @@ public class YaclScreenMaker {
                                     ClientConfig.saveToFile();
                                 }
                         )
-                        .controller(opt -> IntegerSliderControllerBuilder.create(opt)
-                                .range(0, MinecraftClient.getInstance().getWindow().getScaledHeight())
-                                .step(1))
+                        .controller(opt -> new IntegerSliderController(opt, 0, MinecraftClient.getInstance().getWindow().getScaledHeight(), 1))
                         .build()
         );
 
         options.add(
-                Option.<Double>createBuilder() 
+                Option.createBuilder(double.class)
                         .name(Text.translatable("config.lightwithin.light_ready_scale_factor"))
-                        .description(OptionDescription.of(Text.translatable("config.lightwithin.light_ready_scale_factor.tooltip")))
+                        .tooltip(Text.translatable("config.lightwithin.light_ready_scale_factor.tooltip"))
                         .binding(
                                 ClientConfig.light_icon_default_scale, // the default value
                                 () -> ClientConfig.LIGHT_READY_SCALE_FACTOR, // a field to get the current value from
@@ -203,16 +200,14 @@ public class YaclScreenMaker {
                                     ClientConfig.saveToFile();
                                 }
                         )
-                        .controller(opt -> DoubleSliderControllerBuilder.create(opt)
-                                .range((double) 0, 10.0)
-                                .step(0.1))
+                        .controller(opt -> new DoubleSliderController(opt, 0.0, 10.0, 0.1))
                         .build()
         );
 
         options.add(
-                Option.<Double>createBuilder() 
+                Option.createBuilder(double.class)
                         .name(Text.translatable("config.lightwithin.light_charge_scale_factor"))
-                        .description(OptionDescription.of(Text.translatable("config.lightwithin.light_charge_scale_factor.tooltip")))
+                        .tooltip(Text.translatable("config.lightwithin.light_charge_scale_factor.tooltip"))
                         .binding(
                                 ClientConfig.light_icon_default_scale, // the default value
                                 () -> ClientConfig.LIGHT_CHARGE_SCALE_FACTOR, // a field to get the current value from
@@ -221,16 +216,14 @@ public class YaclScreenMaker {
                                     ClientConfig.saveToFile();
                                 }
                         )
-                        .controller(opt -> DoubleSliderControllerBuilder.create(opt)
-                                .range((double) 0, 10.0)
-                                .step(0.1))
+                        .controller(opt -> new DoubleSliderController(opt, 0.0, 10.0, 0.1))
                         .build()
         );
 
         options.add(
-                Option.<Boolean>createBuilder() 
+                Option.createBuilder(boolean.class)
                         .name(Text.translatable("config.lightwithin.hide_light_charge_icon"))
-                        .description(OptionDescription.of(Text.translatable("config.lightwithin.hide_light_charge_icon.tooltip")))
+                        .tooltip(Text.translatable("config.lightwithin.hide_light_charge_icon.tooltip"))
                         .binding(
                                 ClientConfig.HIDE_LIGHT_CHARGE_ICON_default, // the default value
                                 () -> ClientConfig.HIDE_LIGHT_CHARGE_ICON, // a field to get the current value from
@@ -239,14 +232,14 @@ public class YaclScreenMaker {
                                     ClientConfig.saveToFile();
                                 }
                         )
-                        .controller(TickBoxControllerBuilder::create)
+                        .controller(TickBoxController::new)
                         .build()
         );
 
         options.add(
-                Option.<Boolean>createBuilder() 
+                Option.createBuilder(boolean.class)
                         .name(Text.translatable("config.lightwithin.show_charged_player_glow"))
-                        .description(OptionDescription.of(Text.translatable("config.lightwithin.show_charged_player_glow.tooltip")))
+                        .tooltip(Text.translatable("config.lightwithin.show_charged_player_glow.tooltip"))
                         .binding(
                                 ClientConfig.SHOW_CHARGED_PLAYER_GLOW_default, // the default value
                                 () -> ClientConfig.SHOW_CHARGED_PLAYER_GLOW, // a field to get the current value from
@@ -255,31 +248,31 @@ public class YaclScreenMaker {
                                     ClientConfig.saveToFile();
                                 }
                         )
-                        .controller(TickBoxControllerBuilder::create)
+                        .controller(TickBoxController::new)
                         .build()
         );
 
 
         options.add(
-                Option.<Boolean>createBuilder() 
-                .name(Text.translatable("config.lightwithin.showrunes"))
-                .description(OptionDescription.of(Text.translatable("config.lightwithin.showrunes.tooltip")))
-                .binding(
-                        ClientConfig.SHOW_RUNES_default, // the default value
-                        () -> ClientConfig.SHOW_RUNES, // a field to get the current value from
-                        newVal -> {
-                            ClientConfig.SHOW_RUNES = newVal;
-                            ClientConfig.saveToFile();
-                        }
-                )
-                .controller(TickBoxControllerBuilder::create)
-                .build()
+                Option.createBuilder(boolean.class)
+                        .name(Text.translatable("config.lightwithin.showrunes"))
+                        .tooltip(Text.translatable("config.lightwithin.showrunes.tooltip"))
+                        .binding(
+                                ClientConfig.SHOW_RUNES_default, // the default value
+                                () -> ClientConfig.SHOW_RUNES, // a field to get the current value from
+                                newVal -> {
+                                    ClientConfig.SHOW_RUNES = newVal;
+                                    ClientConfig.saveToFile();
+                                }
+                        )
+                        .controller(TickBoxController::new)
+                        .build()
         );
 
         options.add(
-                Option.<Integer>createBuilder()
+                Option.createBuilder(int.class)
                         .name(Text.translatable("config.lightwithin.showrunes_for"))
-                        .description(OptionDescription.of(Text.translatable("config.lightwithin.showrunes_for.tooltip")))
+                        .tooltip(Text.translatable("config.lightwithin.showrunes_for.tooltip"))
                         .binding(
                                 ClientConfig.SHOW_RUNES_FOR_default, // the default value
                                 () -> ClientConfig.SHOW_RUNES_FOR, // a field to get the current value from
@@ -288,16 +281,14 @@ public class YaclScreenMaker {
                                     ClientConfig.saveToFile();
                                 }
                         )
-                        .controller(opt -> IntegerFieldControllerBuilder.create(opt)
-                                .range(0, 60)
-                        )
+                        .controller(opt -> new IntegerFieldController(opt, 0, 60))
                         .build()
         );
 
         options.add(
-                Option.<Double>createBuilder()
+                Option.createBuilder(double.class)
                         .name(Text.translatable("config.lightwithin.ingredient_and_item_scale"))
-                        .description(OptionDescription.of(Text.translatable("config.lightwithin.ingredient_and_item_scale.tooltip")))
+                        .tooltip(Text.translatable("config.lightwithin.ingredient_and_item_scale.tooltip"))
                         .binding(
                                 ClientConfig.ingredient_target_scale_default, // the default value
                                 () -> ClientConfig.INGREDIENT_TARGET_SCALE, // a field to get the current value from
@@ -306,16 +297,14 @@ public class YaclScreenMaker {
                                     ClientConfig.saveToFile();
                                 }
                         )
-                        .controller(opt -> DoubleSliderControllerBuilder.create(opt)
-                                .range((double) 0, 50.0)
-                                .step(0.1))
+                        .controller(opt -> new DoubleSliderController(opt, 0.0, 50.0, 0.1))
                         .build()
         );
 
         options.add(
-                Option.<Integer>createBuilder()
+                Option.createBuilder(int.class)
                         .name(Text.translatable("config.lightwithin.show_ingredient_target_for"))
-                        .description(OptionDescription.of(Text.translatable("config.lightwithin.show_ingredient_target_for.tooltip")))
+                        .tooltip(Text.translatable("config.lightwithin.show_ingredient_target_for.tooltip"))
                         .binding(
                                 ClientConfig.show_ingredient_target_for_default, // the default value
                                 () -> ClientConfig.SHOW_INGREDIENT_TARGET_FOR, // a field to get the current value from
@@ -324,16 +313,14 @@ public class YaclScreenMaker {
                                     ClientConfig.saveToFile();
                                 }
                         )
-                        .controller(opt -> IntegerFieldControllerBuilder.create(opt)
-                                .range(0, 60)
-                        )
+                        .controller(opt -> new IntegerFieldController(opt, 0, 60))
                         .build()
         );
 
         options.add(
-                Option.<Boolean>createBuilder() 
+                Option.createBuilder(boolean.class)
                         .name(Text.translatable("config.lightwithin.auto_light_activation"))
-                        .description(OptionDescription.of(Text.translatable("config.lightwithin.auto_light_activation.tooltip")))
+                        .tooltip(Text.translatable("config.lightwithin.auto_light_activation.tooltip"))
                         .binding(
                                 ClientConfig.AUTO_LIGHT_ACTIVATION_default, // the default value
                                 () -> ClientConfig.AUTO_LIGHT_ACTIVATION, // a field to get the current value from
@@ -342,7 +329,7 @@ public class YaclScreenMaker {
                                     ClientConfig.saveToFile();
                                 }
                         )
-                        .controller(TickBoxControllerBuilder::create)
+                        .controller(TickBoxController::new)
                         .build()
         );
 

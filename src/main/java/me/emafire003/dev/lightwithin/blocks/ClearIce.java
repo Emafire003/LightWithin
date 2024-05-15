@@ -14,10 +14,7 @@ import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.state.property.IntProperty;
 import net.minecraft.state.property.Properties;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Box;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.*;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
@@ -66,8 +63,6 @@ public class ClearIce extends FrostedIceBlock {
                 }
             }
         }
-
-        LightWithin.LOGGER.info("The run variable is: " + run);
 
         if (run && (random.nextInt(3) == 0 || this.canMelt(world, pos, 2)) && world.getLightLevel(pos) > 11 - state.get(AGE) - state.getOpacity(world, pos) && this.increaseAge(state, world, pos)) {
             BlockPos.Mutable mutable = new BlockPos.Mutable();
@@ -131,7 +126,7 @@ public class ClearIce extends FrostedIceBlock {
         }
         if(!world.isClient()){
             ((ServerWorld) world).spawnParticles(ParticleTypes.SNOWFLAKE,
-                    pos.getX(), pos.getY()+0.5, pos.getZ(),
+                    Vec3d.ofCenter(pos).getX(), Vec3d.ofCenter(pos).getY()+0.5, Vec3d.ofCenter(pos).getZ(),
                     150, 0.00001, 0.00001, 0.00001, 0.015);
         }
     }
@@ -145,7 +140,7 @@ public class ClearIce extends FrostedIceBlock {
             world.updateNeighbor(pos, getMeltedState().getBlock(), pos);
             if(!world.isClient()){
                 ((ServerWorld) world).spawnParticles(ParticleTypes.SNOWFLAKE,
-                        pos.toCenterPos().getX(), pos.toCenterPos().getY()+0.5, pos.toCenterPos().getZ(),
+                        Vec3d.ofCenter(pos).getX(), Vec3d.ofCenter(pos).getY()+0.5, Vec3d.ofCenter(pos).getZ(),
                         150, 0.00001, 0.00001, 0.00001, 0.015);
             }
         }

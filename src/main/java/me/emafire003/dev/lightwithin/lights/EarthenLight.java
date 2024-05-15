@@ -19,6 +19,7 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.EntityPose;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
@@ -113,7 +114,7 @@ public class EarthenLight extends InnerLight {
                 target.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, 1, 255, false, false));
                 target.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOW_FALLING, 1, 255, false, false));
 
-                target.damage(caster.getWorld().getDamageSources().inWall(), (float) this.power_multiplier);
+                target.damage(DamageSource.IN_WALL, (float) this.power_multiplier);
                 LightParticlesUtil.spawnCylinder(target.getPos().add(0, 0.2, 0), r, 50, h, h/5, new BlockStateParticleEffect(ParticleTypes.BLOCK, Blocks.DIRT.getDefaultState()), (ServerWorld) caster.getWorld());
 
 

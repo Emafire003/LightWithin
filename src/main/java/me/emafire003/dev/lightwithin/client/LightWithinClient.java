@@ -1,6 +1,7 @@
 package me.emafire003.dev.lightwithin.client;
 
 import com.mojang.datafixers.util.Pair;
+
 import me.emafire003.dev.lightwithin.LightWithin;
 import me.emafire003.dev.lightwithin.blocks.LightBlocks;
 import me.emafire003.dev.lightwithin.client.screens.LuxcognitaScreen;

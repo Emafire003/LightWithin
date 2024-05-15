@@ -6,6 +6,8 @@ import net.minecraft.block.AnvilBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.FallingBlock;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.FallingBlockEntity;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.damage.DamageSource;
@@ -22,24 +24,33 @@ import net.minecraft.world.World;
 import net.minecraft.world.explosion.Explosion;
 import net.minecraft.world.explosion.ExplosionBehavior;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.List;
 import java.util.Optional;
 
-@Mixin(AnvilBlock.class)
-public abstract class AnvilItemCrushMixin extends FallingBlock {
+@Mixin(FallingBlockEntity.class)
+public abstract class AnvilItemCrushMixin extends Entity {
 
-    public AnvilItemCrushMixin(Settings settings) {
-        super(settings);
+
+    @Shadow public abstract BlockState getBlockState();
+
+    public AnvilItemCrushMixin(EntityType<?> type, World world) {
+        super(type, world);
     }
 
-    @Inject(method = "onLanding", at = @At("HEAD"))
-    private void checkAnvilDamage(World world, BlockPos pos, BlockState fallingBlockState, BlockState currentStateInPos, FallingBlockEntity fallingBlockEntity, CallbackInfo ci) {
-        List<ItemEntity> items = world.getEntitiesByClass(ItemEntity.class, new Box(pos), (entity1 -> entity1.getStack().isOf(LightItems.LUXINTUS_BERRY)));
-        int luxintus_exploding = 10+(fallingBlockEntity.timeFalling/10);
+    @Inject(method = "handleFallDamage",
+            at = @At(value = "INVOKE",
+                    target = "Lnet/minecraft/world/World;getOtherEntities(Lnet/minecraft/entity/Entity;Lnet/minecraft/util/math/Box;Ljava/util/function/Predicate;)Ljava/util/List;",
+                    shift = At.Shift.BEFORE))
+    private void checkAnvilDamage(float fallDistance, float damageMultiplier, DamageSource damageSource, CallbackInfoReturnable<Boolean> cir) {
+        List<ItemEntity> items = world.getEntitiesByClass(ItemEntity.class, this.getBoundingBox(), (entity1 -> entity1.getStack().isOf(LightItems.LUXINTUS_BERRY)));
+        BlockPos pos = this.getBlockPos();
+        int luxintus_exploding = (int) (10+(fallDistance/10));
         boolean explosion = false;
 
         for(ItemEntity entity : items){

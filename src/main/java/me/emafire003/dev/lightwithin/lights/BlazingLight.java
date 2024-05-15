@@ -15,6 +15,7 @@ import me.emafire003.dev.structureplacerapi.StructurePlacerAPI;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
@@ -133,7 +134,7 @@ public class BlazingLight extends InnerLight {
             //TODO make the chance configable EDIT: Maybe not
             //it's basicly a crit, unique for now to the blazing light Currently 10 percent
             if(caster.getRandom().nextInt(10) == 1){
-                target.damage(caster.getWorld().getDamageSources().inFire(), (float) (BalanceConfig.BLAZING_DEFAULT_DAMAGE*this.power_multiplier*crit_multiplier));
+                target.damage(DamageSource.IN_FIRE, (float) (BalanceConfig.BLAZING_DEFAULT_DAMAGE*this.power_multiplier*crit_multiplier));
                 target.setOnFireFor(this.duration*BalanceConfig.BLAZING_CRIT_FIRE_MULTIPLIER);
                 target.playSound(LightSounds.LIGHT_CRIT, 1, 1);
                 LightParticlesUtil.spawnDescendingColumn((ServerPlayerEntity) caster, flame_particle, target.getPos().add(0,3,0));
@@ -143,7 +144,7 @@ public class BlazingLight extends InnerLight {
                 }
             }else{
                 target.setOnFireFor(this.duration);
-                target.damage(caster.getWorld().getDamageSources().inFire(), (float) (BalanceConfig.BLAZING_DEFAULT_DAMAGE*this.power_multiplier));
+                target.damage(DamageSource.IN_FIRE, (float) (BalanceConfig.BLAZING_DEFAULT_DAMAGE*this.power_multiplier));
             }
         }
 

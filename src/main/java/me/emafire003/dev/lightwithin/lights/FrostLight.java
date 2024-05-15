@@ -16,6 +16,7 @@ import me.emafire003.dev.lightwithin.util.TargetType;
 import me.emafire003.dev.structureplacerapi.StructurePlacerAPI;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
@@ -140,7 +141,7 @@ public class FrostLight extends InnerLight {
 
                     target.addStatusEffect(new StatusEffectInstance(LightEffects.FROST, caster.getStatusEffect(LightEffects.LIGHT_ACTIVE).getDuration(), 0, false, false));
 
-                    target.damage(caster.getWorld().getDamageSources().freeze(), (float) this.power_multiplier);
+                    target.damage(DamageSource.FREEZE, (float) this.power_multiplier);
 
                     Box box =  target.getDimensions(target.getPose()).getBoxAt(target.getPos());
                     box.expand(1);
