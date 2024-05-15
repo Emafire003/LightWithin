@@ -146,9 +146,7 @@ public class FrostLight extends InnerLight {
                     Box box =  target.getDimensions(target.getPose()).getBoxAt(target.getPos());
                     box.expand(1);
                     Stream<BlockPos> stream_pos = BlockPos.stream(box);
-                    stream_pos.forEach( (pos) -> {
-                        caster.getWorld().setBlockState(pos, LightBlocks.CLEAR_ICE.getDefaultState());
-                    });
+                    stream_pos.forEach( (pos) -> caster.getWorld().setBlockState(pos, LightBlocks.CLEAR_ICE.getDefaultState()));
                 }
             }
 
