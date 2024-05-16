@@ -277,7 +277,7 @@ public class LightWithinClient implements ClientModInitializer {
     /**Create a config screen for ModMenu if YACL is present, or
      * a confirmation screen otherwise to tell you to download yacl*/
     public static Screen createConfigScreen(Screen parent) {
-        if (!FabricLoader.getInstance().isModLoaded("yet_another_config_lib_v3")) {
+        if (!FabricLoader.getInstance().isModLoaded("yet-another-config-lib")) {
             return new ConfirmScreen((result) -> {
                 if (result) {
                     Util.getOperatingSystem().open(URI.create("https://modrinth.com/mod/yacl/versions"));
