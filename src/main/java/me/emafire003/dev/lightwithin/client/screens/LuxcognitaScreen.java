@@ -144,7 +144,6 @@ public class LuxcognitaScreen extends Screen{
 
     }
 
-    //TODO this does not work :(
     public void fillWithLayer(MatrixStack matrixStack, RenderLayer layer, int startX, int startY, int endX, int endY, int z) {
         Matrix4f matrix4f = matrixStack.peek().getPositionMatrix();
         VertexConsumerProvider.Immediate immediate = VertexConsumerProvider.immediate(Tessellator.getInstance().getBuffer());
