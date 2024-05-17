@@ -92,7 +92,7 @@ dependencies {
 	//===========OPTIONAL DEPENDENCIES===========
 
 	//ColoredGlowLib
-	modImplementation files("libs/coloredglowlib-3.0.1+fabric_1.19.2.jar")//"maven.modrinth:coloredglowlib:${project.coloredglowlib_version}"
+	modImplementation "maven.modrinth:coloredglowlib:${project.coloredglowlib_version}"
 
 	//For ALLIES & Enemies
 	//Factions
