@@ -1,8 +1,11 @@
 package me.emafire003.dev.lightwithin.items;
 
 import me.emafire003.dev.lightwithin.LightWithin;
+import me.emafire003.dev.lightwithin.items.components.LightItemComponents;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.minecraft.client.particle.EndRodParticle;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.FoodComponent;
 import net.minecraft.item.*;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
@@ -10,27 +13,30 @@ import net.minecraft.registry.RegistryKey;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Rarity;
 
+import java.util.UUID;
+
 import static me.emafire003.dev.lightwithin.LightWithin.LOGGER;
 
 public class LightItems {
 
     public static final Item LUXINTUS_BERRY = registerItem("luxintus_berry",
             new LuxintusBerryItem(new Item.Settings().rarity(Rarity.EPIC)
-                    .food(new FoodComponent.Builder().alwaysEdible().hunger(5).build()).maxCount(16)),
+                    .food(new FoodComponent.Builder().alwaysEdible().nutrition(5).build()).maxCount(16)),
             ItemGroups.FOOD_AND_DRINK, Items.GLOW_BERRIES);
 
     public static final Item LUXCOGNITA_BERRY = registerItem("luxcognita_berry",
             new LuxcognitaBerryItem(new Item.Settings().rarity(Rarity.RARE)
-                    .food(new FoodComponent.Builder().alwaysEdible().hunger(5).build()).maxCount(16)),
+                    .food(new FoodComponent.Builder().alwaysEdible().nutrition(5).build()).maxCount(16)),
             ItemGroups.FOOD_AND_DRINK, Items.GLOW_BERRIES);
 
     public static final Item LUXMUTUA_BERRY = registerItem("luxmutua_berry",
             new LuxmutuaBerryItem(new Item.Settings().rarity(Rarity.EPIC)
-                    .food(new FoodComponent.Builder().alwaysEdible().hunger(5).build()).maxCount(16)),
+                    .food(new FoodComponent.Builder().alwaysEdible().nutrition(5).build()).maxCount(16)),
             ItemGroups.FOOD_AND_DRINK, Items.GLOW_BERRIES);
 
     public static final Item BOTTLED_LIGHT = registerItem("bottled_light",
-            new BottledLightItem(new Item.Settings().rarity(Rarity.RARE).maxCount(1)),
+            new BottledLightItem(new Item.Settings().rarity(Rarity.RARE).maxCount(1)
+                    .component(LightItemComponents.BOTTLED_LIGHT_PLAYER_UUID, UUID.fromString("00000000-0000-0000-0000-000000000000"))),
             ItemGroups.FOOD_AND_DRINK, Items.GLOW_BERRIES);
 
     public static final Item LUXINTUS_BERRY_POWDER = registerItem("luxintus_berry_powder",

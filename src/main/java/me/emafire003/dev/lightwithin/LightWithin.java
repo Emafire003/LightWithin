@@ -1,5 +1,6 @@
 package me.emafire003.dev.lightwithin;
 
+import me.emafire003.dev.lightwithin.items.components.LightItemComponents;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import org.ladysnake.cca.api.v3.component.ComponentKey;
 import org.ladysnake.cca.api.v3.component.ComponentRegistry;
@@ -119,6 +120,7 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 		LootTableModifier.modifyLootTables();
 		LightCommands.registerArguments();
 		LightEntities.registerEntities();
+		LightItemComponents.registerComponents();
 
 		if(FabricLoader.getInstance().isModLoaded("flan")){
 			FlanCompat.registerFlan();

@@ -3,6 +3,7 @@ package me.emafire003.dev.lightwithin.items;
 import me.emafire003.dev.lightwithin.LightWithin;
 import me.emafire003.dev.lightwithin.component.LightComponent;
 import me.emafire003.dev.lightwithin.config.Config;
+import me.emafire003.dev.lightwithin.items.components.LightItemComponents;
 import me.emafire003.dev.lightwithin.items.crafting.BrewRecipes;
 import me.emafire003.dev.lightwithin.lights.InnerLightType;
 import me.emafire003.dev.lightwithin.particles.LightParticlesUtil;
@@ -11,6 +12,7 @@ import me.emafire003.dev.lightwithin.status_effects.LightEffects;
 import me.emafire003.dev.lightwithin.util.TargetType;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.component.ComponentChanges;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.player.PlayerEntity;
@@ -61,16 +63,16 @@ public class BottledLightItem extends Item {
         
         //Checks to see if the bottle is artificially brewed. If it is, the UUID of the player will be 0000000 etc
         if(BottledLightItem.getCreatedBy(stack).equals(UUID.fromString("00000000-0000-0000-0000-000000000000"))){
-            NbtCompound nbt = stack.getNbt();
-            if(!stack.hasNbt() || nbt == null){
+            //NbtCompound nbt = stack.getNbt();
+            if(!stack.getComponents().isEmpty() || stack.getComponents() == null){
                 return TypedActionResult.pass(stack);
             }
+            if(stack.getComponents().contains(LightItemComponents.BOTTLED_LIGHT_TYPE_INGREDIENT)){
 
-            if(nbt.contains(BrewRecipes.TYPE_INGREDIENT_KEY)){
-                InnerLightType bottled_type = InnerLightType.valueOf(nbt.getString(BrewRecipes.TYPE_INGREDIENT_KEY));
+                InnerLightType bottled_type = InnerLightType.valueOf(stack.getComponents().get(LightItemComponents.BOTTLED_LIGHT_TYPE_INGREDIENT));
                 if(component.getType().equals(bottled_type)){
-                    if(nbt.contains(BrewRecipes.TARGET_INGREDIENT_KEY)){
-                        TargetType bottled_target = TargetType.valueOf(nbt.getString(BrewRecipes.TARGET_INGREDIENT_KEY));
+                    if(stack.getComponents().contains(LightItemComponents.BOTTLED_LIGHT_TARGET_INGREDIENT)){
+                        TargetType bottled_target = TargetType.valueOf(stack.getComponents().get(LightItemComponents.BOTTLED_LIGHT_TARGET_INGREDIENT));
                         if(component.getTargets().equals(bottled_target)){
                             if(addCharge(user, stack, component)){
                                 return TypedActionResult.consume(stack);
@@ -151,7 +153,7 @@ public class BottledLightItem extends Item {
     public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
         tooltip.add(Text.translatable("item.lightwithin.bottled_light.tooltip"));
         if(Screen.hasShiftDown()) {
-            if(stack.hasNbt() && stack.getNbt().getUuid(BrewRecipes.PLAYER_NBT_KEY).equals(UUID.fromString("00000000-0000-0000-0000-000000000000"))){
+            if(stack.getComponents().contains(LightItemComponents.BOTTLED_LIGHT_PLAYER_UUID) && stack.getComponents().get(LightItemComponents.BOTTLED_LIGHT_PLAYER_UUID).equals(UUID.fromString("00000000-0000-0000-0000-000000000000"))){
                 tooltip.add(Text.translatable("item.lightwithin.bottled_light.tooltip.warning").formatted(Formatting.AQUA).formatted(Formatting.ITALIC));
                 if(stack.getNbt().contains(BrewRecipes.TYPE_INGREDIENT_KEY)){
                     tooltip.add(Text.translatable("item.lightwithin.bottled_light.tooltip.type").formatted(Formatting.GREEN).append(Text.literal(stack.getNbt().getString(BrewRecipes.TYPE_INGREDIENT_KEY)).formatted(Formatting.LIGHT_PURPLE)));
@@ -167,18 +169,14 @@ public class BottledLightItem extends Item {
     }
 
     public static void setCreatedBy(PlayerEntity player, ItemStack bottle_item){
-        NbtCompound nbt = new NbtCompound();
-        nbt.putUuid("lightwithin:playerUUID", player.getUuid());
-        bottle_item.setNbt(nbt);
-        LightWithin.LOGGER.info("Setting the nbt of the thing to: " + player.getUuid());
-        LightWithin.LOGGER.info("The nbt of the item is now: " + bottle_item.getNbt());
+        bottle_item.set(LightItemComponents.BOTTLED_LIGHT_PLAYER_UUID, player.getUuid());
     }
 
     public static UUID getCreatedBy(ItemStack bottle_item){
-        if(!bottle_item.hasNbt()){
+        if(!bottle_item.getComponents().isEmpty() || !bottle_item.getComponents().contains(LightItemComponents.BOTTLED_LIGHT_PLAYER_UUID)){
             return UUID.fromString("00000000-0000-0000-0000-000000000000");
         }
-        return bottle_item.getNbt().getUuid("lightwithin:playerUUID");
+        return bottle_item.get(LightItemComponents.BOTTLED_LIGHT_PLAYER_UUID);
     }
 
 
