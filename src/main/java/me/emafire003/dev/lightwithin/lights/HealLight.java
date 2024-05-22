@@ -20,6 +20,7 @@ import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 
@@ -117,9 +118,9 @@ public class HealLight extends InnerLight {
             if(target.equals(caster) && component.getTargets().equals(TargetType.ALLIES)){
                 target.addStatusEffect(new StatusEffectInstance(StatusEffects.REGENERATION, caster.getStatusEffect(LightEffects.LIGHT_ACTIVE).getDuration(), (int) (this.power_multiplier/Config.DIV_SELF), false, false));
             }else if(component.getTargets().equals(TargetType.VARIANT)){
-                List<StatusEffect> remove_status_list = new ArrayList<>();
+                List<RegistryEntry<StatusEffect>> remove_status_list = new ArrayList<>();
                 target.getActiveStatusEffects().forEach((statusEffect, instance) -> {
-                    if(statusEffect.getCategory().equals(StatusEffectCategory.HARMFUL) && statusEffect != LightEffects.LIGHT_FATIGUE){
+                    if(statusEffect.value().getCategory().equals(StatusEffectCategory.HARMFUL) && statusEffect != LightEffects.LIGHT_FATIGUE){
                         remove_status_list.add(statusEffect);
                     }
                 });

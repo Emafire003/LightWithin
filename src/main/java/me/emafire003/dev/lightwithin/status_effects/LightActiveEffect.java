@@ -40,8 +40,16 @@ public class LightActiveEffect extends StatusEffect {
     }
 
     // This method is called when it applies the status effect. We implement custom functionality here.
+    boolean run = false;
+    LivingEntity entity;
+
+    // This method is called when it applies the status effect. We implement custom functionality here.
     @Override
-    public void applyUpdateEffect(LivingEntity entity, int amplifier) {
+    public boolean applyUpdateEffect(LivingEntity entity, int amplifier) {
+        if(!run){
+            run = true;
+            this.entity = entity;
+        }
         if(entity instanceof ServerPlayerEntity){
             LightComponent component = LIGHT_COMPONENT.get(entity);
             if(component.getType().equals(InnerLightType.WIND) && !component.getTargets().equals(TargetType.ALL)){
@@ -49,10 +57,11 @@ public class LightActiveEffect extends StatusEffect {
                 ((ServerWorld) (entity).getWorld()).spawnParticles((ServerPlayerEntity) entity, ParticleTypes.CLOUD, false, entity.getX(), entity.getY(), entity.getZ(), 5, 0, 0, 0, 0.1);
             }
         }
+        return true;
     }
 
     @Override
-    public void onRemoved(LivingEntity entity, AttributeContainer attributes, int amplifier){
+    public void onRemoved(AttributeContainer attributes){
         if(!entity.hasStatusEffect(StatusEffects.GLOWING)){
             entity.setGlowing(false);
         }
@@ -75,6 +84,6 @@ public class LightActiveEffect extends StatusEffect {
             }
 
         }
-        super.onRemoved(entity, attributes, amplifier);
+        super.onRemoved(attributes);
     }
 }

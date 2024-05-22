@@ -41,7 +41,7 @@ public class ReadyLightCommand implements LightCommand{
                         sendReadyPacket(target, true);
                         source.sendFeedback( () -> Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The InnerLight of §d" + target.getName().getString() + "§e has been readied!" ).formatted(Formatting.YELLOW)), true);
                         if(Config.TARGET_FEEDBACK){
-                            target.sendMessage(Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("Your InnerLight was made ready by force!" ).formatted(Formatting.YELLOW)));
+                            target.sendMessage(Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("Your InnerLight was made used by force!" ).formatted(Formatting.YELLOW)));
                         }
                         stopped = true;
                         tickCounter = 0;
@@ -74,7 +74,7 @@ public class ReadyLightCommand implements LightCommand{
                 sendReadyPacket(target, true);
                 source.sendFeedback( () -> Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The InnerLight of §d" + target.getName().getString() + "§e has been readied!" ).formatted(Formatting.YELLOW)), true);
                 if(Config.TARGET_FEEDBACK){
-                    target.sendMessage(Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("Your InnerLight was made ready by force!" ).formatted(Formatting.YELLOW)));
+                    target.sendMessage(Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("Your InnerLight was made used by force!" ).formatted(Formatting.YELLOW)));
                 }
             }
             return 1;
@@ -89,8 +89,8 @@ public class ReadyLightCommand implements LightCommand{
 
     public LiteralCommandNode<ServerCommandSource> getNode() {
         return CommandManager
-                .literal("ready")
-                .requires(PermissionsChecker.hasPerms("lightwithin.commands.ready", 2))
+                .literal("used")
+                .requires(PermissionsChecker.hasPerms("lightwithin.commands.used", 2))
                 .then(
                         CommandManager.argument("player", EntityArgumentType.players())
                                 .executes(this::ready)

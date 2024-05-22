@@ -6,6 +6,7 @@ import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.Identifier;
 
 
+@Deprecated
 public class LightChargeConsumedPacketC2S extends PacketByteBuf {
     public static final Identifier ID = new Identifier(LightWithin.MOD_ID , "light_charge_consumed_packet");
 

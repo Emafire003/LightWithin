@@ -11,7 +11,6 @@ import me.emafire003.dev.lightwithin.status_effects.LightEffects;
 import me.emafire003.dev.lightwithin.util.TargetType;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.player.PlayerEntity;
@@ -46,7 +45,7 @@ public class BottledLightItem extends Item {
             user.playSound(LightSounds.LIGHT_ERROR, 0.5f, 1.2f);
             return TypedActionResult.pass(stack);
         }
-        //"Fails" silently if the player has the light ready but not active
+        //"Fails" silently if the player has the light used but not active
         if(LightWithin.CURRENTLY_READY_LIGHT_PLAYER_CACHE.containsKey(user.getUuid())){
             return TypedActionResult.pass(stack);
         }

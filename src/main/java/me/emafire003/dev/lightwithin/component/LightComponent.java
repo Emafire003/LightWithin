@@ -1,7 +1,8 @@
 package me.emafire003.dev.lightwithin.component;
 
-import dev.onyxstudios.cca.api.v3.component.ComponentV3;
-import dev.onyxstudios.cca.api.v3.component.sync.AutoSyncedComponent;
+import net.minecraft.registry.RegistryWrapper;
+import org.ladysnake.cca.api.v3.component.ComponentV3;
+import org.ladysnake.cca.api.v3.component.sync.AutoSyncedComponent;
 import me.emafire003.dev.lightwithin.LightWithin;
 import me.emafire003.dev.lightwithin.config.Config;
 import me.emafire003.dev.lightwithin.lights.InnerLightType;
@@ -41,7 +42,7 @@ public class LightComponent implements ComponentV3, AutoSyncedComponent {
     }
 
     @Override
-    public void readFromNbt(NbtCompound tag) {
+    public void readFromNbt(NbtCompound tag, RegistryWrapper.WrapperLookup registryLookup) {
         if(tag.contains("type")){
             if(debug){
                 LOGGER.info("the type got: " + tag.getString("type"));
@@ -134,9 +135,9 @@ public class LightComponent implements ComponentV3, AutoSyncedComponent {
         }
 
     }
-
+    
     @Override
-    public void writeToNbt(NbtCompound tag) {
+    public void writeToNbt(NbtCompound tag, RegistryWrapper.WrapperLookup registryLookup) {
         tag.putString("type", this.type.toString());
         tag.putString("targets", this.targets.toString());
         tag.putDouble("cooldown_time", this.max_cooldown_time);
@@ -308,5 +309,4 @@ public class LightComponent implements ComponentV3, AutoSyncedComponent {
         this.isLocked = false;
         LightWithin.LIGHT_COMPONENT.sync(caster);
     }
-
 }

@@ -24,7 +24,7 @@ import java.util.List;
 
 public class DefenseLight extends InnerLight {
 
-    public static final Item INGREDIENT = Items.SCUTE;
+    public static final Item INGREDIENT = Items.TURTLE_SCUTE;
 
     public DefenseLight(List<LivingEntity> targets, double cooldown_time, double power_multiplier, int duration, String color, PlayerEntity caster, boolean rainbow_col) {
         super(targets, cooldown_time, power_multiplier, duration, color, caster, rainbow_col);

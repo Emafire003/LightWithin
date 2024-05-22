@@ -1,6 +1,5 @@
 package me.emafire003.dev.lightwithin.client;
 
-import com.mojang.datafixers.util.Pair;
 import me.emafire003.dev.lightwithin.LightWithin;
 import me.emafire003.dev.lightwithin.blocks.LightBlocks;
 import me.emafire003.dev.lightwithin.client.screens.LuxcognitaScreen;
@@ -28,6 +27,7 @@ import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
+import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.ConfirmScreen;
@@ -42,7 +42,6 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.Util;
 
 import java.net.URI;
-import java.util.Map;
 import java.util.NoSuchElementException;
 
 import static me.emafire003.dev.lightwithin.LightWithin.LOGGER;
@@ -166,12 +165,12 @@ public class LightWithinClient implements ClientModInitializer {
     }
 
     private void registerLightReadyPacket(){
-        ClientPlayNetworking.registerGlobalReceiver(LightReadyPacketS2C.ID, ((client, handler, buf, responseSender) -> {
-            var results = LightReadyPacketS2C.read(buf);
-
+        PayloadTypeRegistry.playS2C().register(LightReadyPayloadS2C.ID, LightReadyPayloadS2C.PACKET_CODEC);
+        ClientPlayNetworking.registerGlobalReceiver(LightReadyPayloadS2C.ID, (payload, context) -> {
+            MinecraftClient client = context.client();
             client.execute(() -> {
                 try{
-                    if(!results){
+                    if(!payload.ready()){
                         setLightReady(false);
                         tickCounter = 0;
                         return;
@@ -191,16 +190,17 @@ public class LightWithinClient implements ClientModInitializer {
                     e.printStackTrace();
                 }
             });
-        }));
+        });
     }
 
     private void registerConfigOptionsSyncPacket(){
-        ClientPlayNetworking.registerGlobalReceiver(ConfigOptionsSyncPacketS2C.ID, ((client, handler, buf, responseSender) -> {
-            Map<String, Boolean> results = ConfigOptionsSyncPacketS2C.readBooleans(buf);
+        PayloadTypeRegistry.playS2C().register(ConfigOptionSyncPayloadS2C.ID, ConfigOptionSyncPayloadS2C.PACKET_CODEC);
 
+        ClientPlayNetworking.registerGlobalReceiver(ConfigOptionSyncPayloadS2C.ID, (payload, context) -> {
+            MinecraftClient client = context.client();
             client.execute(() -> {
                 try{
-                    allowAutoActivation = results.get(ConfigPacketConstants.AUTO_LIGHT_ACTIVATION);
+                    allowAutoActivation = payload.booleanSettings().get(ConfigPacketConstants.AUTO_LIGHT_ACTIVATION);
                 }catch (NoSuchElementException e){
                     LOGGER.warn("No value in the packet, probably not a big problem");
                 }catch (Exception e){
@@ -208,20 +208,18 @@ public class LightWithinClient implements ClientModInitializer {
                     e.printStackTrace();
                 }
             });
-        }));
+        });
     }
 
 
     private void registerPlayRenderEffectPacket(){
         LOGGER.debug("Registering play render effect packet receiver on client...");
-        ClientPlayNetworking.registerGlobalReceiver(PlayRenderEffectPacketS2C.ID, ((client, handler, buf, responseSender) -> {
-            Pair<RenderEffect, Integer> effectAndTarget = PlayRenderEffectPacketS2C.readTarget(buf);
-            if(effectAndTarget == null){
-                LOGGER.error("Error! The PlayRenderEffectPacket had a null pair payload!");
-                return;
-            }
-            RenderEffect effect = effectAndTarget.getFirst();
-            int targetId = effectAndTarget.getSecond();
+
+        PayloadTypeRegistry.playS2C().register(PlayRenderEffectPayloadS2C.ID, PlayRenderEffectPayloadS2C.PACKET_CODEC);
+        ClientPlayNetworking.registerGlobalReceiver(PlayRenderEffectPayloadS2C.ID, (payload, context) -> {
+            MinecraftClient client = context.client();
+            RenderEffect effect = payload.effect();
+            int targetId = payload.targetID();
 
             client.execute(() -> {
                 try{
@@ -270,7 +268,7 @@ public class LightWithinClient implements ClientModInitializer {
                     e.printStackTrace();
                 }
             });
-        }));
+        });
     }
 
     /**Create a config screen for ModMenu if YACL is present, or
@@ -290,14 +288,14 @@ public class LightWithinClient implements ClientModInitializer {
     }
 
     private void registerWindLightVelocityPacket(){
-        LOGGER.info("Registering windlight velocity packet receiver on client...");
-        ClientPlayNetworking.registerGlobalReceiver(WindLightVelocityPacketS2C.ID, ((client, handler, buf, responseSender) -> {
-            var results = WindLightVelocityPacketS2C.read(buf);
-
+        LOGGER.debug("Registering windlight velocity packet receiver on client...");
+        PayloadTypeRegistry.playS2C().register(WindLightVelocityPayloadS2C.ID, WindLightVelocityPayloadS2C.PACKET_CODEC);
+        ClientPlayNetworking.registerGlobalReceiver(WindLightVelocityPayloadS2C.ID, (payload, context) -> {
+            MinecraftClient client = context.client();
             client.execute(() -> {
                 try{
                     assert client.player != null;
-                    client.player.setVelocity(results);
+                    client.player.setVelocity(payload.vx(), payload.vy(), payload.vz());
                     //client.player.move(MovementType.SELF, client.player.getVelocity());
 
                 }catch (NoSuchElementException e){
@@ -307,6 +305,6 @@ public class LightWithinClient implements ClientModInitializer {
                     e.printStackTrace();
                 }
             });
-        }));
+        });
     }
 }

@@ -3,7 +3,7 @@ package me.emafire003.dev.lightwithin.util;
 import me.emafire003.dev.lightwithin.component.LightComponent;
 import me.emafire003.dev.lightwithin.config.Config;
 import me.emafire003.dev.lightwithin.config.TriggerConfig;
-import me.emafire003.dev.lightwithin.networking.LightReadyPacketS2C;
+import me.emafire003.dev.lightwithin.networking.LightReadyPayloadS2C;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
@@ -22,7 +22,7 @@ public class LightTriggerChecks {
 
     public static void sendReadyPacket(ServerPlayerEntity player, boolean b){
         try{
-            ServerPlayNetworking.send(player, LightReadyPacketS2C.ID, new LightReadyPacketS2C(b));
+            ServerPlayNetworking.send(player, new LightReadyPayloadS2C(b));
             addToReadyList(player);
         }catch(Exception e){
             LOGGER.error("FAILED to send data packets to the client!");
@@ -691,7 +691,7 @@ public class LightTriggerChecks {
         }
     }
     
-    /**Send the ready packet and sets the light as naturally triggered*/
+    /**Send the used packet and sets the light as naturally triggered*/
     public static void sendLightTriggered(ServerPlayerEntity player){
         if(!LIGHT_COMPONENT.get(player).hasTriggeredNaturally()){
             LIGHT_COMPONENT.get(player).setTriggeredNaturally(true);

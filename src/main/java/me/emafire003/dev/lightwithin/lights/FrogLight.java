@@ -11,6 +11,8 @@ import net.minecraft.entity.passive.FrogVariant;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.RegistryKey;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
@@ -83,14 +85,14 @@ public class FrogLight extends InnerLight {
                 }
             }
             FrogEntity frog = new FrogEntity(EntityType.FROG, caster.getWorld());
-            FrogVariant variant = FrogVariant.TEMPERATE;
+            RegistryKey<FrogVariant> variant = FrogVariant.TEMPERATE;
             int v = random.nextBetween(0, 2);
             if(v == 0){
                 variant = FrogVariant.COLD;
             }else if(v == 1){
                 variant = FrogVariant.WARM;
             }
-            frog.setVariant(variant);
+            frog.setVariant(Registries.FROG_VARIANT.entryOf(variant));
             frog.setPos(caster.getX()+random.nextDouble(), caster.getY()+2, caster.getZ()+random.nextDouble());
             caster.getWorld().spawnEntity(frog);
         }

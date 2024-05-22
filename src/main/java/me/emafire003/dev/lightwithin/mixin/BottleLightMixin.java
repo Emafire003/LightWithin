@@ -4,7 +4,7 @@ import me.emafire003.dev.lightwithin.LightWithin;
 import me.emafire003.dev.lightwithin.config.Config;
 import me.emafire003.dev.lightwithin.items.BottledLightItem;
 import me.emafire003.dev.lightwithin.items.LightItems;
-import me.emafire003.dev.lightwithin.networking.LightReadyPacketS2C;
+import me.emafire003.dev.lightwithin.networking.LightReadyPayloadS2C;
 import me.emafire003.dev.lightwithin.particles.LightParticlesUtil;
 import me.emafire003.dev.lightwithin.status_effects.LightEffects;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
@@ -40,7 +40,7 @@ public abstract class BottleLightMixin {
         if(LightWithin.CURRENTLY_READY_LIGHT_PLAYER_CACHE.containsKey(user.getUuid()) && !world.isClient()){
             if(!world.isClient()){
                 LightParticlesUtil.spawnLightBottledUpEffect((ServerPlayerEntity) user);
-                ServerPlayNetworking.send((ServerPlayerEntity) user, LightReadyPacketS2C.ID, new LightReadyPacketS2C(false));
+                ServerPlayNetworking.send((ServerPlayerEntity) user, new LightReadyPayloadS2C(false));
                 LightWithin.CURRENTLY_READY_LIGHT_PLAYER_CACHE.remove(user.getUuid());
             }
             world.playSound(null, user.getX(), user.getY(), user.getZ(), SoundEvents.ITEM_BOTTLE_FILL_DRAGONBREATH, SoundCategory.NEUTRAL, 1.0f, 1.3f);

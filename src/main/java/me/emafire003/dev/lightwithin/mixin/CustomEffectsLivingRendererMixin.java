@@ -47,7 +47,7 @@ public abstract class CustomEffectsLivingRendererMixin<T extends Entity> {
 
         //This is an offset to the center of the player.
         //matrixStack.translate(0.0f, 1.0f, 0.0f);
-        matrixStack.translate(0.0f, entity.getDimensions(entity.getPose()).height/2, 0.0f);
+        matrixStack.translate(0.0f, entity.getDimensions(entity.getPose()).height()/2, 0.0f);
 
         for(int n = 0; (float)n < (f + f * f) / 2.0F * 60.0F; ++n) {
             matrixStack.multiply(RotationAxis.POSITIVE_X.rotationDegrees(random.nextFloat() * 360.0F));

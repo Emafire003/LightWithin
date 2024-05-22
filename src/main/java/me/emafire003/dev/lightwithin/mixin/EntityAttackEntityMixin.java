@@ -1,18 +1,10 @@
 package me.emafire003.dev.lightwithin.mixin;
 
-import me.emafire003.dev.lightwithin.LightWithin;
 import me.emafire003.dev.lightwithin.events.EntityAttackEntityEvent;
 import me.emafire003.dev.lightwithin.status_effects.LightEffects;
-import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.mob.EndermanEntity;
-import net.minecraft.util.math.Vec3d;
-import org.slf4j.Logger;
-import org.spongepowered.asm.mixin.Debug;
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
@@ -22,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(LivingEntity.class)
 public abstract class EntityAttackEntityMixin{
 
-    @Inject(method = "onAttacking", at = @At("HEAD"))
+    @Inject(method = "onAttacking", at = @At("HEAD"), cancellable = true)
     public void injectOnAttacking(Entity target, CallbackInfo ci) {
         //for the freeze effect, i didn't want to modify the same method twice
         if(((LivingEntity) (Object) this).hasStatusEffect(LightEffects.FROST)){

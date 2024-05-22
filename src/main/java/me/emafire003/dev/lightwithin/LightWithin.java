@@ -1,10 +1,11 @@
 package me.emafire003.dev.lightwithin;
 
-import dev.onyxstudios.cca.api.v3.component.ComponentKey;
-import dev.onyxstudios.cca.api.v3.component.ComponentRegistry;
-import dev.onyxstudios.cca.api.v3.entity.EntityComponentFactoryRegistry;
-import dev.onyxstudios.cca.api.v3.entity.EntityComponentInitializer;
-import dev.onyxstudios.cca.api.v3.entity.RespawnCopyStrategy;
+import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
+import org.ladysnake.cca.api.v3.component.ComponentKey;
+import org.ladysnake.cca.api.v3.component.ComponentRegistry;
+import org.ladysnake.cca.api.v3.entity.EntityComponentFactoryRegistry;
+import org.ladysnake.cca.api.v3.entity.EntityComponentInitializer;
+import org.ladysnake.cca.api.v3.entity.RespawnCopyStrategy;
 import me.emafire003.dev.lightwithin.blocks.LightBlocks;
 import me.emafire003.dev.lightwithin.commands.LightCommands;
 import me.emafire003.dev.lightwithin.compat.coloredglowlib.CGLCompat;
@@ -100,7 +101,7 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 
 	@Override
 	public void onInitialize() {
-		// This code runs as soon as Minecraft is in a mod-load-ready state.
+		// This code runs as soon as Minecraft is in a mod-load-used state.
 		// However, some things (like resources) may still be uninitialized.
 		// Proceed with mild caution.
 
@@ -167,21 +168,28 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 	public static void syncCustomConfigOptions(ServerPlayerEntity player){
 		Map<String, Boolean> booleanMap = new HashMap<>();
 		booleanMap.put(ConfigPacketConstants.AUTO_LIGHT_ACTIVATION, Config.AUTO_LIGHT_ACTIVATION);
-		//TODO if needed i'll add other settings ecct
-		ConfigOptionsSyncPacketS2C optionsPacket = new ConfigOptionsSyncPacketS2C(booleanMap);
-		ServerPlayNetworking.send(player, ConfigOptionsSyncPacketS2C.ID, optionsPacket);
+		//TODO if needed i'll add other settings
+		ConfigOptionSyncPayloadS2C payload = new ConfigOptionSyncPayloadS2C(booleanMap);
+		ServerPlayNetworking.send(player, payload);
 	}
 
 	private static void registerLightUsedPacket(){
-		ServerPlayNetworking.registerGlobalReceiver(LightUsedPacketC2S.ID, (((server, player, handler, buf, responseSender) -> {
+		PayloadTypeRegistry.playC2S().register(LightUsedPayloadC2S.ID, LightUsedPayloadC2S.PACKET_CODEC);
+
+		ServerPlayNetworking.registerGlobalReceiver(LightUsedPayloadC2S.ID, ((payload, context) -> {
+			ServerPlayerEntity player = context.player();
 			if(player.getWorld().isClient){
 				return;
 			}
-			var results = LightUsedPacketC2S.read(buf);
-			server.execute(() -> {
+			addToReadyList(player);
+			if(player.getServer() == null){
+				LOGGER.error("Error while reciving LightChargeConsumedPacket, server is null!");
+				return;
+			}
+			player.getServer().execute( () -> {
 				try{
 					//Handles the LightCharge being used. If it used, results will be true.
-					if(results){
+					if(payload.used()){
 
 						if(!CheckUtils.canActivateHere(player)){
 							player.sendMessage(Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.translatableWithFallback("light.charge.cant_use_here", "You are not allowed to use you InnerLight here!").formatted(Formatting.RED)));
@@ -191,7 +199,7 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 						//This could be laggy? Maybe?
 						List<ServerPlayerEntity> players = player.getServerWorld().getPlayers();
 						for(ServerPlayerEntity p : players){
-							ServerPlayNetworking.send(p, PlayRenderEffectPacketS2C.ID, new PlayRenderEffectPacketS2C(RenderEffect.LIGHT_RAYS, player));
+							ServerPlayNetworking.send(p, new PlayRenderEffectPayloadS2C(RenderEffect.LIGHT_RAYS, player.getId()));
 						}
 
 						//TODO maybe also increase the max cooldown light-stat?
@@ -212,17 +220,24 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 					e.printStackTrace();
 				}
 			});
-		})));
+
+			//var results = LightUsedPacketC2S.read(buf);
+		}));
 	}
 
 	private static void registerLightChargeConsumedPacket(){
-		ServerPlayNetworking.registerGlobalReceiver(LightChargeConsumedPacketC2S.ID, (((server, player, handler, buf, responseSender) -> {
+		PayloadTypeRegistry.playC2S().register(LightChargeConsumedPayloadC2S.ID, LightChargeConsumedPayloadC2S.PACKET_CODEC);
+		ServerPlayNetworking.registerGlobalReceiver(LightChargeConsumedPayloadC2S.ID, ((payload, context) -> {
+			ServerPlayerEntity player = context.player();
 			if(player.getWorld().isClient){
 				return;
 			}
 			addToReadyList(player);
-			//var results = LightUsedPacketC2S.read(buf);
-			server.execute(() -> {
+			if(player.getServer() == null){
+				LOGGER.error("Error while reciving LightChargeConsumedPacket, server is null!");
+				return;
+			}
+			player.getServer().execute( () -> {
 				try{
 
 					///particle lightwithin:shine_particle ~ ~1 ~ 0.1 0.1 0.1 0.15 25 force
@@ -232,7 +247,7 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 					player.sendMessage(Text.translatable("light.charge.used").formatted(Formatting.YELLOW), true);
 
 					((ServerWorld) player.getWorld()).spawnParticles(
-							LightParticles.SHINE_PARTICLE, player.getX(), player.getY()+player.getDimensions(player.getPose()).height/2, player.getZ(),
+							LightParticles.SHINE_PARTICLE, player.getX(), player.getY()+player.getDimensions(player.getPose()).height()/2, player.getZ(),
 							50, 0.1, 0.1, 0.1, 0.15
 					);
 
@@ -244,7 +259,9 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 					e.printStackTrace();
 				}
 			});
-		})));
+
+			//var results = LightUsedPacketC2S.read(buf);
+		}));
 	}
 
 	public static boolean isPlayerInCooldown(PlayerEntity user){
@@ -593,18 +610,18 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 
 	public static void sendRenderRunePacket(ServerPlayerEntity player){
 		try{
-			ServerPlayNetworking.send(player, PlayRenderEffectPacketS2C.ID, new PlayRenderEffectPacketS2C(RenderEffect.RUNES));
+			ServerPlayNetworking.send(player, new PlayRenderEffectPayloadS2C(RenderEffect.RUNES, -1));
 		}catch(Exception e){
 			LOGGER.error("FAILED to send data packets to the client!");
 			e.printStackTrace();
 		}
 	}
 
-	/**Adds the player to the list of players that are currently ready to
+	/**Adds the player to the list of players that are currently used to
 	 * trigger a light. Automatically removes them after 10 seconds.
 	 * */
 	public static void addToReadyList(PlayerEntity player){
-		//TODO if changig the ready seconds becomes a thing, modify it here too.
+		//TODO if changig the used seconds becomes a thing, modify it here too.
 		CURRENTLY_READY_LIGHT_PLAYER_CACHE.put(player.getUuid(), 20*10);
 	}
 

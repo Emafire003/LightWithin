@@ -1,6 +1,6 @@
 package me.emafire003.dev.lightwithin.util.fabridash;
 
-import me.emafire003.dev.lightwithin.networking.WindLightVelocityPacketS2C;
+import me.emafire003.dev.lightwithin.networking.WindLightVelocityPayloadS2C;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -34,7 +34,7 @@ public class FabriDash {
 
     public static void sendVelocityPacket(ServerPlayerEntity player, Vec3d vel){
         try{
-            ServerPlayNetworking.send(player, WindLightVelocityPacketS2C.ID, new WindLightVelocityPacketS2C(vel));
+            ServerPlayNetworking.send(player, new WindLightVelocityPayloadS2C(vel.getX(), vel.getY(), vel.getZ()));
         }catch(Exception e){
             LOGGER.error("FAILED to send data packets to the client!");
             e.printStackTrace();

@@ -2,24 +2,24 @@ package me.emafire003.dev.lightwithin.particles;
 
 import me.emafire003.dev.lightwithin.LightWithin;
 import net.fabricmc.fabric.api.particle.v1.FabricParticleTypes;
-import net.minecraft.particle.DefaultParticleType;
+import net.minecraft.particle.SimpleParticleType;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
 
 public class LightParticles {
-    public static final DefaultParticleType HEALLIGHT_PARTICLE = FabricParticleTypes.simple();
-    public static final DefaultParticleType DEFENSELIGHT_PARTICLE = FabricParticleTypes.simple();
-    public static final DefaultParticleType STRENGTHLIGHT_PARTICLE = FabricParticleTypes.simple();
-    public static final DefaultParticleType BLAZINGLIGHT_PARTICLE = FabricParticleTypes.simple();
-    public static final DefaultParticleType FROSTLIGHT_PARTICLE = FabricParticleTypes.simple();
-    public static final DefaultParticleType EARTHENLIGHT_PARTICLE = FabricParticleTypes.simple();
-    public static final DefaultParticleType WINDLIGHT_PARTICLE = FabricParticleTypes.simple();
-    public static final DefaultParticleType AQUALIGHT_PARTICLE = FabricParticleTypes.simple();
-    public static final DefaultParticleType FROGLIGHT_PARTICLE = FabricParticleTypes.simple();
+    public static final SimpleParticleType HEALLIGHT_PARTICLE = FabricParticleTypes.simple();
+    public static final SimpleParticleType DEFENSELIGHT_PARTICLE = FabricParticleTypes.simple();
+    public static final SimpleParticleType STRENGTHLIGHT_PARTICLE = FabricParticleTypes.simple();
+    public static final SimpleParticleType BLAZINGLIGHT_PARTICLE = FabricParticleTypes.simple();
+    public static final SimpleParticleType FROSTLIGHT_PARTICLE = FabricParticleTypes.simple();
+    public static final SimpleParticleType EARTHENLIGHT_PARTICLE = FabricParticleTypes.simple();
+    public static final SimpleParticleType WINDLIGHT_PARTICLE = FabricParticleTypes.simple();
+    public static final SimpleParticleType AQUALIGHT_PARTICLE = FabricParticleTypes.simple();
+    public static final SimpleParticleType FROGLIGHT_PARTICLE = FabricParticleTypes.simple();
 
-    public static final DefaultParticleType LIGHT_PARTICLE = FabricParticleTypes.simple();
-    public static final DefaultParticleType SHINE_PARTICLE = FabricParticleTypes.simple();
+    public static final SimpleParticleType LIGHT_PARTICLE = FabricParticleTypes.simple();
+    public static final SimpleParticleType SHINE_PARTICLE = FabricParticleTypes.simple();
 
 
     public static void registerParticles() {

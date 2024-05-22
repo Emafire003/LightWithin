@@ -140,7 +140,7 @@ public class LuxcognitaScreen extends Screen{
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
         //TODO draw the LuxCognita berry at the center of the screen
-        this.renderBackground(context);
+        this.renderBackground(context, mouseX, mouseY, delta);
         super.render(context, mouseX, mouseY, delta);
 
         // Low (lighter) 3735330
@@ -167,8 +167,8 @@ public class LuxcognitaScreen extends Screen{
     }
 
     @Override
-    public void renderBackground(DrawContext context) {
-        super.renderBackground(context);
+    public void renderBackground(DrawContext context, int mouseX, int mouseY, float delta) {
+        super.renderBackground(context, mouseX, mouseY, delta);
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
         fillWithLayer(context, LightRenderLayer.getLightScreen(), 0, 0, this.width, this.height, 0);

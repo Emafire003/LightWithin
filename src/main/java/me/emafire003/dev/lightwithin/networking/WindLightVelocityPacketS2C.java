@@ -13,6 +13,7 @@ import java.util.NoSuchElementException;
 
 import static me.emafire003.dev.lightwithin.LightWithin.LOGGER;
 
+@Deprecated
 public class WindLightVelocityPacketS2C extends PacketByteBuf {
     public static final Identifier ID = new Identifier(LightWithin.MOD_ID , "wind_light_velocity_packet");
 

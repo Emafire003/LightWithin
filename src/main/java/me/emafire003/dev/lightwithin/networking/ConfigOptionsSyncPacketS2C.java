@@ -10,6 +10,7 @@ import java.util.NoSuchElementException;
 
 import static me.emafire003.dev.lightwithin.LightWithin.LOGGER;
 
+@Deprecated
 public class ConfigOptionsSyncPacketS2C extends PacketByteBuf {
     public static final Identifier ID = new Identifier(LightWithin.MOD_ID , "light_config_sync");
 

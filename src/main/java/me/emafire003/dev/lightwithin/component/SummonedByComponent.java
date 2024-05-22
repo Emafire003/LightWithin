@@ -1,10 +1,10 @@
 package me.emafire003.dev.lightwithin.component;
 
-import dev.onyxstudios.cca.api.v3.component.ComponentV3;
-import dev.onyxstudios.cca.api.v3.component.sync.AutoSyncedComponent;
+import net.minecraft.registry.RegistryWrapper;
+import org.ladysnake.cca.api.v3.component.ComponentV3;
+import org.ladysnake.cca.api.v3.component.sync.AutoSyncedComponent;
 import me.emafire003.dev.lightwithin.LightWithin;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.mob.DrownedEntity;
 import net.minecraft.nbt.NbtCompound;
 
 import java.util.UUID;
@@ -24,7 +24,7 @@ public class SummonedByComponent implements ComponentV3, AutoSyncedComponent {
     }
 
     @Override
-    public void readFromNbt(NbtCompound tag) {
+    public void readFromNbt(NbtCompound tag, RegistryWrapper.WrapperLookup registryLookup) {
         if(tag.contains("summoner")){
             this.summoner_UUID = tag.getUuid("summoner");
         }else{
@@ -40,7 +40,7 @@ public class SummonedByComponent implements ComponentV3, AutoSyncedComponent {
     }
 
     @Override
-    public void writeToNbt(NbtCompound tag) {
+    public void writeToNbt(NbtCompound tag, RegistryWrapper.WrapperLookup registryLookup) {
         tag.putUuid("summoner", this.summoner_UUID);
         tag.putBoolean("isSummoned", this.isSummoned);
     }

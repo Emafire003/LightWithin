@@ -31,6 +31,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.RegistryKeys;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.registry.tag.DamageTypeTags;
 import net.minecraft.registry.tag.TagKey;
@@ -178,7 +179,7 @@ public class CheckUtils {
 
     private static float getAppliedArmorToDamage(DamageSource source, float amount, LivingEntity entity){
         if (!source.isIn(DamageTypeTags.BYPASSES_ARMOR)) {
-            amount = DamageUtil.getDamageLeft(amount, (float)entity.getArmor(), (float)entity.getAttributeValue(EntityAttributes.GENERIC_ARMOR_TOUGHNESS));
+            amount = DamageUtil.getDamageLeft(amount, source, (float)entity.getArmor(), (float)entity.getAttributeValue(EntityAttributes.GENERIC_ARMOR_TOUGHNESS));
         }
 
         return amount;
@@ -187,7 +188,7 @@ public class CheckUtils {
     /**Calculates the attack damage that an entity could do to another entity, not accounting for its speed*/
     private static float getAttackDamage(@NotNull LivingEntity attacker, @NotNull LivingEntity target){
         float dmg = (float)attacker.getAttributeValue(EntityAttributes.GENERIC_ATTACK_DAMAGE);
-        dmg += EnchantmentHelper.getAttackDamage(attacker.getMainHandStack(), target.getGroup());
+        dmg += EnchantmentHelper.getAttackDamage(attacker.getMainHandStack(), target.getType());
         if(target instanceof PlayerEntity){
             target.sendMessage(Text.literal("The non calcl damage is §6" +dmg));
 
@@ -198,7 +199,7 @@ public class CheckUtils {
     /**Calculates the attack damage that an entity could do to another entity, accounting for its speed*/
     private static float getAttackDamageWithSpeed(@NotNull LivingEntity attacker,@NotNull LivingEntity target){
         float dmg = (float)attacker.getAttributeValue(EntityAttributes.GENERIC_ATTACK_DAMAGE);
-        dmg += EnchantmentHelper.getAttackDamage(attacker.getMainHandStack(), target.getGroup());
+        dmg += EnchantmentHelper.getAttackDamage(attacker.getMainHandStack(), target.getType());
         if(attacker instanceof PlayerEntity){
             float spd = (float)attacker.getAttributeValue(EntityAttributes.GENERIC_ATTACK_SPEED);
             return dmg*spd;
@@ -739,8 +740,8 @@ public class CheckUtils {
     }
 
     public static boolean checkHasHarmfulStatusEffect(LivingEntity entity){
-        for(StatusEffect status : entity.getActiveStatusEffects().keySet()){
-            if(status.getCategory().equals(StatusEffectCategory.HARMFUL) && !status.equals(LightEffects.LIGHT_FATIGUE)){
+        for(RegistryEntry<StatusEffect> status : entity.getActiveStatusEffects().keySet()){
+            if(status.value().getCategory().equals(StatusEffectCategory.HARMFUL) && !status.equals(LightEffects.LIGHT_FATIGUE)){
                 return true;
             }
         }
@@ -758,7 +759,7 @@ public class CheckUtils {
     public static boolean checkDebuffed(LivingEntity entity){
         Collection<StatusEffectInstance> a = entity.getStatusEffects();
         for(StatusEffectInstance status : a){
-            if(status.getEffectType().getCategory().equals(StatusEffectCategory.HARMFUL)){
+            if(status.getEffectType().value().getCategory().equals(StatusEffectCategory.HARMFUL)){
                 return true;
             }
         }

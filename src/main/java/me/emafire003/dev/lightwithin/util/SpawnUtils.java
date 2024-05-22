@@ -1,14 +1,11 @@
 package me.emafire003.dev.lightwithin.util;
 
 import net.minecraft.block.BlockState;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.SpawnRestriction;
+import net.minecraft.entity.*;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.registry.tag.FluidTags;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.WorldView;
 import org.jetbrains.annotations.Nullable;
@@ -41,7 +38,7 @@ public class SpawnUtils {
             int o = k + MathHelper.nextInt(entity.getRandom(), min_dist,  max_dist) * MathHelper.nextInt(entity.getRandom(), -1, 1);
             BlockPos blockPos = new BlockPos(m, n, o);
             EntityType<?> entityType = spawnEntity.getType();
-            SpawnRestriction.Location location = SpawnRestriction.getLocation(entityType);
+            SpawnLocation location = SpawnRestriction.getLocation(entityType);
             if (canSpawn(location, entity.getWorld(), blockPos, entityType)) {
                 spawnEntity.setPosition(m,n,o);
                 if (entity.getWorld().doesNotIntersectEntities(spawnEntity) && entity.getWorld().isSpaceEmpty(spawnEntity) && !entity.getWorld().containsFluid(spawnEntity.getBoundingBox())) {
@@ -67,7 +64,7 @@ public class SpawnUtils {
      * @param location A location in which the entity can spawn
      *
      * @return Returns true if the entity has been spawned correctly*/
-    public static boolean spawnAround(LivingEntity entity, int min_dist, int max_dist, LivingEntity spawnEntity, ServerWorld serverWorld, SpawnRestriction.Location location){
+    public static boolean spawnAround(LivingEntity entity, int min_dist, int max_dist, LivingEntity spawnEntity, ServerWorld serverWorld, SpawnLocation location){
         int i = MathHelper.floor(entity.getX());
         int j = MathHelper.floor(entity.getY());
         int k = MathHelper.floor(entity.getZ());
@@ -92,23 +89,20 @@ public class SpawnUtils {
     }
 
     //This bypasses entityType block checks, aka zombie and sheep can spawn indipendently from the blocks
-    public static boolean canSpawn(SpawnRestriction.Location location, WorldView world, BlockPos pos, @Nullable EntityType<?> entityType) {
-        if (location == SpawnRestriction.Location.NO_RESTRICTIONS) {
+    public static boolean canSpawn(SpawnLocation location, WorldView world, BlockPos pos, @Nullable EntityType<?> entityType) {
+        if (location == SpawnLocationTypes.UNRESTRICTED) {
             return true;
         } else if (entityType != null && world.getWorldBorder().contains(pos)) {
             BlockState blockState = world.getBlockState(pos);
             FluidState fluidState = world.getFluidState(pos);
             BlockPos blockPos = pos.up();
             BlockPos blockPos2 = pos.down();
-            switch(location) {
-                case IN_WATER:
-                    return fluidState.isIn(FluidTags.WATER) && !world.getBlockState(blockPos).isSolidBlock(world, blockPos);
-                case IN_LAVA:
-                    return fluidState.isIn(FluidTags.LAVA);
-                case ON_GROUND:
-                default:
-                    return isClearForSpawn(world, pos, blockState, fluidState, entityType) && isClearForSpawn(world, blockPos, world.getBlockState(blockPos), world.getFluidState(blockPos), entityType);
+            if (location.equals(SpawnLocationTypes.IN_WATER)) {
+                return fluidState.isIn(FluidTags.WATER) && !world.getBlockState(blockPos).isSolidBlock(world, blockPos);
+            } else if (location.equals(SpawnLocationTypes.IN_LAVA)) {
+                return fluidState.isIn(FluidTags.LAVA);
             }
+            return isClearForSpawn(world, pos, blockState, fluidState, entityType) && isClearForSpawn(world, blockPos, world.getBlockState(blockPos), world.getFluidState(blockPos), entityType);
         } else {
             return false;
         }

@@ -3,8 +3,8 @@ package me.emafire003.dev.lightwithin.client;
 import me.emafire003.dev.lightwithin.LightWithin;
 import me.emafire003.dev.lightwithin.component.LightComponent;
 import me.emafire003.dev.lightwithin.config.ClientConfig;
-import me.emafire003.dev.lightwithin.networking.LightChargeConsumedPacketC2S;
-import me.emafire003.dev.lightwithin.networking.LightUsedPacketC2S;
+import me.emafire003.dev.lightwithin.networking.LightChargeConsumedPayloadC2S;
+import me.emafire003.dev.lightwithin.networking.LightUsedPayloadC2S;
 import me.emafire003.dev.lightwithin.sounds.LightSounds;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
@@ -34,7 +34,7 @@ public class ActivationKey {
         if (client.player != null) {
             if(LightWithinClient.isLightReady()){
                 if(lightActivationKey.wasPressed() || (LightWithinClient.isAutoActivationAllowed() && ClientConfig.AUTO_LIGHT_ACTIVATION)){
-                    ClientPlayNetworking.send(LightUsedPacketC2S.ID, new LightUsedPacketC2S(LightWithinClient.hasUsedCharge()));
+                    ClientPlayNetworking.send(new LightUsedPayloadC2S(LightWithinClient.hasUsedCharge()));
                     LightWithinClient.setLightReady(false);
                     LightWithinClient.setWaitForNext(true);
                     //Reverts back the status of the used charge
@@ -45,7 +45,7 @@ public class ActivationKey {
             LightComponent component = LIGHT_COMPONENT.get(client.player);
             if (lightActivationKey.wasPressed() && component.hasTriggeredNaturally()) {
                 if(!LightWithin.isPlayerInCooldown(client.player) && component.getCurrentLightCharges() != 0){
-                    ClientPlayNetworking.send(LightChargeConsumedPacketC2S.ID, new LightChargeConsumedPacketC2S(true));
+                    ClientPlayNetworking.send(new LightChargeConsumedPayloadC2S(true));
 
                     //TODO improvement Maybe I should also wait for the server to see if i can actually trigger a light here. Like only send the packet and wait for the response. But meh.
                     client.player.playSound(LightSounds.LIGHT_READY, 1f, 0.63f);

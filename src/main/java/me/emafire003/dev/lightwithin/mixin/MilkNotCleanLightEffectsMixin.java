@@ -7,6 +7,7 @@ import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.item.Item;
 import net.minecraft.item.MilkBucketItem;
+import net.minecraft.registry.entry.RegistryEntry;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
@@ -29,7 +30,7 @@ public abstract class MilkNotCleanLightEffectsMixin extends Item {
                 return false;
             } else {
                 for(StatusEffectInstance status : instance.getActiveStatusEffects().values()){
-                    StatusEffect type = status.getEffectType();
+                    RegistryEntry<StatusEffect> type = status.getEffectType();
                     if(!(type instanceof LightActiveEffect || type instanceof LightFatigueEffect)){
                         instance.removeStatusEffect(type);
                     }

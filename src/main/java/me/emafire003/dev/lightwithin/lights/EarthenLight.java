@@ -106,8 +106,8 @@ public class EarthenLight extends InnerLight {
             //TODO probably need to extend the enemy radius
             LivingEntity oldtarget = null;
             for(LivingEntity target : this.targets){
-                float r = target.getDimensions(EntityPose.STANDING).width/2;
-                float h = target.getDimensions(EntityPose.STANDING).height;
+                float r = target.getDimensions(EntityPose.STANDING).width()/2;
+                float h = target.getDimensions(EntityPose.STANDING).height();
 
                 //This are used to immobilize the target ad let it fall down
                 target.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, 1, 255, false, false));

@@ -1,21 +1,14 @@
 package me.emafire003.dev.lightwithin.status_effects;
 
 import me.emafire003.dev.lightwithin.config.Config;
-import me.emafire003.dev.structureplacerapi.StructurePlacerAPI;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectCategory;
 import net.minecraft.fluid.Fluids;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.BlockMirror;
-import net.minecraft.util.BlockRotation;
-import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
-
-import static me.emafire003.dev.lightwithin.LightWithin.MOD_ID;
 
 public class WaterSlideEffect extends StatusEffect {
 
@@ -38,7 +31,7 @@ public class WaterSlideEffect extends StatusEffect {
 
     // This method is called when it applies the status effect. We implement custom functionality here.
     @Override
-    public void applyUpdateEffect(LivingEntity entity, int amplifier) {
+    public boolean applyUpdateEffect(LivingEntity entity, int amplifier) {
         if(Config.STRUCTURE_GRIEFING && !entity.getWorld().getBlockState(entity.getBlockPos()).isOf(Blocks.WATER)){
             Direction facing = entity.getHorizontalFacing();
 
@@ -55,5 +48,6 @@ public class WaterSlideEffect extends StatusEffect {
 
             //IF it's not bedrock etc
         }
+        return true;
     }
 }
