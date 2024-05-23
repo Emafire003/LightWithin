@@ -10,7 +10,7 @@ import net.minecraft.util.Identifier;
 /**@param used Indicates weather or not the light has been activated by using a light charge*/
 public record LightUsedPayloadC2S(boolean used) implements CustomPayload {
     public static final Id<LightUsedPayloadC2S> ID = new Id<>(
-            new Identifier(LightWithin.MOD_ID , "light_charge_consumed_packet")
+            new Identifier(LightWithin.MOD_ID , "light_used_packet")
     );
     public static final PacketCodec<PacketByteBuf, LightUsedPayloadC2S> PACKET_CODEC = PacketCodec.tuple(
             PacketCodecs.BOOL, LightUsedPayloadC2S::used,

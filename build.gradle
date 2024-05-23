@@ -46,6 +46,11 @@ repositories {
 		}
 	}
 
+	maven {
+		name 'Xander Maven'
+		url 'https://maven.isxander.dev/releases'
+	}
+
 	maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
 
 }
@@ -87,11 +92,11 @@ dependencies {
 	//===========OPTIONAL DEPENDENCIES===========
 
 	//ColoredGlowLib
-	modImplementation "maven.modrinth:coloredglowlib:${project.coloredglowlib_version}"
+	modCompileOnly "maven.modrinth:coloredglowlib:${project.coloredglowlib_version}"
 
 	//For ALLIES & Enemies
 	//Factions
-	modImplementation "maven.modrinth:factions:${project.factions_version}"
+	modCompileOnly "maven.modrinth:factions:${project.factions_version}"
 
 	//Argonauts
 	modCompileOnly "maven.modrinth:argonauts:${project.argonauts_version}"
@@ -132,7 +137,9 @@ dependencies {
 	//modImplementation("maven.modrinth:leukocyte:${project.leukocyte_version}")
 
 	//Yet Another Config Lib YACL
-	modImplementation "maven.modrinth:yacl:${project.yacl_version}"
+	//TODO ah it's pulling the wrong release for quilt from here
+	modImplementation "dev.isxander:yet-another-config-lib:${project.yacl_version}"
+	//modCompileOnly "maven.modrinth:yacl:${project.yacl_version}"
 	//modImplementation "dev.isxander.yacl:yet-another-config-lib-fabric:$project.yacl_version"
 
 	//modmenu

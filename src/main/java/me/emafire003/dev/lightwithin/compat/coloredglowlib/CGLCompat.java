@@ -5,7 +5,9 @@ import me.emafire003.dev.coloredglowlib.ColoredGlowLibMod;
 public class CGLCompat {
 
     public static ColoredGlowLibAPI getLib(){
-        return ColoredGlowLibMod.getColoredGlowLib();
+        //TODO fix CGL
+        return null;
+        //return ColoredGlowLibMod.getColoredGlowLib();
     }
 
     public static String getModID(){

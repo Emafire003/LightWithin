@@ -17,13 +17,13 @@ public class LightItemComponents {
         LightWithin.LOGGER.debug("Registering custom item components...");
     }
 // in the initializer
-    public static final DataComponentType<UUID> BOTTLED_LIGHT_PLAYER_UUID = registerComponent("playerUUID",
+    public static final DataComponentType<UUID> BOTTLED_LIGHT_PLAYER_UUID = registerComponent("player_uuid",
         DataComponentType.<UUID>builder().codec(Uuids.CODEC).packetCodec(Uuids.PACKET_CODEC).build());
 
-    public static final DataComponentType<String> BOTTLED_LIGHT_TYPE_INGREDIENT = registerComponent("typeIngredient",
+    public static final DataComponentType<String> BOTTLED_LIGHT_TYPE_INGREDIENT = registerComponent("type_ingredient",
             DataComponentType.<String>builder().codec(Codec.STRING).packetCodec(PacketCodecs.STRING).build());
 
-    public static final DataComponentType<String> BOTTLED_LIGHT_TARGET_INGREDIENT = registerComponent("targetIngredient",
+    public static final DataComponentType<String> BOTTLED_LIGHT_TARGET_INGREDIENT = registerComponent("target_ingredient",
             DataComponentType.<String>builder().codec(Codec.STRING).packetCodec(PacketCodecs.STRING).build());
     private static <T> DataComponentType<T> registerComponent(String name, DataComponentType<T> componentType){
         return Registry.register(Registries.DATA_COMPONENT_TYPE, new Identifier(LightWithin.MOD_ID, name), componentType);
