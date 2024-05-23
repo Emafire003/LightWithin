@@ -8,6 +8,8 @@ import net.minecraft.loot.entry.ItemEntry;
 import net.minecraft.loot.function.SetCountLootFunction;
 import net.minecraft.loot.provider.number.ConstantLootNumberProvider;
 import net.minecraft.loot.provider.number.UniformLootNumberProvider;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
 import net.minecraft.util.Identifier;
 
 public class LootTableModifier {
@@ -41,197 +43,197 @@ public class LootTableModifier {
         float luxcognita_chance = 0.23f;
         float luxintus_chance = 0.1f;
         float luxmutua_chance = 0.02f;
-        LootTableEvents.MODIFY.register(((resourceManager, manager, id, supplier, setter) -> {
-            if (IGLOO_STRUCTURE_CHEST_ID.equals(id)) {
+        LootTableEvents.MODIFY.register(((key, tableBuilder, source) -> {
+            if (RegistryKey.of(RegistryKeys.LOOT_TABLE, IGLOO_STRUCTURE_CHEST_ID).equals(key)) {
                 LootPool.Builder poolBuilder = LootPool.builder()
                         .rolls(ConstantLootNumberProvider.create(1))
                         .conditionally(RandomChanceLootCondition.builder(luxcognita_chance))
                         .with(ItemEntry.builder(LightItems.LUXCOGNITA_BERRY))
                         .apply(SetCountLootFunction.builder(UniformLootNumberProvider.create(1.0f, 2.0f)).build());
-                supplier.pool(poolBuilder.build());
+                tableBuilder.pool(poolBuilder.build());
 
                 LootPool.Builder poolBuilder1 = LootPool.builder()
                         .rolls(ConstantLootNumberProvider.create(1))
                         .conditionally(RandomChanceLootCondition.builder(luxintus_chance))
                         .with(ItemEntry.builder(LightItems.LUXINTUS_BERRY))
                         .apply(SetCountLootFunction.builder(UniformLootNumberProvider.create(1.0f, 1.0f)).build());
-                supplier.pool(poolBuilder1.build());
+                tableBuilder.pool(poolBuilder1.build());
 
                 LootPool.Builder poolBuilder2 = LootPool.builder()
                         .rolls(ConstantLootNumberProvider.create(1))
                         .conditionally(RandomChanceLootCondition.builder(luxmutua_chance))
                         .with(ItemEntry.builder(LightItems.LUXMUTUA_BERRY))
                         .apply(SetCountLootFunction.builder(UniformLootNumberProvider.create(1.0f, 1.0f)).build());
-                supplier.pool(poolBuilder2.build());
+                tableBuilder.pool(poolBuilder2.build());
             }
         }));
 
-        LootTableEvents.MODIFY.register(((resourceManager, manager, id, supplier, setter) -> {
-            if (MINESHAFT.equals(id)) {
+        LootTableEvents.MODIFY.register(((key, tableBuilder, source) -> {
+            if (RegistryKey.of(RegistryKeys.LOOT_TABLE, MINESHAFT).equals(key)) {
                 LootPool.Builder poolBuilder = LootPool.builder()
                         .rolls(ConstantLootNumberProvider.create(1))
                         .conditionally(RandomChanceLootCondition.builder(luxcognita_chance))
                         .with(ItemEntry.builder(LightItems.LUXCOGNITA_BERRY))
                         .apply(SetCountLootFunction.builder(UniformLootNumberProvider.create(1.0f, 2.0f)).build());
-                supplier.pool(poolBuilder.build());
+                tableBuilder.pool(poolBuilder.build());
 
                 LootPool.Builder poolBuilder1 = LootPool.builder()
                         .rolls(ConstantLootNumberProvider.create(1))
                         .conditionally(RandomChanceLootCondition.builder(luxintus_chance))
                         .with(ItemEntry.builder(LightItems.LUXINTUS_BERRY))
                         .apply(SetCountLootFunction.builder(UniformLootNumberProvider.create(1.0f, 2.0f)).build());
-                supplier.pool(poolBuilder1.build());
+                tableBuilder.pool(poolBuilder1.build());
 
                 LootPool.Builder poolBuilder2 = LootPool.builder()
                         .rolls(ConstantLootNumberProvider.create(1))
                         .conditionally(RandomChanceLootCondition.builder(luxmutua_chance))
                         .with(ItemEntry.builder(LightItems.LUXMUTUA_BERRY))
                         .apply(SetCountLootFunction.builder(UniformLootNumberProvider.create(1.0f, 1.0f)).build());
-                supplier.pool(poolBuilder2.build());
+                tableBuilder.pool(poolBuilder2.build());
             }
         }));
 
-        LootTableEvents.MODIFY.register(((resourceManager, manager, id, supplier, setter) -> {
-            if (SHIPWRECK_MAP.equals(id)) {
+        LootTableEvents.MODIFY.register(((key, tableBuilder, source) -> {
+            if (RegistryKey.of(RegistryKeys.LOOT_TABLE, SHIPWRECK_MAP).equals(key)) {
                 LootPool.Builder poolBuilder = LootPool.builder()
                         .rolls(ConstantLootNumberProvider.create(1))
                         .conditionally(RandomChanceLootCondition.builder(luxcognita_chance+0.05f))
                         .with(ItemEntry.builder(LightItems.LUXCOGNITA_BERRY))
                         .apply(SetCountLootFunction.builder(UniformLootNumberProvider.create(1.0f, 1.0f)).build());
-                supplier.pool(poolBuilder.build());
+                tableBuilder.pool(poolBuilder.build());
 
                 LootPool.Builder poolBuilder1 = LootPool.builder()
                         .rolls(ConstantLootNumberProvider.create(1))
                         .conditionally(RandomChanceLootCondition.builder(luxintus_chance))
                         .with(ItemEntry.builder(LightItems.LUXINTUS_BERRY))
                         .apply(SetCountLootFunction.builder(UniformLootNumberProvider.create(1.0f, 1.0f)).build());
-                supplier.pool(poolBuilder1.build());
+                tableBuilder.pool(poolBuilder1.build());
 
                 LootPool.Builder poolBuilder2 = LootPool.builder()
                         .rolls(ConstantLootNumberProvider.create(1))
                         .conditionally(RandomChanceLootCondition.builder(luxmutua_chance+0.01f))
                         .with(ItemEntry.builder(LightItems.LUXMUTUA_BERRY))
                         .apply(SetCountLootFunction.builder(UniformLootNumberProvider.create(1.0f, 1.0f)).build());
-                supplier.pool(poolBuilder2.build());
+                tableBuilder.pool(poolBuilder2.build());
             }
         }));
 
-        LootTableEvents.MODIFY.register(((resourceManager, manager, id, supplier, setter) -> {
-            if (SIMPLE_DUNGEON.equals(id)) {
+        LootTableEvents.MODIFY.register(((key, tableBuilder, source) -> {
+            if (RegistryKey.of(RegistryKeys.LOOT_TABLE, SIMPLE_DUNGEON).equals(key)) {
                 LootPool.Builder poolBuilder = LootPool.builder()
                         .rolls(ConstantLootNumberProvider.create(1))
                         .conditionally(RandomChanceLootCondition.builder(luxcognita_chance))
                         .with(ItemEntry.builder(LightItems.LUXCOGNITA_BERRY))
                         .apply(SetCountLootFunction.builder(UniformLootNumberProvider.create(1.0f, 2.0f)).build());
-                supplier.pool(poolBuilder.build());
+                tableBuilder.pool(poolBuilder.build());
 
                 LootPool.Builder poolBuilder1 = LootPool.builder()
                         .rolls(ConstantLootNumberProvider.create(1))
                         .conditionally(RandomChanceLootCondition.builder(luxintus_chance))
                         .with(ItemEntry.builder(LightItems.LUXINTUS_BERRY))
                         .apply(SetCountLootFunction.builder(UniformLootNumberProvider.create(1.0f, 1.0f)).build());
-                supplier.pool(poolBuilder1.build());
+                tableBuilder.pool(poolBuilder1.build());
 
                 LootPool.Builder poolBuilder2 = LootPool.builder()
                         .rolls(ConstantLootNumberProvider.create(1))
                         .conditionally(RandomChanceLootCondition.builder(luxmutua_chance))
                         .with(ItemEntry.builder(LightItems.LUXMUTUA_BERRY))
                         .apply(SetCountLootFunction.builder(UniformLootNumberProvider.create(1.0f, 1.0f)).build());
-                supplier.pool(poolBuilder2.build());
+                tableBuilder.pool(poolBuilder2.build());
             }
         }));
 
-        LootTableEvents.MODIFY.register(((resourceManager, manager, id, supplier, setter) -> {
-            if (PILLAGER_OUTPOST.equals(id)) {
+        LootTableEvents.MODIFY.register(((key, tableBuilder, source) -> {
+            if (RegistryKey.of(RegistryKeys.LOOT_TABLE, PILLAGER_OUTPOST).equals(key)) {
                 LootPool.Builder poolBuilder = LootPool.builder()
                         .rolls(ConstantLootNumberProvider.create(1))
                         .conditionally(RandomChanceLootCondition.builder(luxcognita_chance))
                         .with(ItemEntry.builder(LightItems.LUXCOGNITA_BERRY))
                         .apply(SetCountLootFunction.builder(UniformLootNumberProvider.create(1.0f, 2.0f)).build());
-                supplier.pool(poolBuilder.build());
+                tableBuilder.pool(poolBuilder.build());
 
                 LootPool.Builder poolBuilder1 = LootPool.builder()
                         .rolls(ConstantLootNumberProvider.create(1))
                         .conditionally(RandomChanceLootCondition.builder(luxintus_chance))
                         .with(ItemEntry.builder(LightItems.LUXINTUS_BERRY))
                         .apply(SetCountLootFunction.builder(UniformLootNumberProvider.create(1.0f, 1.0f)).build());
-                supplier.pool(poolBuilder1.build());
+                tableBuilder.pool(poolBuilder1.build());
 
             }
         }));
 
-        LootTableEvents.MODIFY.register(((resourceManager, manager, id, supplier, setter) -> {
-            if (STRONGHOLD_LIBRARY.equals(id)) {
+        LootTableEvents.MODIFY.register(((key, tableBuilder, source) -> {
+            if (RegistryKey.of(RegistryKeys.LOOT_TABLE, STRONGHOLD_LIBRARY).equals(key)) {
                 LootPool.Builder poolBuilder = LootPool.builder()
                         .rolls(ConstantLootNumberProvider.create(1))
                         .conditionally(RandomChanceLootCondition.builder(luxcognita_chance+0.27f))
                         .with(ItemEntry.builder(LightItems.LUXCOGNITA_BERRY))
                         .apply(SetCountLootFunction.builder(UniformLootNumberProvider.create(1.0f, 2.0f)).build());
-                supplier.pool(poolBuilder.build());
+                tableBuilder.pool(poolBuilder.build());
 
                 LootPool.Builder poolBuilder1 = LootPool.builder()
                         .rolls(ConstantLootNumberProvider.create(1))
                         .conditionally(RandomChanceLootCondition.builder(luxintus_chance+0.05f))
                         .with(ItemEntry.builder(LightItems.LUXINTUS_BERRY))
                         .apply(SetCountLootFunction.builder(UniformLootNumberProvider.create(1.0f, 1.0f)).build());
-                supplier.pool(poolBuilder1.build());
+                tableBuilder.pool(poolBuilder1.build());
 
                 LootPool.Builder poolBuilder2 = LootPool.builder()
                         .rolls(ConstantLootNumberProvider.create(1))
                         .conditionally(RandomChanceLootCondition.builder(luxmutua_chance))
                         .with(ItemEntry.builder(LightItems.LUXMUTUA_BERRY))
                         .apply(SetCountLootFunction.builder(UniformLootNumberProvider.create(1.0f, 1.0f)).build());
-                supplier.pool(poolBuilder2.build());
+                tableBuilder.pool(poolBuilder2.build());
             }
         }));
 
-        LootTableEvents.MODIFY.register(((resourceManager, manager, id, supplier, setter) -> {
-            if (END_CITY_TREASURE.equals(id)) {
+        LootTableEvents.MODIFY.register(((key, tableBuilder, source) -> {
+            if (RegistryKey.of(RegistryKeys.LOOT_TABLE, END_CITY_TREASURE).equals(key)) {
                 LootPool.Builder poolBuilder = LootPool.builder()
                         .rolls(ConstantLootNumberProvider.create(1))
                         .conditionally(RandomChanceLootCondition.builder(luxcognita_chance+0.01f))
                         .with(ItemEntry.builder(LightItems.LUXCOGNITA_BERRY))
                         .apply(SetCountLootFunction.builder(UniformLootNumberProvider.create(1.0f, 2.0f)).build());
-                supplier.pool(poolBuilder.build());
+                tableBuilder.pool(poolBuilder.build());
 
                 LootPool.Builder poolBuilder1 = LootPool.builder()
                         .rolls(ConstantLootNumberProvider.create(1))
                         .conditionally(RandomChanceLootCondition.builder(luxintus_chance+0.01f))
                         .with(ItemEntry.builder(LightItems.LUXINTUS_BERRY))
                         .apply(SetCountLootFunction.builder(UniformLootNumberProvider.create(1.0f, 1.0f)).build());
-                supplier.pool(poolBuilder1.build());
+                tableBuilder.pool(poolBuilder1.build());
 
                 LootPool.Builder poolBuilder2 = LootPool.builder()
                         .rolls(ConstantLootNumberProvider.create(1))
                         .conditionally(RandomChanceLootCondition.builder(luxmutua_chance+0.01f))
                         .with(ItemEntry.builder(LightItems.LUXMUTUA_BERRY))
                         .apply(SetCountLootFunction.builder(UniformLootNumberProvider.create(1.0f, 1.0f)).build());
-                supplier.pool(poolBuilder2.build());
+                tableBuilder.pool(poolBuilder2.build());
             }
         }));
 
-        LootTableEvents.MODIFY.register(((resourceManager, manager, id, supplier, setter) -> {
-            if (ANCIENT_CITY.equals(id)) {
+        LootTableEvents.MODIFY.register(((key, tableBuilder, source) -> {
+            if (RegistryKey.of(RegistryKeys.LOOT_TABLE, ANCIENT_CITY).equals(key)) {
                 LootPool.Builder poolBuilder = LootPool.builder()
                         .rolls(ConstantLootNumberProvider.create(1))
                         .conditionally(RandomChanceLootCondition.builder(luxcognita_chance+0.12f))
                         .with(ItemEntry.builder(LightItems.LUXCOGNITA_BERRY))
                         .apply(SetCountLootFunction.builder(UniformLootNumberProvider.create(1.0f, 2.0f)).build());
-                supplier.pool(poolBuilder.build());
+                tableBuilder.pool(poolBuilder.build());
 
                 LootPool.Builder poolBuilder1 = LootPool.builder()
                         .rolls(ConstantLootNumberProvider.create(1))
                         .conditionally(RandomChanceLootCondition.builder(luxintus_chance+0.05f))
                         .with(ItemEntry.builder(LightItems.LUXINTUS_BERRY))
                         .apply(SetCountLootFunction.builder(UniformLootNumberProvider.create(1.0f, 1.0f)).build());
-                supplier.pool(poolBuilder1.build());
+                tableBuilder.pool(poolBuilder1.build());
 
                 LootPool.Builder poolBuilder2 = LootPool.builder()
                         .rolls(ConstantLootNumberProvider.create(1))
                         .conditionally(RandomChanceLootCondition.builder(luxmutua_chance+0.05f))
                         .with(ItemEntry.builder(LightItems.LUXMUTUA_BERRY))
                         .apply(SetCountLootFunction.builder(UniformLootNumberProvider.create(1.0f, 1.0f)).build());
-                supplier.pool(poolBuilder2.build());
+                tableBuilder.pool(poolBuilder2.build());
             }
         }));
     }

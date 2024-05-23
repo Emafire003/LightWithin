@@ -14,6 +14,7 @@ import me.emafire003.dev.lightwithin.util.TargetType;
 import net.minecraft.command.argument.EntityArgumentType;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -41,7 +42,7 @@ public class GetLightCommand implements LightCommand{
             return 1;
         }catch(Exception e){
             e.printStackTrace();
-            source.sendFeedback(() -> Text.literal("Error: " + e.toString()),false);
+            source.sendFeedback(() -> Text.literal("Error: " + e),false);
             return 0;
         }
 
@@ -58,7 +59,7 @@ public class GetLightCommand implements LightCommand{
             return 1;
         }catch(Exception e){
             e.printStackTrace();
-            source.sendFeedback(() -> Text.literal("Error: " + e.toString()),false);
+            source.sendFeedback(() -> Text.literal("Error: " + e),false);
             return 0;
         }
 
@@ -75,7 +76,7 @@ public class GetLightCommand implements LightCommand{
             return 1;
         }catch(Exception e){
             e.printStackTrace();
-            source.sendFeedback(() -> Text.literal("Error: " + e.toString()),false);
+            source.sendFeedback(() -> Text.literal("Error: " + e),false);
             return 0;
         }
 
@@ -92,7 +93,7 @@ public class GetLightCommand implements LightCommand{
             return 1;
         }catch(Exception e){
             e.printStackTrace();
-            source.sendFeedback(() -> Text.literal("Error: " + e.toString()),false);
+            source.sendFeedback(() -> Text.literal("Error: " + e),false);
             return 0;
         }
     }
@@ -171,7 +172,7 @@ public class GetLightCommand implements LightCommand{
         ServerCommandSource source = context.getSource();
 
         try{
-            Map<StatusEffect, StatusEffectInstance> effect_map = target.getActiveStatusEffects();
+            Map<RegistryEntry<StatusEffect>, StatusEffectInstance> effect_map = target.getActiveStatusEffects();
             if(effect_map.containsKey(LightEffects.LIGHT_FATIGUE)){
                 int cooldown = effect_map.get(LightEffects.LIGHT_FATIGUE).getDuration()/20;
                 source.sendFeedback(() -> Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The current cooldown of §d" + target.getName().getString() + "§e is: " ).formatted(Formatting.YELLOW)
@@ -231,7 +232,7 @@ public class GetLightCommand implements LightCommand{
                         .append(Text.literal("false").formatted(Formatting.RED))), true);
             }
 
-            Map<StatusEffect, StatusEffectInstance> effect_map = target.getActiveStatusEffects();
+            Map<RegistryEntry<StatusEffect>, StatusEffectInstance> effect_map = target.getActiveStatusEffects();
             if(effect_map.containsKey(LightEffects.LIGHT_FATIGUE)){
                 int cooldown = effect_map.get(LightEffects.LIGHT_FATIGUE).getDuration()/20;
                 source.sendFeedback(() -> Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The current cooldown is: ").formatted(Formatting.YELLOW).append(Text.literal("§a"+cooldown))), true);
