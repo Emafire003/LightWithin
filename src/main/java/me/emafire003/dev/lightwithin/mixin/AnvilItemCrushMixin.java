@@ -43,7 +43,7 @@ public abstract class AnvilItemCrushMixin extends FallingBlock {
 
         for(ItemEntity entity : items){
             entity.damage(entity.getDamageSources().fallingAnvil(fallingBlockEntity), 20);
-            //Luxintus berry chances: 75% you get the powder, 15%, too crushed the item disappears, 10% way to crushed the item explodes
+            //Luxintus berry chances: 75% you get the powder, 15%, too crushed the item disappears, 10% way to crush the item explodes
             //For every 5 blocks the % of exploding is increased by one
             for(int i = 0; i < entity.getStack().getCount(); i++){
                 int chance = entity.getWorld().getRandom().nextInt(100);

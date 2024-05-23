@@ -3,13 +3,14 @@ package me.emafire003.dev.lightwithin.items;
 import me.emafire003.dev.lightwithin.LightWithin;
 import me.emafire003.dev.lightwithin.config.Config;
 import me.emafire003.dev.lightwithin.lights.InnerLightType;
-import me.emafire003.dev.lightwithin.networking.PlayRenderEffectPacketS2C;
+import me.emafire003.dev.lightwithin.networking.PlayRenderEffectPayloadS2C;
 import me.emafire003.dev.lightwithin.sounds.LightSounds;
 import me.emafire003.dev.lightwithin.util.RenderEffect;
 import me.emafire003.dev.lightwithin.util.TargetType;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.item.TooltipContext;
+import net.minecraft.client.item.TooltipType;
+import net.minecraft.component.DataComponentTypes;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
@@ -22,7 +23,6 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
 
-import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 public class LuxcognitaBerryItem extends Item {
@@ -36,9 +36,9 @@ public class LuxcognitaBerryItem extends Item {
         if(LightWithin.isPlayerInCooldown(user) && Config.LUXCOGNITA_BYPASS_COOLDOWN){
             return TypedActionResult.pass(user.getStackInHand(hand));
         }
-        if (this.isFood()) {
+        if (this.getComponents().contains(DataComponentTypes.FOOD)) {
             ItemStack itemStack = user.getStackInHand(hand);
-            if (this.getFoodComponent() != null && user.canConsume(this.getFoodComponent().isAlwaysEdible())) {
+            if (this.getComponents().get(DataComponentTypes.FOOD) != null && user.canConsume(this.getComponents().get(DataComponentTypes.FOOD).canAlwaysEat())) {
                 user.setCurrentHand(hand);
                 return TypedActionResult.consume(itemStack);
             } else {
@@ -60,13 +60,13 @@ public class LuxcognitaBerryItem extends Item {
             }
             user.playSound(LightSounds.LIGHT_READY, 1, 0.8f);
 
-            ServerPlayNetworking.send((ServerPlayerEntity) user, PlayRenderEffectPacketS2C.ID, new PlayRenderEffectPacketS2C(RenderEffect.LUXCOGNITA_SCREEN));
+            ServerPlayNetworking.send((ServerPlayerEntity) user, new PlayRenderEffectPayloadS2C(RenderEffect.LUXCOGNITA_SCREEN, -1));
         }
-        return this.isFood() ? user.eatFood(world, stack) : stack;
+        return this.getComponents().contains(DataComponentTypes.FOOD) ? user.eatFood(world, stack) : stack;
     }
 
     @Override
-    public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
+    public void appendTooltip(ItemStack stack, Item.TooltipContext context, List<Text> tooltip, TooltipType type) {
         if(!Screen.hasShiftDown()) {
             tooltip.add(Text.translatable("item.lightwithin.berry.tooltip"));
         } else {

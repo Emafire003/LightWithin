@@ -84,11 +84,11 @@ public abstract class CustomEffectsLivingRendererMixin<T extends Entity> {
     private static final Vec3i rays_color_y = new Vec3i(200, 224, 90); //blueish 104, 240, 210
 
     //A slightly more gray blue rgb(129, 217, 197)
-    //Yellowier yellow rgb(244, 232, 73)
+    //Yellower yellow rgb(244, 232, 73)
     @Unique
     private static void putLightSourceVertex(VertexConsumer buffer, Matrix4f matrix, int alpha, Vec3i color) {
         //The color seems to be the one of the border
-        //Modifiing the first values streches the lines
+        //Modifying the first values stretches the lines
         //it seems this is the primary/source color
         buffer.vertex(matrix, 0.0F, 0.0F, 0.0F).color(color.getX(), color.getY(), color.getZ(), alpha).next();
     }

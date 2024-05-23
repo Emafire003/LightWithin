@@ -26,10 +26,4 @@ public abstract class ArmorOrItemBreakMixin extends Entity {
         ArmorOrToolBreakEvent.EVENT.invoker().brokenItem(breakingItemStack);
     }
 
-    /*@Inject(method = "sendToolBreakStatus", at = @At("RETURN"))
-    private void onSendEquipmentBreakStatus(Hand hand, CallbackInfo ci) {
-        ItemStack breakingItemStack = entity.getStackInHand(hand);
-        ArmorOrToolBreakEvent.EVENT.invoker().brokenItem(breakingItemStack);
-    }*/
-
 }

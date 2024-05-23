@@ -17,6 +17,7 @@ import net.minecraft.entity.mob.CreeperEntity;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.mob.Monster;
 import net.minecraft.entity.mob.PathAwareEntity;
+import net.minecraft.entity.passive.Cracks;
 import net.minecraft.entity.passive.IronGolemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -110,12 +111,11 @@ public class EarthGolemEntity extends IronGolemEntity {
 
     @Override
     public boolean damage(DamageSource source, float amount) {
-        IronGolemEntity.Crack crack = this.getCrack();
+        Cracks.CrackLevel crackLevel = this.getCrackLevel();
         boolean bl = super.damage(source, amount);
-        if (bl && this.getCrack() != crack) {
+        if (bl && this.getCrackLevel() != crackLevel) {
             this.playSound(SoundEvents.ENTITY_IRON_GOLEM_DAMAGE, 1.0F, 1.4F);
         }
-
         return bl;
     }
 

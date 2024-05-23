@@ -4,7 +4,6 @@ import me.emafire003.dev.lightwithin.LightWithin;
 import me.emafire003.dev.lightwithin.component.LightComponent;
 import me.emafire003.dev.lightwithin.config.Config;
 import me.emafire003.dev.lightwithin.items.components.LightItemComponents;
-import me.emafire003.dev.lightwithin.items.crafting.BrewRecipes;
 import me.emafire003.dev.lightwithin.lights.InnerLightType;
 import me.emafire003.dev.lightwithin.particles.LightParticlesUtil;
 import me.emafire003.dev.lightwithin.sounds.LightSounds;
@@ -12,13 +11,12 @@ import me.emafire003.dev.lightwithin.status_effects.LightEffects;
 import me.emafire003.dev.lightwithin.util.TargetType;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.component.ComponentChanges;
+import net.minecraft.client.item.TooltipType;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtCompound;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
@@ -28,9 +26,9 @@ import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 public class BottledLightItem extends Item {
@@ -114,7 +112,6 @@ public class BottledLightItem extends Item {
             }
             return TypedActionResult.pass(stack);
         }
-
         if(addCharge(user, stack, component)){
             return TypedActionResult.consume(stack);
         }else{
@@ -150,16 +147,16 @@ public class BottledLightItem extends Item {
     }
 
     @Override
-    public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
+    public void appendTooltip(ItemStack stack, Item.TooltipContext context, List<Text> tooltip, TooltipType type) {
         tooltip.add(Text.translatable("item.lightwithin.bottled_light.tooltip"));
         if(Screen.hasShiftDown()) {
             if(stack.getComponents().contains(LightItemComponents.BOTTLED_LIGHT_PLAYER_UUID) && stack.getComponents().get(LightItemComponents.BOTTLED_LIGHT_PLAYER_UUID).equals(UUID.fromString("00000000-0000-0000-0000-000000000000"))){
                 tooltip.add(Text.translatable("item.lightwithin.bottled_light.tooltip.warning").formatted(Formatting.AQUA).formatted(Formatting.ITALIC));
-                if(stack.getNbt().contains(BrewRecipes.TYPE_INGREDIENT_KEY)){
-                    tooltip.add(Text.translatable("item.lightwithin.bottled_light.tooltip.type").formatted(Formatting.GREEN).append(Text.literal(stack.getNbt().getString(BrewRecipes.TYPE_INGREDIENT_KEY)).formatted(Formatting.LIGHT_PURPLE)));
+                if(stack.contains(LightItemComponents.BOTTLED_LIGHT_TYPE_INGREDIENT)){
+                    tooltip.add(Text.translatable("item.lightwithin.bottled_light.tooltip.type").formatted(Formatting.GREEN).append(Text.literal(Objects.requireNonNull(stack.get(LightItemComponents.BOTTLED_LIGHT_TYPE_INGREDIENT))).formatted(Formatting.LIGHT_PURPLE)));
                 }
-                if(stack.getNbt().contains(BrewRecipes.TARGET_INGREDIENT_KEY)){
-                    tooltip.add(Text.translatable("item.lightwithin.bottled_light.tooltip.target").formatted(Formatting.GREEN).append(Text.literal(stack.getNbt().getString(BrewRecipes.TARGET_INGREDIENT_KEY)).formatted(Formatting.LIGHT_PURPLE)));
+                if(stack.contains(LightItemComponents.BOTTLED_LIGHT_TARGET_INGREDIENT)){
+                    tooltip.add(Text.translatable("item.lightwithin.bottled_light.tooltip.target").formatted(Formatting.GREEN).append(Text.literal(Objects.requireNonNull(stack.get(LightItemComponents.BOTTLED_LIGHT_TARGET_INGREDIENT))).formatted(Formatting.LIGHT_PURPLE)));
                 }
             }else{
                 tooltip.add(Text.literal("§bPlayer UUID: §a"+getCreatedBy(stack).toString()));

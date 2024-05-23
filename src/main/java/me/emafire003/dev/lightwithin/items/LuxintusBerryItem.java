@@ -6,20 +6,18 @@ import me.emafire003.dev.lightwithin.config.Config;
 import me.emafire003.dev.lightwithin.sounds.LightSounds;
 import me.emafire003.dev.lightwithin.status_effects.LightEffects;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.item.TooltipContext;
+import net.minecraft.client.item.TooltipType;
+import net.minecraft.component.DataComponentTypes;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUsage;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
 
-import net.minecraft.world.explosion.ExplosionBehavior;
-import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 public class LuxintusBerryItem extends Item {
@@ -33,9 +31,9 @@ public class LuxintusBerryItem extends Item {
         if(LightWithin.isPlayerInCooldown(user) && Config.LUXINTUS_BYPASS_COOLDOWN){
             return TypedActionResult.pass(user.getStackInHand(hand));
         }
-        if (this.isFood()) {
+        if (this.getComponents().contains(DataComponentTypes.FOOD)) {
             ItemStack itemStack = user.getStackInHand(hand);
-            if (user.canConsume(this.getFoodComponent().isAlwaysEdible())) {
+            if (this.getComponents().get(DataComponentTypes.FOOD) != null && user.canConsume(this.getComponents().get(DataComponentTypes.FOOD).canAlwaysEat())) {
                 user.setCurrentHand(hand);
                 return TypedActionResult.consume(itemStack);
             } else {
@@ -66,11 +64,11 @@ public class LuxintusBerryItem extends Item {
             }
             LightWithin.activateLight((ServerPlayerEntity) user);
         }
-        return this.isFood() ? user.eatFood(world, stack) : stack;
+        return this.getComponents().contains(DataComponentTypes.FOOD) ? user.eatFood(world, stack) : stack;
     }
 
     @Override
-    public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
+    public void appendTooltip(ItemStack stack, Item.TooltipContext context, List<Text> tooltip, TooltipType type) {
         if(!Screen.hasShiftDown()) {
             tooltip.add(Text.translatable("item.lightwithin.berry.tooltip"));
         } else {
