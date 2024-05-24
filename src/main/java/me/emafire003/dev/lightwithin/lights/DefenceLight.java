@@ -22,22 +22,22 @@ import net.minecraft.sound.SoundCategory;
 
 import java.util.List;
 
-public class DefenseLight extends InnerLight {
+public class DefenceLight extends InnerLight {
 
     public static final Item INGREDIENT = Items.TURTLE_SCUTE;
 
-    public DefenseLight(List<LivingEntity> targets, double cooldown_time, double power_multiplier, int duration, String color, PlayerEntity caster, boolean rainbow_col) {
+    public DefenceLight(List<LivingEntity> targets, double cooldown_time, double power_multiplier, int duration, String color, PlayerEntity caster, boolean rainbow_col) {
         super(targets, cooldown_time, power_multiplier, duration, color, caster, rainbow_col);
         type = InnerLightType.DEFENCE;
     }
 
-    public DefenseLight(List<LivingEntity> targets, double cooldown_time, double power_multiplier, int duration, PlayerEntity caster, boolean rainbow_col) {
+    public DefenceLight(List<LivingEntity> targets, double cooldown_time, double power_multiplier, int duration, PlayerEntity caster, boolean rainbow_col) {
         super(targets, cooldown_time, power_multiplier, duration, caster, rainbow_col);
         type = InnerLightType.DEFENCE;
         color = "427f3b";
     }
 
-    public DefenseLight(List<LivingEntity> targets, double cooldown_time, double power_multiplier, int duration, PlayerEntity caster) {
+    public DefenceLight(List<LivingEntity> targets, double cooldown_time, double power_multiplier, int duration, PlayerEntity caster) {
         super(targets, cooldown_time, power_multiplier, duration, caster);
         type = InnerLightType.DEFENCE;
         //color = "#427f3b";

@@ -450,7 +450,7 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 		if(debug){
 			player.sendMessage(Text.literal("Ok light triggered"), false);
 		}
-		new DefenseLight(targets, component.getMaxCooldown(), component.getPowerMultiplier(),
+		new DefenceLight(targets, component.getMaxCooldown(), component.getPowerMultiplier(),
 				component.getDuration(), player).execute();
 	}
 
