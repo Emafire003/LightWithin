@@ -25,13 +25,9 @@ public class BrewRecipes {
 
 
     public static void registerRecipes(){
-        //TODO remove
-        CustomBrewRecipeRegister.registerCustomRecipe(Items.EXPERIENCE_BOTTLE, LightItems.LUXINTUS_BERRY_POWDER, LightItems.BOTTLED_LIGHT);
         //This means it's artificial
 
         CustomBrewRecipeRegister.registerCustomRecipeWithComponents(Items.EXPERIENCE_BOTTLE, LightItems.LUXINTUS_BERRY_POWDER, LightItems.BOTTLED_LIGHT, null, null, playerUUIDComponent);
-        //CustomBrewRecipeRegister.registerCustomRecipeNbt(Items.EXPERIENCE_BOTTLE, LightItems.LUXINTUS_BERRY_POWDER, LightItems.BOTTLED_LIGHT, null, null, nbt);
-
         //CustomBrewRecipeRegister.registerCustomRecipeNbt(LightItems.BOTTLED_LIGHT, AquaLight.INGREDIENT, LightItems.BOTTLED_LIGHT, nbt, null, light_nbt);
 
         registerType(InnerLightType.AQUA, AquaLight.INGREDIENT);

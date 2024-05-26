@@ -58,13 +58,11 @@ public class BottledLightItem extends Item {
             }
             return TypedActionResult.pass(stack);
         }
-        
+
         //Checks to see if the bottle is artificially brewed. If it is, the UUID of the player will be 0000000 etc
         if(BottledLightItem.getCreatedBy(stack).equals(UUID.fromString("00000000-0000-0000-0000-000000000000"))){
             //NbtCompound nbt = stack.getNbt();
-            if(!stack.getComponents().isEmpty() || stack.getComponents() == null){
-                return TypedActionResult.pass(stack);
-            }
+
             if(stack.getComponents().contains(LightItemComponents.BOTTLED_LIGHT_TYPE_INGREDIENT)){
 
                 InnerLightType bottled_type = InnerLightType.valueOf(stack.getComponents().get(LightItemComponents.BOTTLED_LIGHT_TYPE_INGREDIENT));
@@ -170,7 +168,7 @@ public class BottledLightItem extends Item {
     }
 
     public static UUID getCreatedBy(ItemStack bottle_item){
-        if(!bottle_item.getComponents().isEmpty() || !bottle_item.getComponents().contains(LightItemComponents.BOTTLED_LIGHT_PLAYER_UUID)){
+        if(!bottle_item.getComponents().contains(LightItemComponents.BOTTLED_LIGHT_PLAYER_UUID)){
             return UUID.fromString("00000000-0000-0000-0000-000000000000");
         }
         return bottle_item.get(LightItemComponents.BOTTLED_LIGHT_PLAYER_UUID);
