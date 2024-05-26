@@ -1,3 +1,15 @@
+### Minecraft 1.19.2 specific changes:
+- Some mods like argonauts and Flan aren't supported anymore, since they don't exist for this version of minecraft
+- Some features like the position of the buttons on the screen may differ slightly from the 1.20.1+ version, since some code is missing
+- In general, some rendering stuff changed. But everything should work correctly regardless.
+- Explosions may differ slightly
+
+### Minecraft 1.20.5/.6 specific changes:
+- Old BottledLight items are still compatible even if they use nbt instead of components
+- Some mods that are compatible with LightWithin won't work yet since they haven't updated yet
+- If you find any bugs related in particular to networking and items doing weird stuff
+- There is a known bug of consuming the BottledLight anyway even if in creative. And a similar one regarding the bottling up of a ready light
+
 Welcome to release 1.1.0 which had 43 commits, 155 changed files with 5,633 additions and 1,881 deletions! (yay, and it's not even the port to 1.20.5 yet)
 
 ### LightCharges
