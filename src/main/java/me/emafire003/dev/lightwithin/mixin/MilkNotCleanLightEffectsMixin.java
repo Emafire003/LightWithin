@@ -23,7 +23,6 @@ public abstract class MilkNotCleanLightEffectsMixin extends Item {
         super(settings);
     }
 
-    //TODO this now completely prevents removing the thing, even with the command
     @Redirect(at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;clearStatusEffects()Z"), method = "finishUsing")
     public boolean clearStatusExceptLights(LivingEntity instance){
         try{
