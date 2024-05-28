@@ -113,7 +113,7 @@ public class BlazingLight extends InnerLight {
         if(component.getTargets().equals(TargetType.ALL)){
             power_multiplier = power_multiplier + BalanceConfig.BLAZING_ALL_DAMAGE_BONUS;
         }
-        if(!caster.getWorld().isClient && (CheckUtils.checkGriefable((ServerPlayerEntity) caster) || Config.NON_FUNDAMENTAL_STRUCTURE_GRIEFING) && (component.getTargets().equals(TargetType.ALL) || component.getTargets().equals(TargetType.ENEMIES))) {
+        if(!caster.getWorld().isClient && (CheckUtils.checkGriefable((ServerPlayerEntity) caster) || Config.NON_FUNDAMENTAL_STRUCTURE_GRIEFING)) {
             StructurePlacerAPI placer = new StructurePlacerAPI((ServerWorld) caster.getWorld(), new Identifier(MOD_ID, blazing_structure_id), caster.getBlockPos(), BlockMirror.NONE, BlockRotation.NONE, true, 1.0f, new BlockPos(-3, -4, -3));
             if(Config.REPLACEABLE_STRUCTURES){
                 placer.loadAndRestoreStructureAnimated(caster.getStatusEffect(LightEffects.LIGHT_ACTIVE).getDuration(), 2, true);
@@ -121,6 +121,7 @@ public class BlazingLight extends InnerLight {
                 placer.loadStructure();
             }
         }
+
         if(!caster.getWorld().isClient) {
             LightParticlesUtil.spawnLightTypeParticle(LightParticles.BLAZINGLIGHT_PARTICLE, (ServerWorld) caster.getWorld(), caster.getPos());
         }
