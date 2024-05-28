@@ -171,8 +171,6 @@ public class BottledLightItem extends Item {
         NbtCompound nbt = new NbtCompound();
         nbt.putUuid("lightwithin:playerUUID", player.getUuid());
         bottle_item.setNbt(nbt);
-        LightWithin.LOGGER.info("Setting the nbt of the thing to: " + player.getUuid());
-        LightWithin.LOGGER.info("The nbt of the item is now: " + bottle_item.getNbt());
     }
 
     public static UUID getCreatedBy(ItemStack bottle_item){
