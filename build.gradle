@@ -91,7 +91,7 @@ dependencies {
 	//===========OPTIONAL DEPENDENCIES===========
 
 	//ColoredGlowLib
-	modCompileOnly "maven.modrinth:coloredglowlib:${project.coloredglowlib_version}"
+	modImplementation "maven.modrinth:coloredglowlib:${project.coloredglowlib_version}"
 
 	//For ALLIES & Enemies
 	//Factions

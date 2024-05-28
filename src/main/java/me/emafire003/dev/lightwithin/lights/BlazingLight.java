@@ -9,7 +9,6 @@ import me.emafire003.dev.lightwithin.particles.LightParticles;
 import me.emafire003.dev.lightwithin.particles.LightParticlesUtil;
 import me.emafire003.dev.lightwithin.sounds.LightSounds;
 import me.emafire003.dev.lightwithin.status_effects.LightEffects;
-import me.emafire003.dev.lightwithin.util.CheckUtils;
 import me.emafire003.dev.lightwithin.util.TargetType;
 import me.emafire003.dev.structureplacerapi.StructurePlacerAPI;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
@@ -89,6 +88,7 @@ public class BlazingLight extends InnerLight {
         String blazing_structure_id = "blazing_light";
         String fire_ring_id = "fire_ring";
         ParticleEffect flame_particle = ParticleTypes.FLAME;
+
         if(component.getTargets().equals(TargetType.VARIANT)){
             flame_particle = ParticleTypes.SOUL_FIRE_FLAME;
             fire_ring_id = "soulfire_ring";
@@ -112,15 +112,13 @@ public class BlazingLight extends InnerLight {
         if(component.getTargets().equals(TargetType.ALL)){
             power_multiplier = power_multiplier + BalanceConfig.BLAZING_ALL_DAMAGE_BONUS;
         }
-        if(!caster.getWorld().isClient && (CheckUtils.checkGriefable((ServerPlayerEntity) caster) || Config.NON_FUNDAMENTAL_STRUCTURE_GRIEFING) && (component.getTargets().equals(TargetType.ALL) || component.getTargets().equals(TargetType.ENEMIES))) {
+        if(!caster.getWorld().isClient) {
             StructurePlacerAPI placer = new StructurePlacerAPI((ServerWorld) caster.getWorld(), new Identifier(MOD_ID, blazing_structure_id), caster.getBlockPos(), BlockMirror.NONE, BlockRotation.NONE, true, 1.0f, new BlockPos(-3, -4, -3));
             if(Config.REPLACEABLE_STRUCTURES){
                 placer.loadAndRestoreStructureAnimated(caster.getStatusEffect(LightEffects.LIGHT_ACTIVE).getDuration(), 2, true);
             }else{
                 placer.loadStructure();
             }
-        }
-        if(!caster.getWorld().isClient) {
             LightParticlesUtil.spawnLightTypeParticle(LightParticles.BLAZINGLIGHT_PARTICLE, (ServerWorld) caster.getWorld(), caster.getPos());
         }
         for(LivingEntity target : this.targets){
@@ -131,7 +129,7 @@ public class BlazingLight extends InnerLight {
             }
             
             //TODO make the chance configable EDIT: Maybe not
-            //it's basicly a crit, unique for now to the blazing light Currently 10 percent
+            //it's a crit, unique for now to the blazing light Currently 10 percent
             if(caster.getRandom().nextInt(10) == 1){
                 target.damage(caster.getWorld().getDamageSources().inFire(), (float) (BalanceConfig.BLAZING_DEFAULT_DAMAGE*this.power_multiplier*crit_multiplier));
                 target.setOnFireFor(this.duration*BalanceConfig.BLAZING_CRIT_FIRE_MULTIPLIER);
