@@ -18,6 +18,7 @@ import me.x150.renderer.Renderer2d;
 import me.emafire003.dev.lightwithin.sounds.LightSounds;
 import me.emafire003.dev.lightwithin.status_effects.LightEffects;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.option.Perspective;
@@ -70,12 +71,17 @@ public class RendererEventHandler {
             if(MinecraftClient.getInstance().player == null){
                 return;
             }
+
+            if(FabricLoader.getInstance().isModLoaded("replaymod") && ReplayModCompat.isInReplayMode()){
+                return;
+            }
             RenderSystem.enableBlend();
             RenderSystem.defaultBlendFunc();
 
             LightComponent component = LIGHT_COMPONENT.get(MinecraftClient.getInstance().player);
 
             if(MinecraftClient.getInstance().options.getPerspective().equals(Perspective.FIRST_PERSON)){
+                //In the replay mod the player is by default in first person, so don't display the runes at all, since they are meant for first person.
                 InnerLightType type = component.getType();
                 TargetType targetType = component.getTargets();
                 if(RunesRenderer.shouldRender() && allow_draw_runes){
@@ -106,10 +112,6 @@ public class RendererEventHandler {
                 LightWithinClient.setLightReady(false);
             }
 
-            //In the replay mod the player is by default in first person, so don't display the runes at all, since they are meant for first person.
-            if(ReplayModCompat.isInReplayMode()){
-                return;
-            }
 
             center_x = MinecraftClient.getInstance().getWindow().getScaledWidth()/2;
             center_y = MinecraftClient.getInstance().getWindow().getScaledHeight()/2;
