@@ -18,6 +18,7 @@ import me.x150.renderer.Renderer2d;
 import me.emafire003.dev.lightwithin.sounds.LightSounds;
 import me.emafire003.dev.lightwithin.status_effects.LightEffects;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.option.Perspective;
@@ -70,6 +71,11 @@ public class RendererEventHandler {
             if(MinecraftClient.getInstance().player == null){
                 return;
             }
+
+            if(FabricLoader.getInstance().isModLoaded("replaymod") && ReplayModCompat.isInReplayMode()){
+                return;
+            }
+
             RenderSystem.enableBlend();
             RenderSystem.defaultBlendFunc();
 
