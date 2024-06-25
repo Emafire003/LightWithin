@@ -44,7 +44,7 @@ public class LightItems {
 
     private static Item registerItem(String name, Item item, RegistryKey<ItemGroup> group, Item add_after){
         ItemGroupEvents.modifyEntriesEvent(group).register(content -> content.addAfter(add_after, item));
-        return Registry.register(Registries.ITEM, new Identifier(LightWithin.MOD_ID, name), item);
+        return Registry.register(Registries.ITEM, LightWithin.getIdentifier(name), item);
     }
 
     public static void registerItems(){

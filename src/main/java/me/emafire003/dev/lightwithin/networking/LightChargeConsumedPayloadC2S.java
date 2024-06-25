@@ -9,7 +9,7 @@ import net.minecraft.util.Identifier;
 
 public record LightChargeConsumedPayloadC2S(boolean used) implements CustomPayload {
     public static final Id<LightChargeConsumedPayloadC2S> ID = new Id<>(
-            new Identifier(LightWithin.MOD_ID , "light_charge_consumed_packet")
+            LightWithin.getIdentifier("light_charge_consumed_packet")
     );
 
 

@@ -11,7 +11,7 @@ import java.util.Map;
 
 public record ConfigOptionSyncPayloadS2C(Map<String, Boolean> booleanSettings) implements CustomPayload {
     public static final Id<ConfigOptionSyncPayloadS2C> ID = new Id<>(
-            new Identifier(LightWithin.MOD_ID , "light_config_sync")
+            LightWithin.getIdentifier("light_config_sync")
     );
 
     public static final PacketCodec<PacketByteBuf, ConfigOptionSyncPayloadS2C> PACKET_CODEC = PacketCodec.tuple(

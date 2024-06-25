@@ -10,7 +10,7 @@ import net.minecraft.util.Identifier;
 
 public record WindLightVelocityPayloadS2C(double vx, double vy, double vz) implements CustomPayload {
     public static final Id<WindLightVelocityPayloadS2C> ID = new Id<>(
-            new Identifier(LightWithin.MOD_ID , "wind_light_velocity_packet")
+            LightWithin.getIdentifier("wind_light_velocity_packet")
     );
 
     public static final PacketCodec<PacketByteBuf, WindLightVelocityPayloadS2C> PACKET_CODEC = PacketCodec.tuple(

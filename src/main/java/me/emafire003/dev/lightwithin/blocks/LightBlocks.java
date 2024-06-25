@@ -14,7 +14,6 @@ import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.sound.BlockSoundGroup;
-import net.minecraft.util.Identifier;
 
 public class LightBlocks {
 
@@ -37,8 +36,8 @@ public class LightBlocks {
             new WallBlock(AbstractBlock.Settings.create().sounds(BlockSoundGroup.GLASS).strength(0.05f).slipperiness(0.9f).sounds(BlockSoundGroup.GLASS).nonOpaque()), ItemGroups.NATURAL, Items.ICE);
 
     private static Block registerBlock(String name, Block block, RegistryKey<ItemGroup> tab, Item add_after) {
-        Block the_block = Registry.register(Registries.BLOCK, new Identifier(LightWithin.MOD_ID, name), block);
-        Item the_item = Registry.register(Registries.ITEM, new Identifier(LightWithin.MOD_ID, name), new BlockItem(block, new Item.Settings()));
+        Block the_block = Registry.register(Registries.BLOCK, LightWithin.getIdentifier(name), block);
+        Item the_item = Registry.register(Registries.ITEM, LightWithin.getIdentifier(name), new BlockItem(block, new Item.Settings()));
         ItemGroupEvents.modifyEntriesEvent(tab).register(content -> {
             content.addAfter(add_after, the_item);
         });

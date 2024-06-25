@@ -27,6 +27,7 @@ import net.minecraft.fluid.Fluids;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
@@ -178,6 +179,7 @@ public class AquaLight extends InnerLight {
                     }
                     if(this.power_multiplier >= 5){
                         ItemStack trident = new ItemStack(Items.TRIDENT);
+                        trident.addEnchantment(RegistryEntry.of(Enchantments.CHANNELING), 1);
                         trident.addEnchantment(Enchantments.CHANNELING, 1);
                         TridentEntity tridentEntity = new TridentEntity(caster.getWorld(), caster, trident);
                         tridentEntity.setPos(target.getX(), target.getY()+10, target.getZ());
@@ -243,7 +245,7 @@ public class AquaLight extends InnerLight {
                 entity.getWorld().setBlockState(pos.up(), Fluids.WATER.getFlowing(7, true).getBlockState());
                 Vec3d posc = pos.toCenterPos();
                 entity.sendMessage(Text.literal("Teleporting to: "+ posc.getX() + " " + posc.getY()+1  + " " +posc.getZ()));
-                entity.teleport(posc.getX(), posc.getY()+1, posc.getZ());
+                entity.teleport(posc.getX(), posc.getY()+1, posc.getZ(), false);
             }
         }));
     }

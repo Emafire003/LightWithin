@@ -23,29 +23,29 @@ public class LightParticles {
 
 
     public static void registerParticles() {
-        Registry.register(Registries.PARTICLE_TYPE, new Identifier(LightWithin.MOD_ID, "heal_light_particle"),
+        Registry.register(Registries.PARTICLE_TYPE, LightWithin.getIdentifier("heal_light_particle"),
                 HEALLIGHT_PARTICLE);
-        Registry.register(Registries.PARTICLE_TYPE, new Identifier(LightWithin.MOD_ID, "defense_light_particle"),
+        Registry.register(Registries.PARTICLE_TYPE, LightWithin.getIdentifier("defense_light_particle"),
                 DEFENSELIGHT_PARTICLE);
-        Registry.register(Registries.PARTICLE_TYPE, new Identifier(LightWithin.MOD_ID, "strength_light_particle"),
+        Registry.register(Registries.PARTICLE_TYPE, LightWithin.getIdentifier("strength_light_particle"),
                 STRENGTHLIGHT_PARTICLE);
-        Registry.register(Registries.PARTICLE_TYPE, new Identifier(LightWithin.MOD_ID, "blazing_light_particle"),
+        Registry.register(Registries.PARTICLE_TYPE, LightWithin.getIdentifier("blazing_light_particle"),
                 BLAZINGLIGHT_PARTICLE);
-        Registry.register(Registries.PARTICLE_TYPE, new Identifier(LightWithin.MOD_ID, "frost_light_particle"),
+        Registry.register(Registries.PARTICLE_TYPE, LightWithin.getIdentifier("frost_light_particle"),
                 FROSTLIGHT_PARTICLE);
-        Registry.register(Registries.PARTICLE_TYPE, new Identifier(LightWithin.MOD_ID, "earthen_light_particle"),
+        Registry.register(Registries.PARTICLE_TYPE, LightWithin.getIdentifier("earthen_light_particle"),
                 EARTHENLIGHT_PARTICLE);
-        Registry.register(Registries.PARTICLE_TYPE, new Identifier(LightWithin.MOD_ID, "wind_light_particle"),
+        Registry.register(Registries.PARTICLE_TYPE, LightWithin.getIdentifier("wind_light_particle"),
                 WINDLIGHT_PARTICLE);
-        Registry.register(Registries.PARTICLE_TYPE, new Identifier(LightWithin.MOD_ID, "aqua_light_particle"),
+        Registry.register(Registries.PARTICLE_TYPE, LightWithin.getIdentifier("aqua_light_particle"),
                 AQUALIGHT_PARTICLE);
-        Registry.register(Registries.PARTICLE_TYPE, new Identifier(LightWithin.MOD_ID, "frog_light_particle"),
+        Registry.register(Registries.PARTICLE_TYPE, LightWithin.getIdentifier("frog_light_particle"),
                 FROGLIGHT_PARTICLE);
 
-        Registry.register(Registries.PARTICLE_TYPE, new Identifier(LightWithin.MOD_ID, "light_particle"),
+        Registry.register(Registries.PARTICLE_TYPE, LightWithin.getIdentifier("light_particle"),
                 LIGHT_PARTICLE);
 
-        Registry.register(Registries.PARTICLE_TYPE, new Identifier(LightWithin.MOD_ID, "shine_particle"),
+        Registry.register(Registries.PARTICLE_TYPE, LightWithin.getIdentifier("shine_particle"),
                 SHINE_PARTICLE);
     }
 }

@@ -11,7 +11,7 @@ import net.minecraft.util.Identifier;
 @Environment(value= EnvType.CLIENT)
 @SuppressWarnings("all")
 public class EarthGolemEntityRenderer extends IronGolemEntityRenderer {
-    private static final Identifier TEXTURE = new Identifier(LightWithin.MOD_ID, "textures/entity/earth_golem/earth_golem.png");
+    private static final Identifier TEXTURE = LightWithin.getIdentifier("textures/entity/earth_golem/earth_golem.png");
 
     public EarthGolemEntityRenderer(EntityRendererFactory.Context context) {
         super(context);

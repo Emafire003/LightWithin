@@ -16,8 +16,8 @@ import net.minecraft.util.Identifier;
 public class LightCommands {
 
     public static void registerArguments(){
-        ArgumentTypeRegistry.registerArgumentType(new Identifier(LightWithin.MOD_ID, "light_type"), LightTypeArgument.class, ConstantArgumentSerializer.of(LightTypeArgument::lightType));
-        ArgumentTypeRegistry.registerArgumentType(new Identifier(LightWithin.MOD_ID, "light_target"), LightTargetArgument.class, ConstantArgumentSerializer.of(LightTargetArgument::lightTarget));
+        ArgumentTypeRegistry.registerArgumentType(LightWithin.getIdentifier("light_type"), LightTypeArgument.class, ConstantArgumentSerializer.of(LightTypeArgument::lightType));
+        ArgumentTypeRegistry.registerArgumentType(LightWithin.getIdentifier("light_target"), LightTargetArgument.class, ConstantArgumentSerializer.of(LightTargetArgument::lightTarget));
 
     }
 

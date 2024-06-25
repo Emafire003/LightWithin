@@ -19,10 +19,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldView;
 
 public class FollowSummonerGoal extends Goal {
-    public static final int TELEPORT_DISTANCE = 12;
-    private static final int HORIZONTAL_RANGE = 2;
-    private static final int HORIZONTAL_VARIATION = 3;
-    private static final int VERTICAL_VARIATION = 1;
     private final PathAwareEntity summoned;
     private LivingEntity summoner;
     private final WorldView world;

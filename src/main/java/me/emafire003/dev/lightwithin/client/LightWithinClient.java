@@ -59,7 +59,7 @@ public class LightWithinClient implements ClientModInitializer {
 
     private static boolean shouldDrawChargesCount = true;
 
-    public static final EntityModelLayer MODEL_EARTH_GOLEM_LAYER = new EntityModelLayer(new Identifier(LightWithin.MOD_ID, "earth_golem"), "main");
+    public static final EntityModelLayer MODEL_EARTH_GOLEM_LAYER = new EntityModelLayer(LightWithin.getIdentifier("earth_golem"), "main");
 
 
     @Override

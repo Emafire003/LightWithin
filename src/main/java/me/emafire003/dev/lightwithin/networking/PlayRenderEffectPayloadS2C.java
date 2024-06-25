@@ -11,7 +11,7 @@ import net.minecraft.util.Identifier;
 
 public record PlayRenderEffectPayloadS2C(RenderEffect effect, Integer targetID) implements CustomPayload {
     public static final Id<PlayRenderEffectPayloadS2C> ID = new Id<>(
-            new Identifier(LightWithin.MOD_ID , "play_render_effect_packet")
+            LightWithin.getIdentifier("play_render_effect_packet")
     );
 
     public static final PacketCodec<PacketByteBuf, PlayRenderEffectPayloadS2C> PACKET_CODEC = PacketCodec.tuple(

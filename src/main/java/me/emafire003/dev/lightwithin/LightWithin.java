@@ -95,10 +95,10 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 
 
 	public static final ComponentKey<LightComponent> LIGHT_COMPONENT =
-			ComponentRegistry.getOrCreate(new Identifier(MOD_ID, "light_component"), LightComponent.class);
+			ComponentRegistry.getOrCreate(getIdentifier("light_component"), LightComponent.class);
 
 	public static final ComponentKey<SummonedByComponent> SUMMONED_BY_COMPONENT =
-			ComponentRegistry.getOrCreate(new Identifier(MOD_ID, "summoned_by_component"), SummonedByComponent.class);
+			ComponentRegistry.getOrCreate(getIdentifier("summoned_by_component"), SummonedByComponent.class);
 
 	@Override
 	public void onInitialize() {
@@ -146,6 +146,11 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 			LightTriggerChecks.MIN_TRIGGER = TriggerConfig.TRIGGER_THRESHOLD;
 		});
 
+	}
+
+	/**Returns an identifier for this mod's stuff*/
+	public static Identifier getIdentifier(String path){
+		return Identifier.of(MOD_ID, path);
 	}
 
 	@Override

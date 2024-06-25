@@ -14,28 +14,28 @@ import net.minecraft.util.Identifier;
 
 public class LootTableModifier {
     private static final Identifier ANCIENT_CITY
-            = new Identifier("minecraft", "chests/ancient_city");
+            = Identifier.of("minecraft", "chests/ancient_city");
 
     private static final Identifier MINESHAFT
-            = new Identifier("minecraft", "chests/abandoned_mineshaft");
+            = Identifier.of("minecraft", "chests/abandoned_mineshaft");
 
     private static final Identifier PILLAGER_OUTPOST
-            = new Identifier("minecraft", "chests/pillager_outpost");
+            = Identifier.of("minecraft", "chests/pillager_outpost");
 
     private static final Identifier SIMPLE_DUNGEON
-            = new Identifier("minecraft", "chests/simple_dungeon");
+            = Identifier.of("minecraft", "chests/simple_dungeon");
 
     private static final Identifier SHIPWRECK_MAP
-            = new Identifier("minecraft", "chests/shipwreck_map");
+            = Identifier.of("minecraft", "chests/shipwreck_map");
 
     private static final Identifier STRONGHOLD_LIBRARY
-            = new Identifier("minecraft", "chests/stronghold_library");
+            = Identifier.of("minecraft", "chests/stronghold_library");
 
     private static final Identifier END_CITY_TREASURE
-            = new Identifier("minecraft", "chests/end_city_treasure");
+            = Identifier.of("minecraft", "chests/end_city_treasure");
 
     private static final Identifier IGLOO_STRUCTURE_CHEST_ID
-            = new Identifier("minecraft", "chests/igloo_chest");
+            = Identifier.of("minecraft", "chests/igloo_chest");
 
 
 

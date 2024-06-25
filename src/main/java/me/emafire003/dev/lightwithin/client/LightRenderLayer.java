@@ -11,8 +11,8 @@ import net.minecraft.util.Identifier;
 @Environment(EnvType.CLIENT)
 public class LightRenderLayer extends RenderLayer {
 
-    public static final Identifier SKY_TEXTURE = new Identifier("textures/environment/end_sky.png");
-    public static final Identifier LIGHT_SCREEN_TEXTURE = new Identifier(LightWithin.MOD_ID, "textures/gui/light_screen.png");
+    public static final Identifier SKY_TEXTURE = Identifier.of("textures/environment/end_sky.png");
+    public static final Identifier LIGHT_SCREEN_TEXTURE = LightWithin.getIdentifier("textures/gui/light_screen.png");
 
     public LightRenderLayer(String name, VertexFormat vertexFormat, VertexFormat.DrawMode drawMode, int expectedBufferSize, boolean hasCrumbling, boolean translucent, Runnable startAction, Runnable endAction) {
         super(name, vertexFormat, drawMode, expectedBufferSize, hasCrumbling, translucent, startAction, endAction);

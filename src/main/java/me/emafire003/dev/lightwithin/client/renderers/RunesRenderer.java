@@ -44,7 +44,7 @@ public class RunesRenderer {
         double scale_factor = MinecraftClient.getInstance().getWindow().getScaleFactor();
 
         ClipStack.addWindow(drawContext.getMatrices(), new Rectangle(1,1,1000,1000));
-        Renderer2d.renderTexture(drawContext.getMatrices(), new Identifier(LightWithin.MOD_ID, "textures/lights/runes/"+ type.toString().toLowerCase() + "_light_runes.png"), center_x-(400/scale_factor)/2, center_y-(160/scale_factor)/2, (400/scale_factor)*1.2, (160/scale_factor)*1.2);
+        Renderer2d.renderTexture(drawContext.getMatrices(), LightWithin.getIdentifier("textures/lights/runes/"+ type.toString().toLowerCase() + "_light_runes.png"), center_x-(400/scale_factor)/2, center_y-(160/scale_factor)/2, (400/scale_factor)*1.2, (160/scale_factor)*1.2);
         ClipStack.popWindow();
     }
     

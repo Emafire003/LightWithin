@@ -5,6 +5,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
@@ -21,7 +22,7 @@ public abstract class ArmorOrItemBreakMixin extends Entity {
     }
 
     @Inject(method = "sendEquipmentBreakStatus", at = @At("RETURN"))
-    private void onSendEquipmentBreakStatus(EquipmentSlot slot, CallbackInfo ci) {
+    private void onSendEquipmentBreakStatus(Item item, EquipmentSlot slot, CallbackInfo ci) {
         ItemStack breakingItemStack = ((LivingEntity) (Object) this).getEquippedStack(slot);
         ArmorOrToolBreakEvent.EVENT.invoker().brokenItem(breakingItemStack);
     }

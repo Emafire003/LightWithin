@@ -10,8 +10,8 @@ import net.minecraft.util.math.BlockPos;
 
 public class FlanCompat {
 
-    public static Identifier ACTIVATE_LIGHT = new Identifier(Flan.MODID, "activate_innerlight");
-    public static Identifier LIGHT_GRIEFING = new Identifier(Flan.MODID, "innerlight_griefing");
+    public static Identifier ACTIVATE_LIGHT = Identifier.of(Flan.MODID, "activate_innerlight");
+    public static Identifier LIGHT_GRIEFING = Identifier.of(Flan.MODID, "innerlight_griefing");
 
 
     public static boolean canActivateHere(ServerPlayerEntity player, BlockPos pos){

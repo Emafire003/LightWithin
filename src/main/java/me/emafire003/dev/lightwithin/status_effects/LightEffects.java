@@ -26,7 +26,7 @@ public class LightEffects {
     public static final RegistryEntry<StatusEffect> WATER_CASCADE = registerStatusEffect("water_cascade",
             new WaterCascadeEffect());
     private static RegistryEntry<StatusEffect> registerStatusEffect(String name, StatusEffect effect){
-        return Registry.registerReference(Registries.STATUS_EFFECT, new Identifier(LightWithin.MOD_ID, name), effect);
+        return Registry.registerReference(Registries.STATUS_EFFECT, LightWithin.getIdentifier(name), effect);
     }
 
     public static void registerModEffects(){

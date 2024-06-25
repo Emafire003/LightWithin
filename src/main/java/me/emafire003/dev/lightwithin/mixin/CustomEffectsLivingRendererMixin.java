@@ -90,26 +90,26 @@ public abstract class CustomEffectsLivingRendererMixin<T extends Entity> {
         //The color seems to be the one of the border
         //Modifying the first values stretches the lines
         //it seems this is the primary/source color
-        buffer.vertex(matrix, 0.0F, 0.0F, 0.0F).color(color.getX(), color.getY(), color.getZ(), alpha).next();
+        buffer.vertex(matrix, 0.0F, 0.0F, 0.0F).color(color.getX(), color.getY(), color.getZ(), alpha);
     }
 
     @Unique
     private static void putLightNegativeXTerminalVertex(VertexConsumer buffer, Matrix4f matrix, float radius, float width) {
-        buffer.vertex(matrix, -HALF_SQRT_3 * width, radius, -0.5F * width).color(rays_color_y.getX(), rays_color_y.getY(), rays_color_y.getZ(), 0).next();
-        //buffer.vertex(matrix, width, radius, -0.5F * width).color(red_c, green_c, blue_c, 0).next();
+        buffer.vertex(matrix, -HALF_SQRT_3 * width, radius, -0.5F * width).color(rays_color_y.getX(), rays_color_y.getY(), rays_color_y.getZ(), 0);
+        //buffer.vertex(matrix, width, radius, -0.5F * width).color(red_c, green_c, blue_c, 0);
 
     }
 
     @Unique
     private static void putLightPositiveXTerminalVertex(VertexConsumer buffer, Matrix4f matrix, float radius, float width) {
-        buffer.vertex(matrix, HALF_SQRT_3 * width, radius, -0.5F * width).color(rays_color_y.getX(), rays_color_y.getY(), rays_color_y.getZ(), 0).next();
-        //buffer.vertex(matrix, width, radius, -0.5F * width).color(red_c, green_c, blue_c, 0).next();
+        buffer.vertex(matrix, HALF_SQRT_3 * width, radius, -0.5F * width).color(rays_color_y.getX(), rays_color_y.getY(), rays_color_y.getZ(), 0);
+        //buffer.vertex(matrix, width, radius, -0.5F * width).color(red_c, green_c, blue_c, 0);
 
     }
     @Unique
 
     private static void putLightPositiveZTerminalVertex(VertexConsumer buffer, Matrix4f matrix, float radius, float width) {
-        buffer.vertex(matrix, 0.0F, radius, width).color(rays_color_y.getX(), rays_color_y.getY(), rays_color_y.getZ(), 0).next();
-        //buffer.vertex(matrix, 0.0f, radius, width).color(red_c, green_c, blue_c, 0).next();
+        buffer.vertex(matrix, 0.0F, radius, width).color(rays_color_y.getX(), rays_color_y.getY(), rays_color_y.getZ(), 0);
+        //buffer.vertex(matrix, 0.0f, radius, width).color(red_c, green_c, blue_c, 0);
     }
 }

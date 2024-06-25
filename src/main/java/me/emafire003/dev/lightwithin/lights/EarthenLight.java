@@ -125,7 +125,7 @@ public class EarthenLight extends InnerLight {
                 //If the oldtarget and the new one have a distance greater than 3 it will spawn a new hole,
                 //otherwise it will skip it, since probably they would end up in the same hole regardless
                 if((oldtarget == null || oldtarget.distanceTo(target) > 3) && CheckUtils.checkGriefable((ServerPlayerEntity) caster)){
-                    StructurePlacerAPI placer = new StructurePlacerAPI((ServerWorld) caster.getWorld(), new Identifier(MOD_ID, "earth_hole"), target.getBlockPos(), BlockMirror.NONE, BlockRotation.NONE, true, 1f, new BlockPos(-3, -11, -3));
+                    StructurePlacerAPI placer = new StructurePlacerAPI((ServerWorld) caster.getWorld(), LightWithin.getIdentifier("earth_hole"), target.getBlockPos(), BlockMirror.NONE, BlockRotation.NONE, true, 1f, new BlockPos(-3, -11, -3));
                     if(Config.REPLACEABLE_STRUCTURES && !Config.KEEP_ESSENTIALS_STRUCTURES){
                         placer.loadAndRestoreStructureAnimated(caster.getStatusEffect(LightEffects.LIGHT_ACTIVE).getDuration(), 2, true);
                     }else{
@@ -157,9 +157,9 @@ public class EarthenLight extends InnerLight {
                     if(oldtarget == null || oldtarget.distanceTo(target) > 3){
                         StructurePlacerAPI placer;
                         if(this.power_multiplier > 4){
-                            placer = new StructurePlacerAPI((ServerWorld) caster.getWorld(), new Identifier(MOD_ID, "earth_wall"), caster.getBlockPos(), BlockMirror.NONE, BlockRotation.NONE, true, 1f, new BlockPos(-3, -5, -6));
+                            placer = new StructurePlacerAPI((ServerWorld) caster.getWorld(), LightWithin.getIdentifier("earth_wall"), caster.getBlockPos(), BlockMirror.NONE, BlockRotation.NONE, true, 1f, new BlockPos(-3, -5, -6));
                         }else{
-                            placer = new StructurePlacerAPI((ServerWorld) caster.getWorld(), new Identifier(MOD_ID, "earth_wall1"), caster.getBlockPos(), BlockMirror.NONE, BlockRotation.NONE, true, 1f, new BlockPos(-3, -1, -4));
+                            placer = new StructurePlacerAPI((ServerWorld) caster.getWorld(), LightWithin.getIdentifier("earth_wall1"), caster.getBlockPos(), BlockMirror.NONE, BlockRotation.NONE, true, 1f, new BlockPos(-3, -1, -4));
                         }
 
                         if(Config.REPLACEABLE_STRUCTURES && !Config.KEEP_ESSENTIALS_STRUCTURES){
@@ -187,20 +187,20 @@ public class EarthenLight extends InnerLight {
                     LightParticlesUtil.spawnCircle(caster.getPos().add(0, 1.45, 0), 5, 120, new BlockStateParticleEffect(ParticleTypes.BLOCK, Blocks.DIRT.getDefaultState()), (ServerWorld) caster.getWorld());
                     LightParticlesUtil.spawnCircle(caster.getPos().add(0, 3, 0), 3, 120, new BlockStateParticleEffect(ParticleTypes.BLOCK, Blocks.DIRT.getDefaultState()), (ServerWorld) caster.getWorld());
                     LightParticlesUtil.spawnCircle(caster.getPos().add(0, 5, 0), 2.20, 120, new BlockStateParticleEffect(ParticleTypes.BLOCK, Blocks.DIRT.getDefaultState()), (ServerWorld) caster.getWorld());
-                    placer = new StructurePlacerAPI((ServerWorld) caster.getWorld(), new Identifier(MOD_ID, "self_moat_pillar"), caster.getBlockPos(), BlockMirror.NONE, BlockRotation.NONE, true, 0.96f, new BlockPos(-7, -6, -7));
-                    caster.teleport(caster.getX(), caster.getY()+5, caster.getZ());
+                    placer = new StructurePlacerAPI((ServerWorld) caster.getWorld(), LightWithin.getIdentifier("self_moat_pillar"), caster.getBlockPos(), BlockMirror.NONE, BlockRotation.NONE, true, 0.96f, new BlockPos(-7, -6, -7));
+                    caster.teleport(caster.getX(), caster.getY()+5, caster.getZ(), false);
 
                 }else if(this.power_multiplier < 7 && this.power_multiplier >= 3){
                     LightParticlesUtil.spawnCircle(caster.getPos().add(0, 0.45, 0), 3, 120, new BlockStateParticleEffect(ParticleTypes.BLOCK, Blocks.DIRT.getDefaultState()), (ServerWorld) caster.getWorld());
                     LightParticlesUtil.spawnCircle(caster.getPos().add(0, 1.45, 0), 2.50, 120, new BlockStateParticleEffect(ParticleTypes.BLOCK, Blocks.DIRT.getDefaultState()), (ServerWorld) caster.getWorld());
                     LightParticlesUtil.spawnCircle(caster.getPos().add(0, 4.5, 0), 1.5, 120, new BlockStateParticleEffect(ParticleTypes.BLOCK, Blocks.DIRT.getDefaultState()), (ServerWorld) caster.getWorld());
-                    placer = new StructurePlacerAPI((ServerWorld) caster.getWorld(), new Identifier(MOD_ID, "pillar_only"), caster.getBlockPos(), BlockMirror.NONE, BlockRotation.NONE, true, 0.96f, new BlockPos(-2, 0, -2));
-                    caster.teleport(caster.getX(), caster.getY()+7, caster.getZ());
+                    placer = new StructurePlacerAPI((ServerWorld) caster.getWorld(), LightWithin.getIdentifier("pillar_only"), caster.getBlockPos(), BlockMirror.NONE, BlockRotation.NONE, true, 0.96f, new BlockPos(-2, 0, -2));
+                    caster.teleport(caster.getX(), caster.getY()+7, caster.getZ(), false);
                 }else{
                     LightParticlesUtil.spawnCircle(caster.getPos().add(0, 0.25, 0), 2.5, 120, new BlockStateParticleEffect(ParticleTypes.BLOCK, Blocks.DIRT.getDefaultState()), (ServerWorld) caster.getWorld());
                     LightParticlesUtil.spawnCircle(caster.getPos().add(0, 1.45, 0), 1, 120, new BlockStateParticleEffect(ParticleTypes.BLOCK, Blocks.DIRT.getDefaultState()), (ServerWorld) caster.getWorld());
-                    placer = new StructurePlacerAPI((ServerWorld) caster.getWorld(), new Identifier(MOD_ID, "small_moat"), caster.getBlockPos(), BlockMirror.NONE, BlockRotation.NONE, true, 0.9f, new BlockPos(-3, -5, -3));
-                    caster.teleport(caster.getX(), caster.getY()+2, caster.getZ());
+                    placer = new StructurePlacerAPI((ServerWorld) caster.getWorld(), LightWithin.getIdentifier("small_moat"), caster.getBlockPos(), BlockMirror.NONE, BlockRotation.NONE, true, 0.9f, new BlockPos(-3, -5, -3));
+                    caster.teleport(caster.getX(), caster.getY()+2, caster.getZ(), false);
                 }
                 if(Config.REPLACEABLE_STRUCTURES && !Config.KEEP_ESSENTIALS_STRUCTURES){
                     placer.loadAndRestoreStructureAnimated(caster.getStatusEffect(LightEffects.LIGHT_ACTIVE).getDuration(), 2, true);

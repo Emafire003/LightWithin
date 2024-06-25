@@ -25,7 +25,7 @@ public class LightSounds {
     public static SoundEvent AQUA_LIGHT = registerSoundEvent("aqua_light");
 
     private static SoundEvent registerSoundEvent(String name) {
-        Identifier id = new Identifier(LightWithin.MOD_ID, name);
+        Identifier id = LightWithin.getIdentifier(name);
         return Registry.register(Registries.SOUND_EVENT, id, SoundEvent.of(id));
     }
 
