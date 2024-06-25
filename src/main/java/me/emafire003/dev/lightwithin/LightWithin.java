@@ -613,12 +613,13 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
             if(CURRENTLY_READY_LIGHT_PLAYER_CACHE.isEmpty()){
                 return;
             }
-			for( Map.Entry<UUID, Integer> entry : CURRENTLY_READY_LIGHT_PLAYER_CACHE.entrySet()){
+			Set<Map.Entry<UUID, Integer>> i_hate_the_concurrency_issue_map_entries = CURRENTLY_READY_LIGHT_PLAYER_CACHE.entrySet();
+			for( Map.Entry<UUID, Integer> entry : i_hate_the_concurrency_issue_map_entries){
 				if(entry.getValue() == 0){
 					CURRENTLY_READY_LIGHT_PLAYER_CACHE.remove(entry.getKey());
 				}else{
 					//If already removed should just return null i think, so it's ok.
-					CURRENTLY_READY_LIGHT_PLAYER_CACHE.replace(entry.getKey(), entry.getValue().intValue()-1);
+					CURRENTLY_READY_LIGHT_PLAYER_CACHE.replace(entry.getKey(), entry.getValue() -1);
 				}
 			}
 		});
