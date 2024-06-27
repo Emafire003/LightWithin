@@ -184,7 +184,7 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 						}
 
 						//This could be laggy? Maybe?
-						List<ServerPlayerEntity> players = player.getWorld().getPlayers();
+						List<ServerPlayerEntity> players = player.getServerWorld().getPlayers();
 						for(ServerPlayerEntity p : players){
 							ServerPlayNetworking.send(p, PlayRenderEffectPacketS2C.ID, new PlayRenderEffectPacketS2C(RenderEffect.LIGHT_RAYS, player));
 						}
@@ -605,15 +605,16 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 
 	public void registerReadyLightCacheRemover(){
 		ServerTickEvents.END_SERVER_TICK.register(server -> {
-            if(CURRENTLY_READY_LIGHT_PLAYER_CACHE.isEmpty()){
-                return;
-            }
-			for( Map.Entry<UUID, Integer> entry : CURRENTLY_READY_LIGHT_PLAYER_CACHE.entrySet()){
+			if(CURRENTLY_READY_LIGHT_PLAYER_CACHE.isEmpty()){
+				return;
+			}
+			Set<Map.Entry<UUID, Integer>> i_hate_the_concurrency_issue_map_entries = CURRENTLY_READY_LIGHT_PLAYER_CACHE.entrySet();
+			for( Map.Entry<UUID, Integer> entry : i_hate_the_concurrency_issue_map_entries){
 				if(entry.getValue() == 0){
 					CURRENTLY_READY_LIGHT_PLAYER_CACHE.remove(entry.getKey());
 				}else{
 					//If already removed should just return null i think, so it's ok.
-					CURRENTLY_READY_LIGHT_PLAYER_CACHE.replace(entry.getKey(), entry.getValue().intValue()-1);
+					CURRENTLY_READY_LIGHT_PLAYER_CACHE.replace(entry.getKey(), entry.getValue() -1);
 				}
 			}
 		});
