@@ -184,7 +184,7 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 						}
 
 						//This could be laggy? Maybe?
-						List<ServerPlayerEntity> players = player.getServerWorld().getPlayers();
+						List<ServerPlayerEntity> players = player.getWorld().getPlayers();
 						for(ServerPlayerEntity p : players){
 							ServerPlayNetworking.send(p, PlayRenderEffectPacketS2C.ID, new PlayRenderEffectPacketS2C(RenderEffect.LIGHT_RAYS, player));
 						}
