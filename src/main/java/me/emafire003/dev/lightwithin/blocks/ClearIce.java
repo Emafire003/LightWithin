@@ -7,10 +7,10 @@ import me.emafire003.dev.lightwithin.status_effects.LightEffects;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.registry.tag.EnchantmentTags;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.state.property.IntProperty;
 import net.minecraft.state.property.Properties;
@@ -43,10 +43,6 @@ public class ClearIce extends FrostedIceBlock {
     }
 
     public static final IntProperty AGE = Properties.AGE_3;
-
-    protected IntProperty getAgeProperty() {
-        return AGE;
-    }
 
     @Override
     public ItemStack getPickStack(WorldView world, BlockPos pos, BlockState state) {
@@ -119,7 +115,8 @@ public class ClearIce extends FrostedIceBlock {
     @Override
     public void afterBreak(World world, PlayerEntity player, BlockPos pos, BlockState state, @Nullable BlockEntity blockEntity, ItemStack tool) {
         super.afterBreak(world, player, pos, state, blockEntity, tool);
-        if (EnchantmentHelper.getLevel(Enchantments.SILK_TOUCH, tool) == 0) {
+        //if (EnchantmentHelper.getLevel(Enchantments.SILK_TOUCH, tool) == 0) {
+        if (!EnchantmentHelper.hasAnyEnchantmentsIn(tool, EnchantmentTags.PREVENTS_ICE_MELTING)) {
             if (world.getDimension().ultrawarm()) {
                 world.removeBlock(pos, false);
                 return;

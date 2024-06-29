@@ -9,12 +9,13 @@ import me.emafire003.dev.lightwithin.util.RenderEffect;
 import me.emafire003.dev.lightwithin.util.TargetType;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.item.TooltipType;
 import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.FoodComponent;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.tooltip.TooltipType;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
@@ -62,7 +63,8 @@ public class LuxcognitaBerryItem extends Item {
 
             ServerPlayNetworking.send((ServerPlayerEntity) user, new PlayRenderEffectPayloadS2C(RenderEffect.LUXCOGNITA_SCREEN, -1));
         }
-        return this.getComponents().contains(DataComponentTypes.FOOD) ? user.eatFood(world, stack) : stack;
+        FoodComponent foodComponent = stack.get(DataComponentTypes.FOOD);
+        return foodComponent != null ? user.eatFood(world, stack, foodComponent) : stack;
     }
 
     @Override

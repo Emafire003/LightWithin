@@ -151,7 +151,7 @@ public class LuxcognitaScreen extends Screen{
         float textScale = 1.5f;
         matrixStack.scale(textScale, textScale, textScale);
         //2406703 16777215
-        context.drawCenteredTextWithShadow(this.textRenderer, Text.translatable("screen.luxcognita_dialogue.luxcognitaTalk"), (int) ((this.width / 2)/textScale), (int) ((this.height / 2 - 70)/textScale), getTextColor());
+        context.drawCenteredTextWithShadow(this.textRenderer, Text.translatable("screen.luxcognita_dialogue.luxcognitaTalk"), (int) (((float) this.width / 2)/textScale), (int) (((float) this.height / 2 - 70)/textScale), getTextColor());
         matrixStack.pop();
 
     }
@@ -159,10 +159,11 @@ public class LuxcognitaScreen extends Screen{
     public void fillWithLayer(DrawContext context, RenderLayer layer, int startX, int startY, int endX, int endY, int z) {
         Matrix4f matrix4f = context.getMatrices().peek().getPositionMatrix();
         VertexConsumer vertexConsumer = context.getVertexConsumers().getBuffer(layer);
-        vertexConsumer.vertex(matrix4f, (float)startX, (float)startY, (float)z).next();
-        vertexConsumer.vertex(matrix4f, (float)startX, (float)endY, (float)z).next();
-        vertexConsumer.vertex(matrix4f, (float)endX, (float)endY, (float)z).next();
-        vertexConsumer.vertex(matrix4f, (float)endX, (float)startY, (float)z).next();
+        //these had .next() in pre 1.21
+        vertexConsumer.vertex(matrix4f, (float)startX, (float)startY, (float)z);
+        vertexConsumer.vertex(matrix4f, (float)startX, (float)endY, (float)z);
+        vertexConsumer.vertex(matrix4f, (float)endX, (float)endY, (float)z);
+        vertexConsumer.vertex(matrix4f, (float)endX, (float)startY, (float)z);
         context.draw();
     }
 

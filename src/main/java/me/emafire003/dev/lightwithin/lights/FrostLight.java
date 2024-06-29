@@ -25,15 +25,12 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.util.BlockMirror;
 import net.minecraft.util.BlockRotation;
-import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Direction;
 
 import java.util.List;
 import java.util.stream.Stream;
-
-import static me.emafire003.dev.lightwithin.LightWithin.*;
 
 public class FrostLight extends InnerLight {
 
@@ -91,7 +88,7 @@ public class FrostLight extends InnerLight {
 
         caster.getWorld().playSound(caster.getX(), caster.getY(), caster.getZ(), LightSounds.FROST_LIGHT, SoundCategory.PLAYERS, 1, 1, true);
         if(!caster.getWorld().isClient && (CheckUtils.checkGriefable((ServerPlayerEntity) caster) || Config.NON_FUNDAMENTAL_STRUCTURE_GRIEFING) && (component.getTargets().equals(TargetType.ALL) || component.getTargets().equals(TargetType.ENEMIES))) {
-            StructurePlacerAPI placer = new StructurePlacerAPI((ServerWorld) caster.getWorld(), new Identifier(MOD_ID, "frost_light"), caster.getBlockPos(), BlockMirror.NONE, BlockRotation.NONE, true, 1.0f, new BlockPos(-4, -3, -3));
+            StructurePlacerAPI placer = new StructurePlacerAPI((ServerWorld) caster.getWorld(), LightWithin.getIdentifier("frost_light"), caster.getBlockPos(), BlockMirror.NONE, BlockRotation.NONE, true, 1.0f, new BlockPos(-4, -3, -3));
             if(Config.REPLACEABLE_STRUCTURES){
                 placer.loadAndRestoreStructureAnimated(caster.getStatusEffect(LightEffects.LIGHT_ACTIVE).getDuration(), 2, true);
             }else{
@@ -118,13 +115,13 @@ public class FrostLight extends InnerLight {
                 Direction facing = target.getHorizontalFacing();
                 if(!caster.getWorld().isClient && (CheckUtils.checkGriefable((ServerPlayerEntity) caster) || Config.NON_FUNDAMENTAL_STRUCTURE_GRIEFING)){
 
-                    StructurePlacerAPI placer = new StructurePlacerAPI((ServerWorld) caster.getWorld(), new Identifier(MOD_ID, "frost_wall"), target.getBlockPos(), BlockMirror.NONE, BlockRotation.NONE, true, 1.0f, new BlockPos(-2, -1, -2));
+                    StructurePlacerAPI placer = new StructurePlacerAPI((ServerWorld) caster.getWorld(), LightWithin.getIdentifier("frost_wall"), target.getBlockPos(), BlockMirror.NONE, BlockRotation.NONE, true, 1.0f, new BlockPos(-2, -1, -2));
                     if(facing.equals(Direction.EAST)){
-                        placer = new StructurePlacerAPI((ServerWorld) caster.getWorld(), new Identifier(MOD_ID, "frost_wall"), target.getBlockPos(), BlockMirror.NONE, BlockRotation.CLOCKWISE_90, true, 1.0f, new BlockPos(2, -1, -2));
+                        placer = new StructurePlacerAPI((ServerWorld) caster.getWorld(), LightWithin.getIdentifier("frost_wall"), target.getBlockPos(), BlockMirror.NONE, BlockRotation.CLOCKWISE_90, true, 1.0f, new BlockPos(2, -1, -2));
                     }else if(facing.equals(Direction.SOUTH)){
-                        placer = new StructurePlacerAPI((ServerWorld) caster.getWorld(), new Identifier(MOD_ID, "frost_wall"), target.getBlockPos(), BlockMirror.NONE, BlockRotation.CLOCKWISE_180, true, 1.0f, new BlockPos(2, -1, 2));
+                        placer = new StructurePlacerAPI((ServerWorld) caster.getWorld(), LightWithin.getIdentifier("frost_wall"), target.getBlockPos(), BlockMirror.NONE, BlockRotation.CLOCKWISE_180, true, 1.0f, new BlockPos(2, -1, 2));
                     }else if(facing.equals(Direction.WEST)){
-                        placer = new StructurePlacerAPI((ServerWorld) caster.getWorld(), new Identifier(MOD_ID, "frost_wall"), target.getBlockPos(), BlockMirror.NONE, BlockRotation.COUNTERCLOCKWISE_90, true, 1.0f, new BlockPos(-2, -1, 2));
+                        placer = new StructurePlacerAPI((ServerWorld) caster.getWorld(), LightWithin.getIdentifier("frost_wall"), target.getBlockPos(), BlockMirror.NONE, BlockRotation.COUNTERCLOCKWISE_90, true, 1.0f, new BlockPos(-2, -1, 2));
                     }
 
                     if(Config.REPLACEABLE_STRUCTURES && !Config.KEEP_ESSENTIALS_STRUCTURES){

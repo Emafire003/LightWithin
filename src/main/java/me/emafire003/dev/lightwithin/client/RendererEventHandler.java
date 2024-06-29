@@ -22,7 +22,6 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.option.Perspective;
 import net.minecraft.sound.SoundEvents;
-import net.minecraft.util.Identifier;
 
 import static me.emafire003.dev.lightwithin.LightWithin.LIGHT_COMPONENT;
 import static me.emafire003.dev.lightwithin.LightWithin.LOGGER;
@@ -63,7 +62,7 @@ public class RendererEventHandler {
     }
 
     public void registerRenderEvent(){
-        LOGGER.info("Registering runes renderer...");
+        LOGGER.debug("Registering runes renderer...");
         updateFromConfig();
         RenderEvents.HUD.register(drawContext -> {
 

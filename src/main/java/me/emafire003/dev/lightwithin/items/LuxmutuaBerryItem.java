@@ -9,12 +9,13 @@ import me.emafire003.dev.lightwithin.sounds.LightSounds;
 import me.emafire003.dev.lightwithin.events.LightCreationAndEvent;
 import me.emafire003.dev.lightwithin.util.TargetType;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.item.TooltipType;
 import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.FoodComponent;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.tooltip.TooltipType;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.Hand;
@@ -74,7 +75,8 @@ public class LuxmutuaBerryItem extends Item {
 
             ((ServerPlayerEntity) user).sendMessage(Text.translatable("item.lightwithin.luxmutua_berry.lightchange"), true);
         }
-        return this.getComponents().contains(DataComponentTypes.FOOD) ? user.eatFood(world, stack) : stack;
+        FoodComponent foodComponent = stack.get(DataComponentTypes.FOOD);
+        return foodComponent != null ? user.eatFood(world, stack, foodComponent) : stack;
     }
 
     @Override

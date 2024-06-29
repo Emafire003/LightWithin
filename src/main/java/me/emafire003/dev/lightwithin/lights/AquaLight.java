@@ -15,6 +15,7 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.*;
 import net.minecraft.entity.effect.StatusEffectInstance;
@@ -27,6 +28,7 @@ import net.minecraft.fluid.Fluids;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
@@ -38,6 +40,8 @@ import net.minecraft.util.math.Vec3d;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Stream;
 
 import static me.emafire003.dev.lightwithin.LightWithin.*;
 
@@ -103,21 +107,66 @@ public class AquaLight extends InnerLight {
 
             for(int i = 0; i<power_multiplier; i++){
                 DrownedEntity drowned = new DrownedEntity(EntityType.DROWNED, caster.getWorld());
-
+                
+                
                 ItemStack iron_chest = new ItemStack(Items.CHAINMAIL_CHESTPLATE);
-                iron_chest.addEnchantment(Enchantments.PROTECTION, caster.getRandom().nextBetween(1, 3));
+                //iron_chest.addEnchantment(Enchantments.PROTECTION, caster.getRandom().nextBetween(1, 3));
+
+                Optional<RegistryEntry.Reference<Enchantment>> protection = caster.getWorld().getRegistryManager().get(RegistryKeys.ENCHANTMENT).getEntry(Enchantments.PROTECTION);
+
+                if(protection.isPresent()){
+                    iron_chest.addEnchantment(protection.get(), caster.getRandom().nextBetween(1, 3));
+                }else{
+                    LOGGER.info("Who the heck removed protection from the enchants list? (The drowneds spawned with AquaLight won't be equipped with it, but it's not a critical issue");
+                }
 
                 ItemStack turtle_helmet = new ItemStack(Items.TURTLE_HELMET);
-                turtle_helmet.addEnchantment(Enchantments.BINDING_CURSE, 1);
-                turtle_helmet.addEnchantment(Enchantments.PROJECTILE_PROTECTION, 3);
+                /*turtle_helmet.addEnchantment(Enchantments.BINDING_CURSE, 1);
+                turtle_helmet.addEnchantment(Enchantments.PROJECTILE_PROTECTION, 3);*/
+                Optional<RegistryEntry.Reference<Enchantment>> binding = caster.getWorld().getRegistryManager().get(RegistryKeys.ENCHANTMENT).getEntry(Enchantments.BINDING_CURSE);
+
+                if(binding.isPresent()){
+                    turtle_helmet.addEnchantment(binding.get(), 1);
+                }else{
+                    LOGGER.info("Who the heck removed curse of binding? from the enchants list? (The drowneds spawned with AquaLight won't be equipped with it, but it's not a critical issue");
+                }
+
+                Optional<RegistryEntry.Reference<Enchantment>> projectile_prot = caster.getWorld().getRegistryManager().get(RegistryKeys.ENCHANTMENT).getEntry(Enchantments.PROJECTILE_PROTECTION);
+
+                if(projectile_prot.isPresent()){
+                    turtle_helmet.addEnchantment(projectile_prot.get(), 1);
+                }else{
+                    LOGGER.info("Who the heck removed projectile_protection? from the enchants list? (The drowneds spawned with AquaLight won't be equipped with it, but it's not a critical issue");
+                }
 
                 ItemStack trident = new ItemStack(Items.TRIDENT);
                 if(this.power_multiplier > 5){
-                    trident.addEnchantment(Enchantments.CHANNELING, 1);
+                    /*trident.addEnchantment(Enchantments.CHANNELING, 1);
                     turtle_helmet.addEnchantment(Enchantments.THORNS, caster.getRandom().nextBetween(1, 2));
-                    iron_chest.addEnchantment(Enchantments.THORNS, caster.getRandom().nextBetween(1, 2));
+                    iron_chest.addEnchantment(Enchantments.THORNS, caster.getRandom().nextBetween(1, 2));*/
+                    Optional<RegistryEntry.Reference<Enchantment>> channeling = caster.getWorld().getRegistryManager().get(RegistryKeys.ENCHANTMENT).getEntry(Enchantments.CHANNELING);
+                    if(channeling.isPresent()){
+                        trident.addEnchantment(channeling.get(), 1);
+                    }else{
+                        LOGGER.info("Who the heck removed channeling from the enchants list? (The drowneds spawned with AquaLight won't be equipped with it, but it's not a critical issue");
+                    }
+
+                    Optional<RegistryEntry.Reference<Enchantment>> thorns = caster.getWorld().getRegistryManager().get(RegistryKeys.ENCHANTMENT).getEntry(Enchantments.THORNS);
+                    if(thorns.isPresent()){
+                        turtle_helmet.addEnchantment(thorns.get(), caster.getRandom().nextBetween(1, 2));
+                        iron_chest.addEnchantment(thorns.get(), caster.getRandom().nextBetween(1, 2));
+                    }else{
+                        LOGGER.info("Who the heck removed thorns from the enchants list? (The drowneds spawned with AquaLight won't be equipped with it, but it's not a critical issue");
+                    }
+                    
                 }
-                trident.addEnchantment(Enchantments.IMPALING, caster.getRandom().nextBetween(1,3));
+                //trident.addEnchantment(Enchantments.IMPALING, caster.getRandom().nextBetween(1,3));
+                Optional<RegistryEntry.Reference<Enchantment>> impaling = caster.getWorld().getRegistryManager().get(RegistryKeys.ENCHANTMENT).getEntry(Enchantments.IMPALING);
+                if(impaling.isPresent()){
+                    trident.addEnchantment(impaling.get(), caster.getRandom().nextBetween(1,3));
+                }else{
+                    LOGGER.info("Who the heck removed impaling from the enchants list? (The drowneds spawned with AquaLight won't be equipped with it, but it's not a critical issue");
+                }
 
                 drowned.equipStack(EquipmentSlot.CHEST, iron_chest);
                 drowned.equipStack(EquipmentSlot.HEAD, turtle_helmet);
@@ -179,8 +228,18 @@ public class AquaLight extends InnerLight {
                     }
                     if(this.power_multiplier >= 5){
                         ItemStack trident = new ItemStack(Items.TRIDENT);
-                        trident.addEnchantment(RegistryEntry.of(Enchantments.CHANNELING), 1);
-                        trident.addEnchantment(Enchantments.CHANNELING, 1);
+
+                        //<1.21 code
+                        //trident.addEnchantment(Enchantments.CHANNELING, 1);
+                        Optional<RegistryEntry.Reference<Enchantment>> channeling = caster.getWorld().getRegistryManager().get(RegistryKeys.ENCHANTMENT).getEntry(Enchantments.CHANNELING);
+
+                        if(channeling.isPresent()){
+                            trident.addEnchantment(channeling.get(), 1);
+                        }else{
+                            LOGGER.info("Who the heck removed channeling from the enchants list? (The drowneds spawned with AquaLight won't be equipped with it, but it's not a critical issue");
+                        }
+
+
                         TridentEntity tridentEntity = new TridentEntity(caster.getWorld(), caster, trident);
                         tridentEntity.setPos(target.getX(), target.getY()+10, target.getZ());
                         tridentEntity.addVelocity(0, -1, 0);
