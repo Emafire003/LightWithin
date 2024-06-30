@@ -1,3 +1,7 @@
+### Minecraft 1.21 specific changes:
+- The feather ingredient for the wind light has been changed to the breeze rod instead. (and not the wind charge)
+- Some mods haven't updated yet, so when they do, if they have changed too many things they *may* be incompatible
+
 ### Minecraft 1.19.2 specific changes:
 - Some mods like argonauts and Flan aren't supported anymore, since they don't exist for this version of minecraft
 - Some features like the position of the buttons on the screen may differ slightly from the 1.20.1+ version, since some code is missing

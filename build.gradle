@@ -80,14 +80,17 @@ dependencies {
 	//include modImplementation( 'com.github.0x3C50:Renderer:2273f5e562' )//2273f5e
 
 	//StructurePlacerAPI
+	//TODO upload to modrinth and use that
 	include modImplementation(files("libs/structureplacerapi-1.1.5.jar"))
 	//include modImplementation("maven.modrinth:structureplacerapi:${project.structureplacerapi_version}")
 
 	//CustomBrewRecipes
+	//TODO upload to modrinth and use that
 	modImplementation(files("libs/custombrewrecipes-1.3.2.jar"))
 	//include modImplementation("maven.modrinth:custombrewrecipes:${project.custombrewrecipes_version}")
 
 	//ParticleAnimationLib
+	//TODO upload to modrinth and use that
 	modImplementation(files("libs/particleanimationlib-0.0.3.jar"))
     //include modImplementation("maven.modrinth:particleanimationlib:${project.pal_version}")
 

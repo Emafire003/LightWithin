@@ -33,7 +33,6 @@ import net.minecraft.util.math.BlockPos;
 import java.util.List;
 
 import static me.emafire003.dev.lightwithin.LightWithin.LIGHT_COMPONENT;
-import static me.emafire003.dev.lightwithin.LightWithin.MOD_ID;
 
 public class BlazingLight extends InnerLight {
 

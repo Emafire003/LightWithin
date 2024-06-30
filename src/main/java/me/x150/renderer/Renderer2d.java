@@ -71,12 +71,11 @@ public class Renderer2d {
     }
 
     private static void renderTexturedQuad(Matrix4f matrix, double x0, double x1, double y0, double y1, double z, float u0, float u1, float v0, float v1) {
-        BufferBuilder buffer = Tessellator.getInstance().getBuffer();
-        buffer.begin(DrawMode.QUADS, VertexFormats.POSITION_TEXTURE);
-        buffer.vertex(matrix, (float) x0, (float) y1, (float) z).texture(u0, v1).next();
-        buffer.vertex(matrix, (float) x1, (float) y1, (float) z).texture(u1, v1).next();
-        buffer.vertex(matrix, (float) x1, (float) y0, (float) z).texture(u1, v0).next();
-        buffer.vertex(matrix, (float) x0, (float) y0, (float) z).texture(u0, v0).next();
+        BufferBuilder buffer = Tessellator.getInstance().begin(DrawMode.QUADS, VertexFormats.POSITION_TEXTURE);
+        buffer.vertex(matrix, (float) x0, (float) y1, (float) z).texture(u0, v1);
+        buffer.vertex(matrix, (float) x1, (float) y1, (float) z).texture(u1, v1);
+        buffer.vertex(matrix, (float) x1, (float) y0, (float) z).texture(u1, v0);
+        buffer.vertex(matrix, (float) x0, (float) y0, (float) z).texture(u0, v0);
 
         RenderSystem.setShader(GameRenderer::getPositionTexProgram);
         BufferRenderer.drawWithGlobalProgram(buffer.end());

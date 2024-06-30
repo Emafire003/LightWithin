@@ -36,11 +36,13 @@ import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.registry.tag.DamageTypeTags;
 import net.minecraft.registry.tag.TagKey;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.state.property.Properties;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
+import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -145,7 +147,7 @@ public class CheckUtils {
         return player.getArmor()+player.getHealth() <= (player.getMaxHealth())*health_percent/100;
     }
 
-
+    //TODO i probably need to check if this remains the same
     private static float getModifyAppliedDamage(DamageSource source, float amount, LivingEntity entity){
         if (source.isIn(DamageTypeTags.BYPASSES_EFFECTS)) {
             return amount;
@@ -167,7 +169,11 @@ public class CheckUtils {
             } else if (source.isIn(DamageTypeTags.BYPASSES_ENCHANTMENTS)) {
                 return amount;
             } else {
-                i = EnchantmentHelper.getProtectionAmount(entity.getArmorItems(), source);
+                //i = EnchantmentHelper.getProtectionAmount(entity.getArmorItems(), source);
+                if(entity.getWorld().isClient()){
+                    return amount;
+                }
+                i = (int) EnchantmentHelper.getProtectionAmount((ServerWorld) entity.getWorld(), entity, source);
                 if (i > 0) {
                     amount = DamageUtil.getInflictedDamage(amount, (float)i);
                 }
@@ -179,7 +185,7 @@ public class CheckUtils {
 
     private static float getAppliedArmorToDamage(DamageSource source, float amount, LivingEntity entity){
         if (!source.isIn(DamageTypeTags.BYPASSES_ARMOR)) {
-            amount = DamageUtil.getDamageLeft(amount, source, (float)entity.getArmor(), (float)entity.getAttributeValue(EntityAttributes.GENERIC_ARMOR_TOUGHNESS));
+            amount = DamageUtil.getDamageLeft(entity, amount, source, (float)entity.getArmor(), (float)entity.getAttributeValue(EntityAttributes.GENERIC_ARMOR_TOUGHNESS));
         }
 
         return amount;
@@ -188,7 +194,16 @@ public class CheckUtils {
     /**Calculates the attack damage that an entity could do to another entity, not accounting for its speed*/
     private static float getAttackDamage(@NotNull LivingEntity attacker, @NotNull LivingEntity target){
         float dmg = (float)attacker.getAttributeValue(EntityAttributes.GENERIC_ATTACK_DAMAGE);
-        dmg += EnchantmentHelper.getAttackDamage(attacker.getMainHandStack(), target.getType());
+        DamageSource damageSource = attacker.getDamageSources().mobAttack(attacker);
+        if(attacker instanceof PlayerEntity){
+            damageSource = attacker.getDamageSources().playerAttack((PlayerEntity) attacker);
+        }
+
+        if(attacker.getWorld().isClient()){
+            return dmg;
+        }else{
+            dmg += EnchantmentHelper.getDamage((ServerWorld) attacker.getWorld(), attacker.getWeaponStack(), target, damageSource, dmg);
+        }
         if(target instanceof PlayerEntity){
             target.sendMessage(Text.literal("The non calcl damage is §6" +dmg));
 
@@ -199,7 +214,19 @@ public class CheckUtils {
     /**Calculates the attack damage that an entity could do to another entity, accounting for its speed*/
     private static float getAttackDamageWithSpeed(@NotNull LivingEntity attacker,@NotNull LivingEntity target){
         float dmg = (float)attacker.getAttributeValue(EntityAttributes.GENERIC_ATTACK_DAMAGE);
-        dmg += EnchantmentHelper.getAttackDamage(attacker.getMainHandStack(), target.getType());
+        //dmg += EnchantmentHelper.getAttackDamage(attacker.getMainHandStack(), target.getType());
+
+        DamageSource damageSource = attacker.getDamageSources().mobAttack(attacker);
+        if(attacker instanceof PlayerEntity){
+            damageSource = attacker.getDamageSources().playerAttack((PlayerEntity) attacker);
+        }
+
+        if(attacker.getWorld().isClient()){
+            return dmg;
+        }else{
+            dmg += EnchantmentHelper.getDamage((ServerWorld) attacker.getWorld(), attacker.getWeaponStack(), target, damageSource, dmg);
+        }
+
         if(attacker instanceof PlayerEntity){
             float spd = (float)attacker.getAttributeValue(EntityAttributes.GENERIC_ATTACK_SPEED);
             return dmg*spd;
@@ -439,7 +466,7 @@ public class CheckUtils {
     public static List<Item> toItemList(List<String> list){
         List<Item> items = new ArrayList<>();
         for(String id : list){
-            items.add(Registries.ITEM.get(new Identifier(id)));
+            items.add(Registries.ITEM.get(Identifier.ofVanilla(id)));
         }
         return items;
     }
@@ -455,7 +482,7 @@ public class CheckUtils {
     public static List<Block> toBlockList(List<String> list){
         List<Block> blocks = new ArrayList<>();
         for(String id : list){
-            blocks.add(Registries.BLOCK.get(new Identifier(id)));
+            blocks.add(Registries.BLOCK.get(Identifier.ofVanilla(id)));
         }
         return blocks;
     }

@@ -15,11 +15,11 @@ public class LightEffects {
     public static final RegistryEntry<StatusEffect> LIGHT_ACTIVE = registerStatusEffect("light_active",
             new LightActiveEffect());
     public static final RegistryEntry<StatusEffect> FROST = registerStatusEffect("frost",
-            new FrostEffect().addAttributeModifier(EntityAttributes.GENERIC_ATTACK_SPEED, "4d5ca720-40c5-492f-b74a-f31771f2dacc", -1.0f, EntityAttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
+            new FrostEffect().addAttributeModifier(EntityAttributes.GENERIC_ATTACK_SPEED, Identifier.ofVanilla("effect.haste"), -1.0f, EntityAttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
     public static final RegistryEntry<StatusEffect> FREEZE_RESISTANCE = registerStatusEffect("freeze_resistance",
             new FreezeResistanceEffect());
     public static final RegistryEntry<StatusEffect> STURDY_ROCK = registerStatusEffect("sturdy_rock",
-            new SturdyRockEffect().addAttributeModifier(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE, "70d5f061-467c-430a-a9b6-48475f961db9", 0.15f, EntityAttributeModifier.Operation.ADD_VALUE));
+            new SturdyRockEffect().addAttributeModifier(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE, LightWithin.getIdentifier("effect.sturdy_rock_attribute"), 0.15f, EntityAttributeModifier.Operation.ADD_VALUE));
             //.addAttributeModifier(EntityAttributes.GENERIC_MOVEMENT_SPEED, "70d5f061-467c-430a-a9b6-48475f961db9", 0.5f, EntityAttributeModifier.Operation.MULTIPLY_TOTAL));
     public static final RegistryEntry<StatusEffect> WATER_SLIDE = registerStatusEffect("water_slide",
                     new WaterSlideEffect());

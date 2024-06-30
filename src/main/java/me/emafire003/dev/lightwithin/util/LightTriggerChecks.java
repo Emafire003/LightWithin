@@ -5,6 +5,7 @@ import me.emafire003.dev.lightwithin.config.Config;
 import me.emafire003.dev.lightwithin.config.TriggerConfig;
 import me.emafire003.dev.lightwithin.networking.LightReadyPayloadS2C;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.Entity;
@@ -12,7 +13,11 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.passive.FrogEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.registry.RegistryKeys;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.network.ServerPlayerEntity;
+
+import java.util.Optional;
 
 import static me.emafire003.dev.lightwithin.LightWithin.*;
 
@@ -471,7 +476,14 @@ public class LightTriggerChecks {
         //Yes it ignores protection but whatever. It's a feature not a bug. I can always add it later
         ItemStack boots = player.getInventory().getArmorStack(3);
         int fall_trigger = Config.FALL_TRIGGER;
-        int fe_fa_level = EnchantmentHelper.getLevel(Enchantments.FEATHER_FALLING, boots);
+        int fe_fa_level = 0;
+
+        Optional<RegistryEntry.Reference<Enchantment>> f_falling = player.getWorld().getRegistryManager().get(RegistryKeys.ENCHANTMENT).getEntry(Enchantments.FEATHER_FALLING);
+        if(f_falling.isPresent()){
+            fe_fa_level = EnchantmentHelper.getLevel(f_falling.get(), boots);
+        }else{
+            LOGGER.info("Who the heck removed feather falling from the enchants list? (The drowneds spawned with AquaLight won't be equipped with it, but it's not a critical issue");
+        }
 
         for(int i = 0; i < fe_fa_level; i++){
             fall_trigger = fall_trigger+10;
