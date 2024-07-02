@@ -26,7 +26,7 @@ import java.util.List;
 
 public class WindLight extends InnerLight {
 
-    public static final Item INGREDIENT = Items.BREEZE_ROD;
+    public static final Item INGREDIENT = Items.WIND_CHARGE;
 
     public WindLight(List<LivingEntity> targets, double cooldown_time, double power_multiplier, int duration, String color, PlayerEntity caster, boolean rainbow_col) {
         super(targets, cooldown_time, power_multiplier, duration, color, caster, rainbow_col);

@@ -1,5 +1,5 @@
 ### Minecraft 1.21 specific changes:
-- The feather ingredient for the wind light has been changed to the breeze rod instead. (and not the wind charge)
+- The feather ingredient for the wind light has been changed to the wind charge instead. (and not the wind charge)
 - Some mods haven't updated yet, so when they do, if they have changed too many things they *may* be incompatible
 
 ### Minecraft 1.19.2 specific changes:

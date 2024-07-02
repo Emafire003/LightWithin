@@ -33,6 +33,7 @@ import net.minecraft.util.math.BlockPos;
 import java.util.List;
 
 import static me.emafire003.dev.lightwithin.LightWithin.LIGHT_COMPONENT;
+import static me.emafire003.dev.lightwithin.LightWithin.LOGGER;
 
 public class BlazingLight extends InnerLight {
 
@@ -96,6 +97,9 @@ public class BlazingLight extends InnerLight {
 
             this.color = "blazing_variant";
         }
+
+        //TODO ahhh maybe the strcuture itself is blank
+        LOGGER.info("The blazing structure id is: " + blazing_structure_id);
 
         if(FabricLoader.getInstance().isModLoaded("coloredglowlib")){
             if(this.rainbow_col){
