@@ -27,13 +27,11 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.util.BlockMirror;
 import net.minecraft.util.BlockRotation;
-import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 
 import java.util.List;
 
 import static me.emafire003.dev.lightwithin.LightWithin.LIGHT_COMPONENT;
-import static me.emafire003.dev.lightwithin.LightWithin.LOGGER;
 
 public class BlazingLight extends InnerLight {
 
@@ -98,9 +96,6 @@ public class BlazingLight extends InnerLight {
             this.color = "blazing_variant";
         }
 
-        //TODO ahhh maybe the strcuture itself is blank
-        LOGGER.info("The blazing structure id is: " + blazing_structure_id);
-
         if(FabricLoader.getInstance().isModLoaded("coloredglowlib")){
             if(this.rainbow_col){
                 CGLCompat.getLib().setRainbowColor(this.caster);
@@ -117,7 +112,7 @@ public class BlazingLight extends InnerLight {
             power_multiplier = power_multiplier + BalanceConfig.BLAZING_ALL_DAMAGE_BONUS;
         }
         if(!caster.getWorld().isClient && (CheckUtils.checkGriefable((ServerPlayerEntity) caster) || Config.NON_FUNDAMENTAL_STRUCTURE_GRIEFING)) {
-            StructurePlacerAPI placer = new StructurePlacerAPI((ServerWorld) caster.getWorld(), Identifier.of(blazing_structure_id), caster.getBlockPos(), BlockMirror.NONE, BlockRotation.NONE, true, 1.0f, new BlockPos(-3, -4, -3));
+            StructurePlacerAPI placer = new StructurePlacerAPI((ServerWorld) caster.getWorld(), LightWithin.getIdentifier(blazing_structure_id), caster.getBlockPos(), BlockMirror.NONE, BlockRotation.NONE, true, 1.0f, new BlockPos(-3, -4, -3));
             if(Config.REPLACEABLE_STRUCTURES){
                 placer.loadAndRestoreStructureAnimated(caster.getStatusEffect(LightEffects.LIGHT_ACTIVE).getDuration(), 2, true);
             }else{
@@ -143,7 +138,7 @@ public class BlazingLight extends InnerLight {
                 target.playSound(LightSounds.LIGHT_CRIT, 1, 1);
                 LightParticlesUtil.spawnDescendingColumn((ServerPlayerEntity) caster, flame_particle, target.getPos().add(0,3,0));
                 if(!caster.getWorld().isClient){
-                    StructurePlacerAPI placer = new StructurePlacerAPI((ServerWorld) caster.getWorld(), Identifier.of(fire_ring_id), caster.getBlockPos());
+                    StructurePlacerAPI placer = new StructurePlacerAPI((ServerWorld) caster.getWorld(), LightWithin.getIdentifier(fire_ring_id), caster.getBlockPos());
                     placer.loadStructure();
                 }
             }else{
