@@ -6,6 +6,7 @@
   "mixins": [
     "AnvilItemCrushMixin",
     "ArmorOrItemBreakMixin",
+    "PreventLightEffectClearLivingEntityMixin",
     "BottleLightMixin",
     "DrownedEntityMixin",
     "EntityAttackEntityMixin",

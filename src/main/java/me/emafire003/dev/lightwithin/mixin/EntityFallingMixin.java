@@ -24,8 +24,9 @@ public abstract class EntityFallingMixin extends Entity {
     @Inject(method = "fall", at = @At("HEAD"))
     public void injectEntityFalling(double heightDifference, boolean onGround, BlockState state, BlockPos landedPosition, CallbackInfo ci) {
 
-        if(isFalling(((LivingEntity) (Object) this))){
-            EntityFallingEvent.EVENT.invoker().falling(((LivingEntity)(Object)this), heightDifference, ((LivingEntity)(Object)this).fallDistance);
+        LivingEntity entity = ((LivingEntity) (Object) this);
+        if(isFalling(entity)){
+            EntityFallingEvent.EVENT.invoker().falling(entity, heightDifference, this.fallDistance);
         }
     }
 

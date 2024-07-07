@@ -31,13 +31,10 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.util.BlockMirror;
 import net.minecraft.util.BlockRotation;
-import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
-
 
 import java.util.List;
 
-import static me.emafire003.dev.lightwithin.LightWithin.*;
 
 public class EarthenLight extends InnerLight {
 

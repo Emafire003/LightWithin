@@ -3,16 +3,21 @@ package me.emafire003.dev.lightwithin.mixin;
 import me.emafire003.dev.lightwithin.events.EntityAttackEntityEvent;
 import me.emafire003.dev.lightwithin.status_effects.LightEffects;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(LivingEntity.class)
-public abstract class EntityAttackEntityMixin{
+public abstract class EntityAttackEntityMixin extends Entity{
+
+    public EntityAttackEntityMixin(EntityType<?> type, World world) {
+        super(type, world);
+    }
 
     @Inject(method = "onAttacking", at = @At("HEAD"), cancellable = true)
     public void injectOnAttacking(Entity target, CallbackInfo ci) {
@@ -26,18 +31,8 @@ public abstract class EntityAttackEntityMixin{
         }
     }
 
-    //other stuff that I need in the entity class to prevent some errors not related to the entity attack entity
-    @Inject(method = "clearStatusEffects", at = @At("HEAD"))
-    public void clearLightFatigueToo(CallbackInfoReturnable<Boolean> cir){
-        if(((LivingEntity)(Object)this).hasStatusEffect(LightEffects.LIGHT_ACTIVE)){
-            ((LivingEntity)(Object)this).removeStatusEffect(LightEffects.LIGHT_ACTIVE);
-        }
-        if(((LivingEntity)(Object)this).hasStatusEffect(LightEffects.LIGHT_FATIGUE)){
-            ((LivingEntity)(Object)this).removeStatusEffect(LightEffects.LIGHT_FATIGUE);
-        }
-    }
-
     //Other stuff, AKA depth strider for AQUA self/allies
+    @SuppressWarnings("all")
     @ModifyVariable(method = "travel", at = @At("STORE"), ordinal = 2)
     public float applyWaterSpeedAqua(float h){
         if(h == 0 && ((LivingEntity)(Object)this).hasStatusEffect(LightEffects.WATER_SLIDE)){

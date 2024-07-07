@@ -80,7 +80,7 @@ dependencies {
 	//include modImplementation( 'com.github.0x3C50:Renderer:2273f5e562' )//2273f5e
 
 	//StructurePlacerAPI
-	/include modImplementation("maven.modrinth:structureplacerapi:${project.structureplacerapi_version}")
+	include modImplementation("maven.modrinth:structureplacerapi:${project.structureplacerapi_version}")
 
 	//CustomBrewRecipes
 	include modImplementation("maven.modrinth:custombrewrecipes:${project.custombrewrecipes_version}")
