@@ -37,7 +37,6 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
-import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 
@@ -234,10 +233,8 @@ public class AquaLight extends InnerLight {
                 return;
             }
             if(Config.STRUCTURE_GRIEFING){
-                entity.sendMessage(Text.literal("Ok getting pos inside the structre griefing if. Also, is client: " + entity.getWorld().isClient));
                 BlockPos pos = entity.getBlockPos();
                 if(block_map.isEmpty()){
-                    entity.sendMessage(Text.literal("BlockMap eempty"));
                     start_pos = pos;
                     block_map.put(pos, entity.getWorld().getBlockState(pos));
                 }else{
@@ -249,7 +246,6 @@ public class AquaLight extends InnerLight {
 
                 entity.getWorld().setBlockState(pos.up(), Fluids.WATER.getFlowing(7, true).getBlockState());
                 Vec3d posc = Vec3d.ofCenter(pos);
-                entity.sendMessage(Text.literal("Teleporting to: "+ posc.getX() + " " + posc.getY()+1  + " " +posc.getZ()));
                 entity.teleport(posc.getX(), posc.getY()+1, posc.getZ());
             }
         }));
