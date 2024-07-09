@@ -18,6 +18,8 @@ import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 
+import java.util.Objects;
+
 import static me.emafire003.dev.lightwithin.LightWithin.LIGHT_COMPONENT;
 
 public class LightActiveEffect extends StatusEffect {
@@ -67,12 +69,17 @@ public class LightActiveEffect extends StatusEffect {
             CGLCompat.getLib().setOverrideTeamColors(LightWithin.overrideTeamColorsPrev);
         }
         if(entity instanceof PlayerEntity){
-            if(LightWithin.USED_CHARGE_PLAYER_CACHE.contains(entity.getUuid())){
-                entity.addStatusEffect(new StatusEffectInstance(LightEffects.LIGHT_FATIGUE, (int) (Config.COOLDOWN_MULTIPLIER*20*component.getMaxCooldown()*Config.USED_CHARGE_COOLDOWN_MULTIPLIER), 1));
-                LightWithin.USED_CHARGE_PLAYER_CACHE.remove(entity.getUuid());
-            }else{
-                entity.addStatusEffect(new StatusEffectInstance(LightEffects.LIGHT_FATIGUE, (int) (Config.COOLDOWN_MULTIPLIER*20*component.getMaxCooldown())));
+            if(!entity.getWorld().isClient()){
+                Objects.requireNonNull(entity.getServer()).executeSync(()->{
+                    if(LightWithin.USED_CHARGE_PLAYER_CACHE.contains(entity.getUuid())){
+                        entity.addStatusEffect(new StatusEffectInstance(LightEffects.LIGHT_FATIGUE, (int) (Config.COOLDOWN_MULTIPLIER*20*component.getMaxCooldown()*Config.USED_CHARGE_COOLDOWN_MULTIPLIER), 1));
+                        LightWithin.USED_CHARGE_PLAYER_CACHE.remove(entity.getUuid());
+                    }else{
+                        entity.addStatusEffect(new StatusEffectInstance(LightEffects.LIGHT_FATIGUE, (int) (Config.COOLDOWN_MULTIPLIER*20*component.getMaxCooldown())));
+                    }
+                });
             }
+
 
         }
         super.onRemoved(entity, attributes, amplifier);

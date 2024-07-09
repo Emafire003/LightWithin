@@ -16,7 +16,8 @@
     "LivingEntityDamageTriggersMixin",
     "MilkNotCleanLightEffectsMixin",
     "PlayerFreezeMixin",
-    "PlayerJoinMixin"
+    "PlayerJoinMixin",
+    "PreventLightEffectClearLivingEntityMixin"
   ],
   "client": [
     "CustomEffectsLivingRendererMixin",
