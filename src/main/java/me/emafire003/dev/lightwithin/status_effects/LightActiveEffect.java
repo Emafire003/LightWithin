@@ -13,7 +13,6 @@ import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectCategory;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
@@ -43,14 +42,16 @@ public class LightActiveEffect extends StatusEffect {
 
     // This method is called when it applies the status effect. We implement custom functionality here.
     boolean run = false;
-    LivingEntity entity;
+    LivingEntity targetedLivingEntity;
 
     // This method is called when it applies the status effect. We implement custom functionality here.
     @Override
     public boolean applyUpdateEffect(LivingEntity entity, int amplifier) {
         if(!run){
-            run = true;
-            this.entity = entity;
+            if(!entity.getWorld().isClient()){
+                run = true;
+                this.targetedLivingEntity = entity;
+            }
         }
         if(entity instanceof ServerPlayerEntity){
             LightComponent component = LIGHT_COMPONENT.get(entity);
@@ -64,28 +65,29 @@ public class LightActiveEffect extends StatusEffect {
 
     @Override
     public void onRemoved(AttributeContainer attributes){
-        if(!entity.hasStatusEffect(StatusEffects.GLOWING)){
-            entity.setGlowing(false);
+        run = false;
+        if(!targetedLivingEntity.hasStatusEffect(StatusEffects.GLOWING)){
+            targetedLivingEntity.setGlowing(false);
         }
-        LightComponent component = LIGHT_COMPONENT.get(entity);
+        LightComponent component = LIGHT_COMPONENT.get(targetedLivingEntity);
         if(component.getPrevColor() != null && FabricLoader.getInstance().isModLoaded("coloredglowlib")){
             if(component.getPrevColor() == null){
-                CGLCompat.getLib().clearColor(entity, false);
+                CGLCompat.getLib().clearColor(targetedLivingEntity, false);
             }else{
-                CGLCompat.getLib().setColor(entity, component.getPrevColor());
+                CGLCompat.getLib().setColor(targetedLivingEntity, component.getPrevColor());
             }
             //A bit janky but should do the job. I hope.
             CGLCompat.getLib().setOverrideTeamColors(LightWithin.overrideTeamColorsPrev);
         }
-        if(entity instanceof PlayerEntity && !entity.getWorld().isClient()){
-            if(LightWithin.USED_CHARGE_PLAYER_CACHE.contains(entity.getUuid())){
-                Objects.requireNonNull(entity.getServer()).executeSync(()->{
-                    entity.addStatusEffect(new StatusEffectInstance(LightEffects.LIGHT_FATIGUE, (int) (Config.COOLDOWN_MULTIPLIER*20*component.getMaxCooldown()*Config.USED_CHARGE_COOLDOWN_MULTIPLIER), 1));
-                    LightWithin.USED_CHARGE_PLAYER_CACHE.remove(entity.getUuid());
+        if(!targetedLivingEntity.getWorld().isClient()){
+            if(LightWithin.USED_CHARGE_PLAYER_CACHE.contains(targetedLivingEntity.getUuid())){
+                Objects.requireNonNull(targetedLivingEntity.getServer()).executeSync(()->{
+                    targetedLivingEntity.addStatusEffect(new StatusEffectInstance(LightEffects.LIGHT_FATIGUE, (int) (Config.COOLDOWN_MULTIPLIER*20*component.getMaxCooldown()*Config.USED_CHARGE_COOLDOWN_MULTIPLIER), 1));
+                    LightWithin.USED_CHARGE_PLAYER_CACHE.remove(targetedLivingEntity.getUuid());
                 });
 
             }else{
-                Objects.requireNonNull(entity.getServer()).executeSync(()-> entity.addStatusEffect(new StatusEffectInstance(LightEffects.LIGHT_FATIGUE, (int) (Config.COOLDOWN_MULTIPLIER*20*component.getMaxCooldown()))));
+                Objects.requireNonNull(targetedLivingEntity.getServer()).executeSync(()-> targetedLivingEntity.addStatusEffect(new StatusEffectInstance(LightEffects.LIGHT_FATIGUE, (int) (Config.COOLDOWN_MULTIPLIER*20*component.getMaxCooldown()))));
             }
 
         }

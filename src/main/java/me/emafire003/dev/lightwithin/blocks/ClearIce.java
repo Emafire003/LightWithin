@@ -64,8 +64,6 @@ public class ClearIce extends FrostedIceBlock {
             }
         }
 
-        LightWithin.LOGGER.info("The run variable is: " + run);
-
         if (run && (random.nextInt(3) == 0 || this.canMelt(world, pos, 2)) && world.getLightLevel(pos) > 11 - state.get(AGE) - state.getOpacity(world, pos) && this.increaseAge(state, world, pos)) {
             BlockPos.Mutable mutable = new BlockPos.Mutable();
             Direction[] var6 = Direction.values();

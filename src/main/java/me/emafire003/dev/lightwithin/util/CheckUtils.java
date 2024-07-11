@@ -212,7 +212,8 @@ public class CheckUtils {
 
     /**Calculates the attack damage that an entity could do to another entity, accounting for its speed*/
     private static float getAttackDamageWithSpeed(@NotNull LivingEntity attacker,@NotNull LivingEntity target){
-        float dmg = (float)attacker.getAttributeValue(EntityAttributes.GENERIC_ATTACK_DAMAGE);
+        //TODO i've put a /2 here because in 1.21 the value changed for some reason
+        float dmg = (float)attacker.getAttributeValue(EntityAttributes.GENERIC_ATTACK_DAMAGE)/2;
         //dmg += EnchantmentHelper.getAttackDamage(attacker.getMainHandStack(), target.getType());
 
         DamageSource damageSource = attacker.getDamageSources().mobAttack(attacker);
