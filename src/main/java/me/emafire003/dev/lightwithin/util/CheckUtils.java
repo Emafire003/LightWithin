@@ -49,7 +49,7 @@ import static me.emafire003.dev.lightwithin.LightWithin.*;
 public class CheckUtils {
 
     /**Checks if an entity is surrounded by hostile entities
-     *
+     * <p>
      * If not enabled returns true to not mess with the &&
      *
      * @param entity The entity that could be surrounded*/
@@ -71,7 +71,7 @@ public class CheckUtils {
         if(Config.CHECK_SURROUNDING_MOBS_HEALTH){
             for (HostileEntity ent : entities){
                 if(!(ent.getHealth() <= (ent.getMaxHealth())*Config.SURROUNDING_HEALTH_THRESHOLD/100)){
-                   enemies++;
+                    enemies++;
                 }
             }
         }else{
@@ -84,7 +84,7 @@ public class CheckUtils {
 
     /**Sums up all of the durability of the armor items and if it's below
      * a certain percentage it will return true.
-     *
+     * <p>
      * An empty armor slot counts as an iron armor with 0 durability*/
     public static boolean checkArmorDurability(PlayerEntity player, int dur_percent){
         if(!Config.CHECK_ARMOR_DURABILITY){
@@ -234,7 +234,7 @@ public class CheckUtils {
 
     /**Checks to see if the player would be below a certain threshold
      * after the next attack, if it is returns true.
-     *
+     * <p>
      * Alternatively, Checks both the health and armor of the player,
      * and check if it is below a certain percentage.
      * If it is, returns true
@@ -519,7 +519,7 @@ public class CheckUtils {
 
     /** Checks for blocks in a certain radius from the player pos
      * if they match at least one from the given list.
-     *
+     * <p>
      * If SHOULD_CHECK_BLOCKS from the config it's on false, it will only check the block
      * under the player's feet.
      *
@@ -556,7 +556,7 @@ public class CheckUtils {
 
     /** Checks for blocks in a certain radius from the player pos
      * if they match a waterlogged block or at least one from a given list.
-     *
+     * <p>
      * If SHOULD_CHECK_BLOCKS from the config it's on false, it will only check the block
      * under the player's feet.
      *
@@ -600,7 +600,7 @@ public class CheckUtils {
 
     /** Checks for multiple blocks in a certain radius from the player pos
      * if they match at least one from the given list.
-     *
+     * <p>
      * If SHOULD_CHECK_BLOCKS from the config it's on false, it will only check the block
      * under the player's feet.
      *
@@ -841,7 +841,7 @@ public class CheckUtils {
     }
 
     /**Checks to see if the light-griefing is enabled
-     *
+     * <p>
      * Checks the config option and for land claims/regions*/
     public static boolean checkGriefable(ServerPlayerEntity player){
         return Config.STRUCTURE_GRIEFING || canActivateHereGriefing(player);

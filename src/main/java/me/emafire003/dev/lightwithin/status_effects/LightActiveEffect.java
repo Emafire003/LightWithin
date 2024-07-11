@@ -70,7 +70,7 @@ public class LightActiveEffect extends StatusEffect {
         }
         if(entity instanceof PlayerEntity){
             if(!entity.getWorld().isClient()){
-                Objects.requireNonNull(entity.getServer()).executeSync(()->{
+                Objects.requireNonNull(entity.getServer()).execute(()->{
                     if(LightWithin.USED_CHARGE_PLAYER_CACHE.contains(entity.getUuid())){
                         entity.addStatusEffect(new StatusEffectInstance(LightEffects.LIGHT_FATIGUE, (int) (Config.COOLDOWN_MULTIPLIER*20*component.getMaxCooldown()*Config.USED_CHARGE_COOLDOWN_MULTIPLIER), 1));
                         LightWithin.USED_CHARGE_PLAYER_CACHE.remove(entity.getUuid());
