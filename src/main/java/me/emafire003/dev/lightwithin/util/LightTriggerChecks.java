@@ -315,6 +315,7 @@ public class LightTriggerChecks {
             if(Config.CHECK_ARMOR_DURABILITY && CheckUtils.checkAllyArmor(player, target, Config.DUR_PERCENTAGE_ALLIES)){
                 trigger_sum=trigger_sum+TriggerConfig.FROST_ENEMIES_ALLY_ARMOR_DURABILITY;
             }
+            //TODO I should probably set this to 2 instead of 1. Maybe.
             //Checks if the player has low armor durability
             if(Config.CHECK_ARMOR_DURABILITY && CheckUtils.checkArmorDurability(player, Config.DUR_PERCENTAGE_SELF)){
                 trigger_sum=trigger_sum+TriggerConfig.FROST_ENEMIES_ARMOR_DURABILITY;

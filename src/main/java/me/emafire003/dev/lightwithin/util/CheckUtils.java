@@ -215,7 +215,6 @@ public class CheckUtils {
         //TODO i've put a /2 here because in 1.21 the value changed for some reason
         float dmg = (float)attacker.getAttributeValue(EntityAttributes.GENERIC_ATTACK_DAMAGE)/2;
         //dmg += EnchantmentHelper.getAttackDamage(attacker.getMainHandStack(), target.getType());
-
         DamageSource damageSource = attacker.getDamageSources().mobAttack(attacker);
         if(attacker instanceof PlayerEntity){
             damageSource = attacker.getDamageSources().playerAttack((PlayerEntity) attacker);
@@ -280,7 +279,6 @@ public class CheckUtils {
         if(player.getHealth()-tot_damaged <= (player.getMaxHealth())*health_percent/100){
             return true;
         }
-
         //Simpler check TODO maybe make it a bit more precise with the right formula
         return player.getArmor()+player.getHealth() <= (player.getMaxHealth())*health_percent/100;
     }
