@@ -1,4 +1,4 @@
-package me.emafire003.dev.lightwithin.mixin;
+package me.emafire003.dev.lightwithin.mixin.light_triggers;
 
 import me.emafire003.dev.lightwithin.events.ArmorOrToolBreakEvent;
 import net.minecraft.entity.EquipmentSlot;

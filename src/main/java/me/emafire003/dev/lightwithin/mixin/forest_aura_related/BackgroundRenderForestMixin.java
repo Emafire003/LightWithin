@@ -1,4 +1,4 @@
-package me.emafire003.dev.lightwithin.mixin;
+package me.emafire003.dev.lightwithin.mixin.forest_aura_related;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import me.emafire003.dev.lightwithin.status_effects.LightEffects;
@@ -6,13 +6,11 @@ import net.minecraft.client.render.BackgroundRenderer;
 import net.minecraft.client.render.Camera;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.LivingEntity;
-import org.spongepowered.asm.mixin.Debug;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Debug(export = true)
 @Mixin(BackgroundRenderer.class)
 public abstract class BackgroundRenderForestMixin {
 

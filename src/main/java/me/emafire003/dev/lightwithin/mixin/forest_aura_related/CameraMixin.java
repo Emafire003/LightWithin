@@ -1,15 +1,13 @@
-package me.emafire003.dev.lightwithin.mixin;
+package me.emafire003.dev.lightwithin.mixin.forest_aura_related;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import me.emafire003.dev.lightwithin.lights.ForestAuraLight;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.render.Camera;
-import org.spongepowered.asm.mixin.Debug;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
-@Debug(export = true)
 @Mixin(Camera.class)
 public abstract class CameraMixin {
 

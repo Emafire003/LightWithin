@@ -1,4 +1,4 @@
-package me.emafire003.dev.lightwithin.mixin;
+package me.emafire003.dev.lightwithin.mixin.forest_aura_related;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import me.emafire003.dev.lightwithin.client.LightWithinClient;
