@@ -1,0 +1,25 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:oak_log",
+    "minecraft:spruce_log",
+    "minecraft:acacia_log",
+    "minecraft:mangrove_log",
+    "minecraft:jungle_log",
+    "minecraft:dark_oak_log",
+    "minecraft:cherry_log",
+    "minecraft:birch_log",
+    "minecraft:mycelium",
+    "minecraft:grass_block",
+    "minecraft:rooted_dirt",
+    "minecraft:dirt",
+    "#minecraft:leaves",
+    "minecraft:azalea",
+    "minecraft:flowering_azalea",
+    "minecraft:mangrove_roots",
+    "minecraft:bamboo",
+    "minecraft:mushroom_stem",
+    "minecraft:red_mushroom_block",
+    "minecraft:brown_mushroom_block"
+  ]
+}

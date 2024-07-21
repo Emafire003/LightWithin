@@ -34,6 +34,7 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.block.Block;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.mob.DrownedEntity;
@@ -41,6 +42,8 @@ import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.passive.PassiveEntity;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.entry.RegistryEntryList;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
@@ -56,6 +59,7 @@ import java.nio.file.Path;
 import java.util.*;
 
 import static java.util.Map.entry;
+import static me.emafire003.dev.lightwithin.lights.ForestAuraLight.FOREST_AURA_BLOCKS;
 
 public class LightWithin implements ModInitializer, EntityComponentInitializer {
 	// This logger is used to write text to the console and the log file.
@@ -64,7 +68,7 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 	public static final String MOD_ID = "lightwithin";
 	public static final String PREFIX_MSG = "[LightWithin] ";
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
-	public static int box_expansion_amount = 6;
+	public static int BOX_EXPANSION_AMOUNT = 6;
 
 	private static final boolean debug = false;
 	public static Path PATH = Path.of(FabricLoader.getInstance().getConfigDir() + "/" + MOD_ID + "/");
@@ -90,7 +94,6 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 			entry(InnerLightType.AQUA, Arrays.asList(TargetType.SELF, TargetType.ENEMIES, TargetType.ALLIES,  TargetType.ALL)),
 			entry(InnerLightType.FROG, List.of(TargetType.ALL))
 	);
-
 
 	public static final ComponentKey<LightComponent> LIGHT_COMPONENT =
 			ComponentRegistry.getOrCreate(new Identifier(MOD_ID, "light_component"), LightComponent.class);
@@ -118,6 +121,7 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 		LootTableModifier.modifyLootTables();
 		LightCommands.registerArguments();
 		LightEntities.registerEntities();
+		registerTags();
 
 		if(FabricLoader.getInstance().isModLoaded("flan")){
 			FlanCompat.registerFlan();
@@ -127,9 +131,9 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 
 		ServerLifecycleEvents.SERVER_STARTED.register(minecraftServer -> {
 			BrewRecipes.registerRecipes();
-			box_expansion_amount = Config.AREA_OF_SEARCH_FOR_ENTITIES;
-			if(box_expansion_amount == 0){
-				box_expansion_amount = 6;
+			BOX_EXPANSION_AMOUNT = Config.AREA_OF_SEARCH_FOR_ENTITIES;
+			if(BOX_EXPANSION_AMOUNT == 0){
+				BOX_EXPANSION_AMOUNT = 6;
 			}
 			try{
 				Config.reloadConfig();
@@ -160,6 +164,10 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 			syncCustomConfigOptions(player);
 			return ActionResult.PASS;
 		});
+	}
+
+	public static void registerTags(){
+		RegistryEntryList.Named<Block> forest_blocks = Registries.BLOCK.getOrCreateEntryList(FOREST_AURA_BLOCKS);
 	}
 
 	/**Sends a packet with updated config options to the client
@@ -321,7 +329,7 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 	 * */
 	private static List<LivingEntity> getEnemies(PlayerEntity player){
 		List<LivingEntity> targets = new ArrayList<>();
-		List<LivingEntity> entities = player.getWorld().getEntitiesByClass(LivingEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amount), (entity1 -> true));
+		List<LivingEntity> entities = player.getWorld().getEntitiesByClass(LivingEntity.class, new Box(player.getBlockPos()).expand(BOX_EXPANSION_AMOUNT), (entity1 -> true));
 		for(LivingEntity ent : entities){
 			if(ent instanceof HostileEntity && !CheckUtils.CheckAllies.checkAlly(player, ent)){
 				targets.add(ent);
@@ -344,7 +352,7 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 	 * */
 	public static List<LivingEntity> getAllies(PlayerEntity player){
 		List<LivingEntity> targets = new ArrayList<>();
-		List<LivingEntity> entities = player.getWorld().getEntitiesByClass(LivingEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amount), (entity1 -> true));
+		List<LivingEntity> entities = player.getWorld().getEntitiesByClass(LivingEntity.class, new Box(player.getBlockPos()).expand(BOX_EXPANSION_AMOUNT), (entity1 -> true));
 		targets.add(player);
 		for(LivingEntity ent : entities){
 			if(CheckUtils.CheckAllies.checkAlly(player, ent)){
@@ -382,8 +390,8 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 
 		//Finds peaceful creatures and allies, also the player
 		else if(component.getTargets().equals(TargetType.VARIANT)){
-			targets.addAll(player.getWorld().getEntitiesByClass(PassiveEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amount), (entity1 -> true)));
-			List<LivingEntity> entities = player.getWorld().getEntitiesByClass(LivingEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amount), (entity1 -> true));
+			targets.addAll(player.getWorld().getEntitiesByClass(PassiveEntity.class, new Box(player.getBlockPos()).expand(BOX_EXPANSION_AMOUNT), (entity1 -> true)));
+			List<LivingEntity> entities = player.getWorld().getEntitiesByClass(LivingEntity.class, new Box(player.getBlockPos()).expand(BOX_EXPANSION_AMOUNT), (entity1 -> true));
 			targets.add(player);
 			for(LivingEntity ent : entities){
 				// may need this to prevent bugs EDIT i don't even remember what "this" referred to eheh
@@ -425,7 +433,7 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 			if(CheckUtils.checkSelfDanger(player, Config.HP_PERCENTAGE_SELF)){
 				targets.add(player);
 			}
-			targets.addAll(player.getWorld().getEntitiesByClass(PassiveEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amount), (entity1 -> true)));
+			targets.addAll(player.getWorld().getEntitiesByClass(PassiveEntity.class, new Box(player.getBlockPos()).expand(BOX_EXPANSION_AMOUNT), (entity1 -> true)));
 			player.sendMessage(Text.translatable("light.description.activation.defense.variant"), true);
 		}
 		if(debug){
@@ -463,7 +471,7 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 		List<LivingEntity> targets = new ArrayList<>();
 
 		if(component.getTargets().equals(TargetType.ALL)){
-			targets.addAll(player.getWorld().getEntitiesByClass(LivingEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amount), (entity1 -> true)));
+			targets.addAll(player.getWorld().getEntitiesByClass(LivingEntity.class, new Box(player.getBlockPos()).expand(BOX_EXPANSION_AMOUNT), (entity1 -> true)));
 			targets.remove(player);
 			player.sendMessage(Text.translatable("light.description.activation.blazing.all"), true);
 		}
@@ -485,7 +493,7 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 	public static void activateFrost(LightComponent component, PlayerEntity player){
 		List<LivingEntity> targets = new ArrayList<>();
 		if(component.getTargets().equals(TargetType.ALL)){
-			targets.addAll(player.getWorld().getEntitiesByClass(LivingEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amount), (entity1 -> true)));
+			targets.addAll(player.getWorld().getEntitiesByClass(LivingEntity.class, new Box(player.getBlockPos()).expand(BOX_EXPANSION_AMOUNT), (entity1 -> true)));
 			targets.remove(player);
 			player.sendMessage(Text.translatable("light.description.activation.frost.all"), true);
 		}
@@ -542,7 +550,7 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 			targets.add(player);
 			player.sendMessage(Text.translatable("light.description.activation.wind.self"), true);
 		}else if(component.getTargets().equals(TargetType.ALL)){
-			targets.addAll(player.getWorld().getEntitiesByClass(LivingEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amount), (entity1 -> true)));
+			targets.addAll(player.getWorld().getEntitiesByClass(LivingEntity.class, new Box(player.getBlockPos()).expand(BOX_EXPANSION_AMOUNT), (entity1 -> true)));
 			targets.remove(player);
 			player.sendMessage(Text.translatable("light.description.activation.wind.all"), true);
 		}
@@ -558,7 +566,7 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 	public static void activateAqua(LightComponent component, PlayerEntity player){
 		List<LivingEntity> targets = new ArrayList<>();
 		if(component.getTargets().equals(TargetType.ALL)){
-			targets.addAll(player.getWorld().getEntitiesByClass(LivingEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amount), (entity1 -> true)));
+			targets.addAll(player.getWorld().getEntitiesByClass(LivingEntity.class, new Box(player.getBlockPos()).expand(BOX_EXPANSION_AMOUNT), (entity1 -> true)));
 			targets.remove(player);
 			player.sendMessage(Text.translatable("light.description.activation.aqua.all"), true);
 		}
@@ -584,7 +592,7 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 	//=======================Frog Light=======================
 	public static void activateFrog(LightComponent component, PlayerEntity player){
 
-		List<LivingEntity> targets = new ArrayList<>(player.getWorld().getEntitiesByClass(LivingEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amount), (entity1 -> true)));
+		List<LivingEntity> targets = new ArrayList<>(player.getWorld().getEntitiesByClass(LivingEntity.class, new Box(player.getBlockPos()).expand(BOX_EXPANSION_AMOUNT), (entity1 -> true)));
 		player.sendMessage(Text.translatable("light.description.activation.frog"), true);
 
 		new FrogLight(targets, component.getMaxCooldown(), component.getPowerMultiplier(),
