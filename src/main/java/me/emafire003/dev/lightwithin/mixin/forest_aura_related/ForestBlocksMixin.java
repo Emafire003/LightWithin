@@ -1,4 +1,4 @@
-package me.emafire003.dev.lightwithin.mixin;
+package me.emafire003.dev.lightwithin.mixin.forest_aura_related;
 
 import me.emafire003.dev.lightwithin.lights.ForestAuraLight;
 import me.emafire003.dev.lightwithin.status_effects.LightEffects;

@@ -11,7 +11,6 @@ import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectCategory;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Text;
 import net.minecraft.util.math.Box;
 
 import java.util.ArrayList;
@@ -32,25 +31,17 @@ public class ForestAuraEffect extends StatusEffect {
         super(StatusEffectCategory.BENEFICIAL, 0x1BC131);
     }
 
-
     List<LivingEntity> visibleEntities = new ArrayList<>();
-
-    @Override
-    public boolean canApplyUpdateEffect(int duration, int amplifier) {
-        // In our case, we just make it return true so that it applies the status effect every tick.
-        return true;
-    }
 
     // This method is called when it applies the status effect. We implement custom functionality here.
     @Override
     public void applyUpdateEffect(LivingEntity entity, int amplifier) {
-        //entity.lookAt(EntityAnchorArgumentType.EntityAnchor.FEET, entity.getPos().add(0,0,0));
+
     }
 
     @Override
     public void onApplied(LivingEntity entity, AttributeContainer attributes, int amplifier) {
         super.onApplied(entity, attributes, amplifier);
-        entity.sendMessage(Text.literal("On effect applied"));
         if(!(entity instanceof PlayerEntity)){
             return;
         }
