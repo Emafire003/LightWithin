@@ -42,8 +42,8 @@ public enum InnerLightType {
     SLOW,*/
 
     //TODO next up aura lights
-    /*THUNDER_AURA,
     FOREST_AURA, //spawn vines to block people, poisons enemies and such
+    /*THUNDER_AURA,
     ENDER_AURA,*/
 
     /*PROJECTILE,

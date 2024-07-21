@@ -24,6 +24,9 @@ public class LightEffects {
                     new WaterSlideEffect());
     public static final StatusEffect WATER_CASCADE = registerStatusEffect("water_cascade",
             new WaterCascadeEffect());
+    public static final StatusEffect FOREST_AURA = registerStatusEffect("forest_aura",
+            new ForestAuraEffect());
+
     private static StatusEffect registerStatusEffect(String name, StatusEffect effect){
         return Registry.register(Registries.STATUS_EFFECT, new Identifier(LightWithin.MOD_ID, name),effect);
     }

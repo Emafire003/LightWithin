@@ -42,8 +42,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.Util;
 
 import java.net.URI;
-import java.util.Map;
-import java.util.NoSuchElementException;
+import java.util.*;
 
 import static me.emafire003.dev.lightwithin.LightWithin.LOGGER;
 
@@ -62,6 +61,11 @@ public class LightWithinClient implements ClientModInitializer {
 
     public static final EntityModelLayer MODEL_EARTH_GOLEM_LAYER = new EntityModelLayer(new Identifier(LightWithin.MOD_ID, "earth_golem"), "main");
 
+    //The first one is the player the second one is the entity
+    private static final List<UUID> entitiesGlowingForPlayer = new ArrayList<>();
+    //If the player has the forest aura effect they will see the things nearby.
+    // The entities get added to the list only when the player has said effect. So they must have the forest light and stuff.
+    // The only player that will see the entities glowing is the client player
 
     @Override
     public void onInitializeClient() {
@@ -70,6 +74,7 @@ public class LightWithinClient implements ClientModInitializer {
        registerPlayRenderEffectPacket();
        registerWindLightVelocityPacket();
        registerConfigOptionsSyncPacket();
+       registerGlowingEntitiesPacket();
 
        ClientCommandRegistrationCallback.EVENT.register(ClientLightCommands::registerCommands);
        event_handler.registerRenderEvent();
@@ -153,6 +158,23 @@ public class LightWithinClient implements ClientModInitializer {
     public static boolean isAutoActivationAllowed(){
         return allowAutoActivation;
     }
+
+    public static List<UUID> getEntitiesGlowingForPlayer() {
+        return entitiesGlowingForPlayer;
+    }
+
+    public static void addEntityGlowingForPlayer(Entity entity) {
+        entitiesGlowingForPlayer.add(entity.getUuid());
+    }
+
+    public static void removeEntityFromGlowingForPlayerList(Entity entity) {
+        entitiesGlowingForPlayer.remove(entity.getUuid());
+    }
+
+    public static void clearEntitiesGlowingForPlayer(){
+        entitiesGlowingForPlayer.clear();
+    }
+
 
     /**How much should a player have the opportunity to press the button in seconds
      * <p>
@@ -299,6 +321,32 @@ public class LightWithinClient implements ClientModInitializer {
                     assert client.player != null;
                     client.player.setVelocity(results);
                     //client.player.move(MovementType.SELF, client.player.getVelocity());
+
+                }catch (NoSuchElementException e){
+                    LOGGER.warn("No value in the packet, probably not a big problem");
+                }catch (Exception e){
+                    LOGGER.error("There was an error while getting the packet!");
+                    e.printStackTrace();
+                }
+            });
+        }));
+    }
+
+    private void registerGlowingEntitiesPacket(){
+        LOGGER.debug("Registering glowing entities packet...");
+        ClientPlayNetworking.registerGlobalReceiver(GlowEntitiesPacketS2C.ID, ((client, handler, buf, responseSender) -> {
+            List<UUID> results = GlowEntitiesPacketS2C.read(buf);
+
+            client.execute(() -> {
+                try{
+                    if(results == null){
+                        LOGGER.error("The glowing entities list received is empty!");
+                        return;
+                    }else if(results.size() == 1 && results.get(0).equals(new UUID(0,0))){
+                        entitiesGlowingForPlayer.clear();
+                        return;
+                    }
+                    entitiesGlowingForPlayer.addAll(results);
 
                 }catch (NoSuchElementException e){
                     LOGGER.warn("No value in the packet, probably not a big problem");

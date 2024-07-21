@@ -16,13 +16,12 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.Box;
 import org.jetbrains.annotations.Nullable;
 
-import static me.emafire003.dev.lightwithin.LightWithin.box_expansion_amount;
+import static me.emafire003.dev.lightwithin.LightWithin.BOX_EXPANSION_AMOUNT;
 
 public class TrackEarthGolemTargetGoal extends TrackTargetGoal {
     private final PathAwareEntity entity;
     @Nullable
     private LivingEntity target;
-    private final TargetPredicate targetPredicate = TargetPredicate.createAttackable().setBaseMaxDistance(64.0);
 
     public TrackEarthGolemTargetGoal (PathAwareEntity mob) {
         super(mob, false, true);
@@ -41,7 +40,7 @@ public class TrackEarthGolemTargetGoal extends TrackTargetGoal {
                 }
                 return true;
             } else {
-                List<LivingEntity> entities = summoner.getWorld().getEntitiesByClass(LivingEntity.class, new Box(summoner.getBlockPos()).expand(box_expansion_amount),
+                List<LivingEntity> entities = summoner.getWorld().getEntitiesByClass(LivingEntity.class, new Box(summoner.getBlockPos()).expand(BOX_EXPANSION_AMOUNT),
                         (ent -> {
                             if (CheckUtils.CheckAllies.checkEnemies(summoner, ent)) {
                                 if (ent instanceof PlayerEntity && (ent.isSpectator() || ((PlayerEntity) ent).isCreative())) {
