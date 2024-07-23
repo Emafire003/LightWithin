@@ -7,6 +7,7 @@
   "effect.lightwithin.sturdy_rock": "Sturdy Rock",
   "effect.lightwithin.water_slide": "Water Slide",
   "effect.lightwithin.water_cascade": "Water Cascade",
+  "effect.lightwithin.forest_aura": "Forest Aura",
   "item.lightwithin.luxintus_berry": "Luxintus Berry",
   "item.lightwithin.luxmutua_berry": "Luxmutua Berry",
   "item.lightwithin.luxcognita_berry": "Luxcognita Berry",
@@ -147,6 +148,11 @@
 
   "config.lightwithin.auto_light_activation": "Automatic Light Activation",
   "config.lightwithin.auto_light_activation.tooltip": "Enabling this will activate your light as soon as it's ready. WARNING: it may be disabled by the server!",
+
+  "config.lightwithin.forestaura_enemy_color": "ForestAura Enemy Color",
+  "config.lightwithin.forestaura_enemy_color.tooltip": "The color that will indicate enemies with the forest aura vision. You must install ColoredGlowLib to see the effect.",
+  "config.lightwithin.forestaura_ally_color": "ForestAura Ally Color",
+  "config.lightwithin.forestaura_ally_color.tooltip": "The color that will indicate allies with the forest aura vision. You must install ColoredGlowLib to see the effect.",
 
   "screen.luxcognita_dialogue.lightTypeButton": "About LightType",
   "screen.luxcognita_dialogue.lightTypeIngredientButton": "About LightType Ingredient",

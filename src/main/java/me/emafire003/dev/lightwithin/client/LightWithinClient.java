@@ -5,11 +5,13 @@ import me.emafire003.dev.lightwithin.LightWithin;
 import me.emafire003.dev.lightwithin.blocks.LightBlocks;
 import me.emafire003.dev.lightwithin.client.screens.LuxcognitaScreen;
 import me.emafire003.dev.lightwithin.commands.client.ClientLightCommands;
+import me.emafire003.dev.lightwithin.compat.coloredglowlib.CGLCompat;
 import me.emafire003.dev.lightwithin.compat.yacl.YaclScreenMaker;
 import me.emafire003.dev.lightwithin.config.ClientConfig;
 import me.emafire003.dev.lightwithin.entities.LightEntities;
 import me.emafire003.dev.lightwithin.entities.earth_golem.EarthGolemEntityModel;
 import me.emafire003.dev.lightwithin.entities.earth_golem.EarthGolemEntityRenderer;
+import me.emafire003.dev.lightwithin.lights.ForestAuraLight;
 import me.emafire003.dev.lightwithin.networking.*;
 import me.emafire003.dev.lightwithin.particles.LightParticle;
 import me.emafire003.dev.lightwithin.particles.LightTypeParticleV3;
@@ -35,6 +37,7 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.entity.model.EntityModelLayer;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.screen.ScreenTexts;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.text.Text;
@@ -346,7 +349,14 @@ public class LightWithinClient implements ClientModInitializer {
                         entitiesGlowingForPlayer.clear();
                         return;
                     }
+                    //TODO remove and or test on dedi server
+                    if(FabricLoader.getInstance().isModLoaded("coloredglowlib")){
+                        CGLCompat.getLib().setExclusiveColorFor(client.player, "00aaee", client.player);
+                    }
+
+
                     entitiesGlowingForPlayer.addAll(results);
+                    LOGGER.info("The list of entites glowing is now: " + entitiesGlowingForPlayer);
 
                 }catch (NoSuchElementException e){
                     LOGGER.warn("No value in the packet, probably not a big problem");
