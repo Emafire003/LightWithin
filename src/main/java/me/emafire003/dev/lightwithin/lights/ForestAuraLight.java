@@ -11,11 +11,8 @@ import me.emafire003.dev.lightwithin.status_effects.LightEffects;
 import me.emafire003.dev.lightwithin.util.CheckUtils;
 import me.emafire003.dev.lightwithin.util.SpawnUtils;
 import me.emafire003.dev.lightwithin.util.TargetType;
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.*;
 import net.minecraft.entity.effect.StatusEffectInstance;
@@ -24,7 +21,6 @@ import net.minecraft.entity.mob.DrownedEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.entity.projectile.TridentEntity;
-import net.minecraft.fluid.Fluids;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -35,15 +31,22 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
 
-import java.util.HashMap;
 import java.util.List;
 
 import static me.emafire003.dev.lightwithin.LightWithin.*;
 
 //TODO actually make it into forest light instead of the copy of aqua light
+
+/*Planned stuff:
+* Targets:
+*  - SELF or ALLIES, which applies the forest aura effect (traversing natural blocks)
+*  - ALL, which either makes all terrain difficult to traverse with spikes or similar
+*       OR puffs of plant like stuff that makes player drunk an stuff like that.
+* Maybe it could have like different effects dependig on the color of the puff and the power level.
+*
+*
+* */
 public class ForestAuraLight extends InnerLight {
 
     public static final Item INGREDIENT = Items.OAK_SAPLING;
@@ -52,6 +55,8 @@ public class ForestAuraLight extends InnerLight {
     public static final TagKey<Block> FOREST_AURA_BLOCKS = TagKey.of(RegistryKeys.BLOCK, new Identifier(MOD_ID, "forest_aura_blocks"));
 
     public static final String COLOR = "1BC131";
+    public static final String ENEMY_COLOR = "560d03";
+    public static final String ALLY_COLOR = "2ee878";
 
     public ForestAuraLight(List<LivingEntity> targets, double cooldown_time, double power_multiplier, int duration, String color, PlayerEntity caster, boolean rainbow_col) {
         super(targets, cooldown_time, power_multiplier, duration, color, caster, rainbow_col);
@@ -68,9 +73,11 @@ public class ForestAuraLight extends InnerLight {
         super(targets, cooldown_time, power_multiplier, duration, caster);
         type = InnerLightType.FOREST_AURA;
         //color = "#35f4d1";
+        //TODO
         color = "forest_aura";
     }
 
+    //TODO make new stuff for the forest light
     private void checkSafety(){
         if(this.power_multiplier > BalanceConfig.AQUA_MAX_POWER){
             power_multiplier = BalanceConfig.AQUA_MAX_POWER;
@@ -102,10 +109,19 @@ public class ForestAuraLight extends InnerLight {
         }
 
 
+        //TODO sounds
         caster.getWorld().playSound(caster, caster.getBlockPos(), LightSounds.AQUA_LIGHT, SoundCategory.PLAYERS, 1, 1);
         LightComponent component = LIGHT_COMPONENT.get(caster);
 
         //ALL section (drowneds)
+        if(component.getTargets().equals(TargetType.SELF)){
+            //The -1 is because status effect levels start from 0
+            caster.addStatusEffect(new StatusEffectInstance(LightEffects.FOREST_AURA, this.duration, (int) this.power_multiplier-1));
+        }
+
+
+
+
         if(component.getTargets().equals(TargetType.ALL)){
             LightParticlesUtil.spawnLightTypeParticle(LightParticles.AQUALIGHT_PARTICLE, (ServerWorld) caster.getWorld(), caster.getPos());
 
@@ -181,7 +197,6 @@ public class ForestAuraLight extends InnerLight {
 
                 if(!caster.getWorld().isClient && CheckUtils.checkGriefable((ServerPlayerEntity) caster)) {
                     if(target instanceof PlayerEntity){
-                        applyWaterCascade(target, (int) (this.power_multiplier*3));
                     }else{
                         target.addStatusEffect(new StatusEffectInstance(LightEffects.WATER_CASCADE, (int) (this.power_multiplier*3), 0, false, false));
                     }
@@ -204,54 +219,6 @@ public class ForestAuraLight extends InnerLight {
             }
         }
 
-    }
-
-    HashMap<BlockPos, BlockState> block_map = new HashMap<>();
-
-    BlockPos start_pos;
-    int tickCounter = 0;
-    int blockCounter = 0;
-
-    public void applyWaterCascade(LivingEntity entity, int blocks){
-        blockCounter = blocks;
-        ServerTickEvents.END_SERVER_TICK.register((server -> {
-            if(tickCounter > blocks || tickCounter == -1){
-                if(tickCounter == -1){
-                    return;
-                }
-                tickCounter = -1;
-                block_map.forEach(((blockPos, blockState) -> {
-                    if(blockPos.equals(start_pos)){
-                        entity.getWorld().setBlockState(start_pos, Blocks.SPONGE.getDefaultState());
-                    }
-                    entity.getWorld().setBlockState(blockPos, blockState);
-                }));
-                block_map.clear();
-                return;
-            }
-            tickCounter++;
-            //Skips a few ticks so it goes a little slower and is cooler. Hopefully
-            if(tickCounter%4 == 0){
-                blockCounter++;
-                return;
-            }
-            if(Config.STRUCTURE_GRIEFING){
-                BlockPos pos = entity.getBlockPos();
-                if(block_map.isEmpty()){
-                    start_pos = pos;
-                    block_map.put(pos, entity.getWorld().getBlockState(pos));
-                }else{
-                    if(block_map.containsKey(pos.up())){
-                        return;
-                    }
-                    block_map.put(pos.up(), entity.getWorld().getBlockState(pos.up()));
-                }
-
-                entity.getWorld().setBlockState(pos.up(), Fluids.WATER.getFlowing(7, true).getBlockState());
-                Vec3d posc = pos.toCenterPos();
-                entity.teleport(posc.getX(), posc.getY()+1, posc.getZ());
-            }
-        }));
     }
 
 }

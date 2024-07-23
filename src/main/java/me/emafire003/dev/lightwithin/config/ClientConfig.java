@@ -17,7 +17,7 @@ public class ClientConfig {
     public static SimpleConfig CONFIG;
     private static ConfigProvider configs;
 
-    private static final int ver = 1;
+    private static final int ver = 2;
     public static int VERSION;
 
     public static int LIGHT_READY_ICON_X = 10;
@@ -42,6 +42,10 @@ public class ClientConfig {
     public static final int SHOW_RUNES_FOR_default = 3;
     public static boolean AUTO_LIGHT_ACTIVATION = false;
     public static boolean AUTO_LIGHT_ACTIVATION_default = false;
+    public static String FORESTAURA_ENEMY_COLOR = "560d03";
+    public static String FORESTAURA_ENEMY_COLOR_default = "560d03";
+    public static String FORESTAURA_ALLY_COLOR = "2ee878";
+    public static String FORESTAURA_ALLY_COLOR_default = "2ee878";
 
     public static final int light_icon_default_position = 10;
     public static final double light_icon_default_scale = 1.0;
@@ -85,6 +89,8 @@ public class ClientConfig {
             CONFIG.set("auto_light_activation", AUTO_LIGHT_ACTIVATION);
             CONFIG.set("ingredient_target_scale", INGREDIENT_TARGET_SCALE);
             CONFIG.set("show_ingredient_target_for", SHOW_INGREDIENT_TARGET_FOR);
+            CONFIG.set("forestaura_enemy_color", FORESTAURA_ENEMY_COLOR);
+            CONFIG.set("forestaura_ally_color", FORESTAURA_ALLY_COLOR);
             CONFIG.update();
             RendererEventHandler.updateFromConfig();
         } catch (IOException e) {
@@ -168,6 +174,9 @@ public class ClientConfig {
 
         configs.addKeyValuePair(new Pair<>("auto_light_activation", AUTO_LIGHT_ACTIVATION_default), "Setting this value to true will activate your light as soon as it's ready. WARNING: it may be disabled by the server!");
 
+        configs.addKeyValuePair(new Pair<>("forestaura_enemy_color", FORESTAURA_ENEMY_COLOR), "The color that will indicate enemies with the forest aura vision. You must install ColoredGlowLib to see the effect.");
+        configs.addKeyValuePair(new Pair<>("forestaura_ally_color", FORESTAURA_ALLY_COLOR), "The color that will indicate allies with the forest aura vision. You must install ColoredGlowLib to see the effect.");
+
     }
 
     public static void reloadConfig(){
@@ -195,6 +204,8 @@ public class ClientConfig {
         INGREDIENT_TARGET_SCALE = CONFIG.getOrDefault("ingredient_target_scale", ingredient_target_scale_default);
         SHOW_INGREDIENT_TARGET_FOR = CONFIG.getOrDefault("show_ingredient_target_for", show_ingredient_target_for_default);
         AUTO_LIGHT_ACTIVATION = CONFIG.getOrDefault("auto_light_activation", AUTO_LIGHT_ACTIVATION_default);
+        FORESTAURA_ENEMY_COLOR = CONFIG.getOrDefault("forestaura_enemy_color", FORESTAURA_ENEMY_COLOR_default);
+        FORESTAURA_ALLY_COLOR = CONFIG.getOrDefault("forestaura_ally_color", FORESTAURA_ALLY_COLOR_default);
     }
 }
 
