@@ -1,18 +1,19 @@
 package me.emafire003.dev.lightwithin.status_effects;
 
+import com.mojang.datafixers.util.Pair;
 import me.emafire003.dev.lightwithin.compat.coloredglowlib.CGLCompat;
-import me.emafire003.dev.lightwithin.lights.ForestAuraLight;
 import me.emafire003.dev.lightwithin.networking.GlowEntitiesPacketS2C;
 import me.emafire003.dev.lightwithin.util.CheckUtils;
+import me.emafire003.dev.lightwithin.util.ForestAuraRelation;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.AttributeContainer;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectCategory;
+import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Text;
 import net.minecraft.util.math.Box;
 
 import java.util.ArrayList;
@@ -65,37 +66,50 @@ public class ForestAuraEffect extends StatusEffect {
             return false;
         }));
 
-        List<UUID> uuids = new ArrayList<>();
+        //0 mean neutral, 1 means enemy, 2 ally
+        List<Pair<UUID, ForestAuraRelation>> uuids_related = new ArrayList<>();
+
         visibleEntities.forEach(entity1 -> {
-            uuids.add(entity1.getUuid());
 
             if(FabricLoader.getInstance().isModLoaded("coloredglowlib")){
                 if(amplifier >= 6){
-                    //TODO this doesn't work and also doesn't work with hostile mobs
-                    if(CheckUtils.CheckAllies.checkEnemies(entity, entity1)){
-                        //TODO move to the client side if possible or use packets
-                        //TODO i just realized the client config thing is useless because here we are on the server. So i will need to send packets one way or the other.
-                        CGLCompat.getLib().setExclusiveColorFor(entity1, ForestAuraLight.ENEMY_COLOR, (PlayerEntity) entity);
-                    }else{
-                        ((PlayerEntity) entity).sendMessage(Text.literal("entity: " + entity1 + "is no enemy"));
+                    boolean colored = false;
+                    if(CheckUtils.CheckAllies.checkEnemies(entity, entity1) || entity1 instanceof HostileEntity){
+                        uuids_related.add(new Pair<>(entity1.getUuid(), ForestAuraRelation.ENEMY));
+                        //CLIENTSIDE: CGLCompat.getLib().setExclusiveColorFor(entity1, ForestAuraLight.ENEMY_COLOR, (PlayerEntity) entity);
+                        colored = true;
                     }
                     if(amplifier >= 8){
                         if(CheckUtils.CheckAllies.checkAlly(entity, entity1)){
-                            //TODO i just realized the client config thing is useless because here we are on the server. So i will need to send packets one way or the other.
-                            CGLCompat.getLib().setExclusiveColorFor(entity1, ForestAuraLight.ALLY_COLOR, (PlayerEntity) entity);
+                            if(!colored){
+                                uuids_related.add(new Pair<>(entity1.getUuid(), ForestAuraRelation.ALLY));
+                            }else{
+                                uuids_related.remove(new Pair<>(entity1.getUuid(), ForestAuraRelation.ALLY));
+                                uuids_related.add(new Pair<>(entity1.getUuid(), ForestAuraRelation.ALLY));
+                            }
+                            colored = true;
                         }
                     }
-                }else{
-                    CGLCompat.getLib().setExclusiveColorFor(entity1, ForestAuraLight.COLOR, (PlayerEntity) entity);
+                    if(!colored){
+                        uuids_related.add(new Pair<>(entity1.getUuid(), ForestAuraRelation.NEUTRAL));
+                       // CGLCompat.getLib().setExclusiveColorFor(entity1, ForestAuraLight.COLOR, (PlayerEntity) entity);
+                    }
+                }
+                else{
+                    uuids_related.add(new Pair<>(entity1.getUuid(), ForestAuraRelation.NEUTRAL));
+                    //CGLCompat.getLib().setExclusiveColorFor(entity1, ForestAuraLight.COLOR, (PlayerEntity) entity);
                 }
 
+            }else{
+                uuids_related.add(new Pair<>(entity1.getUuid(), ForestAuraRelation.NEUTRAL));
+                //uuids_related.add(new Pair<>(entity1.getUuid(), 0));
             }
 
 
         });
         if(!entity.getWorld().isClient()){
             //TODO remove
-            GlowEntitiesPacketS2C glowingPacket = new GlowEntitiesPacketS2C(uuids, false);
+            GlowEntitiesPacketS2C glowingPacket = new GlowEntitiesPacketS2C(uuids_related, false);
             ServerPlayNetworking.send((ServerPlayerEntity) entity, GlowEntitiesPacketS2C.ID, glowingPacket);
         }
 
@@ -104,6 +118,9 @@ public class ForestAuraEffect extends StatusEffect {
     @Override
     public void onRemoved(LivingEntity entity, AttributeContainer attributes, int amplifier){
         super.onRemoved(entity, attributes, amplifier);
+        if(!(entity instanceof PlayerEntity)){
+            return;
+        }
         if(FabricLoader.getInstance().isModLoaded("coloredglowlib")){
             visibleEntities.forEach(entity1 -> CGLCompat.getLib().clearExclusiveColorFor(entity1, (PlayerEntity) entity, true));
         }
@@ -112,6 +129,5 @@ public class ForestAuraEffect extends StatusEffect {
             ServerPlayNetworking.send((ServerPlayerEntity) entity, GlowEntitiesPacketS2C.ID, glowingPacket);
         }
     }
-
 
 }

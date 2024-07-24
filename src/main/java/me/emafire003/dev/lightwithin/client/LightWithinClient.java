@@ -18,6 +18,7 @@ import me.emafire003.dev.lightwithin.particles.LightTypeParticleV3;
 import me.emafire003.dev.lightwithin.particles.LightParticles;
 import me.emafire003.dev.lightwithin.sounds.LightSounds;
 import me.emafire003.dev.lightwithin.util.ConfigPacketConstants;
+import me.emafire003.dev.lightwithin.util.ForestAuraRelation;
 import me.emafire003.dev.lightwithin.util.IRenderEffectsEntity;
 import me.emafire003.dev.lightwithin.util.RenderEffect;
 import net.fabricmc.api.ClientModInitializer;
@@ -37,7 +38,6 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.entity.model.EntityModelLayer;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.screen.ScreenTexts;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.text.Text;
@@ -164,18 +164,6 @@ public class LightWithinClient implements ClientModInitializer {
 
     public static List<UUID> getEntitiesGlowingForPlayer() {
         return entitiesGlowingForPlayer;
-    }
-
-    public static void addEntityGlowingForPlayer(Entity entity) {
-        entitiesGlowingForPlayer.add(entity.getUuid());
-    }
-
-    public static void removeEntityFromGlowingForPlayerList(Entity entity) {
-        entitiesGlowingForPlayer.remove(entity.getUuid());
-    }
-
-    public static void clearEntitiesGlowingForPlayer(){
-        entitiesGlowingForPlayer.clear();
     }
 
 
@@ -338,25 +326,61 @@ public class LightWithinClient implements ClientModInitializer {
     private void registerGlowingEntitiesPacket(){
         LOGGER.debug("Registering glowing entities packet...");
         ClientPlayNetworking.registerGlobalReceiver(GlowEntitiesPacketS2C.ID, ((client, handler, buf, responseSender) -> {
-            List<UUID> results = GlowEntitiesPacketS2C.read(buf);
+            List<Pair<UUID, ForestAuraRelation>> results = GlowEntitiesPacketS2C.read(buf);
 
             client.execute(() -> {
                 try{
                     if(results == null){
                         LOGGER.error("The glowing entities list received is empty!");
                         return;
-                    }else if(results.size() == 1 && results.get(0).equals(new UUID(0,0))){
+                    }if(client.player == null){
+                        LOGGER.error("The client player is null!");
+                        return;
+                    }else if(results.size() == 1 && results.get(0).getFirst().equals(new UUID(0,0))){
+                        //Clears CGL exclusive colors on client side.
+                        if(FabricLoader.getInstance().isModLoaded("coloredglowlib")){
+                            entitiesGlowingForPlayer.forEach(uuid -> {
+                                Entity entity = null;
+                                for(Entity entity1 : client.player.clientWorld.getEntities()){
+                                    if(entity1.getUuid().equals(uuid)){
+                                        entity = entity1;
+                                    }
+                                }
+                                if(entity != null){
+                                    CGLCompat.getLib().clearExclusiveColorFor(entity, client.player, false);
+                                }
+                            });
+                        }
+
                         entitiesGlowingForPlayer.clear();
                         return;
                     }
-                    //TODO remove and or test on dedi server
-                    if(FabricLoader.getInstance().isModLoaded("coloredglowlib")){
-                        CGLCompat.getLib().setExclusiveColorFor(client.player, "00aaee", client.player);
-                    }
+                    //If nothing else, it means it's ok to make them glow:
 
+                    results.forEach(uuidRelationPair -> {
+                        entitiesGlowingForPlayer.add(uuidRelationPair.getFirst());
+                        if(FabricLoader.getInstance().isModLoaded("coloredglowlib")){
 
-                    entitiesGlowingForPlayer.addAll(results);
-                    LOGGER.info("The list of entites glowing is now: " + entitiesGlowingForPlayer);
+                            Entity entity = null;
+                            for(Entity entity1 : client.player.clientWorld.getEntities()){
+                                if(entity1.getUuid().equals(uuidRelationPair.getFirst())){
+                                    entity = entity1;
+                                }
+                            }
+                            if(entity == null){
+                                LOGGER.error("Error! Can't find entity with uuid: {}", uuidRelationPair.getFirst());
+                                return;
+                            }
+
+                            if(uuidRelationPair.getSecond().equals(ForestAuraRelation.ALLY)){
+                                CGLCompat.getLib().setExclusiveColorFor(entity, ClientConfig.FORESTAURA_ALLY_COLOR, client.player);
+                            }else if(uuidRelationPair.getSecond().equals(ForestAuraRelation.ENEMY)){
+                                CGLCompat.getLib().setExclusiveColorFor(entity, ClientConfig.FORESTAURA_ENEMY_COLOR, client.player);
+                            }else{
+                                CGLCompat.getLib().setExclusiveColorFor(entity, ForestAuraLight.COLOR, client.player);
+                            }
+                        }
+                    } );
 
                 }catch (NoSuchElementException e){
                     LOGGER.warn("No value in the packet, probably not a big problem");
