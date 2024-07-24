@@ -349,11 +349,11 @@ public class YaclScreenMaker {
                         .name(Text.translatable("config.lightwithin.forestaura_enemy_color"))
                         .description(OptionDescription.of(Text.translatable("config.lightwithin.forestaura_enemy_color.tooltip")))
                         .binding(
-                                Color.decode(ClientConfig.FORESTAURA_ENEMY_COLOR_default), // the default value
-                                () -> Color.decode(ClientConfig.FORESTAURA_ENEMY_COLOR), // a field to get the current value from
+                                Color.decode("#"+ClientConfig.FORESTAURA_ENEMY_COLOR_default), // the default value
+                                () -> Color.decode("#"+ClientConfig.FORESTAURA_ENEMY_COLOR), // a field to get the current value from
                                 newVal -> {
                                     //Alternatively: String.format("%06x", 0xFFFFFF & newVal.getRGB())
-                                    ClientConfig.FORESTAURA_ENEMY_COLOR = Integer.toHexString(newVal.getRGB()).substring(2);;
+                                    ClientConfig.FORESTAURA_ENEMY_COLOR = Integer.toHexString(newVal.getRGB()).substring(2);
                                     ClientConfig.saveToFile();
                                 }
                         )
@@ -366,11 +366,11 @@ public class YaclScreenMaker {
                         .name(Text.translatable("config.lightwithin.forestaura_ally_color"))
                         .description(OptionDescription.of(Text.translatable("config.lightwithin.forestaura_ally_color.tooltip")))
                         .binding(
-                                Color.decode(ClientConfig.FORESTAURA_ALLY_COLOR_default), // the default value
-                                () -> Color.decode(ClientConfig.FORESTAURA_ALLY_COLOR), // a field to get the current value from
+                                Color.decode("#"+ClientConfig.FORESTAURA_ALLY_COLOR_default), // the default value
+                                () -> Color.decode("#"+ClientConfig.FORESTAURA_ALLY_COLOR), // a field to get the current value from
                                 newVal -> {
                                     //Alternatively: String.format("%06x", 0xFFFFFF & newVal.getRGB())
-                                    ClientConfig.FORESTAURA_ALLY_COLOR = Integer.toHexString(newVal.getRGB()).substring(2);;
+                                    ClientConfig.FORESTAURA_ALLY_COLOR = Integer.toHexString(newVal.getRGB()).substring(2);
                                     ClientConfig.saveToFile();
                                 }
                         )
