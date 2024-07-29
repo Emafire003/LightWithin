@@ -92,6 +92,7 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 			entry(InnerLightType.EARTHEN, Arrays.asList(TargetType.SELF, TargetType.ENEMIES, TargetType.ALLIES, TargetType.VARIANT)),
 			entry(InnerLightType.WIND, Arrays.asList(TargetType.SELF, TargetType.ALL, TargetType.ALLIES)),
 			entry(InnerLightType.AQUA, Arrays.asList(TargetType.SELF, TargetType.ENEMIES, TargetType.ALLIES,  TargetType.ALL)),
+			entry(InnerLightType.FOREST_AURA, Arrays.asList(TargetType.ENEMIES, TargetType.ENEMIES, TargetType.SELF)),
 			entry(InnerLightType.FROG, List.of(TargetType.ALL))
 	);
 
@@ -302,7 +303,10 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 			activateWind(component, player);
 		}else if(type.equals(InnerLightType.AQUA)){
 			activateAqua(component, player);
-		}else if(type.equals(InnerLightType.FROG)){
+		} else if(type.equals(InnerLightType.FOREST_AURA)){
+			activateForestAura(component, player);
+		}
+		else if(type.equals(InnerLightType.FROG)){
 			activateFrog(component, player);
 		}
 		//for now defaults here
@@ -586,6 +590,26 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 			player.sendMessage(Text.literal("Ok light triggered"), false);
 		}
 		new AquaLight(targets, component.getMaxCooldown(), component.getPowerMultiplier(),
+				component.getDuration(), player).execute();
+	}
+
+	//=======================Aura Light=======================
+	public static void activateForestAura(LightComponent component, PlayerEntity player){
+		List<LivingEntity> targets = new ArrayList<>();
+
+		if(component.getTargets().equals(TargetType.ENEMIES)){
+			targets.addAll(getEnemies(player));
+			player.sendMessage(Text.translatable("light.description.activation.forest_aura.enemies"), true);
+		}else if(component.getTargets().equals(TargetType.SELF)){
+			targets.add(player);
+			player.sendMessage(Text.translatable("light.description.activation.forest_aura.self"), true);
+		}
+
+		if(debug){
+			player.sendMessage(Text.literal("Ok light triggered"), false);
+		}
+
+		new ForestAuraLight(targets, component.getMaxCooldown(), component.getPowerMultiplier(),
 				component.getDuration(), player).execute();
 	}
 
