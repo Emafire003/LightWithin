@@ -88,6 +88,9 @@ public class LightTriggeringAndEvents {
         if(component.getType().equals(InnerLightType.WIND)){
             checkWind(player, component, attacker, target);
         }
+        if(component.getType().equals(InnerLightType.FOREST_AURA)){
+            player.sendMessage(Text.literal("Implement check for forest aura!"));
+        }
         if(component.getType().equals(InnerLightType.FROG)){
             checkFrog(player, component, attacker, target);
         }

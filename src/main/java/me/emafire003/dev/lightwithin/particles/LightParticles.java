@@ -1,11 +1,17 @@
 package me.emafire003.dev.lightwithin.particles;
 
+import com.mojang.serialization.Codec;
 import me.emafire003.dev.lightwithin.LightWithin;
+import me.emafire003.dev.lightwithin.particles.coloredpuff.ColoredPuffParticleEffect;
 import net.fabricmc.fabric.api.particle.v1.FabricParticleTypes;
 import net.minecraft.particle.DefaultParticleType;
+import net.minecraft.particle.ParticleEffect;
+import net.minecraft.particle.ParticleType;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
+
+import java.util.function.Function;
 
 public class LightParticles {
     public static final DefaultParticleType HEALLIGHT_PARTICLE = FabricParticleTypes.simple();
@@ -20,7 +26,7 @@ public class LightParticles {
 
     public static final DefaultParticleType LIGHT_PARTICLE = FabricParticleTypes.simple();
     public static final DefaultParticleType SHINE_PARTICLE = FabricParticleTypes.simple();
-
+    public static final ParticleType<ColoredPuffParticleEffect> COLORED_PUFF_PARTICLE = FabricParticleTypes.complex(ColoredPuffParticleEffect.FACTORY);
 
     public static void registerParticles() {
         Registry.register(Registries.PARTICLE_TYPE, new Identifier(LightWithin.MOD_ID, "heal_light_particle"),
@@ -47,5 +53,7 @@ public class LightParticles {
 
         Registry.register(Registries.PARTICLE_TYPE, new Identifier(LightWithin.MOD_ID, "shine_particle"),
                 SHINE_PARTICLE);
+        Registry.register(Registries.PARTICLE_TYPE, new Identifier(LightWithin.MOD_ID, "colored_puff_particle"),
+                COLORED_PUFF_PARTICLE);
     }
 }

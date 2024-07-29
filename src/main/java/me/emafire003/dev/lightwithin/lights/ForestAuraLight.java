@@ -4,34 +4,28 @@ import me.emafire003.dev.lightwithin.compat.coloredglowlib.CGLCompat;
 import me.emafire003.dev.lightwithin.component.LightComponent;
 import me.emafire003.dev.lightwithin.config.BalanceConfig;
 import me.emafire003.dev.lightwithin.config.Config;
-import me.emafire003.dev.lightwithin.particles.LightParticles;
+import me.emafire003.dev.lightwithin.lights.forestaura_puffs.ForestPuffColor;
 import me.emafire003.dev.lightwithin.particles.LightParticlesUtil;
 import me.emafire003.dev.lightwithin.sounds.LightSounds;
 import me.emafire003.dev.lightwithin.status_effects.LightEffects;
-import me.emafire003.dev.lightwithin.util.CheckUtils;
-import me.emafire003.dev.lightwithin.util.SpawnUtils;
 import me.emafire003.dev.lightwithin.util.TargetType;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.Block;
-import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.*;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.entity.mob.DrownedEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.projectile.PersistentProjectileEntity;
-import net.minecraft.entity.projectile.TridentEntity;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.tag.TagKey;
-import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
-
+import net.minecraft.util.math.Box;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 import java.util.List;
 
 import static me.emafire003.dev.lightwithin.LightWithin.*;
@@ -118,107 +112,146 @@ public class ForestAuraLight extends InnerLight {
             //The -1 is because status effect levels start from 0
             caster.addStatusEffect(new StatusEffectInstance(LightEffects.FOREST_AURA, this.duration, (int) this.power_multiplier-1));
         }
+        //TODO this should probably be instead ALL except the other forest aura wielders
+        else if(component.getTargets().equals(TargetType.ENEMIES)){
+            //I think it should be 1-(2 +1 per level) puffs
 
-
-
-
-        if(component.getTargets().equals(TargetType.ALL)){
-            LightParticlesUtil.spawnLightTypeParticle(LightParticles.AQUALIGHT_PARTICLE, (ServerWorld) caster.getWorld(), caster.getPos());
-
-            for(int i = 0; i<power_multiplier; i++){
-                DrownedEntity drowned = new DrownedEntity(EntityType.DROWNED, caster.getWorld());
-
-                ItemStack iron_chest = new ItemStack(Items.CHAINMAIL_CHESTPLATE);
-                iron_chest.addEnchantment(Enchantments.PROTECTION, caster.getRandom().nextBetween(1, 3));
-
-                ItemStack turtle_helmet = new ItemStack(Items.TURTLE_HELMET);
-                turtle_helmet.addEnchantment(Enchantments.BINDING_CURSE, 1);
-                turtle_helmet.addEnchantment(Enchantments.PROJECTILE_PROTECTION, 3);
-
-                ItemStack trident = new ItemStack(Items.TRIDENT);
-                if(this.power_multiplier > 5){
-                    trident.addEnchantment(Enchantments.CHANNELING, 1);
-                    turtle_helmet.addEnchantment(Enchantments.THORNS, caster.getRandom().nextBetween(1, 2));
-                    iron_chest.addEnchantment(Enchantments.THORNS, caster.getRandom().nextBetween(1, 2));
-                }
-                trident.addEnchantment(Enchantments.IMPALING, caster.getRandom().nextBetween(1,3));
-
-                drowned.equipStack(EquipmentSlot.CHEST, iron_chest);
-                drowned.equipStack(EquipmentSlot.HEAD, turtle_helmet);
-                if(caster.getRandom().nextBetween(1, 100) > 12){
-                    drowned.equipStack(EquipmentSlot.OFFHAND, trident);
-                }else{
-                    drowned.equipStack(EquipmentSlot.MAINHAND, trident);
-                }
-
-                if(this.power_multiplier > 5 && caster.getRandom().nextBetween(1, 100) == 1){
-                    drowned.equipStack(EquipmentSlot.OFFHAND, trident);
-                    drowned.equipStack(EquipmentSlot.MAINHAND, trident);
-                }
-                SUMMONED_BY_COMPONENT.get(drowned).setSummonerUUID(caster.getUuid());
-                SUMMONED_BY_COMPONENT.get(drowned).setIsSummoned(true);
-
-                boolean b = SpawnUtils.spawnAround(caster, 1, 5, drowned, (ServerWorld) caster.getWorld(), SpawnRestriction.Location.NO_RESTRICTIONS);
-                LightParticlesUtil.spawnLightTypeParticle(LightParticles.AQUALIGHT_PARTICLE, (ServerWorld) drowned.getWorld(), drowned.getPos());
+            if(caster.getWorld().isClient()){
+                return;
             }
 
-        }
-
-        //Allies/self section (boosts & water slide)
-        if(component.getTargets().equals(TargetType.ALLIES) || component.getTargets().equals(TargetType.SELF)){
-            for(LivingEntity target : this.targets){
-                //target.playSound(LightSounds.AQUA_LIGHT, 0.9f, 1);
-                if(this.power_multiplier < 4){
-                    target.addStatusEffect(new StatusEffectInstance(LightEffects.WATER_SLIDE, this.duration*20, 2, false, false));
-                }else{
-                    target.addStatusEffect(new StatusEffectInstance(LightEffects.WATER_SLIDE, this.duration*20, 3, false, false));
-                }
-                if(target.equals(caster) && component.getTargets().equals(TargetType.ALLIES)){
-                    target.addStatusEffect(new StatusEffectInstance(StatusEffects.DOLPHINS_GRACE, this.duration*20, (int) (this.power_multiplier/Config.DIV_SELF), false, false));
-                    target.addStatusEffect(new StatusEffectInstance(StatusEffects.CONDUIT_POWER, this.duration*20, (int) (this.power_multiplier/Config.DIV_SELF), false, false));
-                }else{
-                    target.addStatusEffect(new StatusEffectInstance(StatusEffects.DOLPHINS_GRACE, this.duration*20, (int) (this.power_multiplier), false, false));
-                    target.addStatusEffect(new StatusEffectInstance(StatusEffects.CONDUIT_POWER, this.duration*20, (int) (this.power_multiplier), false, false));
-                }
-
-                LightParticlesUtil.spawnLightTypeParticle(LightParticles.AQUALIGHT_PARTICLE, (ServerWorld) target.getWorld(), target.getPos());
+            int bonus = 0;
+            if(power_multiplier > 5){
+                bonus = Math.max(1, (int) ((power_multiplier-5)/2));
             }
-            //Depending on the level it will spawn a small moat and pillar around the user, a big pillar only and a big pillar with a big moat.
-            //And will also give Solid Rock effect to self, making the player more resistant to knokback
-        }
+            int puffs = caster.getRandom().nextBetween(1+bonus, (int) (2+power_multiplier+bonus));
+            int total_duration = duration;
 
-        //enemies section (water cage & tridents)
-        else if(component.getTargets().equals(TargetType.ENEMIES)) {
-            LightParticlesUtil.spawnLightTypeParticle(LightParticles.AQUALIGHT_PARTICLE, (ServerWorld) caster.getWorld(), caster.getPos());
-
-            for(LivingEntity target : this.targets){
-                //TODO should I play the sound for every enemy? Nah
-                //target.playSound(LightSounds.AQUA_LIGHT, 0.9f, 1);
-
-                if(!caster.getWorld().isClient && CheckUtils.checkGriefable((ServerPlayerEntity) caster)) {
-                    if(target instanceof PlayerEntity){
+            for(int i = 0; i < puffs; i++){
+                //-(puffs-i)
+                //TODO test out. Cool. doesn't work
+                int puff_duration = caster.getRandom().nextBetween(5, 5+total_duration);
+                total_duration = total_duration-(puff_duration-5);
+                if(power_multiplier > 5){
+                    //TODO if i ever modify the number of puff colors, edit here if needed!
+                    int puff = caster.getRandom().nextBetween(0, COLOR_PUFFS.size()-1);
+                    Vec3d pos = getRandomPos(caster, caster.getPos().add(0,2,0), 1.5);
+                    if(pos == null){
+                        //TODO remove?
+                        caster.sendMessage(Text.literal("Position null!"));
                     }else{
-                        target.addStatusEffect(new StatusEffectInstance(LightEffects.WATER_CASCADE, (int) (this.power_multiplier*3), 0, false, false));
+                        //TODO play puff sound
+                        //TODO maybe add a slight delay between each of them?
+                        createForestPuff(caster, pos, (ServerWorld) caster.getWorld(), COLOR_PUFFS.get(puff), puff_duration, (int) power_multiplier);
                     }
-                    if(this.power_multiplier >= 5){
-                        ItemStack trident = new ItemStack(Items.TRIDENT);
-                        trident.addEnchantment(Enchantments.CHANNELING, 1);
-                        TridentEntity tridentEntity = new TridentEntity(caster.getWorld(), caster, trident);
-                        tridentEntity.setPos(target.getX(), target.getY()+10, target.getZ());
-                        tridentEntity.addVelocity(0, -1, 0);
-                        if(this.power_multiplier >= 8){
-                            LightningEntity lightning = new LightningEntity(EntityType.LIGHTNING_BOLT, caster.getWorld());
-                            lightning.setPos(target.getX(), target.getY(), target.getZ());
-                            target.getWorld().spawnEntity(lightning);
-                        }
-                        tridentEntity.pickupType = PersistentProjectileEntity.PickupPermission.DISALLOWED;
-                        target.playSound(SoundEvents.ITEM_TRIDENT_RETURN, 1, 0.7f);
-                        target.getWorld().spawnEntity(tridentEntity);
-                    }
+
                 }
             }
+
+
+            //The puffs mechanism.
+
+            /* The duration might be equal to twice the duration of the caster, divided by the number of puffs
+    This for the total duration of all the generated puffs.
+    For each puff it's a random number between 1 second and the total duration-the number of puffs yet to create
+     *
+    * */
+
         }
 
+    }
+
+    /*First chunck of Puffs:
+     * Level 0-5:
+     * - GREEN
+     * - PURPLE
+     * - YELLOW
+     * - PINK
+     * Level 5-10
+     * - BLUE
+     * - RED
+     * - BLACK
+     * - ORANGE
+     * */
+    /**The other of the list matters! The first four elements can be spawned with a power level lower than 6,
+     * the other ones require a power level of at least 6
+     * */
+    public static List<Integer> COLOR_PUFFS = List.of(
+            //Up to level 5
+            ForestPuffColor.GREEN, ForestPuffColor.YELLOW, ForestPuffColor.PURPLE, ForestPuffColor.PINK,
+            //Available after power level 5
+            ForestPuffColor.BLUE, ForestPuffColor.ORANGE, ForestPuffColor.BLACK, ForestPuffColor.RED);
+
+
+    //TODO either change this or the other one
+    public static double PUFF_BLOCK_RANGE = 2;
+
+    private static final int max_tries = 10000;
+
+    public static Vec3d getRandomPos(LivingEntity entity, Vec3d origin, double dist){
+        Box box = new Box(origin.getX(), origin.getY(), origin.getZ(), (origin.getX() + 1), (origin.getY() + 1), (origin.getZ() + 1)).expand(dist);
+        double i = origin.getX();
+        double j = origin.getY();
+        double k = origin.getZ();
+
+        for(int l = 0; l<max_tries; l++){
+            double m = i + MathHelper.nextDouble(entity.getRandom(), dist,  dist) * MathHelper.nextInt(entity.getRandom(), -1, 1);
+            double n = j + MathHelper.nextDouble(entity.getRandom(), dist,  dist) * MathHelper.nextInt(entity.getRandom(), -1, 1);
+            double o = k + MathHelper.nextDouble(entity.getRandom(), dist,  dist) * MathHelper.nextInt(entity.getRandom(), -1, 1);
+            Vec3d pos = new Vec3d(m,n,o);
+            if(box.contains(pos)){
+                return pos;
+            }
+        }
+        LOGGER.error("Exceeded max tries to spawn a new puff, skipping");
+
+        //TODO maybe remove
+        entity.sendMessage(Text.literal("§cExceeded max tries to spawn a new puff, skipping"));
+        return null;
+
+    }
+
+    /**
+     * @param duration In seconds*/
+    public void createForestPuff(LivingEntity caster, Vec3d origin, ServerWorld world, int color, int duration, int power){
+        //Converts from ticks to seconds
+        int dur = duration * 20;
+        float size = 0.7f;
+
+        List<LivingEntity> targets = world.getEntitiesByClass(LivingEntity.class,
+                new Box(origin.getX(), origin.getY(), origin.getZ(), (origin.getX() + 1), (origin.getY() + 1), (origin.getZ() + 1)).expand(PUFF_BLOCK_RANGE),
+                (entity -> (
+                        //TODO remove after debug and uncomment the other
+                        true
+                        //!entity.equals(caster) && !CheckUtils.CheckAllies.checkAlly(caster, entity)
+                )));
+
+
+        if(color == ForestPuffColor.GREEN){
+            LightParticlesUtil.spawnForestPuff(origin, Vec3d.unpackRgb(color).toVector3f(), Vec3d.unpackRgb(ForestPuffColor.GREEN_END).toVector3f(), size, world);
+            targets.forEach(entity -> entity.addStatusEffect(new StatusEffectInstance(StatusEffects.POISON, dur, power), caster));
+        }else if(color == ForestPuffColor.YELLOW){
+            LightParticlesUtil.spawnForestPuff(origin, Vec3d.unpackRgb(color).toVector3f(), Vec3d.unpackRgb(ForestPuffColor.YELLOW_END).toVector3f(), size, world);
+            targets.forEach(entity -> entity.addStatusEffect(new StatusEffectInstance(StatusEffects.HUNGER, dur, power), caster));
+        }else if(color == ForestPuffColor.RED){
+            LightParticlesUtil.spawnForestPuff(origin, Vec3d.unpackRgb(color).toVector3f(), Vec3d.unpackRgb(ForestPuffColor.RED_END).toVector3f(), size, world);
+            targets.forEach(entity -> entity.addStatusEffect(new StatusEffectInstance(LightEffects.LIGHT_FATIGUE, dur, power), caster));
+        }else if(color == ForestPuffColor.PINK){
+            LightParticlesUtil.spawnForestPuff(origin, Vec3d.unpackRgb(color).toVector3f(), Vec3d.unpackRgb(ForestPuffColor.PINK_END).toVector3f(), size, world);
+            targets.forEach(entity -> entity.addStatusEffect(new StatusEffectInstance(StatusEffects.NAUSEA, dur, power), caster));
+        }else if(color == ForestPuffColor.BLUE){
+            LightParticlesUtil.spawnForestPuff(origin, Vec3d.unpackRgb(color).toVector3f(), Vec3d.unpackRgb(ForestPuffColor.BLUE_END).toVector3f(), size, world);
+            targets.forEach(entity -> entity.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, dur, power), caster));
+        }else if(color == ForestPuffColor.BLACK){
+            LightParticlesUtil.spawnForestPuff(origin, Vec3d.unpackRgb(color).toVector3f(), Vec3d.unpackRgb(ForestPuffColor.BLACK_END).toVector3f(), size, world);
+            targets.forEach(entity -> entity.addStatusEffect(new StatusEffectInstance(StatusEffects.WITHER, dur, power), caster));
+        }else if(color == ForestPuffColor.PURPLE){
+            LightParticlesUtil.spawnForestPuff(origin, Vec3d.unpackRgb(color).toVector3f(), Vec3d.unpackRgb(ForestPuffColor.PURPLE_END).toVector3f(), size, world);
+            //TODO the drunk effect! Or something similar (WIP).
+            // Which could consist of moving randomly to one or the other side, inverted controls,
+            // and the super secret settings thing. And maybe someh
+            targets.forEach(entity -> entity.sendMessage(Text.literal("Ur drunk")));
+        }
     }
 
 }

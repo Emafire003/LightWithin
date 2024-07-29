@@ -142,8 +142,19 @@ public class LightCreationAndEvent {
         int i = 1;
 
         //All of these realease 1.0.0 have roughly a 12.5% chance of appearing. Except the frog that tends very much to 0.
+
+        //ForestAura
+       if(String.valueOf(id_bits[type_bit].charAt(i+1)).matches("f")){
+            return new Pair<>(InnerLightType.FOREST_AURA, determineTarget(id_bits, target_bit, LightWithin.POSSIBLE_TARGETS.get(InnerLightType.FOREST_AURA)));
+        }
+        //Frog? aka f = 6 r = 18 = F+2 o = 15 = E g = 7
+        //If there is "frog" spelled as numbers of the alphabet, then your light is frog. Happy?
+        else if(String.valueOf(id_bits[type_bit]).contains("6f2e7")){
+            return new Pair<>(InnerLightType.FROG, determineTarget(id_bits, target_bit, List.of(TargetType.ALL)));
+        }
+
         //HEAL
-        if(String.valueOf(id_bits[type_bit].charAt(i)).matches("[a-b]")){
+        else if(String.valueOf(id_bits[type_bit].charAt(i)).matches("[a-b]")){
             return new Pair<InnerLightType, TargetType>(InnerLightType.HEAL, determineTarget(id_bits, target_bit, LightWithin.POSSIBLE_TARGETS.get(InnerLightType.HEAL)));
         }
         //DEFENCE
@@ -172,11 +183,6 @@ public class LightCreationAndEvent {
         //Aqua
         else if(String.valueOf(id_bits[type_bit].charAt(i)).matches("[8-9]")){
             return new Pair<>(InnerLightType.AQUA, determineTarget(id_bits, target_bit, LightWithin.POSSIBLE_TARGETS.get(InnerLightType.AQUA)));
-        }
-        //Frog? aka f = 6 r = 18 = F+2 o = 15 = E g = 7
-        //If there is "frog" spelled as numbers of the alphabet, then your light is frog. Happy?
-        else if(String.valueOf(id_bits[type_bit]).contains("6f2e7")){
-            return new Pair<>(InnerLightType.FROG, determineTarget(id_bits, target_bit, List.of(TargetType.ALL)));
         }
         LOGGER.info("[debug] nop not matched, UUID bit: " + id_bits[type_bit]);
         return new Pair<>(InnerLightType.HEAL, TargetType.SELF);
