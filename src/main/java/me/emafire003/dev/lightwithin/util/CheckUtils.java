@@ -215,7 +215,6 @@ public class CheckUtils {
         dmg += EnchantmentHelper.getAttackDamage(attacker.getMainHandStack(), target.getGroup());
         if(target instanceof PlayerEntity){
             target.sendMessage(Text.literal("The non calcl damage is §6" +dmg));
-
         }
         return dmg;
     }

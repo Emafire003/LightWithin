@@ -679,7 +679,6 @@ public class LightTriggerChecks {
     }
 
 
-    //TODO test out in multiplayer i guess
     public static void checkForestAura(PlayerEntity player, LightComponent component, Entity attacker, Entity target){
         double trigger_sum = 0;
 

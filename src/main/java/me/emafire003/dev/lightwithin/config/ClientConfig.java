@@ -88,8 +88,8 @@ public class ClientConfig {
             CONFIG.set("light_charge_preset", LIGHT_CHARGE_PRESET);
             CONFIG.set("light_ready_scale_factor", LIGHT_READY_SCALE_FACTOR);
             CONFIG.set("light_charge_scale_factor", LIGHT_CHARGE_SCALE_FACTOR);
+            CONFIG.set("hide_light_charge_icon", HIDE_LIGHT_CHARGE_ICON);
             CONFIG.set("runes_scale_factor", RUNES_SCALE_FACTOR);
-            CONFIG.set("hide_light_charge_icon", HIDE_LIGHT_CHARGE_ICON_default);
             CONFIG.set("show_charged_player_glow", SHOW_CHARGED_PLAYER_GLOW);
             CONFIG.set("show_runes", SHOW_RUNES);
             CONFIG.set("show_runes_for", SHOW_RUNES_FOR);
