@@ -108,7 +108,7 @@ public class ForestAuraLight extends InnerLight {
         //ALL section (drowneds)
         if(component.getTargets().equals(TargetType.SELF)){
             //The -1 is because status effect levels start from 0
-            caster.addStatusEffect(new StatusEffectInstance(LightEffects.FOREST_AURA, this.duration, (int) this.power_multiplier-1));
+            caster.addStatusEffect(new StatusEffectInstance(LightEffects.FOREST_AURA, this.duration*20, (int) this.power_multiplier-1));
 
         }
         else if(component.getTargets().equals(TargetType.ALL)){
