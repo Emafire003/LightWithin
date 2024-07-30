@@ -58,6 +58,12 @@ public class BrewRecipes {
 
         registerTargetsForType(InnerLightType.EARTHEN, light_nbt);
 
+        light_nbt = nbt.copy();
+        light_nbt.putString(TYPE_INGREDIENT_KEY, InnerLightType.FOREST_AURA.name());
+        CustomBrewRecipeRegister.registerCustomRecipeNbt(LightItems.BOTTLED_LIGHT, ForestAuraLight.INGREDIENT, LightItems.BOTTLED_LIGHT, nbt, null, light_nbt);
+
+        registerTargetsForType(InnerLightType.EARTHEN, light_nbt);
+
         for(Item frog_item : FrogLight.INGREDIENTS){
             light_nbt = nbt.copy();
             light_nbt.putString(TYPE_INGREDIENT_KEY, InnerLightType.FROG.name());

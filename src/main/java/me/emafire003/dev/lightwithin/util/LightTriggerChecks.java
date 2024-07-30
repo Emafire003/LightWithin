@@ -678,6 +678,73 @@ public class LightTriggerChecks {
         }
     }
 
+
+    //TODO actually implement
+    public static void checkForestAura(PlayerEntity player, LightComponent component, Entity attacker, Entity target){
+        double trigger_sum = 0;
+        /**If the player has ALL as target, he needs to be hurt (or an ally has to die, but that depends on the trigger event)*/
+        if(component.getTargets().equals(TargetType.ALL)){
+
+            //Triggers with: Low health, Very low health, Surrounded, forest
+
+            //Checks if the player is very low health
+            if(CheckUtils.checkSelfDanger(player, Config.HP_PERCENTAGE_SELF)){
+                trigger_sum = trigger_sum+TriggerConfig.BLAZING_ALL_VERY_LOW_HEALTH;
+                //Checks if the player has low health
+            }else if(CheckUtils.checkSelfDanger(player, Config.HP_PERCENTAGE_SELF+Config.HP_PERCENTAGE_INCREMENT)){
+                trigger_sum=trigger_sum+TriggerConfig.BLAZING_ALL_LOW_HEALTH;
+            }
+            //Checks if the player is surrounded
+            if(Config.CHECK_SURROUNDED && CheckUtils.checkSurrounded(player)){
+                trigger_sum=trigger_sum+TriggerConfig.BLAZING_ALL_SURROUNDED;
+            }
+            if(player.isOnFire()){
+                trigger_sum = trigger_sum+TriggerConfig.BLAZING_ALL_ONFIRE;
+            }
+            //Checks if the player has low armor durability
+            if(Config.CHECK_ARMOR_DURABILITY && CheckUtils.checkArmorDurability(player, Config.DUR_PERCENTAGE_SELF)){
+                trigger_sum=trigger_sum+TriggerConfig.BLAZING_ALL_ARMOR_DURABILITY;
+            }
+            //Checks if the player has the optimal criteria for activation
+            if(CheckUtils.checkBlazing(player)){
+                trigger_sum=trigger_sum+TriggerConfig.BLAZING_ALL_CONDITIONS;
+            }
+            if(trigger_sum >= MIN_TRIGGER){
+                sendLightTriggered((ServerPlayerEntity) player);
+            }
+        }
+        /**CHECKS if the player has ENEMIES as target, either his or his allies health needs to be low*/
+        else if(component.getTargets().equals(TargetType.ENEMIES) || component.getTargets().equals(TargetType.VARIANT)){
+
+            if(CheckUtils.checkSelfDanger(player, Config.HP_PERCENTAGE_SELF+Config.HP_PERCENTAGE_INCREMENT/2)){
+                trigger_sum = trigger_sum+TriggerConfig.BLAZING_ENEMIES_VERY_LOW_HEALTH;
+            }
+            //Checks if the player is surrounded
+            if(Config.CHECK_SURROUNDED && CheckUtils.checkSurrounded(player)){
+                trigger_sum=trigger_sum+TriggerConfig.BLAZING_ENEMIES_SURROUNDED;
+            }
+            if(player.isOnFire()){
+                trigger_sum = trigger_sum+TriggerConfig.BLAZING_ENEMIES_ONFIRE;
+            }
+            //Checks if the player'sallies have low armor durability
+            if(!player.equals(target) && Config.CHECK_ARMOR_DURABILITY && CheckUtils.checkAllyArmor(player, target, Config.DUR_PERCENTAGE_ALLIES)){
+                trigger_sum=trigger_sum+TriggerConfig.BLAZING_ENEMIES_ALLY_ARMOR_DURABILITY;
+            }
+            //Checks if the player has low armor durability
+            if(Config.CHECK_ARMOR_DURABILITY && CheckUtils.checkArmorDurability(player, Config.DUR_PERCENTAGE_SELF)){
+                trigger_sum=trigger_sum+TriggerConfig.BLAZING_ENEMIES_ARMOR_DURABILITY;
+            }
+            //Checks if the player has the optimal criteria for activation
+            if(CheckUtils.checkBlazing(player)){
+                trigger_sum=trigger_sum+TriggerConfig.BLAZING_ENEMIES_CONDITIONS;
+            }
+            if(trigger_sum >= MIN_TRIGGER){
+                sendLightTriggered((ServerPlayerEntity) player);
+            }
+        }
+
+    }
+
     public static void checkFrog(PlayerEntity player, LightComponent component, LivingEntity attacker, Entity target){
         if(CheckUtils.checkSelfDanger(player, Config.HP_PERCENTAGE_SELF+25)
                 || CheckUtils.checkSurrounded(player)

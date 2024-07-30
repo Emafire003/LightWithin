@@ -92,7 +92,7 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 			entry(InnerLightType.EARTHEN, Arrays.asList(TargetType.SELF, TargetType.ENEMIES, TargetType.ALLIES, TargetType.VARIANT)),
 			entry(InnerLightType.WIND, Arrays.asList(TargetType.SELF, TargetType.ALL, TargetType.ALLIES)),
 			entry(InnerLightType.AQUA, Arrays.asList(TargetType.SELF, TargetType.ENEMIES, TargetType.ALLIES,  TargetType.ALL)),
-			entry(InnerLightType.FOREST_AURA, Arrays.asList(TargetType.ENEMIES, TargetType.ENEMIES, TargetType.SELF)),
+			entry(InnerLightType.FOREST_AURA, Arrays.asList(TargetType.ALL, TargetType.SELF)),
 			entry(InnerLightType.FROG, List.of(TargetType.ALL))
 	);
 
@@ -593,13 +593,13 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 				component.getDuration(), player).execute();
 	}
 
-	//=======================Aura Light=======================
+	//=======================Forest Aura Light=======================
 	public static void activateForestAura(LightComponent component, PlayerEntity player){
 		List<LivingEntity> targets = new ArrayList<>();
 
-		if(component.getTargets().equals(TargetType.ENEMIES)){
+		if(component.getTargets().equals(TargetType.ALL)){
 			targets.addAll(getEnemies(player));
-			player.sendMessage(Text.translatable("light.description.activation.forest_aura.enemies"), true);
+			player.sendMessage(Text.translatable("light.description.activation.forest_aura.all"), true);
 		}else if(component.getTargets().equals(TargetType.SELF)){
 			targets.add(player);
 			player.sendMessage(Text.translatable("light.description.activation.forest_aura.self"), true);

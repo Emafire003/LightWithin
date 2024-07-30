@@ -14,7 +14,7 @@ public class BalanceConfig {
     public static SimpleConfig CONFIG;
     private static ConfigProvider configs;
 
-    private static final int ver = 1;
+    private static final int ver = 2;
     public static int VERSION;
 
     public static int HEAL_MAX_POWER;
@@ -60,6 +60,11 @@ public class BalanceConfig {
     public static int AQUA_MAX_DURATION;
     public static int AQUA_MIN_POWER;
     public static int AQUA_MIN_DURATION;
+
+    public static int FOREST_AURA_MAX_POWER;
+    public static int FOREST_AURA_MAX_DURATION;
+    public static int FOREST_AURA_MIN_POWER;
+    public static int FOREST_AURA_MIN_DURATION;
 
     private static final String config_name = "_balancing";
 
@@ -180,6 +185,13 @@ public class BalanceConfig {
         configs.addKeyValuePair(new Pair<>("aqua_max_duration", 18), "The maximum duration of some effects that can be applied (like water slide, conduit, etc.)");
         configs.addKeyValuePair(new Pair<>("aqua_min_duration", 1), "The minimum duration (see above)");
 
+        configs.addKeyValuePair(new Pair<>("spacer", "spacer"), "");
+
+        configs.addKeyValuePair(new Pair<>("forest_aura_max_power", 10), "The maximum power multiplier (Determines power of status effects, number of drowned spawned, if the cage will spawn a trident and lightning )");
+        configs.addKeyValuePair(new Pair<>("forest_aura_min_power", 1), "The minimum power multiplier (see above)");
+        configs.addKeyValuePair(new Pair<>("forest_aura_max_duration", 18), "The maximum duration of some effects that can be applied (like water slide, conduit, etc.)");
+        configs.addKeyValuePair(new Pair<>("forest_aura_min_duration", 1), "The minimum duration (see above)");
+
     }
 
     public static void reloadConfig(){
@@ -233,6 +245,11 @@ public class BalanceConfig {
         AQUA_MAX_DURATION = CONFIG.getOrDefault("aqua_max_duration", 18);
         AQUA_MIN_POWER = CONFIG.getOrDefault("aqua_min_power", 1);
         AQUA_MIN_DURATION = CONFIG.getOrDefault("aqua_min_duration", 1);
+
+        FOREST_AURA_MAX_POWER = CONFIG.getOrDefault("forest_aura_max_power", 10);
+        FOREST_AURA_MAX_DURATION = CONFIG.getOrDefault("forest_aura_max_duration", 18);
+        FOREST_AURA_MIN_POWER = CONFIG.getOrDefault("forest_aura_min_power", 1);
+        FOREST_AURA_MIN_DURATION = CONFIG.getOrDefault("forest_aura_min_duration", 1);
     }
 }
 
