@@ -6,7 +6,6 @@ import me.emafire003.dev.lightwithin.config.BalanceConfig;
 import me.emafire003.dev.lightwithin.config.Config;
 import me.emafire003.dev.lightwithin.lights.forestaura_puffs.ForestPuffColor;
 import me.emafire003.dev.lightwithin.particles.LightParticlesUtil;
-import me.emafire003.dev.lightwithin.sounds.LightSounds;
 import me.emafire003.dev.lightwithin.status_effects.LightEffects;
 import me.emafire003.dev.lightwithin.util.TargetType;
 import net.fabricmc.loader.api.FabricLoader;
@@ -20,7 +19,6 @@ import net.minecraft.item.Items;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.tag.TagKey;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundCategory;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Box;
@@ -71,23 +69,22 @@ public class ForestAuraLight extends InnerLight {
         color = "forest_aura";
     }
 
-    //TODO make new stuff for the forest light
     private void checkSafety(){
-        if(this.power_multiplier > BalanceConfig.AQUA_MAX_POWER){
-            power_multiplier = BalanceConfig.AQUA_MAX_POWER;
+        if(this.power_multiplier > BalanceConfig.FOREST_AURA_MAX_POWER){
+            power_multiplier = BalanceConfig.FOREST_AURA_MAX_POWER;
         }
-        if(this.power_multiplier < BalanceConfig.AQUA_MIN_POWER){
-            power_multiplier = BalanceConfig.AQUA_MIN_POWER;
+        if(this.power_multiplier < BalanceConfig.FOREST_AURA_MIN_POWER){
+            power_multiplier = BalanceConfig.FOREST_AURA_MIN_POWER;
         }
-        int max_duration = BalanceConfig.AQUA_MAX_DURATION;
+        int max_duration = BalanceConfig.FOREST_AURA_MAX_DURATION;
         if(Config.MULTIPLY_DURATION_LIMIT){
-            max_duration = (int) (BalanceConfig.AQUA_MAX_DURATION * Config.DURATION_MULTIPLIER);
+            max_duration = (int) (BalanceConfig.FOREST_AURA_MAX_DURATION * Config.DURATION_MULTIPLIER);
         }
         if(this.duration > max_duration){
             this.duration = max_duration;
         }
-        if(this.duration < BalanceConfig.AQUA_MIN_DURATION){
-            this.duration = BalanceConfig.AQUA_MIN_DURATION;
+        if(this.duration < BalanceConfig.FOREST_AURA_MIN_DURATION){
+            this.duration = BalanceConfig.FOREST_AURA_MIN_DURATION;
         }
     }
 
@@ -103,17 +100,18 @@ public class ForestAuraLight extends InnerLight {
         }
 
 
-        //TODO sounds
-        caster.getWorld().playSound(caster, caster.getBlockPos(), LightSounds.AQUA_LIGHT, SoundCategory.PLAYERS, 1, 1);
+        //caster.getWorld().playSound(caster, caster.getBlockPos(), LightSounds.AQUA_LIGHT, SoundCategory.PLAYERS, 1, 1);
         LightComponent component = LIGHT_COMPONENT.get(caster);
+
+        //TODO playsound spawn particles and such
 
         //ALL section (drowneds)
         if(component.getTargets().equals(TargetType.SELF)){
             //The -1 is because status effect levels start from 0
             caster.addStatusEffect(new StatusEffectInstance(LightEffects.FOREST_AURA, this.duration, (int) this.power_multiplier-1));
+
         }
-        //TODO this should probably be instead ALL except the other forest aura wielders
-        else if(component.getTargets().equals(TargetType.ENEMIES)){
+        else if(component.getTargets().equals(TargetType.ALL)){
             //I think it should be 1-(2 +1 per level) puffs
 
             if(caster.getWorld().isClient()){
@@ -161,6 +159,7 @@ public class ForestAuraLight extends InnerLight {
 
     }
 
+
     /*First chunck of Puffs:
      * Level 0-5:
      * - GREEN
@@ -184,7 +183,7 @@ public class ForestAuraLight extends InnerLight {
 
 
     //TODO either change this or the other one
-    public static double PUFF_BLOCK_RANGE = 2;
+    public static double PUFF_BLOCK_RANGE = 1.5;
 
     private static final int max_tries = 10000;
 

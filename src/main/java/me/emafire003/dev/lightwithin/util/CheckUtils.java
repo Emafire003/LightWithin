@@ -31,15 +31,15 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.tag.BlockTags;
-import net.minecraft.registry.tag.DamageTypeTags;
-import net.minecraft.registry.tag.TagKey;
+import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.registry.tag.*;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.state.property.Properties;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
+import net.minecraft.world.biome.Biome;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -672,11 +672,13 @@ public class CheckUtils {
             return true;
         }
 
+        //TODO move to tags
         Item main = player.getMainHandStack().getItem();
         Item off = player.getOffHandStack().getItem();
         if(items.contains(main) || items.contains(off)){
             return true;
         }
+        //TODO move to tags
         return checkBlocks(player, toBlockList(TriggerConfig.FROST_TRIGGER_BLOCKS), Config.TRIGGER_BLOCK_RADIUS);
     }
 
@@ -711,6 +713,7 @@ public class CheckUtils {
             return true;
         }
 
+        //TODO move to tags
         return checkMultipleBlocks(player, toBlockList(TriggerConfig.WIND_TRIGGER_BLOCKS), Config.TRIGGER_BLOCK_RADIUS, 7);
     }
 
@@ -730,6 +733,23 @@ public class CheckUtils {
             return true;
         }
         return checkWaterLogggedOrListBlocks(player, toBlockList(TriggerConfig.AQUA_TRIGGER_BLOCKS), Config.TRIGGER_BLOCK_RADIUS);
+    }
+
+    /**Used to check if the player has something that can be considered a ForestAura source
+     *
+     * @param player The player to perform checks on*/
+    public static boolean checkForestAura(PlayerEntity player){
+        RegistryEntry<Biome> biome = player.getWorld().getBiome(player.getBlockPos());
+        if(biome.isIn(BiomeTags.IS_FOREST) || biome.isIn(BiomeTags.IS_JUNGLE) || biome.isIn(BiomeTags.IS_TAIGA)){
+            return true;
+        }
+
+        //Maybe if they are standing on a tree? Or maybe if they have a lot of trees around?
+        //Maybe even the saplings in the hand
+
+        ItemStack main = player.getMainHandStack();
+        ItemStack off = player.getOffHandStack();
+        return main.isIn(ItemTags.SAPLINGS) || off.isIn(ItemTags.SAPLINGS);
     }
 
     public static boolean checkFalling(LivingEntity entity) {
