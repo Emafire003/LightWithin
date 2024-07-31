@@ -174,7 +174,7 @@ public class BalanceConfig {
         configs.addKeyValuePair(new Pair<>("wind_min_duration", 1), "The minimum duration (see above)");
 
         configs.addKeyValuePair(new Pair<>("spacer", "spacer"), "");
-        
+
         configs.addKeyValuePair(new Pair<>("aqua_max_power", 10), "The maximum power multiplier (Determines power of status effects, number of drowned spawned, if the cage will spawn a trident and lightning )");
         configs.addKeyValuePair(new Pair<>("aqua_min_power", 1), "The minimum power multiplier (see above)");
         configs.addKeyValuePair(new Pair<>("aqua_max_duration", 18), "The maximum duration of some effects that can be applied (like water slide, conduit, etc.)");
