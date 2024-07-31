@@ -53,6 +53,7 @@ import org.slf4j.LoggerFactory;
 
 import java.nio.file.Path;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static java.util.Map.entry;
 
@@ -71,7 +72,7 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 	public static boolean overrideTeamColorsPrev = false;
 
 	public static List<UUID> USED_CHARGE_PLAYER_CACHE = new ArrayList<>();
-	public static HashMap<UUID, Integer> CURRENTLY_READY_LIGHT_PLAYER_CACHE = new HashMap<>();
+	public static ConcurrentHashMap<UUID, Integer> CURRENTLY_READY_LIGHT_PLAYER_CACHE = new ConcurrentHashMap<>();
 
 	/**
 	 * This is a map of the possible targets for each target type
@@ -117,6 +118,7 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 		LootTableModifier.modifyLootTables();
 		LightCommands.registerArguments();
 		LightEntities.registerEntities();
+
 		CommandRegistrationCallback.EVENT.register(LightCommands::registerCommands);
 
 
@@ -603,21 +605,22 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 		CURRENTLY_READY_LIGHT_PLAYER_CACHE.put(player.getUuid(), 20*10);
 	}
 
-	public void registerReadyLightCacheRemover(){
-		ServerTickEvents.END_SERVER_TICK.register(server -> {
-			if(CURRENTLY_READY_LIGHT_PLAYER_CACHE.isEmpty()){
-				return;
-			}
-			Set<Map.Entry<UUID, Integer>> i_hate_the_concurrency_issue_map_entries = CURRENTLY_READY_LIGHT_PLAYER_CACHE.entrySet();
-			for( Map.Entry<UUID, Integer> entry : i_hate_the_concurrency_issue_map_entries){
-				if(entry.getValue() == 0){
-					CURRENTLY_READY_LIGHT_PLAYER_CACHE.remove(entry.getKey());
-				}else{
-					//If already removed should just return null i think, so it's ok.
-					CURRENTLY_READY_LIGHT_PLAYER_CACHE.replace(entry.getKey(), entry.getValue() -1);
-				}
-			}
-		});
-	}
+    public void registerReadyLightCacheRemover(){
+        ServerTickEvents.END_SERVER_TICK.register(server -> {
+            if(CURRENTLY_READY_LIGHT_PLAYER_CACHE.isEmpty()){
+                return;
+            }
+            ConcurrentHashMap<UUID, Integer> copy = new ConcurrentHashMap<>(CURRENTLY_READY_LIGHT_PLAYER_CACHE);
+
+            copy.forEach((key, value) -> {
+                if(value == 0){
+                    CURRENTLY_READY_LIGHT_PLAYER_CACHE.remove(key);
+                }else{
+                    //If already removed should just return null i think, so it's ok.
+                    CURRENTLY_READY_LIGHT_PLAYER_CACHE.replace(key, value -1);
+                }
+            });
+        });
+    }
 
 }
