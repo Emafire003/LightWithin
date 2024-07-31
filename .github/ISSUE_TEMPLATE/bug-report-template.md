@@ -1,7 +1,7 @@
 ---
 name: Bug report Template
 about: What to include when reporting a bug
-title: ''
+title: "[BUG]"
 labels: bug
 assignees: Emafire003
 
@@ -19,8 +19,9 @@ Steps to reproduce the behavior:
 
 **Version information**
 LightWithin mod version: <version>
-Minecraft Version: <version>
+Minecraft version: <version>
 Fabric API version: <version>
+If you are using Quilt, QFAPI version: <version>
 
 (Usually not required, but could be helpful if you want)
 Dependencies version: <versions>
@@ -30,7 +31,13 @@ A clear and concise description of what you expected to happen.
 Add this only if it's not something like "The game crashes. It shouldn't do it".
 
 **Screenshots and files**
-These are optional, but could be helpful especially files like the server/client log (located in /logs/ if on the server and %appdata%/.minecraft/logs on client) and the crash reports. 
+Please attach the log files, any that could be useful, as well as the full crash log if a crash is happening.
+(located in /logs/ if on the server and %appdata%/.minecraft/logs on client)
 
 **Additional context**
+If the problem is linked to an activity you are doing in game and then there is a bug, please also specify what Light Type and Target you have. 
+You can use /light get all @p to get this information
+LightType: <>
+LightTarget: <>
+
 Add any other context about the problem here.
