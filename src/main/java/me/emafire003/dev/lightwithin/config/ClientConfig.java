@@ -132,7 +132,7 @@ public class ClientConfig {
         configs.addKeyValuePair(new Pair<>("version", ver), "The version of the config. DO NOT CHANGE IT :D");
 
         configs.addKeyValuePair(new Pair<>("spacer", "spacer"), "");
-        configs.addKeyValuePair(new Pair<>("comment", "comment"), "This config file lets you modify client rendering options, such as displaying the light used icon in a different location or hiding it");
+        configs.addKeyValuePair(new Pair<>("comment", "comment"), "This config file lets you modify client rendering options, such as displaying the light ready icon in a different location or hiding it");
         try{
             int max_x = MinecraftClient.getInstance().getWindow().getScaledWidth();
             int max_y = MinecraftClient.getInstance().getWindow().getScaledHeight();
@@ -144,21 +144,21 @@ public class ClientConfig {
 
         configs.addKeyValuePair(new Pair<>("spacer", "spacer"), "");
 
-        configs.addKeyValuePair(new Pair<>("light_ready_icon_x", light_icon_default_position), "The x coordinate of the light used icon position on your screen. A value of 0 corresponds to left side.");
-        configs.addKeyValuePair(new Pair<>("light_ready_icon_y", light_icon_default_position), "The y coordinate of the light used icon position on your screen. A value of 0 corresponds to top side.");
+        configs.addKeyValuePair(new Pair<>("light_ready_icon_x", light_icon_default_position), "The x coordinate of the light ready icon position on your screen. A value of 0 corresponds to left side.");
+        configs.addKeyValuePair(new Pair<>("light_ready_icon_y", light_icon_default_position), "The y coordinate of the light ready icon position on your screen. A value of 0 corresponds to top side.");
         configs.addKeyValuePair(new Pair<>("light_charge_icon_x", light_icon_default_position), "The x coordinate of the light charge icon position on your screen. A value of 0 corresponds to left side.");
         configs.addKeyValuePair(new Pair<>("light_charge_icon_y", light_icon_default_position), "The y coordinate of the light charge icon position on your screen. A value of 0 corresponds to top side.");
 
-        configs.addKeyValuePair(new Pair<>("light_ready_scale_factor", light_icon_default_scale), "Make this number bigger to make the light used icon bigger, make it smaller to have a smaller light icon!");
+        configs.addKeyValuePair(new Pair<>("light_ready_scale_factor", light_icon_default_scale), "Make this number bigger to make the light ready icon bigger, make it smaller to have a smaller light icon!");
         configs.addKeyValuePair(new Pair<>("light_charge_scale_factor", light_icon_default_scale), "Make this number bigger to make the light charge icon bigger, make it smaller to have a smaller light icon!");
 
-        configs.addKeyValuePair(new Pair<>("light_ready_preset", "TOP_LEFT"), "The position of the light used icon using presets, such as CENTER, TOP/BOTTOM LEFT/RIGHT etc");
+        configs.addKeyValuePair(new Pair<>("light_ready_preset", "TOP_LEFT"), "The position of the light ready icon using presets, such as CENTER, TOP/BOTTOM LEFT/RIGHT etc");
         configs.addKeyValuePair(new Pair<>("light_charge_preset", "TOP_LEFT"), "The position of the light charge icon using presets, such as CENTER, TOP/BOTTOM LEFT/RIGHT etc");
 
         configs.addKeyValuePair(new Pair<>("spacer", "spacer"), "");
 
-        configs.addKeyValuePair(new Pair<>("hide_light_charge_icon", HIDE_LIGHT_CHARGE_ICON_default), "Hide the light charges icon, but still displays the light used one, or the error one if you do something that's not allowed");
-        configs.addKeyValuePair(new Pair<>("show_charged_player_glow", SHOW_CHARGED_PLAYER_GLOW_default), "See players that have light charges used glow like a GlowSquid");
+        configs.addKeyValuePair(new Pair<>("hide_light_charge_icon", HIDE_LIGHT_CHARGE_ICON_default), "Hide the light charges icon, but still displays the light ready one, or the error one if you do something that's not allowed");
+        configs.addKeyValuePair(new Pair<>("show_charged_player_glow", SHOW_CHARGED_PLAYER_GLOW_default), "See players that have light charges ready glow like a GlowSquid");
 
         configs.addKeyValuePair(new Pair<>("show_runes", SHOW_RUNES_default), "Setting this value to false will disable runes from rendering even in first person");
         configs.addKeyValuePair(new Pair<>("show_runes_for", SHOW_RUNES_FOR_default), "How many seconds should the runes last on screen?");
@@ -166,7 +166,7 @@ public class ClientConfig {
         configs.addKeyValuePair(new Pair<>("ingredient_target_scale", ingredient_target_scale_default), "Scale of the item or target icons displayed after interacting with the Luxcognita berry");
         configs.addKeyValuePair(new Pair<>("show_ingredient_target_for", show_ingredient_target_for_default), "How many seconds should the item and target icons last on screen?");
 
-        configs.addKeyValuePair(new Pair<>("auto_light_activation", AUTO_LIGHT_ACTIVATION_default), "Setting this value to true will activate your light as soon as it's used. WARNING: it may be disabled by the server!");
+        configs.addKeyValuePair(new Pair<>("auto_light_activation", AUTO_LIGHT_ACTIVATION_default), "Setting this value to true will activate your light as soon as it's ready. WARNING: it may be disabled by the server!");
 
     }
 

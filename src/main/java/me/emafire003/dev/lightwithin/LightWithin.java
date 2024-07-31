@@ -56,597 +56,599 @@ import org.slf4j.LoggerFactory;
 
 import java.nio.file.Path;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static java.util.Map.entry;
 
 public class LightWithin implements ModInitializer, EntityComponentInitializer {
-	// This logger is used to write text to the console and the log file.
-	// It is considered best practice to use your mod id as the logger's name.
-	// That way, it's clear which mod wrote info, warnings, and errors.
-	public static final String MOD_ID = "lightwithin";
-	public static final String PREFIX_MSG = "[LightWithin] ";
-	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
-	public static int box_expansion_amount = 6;
-
-	private static final boolean debug = false;
-	public static Path PATH = Path.of(FabricLoader.getInstance().getConfigDir() + "/" + MOD_ID + "/");
-
-	public static boolean overrideTeamColorsPrev = false;
-
-	public static List<UUID> USED_CHARGE_PLAYER_CACHE = new ArrayList<>();
-	public static HashMap<UUID, Integer> CURRENTLY_READY_LIGHT_PLAYER_CACHE = new HashMap<>();
-
-	/**
-	 * This is a map of the possible targets for each target type
-	 * <p>
-	 * It is also used in determining the likelihood of each target type being generated,
-	 * from left to right is more likely. The most probable is the one on the left*/
-	public static final Map<InnerLightType, List<TargetType>> POSSIBLE_TARGETS = Map.ofEntries(
-			entry(InnerLightType.HEAL, Arrays.asList(TargetType.SELF, TargetType.ALLIES, TargetType.VARIANT)),
-			entry(InnerLightType.DEFENCE, Arrays.asList(TargetType.SELF, TargetType.ALLIES, TargetType.VARIANT)),
-			entry(InnerLightType.STRENGTH, Arrays.asList(TargetType.SELF, TargetType.ALLIES, TargetType.VARIANT)),
-			entry(InnerLightType.BLAZING, Arrays.asList(TargetType.ENEMIES, TargetType.ALL, TargetType.VARIANT)),
-			entry(InnerLightType.FROST, Arrays.asList(TargetType.ENEMIES, TargetType.ALLIES, TargetType.ALL, TargetType.SELF)),
-			entry(InnerLightType.EARTHEN, Arrays.asList(TargetType.SELF, TargetType.ENEMIES, TargetType.ALLIES, TargetType.VARIANT)),
-			entry(InnerLightType.WIND, Arrays.asList(TargetType.SELF, TargetType.ALL, TargetType.ALLIES)),
-			entry(InnerLightType.AQUA, Arrays.asList(TargetType.SELF, TargetType.ENEMIES, TargetType.ALLIES,  TargetType.ALL)),
-			entry(InnerLightType.FROG, List.of(TargetType.ALL))
-	);
-
-
-	public static final ComponentKey<LightComponent> LIGHT_COMPONENT =
-			ComponentRegistry.getOrCreate(getIdentifier("light_component"), LightComponent.class);
-
-	public static final ComponentKey<SummonedByComponent> SUMMONED_BY_COMPONENT =
-			ComponentRegistry.getOrCreate(getIdentifier("summoned_by_component"), SummonedByComponent.class);
-
-	@Override
-	public void onInitialize() {
-		// This code runs as soon as Minecraft is in a mod-load-used state.
-		// However, some things (like resources) may still be uninitialized.
-		// Proceed with mild caution.
-
-		LightCreationAndEvent.registerCreationListener();
-		LightTriggeringAndEvents.registerListeners();
-		registerLightUsedPacket();
-		registerLightChargeConsumedPacket();
-		registerReadyLightCacheRemover();
-		registerSyncOptionsOnJoin();
-		LightSounds.registerSounds();
-		LightEffects.registerModEffects();
-		LightItems.registerItems();
-		LightParticles.registerParticles();
-		LightBlocks.registerBlocks();
-		LootTableModifier.modifyLootTables();
-		LightCommands.registerArguments();
-		LightEntities.registerEntities();
-		LightItemComponents.registerComponents();
-
-		if(FabricLoader.getInstance().isModLoaded("flan")){
-			FlanCompat.registerFlan();
-		}
-		CommandRegistrationCallback.EVENT.register(LightCommands::registerCommands);
-
-
-		ServerLifecycleEvents.SERVER_STARTED.register(minecraftServer -> {
-			BrewRecipes.registerRecipes();
-			box_expansion_amount = Config.AREA_OF_SEARCH_FOR_ENTITIES;
-			if(box_expansion_amount == 0){
-				box_expansion_amount = 6;
-			}
-			try{
-				Config.reloadConfig();
-				BalanceConfig.reloadConfig();
-				TriggerConfig.reloadConfig();
-			}catch (Exception e){
-				LOGGER.error("There was an error while loading the config files!");
-				e.printStackTrace();
-			}
-
-			LightTriggerChecks.MIN_TRIGGER = TriggerConfig.TRIGGER_THRESHOLD;
-		});
-
-	}
-
-	/**Returns an identifier for this mod's stuff*/
-	public static Identifier getIdentifier(String path){
-		return Identifier.of(MOD_ID, path);
-	}
-
-	@Override
-	public void registerEntityComponentFactories(EntityComponentFactoryRegistry registry) {
-		registry.registerForPlayers(LIGHT_COMPONENT, LightComponent::new, RespawnCopyStrategy.ALWAYS_COPY);
-		registry.registerFor(DrownedEntity.class, SUMMONED_BY_COMPONENT, SummonedByComponent::new);
-		registry.registerFor(EarthGolemEntity.class, SUMMONED_BY_COMPONENT, SummonedByComponent::new);
-	}
-
-	private static void registerSyncOptionsOnJoin(){
-		PlayerJoinEvent.EVENT.register((player, server) -> {
-			if(player.getWorld().isClient){
-				return ActionResult.PASS;
-			}
-			syncCustomConfigOptions(player);
-			return ActionResult.PASS;
-		});
-	}
-
-	/**Sends a packet with updated config options to the client
-	 * such as the auto light activation permission*/
-	public static void syncCustomConfigOptions(ServerPlayerEntity player){
-		Map<String, Boolean> booleanMap = new HashMap<>();
-		booleanMap.put(ConfigPacketConstants.AUTO_LIGHT_ACTIVATION, Config.AUTO_LIGHT_ACTIVATION);
-		//TODO if needed i'll add other settings
-		ConfigOptionSyncPayloadS2C payload = new ConfigOptionSyncPayloadS2C(booleanMap);
-		ServerPlayNetworking.send(player, payload);
-	}
-
-	private static void registerLightUsedPacket(){
-		PayloadTypeRegistry.playC2S().register(LightUsedPayloadC2S.ID, LightUsedPayloadC2S.PACKET_CODEC);
-
-		ServerPlayNetworking.registerGlobalReceiver(LightUsedPayloadC2S.ID, ((payload, context) -> {
-			ServerPlayerEntity player = context.player();
-			if(player.getWorld().isClient){
-				return;
-			}
-			addToReadyList(player);
-			if(player.getServer() == null){
-				LOGGER.error("Error while reciving LightChargeConsumedPacket, server is null!");
-				return;
-			}
-			player.getServer().execute( () -> {
-				try{
-					//Handles the LightCharge being used. If it used, results will be true.
-					if(payload.used()){
-
-						if(!CheckUtils.canActivateHere(player)){
-							player.sendMessage(Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.translatableWithFallback("light.charge.cant_use_here", "You are not allowed to use you InnerLight here!").formatted(Formatting.RED)));
-							return;
-						}
-
-						//This could be laggy? Maybe?
-						List<ServerPlayerEntity> players = player.getServerWorld().getPlayers();
-						for(ServerPlayerEntity p : players){
-							ServerPlayNetworking.send(p, new PlayRenderEffectPayloadS2C(RenderEffect.LIGHT_RAYS, player.getId()));
-						}
-
-						//TODO maybe also increase the max cooldown light-stat?
-						//Currently just increases the cooldown. But the actual charges are fairly hard to get.
-						USED_CHARGE_PLAYER_CACHE.add(player.getUuid());
-
-						player.getWorld().playSound(player.getX(), player.getY(), player.getZ(), LightSounds.LIGHT_CHARGED, SoundCategory.PLAYERS, 1, 0.7f, true);
-
-						if(Config.TARGET_FEEDBACK && Config.USED_CHARGE_COOLDOWN_MULTIPLIER > 1){
-							player.sendMessage(Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.translatable("light.charge.cooldown_message").formatted(Formatting.YELLOW)));
-						}
-					}
-					activateLight(player);
-				}catch (NoSuchElementException e){
-					LOGGER.warn("No value in the packet!");
-				}catch (Exception e){
-					LOGGER.error("There was an error while getting the packet!");
-					e.printStackTrace();
-				}
-			});
-
-			//var results = LightUsedPacketC2S.read(buf);
-		}));
-	}
-
-	private static void registerLightChargeConsumedPacket(){
-		PayloadTypeRegistry.playC2S().register(LightChargeConsumedPayloadC2S.ID, LightChargeConsumedPayloadC2S.PACKET_CODEC);
-		ServerPlayNetworking.registerGlobalReceiver(LightChargeConsumedPayloadC2S.ID, ((payload, context) -> {
-			ServerPlayerEntity player = context.player();
-			if(player.getWorld().isClient){
-				return;
-			}
-			addToReadyList(player);
-			if(player.getServer() == null){
-				LOGGER.error("Error while reciving LightChargeConsumedPacket, server is null!");
-				return;
-			}
-			player.getServer().execute( () -> {
-				try{
-
-					///particle lightwithin:shine_particle ~ ~1 ~ 0.1 0.1 0.1 0.15 25 force
-					if(!CheckUtils.canActivateHere(player)){
-						return;
-					}
-					player.sendMessage(Text.translatable("light.charge.used").formatted(Formatting.YELLOW), true);
-
-					((ServerWorld) player.getWorld()).spawnParticles(
-							LightParticles.SHINE_PARTICLE, player.getX(), player.getY()+player.getDimensions(player.getPose()).height()/2, player.getZ(),
-							50, 0.1, 0.1, 0.1, 0.15
-					);
-
-					LIGHT_COMPONENT.get(player).removeLightCharges();
-				}catch (NoSuchElementException e){
-					LOGGER.warn("No value in the packet!");
-				}catch (Exception e){
-					LOGGER.error("There was an error while getting the packet!");
-					e.printStackTrace();
-				}
-			});
-
-			//var results = LightUsedPacketC2S.read(buf);
-		}));
-	}
-
-	public static boolean isPlayerInCooldown(PlayerEntity user){
-		return user.hasStatusEffect(LightEffects.LIGHT_FATIGUE) || user.hasStatusEffect(LightEffects.LIGHT_ACTIVE);
-	}
-
-	public static void activateLight(PlayerEntity player){
-
-		if(player.getWorld().isClient() || player.hasStatusEffect(LightEffects.LIGHT_FATIGUE)
-				|| player.hasStatusEffect(LightEffects.LIGHT_ACTIVE)
-		 		|| !CheckUtils.canActivateHere((ServerPlayerEntity) player)) {
-			return;
-		}
-
-		CURRENTLY_READY_LIGHT_PLAYER_CACHE.remove(player.getUuid());
-
-		player.addStatusEffect(new StatusEffectInstance(LightEffects.LIGHT_ACTIVE, (20*LIGHT_COMPONENT.get(player).getDuration())));
-
-		if(FabricLoader.getInstance().isModLoaded("coloredglowlib")){
-			//A bit janky but should do the job. I hope.
-			overrideTeamColorsPrev = CGLCompat.getLib().getOverrideTeamColors();
-			CGLCompat.getLib().setOverrideTeamColors(true);
-		}
-		LightComponent component = LIGHT_COMPONENT.get(player);
-		InnerLightType type = component.getType();
-		if(type.equals(InnerLightType.NONE)){
-			return;
-		}
-
-		if(FabricLoader.getInstance().isModLoaded("coloredglowlib")){
-			component.setPrevColor(CGLCompat.getLib().getColor(player));
-		}
-
-		if(type.equals(InnerLightType.HEAL)){
-			activateHeal(component, player);
-		}else if(type.equals(InnerLightType.DEFENCE)){
-			activateDefense(component, player);
-		}else if(type.equals(InnerLightType.STRENGTH)){
-			activateStrength(component, player);
-		}else if(type.equals(InnerLightType.BLAZING)){
-			activateBlazing(component, player);
-		}else if(type.equals(InnerLightType.FROST)){
-			activateFrost(component, player);
-		}else if(type.equals(InnerLightType.EARTHEN)){
-			activateEarthen(component, player);
-		}else if(type.equals(InnerLightType.WIND)){
-			activateWind(component, player);
-		}else if(type.equals(InnerLightType.AQUA)){
-			activateAqua(component, player);
-		}else if(type.equals(InnerLightType.FROG)){
-			activateFrog(component, player);
-		}
-		//for now defaults here
-		else{
-			activateHeal(component, player);
-		}
-
-		if(Config.PLAYER_GLOWS){
-			player.setGlowing(true);
-		}
-		if(!player.getWorld().isClient){
-			LightParticlesUtil.spawnDefaultLightParticleSequence((ServerPlayerEntity) player);
-			sendRenderRunePacket((ServerPlayerEntity) player);
-		}
-
-	}
-
-	/** Gets all the enemies near a player and returns them in a list
-	 * Hostile-non allies (aka not summoned or pets) and Enemy players
-	 * count as Enemies
-	 *
-	 * @param player The player in question
-	 * @return A list of the player's enemies in the box_expansion_amount
-	 * */
-	private static List<LivingEntity> getEnemies(PlayerEntity player){
-		List<LivingEntity> targets = new ArrayList<>();
-		List<LivingEntity> entities = player.getWorld().getEntitiesByClass(LivingEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amount), (entity1 -> true));
-		for(LivingEntity ent : entities){
-			if(ent instanceof HostileEntity && !CheckUtils.CheckAllies.checkAlly(player, ent)){
-				targets.add(ent);
-			}
-			if(ent instanceof PlayerEntity && CheckUtils.CheckAllies.checkEnemies(player, ent)){
-				targets.add(ent);
-			}
-		}
-		return targets;
-	}
-
-	/** Gets all the allies near a player and returns them in a list
-	 * Allied players and pets and summoned mobs count as allies.
-	 * The player itself is counted as well
-	 *<p>
-	 * They also need to be under a certain HP percentage (configurable in the config)
-	 *
-	 * @param player The player in question
-	 * @return A list of the player's enemies in the box_expansion_amount
-	 * */
-	public static List<LivingEntity> getAllies(PlayerEntity player){
-		List<LivingEntity> targets = new ArrayList<>();
-		List<LivingEntity> entities = player.getWorld().getEntitiesByClass(LivingEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amount), (entity1 -> true));
-		targets.add(player);
-		for(LivingEntity ent : entities){
-			if(CheckUtils.CheckAllies.checkAlly(player, ent)){
-				if(Config.ALWAYS_AFFECT_ALLIES || CheckUtils.checkSelfDanger(ent, Config.HP_PERCENTAGE_ALLIES)){
-					targets.add(ent);
-				}
-			}else if(ent instanceof TameableEntity){
-				if(player.equals(((TameableEntity) ent).getOwner())){
-					if(Config.ALWAYS_AFFECT_ALLIES || CheckUtils.checkSelfDanger(ent, Config.HP_PERCENTAGE_VARIANT)){
-						targets.add(ent);
-					}
-				}
-			}
-		}
-		return targets;
-	}
-
-	//=======================HEAL LIGHT=======================
-	public static void activateHeal(LightComponent component, PlayerEntity player){
-		List<LivingEntity> targets = new ArrayList<>();
-
-		if(component.getTargets().equals(TargetType.SELF)){
-			targets.add(player);
-			player.sendMessage(Text.translatable("light.description.activation.heal.allies"), true);
-		}
-		//There could be a bug where the player stands near only 1 ally that is 50% life or lower and
-		// then enderpearls to other companions and cures them. But it's ok because of lore,
-		// like the light saw an ally struggling and activated. Then it heals whoever is near.
-		// It's not a bug, it's a feature now.
-		//Yay.
-		else if(component.getTargets().equals(TargetType.ALLIES)){
-			targets.addAll(getAllies(player));
-			player.sendMessage(Text.translatable("light.description.activation.heal.allies"), true);
-		}
-
-		//Finds peaceful creatures and allies, also the player
-		else if(component.getTargets().equals(TargetType.VARIANT)){
-			targets.addAll(player.getWorld().getEntitiesByClass(PassiveEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amount), (entity1 -> true)));
-			List<LivingEntity> entities = player.getWorld().getEntitiesByClass(LivingEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amount), (entity1 -> true));
-			targets.add(player);
-			for(LivingEntity ent : entities){
-				// may need this to prevent bugs EDIT i don't even remember what "this" referred to eheh
-				if(CheckUtils.CheckAllies.checkAlly(player, ent)){
-					if(Config.ALWAYS_AFFECT_ALLIES || CheckUtils.checkSelfDanger(ent, Config.HP_PERCENTAGE_ALLIES)){
-						targets.add(ent);
-					}
-				}else if(ent instanceof TameableEntity){
-					if(player.equals(((TameableEntity) ent).getOwner())){
-						if(Config.ALWAYS_AFFECT_ALLIES || CheckUtils.checkSelfDanger(ent, Config.HP_PERCENTAGE_VARIANT)){
-							targets.add(ent);
-						}
-					}
-				}
-			}
-			player.sendMessage(Text.translatable("light.description.activation.heal.variant"), true);
-		}
-		if(debug){
-			player.sendMessage(Text.literal("Ok light triggered"), false);
-		}
-		new HealLight(targets, component.getMaxCooldown(), component.getPowerMultiplier(),
-				component.getDuration(), player).execute();
-	}
-
-	//=======================Defense Light=======================
-	public static void activateDefense(LightComponent component, PlayerEntity player){
-		List<LivingEntity> targets = new ArrayList<>();
-		if(component.getTargets().equals(TargetType.SELF)){
-			targets.add(player);
-			player.sendMessage(Text.translatable("light.description.activation.defense.self"), true);
-		}
-		else if(component.getTargets().equals(TargetType.ALLIES)){
-			targets.addAll(getAllies(player));
-			player.sendMessage(Text.translatable("light.description.activation.defense.allies"), true);
-		}
-
-		//Same here
-		else if(component.getTargets().equals(TargetType.VARIANT)){
-			if(CheckUtils.checkSelfDanger(player, Config.HP_PERCENTAGE_SELF)){
-				targets.add(player);
-			}
-			targets.addAll(player.getWorld().getEntitiesByClass(PassiveEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amount), (entity1 -> true)));
-			player.sendMessage(Text.translatable("light.description.activation.defense.variant"), true);
-		}
-		if(debug){
-			player.sendMessage(Text.literal("Ok light triggered"), false);
-		}
-		new DefenceLight(targets, component.getMaxCooldown(), component.getPowerMultiplier(),
-				component.getDuration(), player).execute();
-	}
-
-	//=======================Strength Light=======================
-	public static void activateStrength(LightComponent component, PlayerEntity player){
-		List<LivingEntity> targets = new ArrayList<>();
-
-		if(component.getTargets().equals(TargetType.SELF)){
-			targets.add(player);
-			player.sendMessage(Text.translatable("light.description.activation.strength.self"), true);
-		}else if(component.getTargets().equals(TargetType.VARIANT)){
-			targets.add(player);
-			player.sendMessage(Text.translatable("light.description.activation.strength.variant"), true);
-		}
-		else if(component.getTargets().equals(TargetType.ALLIES)){
-			targets.addAll(getAllies(player));
-			player.sendMessage(Text.translatable("light.description.activation.strength.allies"), true);
-		}
-
-		if(debug){
-			player.sendMessage(Text.literal("Ok light triggered"), false);
-		}
-		new StrengthLight(targets, component.getMaxCooldown(), component.getPowerMultiplier(),
-				component.getDuration(), player).execute();
-	}
-
-	//=======================Blazing Light=======================
-	public static void activateBlazing(LightComponent component, PlayerEntity player){
-		List<LivingEntity> targets = new ArrayList<>();
-
-		if(component.getTargets().equals(TargetType.ALL)){
-			targets.addAll(player.getWorld().getEntitiesByClass(LivingEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amount), (entity1 -> true)));
-			targets.remove(player);
-			player.sendMessage(Text.translatable("light.description.activation.blazing.all"), true);
-		}
-
-		else if(component.getTargets().equals(TargetType.ENEMIES) || component.getTargets().equals(TargetType.VARIANT)){
-			targets.addAll(getEnemies(player));
-			player.sendMessage(Text.translatable("light.description.activation.blazing.enemies"), true);
-		}
-
-
-		if(debug){
-			player.sendMessage(Text.literal("Ok light triggered"), false);
-		}
-		new BlazingLight(targets, component.getMaxCooldown(), component.getPowerMultiplier(),
-				component.getDuration(), player).execute();
-	}
-
-	//=======================Frost Light=======================
-	public static void activateFrost(LightComponent component, PlayerEntity player){
-		List<LivingEntity> targets = new ArrayList<>();
-		if(component.getTargets().equals(TargetType.ALL)){
-			targets.addAll(player.getWorld().getEntitiesByClass(LivingEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amount), (entity1 -> true)));
-			targets.remove(player);
-			player.sendMessage(Text.translatable("light.description.activation.frost.all"), true);
-		}
-
-		else if(component.getTargets().equals(TargetType.ENEMIES)){
-			targets.addAll(getEnemies(player));
-			player.sendMessage(Text.translatable("light.description.activation.frost.enemies"), true);
-		}else if(component.getTargets().equals(TargetType.ALLIES)){
-			targets.addAll(getAllies(player));
-			player.sendMessage(Text.translatable("light.description.activation.frost.allies"), true);
-		}if(component.getTargets().equals(TargetType.SELF)){
-			targets.add(player);
-			player.sendMessage(Text.translatable("light.description.activation.frost.self"), true);
-		}
-		if(debug){
-			player.sendMessage(Text.literal("Ok light triggered"), false);
-		}
-		new FrostLight(targets, component.getMaxCooldown(), component.getPowerMultiplier(),
-				component.getDuration(), player).execute();
-	}
-
-	//=======================Earthen Light=======================
-	public static void activateEarthen(LightComponent component, PlayerEntity player){
-		List<LivingEntity> targets = new ArrayList<>();
-		if(component.getTargets().equals(TargetType.VARIANT)){
-			player.sendMessage(Text.translatable("light.description.activation.earthen.variant"), true);
-		}
-
-		else if(component.getTargets().equals(TargetType.ENEMIES)){
-			targets.addAll(getEnemies(player));
-			player.sendMessage(Text.translatable("light.description.activation.earthen.enemies"), true);
-		}else if(component.getTargets().equals(TargetType.ALLIES)){
-			targets.addAll(getAllies(player));
-			player.sendMessage(Text.translatable("light.description.activation.earthen.allies"), true);
-		}if(component.getTargets().equals(TargetType.SELF)){
-			targets.add(player);
-			player.sendMessage(Text.translatable("light.description.activation.earthen.self"), true);
-		}
-
-		if(debug){
-			player.sendMessage(Text.literal("Ok light triggered"), false);
-		}
-		new EarthenLight(targets, component.getMaxCooldown(), component.getPowerMultiplier(),
-				component.getDuration(), player).execute();
-	}
-
-	//=======================Wind Light=======================
-	public static void activateWind(LightComponent component, PlayerEntity player){
-		List<LivingEntity> targets = new ArrayList<>();
-		if(component.getTargets().equals(TargetType.ALLIES)){
-			targets.addAll(getAllies(player));
-			player.sendMessage(Text.translatable("light.description.activation.wind.allies"), true);
-		}else if(component.getTargets().equals(TargetType.SELF)){
-			targets.add(player);
-			player.sendMessage(Text.translatable("light.description.activation.wind.self"), true);
-		}else if(component.getTargets().equals(TargetType.ALL)){
-			targets.addAll(player.getWorld().getEntitiesByClass(LivingEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amount), (entity1 -> true)));
-			targets.remove(player);
-			player.sendMessage(Text.translatable("light.description.activation.wind.all"), true);
-		}
-
-		if(debug){
-			player.sendMessage(Text.literal("Ok light triggered"), false);
-		}
-		new WindLight(targets, component.getMaxCooldown(), component.getPowerMultiplier(),
-				component.getDuration(), player).execute();
-	}
-
-	//=======================Aqua Light=======================
-	public static void activateAqua(LightComponent component, PlayerEntity player){
-		List<LivingEntity> targets = new ArrayList<>();
-		if(component.getTargets().equals(TargetType.ALL)){
-			targets.addAll(player.getWorld().getEntitiesByClass(LivingEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amount), (entity1 -> true)));
-			targets.remove(player);
-			player.sendMessage(Text.translatable("light.description.activation.aqua.all"), true);
-		}
-
-		else if(component.getTargets().equals(TargetType.ENEMIES)){
-			targets.addAll(getEnemies(player));
-			player.sendMessage(Text.translatable("light.description.activation.aqua.enemies"), true);
-		}else if(component.getTargets().equals(TargetType.ALLIES)){
-			targets.addAll(getAllies(player));
-			player.sendMessage(Text.translatable("light.description.activation.aqua.allies"), true);
-		}if(component.getTargets().equals(TargetType.SELF)){
-			targets.add(player);
-			player.sendMessage(Text.translatable("light.description.activation.aqua.self"), true);
-		}
-
-		if(debug){
-			player.sendMessage(Text.literal("Ok light triggered"), false);
-		}
-		new AquaLight(targets, component.getMaxCooldown(), component.getPowerMultiplier(),
-				component.getDuration(), player).execute();
-	}
-
-	//=======================Frog Light=======================
-	public static void activateFrog(LightComponent component, PlayerEntity player){
-
-		List<LivingEntity> targets = new ArrayList<>(player.getWorld().getEntitiesByClass(LivingEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amount), (entity1 -> true)));
-		player.sendMessage(Text.translatable("light.description.activation.frog"), true);
-
-		new FrogLight(targets, component.getMaxCooldown(), component.getPowerMultiplier(),
-				component.getDuration(), player).execute();
-	}
-
-	public static void sendRenderRunePacket(ServerPlayerEntity player){
-		try{
-			ServerPlayNetworking.send(player, new PlayRenderEffectPayloadS2C(RenderEffect.RUNES, -1));
-		}catch(Exception e){
-			LOGGER.error("FAILED to send data packets to the client!");
-			e.printStackTrace();
-		}
-	}
-
-	/**Adds the player to the list of players that are currently used to
-	 * trigger a light. Automatically removes them after 10 seconds.
-	 * */
-	public static void addToReadyList(PlayerEntity player){
-		//TODO if changig the used seconds becomes a thing, modify it here too.
-		CURRENTLY_READY_LIGHT_PLAYER_CACHE.put(player.getUuid(), 20*10);
-	}
-
-	public void registerReadyLightCacheRemover(){
-		ServerTickEvents.END_SERVER_TICK.register(server -> {
-			if(CURRENTLY_READY_LIGHT_PLAYER_CACHE.isEmpty()){
-				return;
-			}
-			Set<Map.Entry<UUID, Integer>> i_hate_the_concurrency_issue_map_entries = CURRENTLY_READY_LIGHT_PLAYER_CACHE.entrySet();
-			for( Map.Entry<UUID, Integer> entry : i_hate_the_concurrency_issue_map_entries){
-				if(entry.getValue() == 0){
-					CURRENTLY_READY_LIGHT_PLAYER_CACHE.remove(entry.getKey());
-				}else{
-					//If already removed should just return null i think, so it's ok.
-					CURRENTLY_READY_LIGHT_PLAYER_CACHE.replace(entry.getKey(), entry.getValue() -1);
-				}
-			}
-		});
-	}
+    // This logger is used to write text to the console and the log file.
+    // It is considered best practice to use your mod id as the logger's name.
+    // That way, it's clear which mod wrote info, warnings, and errors.
+    public static final String MOD_ID = "lightwithin";
+    public static final String PREFIX_MSG = "[LightWithin] ";
+    public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
+    public static int box_expansion_amount = 6;
+
+    private static final boolean debug = false;
+    public static Path PATH = Path.of(FabricLoader.getInstance().getConfigDir() + "/" + MOD_ID + "/");
+
+    public static boolean overrideTeamColorsPrev = false;
+
+    public static List<UUID> USED_CHARGE_PLAYER_CACHE = new ArrayList<>();
+    public static HashMap<UUID, Integer> CURRENTLY_READY_LIGHT_PLAYER_CACHE = new HashMap<>();
+
+    /**
+     * This is a map of the possible targets for each target type
+     * <p>
+     * It is also used in determining the likelihood of each target type being generated,
+     * from left to right is more likely. The most probable is the one on the left*/
+    public static final Map<InnerLightType, List<TargetType>> POSSIBLE_TARGETS = Map.ofEntries(
+            entry(InnerLightType.HEAL, Arrays.asList(TargetType.SELF, TargetType.ALLIES, TargetType.VARIANT)),
+            entry(InnerLightType.DEFENCE, Arrays.asList(TargetType.SELF, TargetType.ALLIES, TargetType.VARIANT)),
+            entry(InnerLightType.STRENGTH, Arrays.asList(TargetType.SELF, TargetType.ALLIES, TargetType.VARIANT)),
+            entry(InnerLightType.BLAZING, Arrays.asList(TargetType.ENEMIES, TargetType.ALL, TargetType.VARIANT)),
+            entry(InnerLightType.FROST, Arrays.asList(TargetType.ENEMIES, TargetType.ALLIES, TargetType.ALL, TargetType.SELF)),
+            entry(InnerLightType.EARTHEN, Arrays.asList(TargetType.SELF, TargetType.ENEMIES, TargetType.ALLIES, TargetType.VARIANT)),
+            entry(InnerLightType.WIND, Arrays.asList(TargetType.SELF, TargetType.ALL, TargetType.ALLIES)),
+            entry(InnerLightType.AQUA, Arrays.asList(TargetType.SELF, TargetType.ENEMIES, TargetType.ALLIES,  TargetType.ALL)),
+            entry(InnerLightType.FROG, List.of(TargetType.ALL))
+    );
+
+
+    public static final ComponentKey<LightComponent> LIGHT_COMPONENT =
+            ComponentRegistry.getOrCreate(getIdentifier("light_component"), LightComponent.class);
+
+    public static final ComponentKey<SummonedByComponent> SUMMONED_BY_COMPONENT =
+            ComponentRegistry.getOrCreate(getIdentifier("summoned_by_component"), SummonedByComponent.class);
+
+    @Override
+    public void onInitialize() {
+        // This code runs as soon as Minecraft is in a mod-load-used state.
+        // However, some things (like resources) may still be uninitialized.
+        // Proceed with mild caution.
+
+        LightCreationAndEvent.registerCreationListener();
+        LightTriggeringAndEvents.registerListeners();
+        registerLightUsedPacket();
+        registerLightChargeConsumedPacket();
+        registerReadyLightCacheRemover();
+        registerSyncOptionsOnJoin();
+        LightSounds.registerSounds();
+        LightEffects.registerModEffects();
+        LightItems.registerItems();
+        LightParticles.registerParticles();
+        LightBlocks.registerBlocks();
+        LootTableModifier.modifyLootTables();
+        LightCommands.registerArguments();
+        LightEntities.registerEntities();
+        LightItemComponents.registerComponents();
+
+        if(FabricLoader.getInstance().isModLoaded("flan")){
+            FlanCompat.registerFlan();
+        }
+        CommandRegistrationCallback.EVENT.register(LightCommands::registerCommands);
+
+
+        ServerLifecycleEvents.SERVER_STARTED.register(minecraftServer -> {
+            BrewRecipes.registerRecipes();
+            box_expansion_amount = Config.AREA_OF_SEARCH_FOR_ENTITIES;
+            if(box_expansion_amount == 0){
+                box_expansion_amount = 6;
+            }
+            try{
+                Config.reloadConfig();
+                BalanceConfig.reloadConfig();
+                TriggerConfig.reloadConfig();
+            }catch (Exception e){
+                LOGGER.error("There was an error while loading the config files!");
+                e.printStackTrace();
+            }
+
+            LightTriggerChecks.MIN_TRIGGER = TriggerConfig.TRIGGER_THRESHOLD;
+        });
+
+    }
+
+    /**Returns an identifier for this mod's stuff*/
+    public static Identifier getIdentifier(String path){
+        return Identifier.of(MOD_ID, path);
+    }
+
+    @Override
+    public void registerEntityComponentFactories(EntityComponentFactoryRegistry registry) {
+        registry.registerForPlayers(LIGHT_COMPONENT, LightComponent::new, RespawnCopyStrategy.ALWAYS_COPY);
+        registry.registerFor(DrownedEntity.class, SUMMONED_BY_COMPONENT, SummonedByComponent::new);
+        registry.registerFor(EarthGolemEntity.class, SUMMONED_BY_COMPONENT, SummonedByComponent::new);
+    }
+
+    private static void registerSyncOptionsOnJoin(){
+        PlayerJoinEvent.EVENT.register((player, server) -> {
+            if(player.getWorld().isClient){
+                return ActionResult.PASS;
+            }
+            syncCustomConfigOptions(player);
+            return ActionResult.PASS;
+        });
+    }
+
+    /**Sends a packet with updated config options to the client
+     * such as the auto light activation permission*/
+    public static void syncCustomConfigOptions(ServerPlayerEntity player){
+        Map<String, Boolean> booleanMap = new HashMap<>();
+        booleanMap.put(ConfigPacketConstants.AUTO_LIGHT_ACTIVATION, Config.AUTO_LIGHT_ACTIVATION);
+        //TODO if needed i'll add other settings
+        ConfigOptionSyncPayloadS2C payload = new ConfigOptionSyncPayloadS2C(booleanMap);
+        ServerPlayNetworking.send(player, payload);
+    }
+
+    private static void registerLightUsedPacket(){
+        PayloadTypeRegistry.playC2S().register(LightUsedPayloadC2S.ID, LightUsedPayloadC2S.PACKET_CODEC);
+
+        ServerPlayNetworking.registerGlobalReceiver(LightUsedPayloadC2S.ID, ((payload, context) -> {
+            ServerPlayerEntity player = context.player();
+            if(player.getWorld().isClient){
+                return;
+            }
+            addToReadyList(player);
+            if(player.getServer() == null){
+                LOGGER.error("Error while reciving LightChargeConsumedPacket, server is null!");
+                return;
+            }
+            player.getServer().execute( () -> {
+                try{
+                    //Handles the LightCharge being used. If it used, results will be true.
+                    if(payload.used()){
+
+                        if(!CheckUtils.canActivateHere(player)){
+                            player.sendMessage(Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.translatableWithFallback("light.charge.cant_use_here", "You are not allowed to use you InnerLight here!").formatted(Formatting.RED)));
+                            return;
+                        }
+
+                        //This could be laggy? Maybe?
+                        List<ServerPlayerEntity> players = player.getServerWorld().getPlayers();
+                        for(ServerPlayerEntity p : players){
+                            ServerPlayNetworking.send(p, new PlayRenderEffectPayloadS2C(RenderEffect.LIGHT_RAYS, player.getId()));
+                        }
+
+                        //TODO maybe also increase the max cooldown light-stat?
+                        //Currently just increases the cooldown. But the actual charges are fairly hard to get.
+                        USED_CHARGE_PLAYER_CACHE.add(player.getUuid());
+
+                        player.getWorld().playSound(player.getX(), player.getY(), player.getZ(), LightSounds.LIGHT_CHARGED, SoundCategory.PLAYERS, 1, 0.7f, true);
+
+                        if(Config.TARGET_FEEDBACK && Config.USED_CHARGE_COOLDOWN_MULTIPLIER > 1){
+                            player.sendMessage(Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.translatable("light.charge.cooldown_message").formatted(Formatting.YELLOW)));
+                        }
+                    }
+                    activateLight(player);
+                }catch (NoSuchElementException e){
+                    LOGGER.warn("No value in the packet!");
+                }catch (Exception e){
+                    LOGGER.error("There was an error while getting the packet!");
+                    e.printStackTrace();
+                }
+            });
+
+            //var results = LightUsedPacketC2S.read(buf);
+        }));
+    }
+
+    private static void registerLightChargeConsumedPacket(){
+        PayloadTypeRegistry.playC2S().register(LightChargeConsumedPayloadC2S.ID, LightChargeConsumedPayloadC2S.PACKET_CODEC);
+        ServerPlayNetworking.registerGlobalReceiver(LightChargeConsumedPayloadC2S.ID, ((payload, context) -> {
+            ServerPlayerEntity player = context.player();
+            if(player.getWorld().isClient){
+                return;
+            }
+            addToReadyList(player);
+            if(player.getServer() == null){
+                LOGGER.error("Error while reciving LightChargeConsumedPacket, server is null!");
+                return;
+            }
+            player.getServer().execute( () -> {
+                try{
+
+                    ///particle lightwithin:shine_particle ~ ~1 ~ 0.1 0.1 0.1 0.15 25 force
+                    if(!CheckUtils.canActivateHere(player)){
+                        return;
+                    }
+                    player.sendMessage(Text.translatable("light.charge.used").formatted(Formatting.YELLOW), true);
+
+                    ((ServerWorld) player.getWorld()).spawnParticles(
+                            LightParticles.SHINE_PARTICLE, player.getX(), player.getY()+player.getDimensions(player.getPose()).height()/2, player.getZ(),
+                            50, 0.1, 0.1, 0.1, 0.15
+                    );
+
+                    LIGHT_COMPONENT.get(player).removeLightCharges();
+                }catch (NoSuchElementException e){
+                    LOGGER.warn("No value in the packet!");
+                }catch (Exception e){
+                    LOGGER.error("There was an error while getting the packet!");
+                    e.printStackTrace();
+                }
+            });
+
+            //var results = LightUsedPacketC2S.read(buf);
+        }));
+    }
+
+    public static boolean isPlayerInCooldown(PlayerEntity user){
+        return user.hasStatusEffect(LightEffects.LIGHT_FATIGUE) || user.hasStatusEffect(LightEffects.LIGHT_ACTIVE);
+    }
+
+    public static void activateLight(PlayerEntity player){
+
+        if(player.getWorld().isClient() || player.hasStatusEffect(LightEffects.LIGHT_FATIGUE)
+                || player.hasStatusEffect(LightEffects.LIGHT_ACTIVE)
+                || !CheckUtils.canActivateHere((ServerPlayerEntity) player)) {
+            return;
+        }
+
+        CURRENTLY_READY_LIGHT_PLAYER_CACHE.remove(player.getUuid());
+
+        player.addStatusEffect(new StatusEffectInstance(LightEffects.LIGHT_ACTIVE, (20*LIGHT_COMPONENT.get(player).getDuration())));
+
+        if(FabricLoader.getInstance().isModLoaded("coloredglowlib")){
+            //A bit janky but should do the job. I hope.
+            overrideTeamColorsPrev = CGLCompat.getLib().getOverrideTeamColors();
+            CGLCompat.getLib().setOverrideTeamColors(true);
+        }
+        LightComponent component = LIGHT_COMPONENT.get(player);
+        InnerLightType type = component.getType();
+        if(type.equals(InnerLightType.NONE)){
+            return;
+        }
+
+        if(FabricLoader.getInstance().isModLoaded("coloredglowlib")){
+            component.setPrevColor(CGLCompat.getLib().getColor(player));
+        }
+
+        if(type.equals(InnerLightType.HEAL)){
+            activateHeal(component, player);
+        }else if(type.equals(InnerLightType.DEFENCE)){
+            activateDefense(component, player);
+        }else if(type.equals(InnerLightType.STRENGTH)){
+            activateStrength(component, player);
+        }else if(type.equals(InnerLightType.BLAZING)){
+            activateBlazing(component, player);
+        }else if(type.equals(InnerLightType.FROST)){
+            activateFrost(component, player);
+        }else if(type.equals(InnerLightType.EARTHEN)){
+            activateEarthen(component, player);
+        }else if(type.equals(InnerLightType.WIND)){
+            activateWind(component, player);
+        }else if(type.equals(InnerLightType.AQUA)){
+            activateAqua(component, player);
+        }else if(type.equals(InnerLightType.FROG)){
+            activateFrog(component, player);
+        }
+        //for now defaults here
+        else{
+            activateHeal(component, player);
+        }
+
+        if(Config.PLAYER_GLOWS){
+            player.setGlowing(true);
+        }
+        if(!player.getWorld().isClient){
+            LightParticlesUtil.spawnDefaultLightParticleSequence((ServerPlayerEntity) player);
+            sendRenderRunePacket((ServerPlayerEntity) player);
+        }
+
+    }
+
+    /** Gets all the enemies near a player and returns them in a list
+     * Hostile-non allies (aka not summoned or pets) and Enemy players
+     * count as Enemies
+     *
+     * @param player The player in question
+     * @return A list of the player's enemies in the box_expansion_amount
+     * */
+    private static List<LivingEntity> getEnemies(PlayerEntity player){
+        List<LivingEntity> targets = new ArrayList<>();
+        List<LivingEntity> entities = player.getWorld().getEntitiesByClass(LivingEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amount), (entity1 -> true));
+        for(LivingEntity ent : entities){
+            if(ent instanceof HostileEntity && !CheckUtils.CheckAllies.checkAlly(player, ent)){
+                targets.add(ent);
+            }
+            if(ent instanceof PlayerEntity && CheckUtils.CheckAllies.checkEnemies(player, ent)){
+                targets.add(ent);
+            }
+        }
+        return targets;
+    }
+
+    /** Gets all the allies near a player and returns them in a list
+     * Allied players and pets and summoned mobs count as allies.
+     * The player itself is counted as well
+     *<p>
+     * They also need to be under a certain HP percentage (configurable in the config)
+     *
+     * @param player The player in question
+     * @return A list of the player's enemies in the box_expansion_amount
+     * */
+    public static List<LivingEntity> getAllies(PlayerEntity player){
+        List<LivingEntity> targets = new ArrayList<>();
+        List<LivingEntity> entities = player.getWorld().getEntitiesByClass(LivingEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amount), (entity1 -> true));
+        targets.add(player);
+        for(LivingEntity ent : entities){
+            if(CheckUtils.CheckAllies.checkAlly(player, ent)){
+                if(Config.ALWAYS_AFFECT_ALLIES || CheckUtils.checkSelfDanger(ent, Config.HP_PERCENTAGE_ALLIES)){
+                    targets.add(ent);
+                }
+            }else if(ent instanceof TameableEntity){
+                if(player.equals(((TameableEntity) ent).getOwner())){
+                    if(Config.ALWAYS_AFFECT_ALLIES || CheckUtils.checkSelfDanger(ent, Config.HP_PERCENTAGE_VARIANT)){
+                        targets.add(ent);
+                    }
+                }
+            }
+        }
+        return targets;
+    }
+
+    //=======================HEAL LIGHT=======================
+    public static void activateHeal(LightComponent component, PlayerEntity player){
+        List<LivingEntity> targets = new ArrayList<>();
+
+        if(component.getTargets().equals(TargetType.SELF)){
+            targets.add(player);
+            player.sendMessage(Text.translatable("light.description.activation.heal.allies"), true);
+        }
+        //There could be a bug where the player stands near only 1 ally that is 50% life or lower and
+        // then enderpearls to other companions and cures them. But it's ok because of lore,
+        // like the light saw an ally struggling and activated. Then it heals whoever is near.
+        // It's not a bug, it's a feature now.
+        //Yay.
+        else if(component.getTargets().equals(TargetType.ALLIES)){
+            targets.addAll(getAllies(player));
+            player.sendMessage(Text.translatable("light.description.activation.heal.allies"), true);
+        }
+
+        //Finds peaceful creatures and allies, also the player
+        else if(component.getTargets().equals(TargetType.VARIANT)){
+            targets.addAll(player.getWorld().getEntitiesByClass(PassiveEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amount), (entity1 -> true)));
+            List<LivingEntity> entities = player.getWorld().getEntitiesByClass(LivingEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amount), (entity1 -> true));
+            targets.add(player);
+            for(LivingEntity ent : entities){
+                // may need this to prevent bugs EDIT i don't even remember what "this" referred to eheh
+                if(CheckUtils.CheckAllies.checkAlly(player, ent)){
+                    if(Config.ALWAYS_AFFECT_ALLIES || CheckUtils.checkSelfDanger(ent, Config.HP_PERCENTAGE_ALLIES)){
+                        targets.add(ent);
+                    }
+                }else if(ent instanceof TameableEntity){
+                    if(player.equals(((TameableEntity) ent).getOwner())){
+                        if(Config.ALWAYS_AFFECT_ALLIES || CheckUtils.checkSelfDanger(ent, Config.HP_PERCENTAGE_VARIANT)){
+                            targets.add(ent);
+                        }
+                    }
+                }
+            }
+            player.sendMessage(Text.translatable("light.description.activation.heal.variant"), true);
+        }
+        if(debug){
+            player.sendMessage(Text.literal("Ok light triggered"), false);
+        }
+        new HealLight(targets, component.getMaxCooldown(), component.getPowerMultiplier(),
+                component.getDuration(), player).execute();
+    }
+
+    //=======================Defense Light=======================
+    public static void activateDefense(LightComponent component, PlayerEntity player){
+        List<LivingEntity> targets = new ArrayList<>();
+        if(component.getTargets().equals(TargetType.SELF)){
+            targets.add(player);
+            player.sendMessage(Text.translatable("light.description.activation.defense.self"), true);
+        }
+        else if(component.getTargets().equals(TargetType.ALLIES)){
+            targets.addAll(getAllies(player));
+            player.sendMessage(Text.translatable("light.description.activation.defense.allies"), true);
+        }
+
+        //Same here
+        else if(component.getTargets().equals(TargetType.VARIANT)){
+            if(CheckUtils.checkSelfDanger(player, Config.HP_PERCENTAGE_SELF)){
+                targets.add(player);
+            }
+            targets.addAll(player.getWorld().getEntitiesByClass(PassiveEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amount), (entity1 -> true)));
+            player.sendMessage(Text.translatable("light.description.activation.defense.variant"), true);
+        }
+        if(debug){
+            player.sendMessage(Text.literal("Ok light triggered"), false);
+        }
+        new DefenceLight(targets, component.getMaxCooldown(), component.getPowerMultiplier(),
+                component.getDuration(), player).execute();
+    }
+
+    //=======================Strength Light=======================
+    public static void activateStrength(LightComponent component, PlayerEntity player){
+        List<LivingEntity> targets = new ArrayList<>();
+
+        if(component.getTargets().equals(TargetType.SELF)){
+            targets.add(player);
+            player.sendMessage(Text.translatable("light.description.activation.strength.self"), true);
+        }else if(component.getTargets().equals(TargetType.VARIANT)){
+            targets.add(player);
+            player.sendMessage(Text.translatable("light.description.activation.strength.variant"), true);
+        }
+        else if(component.getTargets().equals(TargetType.ALLIES)){
+            targets.addAll(getAllies(player));
+            player.sendMessage(Text.translatable("light.description.activation.strength.allies"), true);
+        }
+
+        if(debug){
+            player.sendMessage(Text.literal("Ok light triggered"), false);
+        }
+        new StrengthLight(targets, component.getMaxCooldown(), component.getPowerMultiplier(),
+                component.getDuration(), player).execute();
+    }
+
+    //=======================Blazing Light=======================
+    public static void activateBlazing(LightComponent component, PlayerEntity player){
+        List<LivingEntity> targets = new ArrayList<>();
+
+        if(component.getTargets().equals(TargetType.ALL)){
+            targets.addAll(player.getWorld().getEntitiesByClass(LivingEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amount), (entity1 -> true)));
+            targets.remove(player);
+            player.sendMessage(Text.translatable("light.description.activation.blazing.all"), true);
+        }
+
+        else if(component.getTargets().equals(TargetType.ENEMIES) || component.getTargets().equals(TargetType.VARIANT)){
+            targets.addAll(getEnemies(player));
+            player.sendMessage(Text.translatable("light.description.activation.blazing.enemies"), true);
+        }
+
+
+        if(debug){
+            player.sendMessage(Text.literal("Ok light triggered"), false);
+        }
+        new BlazingLight(targets, component.getMaxCooldown(), component.getPowerMultiplier(),
+                component.getDuration(), player).execute();
+    }
+
+    //=======================Frost Light=======================
+    public static void activateFrost(LightComponent component, PlayerEntity player){
+        List<LivingEntity> targets = new ArrayList<>();
+        if(component.getTargets().equals(TargetType.ALL)){
+            targets.addAll(player.getWorld().getEntitiesByClass(LivingEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amount), (entity1 -> true)));
+            targets.remove(player);
+            player.sendMessage(Text.translatable("light.description.activation.frost.all"), true);
+        }
+
+        else if(component.getTargets().equals(TargetType.ENEMIES)){
+            targets.addAll(getEnemies(player));
+            player.sendMessage(Text.translatable("light.description.activation.frost.enemies"), true);
+        }else if(component.getTargets().equals(TargetType.ALLIES)){
+            targets.addAll(getAllies(player));
+            player.sendMessage(Text.translatable("light.description.activation.frost.allies"), true);
+        }if(component.getTargets().equals(TargetType.SELF)){
+            targets.add(player);
+            player.sendMessage(Text.translatable("light.description.activation.frost.self"), true);
+        }
+        if(debug){
+            player.sendMessage(Text.literal("Ok light triggered"), false);
+        }
+        new FrostLight(targets, component.getMaxCooldown(), component.getPowerMultiplier(),
+                component.getDuration(), player).execute();
+    }
+
+    //=======================Earthen Light=======================
+    public static void activateEarthen(LightComponent component, PlayerEntity player){
+        List<LivingEntity> targets = new ArrayList<>();
+        if(component.getTargets().equals(TargetType.VARIANT)){
+            player.sendMessage(Text.translatable("light.description.activation.earthen.variant"), true);
+        }
+
+        else if(component.getTargets().equals(TargetType.ENEMIES)){
+            targets.addAll(getEnemies(player));
+            player.sendMessage(Text.translatable("light.description.activation.earthen.enemies"), true);
+        }else if(component.getTargets().equals(TargetType.ALLIES)){
+            targets.addAll(getAllies(player));
+            player.sendMessage(Text.translatable("light.description.activation.earthen.allies"), true);
+        }if(component.getTargets().equals(TargetType.SELF)){
+            targets.add(player);
+            player.sendMessage(Text.translatable("light.description.activation.earthen.self"), true);
+        }
+
+        if(debug){
+            player.sendMessage(Text.literal("Ok light triggered"), false);
+        }
+        new EarthenLight(targets, component.getMaxCooldown(), component.getPowerMultiplier(),
+                component.getDuration(), player).execute();
+    }
+
+    //=======================Wind Light=======================
+    public static void activateWind(LightComponent component, PlayerEntity player){
+        List<LivingEntity> targets = new ArrayList<>();
+        if(component.getTargets().equals(TargetType.ALLIES)){
+            targets.addAll(getAllies(player));
+            player.sendMessage(Text.translatable("light.description.activation.wind.allies"), true);
+        }else if(component.getTargets().equals(TargetType.SELF)){
+            targets.add(player);
+            player.sendMessage(Text.translatable("light.description.activation.wind.self"), true);
+        }else if(component.getTargets().equals(TargetType.ALL)){
+            targets.addAll(player.getWorld().getEntitiesByClass(LivingEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amount), (entity1 -> true)));
+            targets.remove(player);
+            player.sendMessage(Text.translatable("light.description.activation.wind.all"), true);
+        }
+
+        if(debug){
+            player.sendMessage(Text.literal("Ok light triggered"), false);
+        }
+        new WindLight(targets, component.getMaxCooldown(), component.getPowerMultiplier(),
+                component.getDuration(), player).execute();
+    }
+
+    //=======================Aqua Light=======================
+    public static void activateAqua(LightComponent component, PlayerEntity player){
+        List<LivingEntity> targets = new ArrayList<>();
+        if(component.getTargets().equals(TargetType.ALL)){
+            targets.addAll(player.getWorld().getEntitiesByClass(LivingEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amount), (entity1 -> true)));
+            targets.remove(player);
+            player.sendMessage(Text.translatable("light.description.activation.aqua.all"), true);
+        }
+
+        else if(component.getTargets().equals(TargetType.ENEMIES)){
+            targets.addAll(getEnemies(player));
+            player.sendMessage(Text.translatable("light.description.activation.aqua.enemies"), true);
+        }else if(component.getTargets().equals(TargetType.ALLIES)){
+            targets.addAll(getAllies(player));
+            player.sendMessage(Text.translatable("light.description.activation.aqua.allies"), true);
+        }if(component.getTargets().equals(TargetType.SELF)){
+            targets.add(player);
+            player.sendMessage(Text.translatable("light.description.activation.aqua.self"), true);
+        }
+
+        if(debug){
+            player.sendMessage(Text.literal("Ok light triggered"), false);
+        }
+        new AquaLight(targets, component.getMaxCooldown(), component.getPowerMultiplier(),
+                component.getDuration(), player).execute();
+    }
+
+    //=======================Frog Light=======================
+    public static void activateFrog(LightComponent component, PlayerEntity player){
+
+        List<LivingEntity> targets = new ArrayList<>(player.getWorld().getEntitiesByClass(LivingEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amount), (entity1 -> true)));
+        player.sendMessage(Text.translatable("light.description.activation.frog"), true);
+
+        new FrogLight(targets, component.getMaxCooldown(), component.getPowerMultiplier(),
+                component.getDuration(), player).execute();
+    }
+
+    public static void sendRenderRunePacket(ServerPlayerEntity player){
+        try{
+            ServerPlayNetworking.send(player, new PlayRenderEffectPayloadS2C(RenderEffect.RUNES, -1));
+        }catch(Exception e){
+            LOGGER.error("FAILED to send data packets to the client!");
+            e.printStackTrace();
+        }
+    }
+
+    /**Adds the player to the list of players that are currently used to
+     * trigger a light. Automatically removes them after 10 seconds.
+     * */
+    public static void addToReadyList(PlayerEntity player){
+        //TODO if changig the used seconds becomes a thing, modify it here too.
+        CURRENTLY_READY_LIGHT_PLAYER_CACHE.put(player.getUuid(), 20*10);
+    }
+
+    public void registerReadyLightCacheRemover(){
+        ServerTickEvents.END_SERVER_TICK.register(server -> {
+            if(CURRENTLY_READY_LIGHT_PLAYER_CACHE.isEmpty()){
+                return;
+            }
+            ConcurrentHashMap<UUID, Integer> copy = new ConcurrentHashMap<>(CURRENTLY_READY_LIGHT_PLAYER_CACHE);
+
+            copy.forEach((key, value) -> {
+                if(value == 0){
+                    CURRENTLY_READY_LIGHT_PLAYER_CACHE.remove(key);
+                }else{
+                    //If already removed should just return null i think, so it's ok.
+                    CURRENTLY_READY_LIGHT_PLAYER_CACHE.replace(key, value -1);
+                }
+            });
+        });
+    }
 
 }

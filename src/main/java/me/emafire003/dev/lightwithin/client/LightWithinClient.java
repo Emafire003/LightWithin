@@ -38,7 +38,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.screen.ScreenTexts;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
 import net.minecraft.util.Util;
 
 import java.net.URI;
@@ -100,7 +99,7 @@ public class LightWithinClient implements ClientModInitializer {
 
         EntityModelLayerRegistry.registerModelLayer(MODEL_EARTH_GOLEM_LAYER, EarthGolemEntityModel::getTexturedModelData);
 
-        ClientConfig.reloadConfig();
+        ClientConfig.registerConfigs();
 
         ClientTickEvents.END_CLIENT_TICK.register((minecraftClient -> {
             //This is done as to not display another Light Ready icon when it just triggered
