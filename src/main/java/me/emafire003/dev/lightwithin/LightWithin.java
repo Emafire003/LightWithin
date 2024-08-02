@@ -107,6 +107,9 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
         // However, some things (like resources) may still be uninitialized.
         // Proceed with mild caution.
 
+        //Must be run before the packt stuff
+        registerPayloadIds();
+
         LightCreationAndEvent.registerCreationListener();
         LightTriggeringAndEvents.registerListeners();
         registerLightUsedPacket();
@@ -181,9 +184,22 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
         ServerPlayNetworking.send(player, payload);
     }
 
-    private static void registerLightUsedPacket(){
-        PayloadTypeRegistry.playC2S().register(LightUsedPayloadC2S.ID, LightUsedPayloadC2S.PACKET_CODEC);
+    private static void registerPayloadIds(){
+        LOGGER.debug("Registering packets and paylaod ids in the common module...");
 
+        //Client to Server (serverbound packets)
+        PayloadTypeRegistry.playC2S().register(LightUsedPayloadC2S.ID, LightUsedPayloadC2S.PACKET_CODEC);
+        PayloadTypeRegistry.playC2S().register(LightChargeConsumedPayloadC2S.ID, LightChargeConsumedPayloadC2S.PACKET_CODEC);
+
+        //Server to Client (clientbound packets)
+        PayloadTypeRegistry.playS2C().register(LightReadyPayloadS2C.ID, LightReadyPayloadS2C.PACKET_CODEC);
+        PayloadTypeRegistry.playS2C().register(ConfigOptionSyncPayloadS2C.ID, ConfigOptionSyncPayloadS2C.PACKET_CODEC);
+        PayloadTypeRegistry.playS2C().register(PlayRenderEffectPayloadS2C.ID, PlayRenderEffectPayloadS2C.PACKET_CODEC);
+        PayloadTypeRegistry.playS2C().register(WindLightVelocityPayloadS2C.ID, WindLightVelocityPayloadS2C.PACKET_CODEC);
+
+    }
+
+    private static void registerLightUsedPacket(){
         ServerPlayNetworking.registerGlobalReceiver(LightUsedPayloadC2S.ID, ((payload, context) -> {
             ServerPlayerEntity player = context.player();
             if(player.getWorld().isClient){
@@ -234,7 +250,6 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
     }
 
     private static void registerLightChargeConsumedPacket(){
-        PayloadTypeRegistry.playC2S().register(LightChargeConsumedPayloadC2S.ID, LightChargeConsumedPayloadC2S.PACKET_CODEC);
         ServerPlayNetworking.registerGlobalReceiver(LightChargeConsumedPayloadC2S.ID, ((payload, context) -> {
             ServerPlayerEntity player = context.player();
             if(player.getWorld().isClient){

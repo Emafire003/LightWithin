@@ -27,7 +27,6 @@ import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
-import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.ConfirmScreen;
@@ -163,8 +162,8 @@ public class LightWithinClient implements ClientModInitializer {
         return event_handler;
     }
 
+
     private void registerLightReadyPacket(){
-        PayloadTypeRegistry.playS2C().register(LightReadyPayloadS2C.ID, LightReadyPayloadS2C.PACKET_CODEC);
         ClientPlayNetworking.registerGlobalReceiver(LightReadyPayloadS2C.ID, (payload, context) -> {
             MinecraftClient client = context.client();
             client.execute(() -> {
@@ -193,8 +192,6 @@ public class LightWithinClient implements ClientModInitializer {
     }
 
     private void registerConfigOptionsSyncPacket(){
-        PayloadTypeRegistry.playS2C().register(ConfigOptionSyncPayloadS2C.ID, ConfigOptionSyncPayloadS2C.PACKET_CODEC);
-
         ClientPlayNetworking.registerGlobalReceiver(ConfigOptionSyncPayloadS2C.ID, (payload, context) -> {
             MinecraftClient client = context.client();
             client.execute(() -> {
@@ -214,7 +211,6 @@ public class LightWithinClient implements ClientModInitializer {
     private void registerPlayRenderEffectPacket(){
         LOGGER.debug("Registering play render effect packet receiver on client...");
 
-        PayloadTypeRegistry.playS2C().register(PlayRenderEffectPayloadS2C.ID, PlayRenderEffectPayloadS2C.PACKET_CODEC);
         ClientPlayNetworking.registerGlobalReceiver(PlayRenderEffectPayloadS2C.ID, (payload, context) -> {
             MinecraftClient client = context.client();
             RenderEffect effect = payload.effect();
@@ -288,7 +284,6 @@ public class LightWithinClient implements ClientModInitializer {
 
     private void registerWindLightVelocityPacket(){
         LOGGER.debug("Registering windlight velocity packet receiver on client...");
-        PayloadTypeRegistry.playS2C().register(WindLightVelocityPayloadS2C.ID, WindLightVelocityPayloadS2C.PACKET_CODEC);
         ClientPlayNetworking.registerGlobalReceiver(WindLightVelocityPayloadS2C.ID, (payload, context) -> {
             MinecraftClient client = context.client();
             client.execute(() -> {
