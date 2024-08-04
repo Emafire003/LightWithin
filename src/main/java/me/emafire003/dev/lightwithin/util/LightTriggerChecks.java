@@ -13,6 +13,7 @@ import net.minecraft.entity.passive.FrogEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.text.Text;
 
 import static me.emafire003.dev.lightwithin.LightWithin.*;
 
@@ -679,64 +680,69 @@ public class LightTriggerChecks {
     }
 
 
-    //TODO actually implement
     public static void checkForestAura(PlayerEntity player, LightComponent component, Entity attacker, Entity target){
         double trigger_sum = 0;
-        /**If the player has ALL as target, he needs to be hurt (or an ally has to die, but that depends on the trigger event)*/
+
         if(component.getTargets().equals(TargetType.ALL)){
 
-            //Triggers with: Low health, Very low health, Surrounded, forest
+            //Triggers with: Low health, Very low health, Surrounded,
+            // forest, allies (+1), checkLeavesAround, poisoned or debuffed maybe
 
             //Checks if the player is very low health
             if(CheckUtils.checkSelfDanger(player, Config.HP_PERCENTAGE_SELF)){
-                trigger_sum = trigger_sum+TriggerConfig.BLAZING_ALL_VERY_LOW_HEALTH;
+                player.sendMessage(Text.literal("+3 very low"));
+                trigger_sum = trigger_sum+TriggerConfig.FOREST_AURA_ALL_VERY_LOW_HEALTH; //+3
                 //Checks if the player has low health
             }else if(CheckUtils.checkSelfDanger(player, Config.HP_PERCENTAGE_SELF+Config.HP_PERCENTAGE_INCREMENT)){
-                trigger_sum=trigger_sum+TriggerConfig.BLAZING_ALL_LOW_HEALTH;
+                trigger_sum=trigger_sum+TriggerConfig.FOREST_AURA_ALL_LOW_HEALTH; //+2
+                player.sendMessage(Text.literal("+2 low"));
+            }
+            if(CheckUtils.checkAllyHealth(player, attacker, Config.HP_PERCENTAGE_ALLIES)){
+                trigger_sum = trigger_sum + TriggerConfig.FOREST_AURA_ALL_ALLY_LOW_HEALTH; //+1
+                player.sendMessage(Text.literal("+1 allies low"));
             }
             //Checks if the player is surrounded
             if(Config.CHECK_SURROUNDED && CheckUtils.checkSurrounded(player)){
-                trigger_sum=trigger_sum+TriggerConfig.BLAZING_ALL_SURROUNDED;
+                trigger_sum=trigger_sum+TriggerConfig.FOREST_AURA_ALL_SURROUNDED;//+2
+                player.sendMessage(Text.literal("+2 surrounded"));
             }
-            if(player.isOnFire()){
-                trigger_sum = trigger_sum+TriggerConfig.BLAZING_ALL_ONFIRE;
-            }
-            //Checks if the player has low armor durability
-            if(Config.CHECK_ARMOR_DURABILITY && CheckUtils.checkArmorDurability(player, Config.DUR_PERCENTAGE_SELF)){
-                trigger_sum=trigger_sum+TriggerConfig.BLAZING_ALL_ARMOR_DURABILITY;
+            if(CheckUtils.checkNearLeaves(player, TriggerConfig.FOREST_AURA_PERCENT_OF_LEAVES_REQUIRED)){
+                trigger_sum = trigger_sum+TriggerConfig.FOREST_AURA_ALL_LEAVES; //+1
+                player.sendMessage(Text.literal("+1 leaves"));
             }
             //Checks if the player has the optimal criteria for activation
-            if(CheckUtils.checkBlazing(player)){
-                trigger_sum=trigger_sum+TriggerConfig.BLAZING_ALL_CONDITIONS;
+            if(CheckUtils.checkForestAura(player)){
+                player.sendMessage(Text.literal("+3 conditions"));
+                trigger_sum=trigger_sum+TriggerConfig.FOREST_AURA_ALL_CONDITIONS; //+3
             }
             if(trigger_sum >= MIN_TRIGGER){
                 sendLightTriggered((ServerPlayerEntity) player);
             }
         }
         /**CHECKS if the player has ENEMIES as target, either his or his allies health needs to be low*/
-        else if(component.getTargets().equals(TargetType.ENEMIES) || component.getTargets().equals(TargetType.VARIANT)){
+        else if(component.getTargets().equals(TargetType.SELF)){
 
-            if(CheckUtils.checkSelfDanger(player, Config.HP_PERCENTAGE_SELF+Config.HP_PERCENTAGE_INCREMENT/2)){
-                trigger_sum = trigger_sum+TriggerConfig.BLAZING_ENEMIES_VERY_LOW_HEALTH;
+            if(CheckUtils.checkSelfDanger(player, Config.HP_PERCENTAGE_SELF)){
+                trigger_sum = trigger_sum+TriggerConfig.FOREST_AURA_SELF_VERY_LOW_HEALTH; //+3
+                player.sendMessage(Text.literal("+3 very low"));
+                //Checks if the player has low health
+            }else if(CheckUtils.checkSelfDanger(player, Config.HP_PERCENTAGE_SELF+Config.HP_PERCENTAGE_INCREMENT)){
+                trigger_sum=trigger_sum+TriggerConfig.FOREST_AURA_SELF_LOW_HEALTH; //+2
+                player.sendMessage(Text.literal("+2 low"));
             }
             //Checks if the player is surrounded
             if(Config.CHECK_SURROUNDED && CheckUtils.checkSurrounded(player)){
-                trigger_sum=trigger_sum+TriggerConfig.BLAZING_ENEMIES_SURROUNDED;
+                trigger_sum=trigger_sum+TriggerConfig.FOREST_AURA_SELF_SURROUNDED;//+2
+                player.sendMessage(Text.literal("+2 surrounded"));
             }
-            if(player.isOnFire()){
-                trigger_sum = trigger_sum+TriggerConfig.BLAZING_ENEMIES_ONFIRE;
-            }
-            //Checks if the player'sallies have low armor durability
-            if(!player.equals(target) && Config.CHECK_ARMOR_DURABILITY && CheckUtils.checkAllyArmor(player, target, Config.DUR_PERCENTAGE_ALLIES)){
-                trigger_sum=trigger_sum+TriggerConfig.BLAZING_ENEMIES_ALLY_ARMOR_DURABILITY;
-            }
-            //Checks if the player has low armor durability
-            if(Config.CHECK_ARMOR_DURABILITY && CheckUtils.checkArmorDurability(player, Config.DUR_PERCENTAGE_SELF)){
-                trigger_sum=trigger_sum+TriggerConfig.BLAZING_ENEMIES_ARMOR_DURABILITY;
+            if(CheckUtils.checkHasHarmfulStatusEffect(player)){
+                trigger_sum = trigger_sum+TriggerConfig.FOREST_AURA_SELF_HARMFUL_EFFECT; //+1
+                player.sendMessage(Text.literal("+1 harmful effect"));
             }
             //Checks if the player has the optimal criteria for activation
-            if(CheckUtils.checkBlazing(player)){
-                trigger_sum=trigger_sum+TriggerConfig.BLAZING_ENEMIES_CONDITIONS;
+            if(CheckUtils.checkForestAura(player)){
+                trigger_sum=trigger_sum+TriggerConfig.FOREST_AURA_SELF_CONDITIONS; //+3
+                player.sendMessage(Text.literal("+3 conditions"));
             }
             if(trigger_sum >= MIN_TRIGGER){
                 sendLightTriggered((ServerPlayerEntity) player);

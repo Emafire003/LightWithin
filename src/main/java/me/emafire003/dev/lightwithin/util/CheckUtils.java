@@ -20,7 +20,6 @@ import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectCategory;
-import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.passive.PassiveEntity;
@@ -643,6 +642,85 @@ public class CheckUtils {
         //If no match has been found, return false.
     }
 
+    /** Checks for multiple blocks in a certain radius from the player pos
+     * if they match at least one from the given list.
+     * <p>
+     * If SHOULD_CHECK_BLOCKS from the config it's on false, it will only check the block
+     * under the player's feet.
+     *
+     * @param player The player for which we are performing the check for
+     * @param blockTagKey A tag of blocks that if found, will return a positive match
+     * @param rad The radius in block in which to check (The lower, the better for the performance)
+     * @param number The minimum number of blocks around the player needed for it to return true
+     * */
+    public static boolean checkMultipleBlocks(PlayerEntity player, TagKey<Block> blockTagKey, int rad, int number){
+        if(!Config.SHOULD_CHECK_BLOCKS){
+            BlockPos pos = player.getBlockPos().add(0, -1, 0);
+            if(player.getWorld().getBlockState(pos).isIn(blockTagKey)){
+                return true;
+            }
+        }
+        int n = 0;
+
+        BlockPos origin = player.getBlockPos();
+        for(int y = -rad; y <= rad; y++)
+        {
+            for(int x = -rad; x <= rad; x++)
+            {
+                for(int z = -rad; z <= rad; z++)
+                {
+                    BlockPos pos = origin.add(x, y, z);
+                    if(player.getWorld().getBlockState(pos).isIn(blockTagKey)){
+                        n++;
+                    }
+
+                }
+            }
+        }
+        return n >= number;
+        //If no match has been found, return false.
+    }
+
+    /** Checks for multiple blocks in a certain radius from the player pos
+     * if they match at least one from the given list.
+     * <p>
+     * If SHOULD_CHECK_BLOCKS from the config it's on false, it will only check the block
+     * under the player's feet.
+     *
+     * @param player The player for which we are performing the check for
+     * @param blockTagKey A tag of blocks that if found, will return a positive match
+     * @param rad The radius in block in which to check (The lower, the better for the performance)
+     * @param percent The minimum percent of blocks around the player needed for it to return true
+     * */
+    public static boolean checkMultipleBlocksPercent(PlayerEntity player, TagKey<Block> blockTagKey, int rad, double percent){
+        if(!Config.SHOULD_CHECK_BLOCKS){
+            BlockPos pos = player.getBlockPos().add(0, -1, 0);
+            if(player.getWorld().getBlockState(pos).isIn(blockTagKey)){
+                return true;
+            }
+        }
+        int n = 0;
+        int tot = 0;
+
+        BlockPos origin = player.getBlockPos();
+        for(int y = -rad; y <= rad; y++)
+        {
+            for(int x = -rad; x <= rad; x++)
+            {
+                for(int z = -rad; z <= rad; z++)
+                {
+                    BlockPos pos = origin.add(x, y, z);
+                    tot = tot+1;
+                    if(player.getWorld().getBlockState(pos).isIn(blockTagKey)){
+                        n++;
+                    }
+
+                }
+            }
+        }
+        return percent >= ( (double) (100 * n)/tot );
+    }
+
     /**Used to check if the player has something that can be considered a Heat Source
      * for the Blazing Light
      *
@@ -744,12 +822,18 @@ public class CheckUtils {
             return true;
         }
 
-        //Maybe if they are standing on a tree? Or maybe if they have a lot of trees around?
-        //Maybe even the saplings in the hand
-
         ItemStack main = player.getMainHandStack();
         ItemStack off = player.getOffHandStack();
         return main.isIn(ItemTags.SAPLINGS) || off.isIn(ItemTags.SAPLINGS);
+    }
+
+    /**Used to check if the player is near some leaves
+     *
+     * @param player The player to perform checks on
+     * @param percent The minimum percent of blocks that need to be leaves around the player (0-100)
+     * */
+    public static boolean checkNearLeaves(PlayerEntity player, double percent){
+        return checkMultipleBlocksPercent(player, BlockTags.LEAVES, Config.TRIGGER_BLOCK_RADIUS, percent);
     }
 
     public static boolean checkFalling(LivingEntity entity) {
@@ -779,16 +863,6 @@ public class CheckUtils {
         }
         return false;
 
-    }
-
-    public static boolean checkDebuffed(LivingEntity entity){
-        Collection<StatusEffectInstance> a = entity.getStatusEffects();
-        for(StatusEffectInstance status : a){
-            if(status.getEffectType().getCategory().equals(StatusEffectCategory.HARMFUL)){
-                return true;
-            }
-        }
-        return false;
     }
 
     /**Rerturn a list of the player's enemies in the area
