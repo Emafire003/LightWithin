@@ -129,7 +129,6 @@ public class ForestAuraLight extends InnerLight {
 
             for(int i = 0; i < puffs; i++){
                 //-(puffs-i)
-                //TODO test out. Cool. doesn't work
                 int puff_duration = caster.getRandom().nextBetween(5, 5+total_duration);
                 total_duration = total_duration-(puff_duration-5);
                 if(power_multiplier > 5){
@@ -184,7 +183,6 @@ public class ForestAuraLight extends InnerLight {
             ForestPuffColor.BLUE, ForestPuffColor.ORANGE, ForestPuffColor.BLACK, ForestPuffColor.RED);
 
 
-    //TODO either change this or the other one
     public static double PUFF_BLOCK_RANGE = 1.5;
 
     private static final int max_tries = 10000;
@@ -224,6 +222,7 @@ public class ForestAuraLight extends InnerLight {
                 (entity -> (
                         //TODO remove after debug and uncomment the other
                         true
+                        //TODO maybe this should become like !hasForestAuraActivated
                         //!entity.equals(caster) && !CheckUtils.CheckAllies.checkAlly(caster, entity)
                 )));
 
