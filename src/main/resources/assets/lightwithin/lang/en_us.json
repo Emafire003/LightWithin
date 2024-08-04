@@ -106,6 +106,9 @@
   "light.description.activation.aqua.self": "Let me swiftly move on a watery carpet!",
   "light.description.activation.aqua.allies": "Let us swiftly move on a watery carpet!",
 
+  "light.description.activation.forest_aura.all": "The forest grants you its power!",
+  "light.description.activation.forest_aura.self": "The forest will become one with you!",
+
   "config.lightwithin.name": "LightWithin client options",
   "config.lightwithin.category_name": "Options",
   "config.lightwithin.description": "A settings menu to manage what is rendered on the client",

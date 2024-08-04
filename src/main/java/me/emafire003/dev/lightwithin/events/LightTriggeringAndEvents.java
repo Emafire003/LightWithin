@@ -89,7 +89,7 @@ public class LightTriggeringAndEvents {
             checkWind(player, component, attacker, target);
         }
         if(component.getType().equals(InnerLightType.FOREST_AURA)){
-            player.sendMessage(Text.literal("Implement check for forest aura!"));
+            checkForestAura(player, component, attacker, target);
         }
         if(component.getType().equals(InnerLightType.FROG)){
             checkFrog(player, component, attacker, target);
@@ -333,6 +333,9 @@ public class LightTriggeringAndEvents {
             if(component.getType().equals(InnerLightType.AQUA) && entity instanceof LivingEntity){
                 checkAqua(player, component, player, (LivingEntity) entity);
             }
+            if(component.getType().equals(InnerLightType.FOREST_AURA)){
+                checkForestAura(player, component, player, entity);
+            }
             return ActionResult.PASS;
         } );
 
@@ -362,6 +365,9 @@ public class LightTriggeringAndEvents {
                     }
                     if(component.getType().equals(InnerLightType.AQUA)){
                         checkAqua(player, component, player, entity);
+                    }
+                    if(component.getType().equals(InnerLightType.FOREST_AURA)){
+                        checkForestAura(player, component, attacker, entity);
                     }
                     /**End*/
                 }

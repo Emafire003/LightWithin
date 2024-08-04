@@ -19,7 +19,7 @@ public class TriggerConfig {
     public static SimpleConfig CONFIG;
     private static ConfigProvider configs;
 
-    private static final int ver = 2;
+    private static final int ver = 3;
     public static int VERSION;
     
     public static int TRIGGER_THRESHOLD;
@@ -228,6 +228,24 @@ public class TriggerConfig {
     private static final List<String> aqua_items = CheckUtils.toItemStringList(Arrays.asList(Items.WATER_BUCKET, Items.GLASS_BOTTLE, Items.HEART_OF_THE_SEA, Items.NAUTILUS_SHELL, Items.CONDUIT));
     private static final List<String> aqua_blocks = CheckUtils.toBlockStringList(Arrays.asList(Blocks.WATER, Blocks.WATER_CAULDRON, Blocks.CONDUIT, Blocks.WET_SPONGE));
 
+    //V3
+    //Forest Aura Light
+    //All
+    public static int FOREST_AURA_ALL_VERY_LOW_HEALTH = 3;
+    public static int FOREST_AURA_ALL_LOW_HEALTH = 2;
+    public static int FOREST_AURA_ALL_ALLY_LOW_HEALTH = 1;
+    public static int FOREST_AURA_ALL_SURROUNDED = 2;
+    public static int FOREST_AURA_ALL_CONDITIONS = 3;
+    public static int FOREST_AURA_ALL_LEAVES = 1;
+    
+    //Self
+    public static int FOREST_AURA_SELF_VERY_LOW_HEALTH = 3;
+    public static int FOREST_AURA_SELF_LOW_HEALTH = 2;
+    public static int FOREST_AURA_SELF_SURROUNDED = 2;
+    public static int FOREST_AURA_SELF_HARMFUL_EFFECT = 1;
+    public static int FOREST_AURA_SELF_CONDITIONS = 3;
+    
+    public static double FOREST_AURA_PERCENT_OF_LEAVES_REQUIRED = 70.0;
 
 
     private static final String config_name = "_trigger_balance";
@@ -531,6 +549,22 @@ public class TriggerConfig {
         configs.addKeyValuePair(new Pair<>("aqua_allies_ally_drowning", 1), ally_drowning);
         configs.addKeyValuePair(new Pair<>("aqua_allies_conditions", 3), light_conditions_1 + "aqua" + light_conditions_2);
 
+        //==========================Forest Aura==========================
+        configs.addKeyValuePair(new Pair<>("forest_aura_required_leaves_percent", 70.0), "The percent (0.0-100.0) of blocks around the player that need to be leaves");
+        //All
+        configs.addKeyValuePair(new Pair<>("forest_aura_all_very_low_health", 3), caster_very_low_health);
+        configs.addKeyValuePair(new Pair<>("forest_aura_all_surrounded", 2), caster_surrounded);
+        configs.addKeyValuePair(new Pair<>("forest_aura_all_ally_low_health", 1), allies_low_health);
+        configs.addKeyValuePair(new Pair<>("forest_aura_all_surrounded", 2), caster_surrounded);
+        configs.addKeyValuePair(new Pair<>("forest_aura_all_leaves", 1), "The contribution to the trigger threshold when the caster has a lot of leaves around them");
+        configs.addKeyValuePair(new Pair<>("forest_aura_all_conditions", 3), light_conditions_1 + "forest aura" + light_conditions_2);
+
+        //Self
+        configs.addKeyValuePair(new Pair<>("forest_aura_self_very_low_health", 3), caster_very_low_health+" (excludes the low health)");
+        configs.addKeyValuePair(new Pair<>("forest_aura_self_low_health", 2), caster_low_health);
+        configs.addKeyValuePair(new Pair<>("forest_aura_self_surrounded", 2), caster_surrounded);
+        configs.addKeyValuePair(new Pair<>("forest_aura_self_harmful_effect", 1), caster_harmful);
+        configs.addKeyValuePair(new Pair<>("forest_aura_self_conditions", 3), light_conditions_1 + "forest aura" + light_conditions_2);
     }
 
     public static void reloadConfig(){
@@ -744,6 +778,25 @@ public class TriggerConfig {
         //V2
         AQUA_TRIGGER_ITEMS = CONFIG.getOrDefault("aqua_trigger_items", aqua_items);
         AQUA_TRIGGER_BLOCKS = CONFIG.getOrDefault("aqua_trigger_blocks", aqua_blocks);
+        
+        //V3
+        //Forest Aura Light
+        //All
+        FOREST_AURA_ALL_VERY_LOW_HEALTH = CONFIG.getOrDefault("forest_aura_all_very_low_health", 3);
+        FOREST_AURA_ALL_LOW_HEALTH = CONFIG.getOrDefault("forest_aura_all_low_health", 2);
+        FOREST_AURA_ALL_ALLY_LOW_HEALTH = CONFIG.getOrDefault("forest_aura_all_ally_low_health", 1);
+        FOREST_AURA_ALL_SURROUNDED = CONFIG.getOrDefault("forest_aura_all_surrounded", 2);
+        FOREST_AURA_ALL_CONDITIONS = CONFIG.getOrDefault("forest_aura_all_conditions", 3);
+        FOREST_AURA_ALL_LEAVES = CONFIG.getOrDefault("forest_aura_all_leaves", 1);
+
+        //Self
+        FOREST_AURA_SELF_VERY_LOW_HEALTH = CONFIG.getOrDefault("forest_aura_self_very_low_health", 3);
+        FOREST_AURA_SELF_LOW_HEALTH = CONFIG.getOrDefault("forest_aura_self_low_health", 2);
+        FOREST_AURA_SELF_SURROUNDED = CONFIG.getOrDefault("forest_aura_self_surrounded", 2);
+        FOREST_AURA_SELF_HARMFUL_EFFECT = CONFIG.getOrDefault("forest_aura_self_harmful_effect", 1);
+        FOREST_AURA_SELF_CONDITIONS = CONFIG.getOrDefault("forest_aura_self_conditions", 3);
+
+        FOREST_AURA_PERCENT_OF_LEAVES_REQUIRED = CONFIG.getOrDefault("forest_aura_required_leaves_percent", 70.0);
 
     }
 }
