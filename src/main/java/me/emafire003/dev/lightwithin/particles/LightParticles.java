@@ -18,6 +18,7 @@ public class LightParticles {
     public static final DefaultParticleType EARTHENLIGHT_PARTICLE = FabricParticleTypes.simple();
     public static final DefaultParticleType WINDLIGHT_PARTICLE = FabricParticleTypes.simple();
     public static final DefaultParticleType AQUALIGHT_PARTICLE = FabricParticleTypes.simple();
+    public static final DefaultParticleType FOREST_AURA_LIGHT_PARTICLE = FabricParticleTypes.simple();
     public static final DefaultParticleType FROGLIGHT_PARTICLE = FabricParticleTypes.simple();
 
     public static final DefaultParticleType LIGHT_PARTICLE = FabricParticleTypes.simple();
@@ -41,6 +42,8 @@ public class LightParticles {
                 WINDLIGHT_PARTICLE);
         Registry.register(Registries.PARTICLE_TYPE, new Identifier(LightWithin.MOD_ID, "aqua_light_particle"),
                 AQUALIGHT_PARTICLE);
+        Registry.register(Registries.PARTICLE_TYPE, new Identifier(LightWithin.MOD_ID, "forest_aura_light_particle"),
+                FOREST_AURA_LIGHT_PARTICLE);
         Registry.register(Registries.PARTICLE_TYPE, new Identifier(LightWithin.MOD_ID, "frog_light_particle"),
                 FROGLIGHT_PARTICLE);
 

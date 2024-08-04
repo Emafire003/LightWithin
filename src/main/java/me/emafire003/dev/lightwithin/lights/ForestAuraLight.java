@@ -5,6 +5,7 @@ import me.emafire003.dev.lightwithin.component.LightComponent;
 import me.emafire003.dev.lightwithin.config.BalanceConfig;
 import me.emafire003.dev.lightwithin.config.Config;
 import me.emafire003.dev.lightwithin.lights.forestaura_puffs.ForestPuffColor;
+import me.emafire003.dev.lightwithin.particles.LightParticles;
 import me.emafire003.dev.lightwithin.particles.LightParticlesUtil;
 import me.emafire003.dev.lightwithin.status_effects.LightEffects;
 import me.emafire003.dev.lightwithin.util.TargetType;
@@ -43,12 +44,11 @@ public class ForestAuraLight extends InnerLight {
 
     public static final Item INGREDIENT = Items.OAK_SAPLING;
 
-    //TODO move into forest aura light class
     public static final TagKey<Block> FOREST_AURA_BLOCKS = TagKey.of(RegistryKeys.BLOCK, new Identifier(MOD_ID, "forest_aura_blocks"));
 
     public static final String COLOR = "1BC131";
-    public static final String ENEMY_COLOR = "560d03";
-    public static final String ALLY_COLOR = "2ee878";
+    //public static final String ENEMY_COLOR = "560d03";
+    //public static final String ALLY_COLOR = "2ee878";
 
     public ForestAuraLight(List<LivingEntity> targets, double cooldown_time, double power_multiplier, int duration, String color, PlayerEntity caster, boolean rainbow_col) {
         super(targets, cooldown_time, power_multiplier, duration, color, caster, rainbow_col);
@@ -104,6 +104,8 @@ public class ForestAuraLight extends InnerLight {
         LightComponent component = LIGHT_COMPONENT.get(caster);
 
         //TODO playsound spawn particles and such
+        LightParticlesUtil.spawnLightTypeParticle(LightParticles.FOREST_AURA_LIGHT_PARTICLE, (ServerWorld) caster.getWorld(), caster.getPos());
+
 
         //ALL section (drowneds)
         if(component.getTargets().equals(TargetType.SELF)){
