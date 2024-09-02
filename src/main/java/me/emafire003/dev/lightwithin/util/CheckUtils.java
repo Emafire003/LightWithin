@@ -197,9 +197,15 @@ public class CheckUtils {
 
     /**Calculates the attack damage that an entity could do to another entity, accounting for its speed*/
     private static float getAttackDamageWithSpeed(@NotNull LivingEntity attacker,@NotNull LivingEntity target){
+        if(!attacker.getAttributes().hasAttribute(EntityAttributes.GENERIC_ATTACK_DAMAGE)){
+            //TODO maybe move to debug later
+            LOGGER.warn("The attacking entity: " + attacker.getName().toString() + " does not have GENERIC_ATTACK_DAMAGE attribute! May be a normal thing, like a projectile entity!");
+            return -1;
+        }
+
         float dmg = (float)attacker.getAttributeValue(EntityAttributes.GENERIC_ATTACK_DAMAGE);
         dmg += EnchantmentHelper.getAttackDamage(attacker.getMainHandStack(), target.getGroup());
-        if(attacker instanceof PlayerEntity){
+        if(attacker instanceof PlayerEntity && attacker.getAttributes().hasAttribute(EntityAttributes.GENERIC_ATTACK_SPEED)){
             float spd = (float)attacker.getAttributeValue(EntityAttributes.GENERIC_ATTACK_SPEED);
             return dmg*spd;
         }
