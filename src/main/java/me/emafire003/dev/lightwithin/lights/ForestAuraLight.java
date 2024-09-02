@@ -249,7 +249,7 @@ public class ForestAuraLight extends InnerLight {
             LightParticlesUtil.spawnForestPuff(origin, Vec3d.unpackRgb(color).toVector3f(), Vec3d.unpackRgb(ForestPuffColor.PURPLE_END).toVector3f(), size, world);
             //TODO the drunk effect! Or something similar (WIP).
             // Which could consist of moving randomly to one or the other side, inverted controls,
-            // and the super secret settings thing. And maybe someh
+            // and the super secret settings thing. And maybe someh. Or inverted controls. 
             targets.forEach(entity -> entity.sendMessage(Text.literal("Ur drunk")));
         }
     }
