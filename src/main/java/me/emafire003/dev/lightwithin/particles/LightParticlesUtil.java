@@ -138,10 +138,11 @@ public class LightParticlesUtil {
     }*/
 
 
+    //Oridinal particle count (og was: 200, delta 0.1)
     public static void spawnForestPuff(Vec3d pos, Vector3f color, Vector3f color1, float size, ServerWorld world){
         ///particle lightwithin:colored_puff_particle 0 1 0 0.7 0 0.5 0.5 -68.5 -1.5 90.5 0.1 0.1 0.1 0.01 200
         ColoredPuffParticleEffect coloredPuffParticleEffect = new ColoredPuffParticleEffect(color, color1, size);
-        world.spawnParticles(coloredPuffParticleEffect, pos.x, pos.y, pos.z, 200, 0.1, 0.1, 0.1, 0.01);
+        world.spawnParticles(coloredPuffParticleEffect, pos.x, pos.y, pos.z, 150, 0.11, 0.11, 0.11, 0.01);
 
     }
 

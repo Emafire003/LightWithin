@@ -35,6 +35,14 @@
       "lightwithin:light_crit"
     ]
   },
+  "forest_aura_puff": {
+    "subtitle": "lightwithin.forest_puff_bursting",
+    "sounds": [
+      "lightwithin:forest_aura_puff_1",
+      "lightwithin:forest_aura_puff_2",
+      "lightwithin:forest_aura_puff_2"
+    ]
+  },
   "defense_light": {
   "subtitle": "lightwithin.defense_light_triggered",
   "sounds": [

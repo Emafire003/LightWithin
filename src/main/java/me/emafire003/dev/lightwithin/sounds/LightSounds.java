@@ -16,6 +16,7 @@ public class LightSounds {
     public static SoundEvent LIGHT_ERROR = registerSoundEvent("light_error");
     public static SoundEvent LUXCOGNITA_DISPLAY = registerSoundEvent("luxcognita_display");
     public static SoundEvent LIGHT_CRIT = registerSoundEvent("light_crit");
+    public static SoundEvent FOREST_AURA_PUFF = registerSoundEvent("forest_aura_puff");
     public static SoundEvent DEFENSE_LIGHT = registerSoundEvent("defense_light");
     public static SoundEvent STRENGTH_LIGHT = registerSoundEvent("strength_light");
     public static SoundEvent BLAZING_LIGHT = registerSoundEvent("blazing_light");
