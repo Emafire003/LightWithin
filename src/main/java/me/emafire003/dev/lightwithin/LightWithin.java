@@ -441,9 +441,7 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 			targets.addAll(player.getWorld().getEntitiesByClass(PassiveEntity.class, new Box(player.getBlockPos()).expand(BOX_EXPANSION_AMOUNT), (entity1 -> true)));
 			player.sendMessage(Text.translatable("light.description.activation.defense.variant"), true);
 		}
-		if(debug){
-			player.sendMessage(Text.literal("Ok light triggered"), false);
-		}
+
 		new DefenseLight(targets, component.getMaxCooldown(), component.getPowerMultiplier(),
 				component.getDuration(), player).execute();
 	}
@@ -464,9 +462,6 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 			player.sendMessage(Text.translatable("light.description.activation.strength.allies"), true);
 		}
 
-		if(debug){
-			player.sendMessage(Text.literal("Ok light triggered"), false);
-		}
 		new StrengthLight(targets, component.getMaxCooldown(), component.getPowerMultiplier(),
 				component.getDuration(), player).execute();
 	}
@@ -486,10 +481,6 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 			player.sendMessage(Text.translatable("light.description.activation.blazing.enemies"), true);
 		}
 
-
-		if(debug){
-			player.sendMessage(Text.literal("Ok light triggered"), false);
-		}
 		new BlazingLight(targets, component.getMaxCooldown(), component.getPowerMultiplier(),
 				component.getDuration(), player).execute();
 	}
@@ -513,9 +504,7 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 			targets.add(player);
 			player.sendMessage(Text.translatable("light.description.activation.frost.self"), true);
 		}
-		if(debug){
-			player.sendMessage(Text.literal("Ok light triggered"), false);
-		}
+
 		new FrostLight(targets, component.getMaxCooldown(), component.getPowerMultiplier(),
 				component.getDuration(), player).execute();
 	}
@@ -538,9 +527,6 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 			player.sendMessage(Text.translatable("light.description.activation.earthen.self"), true);
 		}
 
-		if(debug){
-			player.sendMessage(Text.literal("Ok light triggered"), false);
-		}
 		new EarthenLight(targets, component.getMaxCooldown(), component.getPowerMultiplier(),
 				component.getDuration(), player).execute();
 	}
@@ -560,9 +546,6 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 			player.sendMessage(Text.translatable("light.description.activation.wind.all"), true);
 		}
 
-		if(debug){
-			player.sendMessage(Text.literal("Ok light triggered"), false);
-		}
 		new WindLight(targets, component.getMaxCooldown(), component.getPowerMultiplier(),
 				component.getDuration(), player).execute();
 	}
@@ -587,9 +570,6 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 			player.sendMessage(Text.translatable("light.description.activation.aqua.self"), true);
 		}
 
-		if(debug){
-			player.sendMessage(Text.literal("Ok light triggered"), false);
-		}
 		new AquaLight(targets, component.getMaxCooldown(), component.getPowerMultiplier(),
 				component.getDuration(), player).execute();
 	}
@@ -599,15 +579,12 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 		List<LivingEntity> targets = new ArrayList<>();
 
 		if(component.getTargets().equals(TargetType.ALL)){
-			targets.addAll(getEnemies(player));
+			targets.addAll(player.getWorld().getEntitiesByClass(LivingEntity.class, new Box(player.getBlockPos()).expand(BOX_EXPANSION_AMOUNT), (entity1 -> true)));
+			targets.remove(player);
 			player.sendMessage(Text.translatable("light.description.activation.forest_aura.all"), true);
 		}else if(component.getTargets().equals(TargetType.SELF)){
 			targets.add(player);
 			player.sendMessage(Text.translatable("light.description.activation.forest_aura.self"), true);
-		}
-
-		if(debug){
-			player.sendMessage(Text.literal("Ok light triggered"), false);
 		}
 
 		new ForestAuraLight(targets, component.getMaxCooldown(), component.getPowerMultiplier(),

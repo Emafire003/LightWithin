@@ -7,8 +7,10 @@ import me.emafire003.dev.lightwithin.config.Config;
 import me.emafire003.dev.lightwithin.lights.forestaura_puffs.ForestPuffColor;
 import me.emafire003.dev.lightwithin.particles.LightParticles;
 import me.emafire003.dev.lightwithin.particles.LightParticlesUtil;
+import me.emafire003.dev.lightwithin.sounds.LightSounds;
 import me.emafire003.dev.lightwithin.status_effects.LightEffects;
 import me.emafire003.dev.lightwithin.util.TargetType;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.Block;
 import net.minecraft.entity.*;
@@ -20,16 +22,20 @@ import net.minecraft.item.Items;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.tag.TagKey;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.sound.SoundCategory;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.shape.VoxelShape;
+
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static me.emafire003.dev.lightwithin.LightWithin.*;
-
-//TODO actually make it into forest light instead of the copy of aqua light
 
 /*Planned stuff:
 * Targets:
@@ -49,6 +55,43 @@ public class ForestAuraLight extends InnerLight {
     public static final String COLOR = "1BC131";
     //public static final String ENEMY_COLOR = "560d03";
     //public static final String ALLY_COLOR = "2ee878";
+
+    //The dealy between each puff spawn
+    private static final int PUFF_DELAY = 7;
+
+    /*First chunk of Puffs:
+     * Level 0-5:
+     * - GREEN
+     * - PURPLE
+     * - YELLOW
+     * - PINK
+     * Level 5-10
+     * - BLUE
+     * - RED
+     * - BLACK
+     * - ORANGE
+     * */
+
+    //Up to level 5
+    public static List<Integer> LOW_TIER_COLOR_PUFFS = List.of(
+            ForestPuffColor.GREEN, ForestPuffColor.YELLOW, ForestPuffColor.PURPLE, ForestPuffColor.PINK);
+
+    //Available after power level 5
+    public static List<Integer> HIGH_TIER_COLOR_PUFFS = List.of(
+            ForestPuffColor.BLUE, ForestPuffColor.ORANGE, ForestPuffColor.BLACK, ForestPuffColor.RED);
+
+
+    /**How far puffs affect other entities. Aka how close an entity needs to be in order to obtain the effect of the puff*/
+    public static final double PUFF_ACTION_BLOCK_RANGE = 1.5;
+
+    /**How far from the caster can puffs spawn, expressed in blocks*/
+    public static final double PUFF_MAX_SPAWN_DISTANCE = 2.1;
+    /**How close to the caster can puffs spawn, expressed in blocks*/
+    public static final double PUFF_MIN_SPAWN_DISTANCE = 0.5;
+
+    /**Max tries to spawn a single puff*/
+    private static final int max_tries = 10000;
+
 
     public ForestAuraLight(List<LivingEntity> targets, double cooldown_time, double power_multiplier, int duration, String color, PlayerEntity caster, boolean rainbow_col) {
         super(targets, cooldown_time, power_multiplier, duration, color, caster, rainbow_col);
@@ -90,6 +133,7 @@ public class ForestAuraLight extends InnerLight {
 
     @Override
     public void execute(){
+
         checkSafety();
         if(FabricLoader.getInstance().isModLoaded("coloredglowlib")){
             if(this.rainbow_col){
@@ -99,19 +143,18 @@ public class ForestAuraLight extends InnerLight {
             }
         }
 
-
         //caster.getWorld().playSound(caster, caster.getBlockPos(), LightSounds.AQUA_LIGHT, SoundCategory.PLAYERS, 1, 1);
         LightComponent component = LIGHT_COMPONENT.get(caster);
 
-        //TODO playsound spawn particles and such
+        //TODO ===================> play light's sound and such <===================
         LightParticlesUtil.spawnLightTypeParticle(LightParticles.FOREST_AURA_LIGHT_PARTICLE, (ServerWorld) caster.getWorld(), caster.getPos());
 
-
-        //ALL section (drowneds)
+        //The self target type adds the forest aura effect, making the player merge with natural blocks and travel trough them, but not see through them
+        //The player can't see because they usually are not a mole. And also because I would need to make every block render the insides too which is not ideal
+        //TODO maybe change the skin tone to a more greeny color?
         if(component.getTargets().equals(TargetType.SELF)){
             //The -1 is because status effect levels start from 0
             caster.addStatusEffect(new StatusEffectInstance(LightEffects.FOREST_AURA, this.duration*20, (int) this.power_multiplier-1, false, false));
-
         }
         else if(component.getTargets().equals(TargetType.ALL)){
             //I think it should be 1-(2 +1 per level) puffs
@@ -120,33 +163,57 @@ public class ForestAuraLight extends InnerLight {
                 return;
             }
 
+            //The bonus number of puffs added if the power level is above 5
             int bonus = 0;
             if(power_multiplier > 5){
                 bonus = Math.max(1, (int) ((power_multiplier-5)/2));
             }
+            //The total number of puffs that are going to be spawned in
+            //The max number is 10(power)+5(bonus)+2=17 puffs. Maybe a bit much? Well the minimum is 1. And above 5 it's 3. So it's more like 3-17.
             int puffs = caster.getRandom().nextBetween(1+bonus, (int) (2+power_multiplier+bonus));
-            int total_duration = duration;
 
-            for(int i = 0; i < puffs; i++){
-                //-(puffs-i)
-                int puff_duration = caster.getRandom().nextBetween(5, 5+total_duration);
-                total_duration = total_duration-(puff_duration-5);
-                if(power_multiplier > 5){
-                    //TODO if i ever modify the number of puff colors, edit here if needed!
-                    int puff = caster.getRandom().nextBetween(0, COLOR_PUFFS.size()-1);
-                    Vec3d pos = getRandomPos(caster, caster.getPos().add(0,2,0), 1.5);
-                    if(pos == null){
-                        //TODO remove?
-                        caster.sendMessage(Text.literal("Position null!"));
-                    }else{
-                        //TODO play puff sound
-                        //TODO maybe add a slight delay between each of them?
-                        createForestPuff(caster, pos, (ServerWorld) caster.getWorld(), COLOR_PUFFS.get(puff), puff_duration, (int) power_multiplier);
-                    }
+            AtomicInteger spawnedPuffs = new AtomicInteger(0);
+            AtomicInteger total_duration = new AtomicInteger(duration);
+            AtomicInteger tickCounter = new AtomicInteger(PUFF_DELAY);
 
+            //Isn't there a nicer way to do this scheduling?
+            ServerTickEvents.END_SERVER_TICK.register(server -> {
+                //Checks the number of spawned puffs, if it's beyond the number of calculated puffs, stop the loop.
+                if(spawnedPuffs.get()>=puffs){
+                    return;
                 }
-            }
+                //Every tick we check the tickCounter, if it's not ten then we only incremenet it and check the next tick
+                // if it's puffDelay it means ten ticks have passed so a new puff should spawn, so the rest of the code runs
+                if(tickCounter.get() != PUFF_DELAY){
+                    tickCounter.getAndIncrement();
+                    return;
+                }
 
+                //Resets the tickCounter to 0, so for the next puff we have to way 10 ticks or whatever puffDelay is
+                tickCounter.set(0);
+                int puff_duration = caster.getRandom().nextBetween(5, 5+total_duration.get());
+                total_duration.set(total_duration.get()-(puff_duration-5));
+
+                //The list of the types of puffs that can be spawned
+                List<Integer> possible_puffs = new ArrayList<>(LOW_TIER_COLOR_PUFFS);
+
+                //If the power level is high enough, the high tier color puffs get added ti the pool
+                if(power_multiplier > 5){
+                    possible_puffs.addAll(HIGH_TIER_COLOR_PUFFS);
+                }
+
+                int puff = caster.getRandom().nextBetween(0, possible_puffs.size()-1);
+                Vec3d pos = getRandomPos(caster, caster.getPos().add(0,1,0), PUFF_MAX_SPAWN_DISTANCE, PUFF_MIN_SPAWN_DISTANCE);
+                if(pos == null){
+                    //TODO remove?
+                    caster.sendMessage(Text.literal("§cPosition null!"));
+                }else{
+                    createForestPuff(caster, pos, (ServerWorld) caster.getWorld(), possible_puffs.get(puff), puff_duration, (int) power_multiplier);
+                }
+
+                //increments the number of spawned puffs
+                spawnedPuffs.getAndIncrement();
+            });
 
             //The puffs mechanism.
 
@@ -161,48 +228,49 @@ public class ForestAuraLight extends InnerLight {
     }
 
 
-    /*First chunck of Puffs:
-     * Level 0-5:
-     * - GREEN
-     * - PURPLE
-     * - YELLOW
-     * - PINK
-     * Level 5-10
-     * - BLUE
-     * - RED
-     * - BLACK
-     * - ORANGE
-     * */
-    /**The other of the list matters! The first four elements can be spawned with a power level lower than 6,
-     * the other ones require a power level of at least 6
-     * */
-    public static List<Integer> COLOR_PUFFS = List.of(
-            //Up to level 5
-            ForestPuffColor.GREEN, ForestPuffColor.YELLOW, ForestPuffColor.PURPLE, ForestPuffColor.PINK,
-            //Available after power level 5
-            ForestPuffColor.BLUE, ForestPuffColor.ORANGE, ForestPuffColor.BLACK, ForestPuffColor.RED);
-
-
-    public static double PUFF_BLOCK_RANGE = 1.5;
-
-    private static final int max_tries = 10000;
-
-    public static Vec3d getRandomPos(LivingEntity entity, Vec3d origin, double dist){
-        Box box = new Box(origin.getX(), origin.getY(), origin.getZ(), (origin.getX() + 1), (origin.getY() + 1), (origin.getZ() + 1)).expand(dist);
+    /** Gets a random position between an origin point and a specified distance
+     * This position must not collide with the model of another block
+     *
+     * @param entity A living entity that will be used to get the world, random and stuff
+     * @param origin The point of origin, which will be used as the center of the box
+     * @param max_dist The maximum distance at which a random position can be given
+     * @param min_dist The minimum distance at which a random position can be given*/
+    public static Vec3d getRandomPos(LivingEntity entity, Vec3d origin, double max_dist, double min_dist){
+        Box box = new Box(origin.getX(), origin.getY(), origin.getZ(), (origin.getX() + 1), (origin.getY() + 1), (origin.getZ() + 1)).expand(max_dist);
         double i = origin.getX();
         double j = origin.getY();
         double k = origin.getZ();
 
         for(int l = 0; l<max_tries; l++){
-            double m = i + MathHelper.nextDouble(entity.getRandom(), dist,  dist) * MathHelper.nextInt(entity.getRandom(), -1, 1);
-            double n = j + MathHelper.nextDouble(entity.getRandom(), dist,  dist) * MathHelper.nextInt(entity.getRandom(), -1, 1);
-            double o = k + MathHelper.nextDouble(entity.getRandom(), dist,  dist) * MathHelper.nextInt(entity.getRandom(), -1, 1);
+            double m = i + MathHelper.nextDouble(entity.getRandom(), min_dist,  max_dist) * MathHelper.nextInt(entity.getRandom(), -1, 1);
+            double n = j + MathHelper.nextDouble(entity.getRandom(), min_dist,  max_dist) * MathHelper.nextInt(entity.getRandom(), -1, 1);
+            double o = k + MathHelper.nextDouble(entity.getRandom(), min_dist,  max_dist) * MathHelper.nextInt(entity.getRandom(), -1, 1);
             Vec3d pos = new Vec3d(m,n,o);
+            //Checks if the position is inside the max distance box
             if(box.contains(pos)){
-                return pos;
+                //Gets the blockshape of the block at that position and check if it's either empty,
+                // or the position is outside its bounding box
+                VoxelShape block_shape = entity.getWorld().getBlockState(BlockPos.ofFloored(pos)).getCollisionShape(entity.getWorld(), BlockPos.ofFloored(pos));
+
+                if(block_shape.isEmpty()){
+                    return pos;
+                }
+                BlockPos current_blockpos = BlockPos.ofFloored(pos);
+                Box bounding_box = block_shape.getBoundingBox();
+                Box collision_box = new Box(current_blockpos.getX()+bounding_box.maxX,
+                        current_blockpos.getY()+bounding_box.maxY,
+                        current_blockpos.getZ()+bounding_box.maxZ,
+                        current_blockpos.getX()+bounding_box.minX,
+                        current_blockpos.getY()+bounding_box.minY,
+                        current_blockpos.getZ()+bounding_box.minX);
+                if(!collision_box.contains(pos)){
+                    return pos;
+                }
+                //Otherwise it tries a new position if possible
+
             }
         }
-        LOGGER.error("Exceeded max tries to spawn a new puff, skipping");
+        LOGGER.error("Exceeded max tries to spawn a new puff for " + entity.getName().toString() + ", skipping!");
 
         //TODO maybe remove
         entity.sendMessage(Text.literal("§cExceeded max tries to spawn a new puff, skipping"));
@@ -211,21 +279,34 @@ public class ForestAuraLight extends InnerLight {
     }
 
     /**
+     * Spawns a new forest puff of particles and applies the effect associated to the puff color to all the neraby entities
+     * It will also play the puff sound
+     *
      * @param duration In seconds*/
     public void createForestPuff(LivingEntity caster, Vec3d origin, ServerWorld world, int color, int duration, int power){
         //Converts from ticks to seconds
         int dur = duration * 20;
         float size = 0.7f;
 
+        float pitch = (float) caster.getRandom().nextBetween(9, 11) /10;
+
+        caster.getWorld().playSound(
+                null, // Player - if non-null, will play sound for every nearby player *except* the specified player
+                BlockPos.ofFloored(origin), // The position of where the sound will come from
+                LightSounds.FOREST_AURA_PUFF, // The sound that will play, in this case, the sound the anvil plays when it lands.
+                SoundCategory.PLAYERS, // This determines which of the volume sliders affect this sound
+                1f, //Volume multiplier, 1 is normal, 0.5 is half volume, etc
+                pitch // Pitch multiplier, 1 is normal, 0.5 is half pitch, etc
+        );
+
         List<LivingEntity> targets = world.getEntitiesByClass(LivingEntity.class,
-                new Box(origin.getX(), origin.getY(), origin.getZ(), (origin.getX() + 1), (origin.getY() + 1), (origin.getZ() + 1)).expand(PUFF_BLOCK_RANGE),
+                new Box(origin.getX(), origin.getY(), origin.getZ(), (origin.getX() + 1), (origin.getY() + 1), (origin.getZ() + 1)).expand(PUFF_ACTION_BLOCK_RANGE),
                 (entity -> (
                         //TODO remove after debug and uncomment the other
                         true
                         //TODO maybe this should become like !hasForestAuraActivated
                         //!entity.equals(caster) && !CheckUtils.CheckAllies.checkAlly(caster, entity)
                 )));
-
 
         if(color == ForestPuffColor.GREEN){
             LightParticlesUtil.spawnForestPuff(origin, Vec3d.unpackRgb(color).toVector3f(), Vec3d.unpackRgb(ForestPuffColor.GREEN_END).toVector3f(), size, world);
@@ -245,6 +326,9 @@ public class ForestAuraLight extends InnerLight {
         }else if(color == ForestPuffColor.BLACK){
             LightParticlesUtil.spawnForestPuff(origin, Vec3d.unpackRgb(color).toVector3f(), Vec3d.unpackRgb(ForestPuffColor.BLACK_END).toVector3f(), size, world);
             targets.forEach(entity -> entity.addStatusEffect(new StatusEffectInstance(StatusEffects.WITHER, dur, power), caster));
+        }else if(color == ForestPuffColor.ORANGE) {
+            LightParticlesUtil.spawnForestPuff(origin, Vec3d.unpackRgb(color).toVector3f(), Vec3d.unpackRgb(ForestPuffColor.ORANGE_END).toVector3f(), size, world);
+            targets.forEach(entity -> entity.addStatusEffect(new StatusEffectInstance(StatusEffects.BLINDNESS, dur, power), caster));
         }else if(color == ForestPuffColor.PURPLE){
             LightParticlesUtil.spawnForestPuff(origin, Vec3d.unpackRgb(color).toVector3f(), Vec3d.unpackRgb(ForestPuffColor.PURPLE_END).toVector3f(), size, world);
             //TODO the drunk effect! Or something similar (WIP).
