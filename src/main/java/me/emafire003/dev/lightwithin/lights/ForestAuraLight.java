@@ -46,6 +46,7 @@ import static me.emafire003.dev.lightwithin.LightWithin.*;
 *
 *
 * */
+//TODO add a message when the intoxicated effect gets applied for the first time as warning!
 public class ForestAuraLight extends InnerLight {
 
     public static final Item INGREDIENT = Items.OAK_SAPLING;
@@ -330,11 +331,9 @@ public class ForestAuraLight extends InnerLight {
             LightParticlesUtil.spawnForestPuff(origin, Vec3d.unpackRgb(color).toVector3f(), Vec3d.unpackRgb(ForestPuffColor.ORANGE_END).toVector3f(), size, world);
             targets.forEach(entity -> entity.addStatusEffect(new StatusEffectInstance(StatusEffects.BLINDNESS, dur, power), caster));
         }else if(color == ForestPuffColor.PURPLE){
+            //TODO add a message when the intoxicated effect gets applied for the first time as warning!
             LightParticlesUtil.spawnForestPuff(origin, Vec3d.unpackRgb(color).toVector3f(), Vec3d.unpackRgb(ForestPuffColor.PURPLE_END).toVector3f(), size, world);
-            //TODO the drunk effect! Or something similar (WIP).
-            // Which could consist of moving randomly to one or the other side, inverted controls,
-            // and the super secret settings thing. And maybe someh. Or inverted controls. 
-            targets.forEach(entity -> entity.sendMessage(Text.literal("Ur drunk")));
+            targets.forEach(entity -> entity.addStatusEffect(new StatusEffectInstance(LightEffects.INTOXICATION, dur, power), caster));
         }
     }
 

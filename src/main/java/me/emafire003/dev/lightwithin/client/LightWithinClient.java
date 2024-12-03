@@ -4,6 +4,7 @@ import com.mojang.datafixers.util.Pair;
 import me.emafire003.dev.lightwithin.LightWithin;
 import me.emafire003.dev.lightwithin.blocks.LightBlocks;
 import me.emafire003.dev.lightwithin.client.screens.LuxcognitaScreen;
+import me.emafire003.dev.lightwithin.client.shaders.LightShaders;
 import me.emafire003.dev.lightwithin.commands.client.ClientLightCommands;
 import me.emafire003.dev.lightwithin.compat.coloredglowlib.CGLCompat;
 import me.emafire003.dev.lightwithin.compat.yacl.YaclScreenMaker;
@@ -77,17 +78,18 @@ public class LightWithinClient implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
-       ActivationKey.register();
-       registerLightReadyPacket();
-       registerPlayRenderEffectPacket();
-       registerWindLightVelocityPacket();
-       registerConfigOptionsSyncPacket();
-       registerGlowingEntitiesPacket();
-       registerParticlesRenderer();
+        ActivationKey.register();
+        registerLightReadyPacket();
+        registerPlayRenderEffectPacket();
+        registerWindLightVelocityPacket();
+        registerConfigOptionsSyncPacket();
+        registerGlowingEntitiesPacket();
+        registerParticlesRenderer();
+        LightShaders.registerShaders();
 
-       ClientCommandRegistrationCallback.EVENT.register(ClientLightCommands::registerCommands);
-       event_handler.registerRenderEvent();
-       event_handler.registerRunesRenderer();
+        ClientCommandRegistrationCallback.EVENT.register(ClientLightCommands::registerCommands);
+        event_handler.registerRenderEvent();
+        event_handler.registerRunesRenderer();
 
         BlockRenderLayerMap.INSTANCE.putBlock(LightBlocks.FROZEN_PLAYER_TOP_BLOCK, RenderLayer.getCutout());
         BlockRenderLayerMap.INSTANCE.putBlock(LightBlocks.FROZEN_PLAYER_BOTTOM_BLOCK, RenderLayer.getCutout());
@@ -119,7 +121,7 @@ public class LightWithinClient implements ClientModInitializer {
             }
 
 
-       }));
+        }));
     }
 
     public static boolean isLightReady(){

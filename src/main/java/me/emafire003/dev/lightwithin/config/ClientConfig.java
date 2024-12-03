@@ -46,6 +46,10 @@ public class ClientConfig {
     public static String FORESTAURA_ENEMY_COLOR_default = "560d03";
     public static String FORESTAURA_ALLY_COLOR = "2ee878";
     public static String FORESTAURA_ALLY_COLOR_default = "2ee878";
+    public static boolean FORESTAURA_INTOXICATION_SHADER = true;
+    public static boolean FORESTAURA_INTOXICATION_SHADER_default = true;
+    public static boolean INTOXICATION_SHADER_WARNING = true;
+    public static boolean INTOXICATION_SHADER_WARNING_default = true;
 
     public static final int light_icon_default_position = 10;
     public static final double light_icon_default_scale = 1.0;
@@ -91,6 +95,8 @@ public class ClientConfig {
             CONFIG.set("show_ingredient_target_for", SHOW_INGREDIENT_TARGET_FOR);
             CONFIG.set("forestaura_enemy_color", FORESTAURA_ENEMY_COLOR);
             CONFIG.set("forestaura_ally_color", FORESTAURA_ALLY_COLOR);
+            CONFIG.set("forestaura_intoxication_shader", FORESTAURA_INTOXICATION_SHADER);
+            CONFIG.set("intoxication_shader_warning", INTOXICATION_SHADER_WARNING);
             CONFIG.update();
             RendererEventHandler.updateFromConfig();
             reloadConfig();
@@ -179,6 +185,8 @@ public class ClientConfig {
 
         configs.addKeyValuePair(new Pair<>("forestaura_enemy_color", FORESTAURA_ENEMY_COLOR), "The color that will indicate enemies with the forest aura vision. You must install ColoredGlowLib to see the effect.");
         configs.addKeyValuePair(new Pair<>("forestaura_ally_color", FORESTAURA_ALLY_COLOR), "The color that will indicate allies with the forest aura vision. You must install ColoredGlowLib to see the effect.");
+        configs.addKeyValuePair(new Pair<>("forestaura_intoxication_shader", FORESTAURA_INTOXICATION_SHADER), "Accessibility setting. Disable this if you don't want to see the Intoxicated effect shader (may give motion sickness)");
+        configs.addKeyValuePair(new Pair<>("intoxication_shader_warning", INTOXICATION_SHADER_WARNING), "Accessibility setting. Turn this off to not see the warning message every time the intoxication effect is applied to you");
 
     }
 
@@ -209,6 +217,8 @@ public class ClientConfig {
         AUTO_LIGHT_ACTIVATION = CONFIG.getOrDefault("auto_light_activation", AUTO_LIGHT_ACTIVATION_default);
         FORESTAURA_ENEMY_COLOR = CONFIG.getOrDefault("forestaura_enemy_color", FORESTAURA_ENEMY_COLOR_default);
         FORESTAURA_ALLY_COLOR = CONFIG.getOrDefault("forestaura_ally_color", FORESTAURA_ALLY_COLOR_default);
+        FORESTAURA_INTOXICATION_SHADER = CONFIG.getOrDefault("forestaura_intoxication_shader", FORESTAURA_INTOXICATION_SHADER);
+        INTOXICATION_SHADER_WARNING = CONFIG.getOrDefault("intoxication_shader", INTOXICATION_SHADER_WARNING);
     }
 }
 
