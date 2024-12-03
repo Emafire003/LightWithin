@@ -89,6 +89,11 @@ dependencies {
 	//ParticleAnimationLib
     include modImplementation("maven.modrinth:particleanimationlib:${project.pal_version}")
 
+	//Satin
+	modImplementation "org.ladysnake:satin:${satin_version}"
+	// Include Satin as a Jar-in-Jar dependency (optional)
+	include "org.ladysnake:satin:${satin_version}"
+
 	//===========OPTIONAL DEPENDENCIES===========
 
 	//ColoredGlowLib

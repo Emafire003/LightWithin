@@ -8,6 +8,7 @@
   "effect.lightwithin.water_slide": "Water Slide",
   "effect.lightwithin.water_cascade": "Water Cascade",
   "effect.lightwithin.forest_aura": "Forest Aura",
+  "effect.lightwithin.intoxication": "Intoxication",
   "item.lightwithin.luxintus_berry": "Luxintus Berry",
   "item.lightwithin.luxmutua_berry": "Luxmutua Berry",
   "item.lightwithin.luxcognita_berry": "Luxcognita Berry",
@@ -157,11 +158,20 @@
   "config.lightwithin.forestaura_enemy_color.tooltip": "The color that will indicate enemies with the forest aura vision. You must install ColoredGlowLib to see the effect.",
   "config.lightwithin.forestaura_ally_color": "ForestAura Ally Color",
   "config.lightwithin.forestaura_ally_color.tooltip": "The color that will indicate allies with the forest aura vision. You must install ColoredGlowLib to see the effect.",
+  "config.lightwithin.forestaura_intoxication_shader": "ForestAura Intoxication Shader",
+  "config.lightwithin.forestaura_intoxication_shader.tooltip": "Accessibility setting. Disable this if you don't want to see the Intoxication effect shader (it may give motion sickness)",
+  "config.lightwithin.intoxication_shader_warning": "Intoxication Shader Warning",
+  "config.lightwithin.intoxication_shader_warning.tooltip": "Accessibility setting. Turn this off to not see the warning message every time the intoxication effect is applied to you",
+
+
 
   "screen.luxcognita_dialogue.lightTypeButton": "About LightType",
   "screen.luxcognita_dialogue.lightTypeIngredientButton": "About LightType Ingredient",
   "screen.luxcognita_dialogue.lightTargetButton": "About LightTarget",
   "screen.luxcognita_dialogue.lightTargetIngredientButton": "About LightTarget Ingredient",
-  "screen.luxcognita_dialogue.luxcognitaTalk": "What wisdom shall I bestow upon you?"
+  "screen.luxcognita_dialogue.luxcognitaTalk": "What wisdom shall I bestow upon you?",
+
+  "lightwithin.warning.general": "WARNING!",
+  "lightwithin.warning.intoxication_shader.1": "If the shader of this effects gives you motion sickness you can turn it off in the config menu!"
 
 }

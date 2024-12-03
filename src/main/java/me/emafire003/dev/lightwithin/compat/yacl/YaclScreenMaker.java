@@ -377,6 +377,36 @@ public class YaclScreenMaker {
                         .controller(opt -> ColorControllerBuilder.create(opt).allowAlpha(false))
                         .build()
         );
+        options.add(
+                Option.<Boolean>createBuilder()
+                        .name(Text.translatable("config.lightwithin.forestaura_intoxication_shader"))
+                        .description(OptionDescription.of(Text.translatable("config.lightwithin.forestaura_intoxication_shader.tooltip")))
+                        .binding(
+                                ClientConfig.FORESTAURA_INTOXICATION_SHADER_default, // the default value
+                                () -> ClientConfig.FORESTAURA_INTOXICATION_SHADER, // a field to get the current value from
+                                newVal -> {
+                                    ClientConfig.FORESTAURA_INTOXICATION_SHADER = newVal;
+                                    ClientConfig.saveToFile();
+                                }
+                        )
+                        .controller(TickBoxControllerBuilder::create)
+                        .build()
+        );
+        options.add(
+                Option.<Boolean>createBuilder()
+                        .name(Text.translatable("config.lightwithin.intoxication_shader_warning"))
+                        .description(OptionDescription.of(Text.translatable("config.lightwithin.intoxication_shader_warning.tooltip")))
+                        .binding(
+                                ClientConfig.INTOXICATION_SHADER_WARNING_default, // the default value
+                                () -> ClientConfig.INTOXICATION_SHADER_WARNING, // a field to get the current value from
+                                newVal -> {
+                                    ClientConfig.INTOXICATION_SHADER_WARNING = newVal;
+                                    ClientConfig.saveToFile();
+                                }
+                        )
+                        .controller(TickBoxControllerBuilder::create)
+                        .build()
+        );
 
         updatedFromActivePreset.set(false);
         return options;

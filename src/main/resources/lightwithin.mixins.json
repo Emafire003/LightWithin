@@ -15,6 +15,7 @@
     "PreventLightEffectClearLivingEntityMixin",
     "forest_aura_related.EnterForestBlocksEntityMixin",
     "forest_aura_related.ForestBlocksMixin",
+    "forest_aura_related.RandomizeMovementPlayerEntityMixin",
     "forest_aura_related.SuffocationImmunityEntityMixin",
     "light_triggers.ArmorOrItemBreakMixin",
     "light_triggers.EntityAttackEntityMixin",
@@ -24,6 +25,8 @@
   ],
   "client": [
     "CustomEffectsLivingRendererMixin",
+    "EntityColorLayerRendererMixin",
+    "OverlayColorMixin",
     "PlayerChargedGlowRendererMixin",
     "RenderEffectsEntityMixin",
     "forest_aura_related.BackgroundRenderForestMixin",
