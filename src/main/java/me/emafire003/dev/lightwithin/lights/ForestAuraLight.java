@@ -43,10 +43,20 @@ import static me.emafire003.dev.lightwithin.LightWithin.*;
 *  - ALL, which either makes all terrain difficult to traverse with spikes or similar
 *       OR puffs of plant like stuff that makes player drunk an stuff like that.
 * Maybe it could have like different effects dependig on the color of the puff and the power level.
-*
+*First chunk of Puffs:
+        * Level 0-5:
+        * - GREEN
+     * - PURPLE
+     * - YELLOW
+     * - PINK
+     * Level 5-10
+        * - BLUE
+     * - RED
+     * - BLACK
+     * - ORANGE
+     *
 *
 * */
-//TODO add a message when the intoxicated effect gets applied for the first time as warning!
 public class ForestAuraLight extends InnerLight {
 
     public static final Item INGREDIENT = Items.OAK_SAPLING;
@@ -57,21 +67,8 @@ public class ForestAuraLight extends InnerLight {
     //public static final String ENEMY_COLOR = "560d03";
     //public static final String ALLY_COLOR = "2ee878";
 
-    //The dealy between each puff spawn
+    /**The dealy between each puff spawn*/
     private static final int PUFF_DELAY = 7;
-
-    /*First chunk of Puffs:
-     * Level 0-5:
-     * - GREEN
-     * - PURPLE
-     * - YELLOW
-     * - PINK
-     * Level 5-10
-     * - BLUE
-     * - RED
-     * - BLACK
-     * - ORANGE
-     * */
 
     //Up to level 5
     public static List<Integer> LOW_TIER_COLOR_PUFFS = List.of(
@@ -102,14 +99,13 @@ public class ForestAuraLight extends InnerLight {
     public ForestAuraLight(List<LivingEntity> targets, double cooldown_time, double power_multiplier, int duration, PlayerEntity caster, boolean rainbow_col) {
         super(targets, cooldown_time, power_multiplier, duration, caster, rainbow_col);
         type = InnerLightType.FOREST_AURA;
-        color = COLOR; //TODO modify color
+        color = COLOR;
     }
 
     public ForestAuraLight(List<LivingEntity> targets, double cooldown_time, double power_multiplier, int duration, PlayerEntity caster) {
         super(targets, cooldown_time, power_multiplier, duration, caster);
         type = InnerLightType.FOREST_AURA;
         //color = "#35f4d1";
-        //TODO
         color = "forest_aura";
     }
 
@@ -144,10 +140,9 @@ public class ForestAuraLight extends InnerLight {
             }
         }
 
-        //caster.getWorld().playSound(caster, caster.getBlockPos(), LightSounds.AQUA_LIGHT, SoundCategory.PLAYERS, 1, 1);
+        caster.getWorld().playSound(null, BlockPos.ofFloored(caster.getPos()),LightSounds.FOREST_AURA_PUFF,SoundCategory.PLAYERS, 1f, 1f);
         LightComponent component = LIGHT_COMPONENT.get(caster);
 
-        //TODO ===================> play light's sound and such <===================
         LightParticlesUtil.spawnLightTypeParticle(LightParticles.FOREST_AURA_LIGHT_PARTICLE, (ServerWorld) caster.getWorld(), caster.getPos());
 
         //The self target type adds the forest aura effect, making the player merge with natural blocks and travel trough them, but not see through them
@@ -274,7 +269,7 @@ public class ForestAuraLight extends InnerLight {
         LOGGER.error("Exceeded max tries to spawn a new puff for " + entity.getName().toString() + ", skipping!");
 
         //TODO maybe remove
-        entity.sendMessage(Text.literal("§cExceeded max tries to spawn a new puff, skipping"));
+        entity.sendMessage(Text.literal("§cError! Exceeded max tries to spawn a new puff, skipping"));
         return null;
 
     }
@@ -331,7 +326,6 @@ public class ForestAuraLight extends InnerLight {
             LightParticlesUtil.spawnForestPuff(origin, Vec3d.unpackRgb(color).toVector3f(), Vec3d.unpackRgb(ForestPuffColor.ORANGE_END).toVector3f(), size, world);
             targets.forEach(entity -> entity.addStatusEffect(new StatusEffectInstance(StatusEffects.BLINDNESS, dur, power), caster));
         }else if(color == ForestPuffColor.PURPLE){
-            //TODO add a message when the intoxicated effect gets applied for the first time as warning!
             LightParticlesUtil.spawnForestPuff(origin, Vec3d.unpackRgb(color).toVector3f(), Vec3d.unpackRgb(ForestPuffColor.PURPLE_END).toVector3f(), size, world);
             targets.forEach(entity -> entity.addStatusEffect(new StatusEffectInstance(LightEffects.INTOXICATION, dur, power), caster));
         }

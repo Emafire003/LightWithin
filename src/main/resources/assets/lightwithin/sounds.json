@@ -84,5 +84,11 @@
     "sounds": [
       "lightwithin:aqua_light"
     ]
+  },
+  "forest_aura_light": {
+    "subtitle": "lightwithin.forest_aura_light_triggered",
+    "sounds": [
+      "lightwithin:forest_aura_light"
+    ]
   }
 }

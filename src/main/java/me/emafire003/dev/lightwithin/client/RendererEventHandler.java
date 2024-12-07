@@ -186,6 +186,9 @@ public class RendererEventHandler {
         if(type.equals(InnerLightType.AQUA)){
             player.playSound(LightSounds.AQUA_LIGHT, 1 ,1);
         }
+        if(type.equals(InnerLightType.FOREST_AURA)){
+            player.playSound(LightSounds.FOREST_AURA_LIGHT, 1 ,1);
+        }
         if(type.equals(InnerLightType.FROG)){
             player.playSound(SoundEvents.ENTITY_FROG_HURT, 1, 0.8f);
         }

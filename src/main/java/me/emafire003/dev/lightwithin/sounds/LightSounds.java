@@ -24,6 +24,7 @@ public class LightSounds {
     public static SoundEvent EARTHEN_LIGHT = registerSoundEvent("earthen_light");
     public static SoundEvent WIND_LIGHT = registerSoundEvent("wind_light");
     public static SoundEvent AQUA_LIGHT = registerSoundEvent("aqua_light");
+    public static SoundEvent FOREST_AURA_LIGHT = registerSoundEvent("forest_aura_light");
 
     private static SoundEvent registerSoundEvent(String name) {
         Identifier id = new Identifier(LightWithin.MOD_ID, name);
