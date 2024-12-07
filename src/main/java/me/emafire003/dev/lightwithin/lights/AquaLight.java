@@ -99,7 +99,7 @@ public class AquaLight extends InnerLight {
         }
 
 
-        caster.getWorld().playSound(caster, caster.getBlockPos(), LightSounds.AQUA_LIGHT, SoundCategory.PLAYERS, 1, 1);
+        caster.getWorld().playSound(caster.getX(), caster.getY(), caster.getZ(), LightSounds.AQUA_LIGHT, SoundCategory.PLAYERS, 1, 1, true);
         LightComponent component = LIGHT_COMPONENT.get(caster);
 
         //ALL section (drowneds)
