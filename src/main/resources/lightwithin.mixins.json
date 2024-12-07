@@ -25,7 +25,8 @@
   ],
   "client": [
     "CustomEffectsLivingRendererMixin",
-    "EntityColorLayerRendererMixin",
+    "EntityColorOverlayRendererMixin",
+    "PlayerArmColorOverlayMixin",
     "PlayerChargedGlowRendererMixin",
     "RenderEffectsEntityMixin",
     "forest_aura_related.BackgroundRenderForestMixin",
