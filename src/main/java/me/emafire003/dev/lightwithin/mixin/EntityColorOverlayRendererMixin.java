@@ -41,10 +41,10 @@ public abstract class EntityColorOverlayRendererMixin<T extends LivingEntity, M 
                     float ob = args.get(6);
                     float oa = args.get(7);
                     //This is done for compatibility with other changes
-                    args.set(4, or*0.200f);
+                    args.set(4, or*0.300f);
                     args.set(5, og*0.908f);
-                    args.set(6, ob*0.200f);
-                    args.set(7, oa*0.75f);//before it was 0.5 which is alright. It does work but is veeeery green
+                    args.set(6, ob*0.300f);
+                    args.set(7, oa*0.77f);//before it was 0.5 which is alright. It does work but is veeeery green
                 }
             }
         }
