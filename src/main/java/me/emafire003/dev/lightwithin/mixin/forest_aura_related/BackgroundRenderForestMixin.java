@@ -31,35 +31,8 @@ public abstract class BackgroundRenderForestMixin {
                 float a = 0.1f;
                 RenderSystem.clearColor(r,g,b,a);
                 ci.cancel();
-                //I think i need to return here
             }
         }
 
     }
-
-    /*
-    //There probably is a better way of doing this, but for now (06.03.2024) it will suffice.
-    @Inject(method = "applyFog", at = @At(value = "RETURN"))
-    private static void injectFogDistance(Camera camera, BackgroundRenderer.FogType fogType, float viewDistance, boolean thickFog, float tickDelta, CallbackInfo ci){
-        CameraSubmersionType cameraSubmersionType = camera.getSubmersionType();
-        Entity entity = camera.getFocusedEntity();
-        BackgroundRenderer.FogData fogData = new BackgroundRenderer.FogData(fogType);
-        //TODO move to player
-        if (entity instanceof LivingEntity && entity.getBlockStateAtPos().isIn(LightWithin.FOREST_AURA_BLOCKS) && cameraSubmersionType == CameraSubmersionType.POWDER_SNOW) {
-            //The def value
-            if (entity.isSpectator()) {
-                fogData.fogStart = -8.0f;
-                fogData.fogEnd = viewDistance * 0.5f;
-            } else {
-                fogData.fogStart = -2.0f;
-                fogData.fogEnd = viewDistance * 0.2f;
-                fogData.fogShape = FogShape.SPHERE;
-            }
-            //TODO i should mixin into this, or before these.
-            RenderSystem.setShaderFogStart(fogData.fogStart);
-            RenderSystem.setShaderFogEnd(fogData.fogEnd);
-            RenderSystem.setShaderFogShape(fogData.fogShape);
-        }
-
-    }*/
 }

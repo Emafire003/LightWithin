@@ -21,7 +21,7 @@ public abstract class ForestBlocksMixin implements ToggleableFeature {
 
     @Inject(method = "getCollisionShape(Lnet/minecraft/world/BlockView;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/ShapeContext;)Lnet/minecraft/util/shape/VoxelShape;", at = @At("HEAD"), cancellable = true)
     public void modifyCollisionShape(BlockView world, BlockPos pos, ShapeContext context, CallbackInfoReturnable<VoxelShape> cir) {
-        if(canWalkInto(world.getBlockState(pos), context, pos)){
+        if(canWalkInto(world.getBlockState(pos), context)){
             if(!context.isDescending() && context.isAbove(VoxelShapes.fullCube(), pos, false)){
                 cir.setReturnValue(VoxelShapes.fullCube());
                 return;
@@ -33,7 +33,7 @@ public abstract class ForestBlocksMixin implements ToggleableFeature {
 
     @Inject(method = "getCameraCollisionShape", at = @At("HEAD"), cancellable = true)
     public void modifyCameraCollisionShape(BlockView world, BlockPos pos, ShapeContext context, CallbackInfoReturnable<VoxelShape> cir) {
-        if(canWalkInto(world.getBlockState(pos), context, pos)){
+        if(canWalkInto(world.getBlockState(pos), context)){
             cir.setReturnValue(VoxelShapes.empty());
         }
     }
@@ -42,7 +42,7 @@ public abstract class ForestBlocksMixin implements ToggleableFeature {
      * Returns true if an entity can get through it
      * False otherwise*/
     @Unique
-    public boolean canWalkInto(BlockState state, ShapeContext context, BlockPos pos){
+    public boolean canWalkInto(BlockState state, ShapeContext context){
         if(state.isIn(ForestAuraLight.FOREST_AURA_BLOCKS)){
             Entity entity;
             if (context instanceof EntityShapeContext && (entity = ((EntityShapeContext)context).getEntity()) != null) {
@@ -51,22 +51,4 @@ public abstract class ForestBlocksMixin implements ToggleableFeature {
         }
         return false;
     }
-
-    //TODO i can remove the is side invisilbe and get culling shape
-    /*@Inject(method = "isSideInvisible", at = @At("HEAD"), cancellable = true)
-    public void modifyIsSideInvisible(BlockState state, Direction direction, CallbackInfoReturnable<Boolean> cir) {
-        if(state.isIn(ForestAuraLight.FOREST_AURA_BLOCKS)){
-            cir.setReturnValue(true);
-        }
-    }
-
-    @Inject(method = "getCullingShape", at = @At("HEAD"), cancellable = true)
-    public void modifyGetCullingShape(BlockView world, BlockPos pos, CallbackInfoReturnable<VoxelShape> cir) {
-        if(world.getBlockState(pos).isIn(ForestAuraLight.FOREST_AURA_BLOCKS)){
-            cir.setReturnValue(VoxelShapes.empty());
-        }
-    }*/
-
-
-
 }

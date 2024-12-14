@@ -8,7 +8,10 @@ import me.emafire003.dev.lightwithin.compat.open_parties_and_claims.OPACChecker;
 import me.emafire003.dev.lightwithin.compat.yawp.YawpCompat;
 import me.emafire003.dev.lightwithin.component.SummonedByComponent;
 import me.emafire003.dev.lightwithin.config.Config;
-import me.emafire003.dev.lightwithin.config.TriggerConfig;
+import me.emafire003.dev.lightwithin.lights.AquaLight;
+import me.emafire003.dev.lightwithin.lights.BlazingLight;
+import me.emafire003.dev.lightwithin.lights.FrostLight;
+import me.emafire003.dev.lightwithin.lights.WindLight;
 import me.emafire003.dev.lightwithin.status_effects.LightEffects;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.Block;
@@ -25,17 +28,14 @@ import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.passive.PassiveEntity;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.registry.Registries;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.tag.*;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.state.property.Properties;
 import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.world.biome.Biome;
@@ -440,43 +440,14 @@ public class CheckUtils {
         }
     }
 
-    public static List<Item> toItemList(List<String> list){
-        List<Item> items = new ArrayList<>();
-        for(String id : list){
-            items.add(Registries.ITEM.get(new Identifier(id)));
-        }
-        return items;
-    }
-
-    public static List<String> toItemStringList(List<Item> list){
-        List<String> items = new ArrayList<>();
-        for(Item item : list){
-            items.add(Registries.ITEM.getId(item).toString());
-        }
-        return items;
-    }
-
-    public static List<Block> toBlockList(List<String> list){
-        List<Block> blocks = new ArrayList<>();
-        for(String id : list){
-            blocks.add(Registries.BLOCK.get(new Identifier(id)));
-        }
-        return blocks;
-    }
-
-    public static List<String> toBlockStringList(List<Block> list){
-        List<String> blocks = new ArrayList<>();
-        for(Block block : list){
-            blocks.add(Registries.BLOCK.getId(block).toString());
-        }
-        return blocks;
-    }
-
-    public static boolean checkBlocksWithTags(PlayerEntity player, int rad, TagKey<?> tag){
-        //If the terrain under the player's feet is natural block (times 3 aka 3 blocks down), will create a moat,  if not a wall.
-        List<TagKey<Block>> tags = new ArrayList<>();
-
+    /**Checks for the presence of a block in the radius around the player and have the selected tag
+     *
+     * @param player The player at the center of the blocks/the target
+     * @param rad The radius around the player to check for the blocks
+     * @param tag The block tagKey that the blocks need to have*/
+    public static boolean checkBlocksWithTag(PlayerEntity player, int rad, TagKey<Block> tag){
         BlockPos origin = player.getBlockPos();
+        boolean found = false;
         for(int y = -rad; y <= rad; y++)
         {
             for(int x = -rad; x <= rad; x++)
@@ -484,12 +455,12 @@ public class CheckUtils {
                 for(int z = -rad; z <= rad; z++)
                 {
                     BlockPos pos = origin.add(x, y, z);
-                    player.getWorld().getBlockState(pos).streamTags().forEach(tags::add);
+                    found = player.getWorld().getBlockState(pos).isIn(tag);
 
                 }
             }
         }
-        return tags.contains(tag);
+        return found;
     }
 
     /** Checks multiple blocks around a player
@@ -500,9 +471,8 @@ public class CheckUtils {
      * @param block_number How many blocks should have the tag in order to be ok
      * @param tag The tag that the blocks need to have
      * */
-    public static boolean checkMultipleBlocksWithTags(PlayerEntity player, int rad, int block_number, TagKey<?> tag){
+    public static boolean checkMultipleBlocksWithTags(PlayerEntity player, int rad, int block_number, TagKey<Block> tag){
         //If the terrain under the player's feet is natural block (times 3 aka 3 blocks down), will create a moat,  if not a wall.
-        List<TagKey<Block>> tags = new ArrayList<>();
         int number = 0;
         BlockPos origin = player.getBlockPos();
         for(int y = -rad; y <= rad; y++)
@@ -512,8 +482,7 @@ public class CheckUtils {
                 for(int z = -rad; z <= rad; z++)
                 {
                     BlockPos pos = origin.add(x, y, z);
-                    player.getWorld().getBlockState(pos).streamTags().forEach(tags::add);
-                    if(tags.contains(tag)){
+                    if(player.getWorld().getBlockState(pos).isIn(tag)){
                         number++;
                     }
                 }
@@ -566,16 +535,16 @@ public class CheckUtils {
      * under the player's feet.
      *
      * @param player The player for which we are performing the check for
-     * @param blocks A list of blocks that if found, will return a positive match
      * @param rad The radius in block in which to check (The lower, the better for the performance)
+     * @param blocksTagKey A tag of blocks that if found, will return a positive match
      * */
-    public static boolean checkWaterLogggedOrListBlocks(PlayerEntity player, List<Block> blocks, int rad){
+    public static boolean checkWaterLoggedOrTag(PlayerEntity player, int rad, TagKey<Block> blocksTagKey){
         if(!Config.SHOULD_CHECK_BLOCKS){
             BlockPos pos = player.getBlockPos().add(0, -1, 0);
             if(player.getWorld().getBlockState(pos).getProperties().contains(Properties.WATERLOGGED)){
                 return player.getWorld().getBlockState(pos).get(Properties.WATERLOGGED);
             }
-            return blocks.contains(player.getWorld().getBlockState(pos).getBlock());
+            return player.getWorld().getBlockState(pos).isIn(blocksTagKey);
         }
 
         BlockPos origin = player.getBlockPos();
@@ -592,7 +561,7 @@ public class CheckUtils {
                             return true;
                         }
                     }
-                    if(blocks.contains(player.getWorld().getBlockState(pos).getBlock())){
+                    if(player.getWorld().getBlockState(pos).isIn(blocksTagKey)){
                         return true;
                     }
 
@@ -726,18 +695,16 @@ public class CheckUtils {
      *
      * @param player The player to perform checks on*/
     public static boolean checkBlazing(PlayerEntity player){
-        List<Item> items = toItemList(TriggerConfig.BLAZING_TRIGGER_ITEMS);
         if(player.isOnFire()){
             return true;
         }
 
-        Item main = player.getMainHandStack().getItem();
-        Item off = player.getOffHandStack().getItem();
-        if(items.contains(main) || items.contains(off)){
+        ItemStack main = player.getMainHandStack();
+        ItemStack off = player.getOffHandStack();
+        if(main.isIn(BlazingLight.BLAZING_TRIGGER_ITEMS) || off.isIn(BlazingLight.BLAZING_TRIGGER_ITEMS)){
             return true;
         }
-
-        return checkBlocks(player, toBlockList(TriggerConfig.BLAZING_TRIGGER_BLOCKS), Config.TRIGGER_BLOCK_RADIUS);
+        return checkBlocksWithTag(player, Config.TRIGGER_BLOCK_RADIUS, BlazingLight.BLAZING_TRIGGER_BLOCKS);
     }
 
     /**Used to check if the player has something that can be considered a Cold Source
@@ -745,19 +712,16 @@ public class CheckUtils {
      *
      * @param player The player to perform checks on*/
     public static boolean checkFrost(PlayerEntity player){
-        List<Item> items = toItemList(TriggerConfig.FROST_TRIGGER_ITEMS);
         if(player.isFrozen()){
             return true;
         }
 
-        //TODO move to tags
-        Item main = player.getMainHandStack().getItem();
-        Item off = player.getOffHandStack().getItem();
-        if(items.contains(main) || items.contains(off)){
+        ItemStack main = player.getMainHandStack();
+        ItemStack off = player.getOffHandStack();
+        if(main.isIn(FrostLight.FROST_TRIGGER_ITEMS) || off.isIn(FrostLight.FROST_TRIGGER_ITEMS)){
             return true;
         }
-        //TODO move to tags
-        return checkBlocks(player, toBlockList(TriggerConfig.FROST_TRIGGER_BLOCKS), Config.TRIGGER_BLOCK_RADIUS);
+        return checkBlocksWithTag(player, Config.TRIGGER_BLOCK_RADIUS, FrostLight.FROST_TRIGGER_BLOCKS);
     }
 
     /**Used to check if the player can trigger the Earthen Light, aka if they have
@@ -792,7 +756,7 @@ public class CheckUtils {
         }
 
         //TODO move to tags
-        return checkMultipleBlocks(player, toBlockList(TriggerConfig.WIND_TRIGGER_BLOCKS), Config.TRIGGER_BLOCK_RADIUS, 7);
+        return checkMultipleBlocksWithTags(player, Config.TRIGGER_BLOCK_RADIUS, 7, WindLight.WIND_TRIGGER_BLOCKS);
     }
 
 
@@ -800,17 +764,16 @@ public class CheckUtils {
      *
      * @param player The player to perform checks on*/
     public static boolean checkAqua(PlayerEntity player){
-        List<Item> items = toItemList(TriggerConfig.AQUA_TRIGGER_ITEMS);
         if(player.isTouchingWaterOrRain()){
             return true;
         }
 
-        Item main = player.getMainHandStack().getItem();
-        Item off = player.getOffHandStack().getItem();
-        if(items.contains(main) || items.contains(off)){
+        ItemStack main = player.getMainHandStack();
+        ItemStack off = player.getOffHandStack();
+        if(main.isIn(AquaLight.AQUA_TRIGGER_ITEMS) || off.isIn(AquaLight.AQUA_TRIGGER_ITEMS)){
             return true;
         }
-        return checkWaterLogggedOrListBlocks(player, toBlockList(TriggerConfig.AQUA_TRIGGER_BLOCKS), Config.TRIGGER_BLOCK_RADIUS);
+        return checkWaterLoggedOrTag(player, Config.TRIGGER_BLOCK_RADIUS, AquaLight.AQUA_TRIGGER_BLOCKS);
     }
 
     /**Used to check if the player has something that can be considered a ForestAura source

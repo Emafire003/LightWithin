@@ -42,6 +42,7 @@ import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.passive.PassiveEntity;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Item;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.entry.RegistryEntryList;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -169,7 +170,18 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 	}
 
 	public static void registerTags(){
-		RegistryEntryList.Named<Block> forest_blocks = Registries.BLOCK.getOrCreateEntryList(FOREST_AURA_BLOCKS);
+		RegistryEntryList.Named<Block> BLAZING_TRIGGER_BLOCKS = Registries.BLOCK.getOrCreateEntryList(BlazingLight.BLAZING_TRIGGER_BLOCKS);
+		RegistryEntryList.Named<Item> BLAZING_TRIGGER_ITEMS = Registries.ITEM.getOrCreateEntryList(BlazingLight.BLAZING_TRIGGER_ITEMS);
+
+		RegistryEntryList.Named<Block> FROST_TRIGGER_BLOCKS = Registries.BLOCK.getOrCreateEntryList(FrostLight.FROST_TRIGGER_BLOCKS);
+		RegistryEntryList.Named<Item> FROST_TRIGGER_ITEMS = Registries.ITEM.getOrCreateEntryList(FrostLight.FROST_TRIGGER_ITEMS);
+
+		RegistryEntryList.Named<Block> WIND_TRIGGER_BLOCKS = Registries.BLOCK.getOrCreateEntryList(WindLight.WIND_TRIGGER_BLOCKS);
+
+		RegistryEntryList.Named<Block> AQUA_TRIGGER_BLOCKS = Registries.BLOCK.getOrCreateEntryList(AquaLight.AQUA_TRIGGER_BLOCKS);
+		RegistryEntryList.Named<Item> AQUA_TRIGGER_ITEMS = Registries.ITEM.getOrCreateEntryList(AquaLight.AQUA_TRIGGER_ITEMS);
+
+		RegistryEntryList.Named<Block> FOREST_BLOCKS = Registries.BLOCK.getOrCreateEntryList(FOREST_AURA_BLOCKS);
 	}
 
 	/**Sends a packet with updated config options to the client
@@ -187,12 +199,11 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 			if(player.getWorld().isClient){
 				return;
 			}
-			var results = LightUsedPacketC2S.read(buf);
+			var used_charge = LightUsedPacketC2S.read(buf);
 			server.execute(() -> {
 				try{
 					//Handles the LightCharge being used. If it used, results will be true.
-					if(results){
-
+					if(used_charge){
 						if(!CheckUtils.canActivateHere(player)){
 							player.sendMessage(Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.translatableWithFallback("light.charge.cant_use_here", "You are not allowed to use you InnerLight here!").formatted(Formatting.RED)));
 							return;
@@ -201,7 +212,7 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 						//This could be laggy? Maybe?
 						List<ServerPlayerEntity> players = player.getServerWorld().getPlayers();
 						for(ServerPlayerEntity p : players){
-							ServerPlayNetworking.send(p, PlayRenderEffectPacketS2C.ID, new PlayRenderEffectPacketS2C(RenderEffect.LIGHT_RAYS, player));
+							ServerPlayNetworking.send(p, PlayRenderEffectPacketS2C.ID, new PlayRenderEffectPacketS2C(RenderEffect.FORCED_LIGHT_RAYS, player));
 						}
 
 						//TODO maybe also increase the max cooldown light-stat?
@@ -212,6 +223,11 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 
 						if(Config.TARGET_FEEDBACK && Config.USED_CHARGE_COOLDOWN_MULTIPLIER > 1){
 							player.sendMessage(Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.translatable("light.charge.cooldown_message").formatted(Formatting.YELLOW)));
+						}
+					}else{
+						List<ServerPlayerEntity> players = player.getServerWorld().getPlayers();
+						for(ServerPlayerEntity p : players){
+							ServerPlayNetworking.send(p, PlayRenderEffectPacketS2C.ID, new PlayRenderEffectPacketS2C(RenderEffect.LIGHT_RAYS, player));
 						}
 					}
 					activateLight(player);
