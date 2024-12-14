@@ -44,7 +44,8 @@ public class LightShaders {
                         .append(Text.literal(" §r").append(Text.translatable("lightwithin.warning.intoxication_shader.1").formatted(Formatting.WHITE))));
 
             }
-            if(Objects.requireNonNull(MinecraftClient.getInstance().player.getStatusEffect(LightEffects.INTOXICATION)).getAmplifier() > 5){
+            //If the amplifier il less than 5 it will display the wobble shader which is a bit easier to manage
+            if(Objects.requireNonNull(MinecraftClient.getInstance().player.getStatusEffect(LightEffects.INTOXICATION)).getAmplifier() < 5){
                 WOBBLE_SHADER.render(tickDelta);
             }else{
                 DECONVERGE_SHADER.render(tickDelta);

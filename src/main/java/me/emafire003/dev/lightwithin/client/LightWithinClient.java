@@ -41,7 +41,6 @@ import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.entity.model.EntityModelLayer;
 import net.minecraft.entity.Entity;
 import net.minecraft.screen.ScreenTexts;
-import net.minecraft.sound.SoundCategory;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Util;
@@ -256,7 +255,6 @@ public class LightWithinClient implements ClientModInitializer {
                             if(targetId == -1){
                                 IRenderEffectsEntity player = (IRenderEffectsEntity) client.player;
                                 player.lightWithin$renderEffect(effect, (int) (4.5*20));
-                                client.player.playSound(LightSounds.LIGHT_CHARGED, 0.7f, 0.7f);
                             }else{
                                 Entity target = client.player.getWorld().getEntityById(targetId);
                                 if(target == null){
@@ -264,12 +262,28 @@ public class LightWithinClient implements ClientModInitializer {
                                     return;
                                 }
                                 ((IRenderEffectsEntity)target).lightWithin$renderEffect(effect, (int) (4.5*20));
-                                if(client.world != null){
+                            }
+                        }else if(effect.equals(RenderEffect.FORCED_LIGHT_RAYS)){
+                            if(targetId == -1){
+                                IRenderEffectsEntity player = (IRenderEffectsEntity) client.player;
+                                player.lightWithin$renderEffect(effect, (int) (4.5*20));
+                                //TODO add a better "error/fatigue"ish sound instead
+                                //client.player.playSound(LightSounds.LIGHT_CHARGED, 0.7f, 0.7f);
+                            }else{
+                                Entity target = client.player.getWorld().getEntityById(targetId);
+                                if(target == null){
+                                    LOGGER.error("Error! The entity got from the ID in the PlayRenderEffectPacket is null!");
+                                    return;
+                                }
+                                ((IRenderEffectsEntity)target).lightWithin$renderEffect(effect, (int) (4.5*20));
+
+                                //TODO add a better "error/fatigue"ish sound instead
+                                /*if(client.world != null){
                                     client.world.playSound(target.getPos().getX(), target.getPos().getY(), target.getPos().getZ(), LightSounds.LIGHT_CHARGED, SoundCategory.PLAYERS, 0.5f, 0.7f, true);
                                 }
                                 if(target.equals(client.player)){
                                     client.player.playSound(LightSounds.LIGHT_CHARGED, 0.5f, 0.7f);
-                                }
+                                }*/
 
                             }
 
@@ -335,6 +349,7 @@ public class LightWithinClient implements ClientModInitializer {
         }));
     }
 
+    /** Sets some entities glowing for the player when the packet is received*/
     private void registerGlowingEntitiesPacket(){
         LOGGER.debug("Registering glowing entities packet...");
         ClientPlayNetworking.registerGlobalReceiver(GlowEntitiesPacketS2C.ID, ((client, handler, buf, responseSender) -> {

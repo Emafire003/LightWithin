@@ -110,6 +110,8 @@
   "light.description.activation.forest_aura.all": "The forest grants you its power!",
   "light.description.activation.forest_aura.self": "The forest will become one with you!",
 
+  "light.description.negated.forest_aura": "Your light sensed its kin, and shielded you from its tricks!",
+
   "config.lightwithin.name": "LightWithin client options",
   "config.lightwithin.category_name": "Options",
   "config.lightwithin.description": "A settings menu to manage what is rendered on the client",

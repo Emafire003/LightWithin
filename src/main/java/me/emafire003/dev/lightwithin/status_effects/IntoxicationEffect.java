@@ -5,6 +5,10 @@ import net.minecraft.entity.attribute.AttributeContainer;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectCategory;
 
+/**To see how this is implemented go check {@link me.emafire003.dev.lightwithin.mixin.forest_aura_related.RandomizeMovementPlayerEntityMixin}
+ * and {@link me.emafire003.dev.lightwithin.client.shaders.LightShaders}
+ *
+ * Anyways, it makes the player see wierdly and switches up the movement controls*/
 public class IntoxicationEffect extends StatusEffect {
 
     /**Amplifier 0-1: inverted controls (forward -> backwards)

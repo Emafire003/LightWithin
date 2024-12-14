@@ -147,7 +147,6 @@ public class ForestAuraLight extends InnerLight {
 
         //The self target type adds the forest aura effect, making the player merge with natural blocks and travel trough them, but not see through them
         //The player can't see because they usually are not a mole. And also because I would need to make every block render the insides too which is not ideal
-        //TODO maybe change the skin tone to a more greeny color?
         if(component.getTargets().equals(TargetType.SELF)){
             //The -1 is because status effect levels start from 0
             caster.addStatusEffect(new StatusEffectInstance(LightEffects.FOREST_AURA, this.duration*20, (int) this.power_multiplier-1, false, false));
@@ -201,8 +200,7 @@ public class ForestAuraLight extends InnerLight {
                 int puff = caster.getRandom().nextBetween(0, possible_puffs.size()-1);
                 Vec3d pos = getRandomPos(caster, caster.getPos().add(0,1,0), PUFF_MAX_SPAWN_DISTANCE, PUFF_MIN_SPAWN_DISTANCE);
                 if(pos == null){
-                    //TODO remove?
-                    caster.sendMessage(Text.literal("§cPosition null!"));
+                    caster.sendMessage(Text.literal("§c[LightWithin] There was an error spawning the puffs, Position null!"));
                 }else{
                     createForestPuff(caster, pos, (ServerWorld) caster.getWorld(), possible_puffs.get(puff), puff_duration, (int) power_multiplier);
                 }
@@ -297,12 +295,20 @@ public class ForestAuraLight extends InnerLight {
 
         List<LivingEntity> targets = world.getEntitiesByClass(LivingEntity.class,
                 new Box(origin.getX(), origin.getY(), origin.getZ(), (origin.getX() + 1), (origin.getY() + 1), (origin.getZ() + 1)).expand(PUFF_ACTION_BLOCK_RANGE),
-                (entity -> (
-                        //TODO remove after debug and uncomment the other
-                        true
-                        //TODO maybe this should become like !hasForestAuraActivated
-                        //!entity.equals(caster) && !CheckUtils.CheckAllies.checkAlly(caster, entity)
-                )));
+                (entity -> {
+                    //If another player has the ForestAura it will not affect them, but some particles will be spawned
+                    //TODO if i ever allow entities to have the light powers remember to change this bit here
+
+                    //TODO test it out multiplayer
+                    if(entity instanceof PlayerEntity && LIGHT_COMPONENT.get(entity).getType().equals(InnerLightType.FOREST_AURA)){
+                        world.spawnParticles(LightParticles.FOREST_AURA_LIGHT_PARTICLE, entity.getX(), entity.getY(), entity.getZ(), 10, 0.11, 0.11, 0.11, 0.01);
+                        ((PlayerEntity) entity).sendMessage(Text.translatable("light.description.negated.forest_aura"), true);
+                        return false;
+                    }
+
+                    return !entity.equals(caster);
+
+                }));
 
         if(color == ForestPuffColor.GREEN){
             LightParticlesUtil.spawnForestPuff(origin, Vec3d.unpackRgb(color).toVector3f(), Vec3d.unpackRgb(ForestPuffColor.GREEN_END).toVector3f(), size, world);

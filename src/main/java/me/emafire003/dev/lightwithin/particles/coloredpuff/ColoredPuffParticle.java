@@ -17,7 +17,7 @@ public class ColoredPuffParticle extends AbstractDustParticle<ColoredPuffParticl
         super(world, x, y, z, velocityX, velocityY, velocityZ, parameters, spriteProvider);
         float f = this.random.nextFloat() * 0.4F + 0.6F;
 
-        //TODO this is the shade thing. Which, I might even keep
+        //this is the shade thing. Which, I might even keep
         this.startColor = this.darken(parameters.getFromColor(), f);
         this.endColor = this.darken(parameters.getToColor(), f);
 
