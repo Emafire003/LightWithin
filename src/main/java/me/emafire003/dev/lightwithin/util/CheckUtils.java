@@ -749,7 +749,6 @@ public class CheckUtils {
             return true;
         }
 
-        //TODO move to tags
         return checkMultipleBlocksWithTags(player, Config.TRIGGER_BLOCK_RADIUS, 7, WindLight.WIND_TRIGGER_BLOCKS);
     }
 

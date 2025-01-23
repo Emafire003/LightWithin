@@ -276,15 +276,6 @@ public class LightWithinClient implements ClientModInitializer {
                                     return;
                                 }
                                 ((IRenderEffectsEntity)target).lightWithin$renderEffect(effect, (int) (4.5*20));
-
-                                //TODO add a better "error/fatigue"ish sound instead
-                                /*if(client.world != null){
-                                    client.world.playSound(target.getPos().getX(), target.getPos().getY(), target.getPos().getZ(), LightSounds.LIGHT_CHARGED, SoundCategory.PLAYERS, 0.5f, 0.7f, true);
-                                }
-                                if(target.equals(client.player)){
-                                    client.player.playSound(LightSounds.LIGHT_CHARGED, 0.5f, 0.7f);
-                                }*/
-
                             }
 
                         }
