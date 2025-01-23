@@ -40,10 +40,7 @@ public class LightTriggeringAndEvents {
         if(component.getLocked()){
             return false;
         }
-        if(LightWithin.isPlayerInCooldown(player)){
-            return false;
-        }
-        return true;
+        return !LightWithin.isPlayerInCooldown(player);
     }
 
 
@@ -163,7 +160,7 @@ public class LightTriggeringAndEvents {
                 }
             }
 
-            //TODO see what's going on here
+            //TODO see what's going on here - future me to future past me: please specify better
             //if the one getting attacked is a passive entity, the entity is the target
             //while the player who triggers the light is the one nearby
             if(target instanceof PassiveEntity){

@@ -23,7 +23,6 @@ public abstract class LivingEntityDamageTriggersMixin {
     )
     private void damageTriggers(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
         LivingEntity entity = (LivingEntity) (Object) this;
-        //TODO add suffocation damage (aka in_wall)
         if (source.getName().equalsIgnoreCase("freeze") && !entity.hasStatusEffect(LightEffects.FREEZE_RESISTANCE)) {
             EntityFreezingEvent.EVENT.invoker().freezing(entity);
         }else if(source.isOf(DamageTypes.ON_FIRE)){
@@ -38,7 +37,11 @@ public abstract class LivingEntityDamageTriggersMixin {
             //Trigger damage from explosion ignited by player
         }else if(source.isOf(DamageTypes.FALLING_BLOCK)){
             //trigger anvil damage
-        }else if(source.isOf(DamageTypes.MAGIC)){
+        }
+        else if(source.isOf(DamageTypes.IN_WALL)){
+            //trigger suffocation damage
+        }
+        else if(source.isOf(DamageTypes.MAGIC)){
             //trigger magical damage
         }else if(source.isOf(DamageTypes.MOB_PROJECTILE)){
             //trigger projectile damage

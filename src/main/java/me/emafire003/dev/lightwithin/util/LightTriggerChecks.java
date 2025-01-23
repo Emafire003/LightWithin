@@ -680,7 +680,6 @@ public class LightTriggerChecks {
     }
 
 
-    //TODO remove the debug messages. And also check why the leaves trigger no matter what
     public static void checkForestAura(PlayerEntity player, LightComponent component, Entity attacker, Entity target){
         double trigger_sum = 0;
 

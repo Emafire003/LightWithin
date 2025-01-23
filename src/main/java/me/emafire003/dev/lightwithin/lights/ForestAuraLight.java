@@ -265,9 +265,6 @@ public class ForestAuraLight extends InnerLight {
             }
         }
         LOGGER.error("Exceeded max tries to spawn a new puff for " + entity.getName().toString() + ", skipping!");
-
-        //TODO maybe remove
-        entity.sendMessage(Text.literal("§cError! Exceeded max tries to spawn a new puff, skipping"));
         return null;
 
     }
