@@ -28,8 +28,7 @@ There a few things that contribute to the uniqueness of a light, called attribut
 - We have the **DURATION**, which, unsurpisingly specifies how much your light remains active
 - Lastly we have the **COOLDOWN** duration, which is how much time will need to pass between activating your light again! Your light will need some rest after spending all that energy no?
 
-[![bisecthosting](https://www.bisecthosting.com/partners/custom-banners/e9bbf36a-be01-4324-b393-dae88a01be66.webp)](https://www.bisecthosting.com/LightDev)
-The best way to enjoy this mod is with other people on a server, so you can use the code LIGHTDEV on [BisectHosting](https://www.bisecthosting.com/LightDev) to save 25% on a 4GB server!
+The best way to enjoy this mod is with other people on a server, so you should download something like e4mc or get a server!
 
 ## How can I activate them?
 In order to activate them you need to meet specific conditions, which often vary between light types. Usually, it involves fighting with another mob/enemy player and being "in danger", for example on low health, or being surrounded by many enemies. To be more precise, usally you need to meet more than one condition in order to trigger the activation. In my opinion it's better to just discover how to activate your light by playing, so I won't go in further detail here, look at the wiki instead.
@@ -58,8 +57,6 @@ The best way to do that, is sharing the mod with as many people as you know, fee
 
 You can directly support me by offering a coffe at this link:
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/S6S88307C)
-
-Or you can use my code on [BisectHosting](https://www.bisecthosting.com/LightDev) for a 25% discount on a 4GB Minecraft server to player with your friends!
 
 Another thing you could is make videos and posts about the mod!
 
