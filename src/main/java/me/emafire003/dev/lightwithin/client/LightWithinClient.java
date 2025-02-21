@@ -17,6 +17,7 @@ import me.emafire003.dev.lightwithin.networking.*;
 import me.emafire003.dev.lightwithin.particles.LightParticle;
 import me.emafire003.dev.lightwithin.particles.LightTypeParticleV3;
 import me.emafire003.dev.lightwithin.particles.LightParticles;
+import me.emafire003.dev.lightwithin.particles.LightningParticle;
 import me.emafire003.dev.lightwithin.particles.coloredpuff.ColoredPuffParticle;
 import me.emafire003.dev.lightwithin.sounds.LightSounds;
 import me.emafire003.dev.lightwithin.util.ConfigPacketConstants;
@@ -174,6 +175,8 @@ public class LightWithinClient implements ClientModInitializer {
 
         ParticleFactoryRegistry.getInstance().register(LightParticles.LIGHT_PARTICLE, LightParticle.Factory::new);
         ParticleFactoryRegistry.getInstance().register(LightParticles.SHINE_PARTICLE, LightParticle.Factory::new);
+
+        ParticleFactoryRegistry.getInstance().register(LightParticles.LIGHTNING_PARTICLE, LightningParticle.Factory::new);
 
         ParticleFactoryRegistry.getInstance().register(LightParticles.COLORED_PUFF_PARTICLE, ColoredPuffParticle.Factory::new);
     }

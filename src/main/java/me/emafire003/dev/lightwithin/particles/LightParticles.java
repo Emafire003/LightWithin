@@ -21,6 +21,8 @@ public class LightParticles {
     public static final DefaultParticleType FOREST_AURA_LIGHT_PARTICLE = FabricParticleTypes.simple();
     public static final DefaultParticleType FROGLIGHT_PARTICLE = FabricParticleTypes.simple();
 
+    public static final DefaultParticleType LIGHTNING_PARTICLE = FabricParticleTypes.simple();
+
     public static final DefaultParticleType LIGHT_PARTICLE = FabricParticleTypes.simple();
     public static final DefaultParticleType SHINE_PARTICLE = FabricParticleTypes.simple();
     public static final ParticleType<ColoredPuffParticleEffect> COLORED_PUFF_PARTICLE = FabricParticleTypes.complex(ColoredPuffParticleEffect.FACTORY);
@@ -54,5 +56,8 @@ public class LightParticles {
                 SHINE_PARTICLE);
         Registry.register(Registries.PARTICLE_TYPE, new Identifier(LightWithin.MOD_ID, "colored_puff_particle"),
                 COLORED_PUFF_PARTICLE);
+
+        Registry.register(Registries.PARTICLE_TYPE, new Identifier(LightWithin.MOD_ID, "lightning_particle"),
+                LIGHTNING_PARTICLE);
     }
 }
