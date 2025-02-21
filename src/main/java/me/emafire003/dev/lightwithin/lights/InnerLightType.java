@@ -43,8 +43,8 @@ public enum InnerLightType {
 
     //TODO next up aura lights
     FOREST_AURA, //spawn vines to block people, poisons enemies and such
-    /*THUNDER_AURA,
-    ENDER_AURA,
+    THUNDER_AURA,
+    /*ENDER_AURA,
     DESERT_AURA (similar to forest aura maybe? At least the going into the sand blocks) maybe when activated have a sandbalde effect that traps and damages the enemies*/
 
     /*PROJECTILE,

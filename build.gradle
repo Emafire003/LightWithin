@@ -1,5 +1,5 @@
 plugins {
-	id 'fabric-loom' version '1.6-SNAPSHOT'
+	id 'fabric-loom' version '1.9-SNAPSHOT'
 	id 'maven-publish'
 }
 
@@ -50,6 +50,8 @@ repositories {
 			includeGroup "curse.maven"
 		}
 	}
+	mavenCentral()
+	maven { url 'https://jitpack.io' }
 
 	maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
 
@@ -77,7 +79,7 @@ dependencies {
 	//1.19 i think
 	//include modImplementation( 'com.github.0x3C50:Renderer:9804cf7d99' )c4faf83
 	//1.20.1
-	//Not needed anymore as of 1.1.0
+	//Not needed anymore as of 1.1. TODO remove this line? Tanto non mi serve in effetti
 	//include modImplementation( 'com.github.0x3C50:Renderer:2273f5e562' )//2273f5e
 
 	//StructurePlacerAPI
@@ -87,7 +89,7 @@ dependencies {
 	include modImplementation("maven.modrinth:custombrewrecipes:${project.custombrewrecipes_version}")
 
 	//ParticleAnimationLib
-    include modImplementation("maven.modrinth:particleanimationlib:${project.pal_version}")
+	include modImplementation("maven.modrinth:particleanimationlib:${project.pal_version}")
 
 	//Satin
 	modImplementation "org.ladysnake:satin:${satin_version}"

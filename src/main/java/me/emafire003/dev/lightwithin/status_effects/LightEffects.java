@@ -28,6 +28,8 @@ public class LightEffects {
             new ForestAuraEffect());
     public static final StatusEffect INTOXICATION = registerStatusEffect("intoxication",
             new IntoxicationEffect());
+    public static final StatusEffect THUNDER_AURA = registerStatusEffect("thunder_aura",
+            new ThunderAuraEffect());
 
     private static StatusEffect registerStatusEffect(String name, StatusEffect effect){
         return Registry.register(Registries.STATUS_EFFECT, new Identifier(LightWithin.MOD_ID, name),effect);
