@@ -13,6 +13,7 @@
     "PlayerFreezeMixin",
     "PlayerJoinMixin",
     "PreventLightEffectClearLivingEntityMixin",
+    "WorldPropertiesAccessor",
     "forest_aura_related.EnterForestBlocksEntityMixin",
     "forest_aura_related.ForestBlocksMixin",
     "forest_aura_related.RandomizeMovementPlayerEntityMixin",

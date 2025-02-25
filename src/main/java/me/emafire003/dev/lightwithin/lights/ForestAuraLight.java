@@ -38,25 +38,25 @@ import java.util.concurrent.atomic.AtomicInteger;
 import static me.emafire003.dev.lightwithin.LightWithin.*;
 
 /*Planned stuff:
-* Targets:
-*  - SELF or ALLIES, which applies the forest aura effect (traversing natural blocks)
-*  - ALL, which either makes all terrain difficult to traverse with spikes or similar
-*       OR puffs of plant like stuff that makes player drunk an stuff like that.
-* Maybe it could have like different effects dependig on the color of the puff and the power level.
-*First chunk of Puffs:
-        * Level 0-5:
-        * - GREEN
-     * - PURPLE
-     * - YELLOW
-     * - PINK
-     * Level 5-10
-        * - BLUE
-     * - RED
-     * - BLACK
-     * - ORANGE
-     *
-*
-* */
+ * Targets:
+ *  - SELF or ALLIES, which applies the forest aura effect (traversing natural blocks)
+ *  - ALL, which either makes all terrain difficult to traverse with spikes or similar
+ *       OR puffs of plant like stuff that makes player drunk an stuff like that.
+ * Maybe it could have like different effects dependig on the color of the puff and the power level.
+ *First chunk of Puffs:
+ * Level 0-5:
+ * - GREEN
+ * - PURPLE
+ * - YELLOW
+ * - PINK
+ * Level 5-10
+ * - BLUE
+ * - RED
+ * - BLACK
+ * - ORANGE
+ *
+ *
+ * */
 public class ForestAuraLight extends InnerLight {
 
     public static final Item INGREDIENT = Items.OAK_SAPLING;
