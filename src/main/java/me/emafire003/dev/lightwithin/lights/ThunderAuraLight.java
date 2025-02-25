@@ -4,36 +4,30 @@ import me.emafire003.dev.lightwithin.compat.coloredglowlib.CGLCompat;
 import me.emafire003.dev.lightwithin.component.LightComponent;
 import me.emafire003.dev.lightwithin.config.BalanceConfig;
 import me.emafire003.dev.lightwithin.config.Config;
-import me.emafire003.dev.lightwithin.lights.forestaura_puffs.ForestPuffColor;
 import me.emafire003.dev.lightwithin.particles.LightParticles;
 import me.emafire003.dev.lightwithin.particles.LightParticlesUtil;
 import me.emafire003.dev.lightwithin.sounds.LightSounds;
 import me.emafire003.dev.lightwithin.status_effects.LightEffects;
 import me.emafire003.dev.lightwithin.util.TargetType;
-import me.emafire003.dev.particleanimationlib.effects.AnimatedBallEffect;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.block.Block;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LightningEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.tag.TagKey;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
-import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.shape.VoxelShape;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static me.emafire003.dev.lightwithin.LightWithin.*;
@@ -55,9 +49,7 @@ Variant:
 * */
 public class ThunderAuraLight extends InnerLight {
 
-    public static final Item INGREDIENT = Items.LIGHTNING_ROD; //Glowstone?
-
-    public static final TagKey<Block> FOREST_AURA_BLOCKS = TagKey.of(RegistryKeys.BLOCK, new Identifier(MOD_ID, "forest_aura_blocks"));
+    public static final Item INGREDIENT = Items.LIGHTNING_ROD; //Glowstone? Iron?
 
     public static final String COLOR = "AFCE23";
 
@@ -115,14 +107,85 @@ public class ThunderAuraLight extends InnerLight {
 
         LightParticlesUtil.spawnLightTypeParticle(LightParticles.FOREST_AURA_LIGHT_PARTICLE, (ServerWorld) caster.getWorld(), caster.getPos());
 
-        if(component.getTargets().equals(TargetType.SELF)){
-            //The -1 is because status effect levels start from 0
-            caster.addStatusEffect(new StatusEffectInstance(LightEffects.FOREST_AURA, this.duration*20, (int) this.power_multiplier-1, false, false));
+        //Allies shield thing
+        if(component.getTargets().equals(TargetType.ALLIES)){
+            //The -1 is because status effect levels start from 0, so it's 0 to 9 but the players sees I, II, III, IV ecc
+            targets.forEach(target -> {
+                target.addStatusEffect(new StatusEffectInstance(LightEffects.THUNDER_AURA, this.duration*20, (int) this.power_multiplier -1, false, true));
+            });
         }
-        else if(component.getTargets().equals(TargetType.ALL)){
-
+        //Extra thundery weather (superstorm). The weather change is global, but the extra lightnings are in a localized area
+        else if(component.getTargets().equals(TargetType.VARIANT)){
+            //Must be on the server
+            caster.addStatusEffect(new StatusEffectInstance(LightEffects.STORM_AURA, this.duration*20, (int) this.power_multiplier, false, false));
         }
 
     }
+
+    /**Spawns a lot of lightnings inside the specified box area for the specified duration
+     * at random positions
+     *
+     * The duration is in seconds*/
+    //Def values 20, 10, 3
+    public static void spawnStormLightnings(Box area, int seconds, int lightnings_per_second, LivingEntity caster){
+        //TODO move this into the effect?
+        AtomicInteger tickCounter = new AtomicInteger();
+        int totalTicks = seconds*20;
+        int interval_between_lightnings = 20/(Math.max(1, lightnings_per_second));
+
+        //It's used to wait for the storm to load in, takes a second
+        AtomicBoolean waitingPhase = new AtomicBoolean(true);
+        ServerTickEvents.END_SERVER_TICK.register(server -> {
+
+            //TODO this just stopped lightnings from spawning
+            if(waitingPhase.get()){
+                //Waits for one second
+                if(tickCounter.get() < 25){
+                    tickCounter.getAndIncrement();
+                    return;
+                }else{
+                    //Then stops the wait phase and turns the counter back to 0
+                    waitingPhase.set(false);
+                    tickCounter.set(0);
+                }
+            }
+
+            if(tickCounter.get() > totalTicks || tickCounter.get() == -1){
+                return;
+            }
+            //TODO make sure this check works
+            //This checks if it's time sto spawn a lightning or not. It is when the current tick is compatible with th interval between lightnings
+            if(tickCounter.get()%interval_between_lightnings == 0){
+                LightningEntity lightning = new LightningEntity(EntityType.LIGHTNING_BOLT, caster.getWorld());
+
+                //TODO verify it doesn't mess things up with the ThreadLocal thing
+                Vec3d pos = new Vec3d(ThreadLocalRandom.current().nextDouble(area.minX, area.maxX), ThreadLocalRandom.current().nextDouble(area.minY, area.maxY), ThreadLocalRandom.current().nextDouble(area.minZ, area.maxZ));
+                //Ensures it's in the air and not inside other blocks
+                while(!caster.getWorld().getBlockState(BlockPos.ofFloored(pos.x, pos.y, pos.z)).isAir()){
+                    pos = new Vec3d(ThreadLocalRandom.current().nextDouble(area.minX, area.maxX), ThreadLocalRandom.current().nextDouble(area.minY, area.maxY), ThreadLocalRandom.current().nextDouble(area.minZ, area.maxZ));
+                }
+
+                //Checks weather or not to force it on the ground, TODO WIKI with a chance of 40%
+                if(caster.getRandom().nextBetween(1,10) <= 4){
+                    //As long as it's air it will go down half a block, trying to find the terrain
+                    while(caster.getWorld().getBlockState(BlockPos.ofFloored(pos.x, pos.y, pos.z)).isAir() && area.contains(pos)){
+                        pos = pos.add(0, -0.5, 0);
+                    }
+                    //I add another +0.5 since if the terrain is found, the position is set below it. Same thing the position silps outside the box
+                    pos = pos.add(0, 0.5, 0);
+                }
+
+                lightning.setPosition(pos);
+                ( (ServerWorld )caster.getWorld()).spawnParticles(LightParticles.LIGHTNING_PARTICLE, pos.x, pos.y+0.25, pos.z, 25, 0.3, 0.3, 0.3, 0.7);
+                if(caster instanceof ServerPlayerEntity){
+                    lightning.setChanneler((ServerPlayerEntity) caster);
+                }
+                caster.getWorld().spawnEntity(lightning);
+            }
+
+            tickCounter.getAndIncrement();
+        });
+    }
+
 
 }

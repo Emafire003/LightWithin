@@ -47,6 +47,12 @@ public class ForestAuraEffect extends StatusEffect {
         super.applyUpdateEffect(entity, amplifier);
     }
 
+    @Override
+    public boolean canApplyUpdateEffect(int duration, int amplifier) {
+        // In our case, we just make it return true so that it applies the status effect every tick.
+        return true;
+    }
+
     AtomicInteger visibleEntityCounter = new AtomicInteger(0);
 
     /**Updates the entites that are glowing if the player still hasn't filled up all of the "slots",
