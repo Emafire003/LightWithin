@@ -3,9 +3,13 @@ package me.emafire003.dev.lightwithin.events;
 import me.emafire003.dev.lightwithin.LightWithin;
 import me.emafire003.dev.lightwithin.component.LightComponent;
 import me.emafire003.dev.lightwithin.lights.InnerLightType;
+import me.emafire003.dev.lightwithin.status_effects.LightEffects;
 import me.emafire003.dev.lightwithin.util.CheckUtils;
+import me.emafire003.dev.lightwithin.util.TargetType;
 import net.fabricmc.fabric.api.event.player.AttackEntityCallback;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LightningEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.passive.PassiveEntity;
 import net.minecraft.entity.passive.TameableEntity;
@@ -13,6 +17,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
+import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.Box;
 
 import java.util.List;
@@ -115,7 +120,6 @@ public class LightTriggeringAndEvents {
             player.sendMessage(Text.literal("Triggering because of blazing check"));
             checkBlazing(player, component, player, target);
         }
-
     }
 
     /**Triggers that lighs on Freezing damage taken by the player*/
@@ -140,6 +144,28 @@ public class LightTriggeringAndEvents {
             checkAqua(player, component, player, target);
         }
 
+    }
+
+    private static void registerThunderAuraAllEffect(){
+        PlayerRightClickInteractEvent.EVENT.register((player) -> {
+            if(player.getWorld().isClient()){
+                return;
+            }
+
+            /*if(player.hasStatusEffect(LightEffects.LIGHT_ACTIVE)
+                    && LIGHT_COMPONENT.get(player).getType().equals(InnerLightType.THUNDER_AURA)
+                    && LIGHT_COMPONENT.get(player).getTargets().equals(TargetType.ALL)
+            ){*/
+                HitResult result = player.raycast(40, 1.0f, true);
+                LightningEntity lightning = new LightningEntity(EntityType.LIGHTNING_BOLT, player.getWorld());
+                lightning.setPosition(result.getPos());
+                lightning.setChanneler(player);
+                player.getWorld().spawnEntity(lightning);
+            //}
+            return;
+
+
+        });
     }
 
     public static void registerListeners(){
@@ -371,6 +397,8 @@ public class LightTriggeringAndEvents {
             }
 
         }));
+
+        registerThunderAuraAllEffect();
     }
 
 

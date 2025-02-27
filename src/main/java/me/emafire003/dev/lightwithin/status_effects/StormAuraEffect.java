@@ -55,7 +55,7 @@ public class StormAuraEffect extends StatusEffect {
 
         ((ServerWorld) target.getWorld()).setWeather(2, dur, true, true);
 
-        //it ranges from 15 to 25 blocks TODO CONFIGURE?
+        //it ranges from 15 to 25 blocks TODO CONFIGURE? or TODO WIKI
         Box storm_area  = Box.from(target.getPos()).expand(15+ amplifier);
         //TODO wiki The number of lightnings is the same as the power multiplier, with a minimum of 1
         spawnStormLightnings(storm_area, dur, Math.max(1, amplifier), target);
