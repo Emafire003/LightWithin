@@ -18,6 +18,7 @@ import me.emafire003.dev.lightwithin.entities.LightEntities;
 import me.emafire003.dev.lightwithin.entities.earth_golem.EarthGolemEntity;
 import me.emafire003.dev.lightwithin.events.LightTriggeringAndEvents;
 import me.emafire003.dev.lightwithin.events.PlayerJoinEvent;
+import me.emafire003.dev.lightwithin.events.PlayerRightClickInteractEvent;
 import me.emafire003.dev.lightwithin.items.LightItems;
 import me.emafire003.dev.lightwithin.items.crafting.BrewRecipes;
 import me.emafire003.dev.lightwithin.lights.*;
@@ -113,6 +114,7 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 		LightTriggeringAndEvents.registerListeners();
 		registerLightUsedPacket();
 		registerLightChargeConsumedPacket();
+		registerInteractPacket();
 		registerReadyLightCacheRemover();
 		registerSyncOptionsOnJoin();
 		LightSounds.registerSounds();
@@ -240,6 +242,18 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 		})));
 	}
 
+	/**Registers an event where the player interacts with something, aka a right click even with an empty hand*/
+	private static void registerInteractPacket(){
+		ServerPlayNetworking.registerGlobalReceiver(InteractedPacketC2S.ID, (((server, player, handler, buf, responseSender) -> {
+			if(player.getWorld().isClient){
+				return;
+			}
+			server.execute(() -> {
+				PlayerRightClickInteractEvent.EVENT.invoker().interact(player);
+			});
+		})));
+	}
+
 	private static void registerLightChargeConsumedPacket(){
 		ServerPlayNetworking.registerGlobalReceiver(LightChargeConsumedPacketC2S.ID, (((server, player, handler, buf, responseSender) -> {
 			if(player.getWorld().isClient){
@@ -271,6 +285,7 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 			});
 		})));
 	}
+
 
 	public static boolean isPlayerInCooldown(PlayerEntity user){
 		return user.hasStatusEffect(LightEffects.LIGHT_FATIGUE) || user.hasStatusEffect(LightEffects.LIGHT_ACTIVE);

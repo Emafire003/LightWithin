@@ -4,6 +4,7 @@ import me.emafire003.dev.lightwithin.compat.coloredglowlib.CGLCompat;
 import me.emafire003.dev.lightwithin.component.LightComponent;
 import me.emafire003.dev.lightwithin.config.BalanceConfig;
 import me.emafire003.dev.lightwithin.config.Config;
+import me.emafire003.dev.lightwithin.events.LightTriggeringAndEvents;
 import me.emafire003.dev.lightwithin.particles.LightParticles;
 import me.emafire003.dev.lightwithin.particles.LightParticlesUtil;
 import me.emafire003.dev.lightwithin.sounds.LightSounds;
@@ -113,6 +114,8 @@ public class ThunderAuraLight extends InnerLight {
             targets.forEach(target -> {
                 target.addStatusEffect(new StatusEffectInstance(LightEffects.THUNDER_AURA, this.duration*20, (int) this.power_multiplier -1, false, true));
             });
+        }else if(component.getTargets().equals(TargetType.ALL)){
+            /**defined inside {@link LightTriggeringAndEvents#registerThunderAuraAllEffect()}*/
         }
         //Extra thundery weather (superstorm). The weather change is global, but the extra lightnings are in a localized area
         else if(component.getTargets().equals(TargetType.VARIANT)){
@@ -137,7 +140,6 @@ public class ThunderAuraLight extends InnerLight {
         AtomicBoolean waitingPhase = new AtomicBoolean(true);
         ServerTickEvents.END_SERVER_TICK.register(server -> {
 
-            //TODO this just stopped lightnings from spawning
             if(waitingPhase.get()){
                 //Waits for one second
                 if(tickCounter.get() < 25){
@@ -153,12 +155,10 @@ public class ThunderAuraLight extends InnerLight {
             if(tickCounter.get() > totalTicks || tickCounter.get() == -1){
                 return;
             }
-            //TODO make sure this check works
             //This checks if it's time sto spawn a lightning or not. It is when the current tick is compatible with th interval between lightnings
             if(tickCounter.get()%interval_between_lightnings == 0){
                 LightningEntity lightning = new LightningEntity(EntityType.LIGHTNING_BOLT, caster.getWorld());
 
-                //TODO verify it doesn't mess things up with the ThreadLocal thing
                 Vec3d pos = new Vec3d(ThreadLocalRandom.current().nextDouble(area.minX, area.maxX), ThreadLocalRandom.current().nextDouble(area.minY, area.maxY), ThreadLocalRandom.current().nextDouble(area.minZ, area.maxZ));
                 //Ensures it's in the air and not inside other blocks
                 while(!caster.getWorld().getBlockState(BlockPos.ofFloored(pos.x, pos.y, pos.z)).isAir()){

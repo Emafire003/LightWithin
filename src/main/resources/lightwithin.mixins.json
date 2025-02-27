@@ -26,6 +26,7 @@
   ],
   "client": [
     "CustomEffectsLivingRendererMixin",
+    "EmptyItemInteractMixin",
     "EntityColorOverlayRendererMixin",
     "PlayerArmColorOverlayMixin",
     "PlayerChargedGlowRendererMixin",
