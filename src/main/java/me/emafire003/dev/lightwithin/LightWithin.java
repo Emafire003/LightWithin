@@ -96,6 +96,7 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 			entry(InnerLightType.WIND, Arrays.asList(TargetType.SELF, TargetType.ALL, TargetType.ALLIES)),
 			entry(InnerLightType.AQUA, Arrays.asList(TargetType.SELF, TargetType.ENEMIES, TargetType.ALLIES,  TargetType.ALL)),
 			entry(InnerLightType.FOREST_AURA, Arrays.asList(TargetType.ALL, TargetType.SELF)),
+			entry(InnerLightType.THUNDER_AURA, Arrays.asList(TargetType.ALLIES, TargetType.ALL, TargetType.VARIANT)),
 			entry(InnerLightType.FROG, List.of(TargetType.ALL))
 	);
 
@@ -619,6 +620,25 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 		}
 
 		new ForestAuraLight(targets, component.getMaxCooldown(), component.getPowerMultiplier(),
+				component.getDuration(), player).execute();
+	}
+
+	//=======================Thunder Aura Light=======================
+	//TODO set the messages!
+	public static void activateThunderAura(LightComponent component, PlayerEntity player){
+		List<LivingEntity> targets = new ArrayList<>();
+
+		if(component.getTargets().equals(TargetType.ALLIES)){
+			targets.addAll(getAllies(player));
+			player.sendMessage(Text.translatable("light.description.activation.thunder_aura.allies"), true);
+		}else if(component.getTargets().equals(TargetType.ALL)){
+			player.sendMessage(Text.translatable("light.description.activation.thunder_aura.all"), true);
+		}else if(component.getTargets().equals(TargetType.VARIANT)){
+			targets.add(player);
+			player.sendMessage(Text.translatable("light.description.activation.thunder_aura.variant"), true);
+		}
+
+		new ThunderAuraLight(targets, component.getMaxCooldown(), component.getPowerMultiplier(),
 				component.getDuration(), player).execute();
 	}
 

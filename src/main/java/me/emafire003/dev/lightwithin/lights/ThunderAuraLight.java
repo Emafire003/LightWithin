@@ -26,7 +26,9 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -54,6 +56,8 @@ public class ThunderAuraLight extends InnerLight {
 
     public static final String COLOR = "AFCE23";
 
+    public static HashMap<UUID, Integer> LIGHTNING_USES_LEFT = new HashMap<>();
+
     public ThunderAuraLight(List<LivingEntity> targets, double cooldown_time, double power_multiplier, int duration, String color, PlayerEntity caster, boolean rainbow_col) {
         super(targets, cooldown_time, power_multiplier, duration, color, caster, rainbow_col);
         type = InnerLightType.THUNDER_AURA;
@@ -71,6 +75,7 @@ public class ThunderAuraLight extends InnerLight {
         color = "thunder_aura";
     }
 
+    //TODO fix these up
     private void checkSafety(){
         if(this.power_multiplier > BalanceConfig.FOREST_AURA_MAX_POWER){
             power_multiplier = BalanceConfig.FOREST_AURA_MAX_POWER;
@@ -114,12 +119,17 @@ public class ThunderAuraLight extends InnerLight {
             targets.forEach(target -> {
                 target.addStatusEffect(new StatusEffectInstance(LightEffects.THUNDER_AURA, this.duration*20, (int) this.power_multiplier -1, false, true));
             });
+            //TODO playsound, maybe a static for the people with the barrier
         }else if(component.getTargets().equals(TargetType.ALL)){
-            /**defined inside {@link LightTriggeringAndEvents#registerThunderAuraAllEffect()}*/
+            /** Defined inside {@link LightTriggeringAndEvents#registerThunderAuraAllEffect()}
+             * Anywasy, it will allow the player to spawn a lightning at the point they are looking at.
+             * A max number of power multiplier of lightnings*/
+            //TODO playsound
         }
         //Extra thundery weather (superstorm). The weather change is global, but the extra lightnings are in a localized area
         else if(component.getTargets().equals(TargetType.VARIANT)){
             //Must be on the server
+            //TODO playsound
             caster.addStatusEffect(new StatusEffectInstance(LightEffects.STORM_AURA, this.duration*20, (int) this.power_multiplier, false, false));
         }
 

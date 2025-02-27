@@ -3,6 +3,7 @@ package me.emafire003.dev.lightwithin.events;
 import me.emafire003.dev.lightwithin.LightWithin;
 import me.emafire003.dev.lightwithin.component.LightComponent;
 import me.emafire003.dev.lightwithin.lights.InnerLightType;
+import me.emafire003.dev.lightwithin.lights.ThunderAuraLight;
 import me.emafire003.dev.lightwithin.status_effects.LightEffects;
 import me.emafire003.dev.lightwithin.util.CheckUtils;
 import me.emafire003.dev.lightwithin.util.TargetType;
@@ -20,6 +21,7 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.Box;
 
+import java.util.HashMap;
 import java.util.List;
 
 import static me.emafire003.dev.lightwithin.LightWithin.*;
@@ -151,20 +153,25 @@ public class LightTriggeringAndEvents {
             if(player.getWorld().isClient()){
                 return;
             }
+            //Checks if the player has an active light, and if its Thunder aura with ALL as a target.
+            // It will also check how many times they have already summoned a lightning bolt, and if it is above their power multiplier it won't allow to spawn new ones
+            if(player.hasStatusEffect(LightEffects.LIGHT_ACTIVE)){
+                LightComponent component = LIGHT_COMPONENT.get(player);
+                if(component.getType().equals(InnerLightType.THUNDER_AURA) && component.getTargets().equals(TargetType.ALL)
+                        && ThunderAuraLight.LIGHTNING_USES_LEFT.getOrDefault(player.getUuid(), 0) < component.getPowerMultiplier()
+                ){
 
-            /*if(player.hasStatusEffect(LightEffects.LIGHT_ACTIVE)
-                    && LIGHT_COMPONENT.get(player).getType().equals(InnerLightType.THUNDER_AURA)
-                    && LIGHT_COMPONENT.get(player).getTargets().equals(TargetType.ALL)
-            ){*/
-                HitResult result = player.raycast(40, 1.0f, true);
-                LightningEntity lightning = new LightningEntity(EntityType.LIGHTNING_BOLT, player.getWorld());
-                lightning.setPosition(result.getPos());
-                lightning.setChanneler(player);
-                player.getWorld().spawnEntity(lightning);
-            //}
-            return;
+                    HitResult result = player.raycast(40, 1.0f, true);
+                    LightningEntity lightning = new LightningEntity(EntityType.LIGHTNING_BOLT, player.getWorld());
+                    lightning.setPosition(result.getPos());
+                    lightning.setChanneler(player);
+                    player.getWorld().spawnEntity(lightning);
+                    //Adds another spent use/addes the first use
+                    ThunderAuraLight.LIGHTNING_USES_LEFT.put(player.getUuid(), 1+ThunderAuraLight.LIGHTNING_USES_LEFT.getOrDefault(player.getUuid(), 0));
 
+                }
 
+            }
         });
     }
 
