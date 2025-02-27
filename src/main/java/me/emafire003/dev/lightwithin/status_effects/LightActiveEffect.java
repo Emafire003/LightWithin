@@ -5,6 +5,7 @@ import me.emafire003.dev.lightwithin.compat.coloredglowlib.CGLCompat;
 import me.emafire003.dev.lightwithin.component.LightComponent;
 import me.emafire003.dev.lightwithin.config.Config;
 import me.emafire003.dev.lightwithin.lights.InnerLightType;
+import me.emafire003.dev.lightwithin.lights.ThunderAuraLight;
 import me.emafire003.dev.lightwithin.util.TargetType;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.entity.LivingEntity;
@@ -76,6 +77,10 @@ public class LightActiveEffect extends StatusEffect {
                         LightWithin.USED_CHARGE_PLAYER_CACHE.remove(entity.getUuid());
                     }else{
                         entity.addStatusEffect(new StatusEffectInstance(LightEffects.LIGHT_FATIGUE, (int) (Config.COOLDOWN_MULTIPLIER*20*component.getMaxCooldown())));
+                    }
+                    //Resets the lightnings uses for the player
+                    if(component.getType().equals(InnerLightType.THUNDER_AURA) && component.getTargets().equals(TargetType.ALL)){
+                        ThunderAuraLight.LIGHTNING_USES_LEFT.remove(entity.getUuid());
                     }
                 });
             }
