@@ -57,6 +57,7 @@ public class Tests {
         int wind = 0;
         int frog = 0;
         int forest = 0;
+        int thunder = 0;
         int error = 0;
         UUID id = UUID.randomUUID();
         for(int i = 0; i<run_times; i++){
@@ -80,6 +81,8 @@ public class Tests {
                 wind++;
             }else if(type.equals(InnerLightType.FOREST_AURA)){
                 forest++;
+            }else if(type.equals(InnerLightType.THUNDER_AURA)){
+                thunder++;
             }else if(type.equals(InnerLightType.FROG)){
                 frog++;
             }else{
@@ -98,6 +101,7 @@ public class Tests {
         p.sendMessage(Text.literal(("Wind: §a" + wind + " §rpercent: §b" + (double) wind*100/run_times)));
         p.sendMessage(Text.literal(("Frog: §a" + frog + " §rpercent: §b" + (double) frog*100/run_times)));
         p.sendMessage(Text.literal(("Forest: §a" + forest + " §rpercent: §b" + (double) forest*100/run_times)));
+        p.sendMessage(Text.literal(("Thunder: §a" + thunder + " §rpercent: §b" + (double) thunder*100/run_times)));
         p.sendMessage(Text.literal(("Error: §c" + error)));
     }
 

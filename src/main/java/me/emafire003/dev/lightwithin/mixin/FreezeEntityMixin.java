@@ -63,17 +63,4 @@ public abstract class FreezeEntityMixin {
         }
     }
 
-    //Again, meant for the Freeze Resistance effect
-    @Inject(
-            method = "damage",
-            at = @At("HEAD"),
-            cancellable = true
-    )
-    private void makeFreezeImmune(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
-        LivingEntity entity = (LivingEntity) (Object) this;
-        if (source.getName().equalsIgnoreCase("freeze") && entity.hasStatusEffect(LightEffects.FREEZE_RESISTANCE)) {
-            cir.setReturnValue(false);
-        }
-    }
-
 }

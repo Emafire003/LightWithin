@@ -4,6 +4,7 @@ import me.emafire003.dev.lightwithin.events.EntityAttackEntityEvent;
 import me.emafire003.dev.lightwithin.events.EntityBurningEvent;
 import me.emafire003.dev.lightwithin.events.EntityDrowningEvent;
 import me.emafire003.dev.lightwithin.events.EntityFreezingEvent;
+import me.emafire003.dev.lightwithin.events.EntityStruckByLightningEvent;
 import me.emafire003.dev.lightwithin.status_effects.LightEffects;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -46,6 +47,7 @@ public abstract class LivingEntityDamageTriggersMixin {
         }else if(source.isOf(DamageTypes.MOB_PROJECTILE)){
             //trigger projectile damage
         }else if(source.isOf(DamageTypes.LIGHTNING_BOLT)){
+            EntityStruckByLightningEvent.EVENT.invoker().lightningBolted(entity);
             //trigger damage from lightning
         }else if(source.isOf(DamageTypes.DROWN)){
             EntityDrowningEvent.EVENT.invoker().drowning(entity);

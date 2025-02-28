@@ -144,15 +144,18 @@ public class LightCreationAndEvent {
         //All of these realease 1.0.0 have roughly a 12.5% chance of appearing. Except the frog that tends very much to 0.
 
         //ForestAura
-       if(String.valueOf(id_bits[type_bit].charAt(i+1)).matches("f")){
+        if(String.valueOf(id_bits[type_bit].charAt(i+1)).matches("f")){
             return new Pair<>(InnerLightType.FOREST_AURA, determineTarget(id_bits, target_bit, LightWithin.POSSIBLE_TARGETS.get(InnerLightType.FOREST_AURA)));
+        }
+        //Thunder Aura
+        else if(String.valueOf(id_bits[type_bit].charAt(i+2)).matches("f")){
+            return new Pair<>(InnerLightType.THUNDER_AURA, determineTarget(id_bits, target_bit, LightWithin.POSSIBLE_TARGETS.get(InnerLightType.THUNDER_AURA)));
         }
         //Frog? aka f = 6 r = 18 = F+2 o = 15 = E g = 7
         //If there is "frog" spelled as numbers of the alphabet, then your light is frog. Happy?
         else if(String.valueOf(id_bits[type_bit]).contains("6f2e7")){
             return new Pair<>(InnerLightType.FROG, determineTarget(id_bits, target_bit, List.of(TargetType.ALL)));
         }
-
         //HEAL
         else if(String.valueOf(id_bits[type_bit].charAt(i)).matches("[a-b]")){
             return new Pair<InnerLightType, TargetType>(InnerLightType.HEAL, determineTarget(id_bits, target_bit, LightWithin.POSSIBLE_TARGETS.get(InnerLightType.HEAL)));

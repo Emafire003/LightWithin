@@ -9,6 +9,7 @@
     "DrownedEntityMixin",
     "FreezeEntityLookMixin",
     "FreezeEntityMixin",
+    "ImmunitiesMixin",
     "MilkNotCleanLightEffectsMixin",
     "PlayerFreezeMixin",
     "PlayerJoinMixin",
