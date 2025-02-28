@@ -148,6 +148,8 @@ public class LightTriggeringAndEvents {
 
     }
 
+
+    //TODO add trigger for player struck by lightning
     private static void registerThunderAuraAllEffect(){
         PlayerRightClickInteractEvent.EVENT.register((player) -> {
             if(player.getWorld().isClient()){
@@ -345,6 +347,38 @@ public class LightTriggeringAndEvents {
                     entityDrowningTriggerCheck(p, (LivingEntity) drowningEntity);
                 }
             }
+        }));
+
+        //Triggers when someone/thing is struck by lightning
+        EntityStruckByLightningEvent.EVENT.register(((boltedEntity) -> {
+            LOGGER.info("Entity " + boltedEntity + " has been bolted");
+            /*if(boltedEntity instanceof PlayerEntity){
+                entityDrowningTriggerCheck((PlayerEntity) boltedEntity, (PlayerEntity) boltedEntity);
+            }
+            //if the target is a pet of someone with a light, the pet is the target. (He is also considered an ally)
+            if(boltedEntity instanceof TameableEntity){
+                if(((TameableEntity) boltedEntity).getOwner() instanceof PlayerEntity){
+                    entityDrowningTriggerCheck((PlayerEntity) ((TameableEntity) boltedEntity).getOwner(), (LivingEntity) boltedEntity);
+                }
+            }
+
+            //if the one getting attacked is a passive entity, the entity is the target
+            //while the player who triggers the light is the one nearby
+            if(boltedEntity instanceof PassiveEntity){
+                List<PlayerEntity> entities1 = boltedEntity.getWorld().getEntitiesByClass(PlayerEntity.class, new Box(boltedEntity.getBlockPos()).expand(BOX_EXPANSION_AMOUNT), (entity1 -> true));
+                for(PlayerEntity p : entities1){
+                    if(!p.equals(boltedEntity)){
+                        entityDrowningTriggerCheck(p, (LivingEntity) boltedEntity);
+                    }
+                }
+            }
+            //if someone is a teammate of a player that can trigger their light by falling, this will check for it
+            List<PlayerEntity> entities = boltedEntity.getWorld().getEntitiesByClass(PlayerEntity.class, new Box(boltedEntity.getBlockPos()).expand(BOX_EXPANSION_AMOUNT), (entity1 -> true));
+            for(PlayerEntity p : entities){
+                if(CheckUtils.CheckAllies.checkAlly(p, (LivingEntity) boltedEntity) && !p.equals(boltedEntity)){
+                    entityDrowningTriggerCheck(p, (LivingEntity) boltedEntity);
+                }
+            }*/
         }));
 
         //Player attacking something

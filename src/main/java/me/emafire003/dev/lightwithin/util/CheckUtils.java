@@ -38,6 +38,7 @@ import net.minecraft.state.property.Properties;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
+import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import org.jetbrains.annotations.NotNull;
 
@@ -818,7 +819,10 @@ public class CheckUtils {
             return target.hasStatusEffect(StatusEffects.POISON);
         }
         return false;
+    }
 
+    public static boolean checkThundering(World world){
+        return world.isThundering();
     }
 
     /**Rerturn a list of the player's enemies in the area
