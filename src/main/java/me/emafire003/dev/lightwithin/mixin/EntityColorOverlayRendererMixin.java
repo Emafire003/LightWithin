@@ -43,6 +43,18 @@ public abstract class EntityColorOverlayRendererMixin<T extends LivingEntity, M 
                     args.set(6, ob*0.300f);
                     args.set(7, oa*0.77f);//before it was 0.5 which is alright. It does work but is veeeery green
                 }
+
+                if(LightWithin.LIGHT_COMPONENT.get(livingEntity).getType().equals(InnerLightType.THUNDER_AURA)){
+                    float or = args.get(4); //Original values, like OriginalRed
+                    float og = args.get(5);
+                    float ob = args.get(6);
+                    float oa = args.get(7);
+                    //This is done for compatibility with other changes
+                    args.set(4, or*0.750f);
+                    args.set(5, og*0.750f);
+                    args.set(6, ob*0.150f);
+                    args.set(7, oa*0.84f);
+                }
             }
         }
         /*TEST STUFF

@@ -45,6 +45,10 @@ public abstract class PlayerArmColorOverlayMixin extends LivingEntityRenderer<Ab
                 arm.render(matrices, vertices, light, overlay, 0.4f, 0.9f, 0.4f, 0.4f);
                 return;
             }
+            if(LightWithin.LIGHT_COMPONENT.get(player).getType().equals(InnerLightType.FOREST_AURA)){
+                arm.render(matrices, vertices, light, overlay, 0.8f, 0.8f, 0.15f, 0.4f);
+                return;
+            }
         }
         //else
         original.call(instance, matrices, vertices, light, overlay);

@@ -8,6 +8,8 @@
   "effect.lightwithin.water_slide": "Water Slide",
   "effect.lightwithin.water_cascade": "Water Cascade",
   "effect.lightwithin.forest_aura": "Forest Aura",
+  "effect.lightwithin.thunder_aura": "Thunder Aura",
+  "effect.lightwithin.storm_aura": "Storm Aura",
   "effect.lightwithin.intoxication": "Intoxication",
   "item.lightwithin.luxintus_berry": "Luxintus Berry",
   "item.lightwithin.luxmutua_berry": "Luxmutua Berry",
@@ -62,6 +64,7 @@
   "light.description.wind": "Your light shines in the wind",
   "light.description.aqua": "Your light best reflects upon watery surfaces",
   "light.description.forest_aura": "You are one with the forest",
+  "light.description.thunder_aura": "You shine like thunder",
   "light.description.frog": "*croak* Wait what?! Frogs?!",
 
   "light.description.target.self": "Your light shall guide you and you alone!",
@@ -111,6 +114,10 @@
   "light.description.activation.forest_aura.self": "The forest will become one with you!",
 
   "light.description.negated.forest_aura": "Your light sensed its kin, and shielded you from its tricks!",
+
+  "light.description.activation.thunder_aura.all": "The storm lends you its greatest weapon!",
+  "light.description.activation.thunder_aura.allies": "The Thunder shall protect your allies!",
+  "light.description.activation.thunder_aura.variant": "The Thunder has come to protect its children!",
 
   "config.lightwithin.name": "LightWithin client options",
   "config.lightwithin.category_name": "Options",
