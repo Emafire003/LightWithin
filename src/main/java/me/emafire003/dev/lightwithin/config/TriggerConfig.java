@@ -586,7 +586,7 @@ public class TriggerConfig {
         configs.addKeyValuePair(new Pair<>("thunder_aura_variant_very_low_health", 3), caster_very_low_health);
         configs.addKeyValuePair(new Pair<>("thunder_aura_variant_low_health", 2), caster_low_health);
         configs.addKeyValuePair(new Pair<>("thunder_aura_variant_surrounded", 2), caster_surrounded);
-        configs.addKeyValuePair(new Pair<>("thunder_aura_variant_raining", 1), raining);
+        configs.addKeyValuePair(new Pair<>("thunder_aura_variant_raining", 2), raining);
         configs.addKeyValuePair(new Pair<>("thunder_aura_variant_conditions", 3), light_conditions_1 + "thunder aura" + light_conditions_2);
 
 
@@ -829,8 +829,8 @@ public class TriggerConfig {
         //Variant
         THUNDER_AURA_VARIANT_VERY_LOW_HEALTH = CONFIG.getOrDefault("thunder_aura_variant_very_low_health", 3);
         THUNDER_AURA_VARIANT_LOW_HEALTH = CONFIG.getOrDefault("thunder_aura_variant_low_health", 2);
-        THUNDER_AURA_VARIANT_SURROUNDED = CONFIG.getOrDefault("thunder_aura_variant_surrounded", 2);
-        THUNDER_AURA_VARIANT_RAINING = CONFIG.getOrDefault("thunder_aura_variant_raining", 1);
+        THUNDER_AURA_VARIANT_SURROUNDED = CONFIG.getOrDefault("thunder_aura_variant_surrounded", 1);
+        THUNDER_AURA_VARIANT_RAINING = CONFIG.getOrDefault("thunder_aura_variant_raining", 2);
         THUNDER_AURA_VARIANT_CONDITIONS = CONFIG.getOrDefault("thunder_aura_variant_conditions", 3);
     }
 

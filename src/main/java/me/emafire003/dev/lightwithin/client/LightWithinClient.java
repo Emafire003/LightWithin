@@ -170,7 +170,7 @@ public class LightWithinClient implements ClientModInitializer {
         ParticleFactoryRegistry.getInstance().register(LightParticles.WINDLIGHT_PARTICLE, LightTypeParticleV3.Factory::new);
         ParticleFactoryRegistry.getInstance().register(LightParticles.AQUALIGHT_PARTICLE, LightTypeParticleV3.Factory::new);
         ParticleFactoryRegistry.getInstance().register(LightParticles.FOREST_AURA_LIGHT_PARTICLE, LightTypeParticleV3.Factory::new);
-
+        ParticleFactoryRegistry.getInstance().register(LightParticles.THUNDER_AURA_LIGHT_PARTICLE, LightTypeParticleV3.Factory::new);
         ParticleFactoryRegistry.getInstance().register(LightParticles.FROGLIGHT_PARTICLE, LightTypeParticleV3.Factory::new);
 
         ParticleFactoryRegistry.getInstance().register(LightParticles.LIGHT_PARTICLE, LightParticle.Factory::new);
