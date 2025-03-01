@@ -66,7 +66,7 @@ You are allowed to use this mod without directly asking me, but you are asked to
 ### Attributions:
 Text logo: textstudio.com
 
-Some audio files: https://mixkit.co
+Some audio files: https://mixkit.co, https://pixabay.com (freesound community)
 
 Other audio files: https://www.beepbox.co/
 

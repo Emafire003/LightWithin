@@ -43,6 +43,14 @@
       "lightwithin:forest_aura_puff_2"
     ]
   },
+  "thunder_aura_zap": {
+    "subtitle": "lightwithin.thunder_aura_zap",
+    "sounds": [
+      "lightwithin:zap_1",
+      "lightwithin:zap_2",
+      "lightwithin:zap_3"
+    ]
+  },
   "defense_light": {
   "subtitle": "lightwithin.defense_light_triggered",
   "sounds": [

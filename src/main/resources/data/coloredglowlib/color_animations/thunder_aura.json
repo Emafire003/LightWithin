@@ -1,0 +1,57 @@
+{
+  "name": "thunder_aura",
+  "colors": [
+    {
+      "color": "#F3F038",
+      "active_for": 15
+    },
+    {
+      "color": "#E3DF31",
+      "active_for": 15
+    },
+    {
+      "color": "#D4CD2B",
+      "active_for": 15
+    },
+    {
+      "color": "#C4BC24",
+      "active_for": 15
+    },
+    {
+      "color": "#B4AB1D",
+      "active_for": 15
+    },
+    {
+      "color": "#A59917",
+      "active_for": 15
+    },
+    {
+      "color": "#958810",
+      "active_for": 15
+    },
+    {
+      "color": "#A59917",
+      "active_for": 15
+    },
+    {
+      "color": "#B4AB1D",
+      "active_for": 15
+    },
+    {
+      "color": "#C4BC24",
+      "active_for": 15
+    },
+    {
+      "color": "#D4CD2B",
+      "active_for": 15
+    },
+    {
+      "color": "#E3DF31",
+      "active_for": 15
+    },
+    {
+      "color": "#F3F038",
+      "active_for": 15
+    }
+  ]
+}
