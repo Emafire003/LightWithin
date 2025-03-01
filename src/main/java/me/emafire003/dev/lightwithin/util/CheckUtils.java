@@ -825,8 +825,9 @@ public class CheckUtils {
         if(checkThundering(player.getWorld())){
             return true;
         }
-        //If the player is standing on a copper rod then lightning conditions met
-        if(player.getWorld().getBlockState(player.getBlockPos().down()).isOf(Blocks.LIGHTNING_ROD)){
+        //If the player is standing on a is copper rod then lightning conditions met
+        if(player.getWorld().getBlockState(player.getBlockPos().down()).isOf(Blocks.LIGHTNING_ROD)
+            || player.getWorld().getBlockState(player.getBlockPos()).isOf(Blocks.LIGHTNING_ROD)){
             return true;
         }
         if(checkRecentlyStruckByLightning(player)){

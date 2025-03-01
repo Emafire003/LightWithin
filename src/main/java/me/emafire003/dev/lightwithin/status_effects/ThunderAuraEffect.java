@@ -1,20 +1,16 @@
 package me.emafire003.dev.lightwithin.status_effects;
 
-import me.emafire003.dev.lightwithin.LightWithin;
 import me.emafire003.dev.lightwithin.particles.LightParticles;
 import me.emafire003.dev.lightwithin.util.CheckUtils;
 import me.emafire003.dev.lightwithin.util.fabridash.FabriDash;
 import me.emafire003.dev.particleanimationlib.effects.AnimatedBallEffect;
-import me.emafire003.dev.particleanimationlib.effects.CuboidEffect;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.AttributeContainer;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectCategory;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.text.Text;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
 
@@ -44,20 +40,16 @@ public class ThunderAuraEffect extends StatusEffect {
 
 
         //Used to debug the size of the collision area
-
-        if(!entity.getWorld().isClient){
+        /*if(!entity.getWorld().isClient){
             CuboidEffect cuboidEffect = CuboidEffect.builder((ServerWorld) entity.getWorld(), ParticleTypes.BUBBLE, new Vec3d(box.minX, box.minY, box.minZ))
                     .targetPos(new Vec3d(box.maxX, box.maxY, box.maxZ)).updatePositions(true).updateTargetPositions(true)
                     .blockSnap(false).padding(0).particles(20).build();
             cuboidEffect.setIterations(2);
             cuboidEffect.run();
-        }
+        }*/
 
         //TODO wiki Gets the nearby entities that ARE NOT ALLIES (meaning anyone except allies will get zapped and knocked back)
-        List<LivingEntity> nearby_entities = entity.getWorld().getEntitiesByClass(LivingEntity.class, box, (entity1 -> {
-            //TODO test the ally thing
-            return !CheckUtils.CheckAllies.checkAlly(entity, entity1) && !entity1.equals(entity);
-        }));
+        List<LivingEntity> nearby_entities = entity.getWorld().getEntitiesByClass(LivingEntity.class, box, (entity1 -> !CheckUtils.CheckAllies.checkAlly(entity, entity1) && !entity1.equals(entity)));
 
         nearby_entities.forEach(target -> {
             if(target instanceof PlayerEntity && target.isSpectator()){
@@ -67,7 +59,6 @@ public class ThunderAuraEffect extends StatusEffect {
             Vec3d v = entity.getPos().add(.5, .5, .5).subtract(target.getPos());
             v = v.multiply(1, 0.00001, 1).multiply(-1.5);
             v = v.normalize().multiply(.6+((double) amplifier /10)); //This is the one that multiplies
-            LightWithin.LOGGER.info("The velocity is: " + v);
             target.setVelocityClient(v.x, v.y, v.z);
             target.setVelocity(v);
             if(target instanceof ServerPlayerEntity && !target.getWorld().isClient()){
@@ -102,9 +93,6 @@ public class ThunderAuraEffect extends StatusEffect {
                 .size(height-height/12).particles((int) (20+(height/10))).particlesPerIteration((int) (20+(height/10)))
                 .build();
 
-        target.sendMessage(Text.literal("The height: " + target.getDimensions(target.getPose()).height));
-        target.sendMessage(Text.literal("The width: " + target.getDimensions(target.getPose()).width));
-
         //TODO set the duration of the effects
         //TODO add the chaning size and ither stuff to allow for entity pose changes
         ballEffect.runFor(10);
@@ -115,9 +103,6 @@ public class ThunderAuraEffect extends StatusEffect {
     @Override
     public void onRemoved(LivingEntity entity, AttributeContainer attributes, int amplifier){
         super.onRemoved(entity, attributes, amplifier);
-        if(!(entity instanceof PlayerEntity)){
-            return;
-        }
     }
 
 }
