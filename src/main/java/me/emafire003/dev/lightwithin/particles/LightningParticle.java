@@ -18,8 +18,6 @@ public class LightningParticle extends AnimatedParticle {
         this.velocityZ = velocityZ;
         this.scale *= 0.75F;
         this.maxAge = 10;
-        //TODO make sure doesn't mess up stuff
-        // this.setTargetColor(15916745);
         this.setSpriteForAge(spriteProvider);
     }
 

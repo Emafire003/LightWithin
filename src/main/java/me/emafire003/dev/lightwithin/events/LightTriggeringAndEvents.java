@@ -2,6 +2,7 @@ package me.emafire003.dev.lightwithin.events;
 
 import me.emafire003.dev.lightwithin.LightWithin;
 import me.emafire003.dev.lightwithin.component.LightComponent;
+import me.emafire003.dev.lightwithin.config.BalanceConfig;
 import me.emafire003.dev.lightwithin.lights.InnerLightType;
 import me.emafire003.dev.lightwithin.lights.ThunderAuraLight;
 import me.emafire003.dev.lightwithin.status_effects.LightEffects;
@@ -456,7 +457,7 @@ public class LightTriggeringAndEvents {
             if(player.hasStatusEffect(LightEffects.LIGHT_ACTIVE)){
                 LightComponent component = LIGHT_COMPONENT.get(player);
                 if(component.getType().equals(InnerLightType.THUNDER_AURA) && component.getTargets().equals(TargetType.ALL)
-                        && ThunderAuraLight.LIGHTNING_USES_LEFT.getOrDefault(player.getUuid(), 0) < component.getPowerMultiplier()
+                        && ThunderAuraLight.LIGHTNING_USES_LEFT.getOrDefault(player.getUuid(), 0) < component.getPowerMultiplier()*BalanceConfig.THUNDER_AURA_ALL_LIGHTNINGS_PER_LEVEL
                 ){
 
                     HitResult result = player.raycast(40, 1.0f, true);
