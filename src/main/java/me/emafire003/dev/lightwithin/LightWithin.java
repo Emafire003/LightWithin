@@ -71,7 +71,7 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 	public static final String MOD_ID = "lightwithin";
 	public static final String PREFIX_MSG = "[LightWithin] ";
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
-	public static int BOX_EXPANSION_AMOUNT = 6;
+	public static int BOX_EXPANSION_AMOUNT = 6; //NB: this is actually configurable in the config file, look below
 
 	private static final boolean debug = false;
 	public static Path PATH = Path.of(FabricLoader.getInstance().getConfigDir() + "/" + MOD_ID + "/");
@@ -254,9 +254,7 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 			if(player.getWorld().isClient){
 				return;
 			}
-			server.execute(() -> {
-				PlayerRightClickInteractEvent.EVENT.invoker().interact(player);
-			});
+			server.execute(() -> PlayerRightClickInteractEvent.EVENT.invoker().interact(player));
 		})));
 	}
 

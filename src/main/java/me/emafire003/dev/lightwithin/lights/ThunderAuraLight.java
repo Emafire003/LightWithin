@@ -51,7 +51,7 @@ AlL:
 Variant:
     - Summons thunderstorm? With many lightnings, like times the power level per second
 
-TRIGGERS when (if conditions are met): Struck by lightning, Ally death, Attacking entity
+TRIGGERS when (if conditions are met): Struck by lightning, Ally death, Attacking entity, Ally being attacked
 
 * */
 public class ThunderAuraLight extends InnerLight {
@@ -102,6 +102,8 @@ public class ThunderAuraLight extends InnerLight {
     }
 
 
+    //TODO add the yellowy color too maybe like forest aura, at least in the variant or all targets
+
     @Override
     public void execute(){
 
@@ -114,10 +116,12 @@ public class ThunderAuraLight extends InnerLight {
             }
         }
 
-        caster.getWorld().playSound(null, BlockPos.ofFloored(caster.getPos()),LightSounds.FOREST_AURA_PUFF,SoundCategory.PLAYERS, 1f, 1f);
         LightComponent component = LIGHT_COMPONENT.get(caster);
 
-        LightParticlesUtil.spawnLightTypeParticle(LightParticles.FOREST_AURA_LIGHT_PARTICLE, (ServerWorld) caster.getWorld(), caster.getPos());
+        if(!caster.getWorld().isClient()){
+            //TODO add the thunder particles
+            LightParticlesUtil.spawnLightTypeParticle(LightParticles.FOREST_AURA_LIGHT_PARTICLE, (ServerWorld) caster.getWorld(), caster.getPos());
+        }
 
         //Allies shield thing
         if(component.getTargets().equals(TargetType.ALLIES)){

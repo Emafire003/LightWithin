@@ -140,10 +140,13 @@ public class ForestAuraLight extends InnerLight {
             }
         }
 
+        //TODO why is this here?
         caster.getWorld().playSound(null, BlockPos.ofFloored(caster.getPos()),LightSounds.FOREST_AURA_PUFF,SoundCategory.PLAYERS, 1f, 1f);
         LightComponent component = LIGHT_COMPONENT.get(caster);
 
-        LightParticlesUtil.spawnLightTypeParticle(LightParticles.FOREST_AURA_LIGHT_PARTICLE, (ServerWorld) caster.getWorld(), caster.getPos());
+        if(!caster.getWorld().isClient()){
+            LightParticlesUtil.spawnLightTypeParticle(LightParticles.FOREST_AURA_LIGHT_PARTICLE, (ServerWorld) caster.getWorld(), caster.getPos());
+        }
 
         //The self target type adds the forest aura effect, making the player merge with natural blocks and travel trough them, but not see through them
         //The player can't see because they usually are not a mole. And also because I would need to make every block render the insides too which is not ideal

@@ -233,7 +233,8 @@ public class TriggerConfig {
     
     //Allies
     public static int THUNDER_AURA_ALLIES_ALLY_LOW_HEALTH = 2;
-    public static int THUNDER_AURA_ALLIES_VERY_LOW_HEALTH = 4;
+    public static int THUNDER_AURA_ALLIES_VERY_LOW_HEALTH = 3;
+    public static int THUNDER_AURA_ALLIES_RAINING = 1;
     public static int THUNDER_AURA_ALLIES_SURROUNDED_BY_ALLIES = 1;
     public static int THUNDER_AURA_ALLIES_STRUCK_BY_LIGHTNING = 1;
     public static int THUNDER_AURA_ALLIES_CONDITIONS = 3;
@@ -578,6 +579,7 @@ public class TriggerConfig {
         configs.addKeyValuePair(new Pair<>("thunder_aura_allies_ally_low_health", 2), allies_low_health);
         configs.addKeyValuePair(new Pair<>("thunder_aura_allies_surrounded_by_allies", 1), caster_surrounded_by_allies);
         configs.addKeyValuePair(new Pair<>("thunder_aura_allies_ally_struck_by_lightning", 1), ally_struck_by_lightning);
+        configs.addKeyValuePair(new Pair<>("thunder_aura_allies_raining", 1), raining);
         configs.addKeyValuePair(new Pair<>("thunder_aura_allies_conditions", 3), light_conditions_1 + "thunder aura" + light_conditions_2);
 
         //Variant
@@ -821,6 +823,7 @@ public class TriggerConfig {
         THUNDER_AURA_ALLIES_VERY_LOW_HEALTH = CONFIG.getOrDefault("thunder_aura_allies_ally_very_low_health", 4);
         THUNDER_AURA_ALLIES_SURROUNDED_BY_ALLIES = CONFIG.getOrDefault("thunder_aura_allies_surrounded_by_allies", 1);
         THUNDER_AURA_ALLIES_STRUCK_BY_LIGHTNING = CONFIG.getOrDefault("thunder_aura_allies_ally_struck_by_lightning", 1);
+        THUNDER_AURA_VARIANT_RAINING = CONFIG.getOrDefault("thunder_aura_allies_raining", 1);
         THUNDER_AURA_ALLIES_CONDITIONS = CONFIG.getOrDefault("thunder_aura_allies_conditions", 3);
 
         //Variant
