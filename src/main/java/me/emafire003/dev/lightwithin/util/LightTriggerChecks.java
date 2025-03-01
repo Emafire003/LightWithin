@@ -13,7 +13,6 @@ import net.minecraft.entity.passive.FrogEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Text;
 
 import static me.emafire003.dev.lightwithin.LightWithin.*;
 
@@ -692,29 +691,23 @@ public class LightTriggerChecks {
 
             //Checks if the player is very low health
             if(CheckUtils.checkSelfDanger(player, Config.HP_PERCENTAGE_SELF)){
-                player.sendMessage(Text.literal("+3 very low"));
                 trigger_sum = trigger_sum+TriggerConfig.FOREST_AURA_ALL_VERY_LOW_HEALTH; //+3
                 //Checks if the player has low health
             }else if(CheckUtils.checkSelfDanger(player, Config.HP_PERCENTAGE_SELF+Config.HP_PERCENTAGE_INCREMENT)){
                 trigger_sum=trigger_sum+TriggerConfig.FOREST_AURA_ALL_LOW_HEALTH; //+2
-                player.sendMessage(Text.literal("+2 low"));
             }
             if(CheckUtils.checkAllyHealth(player, attacker, Config.HP_PERCENTAGE_ALLIES)){
                 trigger_sum = trigger_sum + TriggerConfig.FOREST_AURA_ALL_ALLY_LOW_HEALTH; //+1
-                player.sendMessage(Text.literal("+1 allies low"));
             }
             //Checks if the player is surrounded
             if(Config.CHECK_SURROUNDED && CheckUtils.checkSurrounded(player)){
                 trigger_sum=trigger_sum+TriggerConfig.FOREST_AURA_ALL_SURROUNDED;//+2
-                player.sendMessage(Text.literal("+2 surrounded"));
             }
             if(CheckUtils.checkNearLeaves(player, TriggerConfig.FOREST_AURA_PERCENT_OF_LEAVES_REQUIRED)){
                 trigger_sum = trigger_sum+TriggerConfig.FOREST_AURA_ALL_LEAVES; //+1
-                player.sendMessage(Text.literal("+1 leaves"));
             }
             //Checks if the player has the optimal criteria for activation
             if(CheckUtils.checkForestAura(player)){
-                player.sendMessage(Text.literal("+3 conditions"));
                 trigger_sum=trigger_sum+TriggerConfig.FOREST_AURA_ALL_CONDITIONS; //+3
             }
             if(trigger_sum >= MIN_TRIGGER){
@@ -727,25 +720,20 @@ public class LightTriggerChecks {
             //TODO wiki
             if(CheckUtils.checkSelfDanger(player, Config.HP_PERCENTAGE_SELF)){
                 trigger_sum = trigger_sum+TriggerConfig.FOREST_AURA_SELF_VERY_LOW_HEALTH; //+3
-                player.sendMessage(Text.literal("+3 very low"));
                 //Checks if the player has low health
             }else if(CheckUtils.checkSelfDanger(player, Config.HP_PERCENTAGE_SELF+Config.HP_PERCENTAGE_INCREMENT)){
                 trigger_sum=trigger_sum+TriggerConfig.FOREST_AURA_SELF_LOW_HEALTH; //+2
-                player.sendMessage(Text.literal("+2 low"));
             }
             //Checks if the player is surrounded
             if(Config.CHECK_SURROUNDED && CheckUtils.checkSurrounded(player)){
                 trigger_sum=trigger_sum+TriggerConfig.FOREST_AURA_SELF_SURROUNDED;//+2
-                player.sendMessage(Text.literal("+2 surrounded"));
             }
             if(CheckUtils.checkHasHarmfulStatusEffect(player)){
                 trigger_sum = trigger_sum+TriggerConfig.FOREST_AURA_SELF_HARMFUL_EFFECT; //+1
-                player.sendMessage(Text.literal("+1 harmful effect"));
             }
             //Checks if the player has the optimal criteria for activation
             if(CheckUtils.checkForestAura(player)){
                 trigger_sum=trigger_sum+TriggerConfig.FOREST_AURA_SELF_CONDITIONS; //+3
-                player.sendMessage(Text.literal("+3 conditions"));
             }
             if(trigger_sum >= MIN_TRIGGER){
                 sendLightTriggered((ServerPlayerEntity) player);
@@ -766,25 +754,20 @@ public class LightTriggerChecks {
 
             //Checks if the player is very low health
             if(CheckUtils.checkSelfDanger(player, Config.HP_PERCENTAGE_SELF)){
-                player.sendMessage(Text.literal("+3 very low"));
                 trigger_sum = trigger_sum+TriggerConfig.THUNDER_AURA_ALL_VERY_LOW_HEALTH; //+3
                 //Checks if the player has low health
             }else if(CheckUtils.checkSelfDanger(player, Config.HP_PERCENTAGE_SELF+Config.HP_PERCENTAGE_INCREMENT)){
                 trigger_sum=trigger_sum+TriggerConfig.THUNDER_AURA_ALL_LOW_HEALTH; //+2
-                player.sendMessage(Text.literal("+2 low"));
             }
             //Checks if the player has low armor durability
             if(Config.CHECK_ARMOR_DURABILITY && CheckUtils.checkArmorDurability(player, Config.DUR_PERCENTAGE_SELF)){
                 trigger_sum=trigger_sum+TriggerConfig.THUNDER_AURA_ALL_ARMOR_DURABILITY;//+1
-                player.sendMessage(Text.literal("+1 armor"));
             }
             if(CheckUtils.checkRaining(player.getWorld())){
                 trigger_sum = trigger_sum+TriggerConfig.THUNDER_AURA_ALL_RAINING; //+1
-                player.sendMessage(Text.literal("+1 rain"));
             }
             //Checks if the player has the optimal criteria for activation
             if(CheckUtils.checkThunderAura(player)){
-                player.sendMessage(Text.literal("+3 conditions"));
                 trigger_sum=trigger_sum+TriggerConfig.THUNDER_AURA_ALL_CONDITIONS; //+3
             }
             if(trigger_sum >= MIN_TRIGGER){
@@ -796,21 +779,17 @@ public class LightTriggerChecks {
 
             if(!player.equals(target) && CheckUtils.checkAllyHealth(player, attacker, Config.HP_PERCENTAGE_ALLIES+5)){
                 trigger_sum = trigger_sum + TriggerConfig.THUNDER_AURA_ALLIES_ALLY_LOW_HEALTH; //+2
-                player.sendMessage(Text.literal("low ally +2"));
             }
             if(!player.equals(target) && CheckUtils.checkAllyHealth(player, attacker, Config.HP_PERCENTAGE_ALLIES-5)){
                 trigger_sum = trigger_sum + TriggerConfig.THUNDER_AURA_ALLIES_VERY_LOW_HEALTH;//+3
-                player.sendMessage(Text.literal("very low ally +4"));
             }
 
             if(CheckUtils.checkSelfDanger(player, Config.HP_PERCENTAGE_SELF)){
-                player.sendMessage(Text.literal("+3 very low"));
                 trigger_sum = trigger_sum+TriggerConfig.THUNDER_AURA_ALLIES_VERY_LOW_HEALTH; //+2
             }
 
             if(CheckUtils.checkRaining(player.getWorld())){
                 trigger_sum = trigger_sum+TriggerConfig.THUNDER_AURA_ALLIES_RAINING; //+1
-                player.sendMessage(Text.literal("+1 rain"));
             }
             if(!player.equals(target) && target instanceof LivingEntity && CheckUtils.CheckAllies.checkAlly(player, (LivingEntity) target) && CheckUtils.checkRecentlyStruckByLightning((LivingEntity) target)){
                 trigger_sum=trigger_sum+TriggerConfig.THUNDER_AURA_ALLIES_STRUCK_BY_LIGHTNING; //+1
@@ -834,25 +813,20 @@ public class LightTriggerChecks {
             //Self low health, very low health, rainy weather (+2), surrounded, conditions
             if(CheckUtils.checkSelfDanger(player, Config.HP_PERCENTAGE_SELF)){
                 trigger_sum = trigger_sum+TriggerConfig.THUNDER_AURA_VARIANT_VERY_LOW_HEALTH; //+3
-                player.sendMessage(Text.literal("+3 very low"));
                 //Checks if the player has low health
             }else if(CheckUtils.checkSelfDanger(player, Config.HP_PERCENTAGE_SELF+Config.HP_PERCENTAGE_INCREMENT)){
                 trigger_sum=trigger_sum+TriggerConfig.THUNDER_AURA_VARIANT_LOW_HEALTH; //+2
-                player.sendMessage(Text.literal("+2 low"));
             }
             //Checks if the player is surrounded
             if(Config.CHECK_SURROUNDED && CheckUtils.checkSurrounded(player)){
                 trigger_sum=trigger_sum+TriggerConfig.THUNDER_AURA_VARIANT_SURROUNDED;//+1
-                player.sendMessage(Text.literal("+1 surrounded"));
             }
             if(CheckUtils.checkRaining(player.getWorld())){
                 trigger_sum = trigger_sum+TriggerConfig.THUNDER_AURA_VARIANT_RAINING; //+2
-                player.sendMessage(Text.literal("+2 rain"));
             }
             //Checks if the player has the optimal criteria for activation
             if(CheckUtils.checkThunderAura(player)){
                 trigger_sum=trigger_sum+TriggerConfig.THUNDER_AURA_VARIANT_CONDITIONS; //+3
-                player.sendMessage(Text.literal("+3 conditions"));
             }
             if(trigger_sum >= MIN_TRIGGER){
                 sendLightTriggered((ServerPlayerEntity) player);

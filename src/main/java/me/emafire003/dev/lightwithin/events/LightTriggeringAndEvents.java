@@ -298,7 +298,6 @@ public class LightTriggeringAndEvents {
             if(boltedEntity instanceof PlayerEntity){
                 entityStruckByLightningTriggerCheck((PlayerEntity) boltedEntity, (PlayerEntity) boltedEntity);
             }
-            //TODO test with all target types
             //if the target is a pet of someone with a light, the pet is the target. (He is also considered an ally)
             if(boltedEntity instanceof TameableEntity){
                 if(((TameableEntity) boltedEntity).getOwner() instanceof PlayerEntity){
@@ -313,7 +312,6 @@ public class LightTriggeringAndEvents {
                 List<PlayerEntity> entities1 = boltedEntity.getWorld().getEntitiesByClass(PlayerEntity.class, new Box(boltedEntity.getBlockPos()).expand(BOX_EXPANSION_AMOUNT), (entity1 -> true));
                 for(PlayerEntity p : entities1){
                     //Note: the player can't be the passive entity so no need for the check
-                    //TODO shouldn't this be only in case this entity is an ally?
                     entityStruckByLightningTriggerCheck(p, (LivingEntity) boltedEntity);
                 }
             }
@@ -395,7 +393,6 @@ public class LightTriggeringAndEvents {
             if(component.getType().equals(InnerLightType.AQUA) && entity instanceof LivingEntity){
                 checkAqua(player, component, player, (LivingEntity) entity);
             }
-            //TODO probably remove
             if(component.getType().equals(InnerLightType.FOREST_AURA)){
                 checkForestAura(player, component, player, entity);
             }
@@ -410,7 +407,7 @@ public class LightTriggeringAndEvents {
 
             for(PlayerEntity player : players){
                 if(CheckUtils.CheckAllies.checkAlly(entity, player)){
-                    /** Start to check for potential lights from here*/
+                    ///Start to check for potential lights from here
                     if(!isTriggerable(player)){
                         return;
                     }
@@ -438,7 +435,7 @@ public class LightTriggeringAndEvents {
                     if(component.getType().equals(InnerLightType.THUNDER_AURA)){
                         checkThunderAura(player, component, attacker, entity);
                     }
-                    /**End*/
+                    ///End
                 }
             }
 

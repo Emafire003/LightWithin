@@ -99,7 +99,7 @@ public class ThunderAuraEffect extends StatusEffect {
                 .size(height-height/12).particles((int) (20+(height/10))).particlesPerIteration((int) (20+(height/10)))
                 .build();
 
-        ballEffect.runFor(Objects.requireNonNull(target.getStatusEffect(this)).getDuration());
+        ballEffect.runFor((double) Objects.requireNonNull(target.getStatusEffect(this)).getDuration()/20);
 
 
     }
