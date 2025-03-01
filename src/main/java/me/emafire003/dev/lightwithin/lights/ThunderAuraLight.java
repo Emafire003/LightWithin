@@ -54,10 +54,11 @@ TRIGGERS when (if conditions are met): Struck by lightning, Ally death, Attackin
 * */
 public class ThunderAuraLight extends InnerLight {
 
-    public static final Item INGREDIENT = Items.LIGHTNING_ROD; //Glowstone? Iron?
+    public static final Item INGREDIENT = Items.COPPER_INGOT; //Glowstone? Iron? Lightning rod?
 
     public static final String COLOR = "AFCE23";
 
+    /// Used in the ALL target type, is the amount of lightnings that a player can still spawn in
     public static HashMap<UUID, Integer> LIGHTNING_USES_LEFT = new HashMap<>();
 
     public static final TagKey<Item> THUNDER_AURA_TRIGGER_ITEMS = TagKey.of(RegistryKeys.ITEM, new Identifier(MOD_ID, "thunder_aura_trigger_items"));
@@ -99,9 +100,6 @@ public class ThunderAuraLight extends InnerLight {
         }
     }
 
-
-    //TODO add the yellowy color too maybe like forest aura, at least in the variant or all targets
-
     @Override
     public void execute(){
 
@@ -123,22 +121,17 @@ public class ThunderAuraLight extends InnerLight {
         //Allies shield thing
         if(component.getTargets().equals(TargetType.ALLIES)){
             //The -1 is because status effect levels start from 0, so it's 0 to 9 but the players sees I, II, III, IV ecc
-            targets.forEach(target -> {
-                target.addStatusEffect(new StatusEffectInstance(LightEffects.THUNDER_AURA, this.duration*20, (int) this.power_multiplier -1, false, true));
-            });
+            targets.forEach(target -> target.addStatusEffect(new StatusEffectInstance(LightEffects.THUNDER_AURA, this.duration*20, (int) this.power_multiplier -1, false, true)));
             //TODO playsound, maybe a static for the people with the barrier
-        }else if(component.getTargets().equals(TargetType.ALL)){
-            /** Defined inside {@link LightTriggeringAndEvents#registerThunderAuraAllEffect()}
-             * Anywasy, it will allow the player to spawn a lightning at the point they are looking at.
-             * A max number of power multiplier of lightnings*/
-            //TODO playsound
-        }
-        //Extra thundery weather (superstorm). The weather change is global, but the extra lightnings are in a localized area
+        }//Extra thundery weather (superstorm). The weather change is global, but the extra lightnings are in a localized area
         else if(component.getTargets().equals(TargetType.VARIANT)){
             //Must be on the server
             //TODO playsound
             caster.addStatusEffect(new StatusEffectInstance(LightEffects.STORM_AURA, this.duration*20, (int) this.power_multiplier, false, false));
         }
+        /// "ALL" is defined inside {@link LightTriggeringAndEvents#registerThunderAuraAllEffect()}
+        /// Anyways, it will allow the player to spawn a lightning at the point they are looking at.
+        /// A max number of power multiplier of lightnings
 
     }
 
