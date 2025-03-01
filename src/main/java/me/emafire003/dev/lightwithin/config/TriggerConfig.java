@@ -223,6 +223,28 @@ public class TriggerConfig {
     
     public static double FOREST_AURA_PERCENT_OF_LEAVES_REQUIRED = 70.0;
 
+    //Thunder Aura Light
+    //All
+    public static int THUNDER_AURA_ALL_VERY_LOW_HEALTH = 3;
+    public static int THUNDER_AURA_ALL_LOW_HEALTH = 2;
+    public static int THUNDER_AURA_ALL_ARMOR_DURABILITY = 1;
+    public static int THUNDER_AURA_ALL_RAINING = 1;
+    public static int THUNDER_AURA_ALL_CONDITIONS = 3;
+    
+    //Allies
+    public static int THUNDER_AURA_ALLIES_ALLY_LOW_HEALTH = 2;
+    public static int THUNDER_AURA_ALLIES_VERY_LOW_HEALTH = 4;
+    public static int THUNDER_AURA_ALLIES_SURROUNDED_BY_ALLIES = 1;
+    public static int THUNDER_AURA_ALLIES_STRUCK_BY_LIGHTNING = 1;
+    public static int THUNDER_AURA_ALLIES_CONDITIONS = 3;
+    
+    //Variant
+    public static int THUNDER_AURA_VARIANT_VERY_LOW_HEALTH = 3;
+    public static int THUNDER_AURA_VARIANT_LOW_HEALTH = 2;
+    public static int THUNDER_AURA_VARIANT_SURROUNDED = 1;
+    public static int THUNDER_AURA_VARIANT_RAINING = 2;
+    public static int THUNDER_AURA_VARIANT_CONDITIONS = 3;
+
 
     private static final String config_name = "_trigger_balance";
 
@@ -286,7 +308,8 @@ public class TriggerConfig {
     private static final String caster_poisoned = "The contribution to the trigger threshold when the caster is poisoned";
     private static final String caster_harmful = "The contribution to the trigger threshold when the caster has an harmful status effect";
 
-    private static final String allies_low_health = "The contribution to the trigger threshold when the caster's ALLIES are in danger and on low health";
+    private static final String allies_low_health = "The contribution to the trigger threshold when the caster's ALLIES are in danger and on very low health";
+    private static final String allies_very_low_health = "The contribution to the trigger threshold when the caster's ALLIES are in danger and on low health";
     private static final String allies_low_armor = "The contribution to the trigger threshold when the caster's allies have low durability armor. (If enabled)";
     private static final String allies_poisoned = "The contribution to the trigger threshold when the caster's allies are poisoned";
     
@@ -306,6 +329,11 @@ public class TriggerConfig {
     private static final String ally_freezing = "The contribution to the trigger threshold made by the caster's allies being freezing";
     private static final String caster_drowning = "The contribution to the trigger threshold made by the caster drowning";
     private static final String ally_drowning = "The contribution to the trigger threshold made by the caster's allies drowning";
+
+    private static final String ally_struck_by_lightning = "The contribution to the trigger threshold when the caster's ALLIES have recently been struck by a lightning";
+    private static final String caster_surrounded_by_allies = "The contribution to the trigger threshold when the caster is around/surrounded by many of its ALLIES. (If enabled)";
+
+    private static final String raining = "The contribution to the trigger threshold made by currently haiving a rainy weather in the world";
 
     private static void createConfigs() {
         configs.addKeyValuePair(new Pair<>("version", ver), "The version of the config. DO NOT CHANGE IT :D");
@@ -515,10 +543,13 @@ public class TriggerConfig {
         configs.addKeyValuePair(new Pair<>("aqua_allies_ally_drowning", 1), ally_drowning);
         configs.addKeyValuePair(new Pair<>("aqua_allies_conditions", 3), light_conditions_1 + "aqua" + light_conditions_2);
 
+        configs.addKeyValuePair(new Pair<>("spacer", "spacer"), "");
+
         //==========================Forest Aura==========================
         configs.addKeyValuePair(new Pair<>("forest_aura_required_leaves_percent", 70.0), "The percent (0.0-100.0) of blocks around the player that need to be leaves");
         //All
         configs.addKeyValuePair(new Pair<>("forest_aura_all_very_low_health", 3), caster_very_low_health);
+        configs.addKeyValuePair(new Pair<>("forest_aura_all_low_health", 2), caster_low_health);
         configs.addKeyValuePair(new Pair<>("forest_aura_all_surrounded", 2), caster_surrounded);
         configs.addKeyValuePair(new Pair<>("forest_aura_all_ally_low_health", 1), allies_low_health);
         configs.addKeyValuePair(new Pair<>("forest_aura_all_surrounded", 2), caster_surrounded);
@@ -531,6 +562,33 @@ public class TriggerConfig {
         configs.addKeyValuePair(new Pair<>("forest_aura_self_surrounded", 2), caster_surrounded);
         configs.addKeyValuePair(new Pair<>("forest_aura_self_harmful_effect", 1), caster_harmful);
         configs.addKeyValuePair(new Pair<>("forest_aura_self_conditions", 3), light_conditions_1 + "forest aura" + light_conditions_2);
+
+        configs.addKeyValuePair(new Pair<>("spacer", "spacer"), "");
+
+        //==========================Thunder Aura==========================
+        //All
+        configs.addKeyValuePair(new Pair<>("thunder_aura_all_very_low_health", 3), caster_very_low_health);
+        configs.addKeyValuePair(new Pair<>("thunder_aura_all_low_health", 2), caster_low_health);
+        configs.addKeyValuePair(new Pair<>("thunder_aura_all_armor_durability", 1), caster_low_armor);
+        configs.addKeyValuePair(new Pair<>("thunder_aura_all_raining", 1), raining);
+        configs.addKeyValuePair(new Pair<>("thunder_aura_all_conditions", 3), light_conditions_1 + "thunder aura" + light_conditions_2);
+
+        //Allies
+        configs.addKeyValuePair(new Pair<>("thunder_aura_allies_ally_very_low_health", 4), allies_very_low_health);
+        configs.addKeyValuePair(new Pair<>("thunder_aura_allies_ally_low_health", 2), allies_low_health);
+        configs.addKeyValuePair(new Pair<>("thunder_aura_allies_surrounded_by_allies", 1), caster_surrounded_by_allies);
+        configs.addKeyValuePair(new Pair<>("thunder_aura_allies_ally_struck_by_lightning", 1), ally_struck_by_lightning);
+        configs.addKeyValuePair(new Pair<>("thunder_aura_allies_conditions", 3), light_conditions_1 + "thunder aura" + light_conditions_2);
+
+        //Variant
+        configs.addKeyValuePair(new Pair<>("thunder_aura_variant_very_low_health", 3), caster_very_low_health);
+        configs.addKeyValuePair(new Pair<>("thunder_aura_variant_low_health", 2), caster_low_health);
+        configs.addKeyValuePair(new Pair<>("thunder_aura_variant_surrounded", 2), caster_surrounded);
+        configs.addKeyValuePair(new Pair<>("thunder_aura_variant_raining", 1), raining);
+        configs.addKeyValuePair(new Pair<>("thunder_aura_variant_conditions", 3), light_conditions_1 + "thunder aura" + light_conditions_2);
+
+
+
     }
 
     public static void reloadConfig(){
@@ -749,6 +807,28 @@ public class TriggerConfig {
 
         FOREST_AURA_PERCENT_OF_LEAVES_REQUIRED = CONFIG.getOrDefault("forest_aura_required_leaves_percent", 70.0);
 
+
+        //Thunder Aura Light
+        //All
+        THUNDER_AURA_ALL_VERY_LOW_HEALTH = CONFIG.getOrDefault("thunder_aura_all_very_low_health", 3);
+        THUNDER_AURA_ALL_LOW_HEALTH = CONFIG.getOrDefault("thunder_aura_all_low_health", 2);
+        THUNDER_AURA_ALL_ARMOR_DURABILITY = CONFIG.getOrDefault("thunder_aura_all_armor_durability", 1);
+        THUNDER_AURA_ALL_RAINING = CONFIG.getOrDefault("thunder_aura_all_raining", 1);
+        THUNDER_AURA_ALL_CONDITIONS = CONFIG.getOrDefault("thunder_aura_all_conditions", 3);
+
+        //Allies
+        THUNDER_AURA_ALLIES_ALLY_LOW_HEALTH = CONFIG.getOrDefault("thunder_aura_allies_ally_low_health", 2);
+        THUNDER_AURA_ALLIES_VERY_LOW_HEALTH = CONFIG.getOrDefault("thunder_aura_allies_ally_very_low_health", 4);
+        THUNDER_AURA_ALLIES_SURROUNDED_BY_ALLIES = CONFIG.getOrDefault("thunder_aura_allies_surrounded_by_allies", 1);
+        THUNDER_AURA_ALLIES_STRUCK_BY_LIGHTNING = CONFIG.getOrDefault("thunder_aura_allies_ally_struck_by_lightning", 1);
+        THUNDER_AURA_ALLIES_CONDITIONS = CONFIG.getOrDefault("thunder_aura_allies_conditions", 3);
+
+        //Variant
+        THUNDER_AURA_VARIANT_VERY_LOW_HEALTH = CONFIG.getOrDefault("thunder_aura_variant_very_low_health", 3);
+        THUNDER_AURA_VARIANT_LOW_HEALTH = CONFIG.getOrDefault("thunder_aura_variant_low_health", 2);
+        THUNDER_AURA_VARIANT_SURROUNDED = CONFIG.getOrDefault("thunder_aura_variant_surrounded", 2);
+        THUNDER_AURA_VARIANT_RAINING = CONFIG.getOrDefault("thunder_aura_variant_raining", 1);
+        THUNDER_AURA_VARIANT_CONDITIONS = CONFIG.getOrDefault("thunder_aura_variant_conditions", 3);
     }
 
     //Old stuff

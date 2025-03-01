@@ -66,6 +66,11 @@ public class BalanceConfig {
     public static int FOREST_AURA_MIN_POWER;
     public static int FOREST_AURA_MIN_DURATION;
 
+    public static int THUNDER_AURA_MAX_POWER;
+    public static int THUNDER_AURA_MAX_DURATION;
+    public static int THUNDER_AURA_MIN_POWER;
+    public static int THUNDER_AURA_MIN_DURATION;
+
     private static final String config_name = "_balancing";
 
     public static void handleVersionChange(){
@@ -187,10 +192,17 @@ public class BalanceConfig {
 
         configs.addKeyValuePair(new Pair<>("spacer", "spacer"), "");
 
-        configs.addKeyValuePair(new Pair<>("forest_aura_max_power", 10), "The maximum power multiplier (Determines power of status effects, number of drowned spawned, if the cage will spawn a trident and lightning )");
+        configs.addKeyValuePair(new Pair<>("forest_aura_max_power", 10), "The maximum power multiplier (Determines power of status effects, number of glowing entities seen, their category, number of puffs spawned )");
         configs.addKeyValuePair(new Pair<>("forest_aura_min_power", 1), "The minimum power multiplier (see above)");
-        configs.addKeyValuePair(new Pair<>("forest_aura_max_duration", 18), "The maximum duration of some effects that can be applied (like water slide, conduit, etc.)");
+        configs.addKeyValuePair(new Pair<>("forest_aura_max_duration", 18), "The maximum duration of some effects that can be applied (the duration of the effects, the amount of time in which the puffs are spawned)");
         configs.addKeyValuePair(new Pair<>("forest_aura_min_duration", 1), "The minimum duration (see above)");
+
+        configs.addKeyValuePair(new Pair<>("spacer", "spacer"), "");
+
+        configs.addKeyValuePair(new Pair<>("thunder_aura_max_power", 10), "The maximum power multiplier (Determines power of status effects, how many lightnings are summonable and how many spawn in a storm )");
+        configs.addKeyValuePair(new Pair<>("thunder_aura_min_power", 1), "The minimum power multiplier (see above)");
+        configs.addKeyValuePair(new Pair<>("thunder_aura_max_duration", 18), "The maximum duration of some effects that can be applied (like thunder aura and storm aura etc.)");
+        configs.addKeyValuePair(new Pair<>("thunder_aura_min_duration", 1), "The minimum duration (see above)");
 
     }
 
@@ -250,6 +262,11 @@ public class BalanceConfig {
         FOREST_AURA_MAX_DURATION = CONFIG.getOrDefault("forest_aura_max_duration", 18);
         FOREST_AURA_MIN_POWER = CONFIG.getOrDefault("forest_aura_min_power", 1);
         FOREST_AURA_MIN_DURATION = CONFIG.getOrDefault("forest_aura_min_duration", 1);
+
+        THUNDER_AURA_MAX_POWER = CONFIG.getOrDefault("thunder_aura_max_power", 10);
+        THUNDER_AURA_MAX_DURATION = CONFIG.getOrDefault("thunder_aura_max_duration", 18);
+        THUNDER_AURA_MIN_POWER = CONFIG.getOrDefault("thunder_aura_min_power", 1);
+        THUNDER_AURA_MIN_DURATION = CONFIG.getOrDefault("thunder_aura_min_duration", 1);
     }
 }
 

@@ -96,7 +96,7 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 			entry(InnerLightType.WIND, Arrays.asList(TargetType.SELF, TargetType.ALL, TargetType.ALLIES)),
 			entry(InnerLightType.AQUA, Arrays.asList(TargetType.SELF, TargetType.ENEMIES, TargetType.ALLIES,  TargetType.ALL)),
 			entry(InnerLightType.FOREST_AURA, Arrays.asList(TargetType.ALL, TargetType.SELF)),
-			entry(InnerLightType.THUNDER_AURA, Arrays.asList(TargetType.ALLIES, TargetType.ALL, TargetType.VARIANT)),
+			entry(InnerLightType.THUNDER_AURA, Arrays.asList(TargetType.ALLIES, TargetType.ALLIES, TargetType.ALL, TargetType.ALL, TargetType.VARIANT)),
 			entry(InnerLightType.FROG, List.of(TargetType.ALL))
 	);
 
@@ -172,7 +172,8 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 		});
 	}
 
-	public static void registerTags(){
+	@SuppressWarnings("unused")
+    public static void registerTags(){
 		RegistryEntryList.Named<Block> BLAZING_TRIGGER_BLOCKS = Registries.BLOCK.getOrCreateEntryList(BlazingLight.BLAZING_TRIGGER_BLOCKS);
 		RegistryEntryList.Named<Item> BLAZING_TRIGGER_ITEMS = Registries.ITEM.getOrCreateEntryList(BlazingLight.BLAZING_TRIGGER_ITEMS);
 
@@ -185,6 +186,9 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 		RegistryEntryList.Named<Item> AQUA_TRIGGER_ITEMS = Registries.ITEM.getOrCreateEntryList(AquaLight.AQUA_TRIGGER_ITEMS);
 
 		RegistryEntryList.Named<Block> FOREST_BLOCKS = Registries.BLOCK.getOrCreateEntryList(FOREST_AURA_BLOCKS);
+
+		RegistryEntryList.Named<Item> THUNDER_AURA_TRIGGER_ITEMS = Registries.ITEM.getOrCreateEntryList(ThunderAuraLight.THUNDER_AURA_TRIGGER_ITEMS);
+
 	}
 
 	/**Sends a packet with updated config options to the client
@@ -338,6 +342,8 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 			activateAqua(component, player);
 		} else if(type.equals(InnerLightType.FOREST_AURA)){
 			activateForestAura(component, player);
+		}else if(type.equals(InnerLightType.THUNDER_AURA)){
+			activateThunderAura(component, player);
 		}
 		else if(type.equals(InnerLightType.FROG)){
 			activateFrog(component, player);
