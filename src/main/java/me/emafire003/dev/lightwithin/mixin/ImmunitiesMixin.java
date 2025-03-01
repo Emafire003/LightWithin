@@ -47,7 +47,6 @@ public abstract class ImmunitiesMixin extends Entity implements Attackable {
     private void makeLightningImmune(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
         if(source.isOf(DamageTypes.LIGHTNING_BOLT)){
             if(this.hasStatusEffect(LightEffects.THUNDER_AURA)){
-                //TODO play a shiled/deflection sound?  Electric discharge but in revers to "absorb" it?
                 cir.setReturnValue(false);
             }
             if(this.hasStatusEffect(LightEffects.LIGHT_ACTIVE) && LightWithin.LIGHT_COMPONENT.get(this).getType().equals(InnerLightType.THUNDER_AURA)){
