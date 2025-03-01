@@ -14,7 +14,7 @@ public class Config {
     public static SimpleConfig CONFIG;
     private static ConfigProvider configs;
 
-    private static final int ver = 4;
+    private static final int ver = 5;
     public static int VERSION;
 
     //box expansion amount while searching for other entities, like when checking for allies or targets near the player
@@ -36,6 +36,7 @@ public class Config {
     public static int MIN_ALLIES_LOW;
 
     public static boolean CHECK_SURROUNDED;
+    public static boolean CHECK_SURROUNDED_BY_ALLIES; //Added with version 5
     public static int SURROUNDED_AMOUNT;
     public static double SURROUNDED_ALLIES_MULTIPLIER;
     public static int SURROUNDED_DISTANCE;
@@ -182,6 +183,8 @@ public class Config {
         configs.addKeyValuePair(new Pair<>("spacer", "spacer"), "");
 
         configs.addKeyValuePair(new Pair<>("check_surrounded", true), "Should being surrounded be considered to trigger light?");
+        //V5
+        configs.addKeyValuePair(new Pair<>("check_surrounded_by_allies", true), "Should being 'surrounded' by allies be considered to trigger light?");
         configs.addKeyValuePair(new Pair<>("surrounded_amount", 5), "How many hostile entities needs to be near a player to be considered surrounded?");
         configs.addKeyValuePair(new Pair<>("surrounded_allies_multiplier", 2.0), "When checking if allies are surrounded, how much to multiply the default value above?");
         configs.addKeyValuePair(new Pair<>("surrounded_distance", 5), "How far to check (in blocks) for hostile entities? (Higher values may mean more lag. A lot higher tho)");
@@ -264,6 +267,7 @@ public class Config {
         PLAYER_GLOWS = CONFIG.getOrDefault("player_glows", true);
 
         CHECK_SURROUNDED = CONFIG.getOrDefault("check_surrounded", true);
+        CHECK_SURROUNDED_BY_ALLIES = CONFIG.getOrDefault("check_surrounded_by_allies", true); //V5
         SURROUNDED_AMOUNT = CONFIG.getOrDefault("surrounded_amount", 5);
         SURROUNDED_ALLIES_MULTIPLIER = CONFIG.getOrDefault("surrounded_allies_multiplier", 2.0);
         SURROUNDED_DISTANCE = CONFIG.getOrDefault("surrounded_distance", 5);

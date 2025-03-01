@@ -18,6 +18,8 @@ public class Tests {
         int fifth = 0;
         int error = 0;
         List<TargetType> list = List.of(TargetType.SELF, TargetType.ALLIES, TargetType.ENEMIES, TargetType.ALL, TargetType.VARIANT);
+        //List<TargetType> list = List.of(TargetType.SELF, TargetType.SELF, TargetType.ALLIES, TargetType.ALLIES, TargetType.ENEMIES);
+
         UUID id = UUID.randomUUID();
         for(int i = 0; i<run_times; i++){
             String[] id_bits = id.toString().split("-");

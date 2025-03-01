@@ -19,9 +19,12 @@ import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
+import net.minecraft.registry.RegistryKeys;
+import net.minecraft.registry.tag.TagKey;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
@@ -37,17 +40,18 @@ import static me.emafire003.dev.lightwithin.LightWithin.*;
 
 /*Planned stuff:
 
+While active or under the allies thunder aura effect, immunity to lightning damage.
+
 Allies:
     - Forcefield around ally which bounces off enemies and enemies' projectiles (maybe, otherwise just enemies)
     - Immunity to lightning damage
     - Entites that get in contact with the filed get zapped for tot damage based on power level
 AlL:
-    - Either smite at a distance, like point and summon lighting up to power level times
-    - Or, summon power level times a lighting bolt when hitting a player
-    - Immunity to lightning damage
+    - Either smite at a distance, like point and summon lighting up to power level times yes
 Variant:
-    - Summons thunderstorm? yeah could be cool like summons a localized thunderstorm which is fixed in place and randomly
-    zaps/bolts entities in the area. Like a particle cloud or the thunderstorm itself but zaps stuff a lot more frequently. Like once every second. And the range is the power level
+    - Summons thunderstorm? With many lightnings, like times the power level per second
+
+TRIGGERS when (if conditions are met): Struck by lightning, Ally death, Attacking entity
 
 * */
 public class ThunderAuraLight extends InnerLight {
@@ -57,6 +61,9 @@ public class ThunderAuraLight extends InnerLight {
     public static final String COLOR = "AFCE23";
 
     public static HashMap<UUID, Integer> LIGHTNING_USES_LEFT = new HashMap<>();
+
+    public static final TagKey<Item> THUNDER_AURA_TRIGGER_ITEMS = TagKey.of(RegistryKeys.ITEM, new Identifier(MOD_ID, "thunder_aura_trigger_items"));
+
 
     public ThunderAuraLight(List<LivingEntity> targets, double cooldown_time, double power_multiplier, int duration, String color, PlayerEntity caster, boolean rainbow_col) {
         super(targets, cooldown_time, power_multiplier, duration, color, caster, rainbow_col);
@@ -74,24 +81,23 @@ public class ThunderAuraLight extends InnerLight {
         type = InnerLightType.THUNDER_AURA;
         color = "thunder_aura";
     }
-
-    //TODO fix these up
+    
     private void checkSafety(){
-        if(this.power_multiplier > BalanceConfig.FOREST_AURA_MAX_POWER){
-            power_multiplier = BalanceConfig.FOREST_AURA_MAX_POWER;
+        if(this.power_multiplier > BalanceConfig.THUNDER_AURA_MAX_POWER){
+            power_multiplier = BalanceConfig.THUNDER_AURA_MAX_POWER;
         }
-        if(this.power_multiplier < BalanceConfig.FOREST_AURA_MIN_POWER){
-            power_multiplier = BalanceConfig.FOREST_AURA_MIN_POWER;
+        if(this.power_multiplier < BalanceConfig.THUNDER_AURA_MIN_POWER){
+            power_multiplier = BalanceConfig.THUNDER_AURA_MIN_POWER;
         }
-        int max_duration = BalanceConfig.FOREST_AURA_MAX_DURATION;
+        int max_duration = BalanceConfig.THUNDER_AURA_MAX_DURATION;
         if(Config.MULTIPLY_DURATION_LIMIT){
-            max_duration = (int) (BalanceConfig.FOREST_AURA_MAX_DURATION * Config.DURATION_MULTIPLIER);
+            max_duration = (int) (BalanceConfig.THUNDER_AURA_MAX_DURATION * Config.DURATION_MULTIPLIER);
         }
         if(this.duration > max_duration){
             this.duration = max_duration;
         }
-        if(this.duration < BalanceConfig.FOREST_AURA_MIN_DURATION){
-            this.duration = BalanceConfig.FOREST_AURA_MIN_DURATION;
+        if(this.duration < BalanceConfig.THUNDER_AURA_MIN_DURATION){
+            this.duration = BalanceConfig.THUNDER_AURA_MIN_DURATION;
         }
     }
 
@@ -137,7 +143,7 @@ public class ThunderAuraLight extends InnerLight {
 
     /**Spawns a lot of lightnings inside the specified box area for the specified duration
      * at random positions
-     *
+     * <p>
      * The duration is in seconds*/
     //Def values 20, 10, 3
     public static void spawnStormLightnings(Box area, int seconds, int lightnings_per_second, LivingEntity caster){

@@ -12,15 +12,18 @@ import me.emafire003.dev.lightwithin.lights.AquaLight;
 import me.emafire003.dev.lightwithin.lights.BlazingLight;
 import me.emafire003.dev.lightwithin.lights.FrostLight;
 import me.emafire003.dev.lightwithin.lights.WindLight;
+import me.emafire003.dev.lightwithin.lights.ThunderAuraLight;
 import me.emafire003.dev.lightwithin.status_effects.LightEffects;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.Block;
+import net.minecraft.block.Blocks;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.DamageUtil;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.entity.damage.DamageTypes;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectCategory;
 import net.minecraft.entity.effect.StatusEffects;
@@ -79,6 +82,27 @@ public class CheckUtils {
         }
 
         return enemies >= Config.SURROUNDED_AMOUNT;
+    }
+
+    /**Checks if an entity is surrounded by allied entities
+     * <p>
+     * If not enabled returns true to not mess with the &&
+     *
+     * @param entity The entity that could be surrounded*/
+    public static boolean checkSurroundedByAllies(@NotNull LivingEntity entity){
+        if(!Config.CHECK_SURROUNDED_BY_ALLIES){
+            return false;
+        }
+
+        List<PlayerEntity> players = entity.getWorld().getEntitiesByClass(PlayerEntity.class, new Box(entity.getBlockPos()).expand(Config.SURROUNDED_DISTANCE), (entity1 -> true));
+        int allies = 0;
+        for(PlayerEntity p : players){
+            if(CheckAllies.checkAlly(p, entity)){
+                allies++;
+            }
+        }
+
+        return allies >= Config.SURROUNDED_AMOUNT;
 
     }
 
@@ -793,6 +817,27 @@ public class CheckUtils {
         return checkMultipleBlocksPercent(player, BlockTags.LEAVES, Config.TRIGGER_BLOCK_RADIUS, percent);
     }
 
+    /**Used to check if the player has something that can be considered a ThunderAura source
+     *
+     * @param player The player to perform checks on*/
+    //TODO somehow make these datadriven/customizable at some point?
+    public static boolean checkThunderAura(PlayerEntity player){
+        if(checkThundering(player.getWorld())){
+            return true;
+        }
+        //If the player is standing on a copper rod then lightning conditions met
+        if(player.getWorld().getBlockState(player.getBlockPos().down()).isOf(Blocks.LIGHTNING_ROD)){
+            return true;
+        }
+        if(checkRecentlyStruckByLightning(player)){
+            return true;
+        }
+
+        ItemStack main = player.getMainHandStack();
+        ItemStack off = player.getOffHandStack();
+        return main.isIn(ThunderAuraLight.THUNDER_AURA_TRIGGER_ITEMS) || off.isIn(ThunderAuraLight.THUNDER_AURA_TRIGGER_ITEMS);
+    }
+
     public static boolean checkFalling(LivingEntity entity) {
         if(entity instanceof PlayerEntity){
             return entity.fallDistance > 5 && !entity.isFallFlying() && !entity.isOnGround() && !entity.isClimbing() && !((PlayerEntity) entity).getAbilities().flying && !entity.isSwimming();
@@ -821,9 +866,21 @@ public class CheckUtils {
         return false;
     }
 
+    /** Checks if there is currently a stormy weather in the selected world*/
     public static boolean checkThundering(World world){
         return world.isThundering();
     }
+
+    /** Checks if there is currently a rainy weather in the selected world*/
+    public static boolean checkRaining(World world){
+        return world.isRaining();
+    }
+
+    /**Checks if the most recent damage source done to an entity is a lightning bolt*/
+    public static boolean checkRecentlyStruckByLightning(LivingEntity entity){
+        return entity.getRecentDamageSource() != null && entity.getRecentDamageSource().isOf(DamageTypes.LIGHTNING_BOLT);
+    }
+
 
     /**Rerturn a list of the player's enemies in the area
      * for entity checks, also know as LightWithin.box_exapansion_amount
