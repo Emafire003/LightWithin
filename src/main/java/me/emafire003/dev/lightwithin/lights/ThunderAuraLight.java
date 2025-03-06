@@ -9,6 +9,7 @@ import me.emafire003.dev.lightwithin.particles.LightParticles;
 import me.emafire003.dev.lightwithin.particles.LightParticlesUtil;
 import me.emafire003.dev.lightwithin.status_effects.LightEffects;
 import me.emafire003.dev.lightwithin.util.TargetType;
+import me.emafire003.dev.particleanimationlib.effects.LineEffect;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.entity.EntityType;
@@ -18,10 +19,12 @@ import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
+import net.minecraft.particle.ParticleTypes;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.tag.TagKey;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
@@ -121,8 +124,21 @@ public class ThunderAuraLight extends InnerLight {
         //Allies shield thing
         if(component.getTargets().equals(TargetType.ALLIES)){
             //The -1 is because status effect levels start from 0, so it's 0 to 9 but the players sees I, II, III, IV ecc
-            targets.forEach(target -> target.addStatusEffect(new StatusEffectInstance(LightEffects.THUNDER_AURA, this.duration*20, (int) this.power_multiplier -1, false, true)));
             //TODO playsound, maybe a static for the people with the barrier
+
+            targets.forEach(target -> {
+                if(!caster.getWorld().isClient && !caster.equals(target)){
+                    Vec3d origin = caster.getPos().add(0, caster.getDimensions(caster.getPose()).height/2, 0);
+                    Vec3d finish = target.getPos().add(0, target.getDimensions(target.getPose()).height/2, 0);
+                    //TODO this would be nice as a "completable effect" like it spawns the particles in sequence etc
+                    LineEffect line = LineEffect.builder((ServerWorld) caster.getWorld(), LightParticles.LIGHTNING_PARTICLE, origin)
+                            .particle(ParticleTypes.ELECTRIC_SPARK)         .targetPos(finish).particles((int) origin.distanceTo(finish)*2).particleLimit(100).limitParticlesEveryNIterations(1).build();
+
+                    caster.sendMessage(Text.literal("Spawinging the line, with particles number: " + (int) origin.distanceTo(finish)*2));
+                    line.runFor(0.5);
+                }
+                target.addStatusEffect(new StatusEffectInstance(LightEffects.THUNDER_AURA, this.duration*20, (int) this.power_multiplier -1, false, true));
+            });
         }//Extra thundery weather (superstorm). The weather change is global, but the extra lightnings are in a localized area
         else if(component.getTargets().equals(TargetType.VARIANT)){
             //Must be on the server

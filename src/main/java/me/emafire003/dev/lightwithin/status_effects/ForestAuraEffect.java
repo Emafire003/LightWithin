@@ -1,6 +1,7 @@
 package me.emafire003.dev.lightwithin.status_effects;
 
 import com.mojang.datafixers.util.Pair;
+import me.emafire003.dev.lightwithin.LightWithin;
 import me.emafire003.dev.lightwithin.compat.coloredglowlib.CGLCompat;
 import me.emafire003.dev.lightwithin.networking.GlowEntitiesPacketS2C;
 import me.emafire003.dev.lightwithin.util.CheckUtils;
@@ -21,8 +22,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
-
-import static me.emafire003.dev.lightwithin.LightWithin.BOX_EXPANSION_AMOUNT;
 
 
 /**
@@ -67,7 +66,7 @@ public class ForestAuraEffect extends StatusEffect {
             //When the counter is already past max entities return early
             return;
         }
-        List<LivingEntity> newVisibleEntities = entity.getWorld().getEntitiesByClass(LivingEntity.class, new Box(entity.getBlockPos()).expand(BOX_EXPANSION_AMOUNT * 1.5), (entity1 -> {
+        List<LivingEntity> newVisibleEntities = entity.getWorld().getEntitiesByClass(LivingEntity.class, new Box(entity.getBlockPos()).expand(LightWithin.getBoxExpansionAmount() * 1.5), (entity1 -> {
             if (visibleEntityCounter.get() < amplifier + 3) {
                 if(!entity.equals(entity1) && !visibleEntities.contains(entity1)){
                     visibleEntityCounter.getAndIncrement();

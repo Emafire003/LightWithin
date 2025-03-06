@@ -25,8 +25,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-import static me.emafire003.dev.lightwithin.LightWithin.BOX_EXPANSION_AMOUNT;
-
 public class ClearIce extends FrostedIceBlock {
 
     public ClearIce(AbstractBlock.Settings settings) {
@@ -54,7 +52,7 @@ public class ClearIce extends FrostedIceBlock {
 
     @Override
     public void scheduledTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
-        List<PlayerEntity> entities = world.getEntitiesByClass(PlayerEntity.class, new Box(pos).expand(BOX_EXPANSION_AMOUNT), (entity1 -> true));
+        List<PlayerEntity> entities = world.getEntitiesByClass(PlayerEntity.class, new Box(pos).expand(LightWithin.getBoxExpansionAmount()), (entity1 -> true));
         boolean run = true;
 
         if(!entities.isEmpty()){
