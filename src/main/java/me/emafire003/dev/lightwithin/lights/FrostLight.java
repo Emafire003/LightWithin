@@ -96,7 +96,8 @@ public class FrostLight extends InnerLight {
         }
 
 
-        caster.getWorld().playSound(caster.getX(), caster.getY(), caster.getZ(), LightSounds.FROST_LIGHT, SoundCategory.PLAYERS, 1, 1, true);
+        caster.getWorld().playSound(null, BlockPos.ofFloored(caster.getPos()), LightSounds.FROST_LIGHT, SoundCategory.PLAYERS, 1f, 1f);
+
         if(!caster.getWorld().isClient && (CheckUtils.checkGriefable((ServerPlayerEntity) caster) || Config.NON_FUNDAMENTAL_STRUCTURE_GRIEFING) && (component.getTargets().equals(TargetType.ALL) || component.getTargets().equals(TargetType.ENEMIES))) {
             StructurePlacerAPI placer = new StructurePlacerAPI((ServerWorld) caster.getWorld(), new Identifier(MOD_ID, "frost_light"), caster.getBlockPos(), BlockMirror.NONE, BlockRotation.NONE, true, 1.0f, new BlockPos(-4, -3, -3));
             if(Config.REPLACEABLE_STRUCTURES){
@@ -113,7 +114,7 @@ public class FrostLight extends InnerLight {
         }
 
         for(LivingEntity target : this.targets){
-            target.playSound(LightSounds.FROST_LIGHT, 1, 1);
+            //target.playSound(LightSounds.FROST_LIGHT, 1, 1);
 
             if((component.getTargets().equals(TargetType.SELF) || component.getTargets().equals(TargetType.ALLIES))){
                 if(target.equals(caster) && component.getTargets().equals(TargetType.ALLIES)){
@@ -152,9 +153,7 @@ public class FrostLight extends InnerLight {
                     Box box =  target.getDimensions(target.getPose()).getBoxAt(target.getPos());
                     box.expand(1);
                     Stream<BlockPos> stream_pos = BlockPos.stream(box);
-                    stream_pos.forEach( (pos) -> {
-                        caster.getWorld().setBlockState(pos, LightBlocks.CLEAR_ICE.getDefaultState());
-                    });
+                    stream_pos.forEach( (pos) -> caster.getWorld().setBlockState(pos, LightBlocks.CLEAR_ICE.getDefaultState()));
                 }
             }
 

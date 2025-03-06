@@ -139,9 +139,7 @@ public class ForestAuraLight extends InnerLight {
                 CGLCompat.getLib().setColor(this.caster, this.color);
             }
         }
-
-        //TODO why is this here?
-        caster.getWorld().playSound(null, BlockPos.ofFloored(caster.getPos()),LightSounds.FOREST_AURA_PUFF,SoundCategory.PLAYERS, 1f, 1f);
+        caster.getWorld().playSound(null, BlockPos.ofFloored(caster.getPos()),LightSounds.FOREST_AURA_LIGHT, SoundCategory.PLAYERS, 1f, 1f);
         LightComponent component = LIGHT_COMPONENT.get(caster);
 
         if(!caster.getWorld().isClient()){

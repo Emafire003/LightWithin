@@ -107,7 +107,7 @@ public class AquaLight extends InnerLight {
         }
 
 
-        caster.getWorld().playSound(caster.getX(), caster.getY(), caster.getZ(), LightSounds.AQUA_LIGHT, SoundCategory.PLAYERS, 1, 1, true);
+        caster.getWorld().playSound(null, BlockPos.ofFloored(caster.getPos()), LightSounds.AQUA_LIGHT, SoundCategory.PLAYERS, 1f, 1f);
         LightComponent component = LIGHT_COMPONENT.get(caster);
 
         //ALL section (drowneds)
@@ -202,7 +202,7 @@ public class AquaLight extends InnerLight {
                             target.getWorld().spawnEntity(lightning);
                         }
                         tridentEntity.pickupType = PersistentProjectileEntity.PickupPermission.DISALLOWED;
-                        target.playSound(SoundEvents.ITEM_TRIDENT_RETURN, 1, 0.7f);
+                        caster.getWorld().playSound(null, BlockPos.ofFloored(target.getPos()), SoundEvents.ITEM_TRIDENT_RETURN, SoundCategory.PLAYERS, 1, 0.7f);
                         target.getWorld().spawnEntity(tridentEntity);
                     }
                 }

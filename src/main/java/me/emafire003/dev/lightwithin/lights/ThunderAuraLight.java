@@ -7,6 +7,7 @@ import me.emafire003.dev.lightwithin.config.Config;
 import me.emafire003.dev.lightwithin.events.LightTriggeringAndEvents;
 import me.emafire003.dev.lightwithin.particles.LightParticles;
 import me.emafire003.dev.lightwithin.particles.LightParticlesUtil;
+import me.emafire003.dev.lightwithin.sounds.LightSounds;
 import me.emafire003.dev.lightwithin.status_effects.LightEffects;
 import me.emafire003.dev.lightwithin.util.TargetType;
 import me.emafire003.dev.particleanimationlib.effects.LineEffect;
@@ -24,6 +25,7 @@ import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.tag.TagKey;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.sound.SoundCategory;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
@@ -119,13 +121,11 @@ public class ThunderAuraLight extends InnerLight {
 
         if(!caster.getWorld().isClient()){
             LightParticlesUtil.spawnLightTypeParticle(LightParticles.THUNDER_AURA_LIGHT_PARTICLE, (ServerWorld) caster.getWorld(), caster.getPos());
+            caster.getWorld().playSound(null, BlockPos.ofFloored(caster.getPos()), LightSounds.THUNDER_AURA_LIGHT, SoundCategory.PLAYERS, 1f, 1f);
         }
 
         //Allies shield thing
         if(component.getTargets().equals(TargetType.ALLIES)){
-            //The -1 is because status effect levels start from 0, so it's 0 to 9 but the players sees I, II, III, IV ecc
-            //TODO playsound, maybe a static for the people with the barrier
-
             targets.forEach(target -> {
                 if(!caster.getWorld().isClient && !caster.equals(target)){
                     Vec3d origin = caster.getPos().add(0, caster.getDimensions(caster.getPose()).height/2, 0);
@@ -141,8 +141,6 @@ public class ThunderAuraLight extends InnerLight {
             });
         }//Extra thundery weather (superstorm). The weather change is global, but the extra lightnings are in a localized area
         else if(component.getTargets().equals(TargetType.VARIANT)){
-            //Must be on the server
-            //TODO playsound
             caster.addStatusEffect(new StatusEffectInstance(LightEffects.STORM_AURA, this.duration*20, (int) this.power_multiplier, false, false));
         }
         /// "ALL" is defined inside {@link LightTriggeringAndEvents#registerThunderAuraAllEffect()}
