@@ -28,6 +28,7 @@ import net.minecraft.registry.tag.TagKey;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.BlockMirror;
 import net.minecraft.util.BlockRotation;
 import net.minecraft.util.Identifier;
@@ -111,7 +112,7 @@ public class BlazingLight extends InnerLight {
             }
         }
 
-        caster.getWorld().playSound(caster.getX(), caster.getY(), caster.getZ(), LightSounds.BLAZING_LIGHT, SoundCategory.PLAYERS, 1, 1, true);
+        caster.getWorld().playSound(null, BlockPos.ofFloored(caster.getPos()), LightSounds.BLAZING_LIGHT, SoundCategory.PLAYERS, 1f, 1f);
         caster.addStatusEffect(new StatusEffectInstance(StatusEffects.FIRE_RESISTANCE, caster.getStatusEffect(LightEffects. LIGHT_ACTIVE).getDuration(), 0, false, false));
 
 
@@ -143,7 +144,7 @@ public class BlazingLight extends InnerLight {
             if(caster.getRandom().nextInt(10) == 1){
                 target.damage(caster.getWorld().getDamageSources().inFire(), (float) (BalanceConfig.BLAZING_DEFAULT_DAMAGE*this.power_multiplier*crit_multiplier));
                 target.setOnFireFor(this.duration*BalanceConfig.BLAZING_CRIT_FIRE_MULTIPLIER);
-                target.playSound(LightSounds.LIGHT_CRIT, 1, 1);
+                caster.getWorld().playSound(null, BlockPos.ofFloored(target.getPos()), LightSounds.LIGHT_CRIT, SoundCategory.PLAYERS, 1, 1f);
                 LightParticlesUtil.spawnDescendingColumn((ServerPlayerEntity) caster, flame_particle, target.getPos().add(0,3,0));
                 if(!caster.getWorld().isClient){
                     StructurePlacerAPI placer = new StructurePlacerAPI((ServerWorld) caster.getWorld(), new Identifier(MOD_ID, fire_ring_id), caster.getBlockPos());

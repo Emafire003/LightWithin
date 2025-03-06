@@ -15,14 +15,11 @@ import me.x150.renderer.ClipStack;
 import me.x150.renderer.Rectangle;
 import me.x150.renderer.RenderEvents;
 import me.x150.renderer.Renderer2d;
-import me.emafire003.dev.lightwithin.sounds.LightSounds;
 import me.emafire003.dev.lightwithin.status_effects.LightEffects;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.option.Perspective;
-import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Identifier;
 
 import static me.emafire003.dev.lightwithin.LightWithin.LIGHT_COMPONENT;
@@ -153,45 +150,6 @@ public class RendererEventHandler {
     }
     public void renderLuxTargetItem(){
         TargetItemRenderer.start();
-    }
-
-
-    public void playLightSound(InnerLightType type){
-        ClientPlayerEntity player = MinecraftClient.getInstance().player;
-        if(player == null){
-            LOGGER.error("Can't play light sounds! Client player is null!");
-            return;
-        }
-        if(type.equals(InnerLightType.HEAL)){
-            player.playSound(LightSounds.HEAL_LIGHT, 1 ,1);
-        }
-        if(type.equals(InnerLightType.DEFENCE)){
-            player.playSound(LightSounds.DEFENSE_LIGHT, 1 ,1);
-        }
-        if(type.equals(InnerLightType.STRENGTH)){
-            player.playSound(LightSounds.STRENGTH_LIGHT, 1 ,1);
-        }
-        if(type.equals(InnerLightType.BLAZING)){
-            player.playSound(LightSounds.BLAZING_LIGHT, 1 ,1);
-        }
-        if(type.equals(InnerLightType.FROST)){
-            player.playSound(LightSounds.FROST_LIGHT, 1 ,1);
-        }
-        if(type.equals(InnerLightType.EARTHEN)){
-            player.playSound(LightSounds.EARTHEN_LIGHT, 1 ,1);
-        }
-        if(type.equals(InnerLightType.WIND)){
-            player.playSound(LightSounds.WIND_LIGHT, 1 ,1);
-        }
-        if(type.equals(InnerLightType.AQUA)){
-            player.playSound(LightSounds.AQUA_LIGHT, 1 ,1);
-        }
-        if(type.equals(InnerLightType.FOREST_AURA)){
-            player.playSound(LightSounds.FOREST_AURA_LIGHT, 1 ,1);
-        }
-        if(type.equals(InnerLightType.FROG)){
-            player.playSound(SoundEvents.ENTITY_FROG_HURT, 1, 0.8f);
-        }
     }
 
     public void registerRunesRenderer(){

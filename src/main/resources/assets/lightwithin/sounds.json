@@ -98,5 +98,11 @@
     "sounds": [
       "lightwithin:forest_aura_light"
     ]
+  },
+  "thunder_aura_light": {
+    "subtitle": "lightwithin.thunder_aura_light_triggered",
+    "sounds": [
+      "lightwithin:thunder_aura_light"
+    ]
   }
 }

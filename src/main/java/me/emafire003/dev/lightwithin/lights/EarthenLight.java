@@ -95,7 +95,8 @@ public class EarthenLight extends InnerLight {
 
 
         LightParticlesUtil.spawnLightTypeParticle(LightParticles.EARTHENLIGHT_PARTICLE, (ServerWorld) caster.getWorld(), caster.getPos());
-        caster.getWorld().playSound(caster.getX(), caster.getY(), caster.getZ(), LightSounds.EARTHEN_LIGHT, SoundCategory.PLAYERS, 1, 1, true);
+        caster.getWorld().playSound(null, BlockPos.ofFloored(caster.getPos()), LightSounds.EARTHEN_LIGHT, SoundCategory.PLAYERS, 1f, 1f);
+
         if(caster.getWorld().isClient){
             return;
         }
@@ -132,7 +133,7 @@ public class EarthenLight extends InnerLight {
                         placer.loadStructure();
                     }
                     //It also plays here since a hole opens under things
-                    caster.getWorld().playSound(target.getX(), target.getY(), target.getZ(), LightSounds.EARTHEN_LIGHT, SoundCategory.PLAYERS, 1, 1, true);
+                    caster.getWorld().playSound(null, BlockPos.ofFloored(caster.getPos()), LightSounds.EARTHEN_LIGHT, SoundCategory.PLAYERS, 1f, 1f);
                 }
                 oldtarget = target;
                 //target.playSound(LightSounds.EARTHEN_LIGHT, 0.9f, 1);
@@ -179,7 +180,6 @@ public class EarthenLight extends InnerLight {
             //And will also give Solid Rock effect to self, making the player more resistant to knokback
         }else if(component.getTargets().equals(TargetType.SELF)){
             caster.addStatusEffect(new StatusEffectInstance(LightEffects.STURDY_ROCK, caster.getStatusEffect(LightEffects.LIGHT_ACTIVE).getDuration(), (int) this.power_multiplier, false, false));
-            caster.playSound(LightSounds.EARTHEN_LIGHT, 1, 1);
             if(!caster.getWorld().isClient && CheckUtils.checkGriefable((ServerPlayerEntity) caster)) {
                 StructurePlacerAPI placer;
                 if(this.power_multiplier >= 7){
@@ -207,7 +207,6 @@ public class EarthenLight extends InnerLight {
                 }else{
                     placer.loadStructure();
                 }
-                caster.playSound(LightSounds.EARTHEN_LIGHT, 1, 1);
                 LightParticlesUtil.spawnLightTypeParticle(LightParticles.EARTHENLIGHT_PARTICLE, (ServerWorld) caster.getWorld(), caster.getPos());
             }
         }else if(component.getTargets().equals(TargetType.VARIANT)){

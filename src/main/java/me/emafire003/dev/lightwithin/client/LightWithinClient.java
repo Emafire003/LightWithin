@@ -289,7 +289,7 @@ public class LightWithinClient implements ClientModInitializer {
 
                         else if(effect.equals(RenderEffect.RUNES)){
                             event_handler.renderRunes();
-                            event_handler.playLightSound(LightWithin.LIGHT_COMPONENT.get(client.player).getType());
+                            //event_handler.playLightSound(LightWithin.LIGHT_COMPONENT.get(client.player).getType());
                         }
 
 
