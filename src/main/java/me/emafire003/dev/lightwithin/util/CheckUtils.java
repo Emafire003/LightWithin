@@ -1,5 +1,6 @@
 package me.emafire003.dev.lightwithin.util;
 
+import me.emafire003.dev.lightwithin.LightWithin;
 import me.emafire003.dev.lightwithin.compat.argonauts.ArgonautsChecker;
 import me.emafire003.dev.lightwithin.compat.factions.FactionChecker;
 import me.emafire003.dev.lightwithin.compat.flan.FlanCompat;
@@ -309,7 +310,7 @@ public class CheckUtils {
      * */
     @Deprecated
     public static boolean checkAllyHealthOld(@NotNull PlayerEntity player, Entity attacker, int health_percent){
-        List<LivingEntity> entities = player.getWorld().getEntitiesByClass(LivingEntity.class, new Box(player.getBlockPos()).expand(BOX_EXPANSION_AMOUNT), (entity1 -> true));
+        List<LivingEntity> entities = player.getWorld().getEntitiesByClass(LivingEntity.class, new Box(player.getBlockPos()).expand(LightWithin.getBoxExpansionAmount()), (entity1 -> true));
         int ent_number = 0;
         //I need to this to prevent a ConcurrentModificationError
         List<LivingEntity> team_entities = new ArrayList<>();
@@ -340,7 +341,7 @@ public class CheckUtils {
      * @param health_percent The percentage (15, 25, 70) below which the target is in danger (hence light activatable)
      * */
     public static boolean checkAllyHealth(@NotNull PlayerEntity player, Entity attacker, int health_percent){
-        List<LivingEntity> entities = player.getWorld().getEntitiesByClass(LivingEntity.class, new Box(player.getBlockPos()).expand(BOX_EXPANSION_AMOUNT), (entity1 -> true));
+        List<LivingEntity> entities = player.getWorld().getEntitiesByClass(LivingEntity.class, new Box(player.getBlockPos()).expand(LightWithin.getBoxExpansionAmount()), (entity1 -> true));
         int n_allies_low_health = 0;
         //loops through the entities near the player, if the entities are in the same team as the player
         //and they are not the entity that has been hit then add them to the team_entities and check if their health is ok
@@ -368,7 +369,7 @@ public class CheckUtils {
      * @param health_percent The percentage (15, 25, 70) below which the target is in danger (hence light activatable)
      * */
     public static boolean checkPassiveHealth(PlayerEntity player, Entity entity, int health_percent){
-        List<PassiveEntity> entities = entity.getWorld().getEntitiesByClass(PassiveEntity.class, new Box(player.getBlockPos()).expand(BOX_EXPANSION_AMOUNT), (entity1 -> true));
+        List<PassiveEntity> entities = entity.getWorld().getEntitiesByClass(PassiveEntity.class, new Box(player.getBlockPos()).expand(LightWithin.getBoxExpansionAmount()), (entity1 -> true));
         for(PassiveEntity ent : entities){
             if(ent.getHealth() <= (ent.getMaxHealth())*health_percent/100){
                 return true;
@@ -895,7 +896,7 @@ public class CheckUtils {
      * @param player The player used as the center of the area to search of its enemies*/
     public static List<LivingEntity> getEnemies(PlayerEntity player){
         List<LivingEntity> targets = new ArrayList<>();
-        List<LivingEntity> entities = player.getWorld().getEntitiesByClass(LivingEntity.class, new Box(player.getBlockPos()).expand(BOX_EXPANSION_AMOUNT), (entity1 -> true));
+        List<LivingEntity> entities = player.getWorld().getEntitiesByClass(LivingEntity.class, new Box(player.getBlockPos()).expand(LightWithin.getBoxExpansionAmount()), (entity1 -> true));
         for(LivingEntity ent : entities){
             if(ent instanceof HostileEntity && !CheckUtils.CheckAllies.checkAlly(player, ent)){
                 targets.add(ent);
@@ -913,7 +914,7 @@ public class CheckUtils {
      * @param entity The entity used as the center of the area to search of its enemies*/
     public static List<LivingEntity> getEnemies(LivingEntity entity){
         List<LivingEntity> targets = new ArrayList<>();
-        List<LivingEntity> entities = entity.getWorld().getEntitiesByClass(LivingEntity.class, new Box(entity.getBlockPos()).expand(BOX_EXPANSION_AMOUNT), (entity1 -> true));
+        List<LivingEntity> entities = entity.getWorld().getEntitiesByClass(LivingEntity.class, new Box(entity.getBlockPos()).expand(LightWithin.getBoxExpansionAmount()), (entity1 -> true));
         for(LivingEntity ent : entities){
             if(ent instanceof HostileEntity && !CheckUtils.CheckAllies.checkAlly(entity, ent)){
                 targets.add(ent);

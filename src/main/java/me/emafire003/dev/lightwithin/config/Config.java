@@ -159,7 +159,7 @@ public class Config {
 
         configs.addKeyValuePair(new Pair<>("spacer", "spacer"), "");
 
-        configs.addKeyValuePair(new Pair<>("area_of_search_for_entities", 6), "The box radius in which other entities (such as allies or targets) will be searched");
+        configs.addKeyValuePair(new Pair<>("area_of_search_for_entities", 12), "The box radius in which other entities (such as allies or targets) will be searched. Cannot be less than 1.");
         configs.addKeyValuePair(new Pair<>("cooldown_multiplier", 1.0), "Use this to extend or shorten the cooldown of the light powers effects in general (use <1 values to shorten the cooldown >1 to extend it)");
         //the max value for this is 21 now, 16*1.3 = 20.8. The min one is 1. Unless it's adjusted.
         configs.addKeyValuePair(new Pair<>("duration_multiplier", 1.3), "Use this to extend or shorten the duration of the light powers effects in general (WARNING: Values below 1 are possible but not recommended)");
@@ -256,7 +256,7 @@ public class Config {
 
         VERSION = CONFIG.getOrDefault("version", ver);
 
-        AREA_OF_SEARCH_FOR_ENTITIES = CONFIG.getOrDefault("area_of_search_for_entities", 6);
+        AREA_OF_SEARCH_FOR_ENTITIES = CONFIG.getOrDefault("area_of_search_for_entities", 12);
         COOLDOWN_MULTIPLIER = CONFIG.getOrDefault("cooldown_multiplier", 1.0);
         DURATION_MULTIPLIER = CONFIG.getOrDefault("duration_multiplier", 1.3);
 

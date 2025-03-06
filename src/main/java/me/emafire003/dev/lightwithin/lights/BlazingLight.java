@@ -158,7 +158,7 @@ public class BlazingLight extends InnerLight {
         //to spawn the expanding circle of particles
         ParticleEffect finalFlame_particle = flame_particle;
         ServerTickEvents.END_SERVER_TICK.register((server -> {
-            if(r < LightWithin.BOX_EXPANSION_AMOUNT){
+            if(r < LightWithin.getBoxExpansionAmount()){
                 r = r + 0.5;
                 LightParticlesUtil.spawnCircle(caster.getPos().add(0,0.7,0), r, 100, finalFlame_particle, (ServerWorld) caster.getWorld());
             }
