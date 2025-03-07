@@ -399,7 +399,6 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 	 * */
 	public static List<LivingEntity> getAllies(PlayerEntity player){
 		List<LivingEntity> targets = new ArrayList<>();
-		player.sendMessage(Text.literal("The expansion amount is: " + getBoxExpansionAmount() + " the config values is: " + Config.AREA_OF_SEARCH_FOR_ENTITIES));
 		List<LivingEntity> entities = player.getWorld().getEntitiesByClass(LivingEntity.class, new Box(player.getBlockPos()).expand(getBoxExpansionAmount()), (entity1 -> true));
 		targets.add(player);
 		for(LivingEntity ent : entities){
