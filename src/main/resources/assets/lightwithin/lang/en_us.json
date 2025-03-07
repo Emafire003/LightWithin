@@ -141,6 +141,8 @@
   "config.lightwithin.light_ready_scale_factor.tooltip": "Change this value to make the icon bigger or smaller",
   "config.lightwithin.light_charge_scale_factor": "LightCharge icon scale factor",
   "config.lightwithin.light_charge_scale_factor.tooltip": "Change this value to make the icon bigger or smaller",
+  "config.lightwithin.runes_scale_factor": "Runes scale factor",
+  "config.lightwithin.runes_scale_factor.tooltip": "Change this value to make the runes bigger or smaller",
 
   "config.lightwithin.hide_light_charge_icon": "Hide LightCharge icon",
   "config.lightwithin.hide_light_charge_icon.tooltip": "Set this to true to hide the light charge icon. The Ready and error one will still display",

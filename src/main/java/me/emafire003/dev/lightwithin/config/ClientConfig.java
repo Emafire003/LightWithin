@@ -26,6 +26,7 @@ public class ClientConfig {
     public static int LIGHT_CHARGE_ICON_Y = 10;
     public static double LIGHT_CHARGE_SCALE_FACTOR = 1.0;
     public static double LIGHT_READY_SCALE_FACTOR = 1.0;
+    public static double RUNES_SCALE_FACTOR = 1.0;
     public static String LIGHT_READY_PRESET = "TOP_LEFT";
     public static String LIGHT_CHARGE_PRESET = "TOP_LEFT";
     public static double INGREDIENT_TARGET_SCALE = 5.0;
@@ -53,6 +54,7 @@ public class ClientConfig {
 
     public static final int light_icon_default_position = 10;
     public static final double light_icon_default_scale = 1.0;
+    public static final double runes_default_scale = 0.5;
 
     private static final String config_name = "_client";
 
@@ -86,6 +88,7 @@ public class ClientConfig {
             CONFIG.set("light_charge_preset", LIGHT_CHARGE_PRESET);
             CONFIG.set("light_ready_scale_factor", LIGHT_READY_SCALE_FACTOR);
             CONFIG.set("light_charge_scale_factor", LIGHT_CHARGE_SCALE_FACTOR);
+            CONFIG.set("runes_scale_factor", RUNES_SCALE_FACTOR);
             CONFIG.set("hide_light_charge_icon", HIDE_LIGHT_CHARGE_ICON_default);
             CONFIG.set("show_charged_player_glow", SHOW_CHARGED_PLAYER_GLOW);
             CONFIG.set("show_runes", SHOW_RUNES);
@@ -163,6 +166,7 @@ public class ClientConfig {
 
         configs.addKeyValuePair(new Pair<>("light_ready_scale_factor", light_icon_default_scale), "Make this number bigger to make the light ready icon bigger, make it smaller to have a smaller light icon!");
         configs.addKeyValuePair(new Pair<>("light_charge_scale_factor", light_icon_default_scale), "Make this number bigger to make the light charge icon bigger, make it smaller to have a smaller light icon!");
+        configs.addKeyValuePair(new Pair<>("runes_scale_factor", runes_default_scale), "Make this number bigger to make the light runes bigger, make it smaller to have a smaller rune!");
 
         configs.addKeyValuePair(new Pair<>("light_ready_preset", "TOP_LEFT"), "The position of the light ready icon using presets, such as CENTER, TOP/BOTTOM LEFT/RIGHT etc");
         configs.addKeyValuePair(new Pair<>("light_charge_preset", "TOP_LEFT"), "The position of the light charge icon using presets, such as CENTER, TOP/BOTTOM LEFT/RIGHT etc");
@@ -205,6 +209,7 @@ public class ClientConfig {
         LIGHT_CHARGE_PRESET = CONFIG.getOrDefault("light_charge_preset", "TOP_LEFT");
         LIGHT_READY_SCALE_FACTOR = CONFIG.getOrDefault("light_ready_scale_factor", light_icon_default_scale);
         LIGHT_CHARGE_SCALE_FACTOR = CONFIG.getOrDefault("light_charge_scale_factor", light_icon_default_scale);
+        RUNES_SCALE_FACTOR = CONFIG.getOrDefault("runes_scale_factor", runes_default_scale);
         HIDE_LIGHT_CHARGE_ICON = CONFIG.getOrDefault("hide_light_charge_icon", HIDE_LIGHT_CHARGE_ICON_default);
         SHOW_CHARGED_PLAYER_GLOW = CONFIG.getOrDefault("show_charged_player_glow", SHOW_CHARGED_PLAYER_GLOW_default);
         SHOW_RUNES = CONFIG.getOrDefault("show_runes", SHOW_RUNES_default);

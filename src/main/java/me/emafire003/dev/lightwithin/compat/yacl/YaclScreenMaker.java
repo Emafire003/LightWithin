@@ -15,7 +15,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-
 public class YaclScreenMaker {
 
     public static Screen getScreen(Screen parent){
@@ -221,6 +220,24 @@ public class YaclScreenMaker {
                         )
                         .controller(opt -> DoubleSliderControllerBuilder.create(opt)
                                 .range((double) 0, 10.0)
+                                .step(0.1))
+                        .build()
+        );
+
+        options.add(
+                Option.<Double>createBuilder()
+                        .name(Text.translatable("config.lightwithin.runes_scale_factor"))
+                        .description(OptionDescription.of(Text.translatable("config.lightwithin.runes_scale_factor.tooltip")))
+                        .binding(
+                                ClientConfig.runes_default_scale, // the default value
+                                () -> ClientConfig.RUNES_SCALE_FACTOR, // a field to get the current value from
+                                newVal -> {
+                                    ClientConfig.RUNES_SCALE_FACTOR = newVal;
+                                    ClientConfig.saveToFile();
+                                }
+                        )
+                        .controller(opt -> DoubleSliderControllerBuilder.create(opt)
+                                .range(0.1, 5.0)
                                 .step(0.1))
                         .build()
         );

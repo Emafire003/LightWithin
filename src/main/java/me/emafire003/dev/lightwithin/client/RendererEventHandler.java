@@ -40,7 +40,7 @@ public class RendererEventHandler {
     int center_y = 0;
     double scale_factor;
     static double charge_icon_scale = 1.0;
-    static double ready_icon_scale = 1.0;
+    static double ready_icon_scale = 0.5;
 
     public static void updateFromConfig(){
         light_ready_x = ClientConfig.LIGHT_READY_ICON_X;
@@ -52,6 +52,7 @@ public class RendererEventHandler {
         LightWithinClient.setShouldDrawChargesCount(!ClientConfig.HIDE_LIGHT_CHARGE_ICON);
         allow_draw_runes = ClientConfig.SHOW_RUNES;
         RunesRenderer.setShowRunesFor(ClientConfig.SHOW_RUNES_FOR*20);
+        RunesRenderer.setRunesScale(ClientConfig.RUNES_SCALE_FACTOR);
         TargetRenderer.setScale(ClientConfig.INGREDIENT_TARGET_SCALE);
         TargetRenderer.setShowFor(ClientConfig.SHOW_INGREDIENT_TARGET_FOR*20);
         TypeItemRenderer.setScale(ClientConfig.INGREDIENT_TARGET_SCALE);

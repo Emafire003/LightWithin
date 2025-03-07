@@ -17,6 +17,7 @@ public class RunesRenderer {
     private static boolean renderRunes = false;
     private static int runesTick = 0;
     private static int show_runes_for = 3*20;
+    private static double runes_scale = 1;
     
     public static boolean shouldRender(){
         return renderRunes;
@@ -31,6 +32,10 @@ public class RunesRenderer {
     public static void setShowRunesFor(int ticks){
         show_runes_for = ticks;
     }
+
+    public static void setRunesScale(double scale){
+        runes_scale = scale;
+    }
     
     public static void render(InnerLightType type, DrawContext drawContext){
         ClientPlayerEntity player = MinecraftClient.getInstance().player;
@@ -41,13 +46,12 @@ public class RunesRenderer {
 
         int center_x = MinecraftClient.getInstance().getWindow().getScaledWidth() / 2;
         int center_y = MinecraftClient.getInstance().getWindow().getScaledHeight()/2;
-        double scale_factor = MinecraftClient.getInstance().getWindow().getScaleFactor();
+        //double scale_factor = MinecraftClient.getInstance().getWindow().getScaleFactor();
+        double width = 400*runes_scale;
+        double height = 160*runes_scale;
 
-        ClipStack.addWindow(drawContext.getMatrices(), new Rectangle(1,1,1000,1000));
-        Renderer2d.renderTexture(drawContext.getMatrices(), new Identifier(LightWithin.MOD_ID, "textures/lights/runes/"+ type.toString().toLowerCase() + "_light_runes.png"),
-                center_x-(400/scale_factor)/2, center_y-(160/scale_factor)/2,
-                (400/scale_factor), (160/scale_factor));
-
+        ClipStack.addWindow(drawContext.getMatrices(), new Rectangle((center_x-width/2)-40,(center_y-height/2),(center_x+width/2)+40,(center_y+height/2)));
+        Renderer2d.renderTexture(drawContext.getMatrices(), new Identifier(LightWithin.MOD_ID, "textures/lights/runes/"+ type.toString().toLowerCase() + "_light_runes.png"), center_x-width/2, center_y-height/2, width, height);
         ClipStack.popWindow();
     }
     
