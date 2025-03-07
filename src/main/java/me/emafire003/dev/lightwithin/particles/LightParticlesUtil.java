@@ -30,7 +30,7 @@ public class LightParticlesUtil {
         }*/
         world.spawnParticles(particle,
                 pos.getX(), pos.getY(), pos.getZ(), 50,
-                0.25, 0.15d, 0.25, 0.2);
+                0.15, 0.10d, 0.15, 0.2);
 
 
     }

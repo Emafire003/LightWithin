@@ -109,8 +109,8 @@ public class FrostLight extends InnerLight {
         }
 
         if(!caster.getWorld().isClient()){
+            LightParticlesUtil.spawnLightTypeParticle(LightParticles.FROSTLIGHT_PARTICLE, (ServerWorld) caster.getWorld(), caster.getPos());
             PrecompiledParticleEffects.spawnSnowflake((ServerWorld) caster.getWorld(), caster.getPos().add(0, 2, 0));
-
         }
 
         for(LivingEntity target : this.targets){
@@ -144,7 +144,6 @@ public class FrostLight extends InnerLight {
             }else{
                 if(!caster.getWorld().isClient){
                     LightParticlesUtil.spawnLightTypeParticle(LightParticles.FROSTLIGHT_PARTICLE, (ServerWorld) caster.getWorld(), target.getPos());
-                    LightParticlesUtil.spawnLightTypeParticle(LightParticles.FROSTLIGHT_PARTICLE, (ServerWorld) caster.getWorld(), caster.getPos());
 
                     target.addStatusEffect(new StatusEffectInstance(LightEffects.FROST, caster.getStatusEffect(LightEffects.LIGHT_ACTIVE).getDuration(), 0, false, false));
 
