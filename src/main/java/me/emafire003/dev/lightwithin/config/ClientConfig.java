@@ -168,8 +168,8 @@ public class ClientConfig {
         configs.addKeyValuePair(new Pair<>("light_charge_scale_factor", light_icon_default_scale), "Make this number bigger to make the light charge icon bigger, make it smaller to have a smaller light icon!");
         configs.addKeyValuePair(new Pair<>("runes_scale_factor", runes_default_scale), "Make this number bigger to make the light runes bigger, make it smaller to have a smaller rune!");
 
-        configs.addKeyValuePair(new Pair<>("light_ready_preset", "TOP_LEFT"), "The position of the light ready icon using presets, such as CENTER, TOP/BOTTOM LEFT/RIGHT etc");
-        configs.addKeyValuePair(new Pair<>("light_charge_preset", "TOP_LEFT"), "The position of the light charge icon using presets, such as CENTER, TOP/BOTTOM LEFT/RIGHT etc");
+        configs.addKeyValuePair(new Pair<>("light_ready_preset", "TOP_LEFT"), "The position of the light ready icon using presets, such as CENTER, TOP/BOTTOM LEFT/RIGHT etc. Can only be modified while using YACL.");
+        configs.addKeyValuePair(new Pair<>("light_charge_preset", "TOP_LEFT"), "The position of the light charge icon using presets, such as CENTER, TOP/BOTTOM LEFT/RIGHT etc. Can only be modified while using YACL.");
 
         configs.addKeyValuePair(new Pair<>("spacer", "spacer"), "");
 
