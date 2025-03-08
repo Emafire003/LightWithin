@@ -108,7 +108,7 @@ public class WindLight extends InnerLight {
             //oldtarget and stuff prevent generating multiple structures in the same area
             for(LivingEntity target : this.targets){
 
-                //TODO these are allies, should i still play it? no
+                //these are allies, should i still play it? no
                 //target.playSound(LightSounds.WIND_LIGHT, 0.9f, 1);
                 if(target.equals(caster)){
                     target.addStatusEffect(new StatusEffectInstance(StatusEffects.SPEED, this.duration*20, (int) ((this.power_multiplier/2)/Config.DIV_SELF), false, false));

@@ -17,6 +17,7 @@
     "WorldPropertiesAccessor",
     "forest_aura_related.EnterForestBlocksEntityMixin",
     "forest_aura_related.ForestBlocksMixin",
+    "forest_aura_related.LivingEntityJumpInvoker",
     "forest_aura_related.RandomizeMovementPlayerEntityMixin",
     "forest_aura_related.SuffocationImmunityEntityMixin",
     "light_triggers.ArmorOrItemBreakMixin",

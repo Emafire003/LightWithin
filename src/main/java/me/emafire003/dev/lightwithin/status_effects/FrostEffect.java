@@ -17,7 +17,6 @@ public class FrostEffect extends StatusEffect {
         // In our case, we just make it return true so that it applies the status effect every tick.
         return true;
     }
-    boolean sent = false;
 
     // This method is called when it applies the status effect. We implement custom functionality here.
     @Override
