@@ -9,11 +9,11 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.text.Text;
 import org.jetbrains.annotations.NotNull;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
-
 
 public class YaclScreenMaker {
 
@@ -225,6 +225,24 @@ public class YaclScreenMaker {
         );
 
         options.add(
+                Option.<Double>createBuilder()
+                        .name(Text.translatable("config.lightwithin.runes_scale_factor"))
+                        .description(OptionDescription.of(Text.translatable("config.lightwithin.runes_scale_factor.tooltip")))
+                        .binding(
+                                ClientConfig.runes_default_scale, // the default value
+                                () -> ClientConfig.RUNES_SCALE_FACTOR, // a field to get the current value from
+                                newVal -> {
+                                    ClientConfig.RUNES_SCALE_FACTOR = newVal;
+                                    ClientConfig.saveToFile();
+                                }
+                        )
+                        .controller(opt -> DoubleSliderControllerBuilder.create(opt)
+                                .range(0.1, 5.0)
+                                .step(0.1))
+                        .build()
+        );
+
+        options.add(
                 Option.<Boolean>createBuilder()
                         .name(Text.translatable("config.lightwithin.hide_light_charge_icon"))
                         .description(OptionDescription.of(Text.translatable("config.lightwithin.hide_light_charge_icon.tooltip")))
@@ -336,6 +354,70 @@ public class YaclScreenMaker {
                                 () -> ClientConfig.AUTO_LIGHT_ACTIVATION, // a field to get the current value from
                                 newVal -> {
                                     ClientConfig.AUTO_LIGHT_ACTIVATION = newVal;
+                                    ClientConfig.saveToFile();
+                                }
+                        )
+                        .controller(TickBoxControllerBuilder::create)
+                        .build()
+        );
+
+        options.add(
+                Option.<Color>createBuilder()
+                        .name(Text.translatable("config.lightwithin.forestaura_enemy_color"))
+                        .description(OptionDescription.of(Text.translatable("config.lightwithin.forestaura_enemy_color.tooltip")))
+                        .binding(
+                                Color.decode("#"+ClientConfig.FORESTAURA_ENEMY_COLOR_default), // the default value
+                                () -> Color.decode("#"+ClientConfig.FORESTAURA_ENEMY_COLOR), // a field to get the current value from
+                                newVal -> {
+                                    //Alternatively: String.format("%06x", 0xFFFFFF & newVal.getRGB())
+                                    ClientConfig.FORESTAURA_ENEMY_COLOR = Integer.toHexString(newVal.getRGB()).substring(2);
+                                    ClientConfig.saveToFile();
+                                }
+                        )
+                        .controller(opt -> ColorControllerBuilder.create(opt).allowAlpha(false))
+                        .build()
+        );
+
+        options.add(
+                Option.<Color>createBuilder()
+                        .name(Text.translatable("config.lightwithin.forestaura_ally_color"))
+                        .description(OptionDescription.of(Text.translatable("config.lightwithin.forestaura_ally_color.tooltip")))
+                        .binding(
+                                Color.decode("#"+ClientConfig.FORESTAURA_ALLY_COLOR_default), // the default value
+                                () -> Color.decode("#"+ClientConfig.FORESTAURA_ALLY_COLOR), // a field to get the current value from
+                                newVal -> {
+                                    //Alternatively: String.format("%06x", 0xFFFFFF & newVal.getRGB())
+                                    ClientConfig.FORESTAURA_ALLY_COLOR = Integer.toHexString(newVal.getRGB()).substring(2);
+                                    ClientConfig.saveToFile();
+                                }
+                        )
+                        .controller(opt -> ColorControllerBuilder.create(opt).allowAlpha(false))
+                        .build()
+        );
+        options.add(
+                Option.<Boolean>createBuilder()
+                        .name(Text.translatable("config.lightwithin.forestaura_intoxication_shader"))
+                        .description(OptionDescription.of(Text.translatable("config.lightwithin.forestaura_intoxication_shader.tooltip")))
+                        .binding(
+                                ClientConfig.FORESTAURA_INTOXICATION_SHADER_default, // the default value
+                                () -> ClientConfig.FORESTAURA_INTOXICATION_SHADER, // a field to get the current value from
+                                newVal -> {
+                                    ClientConfig.FORESTAURA_INTOXICATION_SHADER = newVal;
+                                    ClientConfig.saveToFile();
+                                }
+                        )
+                        .controller(TickBoxControllerBuilder::create)
+                        .build()
+        );
+        options.add(
+                Option.<Boolean>createBuilder()
+                        .name(Text.translatable("config.lightwithin.intoxication_shader_warning"))
+                        .description(OptionDescription.of(Text.translatable("config.lightwithin.intoxication_shader_warning.tooltip")))
+                        .binding(
+                                ClientConfig.INTOXICATION_SHADER_WARNING_default, // the default value
+                                () -> ClientConfig.INTOXICATION_SHADER_WARNING, // a field to get the current value from
+                                newVal -> {
+                                    ClientConfig.INTOXICATION_SHADER_WARNING = newVal;
                                     ClientConfig.saveToFile();
                                 }
                         )

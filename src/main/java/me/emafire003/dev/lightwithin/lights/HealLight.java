@@ -22,6 +22,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
+import net.minecraft.util.math.BlockPos;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -103,7 +104,10 @@ public class HealLight extends InnerLight {
                 CGLCompat.getLib().setColor(this.caster, this.color);
             }
         }
-        caster.getWorld().playSound(caster.getX(), caster.getY(), caster.getZ(), LightSounds.HEAL_LIGHT, SoundCategory.PLAYERS, 0.1f, 1, true);
+
+        caster.getWorld().playSound(null, BlockPos.ofFloored(caster.getPos()), LightSounds.HEAL_LIGHT, SoundCategory.PLAYERS, 1f, 1f);
+
+        //caster.getWorld().playSound(caster.getX(), caster.getY(), caster.getZ(), LightSounds.HEAL_LIGHT, SoundCategory.PLAYERS, 0.1f, 1, true);
         //caster.getWorld().playSound(caster, caster.getBlockPos(), LightSounds.HEAL_LIGHT, SoundCategory.AMBIENT, 1,1);
 
         for(LivingEntity target : this.targets){

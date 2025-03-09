@@ -14,6 +14,7 @@ import me.emafire003.dev.lightwithin.util.TargetType;
 import me.emafire003.dev.structureplacerapi.StructurePlacerAPI;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.block.Block;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
@@ -22,9 +23,12 @@ import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.registry.RegistryKeys;
+import net.minecraft.registry.tag.TagKey;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.BlockMirror;
 import net.minecraft.util.BlockRotation;
 import net.minecraft.util.Identifier;
@@ -58,6 +62,9 @@ public class BlazingLight extends InnerLight {
 
     private double crit_multiplier = 1.5;
     private double r = 0.5;
+
+    public static final TagKey<Block> BLAZING_TRIGGER_BLOCKS = TagKey.of(RegistryKeys.BLOCK, new Identifier(MOD_ID, "blazing_trigger_blocks"));
+    public static final TagKey<Item> BLAZING_TRIGGER_ITEMS = TagKey.of(RegistryKeys.ITEM, new Identifier(MOD_ID, "blazing_trigger_items"));
 
     private void checkSafety(){
         if(this.power_multiplier > BalanceConfig.BLAZING_MAX_POWER){
@@ -105,7 +112,7 @@ public class BlazingLight extends InnerLight {
             }
         }
 
-        caster.getWorld().playSound(caster.getX(), caster.getY(), caster.getZ(), LightSounds.BLAZING_LIGHT, SoundCategory.PLAYERS, 1, 1, true);
+        caster.getWorld().playSound(null, BlockPos.ofFloored(caster.getPos()), LightSounds.BLAZING_LIGHT, SoundCategory.PLAYERS, 1f, 1f);
         caster.addStatusEffect(new StatusEffectInstance(StatusEffects.FIRE_RESISTANCE, caster.getStatusEffect(LightEffects. LIGHT_ACTIVE).getDuration(), 0, false, false));
 
 
@@ -137,7 +144,7 @@ public class BlazingLight extends InnerLight {
             if(caster.getRandom().nextInt(10) == 1){
                 target.damage(caster.getWorld().getDamageSources().inFire(), (float) (BalanceConfig.BLAZING_DEFAULT_DAMAGE*this.power_multiplier*crit_multiplier));
                 target.setOnFireFor(this.duration*BalanceConfig.BLAZING_CRIT_FIRE_MULTIPLIER);
-                target.playSound(LightSounds.LIGHT_CRIT, 1, 1);
+                caster.getWorld().playSound(null, BlockPos.ofFloored(target.getPos()), LightSounds.LIGHT_CRIT, SoundCategory.PLAYERS, 1, 1f);
                 LightParticlesUtil.spawnDescendingColumn((ServerPlayerEntity) caster, flame_particle, target.getPos().add(0,3,0));
                 if(!caster.getWorld().isClient){
                     StructurePlacerAPI placer = new StructurePlacerAPI((ServerWorld) caster.getWorld(), new Identifier(MOD_ID, fire_ring_id), caster.getBlockPos());
@@ -152,7 +159,7 @@ public class BlazingLight extends InnerLight {
         //to spawn the expanding circle of particles
         ParticleEffect finalFlame_particle = flame_particle;
         ServerTickEvents.END_SERVER_TICK.register((server -> {
-            if(r < LightWithin.box_expansion_amount){
+            if(r < LightWithin.getBoxExpansionAmount()){
                 r = r + 0.5;
                 LightParticlesUtil.spawnCircle(caster.getPos().add(0,0.7,0), r, 100, finalFlame_particle, (ServerWorld) caster.getWorld());
             }

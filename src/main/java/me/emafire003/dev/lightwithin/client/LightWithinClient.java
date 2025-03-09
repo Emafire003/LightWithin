@@ -4,18 +4,24 @@ import com.mojang.datafixers.util.Pair;
 import me.emafire003.dev.lightwithin.LightWithin;
 import me.emafire003.dev.lightwithin.blocks.LightBlocks;
 import me.emafire003.dev.lightwithin.client.screens.LuxcognitaScreen;
+import me.emafire003.dev.lightwithin.client.shaders.LightShaders;
 import me.emafire003.dev.lightwithin.commands.client.ClientLightCommands;
+import me.emafire003.dev.lightwithin.compat.coloredglowlib.CGLCompat;
 import me.emafire003.dev.lightwithin.compat.yacl.YaclScreenMaker;
 import me.emafire003.dev.lightwithin.config.ClientConfig;
 import me.emafire003.dev.lightwithin.entities.LightEntities;
 import me.emafire003.dev.lightwithin.entities.earth_golem.EarthGolemEntityModel;
 import me.emafire003.dev.lightwithin.entities.earth_golem.EarthGolemEntityRenderer;
+import me.emafire003.dev.lightwithin.lights.ForestAuraLight;
 import me.emafire003.dev.lightwithin.networking.*;
 import me.emafire003.dev.lightwithin.particles.LightParticle;
 import me.emafire003.dev.lightwithin.particles.LightTypeParticleV3;
 import me.emafire003.dev.lightwithin.particles.LightParticles;
+import me.emafire003.dev.lightwithin.particles.LightningParticle;
+import me.emafire003.dev.lightwithin.particles.coloredpuff.ColoredPuffParticle;
 import me.emafire003.dev.lightwithin.sounds.LightSounds;
 import me.emafire003.dev.lightwithin.util.ConfigPacketConstants;
+import me.emafire003.dev.lightwithin.util.ForestAuraRelation;
 import me.emafire003.dev.lightwithin.util.IRenderEffectsEntity;
 import me.emafire003.dev.lightwithin.util.RenderEffect;
 import net.fabricmc.api.ClientModInitializer;
@@ -36,14 +42,16 @@ import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.entity.model.EntityModelLayer;
 import net.minecraft.entity.Entity;
 import net.minecraft.screen.ScreenTexts;
-import net.minecraft.sound.SoundCategory;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Util;
 
 import java.net.URI;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.UUID;
+import java.util.Map;
 
 import static me.emafire003.dev.lightwithin.LightWithin.LOGGER;
 
@@ -62,33 +70,26 @@ public class LightWithinClient implements ClientModInitializer {
 
     public static final EntityModelLayer MODEL_EARTH_GOLEM_LAYER = new EntityModelLayer(new Identifier(LightWithin.MOD_ID, "earth_golem"), "main");
 
+    //The first one is the player the second one is the entity
+    private static final List<UUID> entitiesGlowingForPlayer = new ArrayList<>();
+    //If the player has the forest aura effect they will see the things nearby.
+    // The entities get added to the list only when the player has said effect. So they must have the forest light and stuff.
+    // The only player that will see the entities glowing is the client player
 
     @Override
     public void onInitializeClient() {
-       ActivationKey.register();
-       registerLightReadyPacket();
-       registerPlayRenderEffectPacket();
-       registerWindLightVelocityPacket();
-       registerConfigOptionsSyncPacket();
+        ActivationKey.register();
+        registerLightReadyPacket();
+        registerPlayRenderEffectPacket();
+        registerWindLightVelocityPacket();
+        registerConfigOptionsSyncPacket();
+        registerGlowingEntitiesPacket();
+        registerParticlesRenderer();
+        LightShaders.registerShaders();
 
-       ClientCommandRegistrationCallback.EVENT.register(ClientLightCommands::registerCommands);
-       event_handler.registerRenderEvent();
-       event_handler.registerRunesRenderer();
-       ParticleFactoryRegistry.getInstance().register(LightParticles.HEALLIGHT_PARTICLE, LightTypeParticleV3.Factory::new);
-       ParticleFactoryRegistry.getInstance().register(LightParticles.DEFENSELIGHT_PARTICLE, LightTypeParticleV3.Factory::new);
-       ParticleFactoryRegistry.getInstance().register(LightParticles.STRENGTHLIGHT_PARTICLE, LightTypeParticleV3.Factory::new);
-
-        ParticleFactoryRegistry.getInstance().register(LightParticles.BLAZINGLIGHT_PARTICLE, LightTypeParticleV3.Factory::new);
-        ParticleFactoryRegistry.getInstance().register(LightParticles.FROSTLIGHT_PARTICLE, LightTypeParticleV3.Factory::new);
-        ParticleFactoryRegistry.getInstance().register(LightParticles.EARTHENLIGHT_PARTICLE, LightTypeParticleV3.Factory::new);
-        ParticleFactoryRegistry.getInstance().register(LightParticles.WINDLIGHT_PARTICLE, LightTypeParticleV3.Factory::new);
-        ParticleFactoryRegistry.getInstance().register(LightParticles.AQUALIGHT_PARTICLE, LightTypeParticleV3.Factory::new);
-
-        ParticleFactoryRegistry.getInstance().register(LightParticles.FROGLIGHT_PARTICLE, LightTypeParticleV3.Factory::new);
-
-        ParticleFactoryRegistry.getInstance().register(LightParticles.LIGHT_PARTICLE, LightParticle.Factory::new);
-        ParticleFactoryRegistry.getInstance().register(LightParticles.SHINE_PARTICLE, LightParticle.Factory::new);
-
+        ClientCommandRegistrationCallback.EVENT.register(ClientLightCommands::registerCommands);
+        event_handler.registerRenderEvent();
+        event_handler.registerRunesRenderer();
 
         BlockRenderLayerMap.INSTANCE.putBlock(LightBlocks.FROZEN_PLAYER_TOP_BLOCK, RenderLayer.getCutout());
         BlockRenderLayerMap.INSTANCE.putBlock(LightBlocks.FROZEN_PLAYER_BOTTOM_BLOCK, RenderLayer.getCutout());
@@ -120,7 +121,7 @@ public class LightWithinClient implements ClientModInitializer {
             }
 
 
-       }));
+        }));
     }
 
     public static boolean isLightReady(){
@@ -152,6 +153,32 @@ public class LightWithinClient implements ClientModInitializer {
 
     public static boolean isAutoActivationAllowed(){
         return allowAutoActivation;
+    }
+
+    public static List<UUID> getEntitiesGlowingForPlayer() {
+        return entitiesGlowingForPlayer;
+    }
+
+    public void registerParticlesRenderer(){
+        ParticleFactoryRegistry.getInstance().register(LightParticles.HEALLIGHT_PARTICLE, LightTypeParticleV3.Factory::new);
+        ParticleFactoryRegistry.getInstance().register(LightParticles.DEFENSELIGHT_PARTICLE, LightTypeParticleV3.Factory::new);
+        ParticleFactoryRegistry.getInstance().register(LightParticles.STRENGTHLIGHT_PARTICLE, LightTypeParticleV3.Factory::new);
+
+        ParticleFactoryRegistry.getInstance().register(LightParticles.BLAZINGLIGHT_PARTICLE, LightTypeParticleV3.Factory::new);
+        ParticleFactoryRegistry.getInstance().register(LightParticles.FROSTLIGHT_PARTICLE, LightTypeParticleV3.Factory::new);
+        ParticleFactoryRegistry.getInstance().register(LightParticles.EARTHENLIGHT_PARTICLE, LightTypeParticleV3.Factory::new);
+        ParticleFactoryRegistry.getInstance().register(LightParticles.WINDLIGHT_PARTICLE, LightTypeParticleV3.Factory::new);
+        ParticleFactoryRegistry.getInstance().register(LightParticles.AQUALIGHT_PARTICLE, LightTypeParticleV3.Factory::new);
+        ParticleFactoryRegistry.getInstance().register(LightParticles.FOREST_AURA_LIGHT_PARTICLE, LightTypeParticleV3.Factory::new);
+        ParticleFactoryRegistry.getInstance().register(LightParticles.THUNDER_AURA_LIGHT_PARTICLE, LightTypeParticleV3.Factory::new);
+        ParticleFactoryRegistry.getInstance().register(LightParticles.FROGLIGHT_PARTICLE, LightTypeParticleV3.Factory::new);
+
+        ParticleFactoryRegistry.getInstance().register(LightParticles.LIGHT_PARTICLE, LightParticle.Factory::new);
+        ParticleFactoryRegistry.getInstance().register(LightParticles.SHINE_PARTICLE, LightParticle.Factory::new);
+
+        ParticleFactoryRegistry.getInstance().register(LightParticles.LIGHTNING_PARTICLE, LightningParticle.Factory::new);
+
+        ParticleFactoryRegistry.getInstance().register(LightParticles.COLORED_PUFF_PARTICLE, ColoredPuffParticle.Factory::new);
     }
 
     /**How much should a player have the opportunity to press the button in seconds
@@ -231,7 +258,6 @@ public class LightWithinClient implements ClientModInitializer {
                             if(targetId == -1){
                                 IRenderEffectsEntity player = (IRenderEffectsEntity) client.player;
                                 player.lightWithin$renderEffect(effect, (int) (4.5*20));
-                                client.player.playSound(LightSounds.LIGHT_CHARGED, 0.7f, 0.7f);
                             }else{
                                 Entity target = client.player.getWorld().getEntityById(targetId);
                                 if(target == null){
@@ -239,13 +265,20 @@ public class LightWithinClient implements ClientModInitializer {
                                     return;
                                 }
                                 ((IRenderEffectsEntity)target).lightWithin$renderEffect(effect, (int) (4.5*20));
-                                if(client.world != null){
-                                    client.world.playSound(target.getPos().getX(), target.getPos().getY(), target.getPos().getZ(), LightSounds.LIGHT_CHARGED, SoundCategory.PLAYERS, 0.5f, 0.7f, true);
+                            }
+                        }else if(effect.equals(RenderEffect.FORCED_LIGHT_RAYS)){
+                            if(targetId == -1){
+                                IRenderEffectsEntity player = (IRenderEffectsEntity) client.player;
+                                player.lightWithin$renderEffect(effect, (int) (4.5*20));
+                                //TODO add a better "error/fatigue"ish sound instead
+                                //client.player.playSound(LightSounds.LIGHT_CHARGED, 0.7f, 0.7f);
+                            }else{
+                                Entity target = client.player.getWorld().getEntityById(targetId);
+                                if(target == null){
+                                    LOGGER.error("Error! The entity got from the ID in the PlayRenderEffectPacket is null!");
+                                    return;
                                 }
-                                if(target.equals(client.player)){
-                                    client.player.playSound(LightSounds.LIGHT_CHARGED, 0.5f, 0.7f);
-                                }
-
+                                ((IRenderEffectsEntity)target).lightWithin$renderEffect(effect, (int) (4.5*20));
                             }
 
                         }
@@ -256,7 +289,7 @@ public class LightWithinClient implements ClientModInitializer {
 
                         else if(effect.equals(RenderEffect.RUNES)){
                             event_handler.renderRunes();
-                            event_handler.playLightSound(LightWithin.LIGHT_COMPONENT.get(client.player).getType());
+                            //event_handler.playLightSound(LightWithin.LIGHT_COMPONENT.get(client.player).getType());
                         }
 
 
@@ -309,4 +342,75 @@ public class LightWithinClient implements ClientModInitializer {
             });
         }));
     }
+
+    /** Sets some entities glowing for the player when the packet is received*/
+    private void registerGlowingEntitiesPacket(){
+        LOGGER.debug("Registering glowing entities packet...");
+        ClientPlayNetworking.registerGlobalReceiver(GlowEntitiesPacketS2C.ID, ((client, handler, buf, responseSender) -> {
+            List<Pair<UUID, ForestAuraRelation>> results = GlowEntitiesPacketS2C.read(buf);
+
+            client.execute(() -> {
+                try{
+                    if(results == null){
+                        LOGGER.error("The glowing entities list received is empty!");
+                        return;
+                    }if(client.player == null){
+                        LOGGER.error("The client player is null!");
+                        return;
+                    }else if(results.size() == 1 && results.get(0).getFirst().equals(new UUID(0,0))){
+                        //Clears CGL exclusive colors on client side.
+                        if(FabricLoader.getInstance().isModLoaded("coloredglowlib")){
+                            entitiesGlowingForPlayer.forEach(uuid -> {
+                                Entity entity = null;
+                                for(Entity entity1 : client.player.clientWorld.getEntities()){
+                                    if(entity1.getUuid().equals(uuid)){
+                                        entity = entity1;
+                                    }
+                                }
+                                if(entity != null){
+                                    CGLCompat.getLib().clearExclusiveColorFor(entity, client.player, false);
+                                }
+                            });
+                        }
+
+                        entitiesGlowingForPlayer.clear();
+                        return;
+                    }
+                    //If nothing else, it means it's ok to make them glow:
+
+                    results.forEach(uuidRelationPair -> {
+                        entitiesGlowingForPlayer.add(uuidRelationPair.getFirst());
+                        if(FabricLoader.getInstance().isModLoaded("coloredglowlib")){
+
+                            Entity entity = null;
+                            for(Entity entity1 : client.player.clientWorld.getEntities()){
+                                if(entity1.getUuid().equals(uuidRelationPair.getFirst())){
+                                    entity = entity1;
+                                }
+                            }
+                            if(entity == null){
+                                LOGGER.error("Error! Can't find entity with uuid: {}", uuidRelationPair.getFirst());
+                                return;
+                            }
+
+                            if(uuidRelationPair.getSecond().equals(ForestAuraRelation.ALLY)){
+                                CGLCompat.getLib().setExclusiveColorFor(entity, ClientConfig.FORESTAURA_ALLY_COLOR, client.player);
+                            }else if(uuidRelationPair.getSecond().equals(ForestAuraRelation.ENEMY)){
+                                CGLCompat.getLib().setExclusiveColorFor(entity, ClientConfig.FORESTAURA_ENEMY_COLOR, client.player);
+                            }else{
+                                CGLCompat.getLib().setExclusiveColorFor(entity, ForestAuraLight.COLOR, client.player);
+                            }
+                        }
+                    } );
+
+                }catch (NoSuchElementException e){
+                    LOGGER.warn("No value in the packet, probably not a big problem");
+                }catch (Exception e){
+                    LOGGER.error("There was an error while getting the packet!");
+                    e.printStackTrace();
+                }
+            });
+        }));
+    }
+
 }

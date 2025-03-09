@@ -1,4 +1,4 @@
-package me.emafire003.dev.lightwithin.mixin;
+package me.emafire003.dev.lightwithin.mixin.light_triggers;
 
 import me.emafire003.dev.lightwithin.events.EntityAttackEntityEvent;
 import me.emafire003.dev.lightwithin.status_effects.LightEffects;
@@ -28,6 +28,7 @@ public abstract class EntityAttackEntityMixin{
     //Other stuff, AKA depth strider for AQUA self/allies
     @ModifyVariable(method = "travel", at = @At("STORE"), ordinal = 2)
     public float applyWaterSpeedAqua(float h){
+        //noinspection ReassignedVariable
         if(h == 0 && ((LivingEntity)(Object)this).hasStatusEffect(LightEffects.WATER_SLIDE)){
             h = 0.7f;
         }

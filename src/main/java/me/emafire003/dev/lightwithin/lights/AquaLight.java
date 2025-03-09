@@ -13,6 +13,7 @@ import me.emafire003.dev.lightwithin.util.SpawnUtils;
 import me.emafire003.dev.lightwithin.util.TargetType;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.enchantment.Enchantments;
@@ -33,10 +34,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.Potions;
+import net.minecraft.registry.RegistryKeys;
+import net.minecraft.registry.tag.TagKey;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 
@@ -49,6 +53,10 @@ public class AquaLight extends InnerLight {
 
     public static final Item INGREDIENT = Items.SEAGRASS;
     public static final Potion INGREDIENT_V = Potions.WATER;
+
+    public static final TagKey<Block> AQUA_TRIGGER_BLOCKS = TagKey.of(RegistryKeys.BLOCK, new Identifier(MOD_ID, "aqua_trigger_blocks"));
+    public static final TagKey<Item> AQUA_TRIGGER_ITEMS = TagKey.of(RegistryKeys.ITEM, new Identifier(MOD_ID, "aqua_trigger_items"));
+
 
     public AquaLight(List<LivingEntity> targets, double cooldown_time, double power_multiplier, int duration, String color, PlayerEntity caster, boolean rainbow_col) {
         super(targets, cooldown_time, power_multiplier, duration, color, caster, rainbow_col);
@@ -99,7 +107,7 @@ public class AquaLight extends InnerLight {
         }
 
 
-        caster.getWorld().playSound(caster, caster.getBlockPos(), LightSounds.AQUA_LIGHT, SoundCategory.PLAYERS, 1, 1);
+        caster.getWorld().playSound(null, BlockPos.ofFloored(caster.getPos()), LightSounds.AQUA_LIGHT, SoundCategory.PLAYERS, 1f, 1f);
         LightComponent component = LIGHT_COMPONENT.get(caster);
 
         //ALL section (drowneds)
@@ -194,7 +202,7 @@ public class AquaLight extends InnerLight {
                             target.getWorld().spawnEntity(lightning);
                         }
                         tridentEntity.pickupType = PersistentProjectileEntity.PickupPermission.DISALLOWED;
-                        target.playSound(SoundEvents.ITEM_TRIDENT_RETURN, 1, 0.7f);
+                        caster.getWorld().playSound(null, BlockPos.ofFloored(target.getPos()), SoundEvents.ITEM_TRIDENT_RETURN, SoundCategory.PLAYERS, 1, 0.7f);
                         target.getWorld().spawnEntity(tridentEntity);
                     }
                 }

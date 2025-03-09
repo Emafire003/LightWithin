@@ -7,6 +7,10 @@
   "effect.lightwithin.sturdy_rock": "Sturdy Rock",
   "effect.lightwithin.water_slide": "Water Slide",
   "effect.lightwithin.water_cascade": "Water Cascade",
+  "effect.lightwithin.forest_aura": "Forest Aura",
+  "effect.lightwithin.thunder_aura": "Thunder Aura",
+  "effect.lightwithin.storm_aura": "Storm Aura",
+  "effect.lightwithin.intoxication": "Intoxication",
   "item.lightwithin.luxintus_berry": "Luxintus Berry",
   "item.lightwithin.luxmutua_berry": "Luxmutua Berry",
   "item.lightwithin.luxcognita_berry": "Luxcognita Berry",
@@ -59,6 +63,8 @@
   "light.description.earthen": "Your light draws its power from the earth around you",
   "light.description.wind": "Your light shines in the wind",
   "light.description.aqua": "Your light best reflects upon watery surfaces",
+  "light.description.forest_aura": "You are one with the forest",
+  "light.description.thunder_aura": "You shine like thunder",
   "light.description.frog": "*croak* Wait what?! Frogs?!",
 
   "light.description.target.self": "Your light shall guide you and you alone!",
@@ -104,6 +110,15 @@
   "light.description.activation.aqua.self": "Let me swiftly move on a watery carpet!",
   "light.description.activation.aqua.allies": "Let us swiftly move on a watery carpet!",
 
+  "light.description.activation.forest_aura.all": "The forest grants you its power!",
+  "light.description.activation.forest_aura.self": "The forest will become one with you!",
+
+  "light.description.negated.forest_aura": "Your light sensed its kin, and shielded you from its tricks!",
+
+  "light.description.activation.thunder_aura.all": "The storm lends you its greatest weapon!",
+  "light.description.activation.thunder_aura.allies": "The Thunder shall protect your allies!",
+  "light.description.activation.thunder_aura.variant": "The Thunder has come to protect its children!",
+
   "config.lightwithin.name": "LightWithin client options",
   "config.lightwithin.category_name": "Options",
   "config.lightwithin.description": "A settings menu to manage what is rendered on the client",
@@ -126,6 +141,8 @@
   "config.lightwithin.light_ready_scale_factor.tooltip": "Change this value to make the icon bigger or smaller",
   "config.lightwithin.light_charge_scale_factor": "LightCharge icon scale factor",
   "config.lightwithin.light_charge_scale_factor.tooltip": "Change this value to make the icon bigger or smaller",
+  "config.lightwithin.runes_scale_factor": "Runes scale factor",
+  "config.lightwithin.runes_scale_factor.tooltip": "Change this value to make the runes bigger or smaller",
 
   "config.lightwithin.hide_light_charge_icon": "Hide LightCharge icon",
   "config.lightwithin.hide_light_charge_icon.tooltip": "Set this to true to hide the light charge icon. The Ready and error one will still display",
@@ -148,10 +165,41 @@
   "config.lightwithin.auto_light_activation": "Automatic Light Activation",
   "config.lightwithin.auto_light_activation.tooltip": "Enabling this will activate your light as soon as it's ready. WARNING: it may be disabled by the server!",
 
+  "config.lightwithin.forestaura_enemy_color": "ForestAura Enemy Color",
+  "config.lightwithin.forestaura_enemy_color.tooltip": "The color that will indicate enemies with the forest aura vision. You must install ColoredGlowLib to see the effect.",
+  "config.lightwithin.forestaura_ally_color": "ForestAura Ally Color",
+  "config.lightwithin.forestaura_ally_color.tooltip": "The color that will indicate allies with the forest aura vision. You must install ColoredGlowLib to see the effect.",
+  "config.lightwithin.forestaura_intoxication_shader": "ForestAura Intoxication Shader",
+  "config.lightwithin.forestaura_intoxication_shader.tooltip": "Accessibility setting. Disable this if you don't want to see the Intoxication effect shader (it may give motion sickness)",
+  "config.lightwithin.intoxication_shader_warning": "Intoxication Shader Warning",
+  "config.lightwithin.intoxication_shader_warning.tooltip": "Accessibility setting. Turn this off to not see the warning message every time the intoxication effect is applied to you",
+
+  "audio.lightwithin.heal_light_triggered": "Heal Light has triggered",
+  "audio.lightwithin.defense_light_triggered": "Defense Light has triggered",
+  "audio.lightwithin.strength_light_triggered": "Strength Light has triggered",
+  "audio.lightwithin.blazing_light_triggered": "Blazing Light has triggered",
+  "audio.lightwithin.frost_light_triggered": "Frost Light has triggered",
+  "audio.lightwithin.earthen_light_triggered": "Earthen Light has triggered",
+  "audio.lightwithin.wind_light_triggered": "Wind Light has triggered",
+  "audio.lightwithin.aqua_light_triggered": "Auqa Light has triggered",
+  "audio.lightwithin.forest_aura_light_triggered": "ForestAura Light has triggered",
+  "audio.lightwithin.thunder_aura_light_triggered": "ThunderAura Light has triggered",
+  "audio.lightwithin.light_ready_to_activate": "A light is ready to activate",
+  "audio.lightwithin.light_used_charge": "A light charge has been used",
+  "audio.lightwithin.light_error": "Light error",
+  "audio.lightwithin.luxcognita_display": "Luxcognita berry activated",
+  "audio.lightwithin.light_critical_hit": "Light critical hit",
+  "audio.lightwithin.forest_puff_bursting": "ForestAura puffs bursting",
+  "audio.lightwithin.thunder_aura_zap": "ThunderAura zaps",
+
+
   "screen.luxcognita_dialogue.lightTypeButton": "About LightType",
   "screen.luxcognita_dialogue.lightTypeIngredientButton": "About LightType Ingredient",
   "screen.luxcognita_dialogue.lightTargetButton": "About LightTarget",
   "screen.luxcognita_dialogue.lightTargetIngredientButton": "About LightTarget Ingredient",
-  "screen.luxcognita_dialogue.luxcognitaTalk": "What wisdom shall I bestow upon you?"
+  "screen.luxcognita_dialogue.luxcognitaTalk": "What wisdom shall I bestow upon you?",
+
+  "lightwithin.warning.general": "WARNING!",
+  "lightwithin.warning.intoxication_shader.1": "If the shader of this effect gives you motion sickness you can turn it off in the config menu!"
 
 }

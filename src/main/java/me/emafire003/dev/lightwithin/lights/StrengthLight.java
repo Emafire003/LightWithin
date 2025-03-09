@@ -19,6 +19,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
+import net.minecraft.util.math.BlockPos;
 
 import java.util.List;
 
@@ -75,7 +76,7 @@ public class StrengthLight extends InnerLight {
             }
         }
 
-        caster.getWorld().playSound(caster.getX(), caster.getY(), caster.getZ(), LightSounds.STRENGTH_LIGHT, SoundCategory.PLAYERS, 1, 1, true);
+        caster.getWorld().playSound(null, BlockPos.ofFloored(caster.getPos()), LightSounds.STRENGTH_LIGHT, SoundCategory.PLAYERS, 1f, 1f);
         for(LivingEntity target : this.targets){
             //target.playSound(LightSounds.STRENGTH_LIGHT, 1, 1);
             if(!caster.getWorld().isClient){

@@ -18,6 +18,8 @@ public class Tests {
         int fifth = 0;
         int error = 0;
         List<TargetType> list = List.of(TargetType.SELF, TargetType.ALLIES, TargetType.ENEMIES, TargetType.ALL, TargetType.VARIANT);
+        //List<TargetType> list = List.of(TargetType.SELF, TargetType.SELF, TargetType.ALLIES, TargetType.ALLIES, TargetType.ENEMIES);
+
         UUID id = UUID.randomUUID();
         for(int i = 0; i<run_times; i++){
             String[] id_bits = id.toString().split("-");
@@ -56,6 +58,8 @@ public class Tests {
         int aqua = 0;
         int wind = 0;
         int frog = 0;
+        int forest = 0;
+        int thunder = 0;
         int error = 0;
         UUID id = UUID.randomUUID();
         for(int i = 0; i<run_times; i++){
@@ -77,6 +81,10 @@ public class Tests {
                 aqua++;
             }else if(type.equals(InnerLightType.WIND)){
                 wind++;
+            }else if(type.equals(InnerLightType.FOREST_AURA)){
+                forest++;
+            }else if(type.equals(InnerLightType.THUNDER_AURA)){
+                thunder++;
             }else if(type.equals(InnerLightType.FROG)){
                 frog++;
             }else{
@@ -94,6 +102,8 @@ public class Tests {
         p.sendMessage(Text.literal(("Aqua: §a" + aqua + " §rpercent: §b" + (double) aqua*100/run_times)));
         p.sendMessage(Text.literal(("Wind: §a" + wind + " §rpercent: §b" + (double) wind*100/run_times)));
         p.sendMessage(Text.literal(("Frog: §a" + frog + " §rpercent: §b" + (double) frog*100/run_times)));
+        p.sendMessage(Text.literal(("Forest: §a" + forest + " §rpercent: §b" + (double) forest*100/run_times)));
+        p.sendMessage(Text.literal(("Thunder: §a" + thunder + " §rpercent: §b" + (double) thunder*100/run_times)));
         p.sendMessage(Text.literal(("Error: §c" + error)));
     }
 

@@ -15,11 +15,14 @@ import me.emafire003.dev.lightwithin.util.CheckUtils;
 import me.emafire003.dev.lightwithin.util.TargetType;
 import me.emafire003.dev.structureplacerapi.StructurePlacerAPI;
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.block.Block;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
+import net.minecraft.registry.RegistryKeys;
+import net.minecraft.registry.tag.TagKey;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
@@ -36,6 +39,10 @@ import java.util.stream.Stream;
 import static me.emafire003.dev.lightwithin.LightWithin.*;
 
 public class FrostLight extends InnerLight {
+
+    public static final TagKey<Block> FROST_TRIGGER_BLOCKS = TagKey.of(RegistryKeys.BLOCK, new Identifier(MOD_ID, "frost_trigger_blocks"));
+    public static final TagKey<Item> FROST_TRIGGER_ITEMS = TagKey.of(RegistryKeys.ITEM, new Identifier(MOD_ID, "frost_trigger_items"));
+
 
     public static final Item INGREDIENT = Items.SNOWBALL;
     public FrostLight(List<LivingEntity> targets, double cooldown_time, double power_multiplier, int duration, String color, PlayerEntity caster, boolean rainbow_col) {
@@ -89,7 +96,8 @@ public class FrostLight extends InnerLight {
         }
 
 
-        caster.getWorld().playSound(caster.getX(), caster.getY(), caster.getZ(), LightSounds.FROST_LIGHT, SoundCategory.PLAYERS, 1, 1, true);
+        caster.getWorld().playSound(null, BlockPos.ofFloored(caster.getPos()), LightSounds.FROST_LIGHT, SoundCategory.PLAYERS, 1f, 1f);
+
         if(!caster.getWorld().isClient && (CheckUtils.checkGriefable((ServerPlayerEntity) caster) || Config.NON_FUNDAMENTAL_STRUCTURE_GRIEFING) && (component.getTargets().equals(TargetType.ALL) || component.getTargets().equals(TargetType.ENEMIES))) {
             StructurePlacerAPI placer = new StructurePlacerAPI((ServerWorld) caster.getWorld(), new Identifier(MOD_ID, "frost_light"), caster.getBlockPos(), BlockMirror.NONE, BlockRotation.NONE, true, 1.0f, new BlockPos(-4, -3, -3));
             if(Config.REPLACEABLE_STRUCTURES){
@@ -101,12 +109,12 @@ public class FrostLight extends InnerLight {
         }
 
         if(!caster.getWorld().isClient()){
+            LightParticlesUtil.spawnLightTypeParticle(LightParticles.FROSTLIGHT_PARTICLE, (ServerWorld) caster.getWorld(), caster.getPos());
             PrecompiledParticleEffects.spawnSnowflake((ServerWorld) caster.getWorld(), caster.getPos().add(0, 2, 0));
-
         }
 
         for(LivingEntity target : this.targets){
-            target.playSound(LightSounds.FROST_LIGHT, 1, 1);
+            //target.playSound(LightSounds.FROST_LIGHT, 1, 1);
 
             if((component.getTargets().equals(TargetType.SELF) || component.getTargets().equals(TargetType.ALLIES))){
                 if(target.equals(caster) && component.getTargets().equals(TargetType.ALLIES)){
@@ -136,7 +144,6 @@ public class FrostLight extends InnerLight {
             }else{
                 if(!caster.getWorld().isClient){
                     LightParticlesUtil.spawnLightTypeParticle(LightParticles.FROSTLIGHT_PARTICLE, (ServerWorld) caster.getWorld(), target.getPos());
-                    LightParticlesUtil.spawnLightTypeParticle(LightParticles.FROSTLIGHT_PARTICLE, (ServerWorld) caster.getWorld(), caster.getPos());
 
                     target.addStatusEffect(new StatusEffectInstance(LightEffects.FROST, caster.getStatusEffect(LightEffects.LIGHT_ACTIVE).getDuration(), 0, false, false));
 
@@ -145,9 +152,7 @@ public class FrostLight extends InnerLight {
                     Box box =  target.getDimensions(target.getPose()).getBoxAt(target.getPos());
                     box.expand(1);
                     Stream<BlockPos> stream_pos = BlockPos.stream(box);
-                    stream_pos.forEach( (pos) -> {
-                        caster.getWorld().setBlockState(pos, LightBlocks.CLEAR_ICE.getDefaultState());
-                    });
+                    stream_pos.forEach( (pos) -> caster.getWorld().setBlockState(pos, LightBlocks.CLEAR_ICE.getDefaultState()));
                 }
             }
 

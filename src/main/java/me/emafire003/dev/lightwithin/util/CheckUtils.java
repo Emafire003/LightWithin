@@ -1,5 +1,6 @@
 package me.emafire003.dev.lightwithin.util;
 
+import me.emafire003.dev.lightwithin.LightWithin;
 import me.emafire003.dev.lightwithin.compat.argonauts.ArgonautsChecker;
 import me.emafire003.dev.lightwithin.compat.factions.FactionChecker;
 import me.emafire003.dev.lightwithin.compat.flan.FlanCompat;
@@ -8,38 +9,41 @@ import me.emafire003.dev.lightwithin.compat.open_parties_and_claims.OPACChecker;
 import me.emafire003.dev.lightwithin.compat.yawp.YawpCompat;
 import me.emafire003.dev.lightwithin.component.SummonedByComponent;
 import me.emafire003.dev.lightwithin.config.Config;
-import me.emafire003.dev.lightwithin.config.TriggerConfig;
+import me.emafire003.dev.lightwithin.lights.AquaLight;
+import me.emafire003.dev.lightwithin.lights.BlazingLight;
+import me.emafire003.dev.lightwithin.lights.FrostLight;
+import me.emafire003.dev.lightwithin.lights.WindLight;
+import me.emafire003.dev.lightwithin.lights.ThunderAuraLight;
 import me.emafire003.dev.lightwithin.status_effects.LightEffects;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.Block;
+import net.minecraft.block.Blocks;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.DamageUtil;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.entity.damage.DamageTypes;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectCategory;
-import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.passive.PassiveEntity;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.registry.Registries;
 import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.tag.BlockTags;
-import net.minecraft.registry.tag.DamageTypeTags;
-import net.minecraft.registry.tag.TagKey;
+import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.registry.tag.*;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.state.property.Properties;
 import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
+import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -79,6 +83,27 @@ public class CheckUtils {
         }
 
         return enemies >= Config.SURROUNDED_AMOUNT;
+    }
+
+    /**Checks if an entity is surrounded by allied entities
+     * <p>
+     * If not enabled returns true to not mess with the &&
+     *
+     * @param entity The entity that could be surrounded*/
+    public static boolean checkSurroundedByAllies(@NotNull LivingEntity entity){
+        if(!Config.CHECK_SURROUNDED_BY_ALLIES){
+            return false;
+        }
+
+        List<PlayerEntity> players = entity.getWorld().getEntitiesByClass(PlayerEntity.class, new Box(entity.getBlockPos()).expand(Config.SURROUNDED_DISTANCE), (entity1 -> true));
+        int allies = 0;
+        for(PlayerEntity p : players){
+            if(CheckAllies.checkAlly(p, entity)){
+                allies++;
+            }
+        }
+
+        return allies >= Config.SURROUNDED_AMOUNT;
 
     }
 
@@ -190,7 +215,6 @@ public class CheckUtils {
         dmg += EnchantmentHelper.getAttackDamage(attacker.getMainHandStack(), target.getGroup());
         if(target instanceof PlayerEntity){
             target.sendMessage(Text.literal("The non calcl damage is §6" +dmg));
-
         }
         return dmg;
     }
@@ -285,7 +309,7 @@ public class CheckUtils {
      * */
     @Deprecated
     public static boolean checkAllyHealthOld(@NotNull PlayerEntity player, Entity attacker, int health_percent){
-        List<LivingEntity> entities = player.getWorld().getEntitiesByClass(LivingEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amount), (entity1 -> true));
+        List<LivingEntity> entities = player.getWorld().getEntitiesByClass(LivingEntity.class, new Box(player.getBlockPos()).expand(LightWithin.getBoxExpansionAmount()), (entity1 -> true));
         int ent_number = 0;
         //I need to this to prevent a ConcurrentModificationError
         List<LivingEntity> team_entities = new ArrayList<>();
@@ -316,7 +340,7 @@ public class CheckUtils {
      * @param health_percent The percentage (15, 25, 70) below which the target is in danger (hence light activatable)
      * */
     public static boolean checkAllyHealth(@NotNull PlayerEntity player, Entity attacker, int health_percent){
-        List<LivingEntity> entities = player.getWorld().getEntitiesByClass(LivingEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amount), (entity1 -> true));
+        List<LivingEntity> entities = player.getWorld().getEntitiesByClass(LivingEntity.class, new Box(player.getBlockPos()).expand(LightWithin.getBoxExpansionAmount()), (entity1 -> true));
         int n_allies_low_health = 0;
         //loops through the entities near the player, if the entities are in the same team as the player
         //and they are not the entity that has been hit then add them to the team_entities and check if their health is ok
@@ -344,7 +368,7 @@ public class CheckUtils {
      * @param health_percent The percentage (15, 25, 70) below which the target is in danger (hence light activatable)
      * */
     public static boolean checkPassiveHealth(PlayerEntity player, Entity entity, int health_percent){
-        List<PassiveEntity> entities = entity.getWorld().getEntitiesByClass(PassiveEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amount), (entity1 -> true));
+        List<PassiveEntity> entities = entity.getWorld().getEntitiesByClass(PassiveEntity.class, new Box(player.getBlockPos()).expand(LightWithin.getBoxExpansionAmount()), (entity1 -> true));
         for(PassiveEntity ent : entities){
             if(ent.getHealth() <= (ent.getMaxHealth())*health_percent/100){
                 return true;
@@ -441,43 +465,14 @@ public class CheckUtils {
         }
     }
 
-    public static List<Item> toItemList(List<String> list){
-        List<Item> items = new ArrayList<>();
-        for(String id : list){
-            items.add(Registries.ITEM.get(new Identifier(id)));
-        }
-        return items;
-    }
-
-    public static List<String> toItemStringList(List<Item> list){
-        List<String> items = new ArrayList<>();
-        for(Item item : list){
-            items.add(Registries.ITEM.getId(item).toString());
-        }
-        return items;
-    }
-
-    public static List<Block> toBlockList(List<String> list){
-        List<Block> blocks = new ArrayList<>();
-        for(String id : list){
-            blocks.add(Registries.BLOCK.get(new Identifier(id)));
-        }
-        return blocks;
-    }
-
-    public static List<String> toBlockStringList(List<Block> list){
-        List<String> blocks = new ArrayList<>();
-        for(Block block : list){
-            blocks.add(Registries.BLOCK.getId(block).toString());
-        }
-        return blocks;
-    }
-
-    public static boolean checkBlocksWithTags(PlayerEntity player, int rad, TagKey<?> tag){
-        //If the terrain under the player's feet is natural block (times 3 aka 3 blocks down), will create a moat,  if not a wall.
-        List<TagKey<Block>> tags = new ArrayList<>();
-
+    /**Checks for the presence of a block in the radius around the player and have the selected tag
+     *
+     * @param player The player at the center of the blocks/the target
+     * @param rad The radius around the player to check for the blocks
+     * @param tag The block tagKey that the blocks need to have*/
+    public static boolean checkBlocksWithTag(PlayerEntity player, int rad, TagKey<Block> tag){
         BlockPos origin = player.getBlockPos();
+        boolean found = false;
         for(int y = -rad; y <= rad; y++)
         {
             for(int x = -rad; x <= rad; x++)
@@ -485,12 +480,12 @@ public class CheckUtils {
                 for(int z = -rad; z <= rad; z++)
                 {
                     BlockPos pos = origin.add(x, y, z);
-                    player.getWorld().getBlockState(pos).streamTags().forEach(tags::add);
+                    found = player.getWorld().getBlockState(pos).isIn(tag);
 
                 }
             }
         }
-        return tags.contains(tag);
+        return found;
     }
 
     /** Checks multiple blocks around a player
@@ -501,9 +496,8 @@ public class CheckUtils {
      * @param block_number How many blocks should have the tag in order to be ok
      * @param tag The tag that the blocks need to have
      * */
-    public static boolean checkMultipleBlocksWithTags(PlayerEntity player, int rad, int block_number, TagKey<?> tag){
+    public static boolean checkMultipleBlocksWithTags(PlayerEntity player, int rad, int block_number, TagKey<Block> tag){
         //If the terrain under the player's feet is natural block (times 3 aka 3 blocks down), will create a moat,  if not a wall.
-        List<TagKey<Block>> tags = new ArrayList<>();
         int number = 0;
         BlockPos origin = player.getBlockPos();
         for(int y = -rad; y <= rad; y++)
@@ -513,8 +507,7 @@ public class CheckUtils {
                 for(int z = -rad; z <= rad; z++)
                 {
                     BlockPos pos = origin.add(x, y, z);
-                    player.getWorld().getBlockState(pos).streamTags().forEach(tags::add);
-                    if(tags.contains(tag)){
+                    if(player.getWorld().getBlockState(pos).isIn(tag)){
                         number++;
                     }
                 }
@@ -567,16 +560,16 @@ public class CheckUtils {
      * under the player's feet.
      *
      * @param player The player for which we are performing the check for
-     * @param blocks A list of blocks that if found, will return a positive match
      * @param rad The radius in block in which to check (The lower, the better for the performance)
+     * @param blocksTagKey A tag of blocks that if found, will return a positive match
      * */
-    public static boolean checkWaterLogggedOrListBlocks(PlayerEntity player, List<Block> blocks, int rad){
+    public static boolean checkWaterLoggedOrTag(PlayerEntity player, int rad, TagKey<Block> blocksTagKey){
         if(!Config.SHOULD_CHECK_BLOCKS){
             BlockPos pos = player.getBlockPos().add(0, -1, 0);
             if(player.getWorld().getBlockState(pos).getProperties().contains(Properties.WATERLOGGED)){
                 return player.getWorld().getBlockState(pos).get(Properties.WATERLOGGED);
             }
-            return blocks.contains(player.getWorld().getBlockState(pos).getBlock());
+            return player.getWorld().getBlockState(pos).isIn(blocksTagKey);
         }
 
         BlockPos origin = player.getBlockPos();
@@ -593,7 +586,7 @@ public class CheckUtils {
                             return true;
                         }
                     }
-                    if(blocks.contains(player.getWorld().getBlockState(pos).getBlock())){
+                    if(player.getWorld().getBlockState(pos).isIn(blocksTagKey)){
                         return true;
                     }
 
@@ -643,23 +636,100 @@ public class CheckUtils {
         //If no match has been found, return false.
     }
 
+    /** Checks for multiple blocks in a certain radius from the player pos
+     * if they match at least one from the given list.
+     * <p>
+     * If SHOULD_CHECK_BLOCKS from the config it's on false, it will only check the block
+     * under the player's feet.
+     *
+     * @param player The player for which we are performing the check for
+     * @param blockTagKey A tag of blocks that if found, will return a positive match
+     * @param rad The radius in block in which to check (The lower, the better for the performance)
+     * @param number The minimum number of blocks around the player needed for it to return true
+     * */
+    public static boolean checkMultipleBlocks(PlayerEntity player, TagKey<Block> blockTagKey, int rad, int number){
+        if(!Config.SHOULD_CHECK_BLOCKS){
+            BlockPos pos = player.getBlockPos().add(0, -1, 0);
+            if(player.getWorld().getBlockState(pos).isIn(blockTagKey)){
+                return true;
+            }
+        }
+        int n = 0;
+
+        BlockPos origin = player.getBlockPos();
+        for(int y = -rad; y <= rad; y++)
+        {
+            for(int x = -rad; x <= rad; x++)
+            {
+                for(int z = -rad; z <= rad; z++)
+                {
+                    BlockPos pos = origin.add(x, y, z);
+                    if(player.getWorld().getBlockState(pos).isIn(blockTagKey)){
+                        n++;
+                    }
+
+                }
+            }
+        }
+        return n >= number;
+        //If no match has been found, return false.
+    }
+
+    /** Checks for multiple blocks in a certain radius from the player pos
+     * if they match at least one from the given list.
+     * <p>
+     * If SHOULD_CHECK_BLOCKS from the config it's on false, it will only check the block
+     * under the player's feet.
+     *
+     * @param player The player for which we are performing the check for
+     * @param blockTagKey A tag of blocks that if found, will return a positive match
+     * @param rad The radius in block in which to check (The lower, the better for the performance)
+     * @param percent The minimum percent of blocks around the player needed for it to return true
+     * */
+    public static boolean checkMultipleBlocksPercent(PlayerEntity player, TagKey<Block> blockTagKey, int rad, double percent){
+        if(!Config.SHOULD_CHECK_BLOCKS){
+            BlockPos pos = player.getBlockPos().add(0, -1, 0);
+            if(player.getWorld().getBlockState(pos).isIn(blockTagKey)){
+                return true;
+            }
+        }
+        int n = 0;
+        int tot = 0;
+
+        BlockPos origin = player.getBlockPos();
+        for(int y = -rad; y <= rad; y++)
+        {
+            for(int x = -rad; x <= rad; x++)
+            {
+                for(int z = -rad; z <= rad; z++)
+                {
+                    BlockPos pos = origin.add(x, y, z);
+                    tot = tot+1;
+                    if(player.getWorld().getBlockState(pos).isIn(blockTagKey)){
+                        n++;
+                    }
+
+                }
+            }
+        }
+        return percent >= ( (double) (100 * n)/tot );
+    }
+
     /**Used to check if the player has something that can be considered a Heat Source
      * for the Blazing Light
      *
      * @param player The player to perform checks on*/
     public static boolean checkBlazing(PlayerEntity player){
-        List<Item> items = toItemList(TriggerConfig.BLAZING_TRIGGER_ITEMS);
         if(player.isOnFire()){
             return true;
         }
 
-        Item main = player.getMainHandStack().getItem();
-        Item off = player.getOffHandStack().getItem();
-        if(items.contains(main) || items.contains(off)){
+        ItemStack main = player.getMainHandStack();
+        ItemStack off = player.getOffHandStack();
+        if(main.isIn(BlazingLight.BLAZING_TRIGGER_ITEMS) || off.isIn(BlazingLight.BLAZING_TRIGGER_ITEMS)){
             return true;
         }
-
-        return checkBlocks(player, toBlockList(TriggerConfig.BLAZING_TRIGGER_BLOCKS), Config.TRIGGER_BLOCK_RADIUS);
+        return checkBlocksWithTag(player, Config.TRIGGER_BLOCK_RADIUS, BlazingLight.BLAZING_TRIGGER_BLOCKS);
     }
 
     /**Used to check if the player has something that can be considered a Cold Source
@@ -667,17 +737,16 @@ public class CheckUtils {
      *
      * @param player The player to perform checks on*/
     public static boolean checkFrost(PlayerEntity player){
-        List<Item> items = toItemList(TriggerConfig.FROST_TRIGGER_ITEMS);
         if(player.isFrozen()){
             return true;
         }
 
-        Item main = player.getMainHandStack().getItem();
-        Item off = player.getOffHandStack().getItem();
-        if(items.contains(main) || items.contains(off)){
+        ItemStack main = player.getMainHandStack();
+        ItemStack off = player.getOffHandStack();
+        if(main.isIn(FrostLight.FROST_TRIGGER_ITEMS) || off.isIn(FrostLight.FROST_TRIGGER_ITEMS)){
             return true;
         }
-        return checkBlocks(player, toBlockList(TriggerConfig.FROST_TRIGGER_BLOCKS), Config.TRIGGER_BLOCK_RADIUS);
+        return checkBlocksWithTag(player, Config.TRIGGER_BLOCK_RADIUS, FrostLight.FROST_TRIGGER_BLOCKS);
     }
 
     /**Used to check if the player can trigger the Earthen Light, aka if they have
@@ -711,7 +780,7 @@ public class CheckUtils {
             return true;
         }
 
-        return checkMultipleBlocks(player, toBlockList(TriggerConfig.WIND_TRIGGER_BLOCKS), Config.TRIGGER_BLOCK_RADIUS, 7);
+        return checkMultipleBlocksWithTags(player, Config.TRIGGER_BLOCK_RADIUS, 7, WindLight.WIND_TRIGGER_BLOCKS);
     }
 
 
@@ -719,17 +788,61 @@ public class CheckUtils {
      *
      * @param player The player to perform checks on*/
     public static boolean checkAqua(PlayerEntity player){
-        List<Item> items = toItemList(TriggerConfig.AQUA_TRIGGER_ITEMS);
         if(player.isTouchingWaterOrRain()){
             return true;
         }
 
-        Item main = player.getMainHandStack().getItem();
-        Item off = player.getOffHandStack().getItem();
-        if(items.contains(main) || items.contains(off)){
+        ItemStack main = player.getMainHandStack();
+        ItemStack off = player.getOffHandStack();
+        if(main.isIn(AquaLight.AQUA_TRIGGER_ITEMS) || off.isIn(AquaLight.AQUA_TRIGGER_ITEMS)){
             return true;
         }
-        return checkWaterLogggedOrListBlocks(player, toBlockList(TriggerConfig.AQUA_TRIGGER_BLOCKS), Config.TRIGGER_BLOCK_RADIUS);
+        return checkWaterLoggedOrTag(player, Config.TRIGGER_BLOCK_RADIUS, AquaLight.AQUA_TRIGGER_BLOCKS);
+    }
+
+    /**Used to check if the player has something that can be considered a ForestAura source
+     *
+     * @param player The player to perform checks on*/
+    public static boolean checkForestAura(PlayerEntity player){
+        RegistryEntry<Biome> biome = player.getWorld().getBiome(player.getBlockPos());
+        if(biome.isIn(BiomeTags.IS_FOREST) || biome.isIn(BiomeTags.IS_JUNGLE) || biome.isIn(BiomeTags.IS_TAIGA)){
+            return true;
+        }
+
+        ItemStack main = player.getMainHandStack();
+        ItemStack off = player.getOffHandStack();
+        return main.isIn(ItemTags.SAPLINGS) || off.isIn(ItemTags.SAPLINGS);
+    }
+
+    /**Used to check if the player is near some leaves
+     *
+     * @param player The player to perform checks on
+     * @param percent The minimum percent of blocks that need to be leaves around the player (0-100)
+     * */
+    public static boolean checkNearLeaves(PlayerEntity player, double percent){
+        return checkMultipleBlocksPercent(player, BlockTags.LEAVES, Config.TRIGGER_BLOCK_RADIUS, percent);
+    }
+
+    /**Used to check if the player has something that can be considered a ThunderAura source
+     *
+     * @param player The player to perform checks on*/
+    //TODO somehow make these datadriven/customizable at some point?
+    public static boolean checkThunderAura(PlayerEntity player){
+        if(checkThundering(player.getWorld())){
+            return true;
+        }
+        //If the player is standing on a is copper rod then lightning conditions met
+        if(player.getWorld().getBlockState(player.getBlockPos().down()).isOf(Blocks.LIGHTNING_ROD)
+            || player.getWorld().getBlockState(player.getBlockPos()).isOf(Blocks.LIGHTNING_ROD)){
+            return true;
+        }
+        if(checkRecentlyStruckByLightning(player)){
+            return true;
+        }
+
+        ItemStack main = player.getMainHandStack();
+        ItemStack off = player.getOffHandStack();
+        return main.isIn(ThunderAuraLight.THUNDER_AURA_TRIGGER_ITEMS) || off.isIn(ThunderAuraLight.THUNDER_AURA_TRIGGER_ITEMS);
     }
 
     public static boolean checkFalling(LivingEntity entity) {
@@ -758,18 +871,23 @@ public class CheckUtils {
             return target.hasStatusEffect(StatusEffects.POISON);
         }
         return false;
-
     }
 
-    public static boolean checkDebuffed(LivingEntity entity){
-        Collection<StatusEffectInstance> a = entity.getStatusEffects();
-        for(StatusEffectInstance status : a){
-            if(status.getEffectType().getCategory().equals(StatusEffectCategory.HARMFUL)){
-                return true;
-            }
-        }
-        return false;
+    /** Checks if there is currently a stormy weather in the selected world*/
+    public static boolean checkThundering(World world){
+        return world.isThundering();
     }
+
+    /** Checks if there is currently a rainy weather in the selected world*/
+    public static boolean checkRaining(World world){
+        return world.isRaining();
+    }
+
+    /**Checks if the most recent damage source done to an entity is a lightning bolt*/
+    public static boolean checkRecentlyStruckByLightning(LivingEntity entity){
+        return entity.getRecentDamageSource() != null && entity.getRecentDamageSource().isOf(DamageTypes.LIGHTNING_BOLT);
+    }
+
 
     /**Rerturn a list of the player's enemies in the area
      * for entity checks, also know as LightWithin.box_exapansion_amount
@@ -777,7 +895,7 @@ public class CheckUtils {
      * @param player The player used as the center of the area to search of its enemies*/
     public static List<LivingEntity> getEnemies(PlayerEntity player){
         List<LivingEntity> targets = new ArrayList<>();
-        List<LivingEntity> entities = player.getWorld().getEntitiesByClass(LivingEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amount), (entity1 -> true));
+        List<LivingEntity> entities = player.getWorld().getEntitiesByClass(LivingEntity.class, new Box(player.getBlockPos()).expand(LightWithin.getBoxExpansionAmount()), (entity1 -> true));
         for(LivingEntity ent : entities){
             if(ent instanceof HostileEntity && !CheckUtils.CheckAllies.checkAlly(player, ent)){
                 targets.add(ent);
@@ -795,7 +913,7 @@ public class CheckUtils {
      * @param entity The entity used as the center of the area to search of its enemies*/
     public static List<LivingEntity> getEnemies(LivingEntity entity){
         List<LivingEntity> targets = new ArrayList<>();
-        List<LivingEntity> entities = entity.getWorld().getEntitiesByClass(LivingEntity.class, new Box(entity.getBlockPos()).expand(box_expansion_amount), (entity1 -> true));
+        List<LivingEntity> entities = entity.getWorld().getEntitiesByClass(LivingEntity.class, new Box(entity.getBlockPos()).expand(LightWithin.getBoxExpansionAmount()), (entity1 -> true));
         for(LivingEntity ent : entities){
             if(ent instanceof HostileEntity && !CheckUtils.CheckAllies.checkAlly(entity, ent)){
                 targets.add(ent);
