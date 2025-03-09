@@ -1,42 +1,42 @@
 {
   "heal_light": {
-    "subtitle": "lightwithin.heal_light_triggered",
+    "subtitle": "audio.lightwithin.heal_light_triggered",
     "sounds": [
       "lightwithin:heal_light"
     ]
   },
   "light_ready": {
-    "subtitle": "lightwithin.light_ready_to_activate",
+    "subtitle": "audio.lightwithin.light_ready_to_activate",
     "sounds": [
       "lightwithin:light_ready"
     ]
   },
   "light_charged": {
-    "subtitle": "lightwithin.light_used_charge",
+    "subtitle": "audio.lightwithin.light_used_charge",
     "sounds": [
       "lightwithin:light_charged"
     ]
   },
   "light_error": {
-    "subtitle": "lightwithin.light_error",
+    "subtitle": "audio.lightwithin.light_error",
     "sounds": [
       "lightwithin:light_error"
     ]
   },
   "luxcognita_display": {
-    "subtitle": "lightwithin.luxcognita_display",
+    "subtitle": "audio.lightwithin.luxcognita_display",
     "sounds": [
       "lightwithin:luxcognita_display"
     ]
   },
   "light_crit": {
-    "subtitle": "lightwithin.light_critical_hit",
+    "subtitle": "audio.lightwithin.light_critical_hit",
     "sounds": [
       "lightwithin:light_crit"
     ]
   },
   "forest_aura_puff": {
-    "subtitle": "lightwithin.forest_puff_bursting",
+    "subtitle": "audio.lightwithin.forest_puff_bursting",
     "sounds": [
       "lightwithin:forest_aura_puff_1",
       "lightwithin:forest_aura_puff_2",
@@ -44,7 +44,7 @@
     ]
   },
   "thunder_aura_zap": {
-    "subtitle": "lightwithin.thunder_aura_zap",
+    "subtitle": "audio.lightwithin.thunder_aura_zap",
     "sounds": [
       "lightwithin:zap_1",
       "lightwithin:zap_2",
@@ -52,55 +52,55 @@
     ]
   },
   "defense_light": {
-  "subtitle": "lightwithin.defense_light_triggered",
+  "subtitle": "audio.lightwithin.defense_light_triggered",
   "sounds": [
     "lightwithin:defense_light"
   ]
   },
   "strength_light": {
-    "subtitle": "lightwithin.strength_light_triggered",
+    "subtitle": "audio.lightwithin.strength_light_triggered",
     "sounds": [
       "lightwithin:strength_light"
     ]
   },
   "blazing_light": {
-    "subtitle": "lightwithin.blazing_light_triggered",
+    "subtitle": "audio.lightwithin.blazing_light_triggered",
     "sounds": [
       "lightwithin:blazing_light"
     ]
   },
   "frost_light": {
-    "subtitle": "lightwithin.frost_light_triggered",
+    "subtitle": "audio.lightwithin.frost_light_triggered",
     "sounds": [
       "lightwithin:frost_light"
     ]
   },
   "earthen_light": {
-    "subtitle": "lightwithin.earthen_light_triggered",
+    "subtitle": "audio.lightwithin.earthen_light_triggered",
     "sounds": [
       "lightwithin:earthen_light"
     ]
   },
   "wind_light": {
-    "subtitle": "lightwithin.wind_light_triggered",
+    "subtitle": "audio.lightwithin.wind_light_triggered",
     "sounds": [
       "lightwithin:wind_light"
     ]
   },
   "aqua_light": {
-    "subtitle": "lightwithin.aqua_light_triggered",
+    "subtitle": "audio.lightwithin.aqua_light_triggered",
     "sounds": [
       "lightwithin:aqua_light"
     ]
   },
   "forest_aura_light": {
-    "subtitle": "lightwithin.forest_aura_light_triggered",
+    "subtitle": "audio.lightwithin.forest_aura_light_triggered",
     "sounds": [
       "lightwithin:forest_aura_light"
     ]
   },
   "thunder_aura_light": {
-    "subtitle": "lightwithin.thunder_aura_light_triggered",
+    "subtitle": "audio.lightwithin.thunder_aura_light_triggered",
     "sounds": [
       "lightwithin:thunder_aura_light"
     ]

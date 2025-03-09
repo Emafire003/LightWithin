@@ -174,6 +174,23 @@
   "config.lightwithin.intoxication_shader_warning": "Intoxication Shader Warning",
   "config.lightwithin.intoxication_shader_warning.tooltip": "Accessibility setting. Turn this off to not see the warning message every time the intoxication effect is applied to you",
 
+  "audio.lightwithin.heal_light_triggered": "Heal Light has triggered",
+  "audio.lightwithin.defense_light_triggered": "Defense Light has triggered",
+  "audio.lightwithin.strength_light_triggered": "Strength Light has triggered",
+  "audio.lightwithin.blazing_light_triggered": "Blazing Light has triggered",
+  "audio.lightwithin.frost_light_triggered": "Frost Light has triggered",
+  "audio.lightwithin.earthen_light_triggered": "Earthen Light has triggered",
+  "audio.lightwithin.wind_light_triggered": "Wind Light has triggered",
+  "audio.lightwithin.aqua_light_triggered": "Auqa Light has triggered",
+  "audio.lightwithin.forest_aura_light_triggered": "ForestAura Light has triggered",
+  "audio.lightwithin.thunder_aura_light_triggered": "ThunderAura Light has triggered",
+  "audio.lightwithin.light_ready_to_activate": "A light is ready to activate",
+  "audio.lightwithin.light_used_charge": "A light charge has been used",
+  "audio.lightwithin.light_error": "Light error",
+  "audio.lightwithin.luxcognita_display": "Luxcognita berry activated",
+  "audio.lightwithin.light_critical_hit": "Light critical hit",
+  "audio.lightwithin.forest_puff_bursting": "ForestAura puffs bursting",
+  "audio.lightwithin.thunder_aura_zap": "ThunderAura zaps",
 
 
   "screen.luxcognita_dialogue.lightTypeButton": "About LightType",

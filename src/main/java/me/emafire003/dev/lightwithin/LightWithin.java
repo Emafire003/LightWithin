@@ -634,7 +634,6 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 	}
 
 	//=======================Thunder Aura Light=======================
-	//TODO set the messages!
 	public static void activateThunderAura(LightComponent component, PlayerEntity player){
 		List<LivingEntity> targets = new ArrayList<>();
 
