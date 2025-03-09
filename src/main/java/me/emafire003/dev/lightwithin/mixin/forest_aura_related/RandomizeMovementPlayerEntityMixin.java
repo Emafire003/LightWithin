@@ -16,8 +16,6 @@ import java.util.Objects;
 @Mixin(PlayerEntity.class)
 public abstract class RandomizeMovementPlayerEntityMixin extends LivingEntity {
 
-    //TODO add a RandomizeJump in the LivingEntity class
-
     protected RandomizeMovementPlayerEntityMixin(EntityType<? extends LivingEntity> entityType, World world) {
         super(entityType, world);
     }
