@@ -9,7 +9,9 @@ import net.minecraft.util.StringIdentifiable;
 public enum RenderEffect implements StringIdentifiable {
     RUNES("runes"),
     LIGHT_RAYS("light_rays"),
-    LUXCOGNITA_SCREEN("luxcognita_screen");
+    LUXCOGNITA_SCREEN("luxcognita_screen"),
+    FORCED_LIGHT_RAYS("forced_light_rays");
+
     //TODO i need to make a PacketCodec as well
     public static final Codec<RenderEffect> CODEC = StringIdentifiable.createCodec(RenderEffect::values);
 

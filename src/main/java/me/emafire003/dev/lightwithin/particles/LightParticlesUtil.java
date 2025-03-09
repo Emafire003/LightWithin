@@ -1,5 +1,6 @@
 package me.emafire003.dev.lightwithin.particles;
 
+import me.emafire003.dev.lightwithin.particles.coloredpuff.ColoredPuffParticleEffect;
 import me.emafire003.dev.particleanimationlib.effects.VortexEffect;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.minecraft.particle.DustParticleEffect;
@@ -29,7 +30,7 @@ public class LightParticlesUtil {
         }*/
         world.spawnParticles(particle,
                 pos.getX(), pos.getY(), pos.getZ(), 50,
-                0.25, 0.15d, 0.25, 0.2);
+                0.15, 0.10d, 0.15, 0.2);
 
 
     }
@@ -135,6 +136,15 @@ public class LightParticlesUtil {
         world.addParticle(new DustParticleEffect(new Vector3f(Vec3d.unpackRgb(43758).toVector3f()), 1.0F), pos.getX(), pos.getY(), pos.getZ(), 0.0D, 0.0D, 0.0D);
 
     }*/
+
+
+    //Oridinal particle count (og was: 200, delta 0.1)
+    public static void spawnForestPuff(Vec3d pos, Vector3f color, Vector3f color1, float size, ServerWorld world){
+        ///particle lightwithin:colored_puff_particle 0 1 0 0.7 0 0.5 0.5 -68.5 -1.5 90.5 0.1 0.1 0.1 0.01 200
+        ColoredPuffParticleEffect coloredPuffParticleEffect = new ColoredPuffParticleEffect(color, color1, size);
+        world.spawnParticles(coloredPuffParticleEffect, pos.x, pos.y, pos.z, 150, 0.11, 0.11, 0.11, 0.01);
+
+    }
 
     /**Spawns yellow and light blue particles that go from about the head of the player to
      * the art in a small vorex*/

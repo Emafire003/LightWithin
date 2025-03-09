@@ -55,7 +55,7 @@ public class GetLightCommand implements LightCommand{
         try{
             InnerLightType type = LightWithin.LIGHT_COMPONENT.get(target).getType();
             source.sendFeedback(() -> Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The InnerLight type of §d" + target.getName().getString() + "§e is: " ).formatted(Formatting.YELLOW)
-                        .append(Text.literal(type.toString()).formatted(Formatting.GREEN))), true);
+                    .append(Text.literal(type.toString()).formatted(Formatting.GREEN))), true);
             return 1;
         }catch(Exception e){
             e.printStackTrace();

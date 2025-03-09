@@ -11,6 +11,7 @@ import me.emafire003.dev.lightwithin.particles.LightParticlesUtil;
 import me.emafire003.dev.lightwithin.sounds.LightSounds;
 import me.emafire003.dev.lightwithin.util.TargetType;
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.block.Block;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
@@ -18,14 +19,17 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.registry.RegistryKeys;
+import net.minecraft.registry.tag.TagKey;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundCategory;
+import net.minecraft.util.math.BlockPos;
 
 import java.util.List;
 
 public class WindLight extends InnerLight {
 
+    public static final TagKey<Block> WIND_TRIGGER_BLOCKS = TagKey.of(RegistryKeys.BLOCK, new Identifier(MOD_ID, "wind_trigger_blocks"));
     public static final Item INGREDIENT = Items.WIND_CHARGE;
 
     public WindLight(List<LivingEntity> targets, double cooldown_time, double power_multiplier, int duration, String color, PlayerEntity caster, boolean rainbow_col) {
@@ -77,7 +81,12 @@ public class WindLight extends InnerLight {
             }
         }
 
-        caster.getWorld().playSound(caster.getX(), caster.getY(), caster.getZ(), LightSounds.WIND_LIGHT, SoundCategory.PLAYERS, 1, 1, true);
+        if(caster.getWorld().isClient()){
+            return;
+        }
+
+        caster.getWorld().playSound(null, BlockPos.ofFloored(caster.getPos()), LightSounds.WIND_LIGHT, SoundCategory.PLAYERS, 1f, 1f);
+
         //caster.getWorld().playSound(caster, caster.getBlockPos(), LightSounds.WIND_LIGHT, SoundCategory.PLAYERS, 1, 1);
         ServerWorld world = (ServerWorld) (caster).getWorld();
         //If the light target is OTHER it will blow away every entity in radius
@@ -95,7 +104,7 @@ public class WindLight extends InnerLight {
             //oldtarget and stuff prevent generating multiple structures in the same area
             for(LivingEntity target : this.targets){
 
-                //TODO these are allies, should i still play it? no
+                //these are allies, should i still play it? no
                 //target.playSound(LightSounds.WIND_LIGHT, 0.9f, 1);
                 if(target.equals(caster)){
                     target.addStatusEffect(new StatusEffectInstance(StatusEffects.SPEED, this.duration*20, (int) ((this.power_multiplier/2)/Config.DIV_SELF), false, false));

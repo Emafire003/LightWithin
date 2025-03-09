@@ -14,8 +14,10 @@ import net.minecraft.item.Items;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.random.Random;
 
 import java.util.List;
@@ -74,9 +76,12 @@ public class FrogLight extends InnerLight {
         Random random = caster.getRandom();
         int frogs = (int) (this.power_multiplier+random.nextBetween(0, 5));
         LightParticlesUtil.spawnLightTypeParticle(LightParticles.FROGLIGHT_PARTICLE, (ServerWorld) caster.getWorld(), caster.getPos());
+        caster.getWorld().playSound(null, BlockPos.ofFloored(caster.getPos()), SoundEvents.ENTITY_FROG_HURT, SoundCategory.PLAYERS, 1, 0.8f);
+
         for(int i = 0; i<frogs; i++){
             for(LivingEntity target : this.targets){
-                target.playSound(SoundEvents.ENTITY_FROG_HURT, 1, 0.8f);
+                caster.getWorld().playSound(null, BlockPos.ofFloored(target.getPos()), SoundEvents.ENTITY_FROG_HURT, SoundCategory.PLAYERS, 1, 0.8f);
+
                 if(!target.isSpectator()){
                     target.damage(caster.getWorld().getDamageSources().magic(), frogs);
                 }

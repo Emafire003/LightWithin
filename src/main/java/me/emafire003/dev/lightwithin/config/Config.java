@@ -12,9 +12,9 @@ import static me.emafire003.dev.lightwithin.LightWithin.LOGGER;
 
 public class Config {
     public static SimpleConfig CONFIG;
-    private static ConfigProvider defaultConfigs;
+    private static ConfigProvider configs;
 
-    private static final int ver = 4;
+    private static final int ver = 5;
     public static int VERSION;
 
     //box expansion amount while searching for other entities, like when checking for allies or targets near the player
@@ -36,6 +36,7 @@ public class Config {
     public static int MIN_ALLIES_LOW;
 
     public static boolean CHECK_SURROUNDED;
+    public static boolean CHECK_SURROUNDED_BY_ALLIES; //Added with version 5
     public static int SURROUNDED_AMOUNT;
     public static double SURROUNDED_ALLIES_MULTIPLIER;
     public static int SURROUNDED_DISTANCE;
@@ -107,7 +108,7 @@ public class Config {
             HashMap<String, String> config_old = CONFIG.getConfigCopy();
             try {
                 CONFIG.delete();
-                CONFIG = SimpleConfig.of(LightWithin.MOD_ID + "_config").provider(defaultConfigs).request();
+                CONFIG = SimpleConfig.of(LightWithin.MOD_ID + "_config").provider(configs).request();
                 HashMap<Pair<String, ?>, Pair<String, ?>> sub_map = new HashMap<>();
 
                 CONFIG.getConfigCopy().forEach((key, value) -> sub_map.put(new Pair<>(key, value),  new Pair<>(key, config_old.get(key))));
@@ -120,10 +121,10 @@ public class Config {
     }
 
     public static void registerConfigs() {
-        defaultConfigs = new ConfigProvider();
-        createDefaultConfigs();
+        configs = new ConfigProvider();
+        createConfigs();
 
-        CONFIG = SimpleConfig.of(LightWithin.MOD_ID + "_config").provider(defaultConfigs).request();
+        CONFIG = SimpleConfig.of(LightWithin.MOD_ID + "_config").provider(configs).request();
 
         handleVersionChange();
 
@@ -145,104 +146,106 @@ public class Config {
             } catch (IOException f) {
                 f.printStackTrace();
             }
-            CONFIG = SimpleConfig.of(LightWithin.MOD_ID + "_config").provider(defaultConfigs).request();
+            CONFIG = SimpleConfig.of(LightWithin.MOD_ID + "_config").provider(configs).request();
             assignConfigs();
             LOGGER.warn("Generated a new config file, make sure to configure it again!");
         }
 
-        LOGGER.info("All " + defaultConfigs.getConfigsList().size() + " have been set properly");
+        LOGGER.info("All " + configs.getConfigsList().size() + " have been set properly");
     }
 
-    private static void createDefaultConfigs() {
-        defaultConfigs.addKeyValuePair(new Pair<>("version", ver), "The version of the config. DO NOT CHANGE IT :D");
+    private static void createConfigs() {
+        configs.addKeyValuePair(new Pair<>("version", ver), "The version of the config. DO NOT CHANGE IT :D");
 
-        defaultConfigs.addKeyValuePair(new Pair<>("spacer", "spacer"), "");
+        configs.addKeyValuePair(new Pair<>("spacer", "spacer"), "");
 
-        defaultConfigs.addKeyValuePair(new Pair<>("area_of_search_for_entities", 6), "The box radius in which other entities (such as allies or targets) will be searched");
-        defaultConfigs.addKeyValuePair(new Pair<>("cooldown_multiplier", 1.0), "Use this to extend or shorten the cooldown of the light powers effects in general (use <1 values to shorten the cooldown >1 to extend it)");
+        configs.addKeyValuePair(new Pair<>("area_of_search_for_entities", 12), "The box radius in which other entities (such as allies or targets) will be searched. Cannot be less than 1.");
+        configs.addKeyValuePair(new Pair<>("cooldown_multiplier", 1.0), "Use this to extend or shorten the cooldown of the light powers effects in general (use <1 values to shorten the cooldown >1 to extend it)");
         //the max value for this is 21 now, 16*1.3 = 20.8. The min one is 1. Unless it's adjusted.
-        defaultConfigs.addKeyValuePair(new Pair<>("duration_multiplier", 1.3), "Use this to extend or shorten the duration of the light powers effects in general (WARNING: Values below 1 are possible but not recommended)");
-        defaultConfigs.addKeyValuePair(new Pair<>("multiply_duration_limit", true), "Should the max duration values (see below) be multiplied by the duration multiplier?");
-        defaultConfigs.addKeyValuePair(new Pair<>("player_glows", true), "Does the player glow when the light activates?");
-        defaultConfigs.addKeyValuePair(new Pair<>("always_affect_allies", false), "Should every ally be affected by the effect of a light triggering? For example, should an ally at full health be healed by the heal light of the caster?");
-        defaultConfigs.addKeyValuePair(new Pair<>("div_self", 2), "By how much should the power be divided for applying the effect of the ALLIES to the caster? Set to 1 to disable");
+        configs.addKeyValuePair(new Pair<>("duration_multiplier", 1.3), "Use this to extend or shorten the duration of the light powers effects in general (WARNING: Values below 1 are possible but not recommended)");
+        configs.addKeyValuePair(new Pair<>("multiply_duration_limit", true), "Should the max duration values (see below) be multiplied by the duration multiplier?");
+        configs.addKeyValuePair(new Pair<>("player_glows", true), "Does the player glow when the light activates?");
+        configs.addKeyValuePair(new Pair<>("always_affect_allies", false), "Should every ally be affected by the effect of a light triggering? For example, should an ally at full health be healed by the heal light of the caster?");
+        configs.addKeyValuePair(new Pair<>("div_self", 2), "By how much should the power be divided for applying the effect of the ALLIES to the caster? Set to 1 to disable");
 
-        defaultConfigs.addKeyValuePair(new Pair<>("spacer", "spacer"), "");
+        configs.addKeyValuePair(new Pair<>("spacer", "spacer"), "");
 
-        defaultConfigs.addKeyValuePair(new Pair<>("adjust_for_low_duration", false), "Should a very short duration value be adjusted to make it longer? (Bear in mind that each light has a duration minimum, configurable below)");
-        defaultConfigs.addKeyValuePair(new Pair<>("adjust_dur_amount", 5), "How many extra seconds should be added to the low duration as adjustment. (Requires true above) (Also used with 0 and errors, regardless of the setting above)");
-        defaultConfigs.addKeyValuePair(new Pair<>("adjust_dur_threshold", 4), "Which values to consider being very low. (For example, durations under 4 are considered low and to be adjusted if the setting is enabled)");
+        configs.addKeyValuePair(new Pair<>("adjust_for_low_duration", false), "Should a very short duration value be adjusted to make it longer? (Bear in mind that each light has a duration minimum, configurable below)");
+        configs.addKeyValuePair(new Pair<>("adjust_dur_amount", 5), "How many extra seconds should be added to the low duration as adjustment. (Requires true above) (Also used with 0 and errors, regardless of the setting above)");
+        configs.addKeyValuePair(new Pair<>("adjust_dur_threshold", 4), "Which values to consider being very low. (For example, durations under 4 are considered low and to be adjusted if the setting is enabled)");
 
-        defaultConfigs.addKeyValuePair(new Pair<>("spacer", "spacer"), "");
+        configs.addKeyValuePair(new Pair<>("spacer", "spacer"), "");
 
-        defaultConfigs.addKeyValuePair(new Pair<>("luxintus_bypass_cooldown", true), "Does eating a Luxintus Berry bypass the cooldown?");
-        defaultConfigs.addKeyValuePair(new Pair<>("luxcognita_bypass_cooldown", true), "Does eating a Luxcognita Berry bypass the cooldown?");
-        defaultConfigs.addKeyValuePair(new Pair<>("luxmutua_bypass_cooldown", false), "Does eating a Luxmutua Berry bypass the cooldown?");
+        configs.addKeyValuePair(new Pair<>("luxintus_bypass_cooldown", true), "Does eating a Luxintus Berry bypass the cooldown?");
+        configs.addKeyValuePair(new Pair<>("luxcognita_bypass_cooldown", true), "Does eating a Luxcognita Berry bypass the cooldown?");
+        configs.addKeyValuePair(new Pair<>("luxmutua_bypass_cooldown", false), "Does eating a Luxmutua Berry bypass the cooldown?");
 
-        defaultConfigs.addKeyValuePair(new Pair<>("spacer", "spacer"), "");
+        configs.addKeyValuePair(new Pair<>("spacer", "spacer"), "");
 
-        defaultConfigs.addKeyValuePair(new Pair<>("check_surrounded", true), "Should being surrounded be considered to trigger light?");
-        defaultConfigs.addKeyValuePair(new Pair<>("surrounded_amount", 5), "How many hostile entities needs to be near a player to be considered surrounded?");
-        defaultConfigs.addKeyValuePair(new Pair<>("surrounded_allies_multiplier", 2.0), "When checking if allies are surrounded, how much to multiply the default value above?");
-        defaultConfigs.addKeyValuePair(new Pair<>("surrounded_distance", 5), "How far to check (in blocks) for hostile entities? (Higher values may mean more lag. A lot higher tho)");
-        defaultConfigs.addKeyValuePair(new Pair<>("check_surrounding_mobs_health", true), "Do a check on the mobs health. If below a certain threshold, stop considering in the surrounded count");
-        defaultConfigs.addKeyValuePair(new Pair<>("surrounding_health_threshold", 15), "The hp percentage below which mobs won't be considered in the surrounding count anymore (like 15, 20, 50)");
+        configs.addKeyValuePair(new Pair<>("check_surrounded", true), "Should being surrounded be considered to trigger light?");
+        //V5
+        configs.addKeyValuePair(new Pair<>("check_surrounded_by_allies", true), "Should being 'surrounded' by allies be considered to trigger light?");
+        configs.addKeyValuePair(new Pair<>("surrounded_amount", 5), "How many hostile entities needs to be near a player to be considered surrounded?");
+        configs.addKeyValuePair(new Pair<>("surrounded_allies_multiplier", 2.0), "When checking if allies are surrounded, how much to multiply the default value above?");
+        configs.addKeyValuePair(new Pair<>("surrounded_distance", 5), "How far to check (in blocks) for hostile entities? (Higher values may mean more lag. A lot higher tho)");
+        configs.addKeyValuePair(new Pair<>("check_surrounding_mobs_health", true), "Do a check on the mobs health. If below a certain threshold, stop considering in the surrounded count");
+        configs.addKeyValuePair(new Pair<>("surrounding_health_threshold", 15), "The hp percentage below which mobs won't be considered in the surrounding count anymore (like 15, 20, 50)");
 
-        defaultConfigs.addKeyValuePair(new Pair<>("spacer", "spacer"), "");
+        configs.addKeyValuePair(new Pair<>("spacer", "spacer"), "");
 
-        defaultConfigs.addKeyValuePair(new Pair<>("hp_percentage_self", 30), "The hp percentage below which the light will be triggerable if the target is SELF (like 15, 20, 50) (in some cases it may not apply)");
-        defaultConfigs.addKeyValuePair(new Pair<>("hp_percentage_allies", 50), "The hp percentage below which the light will be triggerable if the target is ALLIES (like 15, 20, 50) (in some cases it may not apply)");
-        defaultConfigs.addKeyValuePair(new Pair<>("hp_percentage_variant", 50), "The hp percentage below which the light will be triggerable if the target is VARIANT/Passive mobs for example (like 15, 20, 50) (in some cases it may not apply)");
-        defaultConfigs.addKeyValuePair(new Pair<>("hp_percentage_increment", 20), "The hp percentage to add to differentiante from very low and low health");
-        defaultConfigs.addKeyValuePair(new Pair<>("min_allies_low", 1), "How many allies near the player should be on low health for them to trigger a light activation?");
+        configs.addKeyValuePair(new Pair<>("hp_percentage_self", 30), "The hp percentage below which the light will be triggerable if the target is SELF (like 15, 20, 50) (in some cases it may not apply)");
+        configs.addKeyValuePair(new Pair<>("hp_percentage_allies", 50), "The hp percentage below which the light will be triggerable if the target is ALLIES (like 15, 20, 50) (in some cases it may not apply)");
+        configs.addKeyValuePair(new Pair<>("hp_percentage_variant", 50), "The hp percentage below which the light will be triggerable if the target is VARIANT/Passive mobs for example (like 15, 20, 50) (in some cases it may not apply)");
+        configs.addKeyValuePair(new Pair<>("hp_percentage_increment", 20), "The hp percentage to add to differentiante from very low and low health");
+        configs.addKeyValuePair(new Pair<>("min_allies_low", 1), "How many allies near the player should be on low health for them to trigger a light activation?");
 
-        defaultConfigs.addKeyValuePair(new Pair<>("spacer", "spacer"), "");
+        configs.addKeyValuePair(new Pair<>("spacer", "spacer"), "");
 
-        defaultConfigs.addKeyValuePair(new Pair<>("check_armor_durability", true), "Should the armor durability be considered to trigger light?");
-        defaultConfigs.addKeyValuePair(new Pair<>("dur_percentage_self", 5), "The armor durability percentage below which the light will be triggerable if the target is SELF (like 15, 20, 50) (in some cases it may not apply)");
-        defaultConfigs.addKeyValuePair(new Pair<>("dur_percentage_allies", 10), "The armor durability percentage below which the light will be triggerable if the target is ALLIES (like 15, 20, 50) (in some cases it may not apply)");
-        defaultConfigs.addKeyValuePair(new Pair<>("dur_percentage_variant", 10), "The armor durability percentage below which the light will be triggerable if the target is VARIANT/Passive mobs for example (like 15, 20, 50) (in some cases it may not apply)");
+        configs.addKeyValuePair(new Pair<>("check_armor_durability", true), "Should the armor durability be considered to trigger light?");
+        configs.addKeyValuePair(new Pair<>("dur_percentage_self", 5), "The armor durability percentage below which the light will be triggerable if the target is SELF (like 15, 20, 50) (in some cases it may not apply)");
+        configs.addKeyValuePair(new Pair<>("dur_percentage_allies", 10), "The armor durability percentage below which the light will be triggerable if the target is ALLIES (like 15, 20, 50) (in some cases it may not apply)");
+        configs.addKeyValuePair(new Pair<>("dur_percentage_variant", 10), "The armor durability percentage below which the light will be triggerable if the target is VARIANT/Passive mobs for example (like 15, 20, 50) (in some cases it may not apply)");
 
-        defaultConfigs.addKeyValuePair(new Pair<>("spacer", "spacer"), "");
+        configs.addKeyValuePair(new Pair<>("spacer", "spacer"), "");
 
-        defaultConfigs.addKeyValuePair(new Pair<>("should_check_blocks", true), "Should the blocks near the player be checked for the light activation? Could impact on performance");
-        defaultConfigs.addKeyValuePair(new Pair<>("structure_griefing", true), "If set to false will prevent lights from spawning ANY KIND structures on activation (I'd suggest leaving it to true)");
-        defaultConfigs.addKeyValuePair(new Pair<>("non_fundamental_structure_griefing", true), "If set to false will prevent lights from spawning structures that are not fundamental for the light's effect. For example Earthen Light's structures will STILL SPAWN (I'd suggest leaving it to true)");
+        configs.addKeyValuePair(new Pair<>("should_check_blocks", true), "Should the blocks near the player be checked for the light activation? Could impact on performance");
+        configs.addKeyValuePair(new Pair<>("structure_griefing", true), "If set to false will prevent lights from spawning ANY KIND structures on activation (I'd suggest leaving it to true)");
+        configs.addKeyValuePair(new Pair<>("non_fundamental_structure_griefing", true), "If set to false will prevent lights from spawning structures that are not fundamental for the light's effect. For example Earthen Light's structures will STILL SPAWN (I'd suggest leaving it to true)");
         //V2
-        defaultConfigs.addKeyValuePair(new Pair<>("replaceable_structures", true), "Should structures be replaced after a while by the old terrain? Setting this to true may impact performance!");
-        defaultConfigs.addKeyValuePair(new Pair<>("keep_essentials_structures", true), "Should structures essential to the effect of the light, such as Earthen light's pillars and ravines be kept if replaceable_structures is true? (aka the terrain won't regenerate)");
+        configs.addKeyValuePair(new Pair<>("replaceable_structures", true), "Should structures be replaced after a while by the old terrain? Setting this to true may impact performance!");
+        configs.addKeyValuePair(new Pair<>("keep_essentials_structures", true), "Should structures essential to the effect of the light, such as Earthen light's pillars and ravines be kept if replaceable_structures is true? (aka the terrain won't regenerate)");
 
-        defaultConfigs.addKeyValuePair(new Pair<>("spacer", "spacer"), "");
+        configs.addKeyValuePair(new Pair<>("spacer", "spacer"), "");
 
-        defaultConfigs.addKeyValuePair(new Pair<>("command_target_feedback", true), "Should a message be sent the target of a command, such us when changing its innerlight?");
-        defaultConfigs.addKeyValuePair(new Pair<>("reset_on_join", false), "Should the InnerLight be completely resetted upon joining the server/world again? Useful after an update of the mod that added new Light Types");
+        configs.addKeyValuePair(new Pair<>("command_target_feedback", true), "Should a message be sent the target of a command, such us when changing its innerlight?");
+        configs.addKeyValuePair(new Pair<>("reset_on_join", false), "Should the InnerLight be completely resetted upon joining the server/world again? Useful after an update of the mod that added new Light Types");
 
-        defaultConfigs.addKeyValuePair(new Pair<>("auto_light_activation", false), "Allow players to auto activate their light if they want to");
+        configs.addKeyValuePair(new Pair<>("auto_light_activation", false), "Allow players to auto activate their light if they want to");
 
-        defaultConfigs.addKeyValuePair(new Pair<>("light_locked_default", false), "Should the light activation be locked by default? (Unless you use a command players won't be able to use lights)");
-        defaultConfigs.addKeyValuePair(new Pair<>("unlock_with_luxintus", true), "Should eating a Luxintus berry unlocked the light?");
-        defaultConfigs.addKeyValuePair(new Pair<>("not_ally_then_enemy", false), "Should a player that is not an explicit ALLY be considered an ENEMY?");
-
-        //V3
-        defaultConfigs.addKeyValuePair(new Pair<>("light_default_status", true), "When using world protector mods, should the light be activatable by default? If false, you'll need to create regions where the it's activatable through world protector mods' flags");
-
-        defaultConfigs.addKeyValuePair(new Pair<>("fall_trigger", 25), "How many blocks should be passed before a fall is considered very high? 10 blocks added per level of Feather Falling");
+        configs.addKeyValuePair(new Pair<>("light_locked_default", false), "Should the light activation be locked by default? (Unless you use a command players won't be able to use lights)");
+        configs.addKeyValuePair(new Pair<>("unlock_with_luxintus", true), "Should eating a Luxintus berry unlocked the light?");
+        configs.addKeyValuePair(new Pair<>("not_ally_then_enemy", false), "Should a player that is not an explicit ALLY be considered an ENEMY?");
 
         //V3
-        defaultConfigs.addKeyValuePair(new Pair<>("trigger_block_radius", 3), "The radius of blocks to check when searching for blocks to fulfill light trigger conditions. Ex: checking fire blocks for triggering blazing light. WARNING! Could lead to a lot of lag at high values!");
+        configs.addKeyValuePair(new Pair<>("light_default_status", true), "When using world protector mods, should the light be activatable by default? If false, you'll need to create regions where the it's activatable through world protector mods' flags");
+
+        configs.addKeyValuePair(new Pair<>("fall_trigger", 25), "How many blocks should be passed before a fall is considered very high? 10 blocks added per level of Feather Falling");
+
+        //V3
+        configs.addKeyValuePair(new Pair<>("trigger_block_radius", 3), "The radius of blocks to check when searching for blocks to fulfill light trigger conditions. Ex: checking fire blocks for triggering blazing light. WARNING! Could lead to a lot of lag at high values!");
 
         //V4
-        defaultConfigs.addKeyValuePair(new Pair<>("used_charge_cooldown_multiplier", 2.5), "Multiplies the duration of the cooldown when a light charge has been used to force activate a light. Cannot go below 1.2");
-        defaultConfigs.addKeyValuePair(new Pair<>("allow_max_charge_0", true), "Can a player have 0 as a max light charges value? Note: won't change for players that already have a light, they will need to reset it");
-        defaultConfigs.addKeyValuePair(new Pair<>("allow_max_charge_8", true), "Can a player have 8 as a max light charges value? Note: won't change for players that already have a light, they will need to reset it");
+        configs.addKeyValuePair(new Pair<>("used_charge_cooldown_multiplier", 2.5), "Multiplies the duration of the cooldown when a light charge has been used to force activate a light. Cannot go below 1.2");
+        configs.addKeyValuePair(new Pair<>("allow_max_charge_0", true), "Can a player have 0 as a max light charges value? Note: won't change for players that already have a light, they will need to reset it");
+        configs.addKeyValuePair(new Pair<>("allow_max_charge_8", true), "Can a player have 8 as a max light charges value? Note: won't change for players that already have a light, they will need to reset it");
 
-        defaultConfigs.addKeyValuePair(new Pair<>("bypass_natural_trigger", false), "If true will bypass the requirement of having to activate the light naturally before using a light charge");
-        defaultConfigs.addKeyValuePair(new Pair<>("light_usable_in_faction", UsableInFactionOptions.EVERYONE.toString()), "If Factions is installed, who can activate a light in a faction territory? Options: EVERYONE, MEMBER, OWNER, LEADER, COMMANDER, GUEST, ALLIES, ENEMIES. The last two include members as well.");
+        configs.addKeyValuePair(new Pair<>("bypass_natural_trigger", false), "If true will bypass the requirement of having to activate the light naturally before using a light charge");
+        configs.addKeyValuePair(new Pair<>("light_usable_in_faction", UsableInFactionOptions.EVERYONE.toString()), "If Factions is installed, who can activate a light in a faction territory? Options: EVERYONE, MEMBER, OWNER, LEADER, COMMANDER, GUEST, ALLIES, ENEMIES. The last two include members as well.");
     }
 
     public static void reloadConfig(){
         registerConfigs();
-        LOGGER.info("All " + defaultConfigs.getConfigsList().size() + " have been reloaded properly");
+        LOGGER.info("All " + configs.getConfigsList().size() + " have been reloaded properly");
 
     }
 
@@ -253,7 +256,7 @@ public class Config {
 
         VERSION = CONFIG.getOrDefault("version", ver);
 
-        AREA_OF_SEARCH_FOR_ENTITIES = CONFIG.getOrDefault("area_of_search_for_entities", 6);
+        AREA_OF_SEARCH_FOR_ENTITIES = CONFIG.getOrDefault("area_of_search_for_entities", 12);
         COOLDOWN_MULTIPLIER = CONFIG.getOrDefault("cooldown_multiplier", 1.0);
         DURATION_MULTIPLIER = CONFIG.getOrDefault("duration_multiplier", 1.3);
 
@@ -264,6 +267,7 @@ public class Config {
         PLAYER_GLOWS = CONFIG.getOrDefault("player_glows", true);
 
         CHECK_SURROUNDED = CONFIG.getOrDefault("check_surrounded", true);
+        CHECK_SURROUNDED_BY_ALLIES = CONFIG.getOrDefault("check_surrounded_by_allies", true); //V5
         SURROUNDED_AMOUNT = CONFIG.getOrDefault("surrounded_amount", 5);
         SURROUNDED_ALLIES_MULTIPLIER = CONFIG.getOrDefault("surrounded_allies_multiplier", 2.0);
         SURROUNDED_DISTANCE = CONFIG.getOrDefault("surrounded_distance", 5);

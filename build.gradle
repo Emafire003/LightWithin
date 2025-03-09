@@ -1,5 +1,5 @@
 plugins {
-	id 'fabric-loom' version '1.6-SNAPSHOT'
+	id 'fabric-loom' version '1.9-SNAPSHOT'
 	id 'maven-publish'
 }
 
@@ -45,6 +45,8 @@ repositories {
 			includeGroup "curse.maven"
 		}
 	}
+	mavenCentral()
+	maven { url 'https://jitpack.io' }
 
 	maven {
 		name 'Xander Maven'
@@ -86,7 +88,12 @@ dependencies {
 	include modImplementation("maven.modrinth:custombrewrecipes:${project.custombrewrecipes_version}")
 
 	//ParticleAnimationLib
-	include modImplementation("maven.modrinth:particleanimationlib:${project.pal_version}")
+    include modImplementation("maven.modrinth:particleanimationlib:${project.pal_version}")
+
+	//Satin
+	modImplementation "org.ladysnake:satin:${satin_version}"
+	// Include Satin as a Jar-in-Jar dependency (optional)
+	include "org.ladysnake:satin:${satin_version}"
 
 	//===========OPTIONAL DEPENDENCIES===========
 

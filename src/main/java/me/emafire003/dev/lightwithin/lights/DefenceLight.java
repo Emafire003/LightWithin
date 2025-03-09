@@ -19,6 +19,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
+import net.minecraft.util.math.BlockPos;
 
 import java.util.List;
 
@@ -76,7 +77,7 @@ public class DefenceLight extends InnerLight {
             }
         }
 
-        caster.getWorld().playSound(caster.getX(), caster.getY(), caster.getZ(), LightSounds.DEFENSE_LIGHT, SoundCategory.PLAYERS, 1, 1, true);
+        caster.getWorld().playSound(null, BlockPos.ofFloored(caster.getPos()), LightSounds.DEFENSE_LIGHT, SoundCategory.PLAYERS, 1f, 1f);
         for(LivingEntity target : this.targets){
             //target.playSound(LightSounds.DEFENSE_LIGHT, 1, 1);
             //LightParticlesUtil.spawnLightTypeParticle(LightParticles.DEFENSELIGHT_PARTICLE, target);

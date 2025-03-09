@@ -17,7 +17,7 @@ public class ClientConfig {
     public static SimpleConfig CONFIG;
     private static ConfigProvider configs;
 
-    private static final int ver = 1;
+    private static final int ver = 2;
     public static int VERSION;
 
     public static int LIGHT_READY_ICON_X = 10;
@@ -26,6 +26,7 @@ public class ClientConfig {
     public static int LIGHT_CHARGE_ICON_Y = 10;
     public static double LIGHT_CHARGE_SCALE_FACTOR = 1.0;
     public static double LIGHT_READY_SCALE_FACTOR = 1.0;
+    public static double RUNES_SCALE_FACTOR = 1.0;
     public static String LIGHT_READY_PRESET = "TOP_LEFT";
     public static String LIGHT_CHARGE_PRESET = "TOP_LEFT";
     public static double INGREDIENT_TARGET_SCALE = 5.0;
@@ -42,9 +43,18 @@ public class ClientConfig {
     public static final int SHOW_RUNES_FOR_default = 3;
     public static boolean AUTO_LIGHT_ACTIVATION = false;
     public static boolean AUTO_LIGHT_ACTIVATION_default = false;
+    public static String FORESTAURA_ENEMY_COLOR = "560d03";
+    public static String FORESTAURA_ENEMY_COLOR_default = "560d03";
+    public static String FORESTAURA_ALLY_COLOR = "2ee878";
+    public static String FORESTAURA_ALLY_COLOR_default = "2ee878";
+    public static boolean FORESTAURA_INTOXICATION_SHADER = true;
+    public static boolean FORESTAURA_INTOXICATION_SHADER_default = true;
+    public static boolean INTOXICATION_SHADER_WARNING = true;
+    public static boolean INTOXICATION_SHADER_WARNING_default = true;
 
     public static final int light_icon_default_position = 10;
     public static final double light_icon_default_scale = 1.0;
+    public static final double runes_default_scale = 0.5;
 
     private static final String config_name = "_client";
 
@@ -79,12 +89,17 @@ public class ClientConfig {
             CONFIG.set("light_ready_scale_factor", LIGHT_READY_SCALE_FACTOR);
             CONFIG.set("light_charge_scale_factor", LIGHT_CHARGE_SCALE_FACTOR);
             CONFIG.set("hide_light_charge_icon", HIDE_LIGHT_CHARGE_ICON);
+            CONFIG.set("runes_scale_factor", RUNES_SCALE_FACTOR);
             CONFIG.set("show_charged_player_glow", SHOW_CHARGED_PLAYER_GLOW);
             CONFIG.set("show_runes", SHOW_RUNES);
             CONFIG.set("show_runes_for", SHOW_RUNES_FOR);
             CONFIG.set("auto_light_activation", AUTO_LIGHT_ACTIVATION);
             CONFIG.set("ingredient_target_scale", INGREDIENT_TARGET_SCALE);
             CONFIG.set("show_ingredient_target_for", SHOW_INGREDIENT_TARGET_FOR);
+            CONFIG.set("forestaura_enemy_color", FORESTAURA_ENEMY_COLOR);
+            CONFIG.set("forestaura_ally_color", FORESTAURA_ALLY_COLOR);
+            CONFIG.set("forestaura_intoxication_shader", FORESTAURA_INTOXICATION_SHADER);
+            CONFIG.set("intoxication_shader_warning", INTOXICATION_SHADER_WARNING);
             CONFIG.update();
             RendererEventHandler.updateFromConfig();
         } catch (IOException e) {
@@ -151,9 +166,10 @@ public class ClientConfig {
 
         configs.addKeyValuePair(new Pair<>("light_ready_scale_factor", light_icon_default_scale), "Make this number bigger to make the light ready icon bigger, make it smaller to have a smaller light icon!");
         configs.addKeyValuePair(new Pair<>("light_charge_scale_factor", light_icon_default_scale), "Make this number bigger to make the light charge icon bigger, make it smaller to have a smaller light icon!");
+        configs.addKeyValuePair(new Pair<>("runes_scale_factor", runes_default_scale), "Make this number bigger to make the light runes bigger, make it smaller to have a smaller rune!");
 
-        configs.addKeyValuePair(new Pair<>("light_ready_preset", "TOP_LEFT"), "The position of the light ready icon using presets, such as CENTER, TOP/BOTTOM LEFT/RIGHT etc");
-        configs.addKeyValuePair(new Pair<>("light_charge_preset", "TOP_LEFT"), "The position of the light charge icon using presets, such as CENTER, TOP/BOTTOM LEFT/RIGHT etc");
+        configs.addKeyValuePair(new Pair<>("light_ready_preset", "TOP_LEFT"), "The position of the light ready icon using presets, such as CENTER, TOP/BOTTOM LEFT/RIGHT etc. Can only be modified while using YACL.");
+        configs.addKeyValuePair(new Pair<>("light_charge_preset", "TOP_LEFT"), "The position of the light charge icon using presets, such as CENTER, TOP/BOTTOM LEFT/RIGHT etc. Can only be modified while using YACL.");
 
         configs.addKeyValuePair(new Pair<>("spacer", "spacer"), "");
 
@@ -167,6 +183,11 @@ public class ClientConfig {
         configs.addKeyValuePair(new Pair<>("show_ingredient_target_for", show_ingredient_target_for_default), "How many seconds should the item and target icons last on screen?");
 
         configs.addKeyValuePair(new Pair<>("auto_light_activation", AUTO_LIGHT_ACTIVATION_default), "Setting this value to true will activate your light as soon as it's ready. WARNING: it may be disabled by the server!");
+
+        configs.addKeyValuePair(new Pair<>("forestaura_enemy_color", FORESTAURA_ENEMY_COLOR), "The color that will indicate enemies with the forest aura vision. You must install ColoredGlowLib to see the effect.");
+        configs.addKeyValuePair(new Pair<>("forestaura_ally_color", FORESTAURA_ALLY_COLOR), "The color that will indicate allies with the forest aura vision. You must install ColoredGlowLib to see the effect.");
+        configs.addKeyValuePair(new Pair<>("forestaura_intoxication_shader", FORESTAURA_INTOXICATION_SHADER), "Accessibility setting. Disable this if you don't want to see the Intoxicated effect shader (may give motion sickness)");
+        configs.addKeyValuePair(new Pair<>("intoxication_shader_warning", INTOXICATION_SHADER_WARNING), "Accessibility setting. Turn this off to not see the warning message every time the intoxication effect is applied to you");
 
     }
 
@@ -188,6 +209,7 @@ public class ClientConfig {
         LIGHT_CHARGE_PRESET = CONFIG.getOrDefault("light_charge_preset", "TOP_LEFT");
         LIGHT_READY_SCALE_FACTOR = CONFIG.getOrDefault("light_ready_scale_factor", light_icon_default_scale);
         LIGHT_CHARGE_SCALE_FACTOR = CONFIG.getOrDefault("light_charge_scale_factor", light_icon_default_scale);
+        RUNES_SCALE_FACTOR = CONFIG.getOrDefault("runes_scale_factor", runes_default_scale);
         HIDE_LIGHT_CHARGE_ICON = CONFIG.getOrDefault("hide_light_charge_icon", HIDE_LIGHT_CHARGE_ICON_default);
         SHOW_CHARGED_PLAYER_GLOW = CONFIG.getOrDefault("show_charged_player_glow", SHOW_CHARGED_PLAYER_GLOW_default);
         SHOW_RUNES = CONFIG.getOrDefault("show_runes", SHOW_RUNES_default);
@@ -195,6 +217,10 @@ public class ClientConfig {
         INGREDIENT_TARGET_SCALE = CONFIG.getOrDefault("ingredient_target_scale", ingredient_target_scale_default);
         SHOW_INGREDIENT_TARGET_FOR = CONFIG.getOrDefault("show_ingredient_target_for", show_ingredient_target_for_default);
         AUTO_LIGHT_ACTIVATION = CONFIG.getOrDefault("auto_light_activation", AUTO_LIGHT_ACTIVATION_default);
+        FORESTAURA_ENEMY_COLOR = CONFIG.getOrDefault("forestaura_enemy_color", FORESTAURA_ENEMY_COLOR_default);
+        FORESTAURA_ALLY_COLOR = CONFIG.getOrDefault("forestaura_ally_color", FORESTAURA_ALLY_COLOR_default);
+        FORESTAURA_INTOXICATION_SHADER = CONFIG.getOrDefault("forestaura_intoxication_shader", FORESTAURA_INTOXICATION_SHADER);
+        INTOXICATION_SHADER_WARNING = CONFIG.getOrDefault("intoxication_shader", INTOXICATION_SHADER_WARNING);
     }
 }
 

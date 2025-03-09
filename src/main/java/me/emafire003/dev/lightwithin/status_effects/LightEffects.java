@@ -27,6 +27,17 @@ public class LightEffects {
             new WaterCascadeEffect());
     private static RegistryEntry<StatusEffect> registerStatusEffect(String name, StatusEffect effect){
         return Registry.registerReference(Registries.STATUS_EFFECT, LightWithin.getIdentifier(name), effect);
+    public static final StatusEffect FOREST_AURA = registerStatusEffect("forest_aura",
+            new ForestAuraEffect());
+    public static final StatusEffect INTOXICATION = registerStatusEffect("intoxication",
+            new IntoxicationEffect());
+    public static final StatusEffect THUNDER_AURA = registerStatusEffect("thunder_aura",
+            new ThunderAuraEffect());
+    public static final StatusEffect STORM_AURA = registerStatusEffect("storm_aura",
+            new StormAuraEffect());
+
+    private static StatusEffect registerStatusEffect(String name, StatusEffect effect){
+        return Registry.register(Registries.STATUS_EFFECT, new Identifier(LightWithin.MOD_ID, name),effect);
     }
 
     public static void registerModEffects(){

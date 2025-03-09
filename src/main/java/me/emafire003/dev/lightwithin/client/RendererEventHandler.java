@@ -15,11 +15,9 @@ import me.x150.renderer.ClipStack;
 import me.x150.renderer.Rectangle;
 import me.x150.renderer.RenderEvents;
 import me.x150.renderer.Renderer2d;
-import me.emafire003.dev.lightwithin.sounds.LightSounds;
 import me.emafire003.dev.lightwithin.status_effects.LightEffects;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.option.Perspective;
 import net.minecraft.sound.SoundEvents;
 
@@ -41,7 +39,7 @@ public class RendererEventHandler {
     int center_y = 0;
     double scale_factor;
     static double charge_icon_scale = 1.0;
-    static double ready_icon_scale = 1.0;
+    static double ready_icon_scale = 0.5;
 
     public static void updateFromConfig(){
         light_ready_x = ClientConfig.LIGHT_READY_ICON_X;
@@ -53,6 +51,7 @@ public class RendererEventHandler {
         LightWithinClient.setShouldDrawChargesCount(!ClientConfig.HIDE_LIGHT_CHARGE_ICON);
         allow_draw_runes = ClientConfig.SHOW_RUNES;
         RunesRenderer.setShowRunesFor(ClientConfig.SHOW_RUNES_FOR*20);
+        RunesRenderer.setRunesScale(ClientConfig.RUNES_SCALE_FACTOR);
         TargetRenderer.setScale(ClientConfig.INGREDIENT_TARGET_SCALE);
         TargetRenderer.setShowFor(ClientConfig.SHOW_INGREDIENT_TARGET_FOR*20);
         TypeItemRenderer.setScale(ClientConfig.INGREDIENT_TARGET_SCALE);
@@ -70,13 +69,13 @@ public class RendererEventHandler {
                 return;
             }
 
-            
             RenderSystem.enableBlend();
             RenderSystem.defaultBlendFunc();
 
             LightComponent component = LIGHT_COMPONENT.get(MinecraftClient.getInstance().player);
 
             if(MinecraftClient.getInstance().options.getPerspective().equals(Perspective.FIRST_PERSON)){
+                //In the replay mod the player is by default in first person, so don't display the runes at all, since they are meant for first person.
                 InnerLightType type = component.getType();
                 TargetType targetType = component.getTargets();
                 if(RunesRenderer.shouldRender() && allow_draw_runes){
@@ -107,6 +106,7 @@ public class RendererEventHandler {
                 LightWithinClient.setLightReady(false);
             }
 
+            //TODO make sure this is ok even in the main etc
             //In the replay mod the player is by default in first person, so don't display the runes at all, since they are meant for first person.
             if(ReplayModCompat.isInReplayMode()){
                 return;
@@ -152,42 +152,6 @@ public class RendererEventHandler {
     }
     public void renderLuxTargetItem(){
         TargetItemRenderer.start();
-    }
-
-
-    public void playLightSound(InnerLightType type){
-        ClientPlayerEntity player = MinecraftClient.getInstance().player;
-        if(player == null){
-            LOGGER.error("Can't play light sounds! Client player is null!");
-            return;
-        }
-        if(type.equals(InnerLightType.HEAL)){
-            player.playSound(LightSounds.HEAL_LIGHT, 1 ,1);
-        }
-        if(type.equals(InnerLightType.DEFENCE)){
-            player.playSound(LightSounds.DEFENSE_LIGHT, 1 ,1);
-        }
-        if(type.equals(InnerLightType.STRENGTH)){
-            player.playSound(LightSounds.STRENGTH_LIGHT, 1 ,1);
-        }
-        if(type.equals(InnerLightType.BLAZING)){
-            player.playSound(LightSounds.BLAZING_LIGHT, 1 ,1);
-        }
-        if(type.equals(InnerLightType.FROST)){
-            player.playSound(LightSounds.FROST_LIGHT, 1 ,1);
-        }
-        if(type.equals(InnerLightType.EARTHEN)){
-            player.playSound(LightSounds.EARTHEN_LIGHT, 1 ,1);
-        }
-        if(type.equals(InnerLightType.WIND)){
-            player.playSound(LightSounds.WIND_LIGHT, 1 ,1);
-        }
-        if(type.equals(InnerLightType.AQUA)){
-            player.playSound(LightSounds.AQUA_LIGHT, 1 ,1);
-        }
-        if(type.equals(InnerLightType.FROG)){
-            player.playSound(SoundEvents.ENTITY_FROG_HURT, 1, 0.8f);
-        }
     }
 
     public void registerRunesRenderer(){

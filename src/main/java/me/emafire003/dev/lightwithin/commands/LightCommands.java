@@ -46,6 +46,9 @@ public class LightCommands {
                 new ChargeCommand()
         };
 
+        ActivateLightCommand.createScheduler();
+        ReadyLightCommand.createScheduler();
+
         for (LightCommand command : commands) {
             lightcommands.addChild(command.getNode());
             alias.addChild(command.getNode());

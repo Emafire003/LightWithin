@@ -1,4 +1,4 @@
-package me.emafire003.dev.lightwithin.mixin;
+package me.emafire003.dev.lightwithin.mixin.renderer;
 
 // Copyright: https://github.com/0x3C50/Renderer/blob/master/LICENSE
 // Only needed the render events
