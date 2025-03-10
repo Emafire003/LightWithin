@@ -165,7 +165,7 @@ public class Config {
         configs.addKeyValuePair(new Pair<>("duration_multiplier", 1.3), "Use this to extend or shorten the duration of the light powers effects in general (WARNING: Values below 1 are possible but not recommended)");
         configs.addKeyValuePair(new Pair<>("multiply_duration_limit", true), "Should the max duration values (see below) be multiplied by the duration multiplier?");
         configs.addKeyValuePair(new Pair<>("player_glows", true), "Does the player glow when the light activates?");
-        configs.addKeyValuePair(new Pair<>("always_affect_allies", false), "Should every ally be affected by the effect of a light triggering? For example, should an ally at full health be healed by the heal light of the caster?");
+        configs.addKeyValuePair(new Pair<>("always_affect_allies", true), "Should every ally be affected by the effect of a light triggering? For example, should an ally at full health be healed by the heal light of the caster?");
         configs.addKeyValuePair(new Pair<>("div_self", 2), "By how much should the power be divided for applying the effect of the ALLIES to the caster? Set to 1 to disable");
 
         configs.addKeyValuePair(new Pair<>("spacer", "spacer"), "");
@@ -283,7 +283,7 @@ public class Config {
         DUR_PERCENTAGE_SELF = CONFIG.getOrDefault("dur_percentage_self", 5);
         DUR_PERCENTAGE_ALLIES = CONFIG.getOrDefault("dur_percentage_allies", 10);
         DUR_PERCENTAGE_VARIANT = CONFIG.getOrDefault("dur_percentage_variant", 10);
-        ALWAYS_AFFECT_ALLIES = CONFIG.getOrDefault("always_affect_allies", false);
+        ALWAYS_AFFECT_ALLIES = CONFIG.getOrDefault("always_affect_allies", true);
 
         SHOULD_CHECK_BLOCKS = CONFIG.getOrDefault("should_check_blocks", true);
         STRUCTURE_GRIEFING = CONFIG.getOrDefault("structure_griefing", true);
