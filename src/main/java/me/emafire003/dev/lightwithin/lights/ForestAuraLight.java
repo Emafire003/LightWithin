@@ -79,14 +79,6 @@ public class ForestAuraLight extends InnerLight {
             ForestPuffColor.BLUE, ForestPuffColor.ORANGE, ForestPuffColor.BLACK, ForestPuffColor.RED);
 
 
-    /**How far puffs affect other entities. Aka how close an entity needs to be in order to obtain the effect of the puff*/
-    public static final double PUFF_ACTION_BLOCK_RANGE = 1.5;
-
-    /**How far from the caster can puffs spawn, expressed in blocks*/
-    public static final double PUFF_MAX_SPAWN_DISTANCE = 2.1;
-    /**How close to the caster can puffs spawn, expressed in blocks*/
-    public static final double PUFF_MIN_SPAWN_DISTANCE = 0.5;
-
     /**Max tries to spawn a single puff*/
     private static final int max_tries = 10000;
 
@@ -199,7 +191,7 @@ public class ForestAuraLight extends InnerLight {
                 }
 
                 int puff = caster.getRandom().nextBetween(0, possible_puffs.size()-1);
-                Vec3d pos = getRandomPos(caster, caster.getPos().add(0,1,0), PUFF_MAX_SPAWN_DISTANCE, PUFF_MIN_SPAWN_DISTANCE);
+                Vec3d pos = getRandomPos(caster, caster.getPos().add(0,1,0), BalanceConfig.FOREST_AURA_PUFF_MAX_SPAWN_DIST, BalanceConfig.FOREST_AURA_PUFF_MIN_SPAWN_DIST);
                 if(pos == null){
                     caster.sendMessage(Text.literal("§c[LightWithin] There was an error spawning the puffs, Position null!"));
                 }else{
@@ -292,7 +284,7 @@ public class ForestAuraLight extends InnerLight {
         );
 
         List<LivingEntity> targets = world.getEntitiesByClass(LivingEntity.class,
-                new Box(origin.getX(), origin.getY(), origin.getZ(), (origin.getX() + 1), (origin.getY() + 1), (origin.getZ() + 1)).expand(PUFF_ACTION_BLOCK_RANGE),
+                new Box(origin.getX(), origin.getY(), origin.getZ(), (origin.getX() + 1), (origin.getY() + 1), (origin.getZ() + 1)).expand(BalanceConfig.FOREST_AURA_PUFF_ACTION_BLOCK_RANGE),
                 (entity -> {
                     //If another player has the ForestAura it will not affect them, but some particles will be spawned
                     //TODO if i ever allow entities to have the light powers remember to change this bit here
