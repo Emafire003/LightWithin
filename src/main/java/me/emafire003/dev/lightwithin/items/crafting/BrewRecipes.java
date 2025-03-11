@@ -35,17 +35,8 @@ public class BrewRecipes {
         registerType(InnerLightType.FROST, FrostLight.INGREDIENT);
         registerType(InnerLightType.DEFENCE, DefenceLight.INGREDIENT);
         registerType(InnerLightType.EARTHEN, EarthenLight.INGREDIENT);
-
-        light_nbt = nbt.copy();
-        light_nbt.putString(TYPE_INGREDIENT_KEY, InnerLightType.FOREST_AURA.name());
-        CustomBrewRecipeRegister.registerCustomRecipeNbt(LightItems.BOTTLED_LIGHT, ForestAuraLight.INGREDIENT, LightItems.BOTTLED_LIGHT, nbt, null, light_nbt);
-        registerTargetsForType(InnerLightType.FOREST_AURA, light_nbt);
-
-        light_nbt = nbt.copy();
-        light_nbt.putString(TYPE_INGREDIENT_KEY, InnerLightType.THUNDER_AURA.name());
-        CustomBrewRecipeRegister.registerCustomRecipeNbt(LightItems.BOTTLED_LIGHT, ThunderAuraLight.INGREDIENT, LightItems.BOTTLED_LIGHT, nbt, null, light_nbt);
-        registerTargetsForType(InnerLightType.THUNDER_AURA, light_nbt);
-
+        registerType(InnerLightType.FOREST_AURA, ForestAuraLight.INGREDIENT);
+        registerType(InnerLightType.THUNDER_AURA, ThunderAuraLight.INGREDIENT);
 
         for(Item frog_item : FrogLight.INGREDIENTS){
             registerType(InnerLightType.FROG, frog_item);

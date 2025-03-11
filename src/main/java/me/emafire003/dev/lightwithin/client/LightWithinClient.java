@@ -42,15 +42,10 @@ import net.minecraft.client.render.entity.model.EntityModelLayer;
 import net.minecraft.entity.Entity;
 import net.minecraft.screen.ScreenTexts;
 import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
 import net.minecraft.util.Util;
 
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.UUID;
-import java.util.Map;
+import java.util.*;
 
 import static me.emafire003.dev.lightwithin.LightWithin.LOGGER;
 
@@ -297,7 +292,7 @@ public class LightWithinClient implements ClientModInitializer {
                     e.printStackTrace();
                 }
             });
-        }));
+        });
     }
 
     /**Create a config screen for ModMenu if YACL is present, or
@@ -339,18 +334,18 @@ public class LightWithinClient implements ClientModInitializer {
     /** Sets some entities glowing for the player when the packet is received*/
     private void registerGlowingEntitiesPacket(){
         LOGGER.debug("Registering glowing entities packet...");
-        ClientPlayNetworking.registerGlobalReceiver(GlowEntitiesPacketS2C.ID, ((client, handler, buf, responseSender) -> {
-            List<Pair<UUID, ForestAuraRelation>> results = GlowEntitiesPacketS2C.read(buf);
-
+        ClientPlayNetworking.registerGlobalReceiver(GlowEntitiesPayloadS2C.ID, (payload, context) -> {
+            MinecraftClient client = context.client();
             client.execute(() -> {
                 try{
+                    Map<UUID, ForestAuraRelation> results = payload.entitiesGlowing();
                     if(results == null){
                         LOGGER.error("The glowing entities list received is empty!");
                         return;
                     }if(client.player == null){
                         LOGGER.error("The client player is null!");
                         return;
-                    }else if(results.size() == 1 && results.get(0).getFirst().equals(new UUID(0,0))){
+                    }else if(results.size() == 1 && results.containsKey(new UUID(0,0))){
                         //Clears CGL exclusive colors on client side.
                         if(FabricLoader.getInstance().isModLoaded("coloredglowlib")){
                             entitiesGlowingForPlayer.forEach(uuid -> {
@@ -371,24 +366,24 @@ public class LightWithinClient implements ClientModInitializer {
                     }
                     //If nothing else, it means it's ok to make them glow:
 
-                    results.forEach(uuidRelationPair -> {
-                        entitiesGlowingForPlayer.add(uuidRelationPair.getFirst());
+                    results.keySet().forEach(uuid -> {
+                        entitiesGlowingForPlayer.add(uuid);
                         if(FabricLoader.getInstance().isModLoaded("coloredglowlib")){
 
                             Entity entity = null;
                             for(Entity entity1 : client.player.clientWorld.getEntities()){
-                                if(entity1.getUuid().equals(uuidRelationPair.getFirst())){
+                                if(entity1.getUuid().equals(uuid)){
                                     entity = entity1;
                                 }
                             }
                             if(entity == null){
-                                LOGGER.error("Error! Can't find entity with uuid: {}", uuidRelationPair.getFirst());
+                                LOGGER.error("Error! Can't find entity with uuid: {}", uuid);
                                 return;
                             }
 
-                            if(uuidRelationPair.getSecond().equals(ForestAuraRelation.ALLY)){
+                            if(results.get(uuid).equals(ForestAuraRelation.ALLY)){
                                 CGLCompat.getLib().setExclusiveColorFor(entity, ClientConfig.FORESTAURA_ALLY_COLOR, client.player);
-                            }else if(uuidRelationPair.getSecond().equals(ForestAuraRelation.ENEMY)){
+                            }else if(results.get(uuid).equals(ForestAuraRelation.ENEMY)){
                                 CGLCompat.getLib().setExclusiveColorFor(entity, ClientConfig.FORESTAURA_ENEMY_COLOR, client.player);
                             }else{
                                 CGLCompat.getLib().setExclusiveColorFor(entity, ForestAuraLight.COLOR, client.player);
@@ -403,7 +398,7 @@ public class LightWithinClient implements ClientModInitializer {
                     e.printStackTrace();
                 }
             });
-        }));
+        });
     }
 
 }

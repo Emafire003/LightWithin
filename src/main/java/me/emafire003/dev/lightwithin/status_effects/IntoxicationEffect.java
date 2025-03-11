@@ -2,10 +2,8 @@ package me.emafire003.dev.lightwithin.status_effects;
 
 import me.emafire003.dev.lightwithin.mixin.forest_aura_related.LivingEntityJumpInvoker;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.attribute.AttributeContainer;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectCategory;
-import net.minecraft.entity.player.PlayerEntity;
 
 /**To see how this is implemented go check {@link me.emafire003.dev.lightwithin.mixin.forest_aura_related.RandomizeMovementPlayerEntityMixin}
  * and {@link me.emafire003.dev.lightwithin.client.shaders.LightShaders}
@@ -19,9 +17,9 @@ public class IntoxicationEffect extends StatusEffect {
      * Amplifier 6-7: swapped X-Z, inverted Z which is now X vvv------ WOBBLE SHADER ------vvv
      * Amplifier 8-9: swapped X-Z, inverted both
      * Amplifier 10+: inverted controls
-     *
+     * <p>
      * Random jumps, with (amplifier/1.5)% chance jump each tick when on ground
-     *
+     * <p>
      * {@link me.emafire003.dev.lightwithin.mixin.forest_aura_related.RandomizeMovementPlayerEntityMixin}*/
     public IntoxicationEffect() {
         super(StatusEffectCategory.HARMFUL, 0x7E1291);
@@ -35,22 +33,14 @@ public class IntoxicationEffect extends StatusEffect {
 
     // This method is called when it applies the status effect. We implement custom functionality here.
     @Override
-    public void applyUpdateEffect(LivingEntity entity, int amplifier) {
+    public boolean applyUpdateEffect(LivingEntity entity, int amplifier) {
         super.applyUpdateEffect(entity, amplifier);
         //amplifier/1.5% chance
         if(entity.isOnGround() && entity.getRandom().nextBetween(1, 100) <= (double) amplifier /1.5){
             ((LivingEntityJumpInvoker) entity).jumpInvoker();
         }
-    }
-
-    @Override
-    public void onApplied(LivingEntity entity, AttributeContainer attributes, int amplifier) {
-        super.onApplied(entity, attributes, amplifier);
-    }
-
-    @Override
-    public void onRemoved(LivingEntity entity, AttributeContainer attributes, int amplifier){
-        super.onRemoved(entity, attributes, amplifier);
+        //TODO don't know what this means maybe it should be false
+        return true;
     }
 
 }

@@ -43,9 +43,9 @@ public abstract class ForestBlocksMixin implements ToggleableFeature {
      * False otherwise*/
     @Unique
     public boolean canWalkInto(BlockState state, ShapeContext context){
-        if(state.isIn(ForestAuraLight.FOREST_AURA_BLOCKS)){
+        if(state.isIn(ForestAuraLight.FOREST_AURA_BLOCKS)) {
             Entity entity;
-            if (context instanceof EntityShapeContext && (entity = ((EntityShapeContext)context).getEntity()) != null) {
+            if (context instanceof EntityShapeContext && (entity = ((EntityShapeContext) context).getEntity()) != null) {
                 return (entity instanceof LivingEntity && ((LivingEntity) entity).hasStatusEffect(LightEffects.FOREST_AURA));
             }
         }

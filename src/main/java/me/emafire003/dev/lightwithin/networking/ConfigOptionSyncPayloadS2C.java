@@ -7,7 +7,6 @@ import net.minecraft.network.packet.CustomPayload;
 
 import java.util.Map;
 
-
 public record ConfigOptionSyncPayloadS2C(Map<String, Boolean> booleanSettings) implements CustomPayload {
     public static final Id<ConfigOptionSyncPayloadS2C> ID = new Id<>(
             LightWithin.getIdentifier("light_config_sync")

@@ -6,7 +6,6 @@ import me.emafire003.dev.lightwithin.util.CheckUtils;
 import me.emafire003.dev.lightwithin.util.fabridash.FabriDash;
 import me.emafire003.dev.particleanimationlib.effects.AnimatedBallEffect;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.attribute.AttributeContainer;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectCategory;
 import net.minecraft.entity.player.PlayerEntity;
@@ -37,10 +36,9 @@ public class ThunderAuraEffect extends StatusEffect {
 
     //for some reason this does not work, so work-arounds!
     @Override
-    public void applyUpdateEffect(LivingEntity entity, int amplifier) {
-        //Boh non funziona un tubo ok.
+    public boolean applyUpdateEffect(LivingEntity entity, int amplifier) {
 
-        float height = entity.getDimensions(entity.getPose()).height;
+        float height = entity.getDimensions(entity.getPose()).height();
         Box box = Box.of(entity.getPos().add(0, height/1.5, 0), 0.6+height-height/10, 0.6+height-height/10, 0.6+height-height/10); //og is 1.7
 
 
@@ -81,32 +79,27 @@ public class ThunderAuraEffect extends StatusEffect {
             }
         });
 
-        super.applyUpdateEffect(entity, amplifier);
+        return super.applyUpdateEffect(entity, amplifier);
     }
 
 
     @Override
-    public void onApplied(LivingEntity target, AttributeContainer attributes, int amplifier) {
-        super.onApplied(target, attributes, amplifier);
+    public void onApplied(LivingEntity target, int amplifier) {
+        super.onApplied(target, amplifier);
 
         if(target.getWorld().isClient()){
             return;
         }
 
-        float height = target.getDimensions(target.getPose()).height;
+        float height = target.getDimensions(target.getPose()).height();
         AnimatedBallEffect ballEffect = AnimatedBallEffect.builder((ServerWorld) target.getWorld(), LightParticles.LIGHTNING_PARTICLE, target.getPos())
                 .entityOrigin(target).originOffset(new Vec3d(0,height/3.5,0)).updatePositions(true) // This is used to follow the player
                 .size(height-height/12).particles((int) (20+(height/10))).particlesPerIteration((int) (20+(height/10)))
                 .build();
 
-        ballEffect.runFor((double) Objects.requireNonNull(target.getStatusEffect(this)).getDuration()/20);
+        ballEffect.runFor((double) Objects.requireNonNull(target.getStatusEffect(LightEffects.THUNDER_AURA)).getDuration()/20);
 
 
-    }
-
-    @Override
-    public void onRemoved(LivingEntity entity, AttributeContainer attributes, int amplifier){
-        super.onRemoved(entity, attributes, amplifier);
     }
 
 }

@@ -27,10 +27,19 @@ public class StormAuraEffect extends StatusEffect {
         return true;
     }
 
-    //for some reason this does not work, so work-arounds!
+    boolean run = false;
+    LivingEntity targetedLivingEntity;
+
     @Override
-    public void applyUpdateEffect(LivingEntity entity, int amplifier) {
+    public boolean applyUpdateEffect(LivingEntity entity, int amplifier) {
         super.applyUpdateEffect(entity, amplifier);
+        if(!run){
+            if(!entity.getWorld().isClient()){
+                run = true;
+                this.targetedLivingEntity = entity;
+            }
+        }
+        return super.applyUpdateEffect(entity, amplifier);
     }
 
     private int prev_clearTime = 0;
@@ -39,8 +48,8 @@ public class StormAuraEffect extends StatusEffect {
     private boolean prev_thunder = false;
 
     @Override
-    public void onApplied(LivingEntity target, AttributeContainer attributes, int amplifier) {
-        super.onApplied(target, attributes, amplifier);
+    public void onApplied(LivingEntity target, int amplifier) {
+        super.onApplied(target, amplifier);
 
         if(target.getWorld().isClient()){
             return;
@@ -52,7 +61,7 @@ public class StormAuraEffect extends StatusEffect {
         prev_thunder = ((WorldPropertiesAccessor) target.getWorld()).getWorldProperties().isThundering();
 
         //i need it in seconds
-        int dur = Objects.requireNonNull(target.getStatusEffect(this)).getDuration()/20;
+        int dur = Objects.requireNonNull(target.getStatusEffect(LightEffects.STORM_AURA)).getDuration()/20;
 
         ((ServerWorld) target.getWorld()).setWeather(2, dur, true, true);
 
@@ -63,12 +72,12 @@ public class StormAuraEffect extends StatusEffect {
     }
 
     @Override
-    public void onRemoved(LivingEntity entity, AttributeContainer attributes, int amplifier){
-        super.onRemoved(entity, attributes, amplifier);
-        if(entity.getWorld().isClient()){
+    public void onRemoved(AttributeContainer attributes){
+        super.onRemoved(attributes);
+        if(targetedLivingEntity.getWorld().isClient()){
             return;
         }
-        ((ServerWorld) entity.getWorld()).setWeather(prev_clearTime, prev_rainTime, prev_rain, prev_thunder);
+        ((ServerWorld) targetedLivingEntity.getWorld()).setWeather(prev_clearTime, prev_rainTime, prev_rain, prev_thunder);
     }
 
 }

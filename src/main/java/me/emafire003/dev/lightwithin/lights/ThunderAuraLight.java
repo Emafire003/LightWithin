@@ -1,5 +1,6 @@
 package me.emafire003.dev.lightwithin.lights;
 
+import me.emafire003.dev.lightwithin.LightWithin;
 import me.emafire003.dev.lightwithin.compat.coloredglowlib.CGLCompat;
 import me.emafire003.dev.lightwithin.component.LightComponent;
 import me.emafire003.dev.lightwithin.config.BalanceConfig;
@@ -27,7 +28,6 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
@@ -66,7 +66,7 @@ public class ThunderAuraLight extends InnerLight {
     /// Used in the ALL target type, is the amount of lightnings that a player can still spawn in
     public static HashMap<UUID, Integer> LIGHTNING_USES_LEFT = new HashMap<>();
 
-    public static final TagKey<Item> THUNDER_AURA_TRIGGER_ITEMS = TagKey.of(RegistryKeys.ITEM, new Identifier(MOD_ID, "thunder_aura_trigger_items"));
+    public static final TagKey<Item> THUNDER_AURA_TRIGGER_ITEMS = TagKey.of(RegistryKeys.ITEM, LightWithin.getIdentifier("thunder_aura_trigger_items"));
 
 
     public ThunderAuraLight(List<LivingEntity> targets, double cooldown_time, double power_multiplier, int duration, String color, PlayerEntity caster, boolean rainbow_col) {
@@ -128,8 +128,8 @@ public class ThunderAuraLight extends InnerLight {
         if(component.getTargets().equals(TargetType.ALLIES)){
             targets.forEach(target -> {
                 if(!caster.getWorld().isClient && !caster.equals(target)){
-                    Vec3d origin = caster.getPos().add(0, caster.getDimensions(caster.getPose()).height/2, 0);
-                    Vec3d finish = target.getPos().add(0, target.getDimensions(target.getPose()).height/2, 0);
+                    Vec3d origin = caster.getPos().add(0, caster.getDimensions(caster.getPose()).height()/2, 0);
+                    Vec3d finish = target.getPos().add(0, target.getDimensions(target.getPose()).height()/2, 0);
                     //TODO this would be nice as a "completable effect" like it spawns the particles in sequence etc
                     LineEffect line = LineEffect.builder((ServerWorld) caster.getWorld(), LightParticles.LIGHTNING_PARTICLE, origin)
                             .particle(ParticleTypes.ELECTRIC_SPARK)         .targetPos(finish).particles((int) origin.distanceTo(finish)*2).particleLimit(100).limitParticlesEveryNIterations(1).build();

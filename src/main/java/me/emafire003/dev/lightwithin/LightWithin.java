@@ -20,7 +20,6 @@ import me.emafire003.dev.lightwithin.entities.LightEntities;
 import me.emafire003.dev.lightwithin.entities.earth_golem.EarthGolemEntity;
 import me.emafire003.dev.lightwithin.events.LightTriggeringAndEvents;
 import me.emafire003.dev.lightwithin.events.PlayerJoinEvent;
-import me.emafire003.dev.lightwithin.events.PlayerRightClickInteractEvent;
 import me.emafire003.dev.lightwithin.items.LightItems;
 import me.emafire003.dev.lightwithin.items.crafting.BrewRecipes;
 import me.emafire003.dev.lightwithin.lights.*;
@@ -123,7 +122,6 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 		LightTriggeringAndEvents.registerListeners();
 		registerLightUsedPacket();
 		registerLightChargeConsumedPacket();
-		registerInteractPacket();
 		registerReadyLightCacheRemover();
 		registerSyncOptionsOnJoin();
 		LightSounds.registerSounds();
@@ -210,15 +208,6 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 		return Config.AREA_OF_SEARCH_FOR_ENTITIES;
 	}
 
-	/**Sends a packet with updated config options to the client
-	 * such as the auto light activation permission*/
-	public static void syncCustomConfigOptions(ServerPlayerEntity player){
-		Map<String, Boolean> booleanMap = new HashMap<>();
-		booleanMap.put(ConfigPacketConstants.AUTO_LIGHT_ACTIVATION, Config.AUTO_LIGHT_ACTIVATION);
-		//TODO if needed i'll add other settings ecct
-		ConfigOptionsSyncPacketS2C optionsPacket = new ConfigOptionsSyncPacketS2C(booleanMap);
-		ServerPlayNetworking.send(player, ConfigOptionsSyncPacketS2C.ID, optionsPacket);
-	}
     /**Sends a packet with updated config options to the client
      * such as the auto light activation permission*/
     public static void syncCustomConfigOptions(ServerPlayerEntity player){
@@ -235,12 +224,14 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
         //Client to Server (serverbound packets)
         PayloadTypeRegistry.playC2S().register(LightUsedPayloadC2S.ID, LightUsedPayloadC2S.PACKET_CODEC);
         PayloadTypeRegistry.playC2S().register(LightChargeConsumedPayloadC2S.ID, LightChargeConsumedPayloadC2S.PACKET_CODEC);
+		PayloadTypeRegistry.playC2S().register(InteractedPayloadC2S.ID, InteractedPayloadC2S.PACKET_CODEC);
 
-        //Server to Client (clientbound packets)
+		//Server to Client (clientbound packets)
         PayloadTypeRegistry.playS2C().register(LightReadyPayloadS2C.ID, LightReadyPayloadS2C.PACKET_CODEC);
         PayloadTypeRegistry.playS2C().register(ConfigOptionSyncPayloadS2C.ID, ConfigOptionSyncPayloadS2C.PACKET_CODEC);
         PayloadTypeRegistry.playS2C().register(PlayRenderEffectPayloadS2C.ID, PlayRenderEffectPayloadS2C.PACKET_CODEC);
         PayloadTypeRegistry.playS2C().register(WindLightVelocityPayloadS2C.ID, WindLightVelocityPayloadS2C.PACKET_CODEC);
+		PayloadTypeRegistry.playS2C().register(GlowEntitiesPayloadS2C.ID, GlowEntitiesPayloadS2C.PACKET_CODEC);
 
     }
 
@@ -283,7 +274,8 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
                     }else{
                         List<ServerPlayerEntity> players = player.getServerWorld().getPlayers();
                         for(ServerPlayerEntity p : players){
-                            ServerPlayNetworking.send(p, PlayRenderEffectPacketS2C.ID, new PlayRenderEffectPacketS2C(RenderEffect.LIGHT_RAYS, player));
+							ServerPlayNetworking.send(p, new PlayRenderEffectPayloadS2C(RenderEffect.LIGHT_RAYS, player.getId()));
+
                         }
                     }
                     activateLight(player);
@@ -299,15 +291,6 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
         }));
     }
 
-    /**Registers an event where the player interacts with something, aka a right click even with an empty hand*/
-    private static void registerInteractPacket(){
-        ServerPlayNetworking.registerGlobalReceiver(InteractedPacketC2S.ID, (((server, player, handler, buf, responseSender) -> {
-            if(player.getWorld().isClient){
-                return;
-            }
-            server.execute(() -> PlayerRightClickInteractEvent.EVENT.invoker().interact(player));
-        })));
-    }
 
     private static void registerLightChargeConsumedPacket(){
         ServerPlayNetworking.registerGlobalReceiver(LightChargeConsumedPayloadC2S.ID, ((payload, context) -> {
@@ -448,7 +431,7 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 	 * */
 	public static List<LivingEntity> getAllies(PlayerEntity player){
 		List<LivingEntity> targets = new ArrayList<>();
-		List<LivingEntity> entities = player.getWorld().getEntitiesByClass(LivingEntity.class, new Box(player.getBlockPos()).expand(box_expansion_amount), (entity1 -> true));
+		List<LivingEntity> entities = player.getWorld().getEntitiesByClass(LivingEntity.class, new Box(player.getBlockPos()).expand(getBoxExpansionAmount()), (entity1 -> true));
 		targets.add(player);
 		for(LivingEntity ent : entities){
 			if(CheckUtils.CheckAllies.checkAlly(player, ent)){
@@ -533,7 +516,7 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 			player.sendMessage(Text.translatable("light.description.activation.defense.variant"), true);
 		}
 
-		new DefenseLight(targets, component.getMaxCooldown(), component.getPowerMultiplier(),
+		new DefenceLight(targets, component.getMaxCooldown(), component.getPowerMultiplier(),
 				component.getDuration(), player).execute();
 	}
 
@@ -712,7 +695,7 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 
 	public static void sendRenderRunePacket(ServerPlayerEntity player){
 		try{
-			ServerPlayNetworking.send(player, PlayRenderEffectPacketS2C.ID, new PlayRenderEffectPacketS2C(RenderEffect.RUNES));
+			ServerPlayNetworking.send(player, new PlayRenderEffectPayloadS2C(RenderEffect.RUNES, player.getId()));
 		}catch(Exception e){
 			LOGGER.error("FAILED to send data packets to the client!");
 			e.printStackTrace();

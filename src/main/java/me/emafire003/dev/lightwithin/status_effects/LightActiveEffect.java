@@ -41,7 +41,6 @@ public class LightActiveEffect extends StatusEffect {
         return true;
     }
 
-    // This method is called when it applies the status effect. We implement custom functionality here.
     boolean run = false;
     LivingEntity targetedLivingEntity;
 
@@ -92,7 +91,7 @@ public class LightActiveEffect extends StatusEffect {
             }
             //Resets the lightnings uses for the player
             if(component.getType().equals(InnerLightType.THUNDER_AURA) && component.getTargets().equals(TargetType.ALL)){
-                ThunderAuraLight.LIGHTNING_USES_LEFT.remove(entity.getUuid());
+                ThunderAuraLight.LIGHTNING_USES_LEFT.remove(targetedLivingEntity.getUuid());
             }
 
         }

@@ -1,9 +1,8 @@
 package me.emafire003.dev.lightwithin.status_effects;
 
-import com.mojang.datafixers.util.Pair;
 import me.emafire003.dev.lightwithin.LightWithin;
 import me.emafire003.dev.lightwithin.compat.coloredglowlib.CGLCompat;
-import me.emafire003.dev.lightwithin.networking.GlowEntitiesPacketS2C;
+import me.emafire003.dev.lightwithin.networking.GlowEntitiesPayloadS2C;
 import me.emafire003.dev.lightwithin.util.CheckUtils;
 import me.emafire003.dev.lightwithin.util.ForestAuraRelation;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
@@ -18,9 +17,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.math.Box;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 
@@ -40,10 +37,20 @@ public class ForestAuraEffect extends StatusEffect {
     private static final int ticksBetweenUpdates = 20*3; //Aka it now updates the entities once every 3 secons
     private int tickCounter = 0;
 
+    boolean run = false;
+    LivingEntity targetedLivingEntity;
+
     //for some reason this does not work, so work-arounds!
     @Override
-    public void applyUpdateEffect(LivingEntity entity, int amplifier) {
+    public boolean applyUpdateEffect(LivingEntity entity, int amplifier) {
         super.applyUpdateEffect(entity, amplifier);
+        if(!run){
+            if(!entity.getWorld().isClient()){
+                run = true;
+                this.targetedLivingEntity = entity;
+            }
+        }
+        return true;
     }
 
     @Override
@@ -78,7 +85,7 @@ public class ForestAuraEffect extends StatusEffect {
         visibleEntities.addAll(newVisibleEntities);
 
         //0 means neutral, 1 means enemy, 2 ally
-        List<Pair<UUID, ForestAuraRelation>> uuids_related = new ArrayList<>();
+        HashMap<UUID, ForestAuraRelation> uuids_related = new HashMap<>();
 
         newVisibleEntities.forEach(entity1 -> {
 
@@ -86,46 +93,50 @@ public class ForestAuraEffect extends StatusEffect {
                 if(amplifier >= 6){
                     boolean colored = false;
                     if(CheckUtils.CheckAllies.checkEnemies(entity, entity1) || entity1 instanceof HostileEntity){
-                        uuids_related.add(new Pair<>(entity1.getUuid(), ForestAuraRelation.ENEMY));
+                        uuids_related.put(entity1.getUuid(), ForestAuraRelation.ENEMY);
                         //CLIENTSIDE: CGLCompat.getLib().setExclusiveColorFor(entity1, ForestAuraLight.ENEMY_COLOR, (PlayerEntity) entity);
                         colored = true;
                     }
                     if(amplifier >= 8){
                         if(CheckUtils.CheckAllies.checkAlly(entity, entity1)){
                             if(!colored){
-                                uuids_related.add(new Pair<>(entity1.getUuid(), ForestAuraRelation.ALLY));
+                                uuids_related.put(entity1.getUuid(), ForestAuraRelation.ALLY);
                             }else{
-                                uuids_related.remove(new Pair<>(entity1.getUuid(), ForestAuraRelation.ALLY));
-                                uuids_related.add(new Pair<>(entity1.getUuid(), ForestAuraRelation.ALLY));
+                                uuids_related.remove(entity1.getUuid());
+                                uuids_related.put(entity1.getUuid(), ForestAuraRelation.ALLY);
                             }
                             colored = true;
                         }
                     }
                     if(!colored){
-                        uuids_related.add(new Pair<>(entity1.getUuid(), ForestAuraRelation.NEUTRAL));
+                        uuids_related.put(entity1.getUuid(), ForestAuraRelation.NEUTRAL);
                         // CGLCompat.getLib().setExclusiveColorFor(entity1, ForestAuraLight.COLOR, (PlayerEntity) entity);
                     }
                 }
                 else{
-                    uuids_related.add(new Pair<>(entity1.getUuid(), ForestAuraRelation.NEUTRAL));
+                    uuids_related.put(entity1.getUuid(), ForestAuraRelation.NEUTRAL);
                     //CGLCompat.getLib().setExclusiveColorFor(entity1, ForestAuraLight.COLOR, (PlayerEntity) entity);
                 }
 
             }else{
-                uuids_related.add(new Pair<>(entity1.getUuid(), ForestAuraRelation.NEUTRAL));
+                uuids_related.put(entity1.getUuid(), ForestAuraRelation.NEUTRAL);
                 //uuids_related.add(new Pair<>(entity1.getUuid(), 0));
             }
         });
 
         if(!entity.getWorld().isClient()){
-            GlowEntitiesPacketS2C glowingPacket = new GlowEntitiesPacketS2C(uuids_related, false);
-            ServerPlayNetworking.send((ServerPlayerEntity) entity, GlowEntitiesPacketS2C.ID, glowingPacket);
+            sendGlowEntitiesPacket((ServerPlayerEntity) entity, uuids_related, false);
         }
     }
 
+    public static void sendGlowEntitiesPacket(ServerPlayerEntity player, Map<UUID, ForestAuraRelation> relationMap, boolean shouldClear){
+        GlowEntitiesPayloadS2C payload = new GlowEntitiesPayloadS2C(relationMap, shouldClear);
+        ServerPlayNetworking.send(player, payload);
+    }
+
     @Override
-    public void onApplied(LivingEntity entity, AttributeContainer attributes, int amplifier) {
-        super.onApplied(entity, attributes, amplifier);
+    public void onApplied(LivingEntity entity, int amplifier) {
+        super.onApplied(entity, amplifier);
 
         if(!(entity instanceof PlayerEntity)){
             return;
@@ -157,18 +168,18 @@ public class ForestAuraEffect extends StatusEffect {
 
     }
 
+    //TODO the glow effect persists
     @Override
-    public void onRemoved(LivingEntity entity, AttributeContainer attributes, int amplifier){
-        super.onRemoved(entity, attributes, amplifier);
-        if(!(entity instanceof PlayerEntity)){
+    public void onRemoved(AttributeContainer attributes){
+        super.onRemoved(attributes);
+        if(!(targetedLivingEntity instanceof PlayerEntity)){
             return;
         }
         if(FabricLoader.getInstance().isModLoaded("coloredglowlib")){
-            visibleEntities.forEach(entity1 -> CGLCompat.getLib().clearExclusiveColorFor(entity1, (PlayerEntity) entity, true));
+            visibleEntities.forEach(entity1 -> CGLCompat.getLib().clearExclusiveColorFor(entity1, (PlayerEntity) targetedLivingEntity, true));
         }
-        if(!entity.getWorld().isClient()){
-            GlowEntitiesPacketS2C glowingPacket = new GlowEntitiesPacketS2C(null, true);
-            ServerPlayNetworking.send((ServerPlayerEntity) entity, GlowEntitiesPacketS2C.ID, glowingPacket);
+        if(!targetedLivingEntity.getWorld().isClient()){
+            sendGlowEntitiesPacket((ServerPlayerEntity) targetedLivingEntity, null, true);
         }
         //clears the stuff
         visibleEntities.clear();

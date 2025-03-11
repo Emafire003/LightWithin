@@ -1,6 +1,5 @@
 package me.emafire003.dev.lightwithin.lights;
 
-
 import me.emafire003.dev.lightwithin.LightWithin;
 import me.emafire003.dev.lightwithin.compat.coloredglowlib.CGLCompat;
 import me.emafire003.dev.lightwithin.component.LightComponent;
@@ -27,7 +26,6 @@ import net.minecraft.util.math.BlockPos;
 
 import java.util.ArrayList;
 import java.util.List;
-
 
 public class HealLight extends InnerLight {
 

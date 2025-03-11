@@ -17,15 +17,15 @@ public class LightParticles {
     public static final SimpleParticleType EARTHENLIGHT_PARTICLE = FabricParticleTypes.simple();
     public static final SimpleParticleType WINDLIGHT_PARTICLE = FabricParticleTypes.simple();
     public static final SimpleParticleType AQUALIGHT_PARTICLE = FabricParticleTypes.simple();
-    public static final DefaultParticleType FOREST_AURA_LIGHT_PARTICLE = FabricParticleTypes.simple();
-    public static final DefaultParticleType THUNDER_AURA_LIGHT_PARTICLE = FabricParticleTypes.simple();
+    public static final SimpleParticleType FOREST_AURA_LIGHT_PARTICLE = FabricParticleTypes.simple();
+    public static final SimpleParticleType THUNDER_AURA_LIGHT_PARTICLE = FabricParticleTypes.simple();
     public static final SimpleParticleType FROGLIGHT_PARTICLE = FabricParticleTypes.simple();
 
-    public static final DefaultParticleType LIGHTNING_PARTICLE = FabricParticleTypes.simple();
+    public static final SimpleParticleType LIGHTNING_PARTICLE = FabricParticleTypes.simple();
 
     public static final SimpleParticleType LIGHT_PARTICLE = FabricParticleTypes.simple();
     public static final SimpleParticleType SHINE_PARTICLE = FabricParticleTypes.simple();
-    public static final ParticleType<ColoredPuffParticleEffect> COLORED_PUFF_PARTICLE = FabricParticleTypes.complex(ColoredPuffParticleEffect.FACTORY);
+    public static final ParticleType<ColoredPuffParticleEffect> COLORED_PUFF_PARTICLE = FabricParticleTypes.complex(ColoredPuffParticleEffect.CODEC, ColoredPuffParticleEffect.PACKET_CODEC);
 
     public static void registerParticles() {
         Registry.register(Registries.PARTICLE_TYPE, LightWithin.getIdentifier("heal_light_particle"),
@@ -46,7 +46,7 @@ public class LightParticles {
                 AQUALIGHT_PARTICLE);
         Registry.register(Registries.PARTICLE_TYPE, LightWithin.getIdentifier("frog_light_particle"),
         Registry.register(Registries.PARTICLE_TYPE, LightWithin.getIdentifier("forest_aura_light_particle"),
-                FOREST_AURA_LIGHT_PARTICLE);
+                FOREST_AURA_LIGHT_PARTICLE));
         Registry.register(Registries.PARTICLE_TYPE, LightWithin.getIdentifier("thunder_aura_light_particle"),
                 THUNDER_AURA_LIGHT_PARTICLE);
         Registry.register(Registries.PARTICLE_TYPE, LightWithin.getIdentifier("frog_light_particle"),

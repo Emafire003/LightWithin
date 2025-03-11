@@ -25,19 +25,17 @@ public class LightEffects {
                     new WaterSlideEffect());
     public static final RegistryEntry<StatusEffect> WATER_CASCADE = registerStatusEffect("water_cascade",
             new WaterCascadeEffect());
-    private static RegistryEntry<StatusEffect> registerStatusEffect(String name, StatusEffect effect){
-        return Registry.registerReference(Registries.STATUS_EFFECT, LightWithin.getIdentifier(name), effect);
-    public static final StatusEffect FOREST_AURA = registerStatusEffect("forest_aura",
+    public static final RegistryEntry<StatusEffect> FOREST_AURA = registerStatusEffect("forest_aura",
             new ForestAuraEffect());
-    public static final StatusEffect INTOXICATION = registerStatusEffect("intoxication",
+    public static final RegistryEntry<StatusEffect> INTOXICATION = registerStatusEffect("intoxication",
             new IntoxicationEffect());
-    public static final StatusEffect THUNDER_AURA = registerStatusEffect("thunder_aura",
+    public static final RegistryEntry<StatusEffect> THUNDER_AURA = registerStatusEffect("thunder_aura",
             new ThunderAuraEffect());
-    public static final StatusEffect STORM_AURA = registerStatusEffect("storm_aura",
+    public static final RegistryEntry<StatusEffect> STORM_AURA = registerStatusEffect("storm_aura",
             new StormAuraEffect());
 
-    private static StatusEffect registerStatusEffect(String name, StatusEffect effect){
-        return Registry.register(Registries.STATUS_EFFECT, new Identifier(LightWithin.MOD_ID, name),effect);
+    private static RegistryEntry<StatusEffect> registerStatusEffect(String name, StatusEffect effect) {
+        return Registry.registerReference(Registries.STATUS_EFFECT, LightWithin.getIdentifier(name), effect);
     }
 
     public static void registerModEffects(){

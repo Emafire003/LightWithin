@@ -27,6 +27,7 @@ import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.damage.DamageTypes;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectCategory;
+import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.passive.PassiveEntity;
@@ -487,41 +488,6 @@ public class CheckUtils {
         }
     }
 
-    public static List<Item> toItemList(List<String> list){
-        List<Item> items = new ArrayList<>();
-        for(String id : list){
-            items.add(Registries.ITEM.get(Identifier.of(id)));
-        }
-        return items;
-    }
-
-    public static List<String> toItemStringList(List<Item> list){
-        List<String> items = new ArrayList<>();
-        for(Item item : list){
-            items.add(Registries.ITEM.getId(item).toString());
-        }
-        return items;
-    }
-
-    public static List<Block> toBlockList(List<String> list){
-        List<Block> blocks = new ArrayList<>();
-        for(String id : list){
-            blocks.add(Registries.BLOCK.get(Identifier.of(id)));
-        }
-        return blocks;
-    }
-
-    public static List<String> toBlockStringList(List<Block> list){
-        List<String> blocks = new ArrayList<>();
-        for(Block block : list){
-            blocks.add(Registries.BLOCK.getId(block).toString());
-        }
-        return blocks;
-    }
-
-    public static boolean checkBlocksWithTags(PlayerEntity player, int rad, TagKey<?> tag){
-        //If the terrain under the player's feet is natural block (times 3 aka 3 blocks down), will create a moat,  if not a wall.
-        List<TagKey<Block>> tags = new ArrayList<>();
 
     /**Checks for the presence of a block in the radius around the player and have the selected tag
      *
@@ -942,8 +908,11 @@ public class CheckUtils {
     }
 
     /**Checks if the most recent damage source done to an entity is a lightning bolt*/
-    public static boolean checkRecentlyStruckByLightning(LivingEntity entity){
+    public static boolean checkRecentlyStruckByLightning(LivingEntity entity) {
         return entity.getRecentDamageSource() != null && entity.getRecentDamageSource().isOf(DamageTypes.LIGHTNING_BOLT);
+    }
+
+    //TODO check if i reallt don't use it anywhere of it's a problem
     public static boolean checkDebuffed(LivingEntity entity){
         Collection<StatusEffectInstance> a = entity.getStatusEffects();
         for(StatusEffectInstance status : a){

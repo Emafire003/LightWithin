@@ -1,27 +1,27 @@
 package me.emafire003.dev.lightwithin.client.shaders;
 
-import ladysnake.satin.api.event.ShaderEffectRenderCallback;
-import ladysnake.satin.api.managed.ManagedShaderEffect;
-import ladysnake.satin.api.managed.ShaderEffectManager;
 import me.emafire003.dev.lightwithin.config.ClientConfig;
 import me.emafire003.dev.lightwithin.status_effects.LightEffects;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
+import org.ladysnake.satin.api.event.ShaderEffectRenderCallback;
+import org.ladysnake.satin.api.managed.ManagedShaderEffect;
+import org.ladysnake.satin.api.managed.ShaderEffectManager;
 
 import java.util.Objects;
 
 public class LightShaders {
 
     public static final ManagedShaderEffect PHOSPHOR_DRUNK_SHADER = ShaderEffectManager.getInstance()
-            .manage(new Identifier("shaders/post/phosphor.json"));
+            .manage(Identifier.of("shaders/post/phosphor.json"));
 
     public static final ManagedShaderEffect DECONVERGE_SHADER = ShaderEffectManager.getInstance()
-            .manage(new Identifier("shaders/post/deconverge.json"));
+            .manage(Identifier.of("shaders/post/deconverge.json"));
 
     public static final ManagedShaderEffect WOBBLE_SHADER = ShaderEffectManager.getInstance()
-            .manage(new Identifier("shaders/post/wobble.json"));
+            .manage(Identifier.of("shaders/post/wobble.json"));
 
     private static boolean intoxicated_warning_sent = false;
 

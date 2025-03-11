@@ -37,8 +37,8 @@ import java.util.stream.Stream;
 
 public class FrostLight extends InnerLight {
 
-    public static final TagKey<Block> FROST_TRIGGER_BLOCKS = TagKey.of(RegistryKeys.BLOCK, new Identifier(MOD_ID, "frost_trigger_blocks"));
-    public static final TagKey<Item> FROST_TRIGGER_ITEMS = TagKey.of(RegistryKeys.ITEM, new Identifier(MOD_ID, "frost_trigger_items"));
+    public static final TagKey<Block> FROST_TRIGGER_BLOCKS = TagKey.of(RegistryKeys.BLOCK, LightWithin.getIdentifier("frost_trigger_blocks"));
+    public static final TagKey<Item> FROST_TRIGGER_ITEMS = TagKey.of(RegistryKeys.ITEM, LightWithin.getIdentifier("frost_trigger_items"));
 
 
     public static final Item INGREDIENT = Items.SNOWBALL;
@@ -117,7 +117,7 @@ public class FrostLight extends InnerLight {
                 if(target.equals(caster) && component.getTargets().equals(TargetType.ALLIES)){
                     target.addStatusEffect(new StatusEffectInstance(LightEffects.FREEZE_RESISTANCE, (int) (this.duration*20/Config.DIV_SELF)));
                 }else{
-                    target.addStatusEffect(new StatusEffectInstance(LightEffects.FREEZE_RESISTANCE, (int) (this.duration)*20));
+                    target.addStatusEffect(new StatusEffectInstance(LightEffects.FREEZE_RESISTANCE, this.duration *20));
                 }
 
                 Direction facing = target.getHorizontalFacing();
