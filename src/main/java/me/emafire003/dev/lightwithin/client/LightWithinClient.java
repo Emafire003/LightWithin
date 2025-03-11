@@ -339,13 +339,14 @@ public class LightWithinClient implements ClientModInitializer {
             client.execute(() -> {
                 try{
                     Map<UUID, ForestAuraRelation> results = payload.entitiesGlowing();
-                    if(results == null){
+                    if(results == null && !payload.shouldClear()){
                         LOGGER.error("The glowing entities list received is empty!");
                         return;
                     }if(client.player == null){
                         LOGGER.error("The client player is null!");
                         return;
-                    }else if(results.size() == 1 && results.containsKey(new UUID(0,0))){
+                    }else if(payload.shouldClear()){
+                        client.player.sendMessage(Text.literal("helo"));
                         //Clears CGL exclusive colors on client side.
                         if(FabricLoader.getInstance().isModLoaded("coloredglowlib")){
                             entitiesGlowingForPlayer.forEach(uuid -> {

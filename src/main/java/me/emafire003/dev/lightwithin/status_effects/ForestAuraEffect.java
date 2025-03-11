@@ -168,7 +168,6 @@ public class ForestAuraEffect extends StatusEffect {
 
     }
 
-    //TODO the glow effect persists
     @Override
     public void onRemoved(AttributeContainer attributes){
         super.onRemoved(attributes);
