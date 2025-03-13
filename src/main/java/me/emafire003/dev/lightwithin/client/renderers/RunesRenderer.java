@@ -17,8 +17,8 @@ public class RunesRenderer {
     private static boolean renderRunes = false;
     private static int runesTick = 0;
     private static int show_runes_for = 3*20;
-    private static double runes_scale = 1;
-    
+    private static double runes_scale = 0.5;
+
     public static boolean shouldRender(){
         return renderRunes;
     }
@@ -36,7 +36,7 @@ public class RunesRenderer {
     public static void setRunesScale(double scale){
         runes_scale = scale;
     }
-    
+
     public static void render(InnerLightType type, DrawContext drawContext){
         ClientPlayerEntity player = MinecraftClient.getInstance().player;
         if(player == null){

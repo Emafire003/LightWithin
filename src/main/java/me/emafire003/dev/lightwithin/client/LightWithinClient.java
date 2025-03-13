@@ -102,7 +102,7 @@ public class LightWithinClient implements ClientModInitializer {
 
         EntityModelLayerRegistry.registerModelLayer(MODEL_EARTH_GOLEM_LAYER, EarthGolemEntityModel::getTexturedModelData);
 
-        ClientConfig.registerConfigs();
+        ClientConfig.reloadConfig();
 
         ClientTickEvents.END_CLIENT_TICK.register((minecraftClient -> {
             //This is done as to not display another Light Ready icon when it just triggered
