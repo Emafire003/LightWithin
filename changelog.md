@@ -15,10 +15,8 @@ Intoxication, that will randomise the movement controls, and make the player see
 
 You are immune to suffocation damage while you have your light active, but be aware of its timer!
 
-To trigger this light, you (generally) will need to be: low health, in a forest biome, be surronded by leaves or hold a sapling. 
-# TODO make sure these are corrct?
-The relevant checks are performed when: you get attacked, you attack, an ally dies. More info on the wiki. 
-# TODO make sure these are corrct?
+To trigger this light, you (generally) will need to be: low health, in a forest biome, be surrounded by leaves or hold a sapling.
+The relevant checks are performed when: you get attacked, you attack, an ally dies. More info on the wiki.
 
 ### ThunderAura
 This one comes with the power of bellowing thunder and the strength of its lightnings. Whenever you activated, you will become a bit yellowier than before. And statically charged probably too.
