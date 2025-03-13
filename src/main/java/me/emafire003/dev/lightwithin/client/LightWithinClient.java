@@ -346,7 +346,6 @@ public class LightWithinClient implements ClientModInitializer {
                         LOGGER.error("The client player is null!");
                         return;
                     }else if(payload.shouldClear()){
-                        client.player.sendMessage(Text.literal("helo"));
                         //Clears CGL exclusive colors on client side.
                         if(FabricLoader.getInstance().isModLoaded("coloredglowlib")){
                             entitiesGlowingForPlayer.forEach(uuid -> {

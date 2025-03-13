@@ -17,6 +17,7 @@ import net.minecraft.client.render.entity.PlayerEntityRenderer;
 import net.minecraft.client.render.entity.model.PlayerEntityModel;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.math.ColorHelper;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -43,11 +44,12 @@ public abstract class PlayerArmColorOverlayMixin extends LivingEntityRenderer<Ab
         }
         if(player.hasStatusEffect(LightEffects.LIGHT_ACTIVE)){
             if(LightWithin.LIGHT_COMPONENT.get(player).getType().equals(InnerLightType.FOREST_AURA)){
-                //TODO see from 1.20 and bring this back
+                arm.render(matrices, vertices, light, overlay, ColorHelper.Argb.fromFloats(0.4F, 0.4f, 0.9f, 0.4f));
                 //arm.render(matrices, vertices, light, overlay, 0.4f, 0.9f, 0.4f, 0.4f);
                 return;
             }
             if(LightWithin.LIGHT_COMPONENT.get(player).getType().equals(InnerLightType.THUNDER_AURA)){
+                arm.render(matrices, vertices, light, overlay, ColorHelper.Argb.fromFloats(0.4F, 0.8f, 0.8f, 0.15f));
                 //rm.render(matrices, vertices, light, overlay, 0.8f, 0.8f, 0.15f, 0.4f);
                 return;
             }
