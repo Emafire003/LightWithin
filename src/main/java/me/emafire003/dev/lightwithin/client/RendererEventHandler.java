@@ -105,7 +105,6 @@ public class RendererEventHandler {
                 LightWithinClient.setLightReady(false);
             }
 
-            //TODO make sure this is ok even in the main etc
             //In the replay mod the player is by default in first person, so don't display the runes at all, since they are meant for first person.
             if(ReplayModCompat.isInReplayMode()){
                 return;

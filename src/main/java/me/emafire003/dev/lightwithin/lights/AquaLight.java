@@ -122,8 +122,8 @@ public class AquaLight extends InnerLight {
                 if(protection.isPresent()){
                     iron_chest.addEnchantment(protection.get(), caster.getRandom().nextBetween(1, 3));
                 }else{
-                    //TODO remove
-                    LOGGER.info("Who the heck removed protection from the enchants list? (The drowneds spawned with AquaLight won't be equipped with it, but it's not a critical issue");
+                    //Ah this is a message to any modder who removed the protection enchant from the enchants list, not a "true" debug message.
+                    LOGGER.debug("Who the heck removed protection from the enchants list? (The drowneds spawned with AquaLight won't be equipped with it, but it's not a critical issue");
                 }
 
                 ItemStack turtle_helmet = new ItemStack(Items.TURTLE_HELMET);

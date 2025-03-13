@@ -39,7 +39,6 @@ public class IntoxicationEffect extends StatusEffect {
         if(entity.isOnGround() && entity.getRandom().nextBetween(1, 100) <= (double) amplifier /1.5){
             ((LivingEntityJumpInvoker) entity).jumpInvoker();
         }
-        //TODO don't know what this means maybe it should be false
         return true;
     }
 

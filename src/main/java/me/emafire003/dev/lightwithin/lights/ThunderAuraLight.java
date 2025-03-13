@@ -27,7 +27,6 @@ import net.minecraft.registry.tag.TagKey;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
-import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
@@ -134,7 +133,6 @@ public class ThunderAuraLight extends InnerLight {
                     LineEffect line = LineEffect.builder((ServerWorld) caster.getWorld(), LightParticles.LIGHTNING_PARTICLE, origin)
                             .particle(ParticleTypes.ELECTRIC_SPARK)         .targetPos(finish).particles((int) origin.distanceTo(finish)*2).particleLimit(100).limitParticlesEveryNIterations(1).build();
 
-                    caster.sendMessage(Text.literal("Spawinging the line, with particles number: " + (int) origin.distanceTo(finish)*2));
                     line.runFor(0.5);
                 }
                 target.addStatusEffect(new StatusEffectInstance(LightEffects.THUNDER_AURA, this.duration*20, (int) this.power_multiplier -1, false, true));

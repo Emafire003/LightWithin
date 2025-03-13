@@ -754,7 +754,6 @@ public class LightTriggerChecks {
 
     }
 
-    //TODO test multiplayer
     public static void checkThunderAura(PlayerEntity player, LightComponent component, Entity attacker, Entity target){
         double trigger_sum = 0;
 

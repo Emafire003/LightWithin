@@ -12,7 +12,6 @@ public enum RenderEffect implements StringIdentifiable {
     LUXCOGNITA_SCREEN("luxcognita_screen"),
     FORCED_LIGHT_RAYS("forced_light_rays");
 
-    //TODO i need to make a PacketCodec as well
     public static final Codec<RenderEffect> CODEC = StringIdentifiable.createCodec(RenderEffect::values);
 
     /*public static <T extends Enum<T>> T readEnumConstant(Class<T> enumClass, ByteBuf buf) {
