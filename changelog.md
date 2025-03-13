@@ -1,40 +1,76 @@
-Welcome to release 1.1.0 which had 43 commits, 155 changed files with 5,633 additions and 1,881 deletions! (yay, and it's not even the port to 1.20.5 yet)
+Hi! It's been a while (again)! Update 1.2.0 brings you (mainly)...
+## Aura lights!
+A new category of lights, beside the effect-based ones (well technically almost all of them use effects) and the "elemental ones".
+These first ones added are ForestAura and ThunderAura, and you have a roughly 6% chance of getting them. (They are still based on you uuid so it's not chance per se, but more of the "chance you have of having a compatible uuid" with it)
 
-### LightCharges
-This is the primary feature added by this release. LightCharges will allow you to activate your light whenever you want! Sort of.
+### ForestAura
+This light is linked to the essence of the forest, be it the soil or the plants. Whenever you activate it, you will be communing with the forest and thus you will turn green! (photosynthesis ehy?)
+It has two target types:
+- **SELF**: Once activate, your matter and the matter of the forest will become one thing, and you will be able to pass through forest blocks (defined in a dedicated tag), like dirt logs and leaves. 
+It works similarly to powder snow. Be careful tho! You are not a mole and you won't be able to see inside blocks, but you will be able to see other entities through a glow effect.
+Based on the power level of your light, you will also be able to tell apart friend from foe!
+- **ALL**: This variant will be harnessing the power of the secondary metabolites of forest plants: it will spawn a few different "puffs" of various substances around the caster, and they will affect every other entity around them,
+except for other fellow forest-aura light-bringers. The puffs will apply different potion effects, like blindness slowness, poison etc, their strength type and duration depeding on the light's duration and power level. A new potion effect has been added,
+Intoxication, that will randomise the movement controls, and make the player see... well peculiar stuff. (configurable in the config for accessibility). It will also make them jump around!
 
-- You will be able to get and use LightCharges after you have triggred your light normally at least once. 
-- Every player has maximum number of charges that they can store at a given time, and it ranges from 0-8 (or 1-7, see the config). 
-- You can use a charge by pressing the same button you use to activate it, by default it's **V**. Using a charge will set you in a "light-ready" status, press the activation button again to activate your light. You can't automatically recover a charge you have used, so make sure to activate your light as well! Or, harvest it with a Empty bottle to get the BottledLight back.
-- An icon will also appear showing how many light charges you currently have. Also, the more light chargese you have stored, the more you will glow. When you have max light charges you will also emit some light particles. The icon won't show up unless you have triggered your light naturally at least once. By default it's in the same position as the activate icon, top left corner!
-- Using a light charge is more costly for your light, and will increase the cooldown time by quite a lot!
-- Getting a charge is a complicated and somewhat expensive process. You will need to get a BottledLight, an item that stores InnerLight energy in a bottle. You can use this item with a right click, and after the bottle breaks you will have obtained one light charge. You will also be put in a temporary cooldown.
-- To get the BottledLight there are two ways: The first and simpler one is using an empty bottle when your light is ready. This will make a BottledLight store your own InnerLight, and only you will be able to use it. The other way is the alchemist way, you will be able to brew some of it by using an Experience Bottle and crushed luxintus berry, which you can obtain by smashing an anvil on top a luxintus berry. Be warned! May explode!. After that, you will need to insert the ingredients associated to the desidere light type and target. Every player with the same type and target will be able to use these. But if you have a different light type, please refrain from trying to use it!
-- Cool rendering effects, like particles and rays are displayed when you use a light charge, when you increase your number of charges, when you harvest it etc. Also some new sounds will play.
+You are immune to suffocation damage while you have your light active, but be aware of its timer!
 
-### Luxcognita Rework
-The luxcognita berry has been reworked, now when you eat it a new screen will open, with the berry asking you what you want to know. You will be able to chose learn about 4 things: Your InnerLight type, target and their corresponding ingredients. An animation and a jingle will play when you press the button. Be warned! You are "actively thinking-speaking with the luxintus berry" aka the game isn't paused, so you are vulnerable to mob attacks!
+To trigger this light, you (generally) will need to be: low health, in a forest biome, be surronded by leaves or hold a sapling. 
+# TODO make sure these are corrct?
+The relevant checks are performed when: you get attacked, you attack, an ally dies. More info on the wiki. 
+# TODO make sure these are corrct?
 
-In the future this may be the start of somekind of in-game tutorial of the mod, so tell me if you like it and if you'd change anything.
+### ThunderAura
+This one comes with the power of bellowing thunder and the strength of its lightnings. Whenever you activated, you will become a bit yellowier than before. And statically charged probably too.
+It has three target types:
+- **ALLIES**: Upon activation, you and your allies will be shielded by the thunder, with a globe of electrical particles floating around you. This forcefield will
+always be centered around you or you ally, and if any entity comes into contact with it will get shocked and bounced back where it came! (it is a very satisfying and fun thing to do trust me). 
+A "zap" sound will also be played, and particles displayed. The strength of the repulsion and the damage are scaled on the power level. The size of the forcefield is scaled by the size of the entity.
+You and your allies will also be immune to lightning damage while the effect is active
+- **ALL**: You will be able to use the power of the storm to strike wherever you like with a thunder bolt! Just point, right click, and... BAM HERE COMES LIGHTNING!!! *(mcqueen?)*. You can do so even if you don't have a free hand.
+The number of lightnings spawned (by default, but it's configurable), is determined by the light's power level. The max distance is several blocks away (30ish iirc).
+- **VARIANT**: This is the most peculiar target type, and maybe the most close to thunder itself. Once you activate, you will call a storm where you stand.
+But it will be supercharged with A LOT of extra lightnings. They will randomly spawn in (configurable) area around you, and they will be spawning both on ground and in the air.
+The amount of lightnings per second is based on you power level, as well as the area of this effect. 
 
-### Client Config
-A client config file has been added. This allows you to customize the graphical settings for the mod, and this one comes wiht a GUI! To open the config menu you will need to install YACL and ModMenu. The client config adds options to adjust the position of the icons, their scale, the presence of the runes on screen and more. Check it out in game or look at the respective section on the wiki!
+You are always protected from lightning damage while your light is active as well.
+To trigger this light, you (generally) will need to: be on low health (or your allies need to), surrounded by your allies, have a copper rod, stand on a copper rod, thundery or rainy weather.
+The checks are performed when an ally is getting attacked or struck by lightning, you are getting attacked or struck by lightning. Check the wiki for more info.
 
-### Config version 4
-A few new settings were added, mostly concerning the newly added stuff. You will also be able to specify if and who can activate an InnerLight in a faction's territory, if the Factions mod is installed.
+Get more info in the wiki, or just try it out! It of course comes with its icon, particle effect and sounds!
 
-### Commands
-- A new command sub type has benn added, `/light charge <add|remove|fill|empty> [amount]` to manage the light charges. Also, the `/light get all` command now displays information on what the inner lights of a player would originally have been. For example, if they used a luxmutua berry it will show what their type should be according to their UUID. The permission to use it, as usual, is `lightwithin.commands.charge`.
-- Added options to mange the *hasTriggeredNaturally* status and *max_charges* to `/light set & get` commands.
-- Also, a mostly debug command to reload the client config has been added, `/light_client reload`. 
+### Trigger items and blocks are now tags
+The list of blocks and item that acted as triggers for some of the lights have now been moved away from the config files and into new tags, located in
+`..data/lightwithin/tags/` and you will be able to modify them via a datapack. 
 
-### Misc
-Added a trigger for a player causing an explosion, it will be treated as Enity Attack on another one.
-Added new particles! These will spawn when using or obtaining light charges mostly. Also added a system to display render effects, and quite a bit of this sort of things under the hood, like two new libraries written by my are included in this version.
-Added new sound effects!
-Fixed a few issues
-Updated dependencies, mainly compatibility with flan 1.10+ has been added. 
-Optimized some of the code
-Possibily something else i've forgot.
+### New trigger options and checks
+A new check has been added, _surrounded by allies_, which checks how many allies are you close to. It is used in the thunder aura light currently.
+There are also checks for the weather, and the surrounding leaves. There are also triggers for when you get zapped by lightning.
+
+### Config Files
+- Updated the main Config to version 5, added the "surrounded_by_allies" option, similar to surrounded by instead of enemies it uses allies.
+- BalanceConfig to version 2, added the new settings for forest and thunder aura. You will also be able to set the puff action range, their max and min distance relative to the player. 
+You can also change the number of lightnings per level and the size of the superstorm.
+- TriggerConfig updated to version 3, added the settings for Forest and Thunder Aura
+- ClientConfig to verso 2, added the options to scale the runes displayed on activation as well as the option to choose the colors for ForsetAura's vision of allies enemies and neutrals.
+
+### Under the hood changes
+Updated to Loom 1.9, updated to the newer gradle version, updated to ParticleAnimationLib 0.1.0. Updated to new YAWP version (1.21.1)
+
+### Misc & Bug fixes
+- Added a few new particles, the lightnings ones and puff particle ones.
+- Added the relevant BottledLights to the 2 new lights
+- Tweaked how the light types particle look, they now go a bit more horizontally before floating up. They also are a little less randomly coloured.
+- The area of search for entities (the one that checks for allies and enemies and does stuff) has been double to 12 blocks (from 6) by default
+- Added sound subtitles translations
+- Fixed how the sounds are played 
+- Fixed [#23](https://github.com/Emafire003/LightWithin/issues/23)
+- Fixed [#17](https://github.com/Emafire003/LightWithin/issues/17)
+- Fixed the runes rendering off-center
+- Fixed a bug where the ClientConfig loaded wrong defaults on startup
+- Fixed a bug that didn't allow changing the size of the area of search for entities
+- Fixed FrostLight particles non spawning
+- Fixed HealLight sound being played too low
+- Fixed the `/light ready|activate delay` timers, they now work properly [#26](https://github.com/Emafire003/LightWithin/issues/27)
 
 
