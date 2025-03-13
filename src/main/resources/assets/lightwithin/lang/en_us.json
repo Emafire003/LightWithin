@@ -200,6 +200,18 @@
   "screen.luxcognita_dialogue.luxcognitaTalk": "What wisdom shall I bestow upon you?",
 
   "lightwithin.warning.general": "WARNING!",
-  "lightwithin.warning.intoxication_shader.1": "If the shader of this effect gives you motion sickness you can turn it off in the config menu!"
+  "lightwithin.warning.intoxication_shader.1": "If the shader of this effect gives you motion sickness you can turn it off in the config menu!",
+
+  "tag.item.lightwithin.blazing_trigger_items": "BlazingLight triggering items",
+  "tag.item.lightwithin.frost_trigger_items": "FrostLight triggering items",
+  "tag.item.lightwithin.wind_trigger_items": "WindLight triggering items",
+  "tag.item.lightwithin.aqua_trigger_items": "AquaLight triggering items",
+  "tag.item.lightwithin.forest_aura_trigger_items": "ForestAuraLight triggering items",
+
+  "tag.block.lightwithin.blazing_trigger_blocks": "BlazingLight triggering blocks",
+  "tag.block.lightwithin.frost_trigger_blocks": "FrostLight triggering blocks",
+  "tag.block.lightwithin.wind_trigger_blocks": "WindLight triggering blocks",
+  "tag.block.lightwithin.aqua_trigger_blocks": "AquaLight triggering blocks",
+  "tag.block.lightwithin.forest_aura_trigger_blocks": "ForestAuraLight triggering blocks"
 
 }
