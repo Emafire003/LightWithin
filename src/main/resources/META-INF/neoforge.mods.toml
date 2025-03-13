@@ -1,0 +1,34 @@
+modLoader="javafml"
+loaderVersion="[47,)"
+license="GNU LGLP3"
+
+[properties]
+"connector:placeholder"=true
+
+[[mods]]
+modId="lightwithin"
+version="1.2.0+1.20.1"
+displayName="LightWithin"
+authors="example"
+description='''Adding new fancy magical-ish and player-unique powers, the 'InnerLights' which are going to activate when the player is in danger!'''
+
+[[dependencies.lightwithin]]
+modId="forge"
+mandatory=true
+versionRange="[47,)"
+ordering="NONE"
+side="BOTH"
+
+[[dependencies.lightwithin]]
+modId="minecraft"
+mandatory=true
+versionRange="[1.20.1]"
+ordering="NONE"
+side="BOTH"
+
+[[dependencies.lightwithin]]
+modId="connector"
+mandatory=true
+versionRange="*"
+ordering="NONE"
+side="BOTH"
