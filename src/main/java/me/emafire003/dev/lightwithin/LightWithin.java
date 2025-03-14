@@ -65,6 +65,16 @@ import java.util.concurrent.ConcurrentHashMap;
 import static java.util.Map.entry;
 import static me.emafire003.dev.lightwithin.lights.ForestAuraLight.FOREST_AURA_BLOCKS;
 
+//TODO remove
+/*
+TODO
+- CustomBrewRecipes doesn't work may need to port it over
+- Rendering stuff is messed up, if the mod renders something everything else on the hud isn't rendered. Some blend something
+- Can't eat luxmutua berry for some reason. Sometimes
+- The right click from thunder aura doens't work. (Why? It did in 1.20.1! :/)
+- The knokback effect thingies from ThunderAura don't work (WHAT THE FUCK) ok no they do but teams are messed uo
+*/
+
 public class LightWithin implements ModInitializer, EntityComponentInitializer {
 	// This logger is used to write text to the console and the log file.
 	// It is considered best practice to use your mod id as the logger's name.

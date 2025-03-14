@@ -1,14 +1,14 @@
 package me.emafire003.dev.lightwithin.client.shaders;
 
+import dev.cammiescorner.velvet.api.event.ShaderEffectRenderCallback;
+import dev.cammiescorner.velvet.api.managed.ManagedShaderEffect;
+import dev.cammiescorner.velvet.api.managed.ShaderEffectManager;
 import me.emafire003.dev.lightwithin.config.ClientConfig;
 import me.emafire003.dev.lightwithin.status_effects.LightEffects;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
-import org.ladysnake.satin.api.event.ShaderEffectRenderCallback;
-import org.ladysnake.satin.api.managed.ManagedShaderEffect;
-import org.ladysnake.satin.api.managed.ShaderEffectManager;
 
 import java.util.Objects;
 

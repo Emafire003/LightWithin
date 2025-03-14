@@ -1,5 +1,5 @@
 plugins {
-	id 'fabric-loom' version '1.9-SNAPSHOT'
+	id 'fabric-loom' version '1.10-SNAPSHOT'
 	id 'maven-publish'
 }
 
@@ -64,6 +64,11 @@ repositories {
 		url 'https://maven.isxander.dev/releases'
 	}
 
+	maven {
+		name = "Up-Mods & Cammie's Corner"
+		url = "https://maven.uuid.gg/releases"
+	}
+
 	maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
 
 }
@@ -99,12 +104,22 @@ dependencies {
 	include modImplementation("maven.modrinth:custombrewrecipes:${project.custombrewrecipes_version}")
 
 	//ParticleAnimationLib
-    include modImplementation("maven.modrinth:particleanimationlib:${project.pal_version}")
+	include modImplementation("maven.modrinth:particleanimationlib:${project.pal_version}")
 
 	//Satin
-	modImplementation "org.ladysnake:satin:${satin_version}"
+	//modImplementation "org.ladysnake:satin:${satin_version}"
 	// Include Satin as a Jar-in-Jar dependency (optional)
-	include "org.ladysnake:satin:${satin_version}"
+	//include "org.ladysnake:satin:${satin_version}"
+	//modImplementation "dev.cammiescorner.velvet:Velvet-Common:${velvet_version}"
+	//modImplementation "dev.cammiescorner.velvet:Velvet-Fabric:${velvet_version}"
+//0.508.1+Fabric
+	// If you want to jar-in-jar Velvet
+	//include "dev.cammiescorner.velvet:Velvet-Common:${velvet_version}"
+	//include "dev.cammiescorner.velvet:Velvet-Fabric:${velvet_version}"
+	/*include modImplementation("maven.modrinth:velvet-api:BNMKHe5B")
+	include modImplementation("maven.modrinth:sparkweave:0.508.1+Fabric")*/
+	modCompileOnly("maven.modrinth:velvet-api:BNMKHe5B")
+	modCompileOnly("maven.modrinth:sparkweave:0.508.1+Fabric")
 
 	//===========OPTIONAL DEPENDENCIES===========
 

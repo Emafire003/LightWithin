@@ -32,3 +32,10 @@ mandatory=true
 versionRange="*"
 ordering="NONE"
 side="BOTH"
+
+[[dependencies.lightwithin]]
+modId="velvet-api"
+mandatory=true
+versionRange="*"
+ordering="NONE"
+side="BOTH"
