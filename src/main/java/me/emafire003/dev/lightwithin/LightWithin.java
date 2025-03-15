@@ -2,6 +2,7 @@ package me.emafire003.dev.lightwithin;
 
 import me.emafire003.dev.lightwithin.items.components.LightItemComponents;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
+import net.minecraft.util.Identifier;
 import org.ladysnake.cca.api.v3.component.ComponentKey;
 import org.ladysnake.cca.api.v3.component.ComponentRegistry;
 import org.ladysnake.cca.api.v3.entity.EntityComponentFactoryRegistry;
@@ -64,7 +65,6 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static java.util.Map.entry;
-import static me.emafire003.dev.coloredglowlib.ColoredGlowLibMod.getIdentifier;
 import static me.emafire003.dev.lightwithin.lights.ForestAuraLight.FOREST_AURA_BLOCKS;
 
 //TODO remove
@@ -96,6 +96,11 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 
 	public static List<UUID> USED_CHARGE_PLAYER_CACHE = new ArrayList<>();
 	public static ConcurrentHashMap<UUID, Integer> CURRENTLY_READY_LIGHT_PLAYER_CACHE = new ConcurrentHashMap<>();
+
+	/**Returns an identifier for this mod's stuff*/
+	public static Identifier getIdentifier(String path){
+		return Identifier.of(MOD_ID, path);
+	}
 
 	/**
 	 * This is a map of the possible targets for each target type
