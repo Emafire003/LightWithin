@@ -17,6 +17,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArgs;
 import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 
+import java.awt.Color;
+
 @Mixin(LivingEntityRenderer.class)
 public abstract class EntityColorOverlayRendererMixin<T extends LivingEntity, M extends EntityModel<T>> extends EntityRenderer<T> implements FeatureRendererContext<T, M> {
 
@@ -42,6 +44,15 @@ public abstract class EntityColorOverlayRendererMixin<T extends LivingEntity, M 
                     int color = ColorHelper.Argb.mixColor(og, ColorHelper.Argb.fromFloats(0.84F, 0.750f, 0.750f, 0.150f));
                     args.set(4, color);
                 }
+                //Only triggers on April 1st
+            }else if(LightWithin.AP1){
+                int og = args.get(4);
+
+                String id_bits = livingEntity.getUuid().toString().split("-")[0];
+                Color color1 = Color.decode("#"+id_bits.substring(0, 6));
+
+                int color = ColorHelper.Argb.mixColor(og, ColorHelper.Argb.fromFloats(0.84F, (float) color1.getRed()/255, (float) color1.getGreen()/255, (float) color1.getBlue()/255));
+                args.set(4, color);
             }
         }
         /*TEST STUFF

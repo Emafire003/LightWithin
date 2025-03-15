@@ -53,16 +53,18 @@ import net.minecraft.sound.SoundCategory;
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Formatting;
-import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Box;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.nio.file.Path;
+import java.time.LocalDate;
+import java.time.Month;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static java.util.Map.entry;
+import static me.emafire003.dev.coloredglowlib.ColoredGlowLibMod.getIdentifier;
 import static me.emafire003.dev.lightwithin.lights.ForestAuraLight.FOREST_AURA_BLOCKS;
 
 //TODO remove
@@ -84,6 +86,8 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 	//TODO wiki/changelog AREA OF SEARCH FOR ENTITIES DOUBLED
 	//private static int BOX_EXPANSION_AMOUNT = 6; //NB: this is actually configurable in the config file, look below
+
+	public static boolean AP1 = false;
 
 	private static final boolean debug = false;
 	public static Path PATH = Path.of(FabricLoader.getInstance().getConfigDir() + "/" + MOD_ID + "/");
@@ -169,29 +173,31 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 			LightTriggerChecks.MIN_TRIGGER = TriggerConfig.TRIGGER_THRESHOLD;
 		});
 
+		LocalDate currentDate = LocalDate.now();
+		int day = currentDate.getDayOfMonth();
+		Month month = currentDate.getMonth();
+		if(month.equals(Month.APRIL) && day == 1){
+			AP1 = true;
+		}
+
 	}
 
-    /**Returns an identifier for this mod's stuff*/
-    public static Identifier getIdentifier(String path){
-        return Identifier.of(MOD_ID, path);
-    }
+	@Override
+	public void registerEntityComponentFactories(EntityComponentFactoryRegistry registry) {
+		registry.registerForPlayers(LIGHT_COMPONENT, LightComponent::new, RespawnCopyStrategy.ALWAYS_COPY);
+		registry.registerFor(DrownedEntity.class, SUMMONED_BY_COMPONENT, SummonedByComponent::new);
+		registry.registerFor(EarthGolemEntity.class, SUMMONED_BY_COMPONENT, SummonedByComponent::new);
+	}
 
-    @Override
-    public void registerEntityComponentFactories(EntityComponentFactoryRegistry registry) {
-        registry.registerForPlayers(LIGHT_COMPONENT, LightComponent::new, RespawnCopyStrategy.ALWAYS_COPY);
-        registry.registerFor(DrownedEntity.class, SUMMONED_BY_COMPONENT, SummonedByComponent::new);
-        registry.registerFor(EarthGolemEntity.class, SUMMONED_BY_COMPONENT, SummonedByComponent::new);
-    }
-
-    private static void registerSyncOptionsOnJoin(){
-        PlayerJoinEvent.EVENT.register((player, server) -> {
-            if(player.getWorld().isClient){
-                return ActionResult.PASS;
-            }
-            syncCustomConfigOptions(player);
-            return ActionResult.PASS;
-        });
-    }
+	private static void registerSyncOptionsOnJoin(){
+		PlayerJoinEvent.EVENT.register((player, server) -> {
+			if(player.getWorld().isClient){
+				return ActionResult.PASS;
+			}
+			syncCustomConfigOptions(player);
+			return ActionResult.PASS;
+		});
+	}
 
 	@SuppressWarnings("unused")
     public static void registerTags(){
