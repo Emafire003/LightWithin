@@ -1,4 +1,12 @@
 {
+  "light_structure.mdx": {
+    "name": "How an InnerLight is Structured",
+    "icon": null
+  },
+  "activation": {
+    "name": "Activating your InnerLight",
+    "icon": "SparklesIcon"
+  },
   "light_types": {
     "name": "Light Types",
     "icon": null
@@ -7,20 +15,8 @@
     "name": "⌨\uFE0F Commands",
     "icon": null
   },
-  "customization": {
-    "name": "📦 Datapacks/Modpacks",
-    "icon": null
-  },
-  "activation": {
-    "name": "Activating your InnerLight",
-    "icon": "SparklesIcon"
-  },
-  "polaroid": {
-    "name": "🌈 Polaroid",
-    "icon": null
-  },
-  "faq.mdx": {
-    "name": "❔ FAQ",
+  "config_files": {
+    "name": "Config files",
     "icon": null
   }
 }

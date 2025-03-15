@@ -1,0 +1,48 @@
+---
+title: How a light is structured
+---
+An InnerLight is uniquely determined based on your uuid. Each innerlight is made up of a few attributes, each one influenced by your uuid.
+You can look at your or someone else's attributes and values using the command `/light get all <target>`
+
+### <BadgeIcon width={32} height={32} strokeWidth={1.5} /> Type
+-----
+This is the most important aspect of your InnerLight. It dictates which kind or type of power you have. There are quite a few of different light types,
+and you can find them on their dedicated space on this wiki.
+
+Different kinds of light types have different rarities, with the "Aura" lights being less common (as in it's rarer to have that particular UUID).
+
+### <TargetIcon width={30} height={30} strokeWidth={1.5} /> Target
+-----
+The second most important aspect of your InnerLight. It's like its "sub-type". It specifies what your light targets, what it acts upon, be it your ENEMIES, ALLIES or your SELF.
+Usually this means that some kind of effect will be applied to a category of entities near you (allies or enemies). There is also a peculiar target type, VARIANT which can represent
+a (usually rarer) variation on another target type of that InnerLight type, or something that doesn't fall in the other categories. More info in the dedicate section of the wiki.important
+
+Different target types are available for each InnerLight type, and they have different rarities too.
+
+### <FlameIcon width={32} height={32} strokeWidth={1.5} />  Power
+-----
+Indicated sometimes with power level, or power multiplier (same thing). It's a number from 1 to 10 and is used to determine how strong the effects
+of your inner light are. For example, this can be used as the amplifier level of status effect applied to the target, or used as level that unlocks new abilities,
+like creating bigger structures in the Earthen Light type. It can also affect the damage that your light does.
+
+
+### <TimerIcon width={32} height={32} strokeWidth={1.5} /> Duration
+-----
+It's an integer value that specifies how long (in seconds) your light remains active, and how long its effect lasts.
+
+Normally it goes from 5 to 18 seconds, but it's all configurable in the main config file.
+
+### <ClockArrowDownIcon width={30} height={30} strokeWidth={1.5} /> Cooldown
+-----
+Is how much time (in seconds) your light will be in a "fatigued" state, after being used.
+In the cooldown/fatigued period you won't be able to trigger your light anymore, nor you will be able to use Bottled Lights to restore your light charges.
+
+It goes from 10 to 170.
+
+### <BatteryMediumIcon width={32} height={32} strokeWidth={1.5} />  **Max charges**
+-----
+Determines how many light charges you can store at a time. You won't be able to use bottled lights to add more charges that this limit.
+
+#### Other attributes in the light component
+There are two more less "prevalent" attributes, which are the `isLocked` attribute, which can be used by admins to lock someones light, preventing it from triggering
+and `hasTriggeredNaturally`, which won't allow you to use light charges until you have triggered your light in a natural way. None of the two is based on the UUID, and both are "false" by default.

@@ -1,0 +1,50 @@
+{
+  "general.mdx": {
+    "name": "General info on LightTypes",
+    "icon": null
+  },
+  "heal.mdx": {
+    "name": "Heal Light",
+    "icon": null
+  },
+  "defence.mdx": {
+    "name": "Defence Light",
+    "icon": null
+  },
+  "strength.mdx": {
+    "name": "Strength Light",
+    "icon": null
+  },
+  "blazing.mdx": {
+    "name": "Blazing Light",
+    "icon": null
+  },
+  "frost.mdx": {
+    "name": "Frost Light",
+    "icon": null
+  },
+  "earthen.mdx": {
+    "name": "Earthen Light",
+    "icon": null
+  },
+  "wind.mdx": {
+    "name": "Wind Light",
+    "icon": null
+  },
+  "aqua.mdx": {
+    "name": "Aqua Light",
+    "icon": null
+  },
+  "forest_aura.mdx": {
+    "name": "ForestAura Light",
+    "icon": null
+  },
+  "thunder_aura.mdx": {
+    "name": "ThunderAura Light",
+    "icon": null
+  },
+  "frog.mdx": {
+    "name": "Easter egg spoilers!-Light",
+    "icon": null
+  }
+}
