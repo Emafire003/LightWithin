@@ -1,0 +1,14 @@
+{
+  "activation.mdx": {
+    "name": "Normal Activation",
+    "icon": null
+  },
+  "lightcharges.mdx": {
+    "name": "LightCharges",
+    "icon": null
+  },
+  "triggers.mdx": {
+    "name": "Light Triggers",
+    "icon": null
+  }
+}

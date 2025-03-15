@@ -1,0 +1,62 @@
+---
+title: A list of light Triggers and conditions
+---
+## Trigger events
+These are the events that start the "checking chain" to verify if a light is ready to activate or not. Every time one of this
+things happen, the related event fires and checks if there are enough conditions to activate the light. 
+- Getting attacked by an entity
+- Attacking
+- Ally getting attacked
+- Ally dying
+- Falling (not necessarily taking damage)
+- Freezing
+- Burning
+- Drowning
+- Armor or tool breaking
+- Getting struck by a lightning bolt
+
+## Conditions
+These are used to check if a light is ready to activate or not. The combination of these varies between light type and target types, and you can even modify them
+per light-type and target-type in the _Trigger Config_. 
+
+### <Asset location="minecraft:hud/hearth/half.png" title="Low Health"/> Low health <Asset location="minecraft:hud/hearth/half.png" title="Low Health"/>
+When you get attacked by something, like a Zombie or another player, the mod tries to predict the amount of damage you will receive with the next hit. If it is below a certain percent, configurable in the (main) config file, it contributes to trigger threshold. It's the most common, to some extent it's part of every light triggering mechanism, even if sometimes it is not a requirement.
+For the ALLIES and other creatures a different value is used as the percentage, which is configurable as well.
+
+The damage prediction is based on the damage that the last Entity that has attacked you, including your armor, status effects and attributes.
+
+### <Asset width={27} height={27} location="lightwithin:icons/armor_half.png" title="Low Armor"/> Having low armor durability <Asset location="minecraft:hud/armor_half.png" title="Low Armor"/>
+Having low armor durability and thus risking to be without protection within the next hits. Percentage of durability configurable. This check can be disabled in the main config.
+
+### Being surrounded
+If you are surrounded by enough enemies (configurable), which by default are Hostile entities and player listed as Enemies in your faction/party, it will contribute to the trigger threshold. Most of the time, not by much. It can be disabled in the main config.
+
+### Being surrounded by allies
+If you are surrounded by allies (as in same faction/pets etc, see the other wiki pages) it will contribute to the trigger threshold.
+
+### Falling
+If you are falling, it will contribute to the trigger threshold, with a different weight depending on how much you are falling.
+
+### Burning
+If you are burning, it will contribute to the trigger threshold.
+
+### Freezing
+If you are freezing, it will contribute to the trigger threshold.
+
+### Drowning
+If you are drowning, it will contribute to the trigger threshold.
+
+### Being near leaves
+If you are near enough leaves blocks (7, configurable), it will contribute to the trigger threshold.
+
+### Raining
+If it's currently raining, it will contribute to the trigger threshold.
+
+### Having a negative status effect
+If you are under the effect of an Harmful potion effect (like Poison, Weakness and such) it will contribute to the trigger threshold.
+
+### Light Conditions
+These are specific to (almost) each light type. They are usually required in order to reach the trigger threshold.
+
+These checks can also apply to your allies in some cases.
+

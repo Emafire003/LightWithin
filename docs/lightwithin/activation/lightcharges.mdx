@@ -1,0 +1,31 @@
+---
+title: Activating your light using LightCharges
+---
+## What are LightCharges?
+Update 1.1.0 introduced a new way to trigger your light whenever you want (sort of).
+
+This is done by using LightCharges, a concentrated form of light that you store inside yourself. You will even glow if you store enough of them!
+When you acquire a LightCharge an icon similar to the light active icon will appear, by default in the same place as well.
+
+This icon, with the number of charges you currently have: <Asset location="lightwithin:lights/light_charge_base" title="Light Charge icon"/>, or with the number: <Asset location="lightwithin:lights/light_charge_1" title="Light Charge icon, 1 charge"/>
+
+It will indicate that you have a number of possible Light Charge uses. When you want to activate your light, you simply press the same button you would use to activate your light (by default it's **V**) and the light ready icon will appear.
+From this point on, it's the same as if the light had triggered naturally.
+
+But be ware! There are quite a few limitations and caveats:
+- First of all, you will be able to store LightCharges only once you have triggered your light for the first time in a natural way
+- Then, you can only store a fixed number of charges, the amount will depend, as usual, on a new light attribute uniquely determined thanks to your UUID. ("max_charges")
+- Whenever you use a LightCharge your cooldown will be longer. And in the future, who knows, something may happen if you "abuse" this too much!
+
+## TODO put the player glowing when they have full light charges
+
+## How do I get Light Charges?
+You have to obtain a new item called *Bottled Light*.
+Then, you can consume this bottle to add one light charge to your counter. The bottle will be consumed, and broken. This will also temporary put your light in a fatigued state, aka a cooldown half as long as your max cooldown.
+
+To obtain this bottle there are two methods, which you can find [here](https://github.com/Emafire003/LightWithin/wiki/6:-Items-and-miscellaneous#bottledlight-)
+# TODO move the ways here as well
+
+## When can I use the LightCharges?
+Whenever you want, as long as you are not affect by _Light Fatigue_ and you are in area where lights can be used (see the page on compatibility with other mods).
+If you try to use it anyway, an error sound effect will play and the icon will be come red for a second: <Asset location="lightwithin:lights/light_charge_base_error" title="Light Charge error"/>

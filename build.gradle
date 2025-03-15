@@ -1,6 +1,7 @@
 plugins {
 	id 'fabric-loom' version '1.9-SNAPSHOT'
 	id 'maven-publish'
+	id 'org.moddedmc.wiki.toolkit' version '0.2.6'
 }
 
 sourceCompatibility = JavaVersion.VERSION_16
@@ -151,6 +152,12 @@ dependencies {
 	modImplementation("com.terraformersmc:modmenu:${project.modmenu_version}") {
 		exclude(group: "net.fabricmc.fabric-api")
 	}
+
+	//wiki
+	// Version list: https://maven.sinytra.org/org/sinytra/item-asset-export-fabric
+	//TODO maybe remove
+	modRuntimeOnly "org.sinytra:item-asset-export-fabric:1.0.0+1.21"
+
 }
 
 processResources {
@@ -193,5 +200,17 @@ publishing {
 		// Notice: This block does NOT have the same function as the block in the top level.
 		// The repositories here will be used for publishing your artifact, not for
 		// retrieving dependencies.
+	}
+}
+
+
+wiki {
+	docs {
+		// The name of the object (examplemod) should match the registered wiki project ID (if it exists).
+		lightwithin {
+			// The path to the folder containing the documentation metadata file (sinytra-wiki.json)
+			root = file('docs/lightwithin/')
+			exportedAssetNamespaces = ['lightwithin']
+		}
 	}
 }
