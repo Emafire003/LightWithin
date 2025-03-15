@@ -12,7 +12,7 @@
     "minecraft:mycelium",
     "minecraft:grass_block",
     "minecraft:rooted_dirt",
-    "minecraft:dirt",
+    "#minecraft:dirt",
     "#minecraft:leaves",
     "minecraft:azalea",
     "minecraft:flowering_azalea",

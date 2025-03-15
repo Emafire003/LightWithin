@@ -1,0 +1,37 @@
+## <Asset location="lightwithin:particle/frost_light" title="Frost light"/> Frost light <Asset location="lightwithin:particle/frost_light" title="Frost light"/>
+
+**Possible Target  Types:** `ENEMIES`, `ALL`, `ALLIES`, `SELF`
+
+**Trigger actions**: Getting attacked, Freezing, Ally dying
+
+**BottledLight ingredient**: `minecraft:snowball`
+
+**Conditions:** 
+- **`ENEMIES`**: `Very low health`, `Allies low health`, `Ally low armor durability`, `Low armor durability`, `Surrounded`, `Freezing,` `Frost conditions`
+- **`ALL`**: `Low Health`, `Very low Health`, `Low armor durability`, `Surrounded`, `Freezing,` `Frost conditions`
+- **`SELF`**: `Low Health`, `Very low Health`, `Low armor durability`, `Surrounded`, `Freezing,` `Frost conditions`
+- **`ALLIES`**: `Ally's low Health`, `Very low Health`, `Ally low armor durability`, `Freezing,` `Surrounded`, `Frost conditions`
+
+Frost conditions:
+- Freezing
+- Being near of these blocks: POWDER_SNOW, SNOW, ICE, PACKED_ICE, BLUE_ICE, SNOW, SNOW_BLOCK, POWDER_SNOW_CAULDRON
+- Holding one of this items: ICE, PACKED_ICE, BLUE_ICE, SNOW, SNOW_BLOCK, SNOWBALL, POWDER_SNOW_BUCKET
+
+The blocks and items are configurable with tags!
+
+**Effect:**
+- **`ENEMIES`**: When activated, nearby enemies will be frozen in Clear Ice, blocking all their movements and make them freeze like in powder snow thanks to the Frost status effect that lasts for the duration of the light's duration attribute. They will also be instantly damaged by an amount equal to the player's power multiplier (alone). A structure of snow and ice will also be spawned. 
+A snowflake of particles will also spawn around the caster, along with Frost light particles.
+- **`ALL`**: Same as ENEMIES, but will target everyone in range so be careful!
+- **`SELF`**: A wall of ice will spawn around the player, with the open end being oriented behind the player. They will also get the Freeze Resistance effect, for the duration of the light. It works like Fire resistance but against Frost damage. A snowflake of particles will also spawn around the caster, along with Frost light particles.
+- **`ALLIES`**: Same as SELF, but will target allies as well! (The duration of the Frost resistance for the caster is reduced, configurable)
+
+<details>
+  <summary>Show Images</summary>
+  
+  ![frost1](https://cdn.modrinth.com/data/f8LsKKPu/images/4237ec9db6973f0e757741d2d22c53d384b1856e.png)
+![frost2](https://cdn.modrinth.com/data/f8LsKKPu/images/8bab1f6a7b9e0feff4edbf2a802f21183b9c10e4.png)
+
+</details>
+
+*Trivia: This with the target Enemies is my favourite currently!*

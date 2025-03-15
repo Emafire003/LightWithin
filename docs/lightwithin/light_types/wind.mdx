@@ -1,0 +1,28 @@
+## <Asset location="lightwithin:particle/wind_light" title="Wind light"/> Wind Light <Asset location="lightwithin:particle/wind_light" title="Wind light"/>
+
+**Possible Target  Types:** `SELF`, `ALLIES`, `VARIANT`
+
+**Trigger actions**: Getting attacked, Falling, Ally dying
+
+**BottledLight ingredient**: `minecraft:feather`, `minecraft:windcharge` in 1.21+
+
+**Conditions:**
+- **`SELF`**: `Low Health`, `Very low Health`, `Falling`, `Falling a lot`, `Surrounded`, `Wind conditions`
+- **`ALL`**: `Very low Health`, `Falling`, `Falling a lot`, `Surrounded`, `Wind conditions`
+- **`ALLIES`**: `Ally's low Health`, `Very low Health`, `Falling`, `Ally Falling`, `Ally Falling a lot`, `Surrounded`, `Wind conditions`
+
+Wind conditions:
+- Being above sea level (y >= 64) and being able to see the sky
+- Being near multiple blocks of air. You can change which blocks count as air in the Trigger config file
+
+**Effect:**
+- **`SELF`**: When activated the player will _dash_ in the direction they are looking, and they will get the Slow Falling, Speed and jump boost effect. The level of speed and jump boost is equal to the power multiplier divided by 1.5, whereas the strength of the dash is equal to the power multiplier. Cloud particles will be spawned beneath the player's feet, kind of like riding the wind. Upon activation the player will also be engulfed by Wind light particles.
+- **`ALL`**: When activated all entities around the player will be pushed away, the strenght of the push depends on the power multiplier. The entities hit by this will also get the Slowness effect, with a level equal to half of the power multiplier. (They would have to endure against the wind). A burst of cloud particles will appear, along the Wind Particles around the player.
+- **`ALLIES`**: When activated the player's allies will get the Slow Falling, Speed and jump boost effect. The level of speed and jump boost is equal to the power multiplier divided by 1.5. The player will get the same, but with a lower level. Cloud particles will be spawned beneath the players feet, kind of like riding the wind. Upon activation the players will also be engulfed by Wind light particles.
+
+<details>
+  <summary>Show Images</summary>
+
+  ![wind1](https://cdn.modrinth.com/data/f8LsKKPu/images/91eb5ba983b5d8eb91f5fb0dc4a4334dd701223c.png)
+
+</details>

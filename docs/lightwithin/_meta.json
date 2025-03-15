@@ -1,7 +1,7 @@
 {
   "light_structure.mdx": {
     "name": "How an InnerLight is Structured",
-    "icon": null
+    "icon": "Sparkle"
   },
   "activation": {
     "name": "Activating your InnerLight",
@@ -9,7 +9,7 @@
   },
   "light_types": {
     "name": "Light Types",
-    "icon": null
+    "icon": "Eclipse"
   },
   "commands": {
     "name": "⌨\uFE0F Commands",
@@ -17,6 +17,6 @@
   },
   "config_files": {
     "name": "Config files",
-    "icon": null
+    "icon": "FileSliders"
   }
 }
