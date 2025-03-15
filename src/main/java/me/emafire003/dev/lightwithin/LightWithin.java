@@ -1,5 +1,6 @@
 package me.emafire003.dev.lightwithin;
 
+import com.mojang.serialization.Codec;
 import dev.onyxstudios.cca.api.v3.component.ComponentKey;
 import dev.onyxstudios.cca.api.v3.component.ComponentRegistry;
 import dev.onyxstudios.cca.api.v3.entity.EntityComponentFactoryRegistry;
@@ -58,6 +59,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.nio.file.Path;
+import java.time.LocalDate;
+import java.time.Month;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -65,6 +68,7 @@ import static java.util.Map.entry;
 import static me.emafire003.dev.lightwithin.lights.ForestAuraLight.FOREST_AURA_BLOCKS;
 
 public class LightWithin implements ModInitializer, EntityComponentInitializer {
+	public static final Codec<LightWithin> CODEC = Codec.unit(LightWithin::new);
 	// This logger is used to write text to the console and the log file.
 	// It is considered best practice to use your mod id as the logger's name.
 	// That way, it's clear which mod wrote info, warnings, and errors.
@@ -73,6 +77,8 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 	//TODO wiki/changelog AREA OF SEARCH FOR ENTITIES DOUBLED
 	//private static int BOX_EXPANSION_AMOUNT = 6; //NB: this is actually configurable in the config file, look below
+
+	public static boolean AP1 = false;
 
 	private static final boolean debug = false;
 	public static Path PATH = Path.of(FabricLoader.getInstance().getConfigDir() + "/" + MOD_ID + "/");
@@ -153,6 +159,13 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 
 			LightTriggerChecks.MIN_TRIGGER = TriggerConfig.TRIGGER_THRESHOLD;
 		});
+
+		LocalDate currentDate = LocalDate.now();
+		int day = currentDate.getDayOfMonth();
+		Month month = currentDate.getMonth();
+		if(month.equals(Month.APRIL) && day == 1){
+			AP1 = true;
+		}
 
 	}
 

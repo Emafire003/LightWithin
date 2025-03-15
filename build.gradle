@@ -156,7 +156,7 @@ dependencies {
 	//wiki
 	// Version list: https://maven.sinytra.org/org/sinytra/item-asset-export-fabric
 	//TODO maybe remove
-	modRuntimeOnly "org.sinytra:item-asset-export-fabric:1.0.0+1.21"
+	//modRuntimeOnly "org.sinytra:item-asset-export-fabric:1.0.0+1.21"
 
 }
 

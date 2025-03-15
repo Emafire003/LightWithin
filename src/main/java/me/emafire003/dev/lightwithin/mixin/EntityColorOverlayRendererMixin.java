@@ -11,13 +11,20 @@ import net.minecraft.client.render.entity.feature.FeatureRendererContext;
 import net.minecraft.client.render.entity.model.EntityModel;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import org.slf4j.Logger;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArgs;
 import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 
+import java.awt.Color;
+
 @Mixin(LivingEntityRenderer.class)
 public abstract class EntityColorOverlayRendererMixin<T extends LivingEntity, M extends EntityModel<T>> extends EntityRenderer<T> implements FeatureRendererContext<T, M> {
+
+    @Shadow @Final private static Logger LOGGER;
 
     protected EntityColorOverlayRendererMixin(EntityRendererFactory.Context ctx) {
         super(ctx);
@@ -55,6 +62,18 @@ public abstract class EntityColorOverlayRendererMixin<T extends LivingEntity, M 
                     args.set(6, ob*0.150f);
                     args.set(7, oa*0.84f);
                 }
+                //Only triggers on April 1st
+            }else if(LightWithin.AP1){
+                float oa = args.get(7);
+
+                String id_bits = livingEntity.getUuid().toString().split("-")[0];
+                Color color = Color.decode("#"+id_bits.substring(0, 6));
+
+                //This is done for compatibility with other changes
+                args.set(4, (float) (color.getRed())/255);
+                args.set(5, (float) (color.getBlue())/255);
+                args.set(6, (float) (color.getGreen())/255);
+                args.set(7, oa*0.75f);
             }
         }
         /*TEST STUFF
