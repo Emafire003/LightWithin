@@ -68,6 +68,7 @@ public class BalanceConfig {
     public static double FOREST_AURA_PUFF_ACTION_BLOCK_RANGE = 1.5;
     public static double FOREST_AURA_PUFF_MAX_SPAWN_DIST = 4.5;
     public static double FOREST_AURA_PUFF_MIN_SPAWN_DIST = 0.7;
+    public static double FOREST_AURA_PUFF_DURATION_MULTIPLIER = 1.2;
 
     public static int THUNDER_AURA_MAX_POWER;
     public static int THUNDER_AURA_MAX_DURATION;
@@ -206,6 +207,7 @@ public class BalanceConfig {
         configs.addKeyValuePair(new Pair<>("forest_aura_puff_action_block_range", 1.5), "How far puffs affect other entities. Aka how close an entity needs to be in order to obtain the effect of the puff");
         configs.addKeyValuePair(new Pair<>("forest_aura_puff_max_spawn_distance", 4.5), "How far from the caster can puffs spawn, expressed in blocks");
         configs.addKeyValuePair(new Pair<>("forest_aura_puff_min_spawn_distance", 0.7), "How close to the caster can puffs spawn, expressed in blocks");
+        configs.addKeyValuePair(new Pair<>("forest_aura_puff_duration_multiplier", 1.2), "How much to multiply the base total duration of the puff effects of. The base total duration is equal to the duration of the light");
 
         configs.addKeyValuePair(new Pair<>("spacer", "spacer"), "");
 
@@ -277,6 +279,7 @@ public class BalanceConfig {
         FOREST_AURA_PUFF_ACTION_BLOCK_RANGE = CONFIG.getOrDefault("forest_aura_puff_action_block_range", 1.5);
         FOREST_AURA_PUFF_MAX_SPAWN_DIST = CONFIG.getOrDefault("forest_aura_puff_max_spawn_dist", 4.5);
         FOREST_AURA_PUFF_MIN_SPAWN_DIST = CONFIG.getOrDefault("forest_aura_puff_min_spawn_dist", 0.7);
+        FOREST_AURA_PUFF_DURATION_MULTIPLIER = CONFIG.getOrDefault("forest_aura_puff_duration_multiplier", 1.2);
 
         THUNDER_AURA_MAX_POWER = CONFIG.getOrDefault("thunder_aura_max_power", 10);
         THUNDER_AURA_MAX_DURATION = CONFIG.getOrDefault("thunder_aura_max_duration", 18);
