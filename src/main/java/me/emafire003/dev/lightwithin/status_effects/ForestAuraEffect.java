@@ -142,11 +142,6 @@ public class ForestAuraEffect extends StatusEffect {
             return;
         }
 
-        //TODO write in wiki:
-        // You will be able to see a number of entites equal to 3+the power level.
-        // At level 7 you will see if they are enemies and
-        // at level 9 you will see if they are allies, enemies or neutral.
-        // if cgl is installed
         //allows the counter to work again
         tickCounter = 0;
         //Makes the initial entities in the area glow
