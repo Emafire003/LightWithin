@@ -42,7 +42,6 @@ public abstract class PlayerArmColorOverlayMixin extends LivingEntityRenderer<Ab
             original.call(instance, matrices, vertices, light, overlay);
             return;
         }
-        vertices.color(1f, 0f , 0f, 1f).next();
         if(player.hasStatusEffect(LightEffects.LIGHT_ACTIVE)){
             if(LightWithin.LIGHT_COMPONENT.get(player).getType().equals(InnerLightType.FOREST_AURA)){
                 arm.render(matrices, vertices, light, overlay, 0.4f, 0.9f, 0.4f, 0.4f);
@@ -50,7 +49,6 @@ public abstract class PlayerArmColorOverlayMixin extends LivingEntityRenderer<Ab
             }
             if(LightWithin.LIGHT_COMPONENT.get(player).getType().equals(InnerLightType.THUNDER_AURA)){
                 arm.render(matrices, vertices, light, overlay, 0.8f, 0.8f, 0.15f, 0.4f);
-                vertices.color(1f, 0f , 0f, 1f).next();
                 return;
             }
         }

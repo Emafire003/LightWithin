@@ -2,7 +2,9 @@
 title: How a light is structured
 ---
 An InnerLight is uniquely determined based on your uuid. Each innerlight is made up of a few attributes, each one influenced by your uuid.
-You can look at your or someone else's attributes and values using the command `/light get all <target>`
+You can look at your or someone else's attributes and values using the command `/light get all <target>`.
+They are determined upon the first time a player joins the world/server and they are different (at least under some of the aspects) for each player.
+For the nerds: each attributes is stored inside an NBT data component within each player entity.
 
 ### <BadgeIcon width={32} height={32} strokeWidth={1.5} /> Type
 -----
@@ -10,6 +12,8 @@ This is the most important aspect of your InnerLight. It dictates which kind or 
 and you can find them on their dedicated space on this wiki.
 
 Different kinds of light types have different rarities, with the "Aura" lights being less common (as in it's rarer to have that particular UUID).
+As of 1.2.0, the chances are around 6% for the aura lights and 10-11% for the others.
+<details><summary><font size="1"> Exception </font></summary> <font size="1"> Except the meme-easter egg one. That ones is roughly 5 in 100000000 </font></details>
 
 ### <TargetIcon width={30} height={30} strokeWidth={1.5} /> Target
 -----
@@ -17,11 +21,11 @@ The second most important aspect of your InnerLight. It's like its "sub-type". I
 Usually this means that some kind of effect will be applied to a category of entities near you (allies or enemies). There is also a peculiar target type, VARIANT which can represent
 a (usually rarer) variation on another target type of that InnerLight type, or something that doesn't fall in the other categories. More info in the dedicate section of the wiki.important
 
-Different target types are available for each InnerLight type, and they have different rarities too.
+Different target types are available for each InnerLight type, and they have different relative rarities/chance of appearing.
 
 ### <FlameIcon width={32} height={32} strokeWidth={1.5} />  Power
 -----
-Indicated sometimes with power level, or power multiplier (same thing). It's a number from 1 to 10 and is used to determine how strong the effects
+Indicated sometimes with power level, or power multiplier (same thing). It's a number `from 1 to 10` and is used to determine how strong the effects
 of your inner light are. For example, this can be used as the amplifier level of status effect applied to the target, or used as level that unlocks new abilities,
 like creating bigger structures in the Earthen Light type. It can also affect the damage that your light does.
 
@@ -30,18 +34,19 @@ like creating bigger structures in the Earthen Light type. It can also affect th
 -----
 It's an integer value that specifies how long (in seconds) your light remains active, and how long its effect lasts.
 
-Normally it goes from 5 to 18 seconds, but it's all configurable in the main config file.
+Normally it goes from `1 to 21` seconds, but it's all configurable in the main config file. It's an hex value taken from your uuid multiplied by a default multiplier of `1.3` .
 
 ### <ClockArrowDownIcon width={30} height={30} strokeWidth={1.5} /> Cooldown
 -----
 Is how much time (in seconds) your light will be in a "fatigued" state, after being used.
 In the cooldown/fatigued period you won't be able to trigger your light anymore, nor you will be able to use Bottled Lights to restore your light charges.
 
-It goes from 10 to 170.
+It goes from `10 to 170` with intervals of 10.
 
 ### <BatteryMediumIcon width={32} height={32} strokeWidth={1.5} />  **Max charges**
 -----
 Determines how many light charges you can store at a time. You won't be able to use bottled lights to add more charges that this limit.
+It ranges from `0-8` and optionally you can cut the lowest and higher value in the config making it range from `1-7`. (by default you have at least 1)
 
 #### Other attributes in the light component
 There are two more less "prevalent" attributes, which are the `isLocked` attribute, which can be used by admins to lock someones light, preventing it from triggering

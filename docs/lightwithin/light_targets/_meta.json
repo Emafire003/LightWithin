@@ -1,0 +1,26 @@
+{
+  "general.mdx": {
+    "name": "General info on TargetTypes",
+    "icon": null
+  },
+  "self.mdx": {
+    "name": "SELF",
+    "icon": "User"
+  },
+  "allies.mdx": {
+    "name": "ALLIES",
+    "icon": "UsersRound"
+  },
+  "enemies.mdx": {
+    "name": "ENEMIES",
+    "icon": "Swords"
+  },
+  "all.mdx": {
+    "name": "ALL",
+    "icon": "CircleDotDashed"
+  },
+  "variant.mdx": {
+    "name": "VARIANT",
+    "icon": "Star"
+  }
+}

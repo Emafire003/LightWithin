@@ -11,6 +11,10 @@
     "name": "Light Types",
     "icon": "Eclipse"
   },
+  "light_targets": {
+    "name": "Light Targets",
+    "icon": "Crosshair"
+  },
   "commands": {
     "name": "⌨\uFE0F Commands",
     "icon": null
