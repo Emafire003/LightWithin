@@ -1,0 +1,41 @@
+## <Asset location="lightwithin:particle/thunder_aura_light" title="ThunderAura light"/> ThunderAura Light <Asset location="lightwithin:particle/thunder_aura_light" title="ThunderAura light"/>
+
+**Possible Target Types:** `ALLIES`, `ALL`, `VARIANT`
+
+**Trigger actions**: Attacking, Ally dying, Getting Struck by lightning, Ally getting struck by lightning
+
+**BottledLight ingredient**: `minecraft:copper_ingot`
+
+**Conditions:**
+- **`ALLIES`**: `Ally Low Health`, `Ally Very low Health`, `Low Health`, `Raining`,`Surrounded by Allies`, `Ally recently struck by lightning`, `ThunderAura conditions`
+- **`ALL`**: `Low Health`, `Very low Health`, `Low Armor`, `Raining`, `ThunderAura conditions`
+- **`VARIANT`**: `Low Health`, `Very low Health`, `Surrounded`, `Raining`, `ThunderAura conditions`
+
+
+ThunderAura conditions:
+- Thundery weather
+- Recently been struck by lightning (the last damage type taken must be from a lightning bolt)
+- Holding a ThunderAura item (by default, only a Lightning rod) (configurable using tags)
+- Standing on a ThunderAura block (by default, only a Lightning rod) (configurable using tags)
+
+**Effect:**
+- **`ALLIES`**: A spherical force field of electric particles will surround you and your allies. Aka the effect "ThunderAura" will be applied to you.
+When a non-ALLY entity comes into contact with this force filed it is bounced back and gets zapped by the shield. The higher the power level of the light,
+the higher will be the damage of the zap and the repulsive force. The shield scales with the dimensions of the entities.
+While under the effect of this force field the target (you or your allies) is immune to lightning damage.
+- **`ALL`**: When activated the caster will be able to summon a number of lightning bolts equal to their power level (or more, configurable in the main config file).
+To do this, the caster can point in a direction and right click to summon a lightning bolt at the targeted position.
+- **`VARIANT`**: When activated a (super) lightning storm will be summoned in the area around the caster. The weather will turn to thunder for the duration of the light and a number of lightnings
+equal to the light's power level will spawn each second (configurable). The AoE is 15 blocks+ the power level (configurable). A good number of these will spawn on land, but they can also spawn mid air.
+
+When this light is active no damage from lightning bolts is taken by the caster.
+
+
+
+<details>
+  <summary>Show Images</summary>
+
+  ![aqua1](https://cdn.modrinth.com/data/f8LsKKPu/images/61eb1d882e3fb822c528cd0013e43e7a1ddd38b2.png)
+![aqua2](https://cdn.modrinth.com/data/f8LsKKPu/images/6253c727649bbab788c2a280d8bf6abc357304e4.png)
+
+</details>
