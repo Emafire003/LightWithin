@@ -147,7 +147,7 @@ public class LightTriggeringAndEvents {
         }
     }
 
-    /**Triggers that lighs on Freezing damage taken by the player*/
+    /**Triggers that lighs on Lightning damage taken by the player*/
     public static void entityStruckByLightningTriggerCheck(PlayerEntity player, LivingEntity target){
         if(!isTriggerable(player)){
             return;

@@ -34,7 +34,7 @@ public abstract class PlayerArmColorOverlayMixin extends LivingEntityRenderer<Ab
 
     @WrapOperation(
             method = "renderArm",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/client/model/ModelPart;render(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumer;II)V")
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/client/model/ModelPart;render(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumer;II)V", ordinal = 0)
     )
     public void applyArmColor(ModelPart instance, MatrixStack matrices, VertexConsumer vertices, int light, int overlay, Operation<Void> original, @Local(ordinal = 0, argsOnly = true) ModelPart arm, @Local(ordinal = 1, argsOnly = true) ModelPart sleeve){
         PlayerEntity player = MinecraftClient.getInstance().player;
@@ -42,15 +42,15 @@ public abstract class PlayerArmColorOverlayMixin extends LivingEntityRenderer<Ab
             original.call(instance, matrices, vertices, light, overlay);
             return;
         }
+        vertices.color(1f, 0f , 0f, 1f).next();
         if(player.hasStatusEffect(LightEffects.LIGHT_ACTIVE)){
             if(LightWithin.LIGHT_COMPONENT.get(player).getType().equals(InnerLightType.FOREST_AURA)){
                 arm.render(matrices, vertices, light, overlay, 0.4f, 0.9f, 0.4f, 0.4f);
-                sleeve.render(matrices, vertices, light, overlay, 0.4f, 0.9f, 0.4f, 0.4f);
                 return;
             }
             if(LightWithin.LIGHT_COMPONENT.get(player).getType().equals(InnerLightType.THUNDER_AURA)){
                 arm.render(matrices, vertices, light, overlay, 0.8f, 0.8f, 0.15f, 0.4f);
-                sleeve.render(matrices, vertices, light, overlay, 0.8f, 0.8f, 0.15f, 0.4f);
+                vertices.color(1f, 0f , 0f, 1f).next();
                 return;
             }
         }
@@ -58,9 +58,37 @@ public abstract class PlayerArmColorOverlayMixin extends LivingEntityRenderer<Ab
 
             String id_bits = MinecraftClient.getInstance().player.getUuid().toString().split("-")[0];
             Color color = Color.decode("#"+id_bits.substring(0, 6));
-
             arm.render(matrices, vertices, light, overlay, (float) (color.getRed())/255, (float) (color.getBlue())/255, (float) (color.getGreen())/255, 0.4f);
-            sleeve.render(matrices, vertices, light, overlay, (float) (color.getRed())/255, (float) (color.getBlue())/255, (float) (color.getGreen())/255, 0.4f);
+        }
+        //else
+        original.call(instance, matrices, vertices, light, overlay);
+    }
+
+    @WrapOperation(
+            method = "renderArm",
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/client/model/ModelPart;render(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumer;II)V", ordinal = 1)
+    )
+    public void applySleeveColor(ModelPart instance, MatrixStack matrices, VertexConsumer vertices, int light, int overlay, Operation<Void> original, @Local(ordinal = 0, argsOnly = true) ModelPart arm, @Local(ordinal = 1, argsOnly = true) ModelPart sleeve){
+        PlayerEntity player = MinecraftClient.getInstance().player;
+        if(player == null){
+            original.call(instance, matrices, vertices, light, overlay);
+            return;
+        }
+        if(player.hasStatusEffect(LightEffects.LIGHT_ACTIVE)){
+            if(LightWithin.LIGHT_COMPONENT.get(player).getType().equals(InnerLightType.FOREST_AURA)){
+                sleeve.render(matrices, vertices, light, overlay, 0.4f, 0.9f, 0.4f, 0.7f);
+                return;
+            }
+            if(LightWithin.LIGHT_COMPONENT.get(player).getType().equals(InnerLightType.THUNDER_AURA)){
+                sleeve.render(matrices, vertices, light, overlay, 0.8f, 0.8f, 0.15f, 0.7f);
+                return;
+            }
+        }
+        else if(LightWithin.AP1){
+
+            String id_bits = MinecraftClient.getInstance().player.getUuid().toString().split("-")[0];
+            Color color = Color.decode("#"+id_bits.substring(0, 6));
+            sleeve.render(matrices, vertices, light, overlay, (float) (color.getRed())/255, (float) (color.getBlue())/255, (float) (color.getGreen())/255, 0.7f);
         }
         //else
         original.call(instance, matrices, vertices, light, overlay);

@@ -684,7 +684,6 @@ public class LightTriggerChecks {
 
         if(component.getTargets().equals(TargetType.ALL)){
 
-            //TODO wiki
             //Triggers with: Low health, Very low health, Surrounded,
             // forest, allies (+1), checkLeavesAround, poisoned or debuffed maybe
 
@@ -716,7 +715,6 @@ public class LightTriggerChecks {
         /**CHECKS if the player has ENEMIES as target, either his or his allies health needs to be low*/
         else if(component.getTargets().equals(TargetType.SELF)){
 
-            //TODO wiki
             if(CheckUtils.checkSelfDanger(player, Config.HP_PERCENTAGE_SELF)){
                 trigger_sum = trigger_sum+TriggerConfig.FOREST_AURA_SELF_VERY_LOW_HEALTH; //+3
                 //Checks if the player has low health
