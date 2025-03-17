@@ -1,0 +1,125 @@
+---
+title: LightWithin configs
+---
+# Balance config file
+### Filename: `lightwithin_balancing.yml`
+Server side config which manages things like the min/max duration and power of each light type as well as other balance settings specific to each light type. Here you can find a copy updated to 1.2.0:
+
+```yaml
+#The version of the config. DO NOT CHANGE IT :D | default= 2 | type= Integer
+version:2
+
+#This config file lets you modify how the max and min values of each light when it activates. Be very careful while changing these, they could be already multiplied by a setting in the main config file!
+
+#The maximum power multiplier (aka level of the effect) | default= 8 | type= Integer
+heal_max_power:8
+#The maximum duration of the effect | default= 10 | type= Integer
+heal_max_duration:10
+#The minimum power multiplier (aka level of the effect) | default= 1 | type= Integer
+heal_min_power:1
+#The minimum duration of the effect | default= 4 | type= Integer
+heal_min_duration:4
+
+#The maximum power multiplier (aka level of the effect) | default= 8 | type= Integer
+defense_max_power:8
+#The maximum duration of the effect | default= 10 | type= Integer
+defense_max_duration:10
+#The minimum power multiplier (aka level of the effect) | default= 1 | type= Integer
+defense_min_power:1
+#The minimum duration of the effect | default= 5 | type= Integer
+defense_min_duration:5
+
+#The maximum power multiplier (aka level of the effect) | default= 6 | type= Integer
+strength_max_power:6
+#The maximum duration of the effect | default= 10 | type= Integer
+strength_max_duration:10
+#The minimum power multiplier (aka level of the effect) | default= 1 | type= Integer
+strength_min_power:1
+#The minimum duration of the effect | default= 5 | type= Integer
+strength_min_duration:5
+
+#The default damage of the light when activates. It will be multiplied by the power multiplier, and also the target will be set on fire so be careful | default= 2 | type= Integer
+blazing_default_damage:2
+#The maximum power multiplier (aka by how much the default damage gets multiplied) | default= 10 | type= Integer
+blazing_max_power:10
+#The maximum duration of the fire | default= 15 | type= Integer
+blazing_max_duration:15
+#The minimum power multiplier (aka by how much the default damage gets multiplied) | default= 1 | type= Integer
+blazing_min_power:1
+#The minimum duration of the fire | default= 5 | type= Integer
+blazing_min_duration:5
+#The damage multiplier for a critical hit (must be >= 1) | default= 1.5 | type= Double
+blazing_crit_multiplier:1.5
+#The multiplier of the duration in seconds, for which the target(s) will be set on fire (must be >= 1) | default= 2 | type= Integer
+blazing_crit_fire_multiplier:2
+#The damage bonus (2 = 1 hearth) when the target is ALL | default= 3 | type= Integer
+blazing_all_damage_bonus:3
+
+#The maximum power multiplier (aka the AMOUNT of freeze damage inflicted upon activation. 2 = 1 hearth) | default= 10 | type= Integer
+frost_max_power:10
+#The maximum duration of the frost effect | default= 18 | type= Integer
+frost_max_duration:18
+#The minimum power multiplier (aka the AMOUNT of freeze damage inflicted upon activation. 2 = 1 hearth) | default= 1 | type= Integer
+frost_min_power:1
+#The minimum duration of the frost effect | default= 5 | type= Integer
+frost_min_duration:5
+
+#The maximum power multiplier (Used to determine the level of the structures spawned and the bonus damage done to enemies) | default= 10 | type= Integer
+earthen_max_power:10
+#The minimum power multiplier (see above) | default= 1 | type= Integer
+earthen_min_power:1
+#The maximum duration of some effects that can be applied (like solid rock, mining fatigue) | default= 18 | type= Integer
+earthen_max_duration:18
+#The minimum duration (see above) | default= 1 | type= Integer
+earthen_min_duration:1
+
+#The maximum power multiplier (Used to determine the power of the status effects and the distance of the dash) | default= 10 | type= Integer
+wind_max_power:10
+#The minimum power multiplier (see above) | default= 1 | type= Integer
+wind_min_power:1
+#The maximum duration of some effects that can be applied (like speed, haste, slow falling) | default= 18 | type= Integer
+wind_max_duration:18
+#The minimum duration (see above) | default= 1 | type= Integer
+wind_min_duration:1
+
+#The maximum power multiplier (Determines power of status effects, number of drowned spawned, if the cage will spawn a trident and lightning ) | default= 10 | type= Integer
+aqua_max_power:10
+#The minimum power multiplier (see above) | default= 1 | type= Integer
+aqua_min_power:1
+#The maximum duration of some effects that can be applied (like water slide, conduit, etc.) | default= 18 | type= Integer
+aqua_max_duration:18
+#The minimum duration (see above) | default= 1 | type= Integer
+aqua_min_duration:1
+
+#The maximum power multiplier (Determines power of status effects, number of glowing entities seen, their category, number of puffs spawned ) | default= 10 | type= Integer
+forest_aura_max_power:10
+#The minimum power multiplier (see above) | default= 1 | type= Integer
+forest_aura_min_power:1
+#The maximum duration of some effects that can be applied (the duration of the effects, the amount of time in which the puffs are spawned) | default= 18 | type= Integer
+forest_aura_max_duration:18
+#The minimum duration (see above) | default= 1 | type= Integer
+forest_aura_min_duration:1
+#How far puffs affect other entities. Aka how close an entity needs to be in order to obtain the effect of the puff | default= 1.5 | type= Double
+forest_aura_puff_action_block_range:1.5
+#How far from the caster can puffs spawn, expressed in blocks | default= 4.5 | type= Double
+forest_aura_puff_max_spawn_distance:4.5
+#How close to the caster can puffs spawn, expressed in blocks | default= 0.7 | type= Double
+forest_aura_puff_min_spawn_distance:0.7
+#How much to multiply the base total duration of the puff effects of. The base total duration is equal to the duration of the light | default= 1.2 | type= Double
+forest_aura_puff_duration_multiplier:1.2
+
+#The maximum power multiplier (Determines power of status effects, how many lightnings are summonable and how many spawn in a storm ) | default= 10 | type= Integer
+thunder_aura_max_power:10
+#The minimum power multiplier (see above) | default= 1 | type= Integer
+thunder_aura_min_power:1
+#The maximum duration of some effects that can be applied (like thunder aura and storm aura etc.) | default= 18 | type= Integer
+thunder_aura_max_duration:18
+#The minimum duration (see above) | default= 1 | type= Integer
+thunder_aura_min_duration:1
+#The minimum radius that the superstorm (the area in which lightnings spawn) spans across. Bear in mind that it will be increased by one block per level of power multiplier | default= 15 | type= Integer
+thunder_aura_variant_storm_min_size:15
+#The number of lightnings that will be spawned in the superstorm in each second per every power multiplier level | default= 1 | type= Integer
+thunder_aura_variant_lightnings_per_level:1
+#The max number of lightnings that a player can spawn per every power multiplier level | default= 1 | type= Integer
+thunder_aura_all_lightnings_per_level:1
+```
