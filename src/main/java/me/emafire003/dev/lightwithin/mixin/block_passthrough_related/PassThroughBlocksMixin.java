@@ -1,4 +1,4 @@
-package me.emafire003.dev.lightwithin.mixin.forest_aura_related;
+package me.emafire003.dev.lightwithin.mixin.block_passthrough_related;
 
 import me.emafire003.dev.lightwithin.lights.ForestAuraLight;
 import me.emafire003.dev.lightwithin.status_effects.LightEffects;
@@ -17,7 +17,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(AbstractBlock.AbstractBlockState.class)
-public abstract class ForestBlocksMixin implements ToggleableFeature {
+public abstract class PassThroughBlocksMixin implements ToggleableFeature {
 
     @Inject(method = "getCollisionShape(Lnet/minecraft/world/BlockView;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/ShapeContext;)Lnet/minecraft/util/shape/VoxelShape;", at = @At("HEAD"), cancellable = true)
     public void modifyCollisionShape(BlockView world, BlockPos pos, ShapeContext context, CallbackInfoReturnable<VoxelShape> cir) {
@@ -47,6 +47,12 @@ public abstract class ForestBlocksMixin implements ToggleableFeature {
             Entity entity;
             if (context instanceof EntityShapeContext && (entity = ((EntityShapeContext)context).getEntity()) != null) {
                 return (entity instanceof LivingEntity && ((LivingEntity) entity).hasStatusEffect(LightEffects.FOREST_AURA));
+            }
+        }
+        if(state.isOf(Blocks.AIR)){
+            Entity entity;
+            if (context instanceof EntityShapeContext && (entity = ((EntityShapeContext)context).getEntity()) != null) {
+                return (entity instanceof LivingEntity && ((LivingEntity) entity).hasStatusEffect(LightEffects.WIND_WALKING));
             }
         }
         return false;
