@@ -21,6 +21,8 @@ public class LightEffects {
     public static final RegistryEntry<StatusEffect> STURDY_ROCK = registerStatusEffect("sturdy_rock",
             new SturdyRockEffect().addAttributeModifier(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE, LightWithin.getIdentifier("effect.sturdy_rock_attribute"), 0.15f, EntityAttributeModifier.Operation.ADD_VALUE));
             //.addAttributeModifier(EntityAttributes.GENERIC_MOVEMENT_SPEED, "70d5f061-467c-430a-a9b6-48475f961db9", 0.5f, EntityAttributeModifier.Operation.MULTIPLY_TOTAL));
+    public static final RegistryEntry<StatusEffect> WIND_WALKING = registerStatusEffect("wind_walking",
+                    new WindWalkingEffect());
     public static final RegistryEntry<StatusEffect> WATER_SLIDE = registerStatusEffect("water_slide",
                     new WaterSlideEffect());
     public static final RegistryEntry<StatusEffect> WATER_CASCADE = registerStatusEffect("water_cascade",
