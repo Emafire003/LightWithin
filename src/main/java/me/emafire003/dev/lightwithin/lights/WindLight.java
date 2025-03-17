@@ -114,12 +114,12 @@ public class WindLight extends InnerLight {
                 if(target.equals(caster)){
                     target.addStatusEffect(new StatusEffectInstance(StatusEffects.SPEED, this.duration*20, (int) ((this.power_multiplier/2)/Config.DIV_SELF), false, false));
                     target.addStatusEffect(new StatusEffectInstance(StatusEffects.JUMP_BOOST, this.duration*20, (int) ((this.power_multiplier/2)/Config.DIV_SELF), false, false));
-                    //target.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOW_FALLING, this.duration*20, 0, false, false));
+                    target.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOW_FALLING, this.duration*20, 0, false, false));
                     target.addStatusEffect(new StatusEffectInstance(LightEffects.WIND_WALKING, this.duration*20, 0, false, true));
                 }else{
                     target.addStatusEffect(new StatusEffectInstance(StatusEffects.SPEED, this.duration*20, (int) (this.power_multiplier/2), false, false));
                     target.addStatusEffect(new StatusEffectInstance(StatusEffects.JUMP_BOOST, this.duration*20, (int) (this.power_multiplier/2), false, false));
-                    //target.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOW_FALLING, this.duration*20, 0, false, false));
+                    target.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOW_FALLING, this.duration*20, 0, false, false));
                     target.addStatusEffect(new StatusEffectInstance(LightEffects.WIND_WALKING, this.duration*20, 0, false, true));
                 }
 
