@@ -1,0 +1,12 @@
+---
+title: The config files
+---
+# The Configuration files
+There are three configuration files, the first one is a more general one, while the other two serve the purpose of balancing the light's effects and triggering methods. They are located in the `/config/lightwithin` folder, like most other mods. They are in `.yml` which supports comments and you can edit them using a program like Notepad++.
+
+Only the `client_config.yml` has a GUI, that you can open while using YACL and ModMenu.
+Since all of the other settings are server side, implementing a GUI would not be very useful for all the other files.
+
+For each setting there is a comment above it, explaining what the setting does and the default value of the setting, along what type of parameter it is. (For example it will tell you that it's boolean value, so true or false, or instead Integer number)
+
+If the config gets corrupted, or changes, or something goes wrong, it will be renamed to `<configname>_corruptedorold.yml`, and a new clean version will be generated, allowing the mod to load. You can then see what went wrong and manually change the values from the old config to the new one.

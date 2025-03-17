@@ -1,0 +1,22 @@
+{
+  "configs.mdx": {
+    "name": "General info on the config files",
+    "icon": null
+  },
+  "main.mdx": {
+    "name": "Main config",
+    "icon": null
+  },
+  "balance.mdx": {
+    "name": "Balance config",
+    "icon": null
+  },
+  "trigger.mdx": {
+    "name": "Trigger Balance config",
+    "icon": null
+  },
+  "client.mdx": {
+    "name": "Client config",
+    "icon": null
+  }
+}

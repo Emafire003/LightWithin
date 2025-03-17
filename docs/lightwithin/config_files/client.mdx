@@ -1,0 +1,57 @@
+---
+title: LightWithin configs
+---
+# Client config files
+### Filename: `lightwithin_client.yml`
+Client side config which manages display settings like the postion of rendered items on screen like the runes and the light icons. Can be edited in game using [YetAnotherConfigLib](https://modrinth.com/mod/yacl). Here you can find a copy updated to 1.2.0:
+Note: you can't manually change the presets, you will need to use YACL to do that. But you can still change the x,y values.
+
+```yaml
+#The version of the config. DO NOT CHANGE IT :D | default= 2 | type= Integer
+version:2
+
+#This config file lets you modify client rendering options, such as displaying the light ready icon in a different location or hiding it
+#The maximum x coordinate of your screen seems to be: 640, while your y coordinate seems to be: 331 and your scale factor: 3.0
+
+#The x coordinate of the light ready icon position on your screen. A value of 0 corresponds to left side. | default= 10 | type= Integer
+light_ready_icon_x:10
+#The y coordinate of the light ready icon position on your screen. A value of 0 corresponds to top side. | default= 10 | type= Integer
+light_ready_icon_y:10
+#The x coordinate of the light charge icon position on your screen. A value of 0 corresponds to left side. | default= 10 | type= Integer
+light_charge_icon_x:10
+#The y coordinate of the light charge icon position on your screen. A value of 0 corresponds to top side. | default= 10 | type= Integer
+light_charge_icon_y:10
+#Make this number bigger to make the light ready icon bigger, make it smaller to have a smaller light icon! | default= 1.0 | type= Double
+light_ready_scale_factor:1.0
+#Make this number bigger to make the light charge icon bigger, make it smaller to have a smaller light icon! | default= 1.0 | type= Double
+light_charge_scale_factor:1.0
+#Make this number bigger to make the light runes bigger, make it smaller to have a smaller rune! | default= 0.5 | type= Double
+runes_scale_factor:0.5
+#The position of the light ready icon using presets, such as CENTER, TOP/BOTTOM LEFT/RIGHT etc. Can only be modified while using YACL. | default= TOP_LEFT | type= String
+light_ready_preset:TOP_LEFT
+#The position of the light charge icon using presets, such as CENTER, TOP/BOTTOM LEFT/RIGHT etc. Can only be modified while using YACL. | default= TOP_LEFT | type= String
+light_charge_preset:TOP_LEFT
+
+#Hide the light charges icon, but still displays the light ready one, or the error one if you do something that's not allowed | default= false | type= Boolean
+hide_light_charge_icon:false
+#See players that have light charges ready glow like a GlowSquid | default= true | type= Boolean
+show_charged_player_glow:true
+#Setting this value to false will disable runes from rendering even in first person | default= true | type= Boolean
+show_runes:true
+#How many seconds should the runes last on screen? | default= 3 | type= Integer
+show_runes_for:3
+#Scale of the item or target icons displayed after interacting with the Luxcognita berry | default= 5.0 | type= Double
+ingredient_target_scale:5.0
+#How many seconds should the item and target icons last on screen? | default= 5 | type= Integer
+show_ingredient_target_for:5
+#Setting this value to true will activate your light as soon as it's ready. WARNING: it may be disabled by the server! | default= false | type= Boolean
+auto_light_activation:false
+#The color that will indicate enemies with the forest aura vision. You must install ColoredGlowLib to see the effect. | default= 560d03 | type= String
+forestaura_enemy_color:560d03
+#The color that will indicate allies with the forest aura vision. You must install ColoredGlowLib to see the effect. | default= 2dd8ac | type= String
+forestaura_ally_color:2dd8ac
+#Accessibility setting. Disable this if you don't want to see the Intoxicated effect shader (may give motion sickness) | default= true | type= Boolean
+forestaura_intoxication_shader:true
+#Accessibility setting. Turn this off to not see the warning message every time the intoxication effect is applied to you | default= true | type= Boolean
+intoxication_shader_warning:true
+```

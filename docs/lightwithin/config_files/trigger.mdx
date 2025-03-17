@@ -1,0 +1,337 @@
+---
+title: LightWithin configs
+---
+# Trigger config file
+### Filename: `lightwithin_trigger_balancing.yml`
+Server side config which manages the trigger threshold and the weights of each condition of each light target and type. Here you can find a copy updated to 1.2.0:
+
+```yaml
+#The version of the config. DO NOT CHANGE IT :D | default= 3 | type= Integer
+version:3
+#The threshold to reach in order to activate a light | default= 5 | type= Integer
+trigger_threshold:5
+
+#This config file lets you modify how the lights trigger. Be very careful if you really want to change this!
+
+#The contribution to the trigger threshold when the caster is in danger and very low health (excludes the low health) | default= 5 | type= Integer
+heal_self_very_low_health:5
+#The contribution to the trigger threshold when the caster is in danger and low health | default= 2 | type= Integer
+heal_self_low_health:2
+#The contribution to the trigger threshold when the caster is surrounded. (If enabled) | default= 1 | type= Integer
+heal_self_surrounded:1
+#The contribution to the trigger threshold when the caster has low durability armor. (If enabled) | default= 1 | type= Integer
+heal_self_armor_durability:1
+#The contribution to the trigger threshold when the caster is poisoned | default= 3 | type= Integer
+heal_self_poisoned:3
+#The contribution to the trigger threshold when the caster's ALLIES are in danger and on very low health | default= 4 | type= Integer
+heal_allies_ally_low_health:4
+#The contribution to the trigger threshold when the caster is in danger and very low health | default= 1 | type= Integer
+heal_allies_very_low_health:1
+#The contribution to the trigger threshold when the caster is surrounded. (If enabled) | default= 1 | type= Integer
+heal_allies_surrounded:1
+#The contribution to the trigger threshold when the caster's allies have low durability armor. (If enabled) | default= 1 | type= Integer
+heal_allies_ally_armor_durability:1
+#The contribution to the trigger threshold when the caster's allies are poisoned | default= 2 | type= Integer
+heal_allies_ally_poisoned:2
+#The contribution to the trigger threshold when passive mobs are in danger and on low health | default= 2 | type= Integer
+heal_variant_passive_low_health:2
+#The contribution to the trigger threshold when the caster is in danger and very low health | default= 2 | type= Integer
+heal_variant_very_low_health:2
+#The contribution to the trigger threshold when the caster's ALLIES are in danger and on very low health | default= 2 | type= Integer
+heal_variant_ally_low_health:2
+#The contribution to the trigger threshold when another entity has an harmful status effect (excludes the check for the caster) | default= 3 | type= Integer
+heal_variant_other_harmful_effect:3
+#The contribution to the trigger threshold when the caster has an harmful status effect | default= 3 | type= Integer
+heal_variant_harmful_effect:3
+
+#The contribution to the trigger threshold when the caster is in danger and very low health (excludes the low health) | default= 5 | type= Integer
+defence_self_very_low_health:5
+#The contribution to the trigger threshold when the caster is in danger and low health | default= 3 | type= Integer
+defence_self_low_health:3
+#The contribution to the trigger threshold when the caster is surrounded. (If enabled) | default= 2 | type= Integer
+defence_self_surrounded:2
+#The contribution to the trigger threshold when the caster has low durability armor. (If enabled) | default= 2 | type= Integer
+defence_self_armor_durability:2
+#The contribution to the trigger threshold when the caster's ALLIES are in danger and on very low health | default= 4 | type= Integer
+defence_allies_ally_low_health:4
+#The contribution to the trigger threshold when the caster is in danger and very low health | default= 1 | type= Integer
+defence_allies_very_low_health:1
+#The contribution to the trigger threshold when the caster is surrounded. (If enabled) | default= 2 | type= Integer
+defence_allies_surrounded:2
+#The contribution to the trigger threshold when the caster's allies have low durability armor. (If enabled) | default= 2 | type= Integer
+defence_allies_ally_armor_durability:2
+#WARNING: This is the only check, so leave it equal to the TriggerThe contribution to the trigger threshold when passive mobs are in danger and on low health | default= 5 | type= Integer
+defence_variant_passive_low_health:5
+
+#The contribution to the trigger threshold when the caster is in danger and very low health (excludes the low health) | default= 5 | type= Integer
+strength_self_variant_very_low_health:5
+#The contribution to the trigger threshold when the caster is in danger and low health | default= 3 | type= Integer
+strength_self_variant_low_health:3
+#The contribution to the trigger threshold when the caster is surrounded. (If enabled) | default= 1 | type= Integer
+strength_self_variant_surrounded:1
+#The contribution to the trigger threshold when the caster has low durability armor. (If enabled) | default= 2 | type= Integer
+strength_self_variant_armor_durability:2
+#The contribution to the trigger threshold when the caster's ALLIES are in danger and on very low health | default= 4 | type= Integer
+strength_allies_ally_low_health:4
+#The contribution to the trigger threshold when the caster is in danger and very low health | default= 1 | type= Integer
+strength_allies_very_low_health:1
+#The contribution to the trigger threshold when the caster is surrounded. (If enabled) | default= 1 | type= Integer
+strength_allies_surrounded:1
+#The contribution to the trigger threshold when the caster's allies have low durability armor. (If enabled) | default= 2 | type= Integer
+strength_allies_ally_armor_durability:2
+
+#The contribution to the trigger threshold when the caster is in danger and very low health (excludes the low health) | default= 4 | type= Integer
+blazing_all_very_low_health:4
+#The contribution to the trigger threshold when the caster is in danger and low health | default= 2 | type= Integer
+blazing_all_low_health:2
+#The contribution to the trigger threshold when the caster is surrounded. (If enabled) | default= 1 | type= Integer
+blazing_all_surrounded:1
+#The contribution to the trigger threshold when the caster has low durability armor. (If enabled) | default= 1 | type= Integer
+blazing_all_armor_durability:1
+#The contribution to the trigger threshold made by the caster being on fire | default= 1 | type= Integer
+blazing_all_onfire:1
+#The contribution to the trigger threshold when the blazing light conditions are met | default= 3 | type= Integer
+blazing_all_conditions:3
+#The contribution to the trigger threshold when the caster is in danger and very low health | default= 2 | type= Integer
+blazing_enemies_very_low_health:2
+#The contribution to the trigger threshold when the caster is surrounded. (If enabled) | default= 1 | type= Integer
+blazing_enemies_surrounded:1
+#The contribution to the trigger threshold when the caster has low durability armor. (If enabled) | default= 1 | type= Integer
+blazing_all_armor_durability:1
+#The contribution to the trigger threshold when the caster's allies have low durability armor. (If enabled) | default= 2 | type= Integer
+blazing_enemies_ally_armor_durability:2
+#The contribution to the trigger threshold made by the caster being on fire | default= 1 | type= Integer
+blazing_enemies_onfire:1
+#The contribution to the trigger threshold when the blazing light conditions are met | default= 3 | type= Integer
+blazing_enemies_conditions:3
+
+#The contribution to the trigger threshold when the caster is in danger and very low health | default= 4 | type= Integer
+frost_all_very_low_health:4
+#The contribution to the trigger threshold when the caster is in danger and low health | default= 2 | type= Integer
+frost_all_low_health:2
+#The contribution to the trigger threshold when the caster is surrounded. (If enabled) | default= 1 | type= Integer
+frost_all_surrounded:1
+#The contribution to the trigger threshold when the caster has low durability armor. (If enabled) | default= 1 | type= Integer
+frost_all_armor_durability:1
+#The contribution to the trigger threshold made by the caster freezing | default= 1 | type= Integer
+frost_all_freezing:1
+#The contribution to the trigger threshold when the frost light conditions are met | default= 3 | type= Integer
+frost_all_conditions:3
+#The contribution to the trigger threshold when the caster's ALLIES are in danger and on very low health | default= 3 | type= Integer
+frost_enemies_ally_low_health:3
+#The contribution to the trigger threshold when the caster is in danger and very low health | default= 1 | type= Integer
+frost_enemies_very_low_health:1
+#The contribution to the trigger threshold when the caster has low durability armor. (If enabled) | default= 1 | type= Integer
+frost_enemies_armor_durability:1
+#The contribution to the trigger threshold when the caster is surrounded. (If enabled) | default= 1 | type= Integer
+frost_enemies_surrounded:1
+#The contribution to the trigger threshold when the caster's allies have low durability armor. (If enabled) | default= 2 | type= Integer
+frost_enemies_ally_armor_durability:2
+#The contribution to the trigger threshold made by the caster freezing | default= 1 | type= Integer
+frost_enemies_freezing:1
+#The contribution to the trigger threshold when the frost light conditions are met | default= 3 | type= Integer
+frost_enemies_conditions:3
+#The contribution to the trigger threshold when the caster is in danger and very low health (excludes the low health) | default= 4 | type= Integer
+frost_self_very_low_health:4
+#The contribution to the trigger threshold when the caster is in danger and low health | default= 2 | type= Integer
+frost_self_low_health:2
+#The contribution to the trigger threshold when the caster has low durability armor. (If enabled) | default= 2 | type= Integer
+frost_self_armor_durability:2
+#The contribution to the trigger threshold made by the caster freezing | default= 1 | type= Integer
+frost_self_freezing:1
+#The contribution to the trigger threshold when the frost light conditions are met | default= 3 | type= Integer
+frost_self_conditions:3
+#The contribution to the trigger threshold when the caster's ALLIES are in danger and on very low health | default= 4 | type= Integer
+frost_allies_ally_low_health:4
+#The contribution to the trigger threshold when the caster is in danger and low health | default= 1 | type= Integer
+frost_allies_very_low_health:1
+#The contribution to the trigger threshold when the caster is surrounded. (If enabled) | default= 1 | type= Integer
+frost_allies_surrounded:1
+#The contribution to the trigger threshold when the caster's allies have low durability armor. (If enabled) | default= 1 | type= Integer
+frost_allies_ally_armor_durability:1
+#The contribution to the trigger threshold made by the caster freezing | default= 1 | type= Integer
+frost_allies_freezing:1
+#The contribution to the trigger threshold made by the caster's allies being freezing | default= 1 | type= Integer
+frost_allies_ally_freezing:1
+#The contribution to the trigger threshold when the frost light conditions are met | default= 3 | type= Integer
+frost_allies_conditions:3
+
+#The contribution to the trigger threshold when the caster is in danger and very low health | default= 4 | type= Integer
+earthen_variant_very_low_health:4
+#The contribution to the trigger threshold when the caster's ALLIES are in danger and on very low health | default= 3 | type= Integer
+earthen_variant_allies_low_healthy:3
+#The contribution to the trigger threshold when the caster is surrounded. (If enabled) | default= 1 | type= Integer
+earthen_variant_surrounded:1
+#The contribution to the trigger threshold when the earthen light conditions are met | default= 3 | type= Integer
+earthen_variant_conditions:3
+#The contribution to the trigger threshold when the caster's ALLIES are in danger and on very low health | default= 3 | type= Integer
+earthen_enemies_ally_low_health:3
+#The contribution to the trigger threshold when the caster is in danger and very low health | default= 4 | type= Integer
+earthen_enemies_very_low_health:4
+#The contribution to the trigger threshold when the caster is surrounded. (If enabled) | default= 1 | type= Integer
+earthen_enemies_surrounded:1
+#The contribution to the trigger threshold when the earthen light conditions are met | default= 3 | type= Integer
+earthen_enemies_conditions:3
+#The contribution to the trigger threshold when the caster is in danger and very low health (excludes the low health) | default= 3 | type= Integer
+earthen_self_very_low_health:3
+#The contribution to the trigger threshold when the caster is in danger and low health | default= 2 | type= Integer
+earthen_self_low_health:2
+#The contribution to the trigger threshold when the caster is surrounded. (If enabled) | default= 2 | type= Integer
+earthen_self_surrounded:2
+#The contribution to the trigger threshold when the frost light conditions are met | default= 3 | type= Integer
+earthen_self_conditions:3
+#The contribution to the trigger threshold when the caster's ALLIES are in danger and on very low health | default= 4 | type= Integer
+earthen_allies_ally_low_health:4
+#The contribution to the trigger threshold when the caster is in danger and low health | default= 1 | type= Integer
+earthen_allies_very_low_health:1
+#The contribution to the trigger threshold when the caster is surrounded. (If enabled) | default= 1 | type= Integer
+earthen_allies_surrounded:1
+#The contribution to the trigger threshold when the frost light conditions are met | default= 3 | type= Integer
+earthen_allies_conditions:3
+
+#The contribution to the trigger threshold when the caster is in danger and very low health | default= 4 | type= Integer
+wind_all_very_low_health:4
+#The contribution to the trigger threshold when the caster is surrounded. (If enabled) | default= 1 | type= Integer
+wind_all_surrounded:1
+#The contribution to the trigger threshold made by the caster falling a few blocks | default= 1 | type= Integer
+wind_all_falling:1
+#The contribution to the trigger threshold made by the caster falling a lot of blocks | default= 3 | type= Integer
+wind_all_falling_high:3
+#The contribution to the trigger threshold when the wind light conditions are met | default= 3 | type= Integer
+wind_all_conditions:3
+#The contribution to the trigger threshold when the caster is in danger and very low health (excludes the low health) | default= 4 | type= Integer
+wind_self_very_low_health:4
+#The contribution to the trigger threshold when the caster is in danger and low health | default= 2 | type= Integer
+wind_self_low_health:2
+#The contribution to the trigger threshold when the caster is surrounded. (If enabled) | default= 1 | type= Integer
+wind_self_surrounded:1
+#The contribution to the trigger threshold made by the caster falling a few blocks | default= 1 | type= Integer
+wind_self_falling:1
+#The contribution to the trigger threshold made by the caster falling a lot of blocks | default= 3 | type= Integer
+wind_self_falling_high:3
+#The contribution to the trigger threshold when the wind light conditions are met | default= 3 | type= Integer
+wind_self_conditions:3
+#The contribution to the trigger threshold when the caster's ALLIES are in danger and on very low health | default= 4 | type= Integer
+wind_allies_ally_low_health:4
+#The contribution to the trigger threshold when the caster is in danger and low health | default= 1 | type= Integer
+wind_allies_very_low_health:1
+#The contribution to the trigger threshold when the caster is surrounded. (If enabled) | default= 1 | type= Integer
+wind_allies_surrounded:1
+#The contribution to the trigger threshold made by the caster's allies falling a few blocks | default= 2 | type= Integer
+wind_allies_ally_falling:2
+#The contribution to the trigger threshold made by the caster's allies falling a lot of blocks | default= 4 | type= Integer
+wind_allies_ally_falling_high:4
+#The contribution to the trigger threshold made by the caster falling a few blocks | default= 2 | type= Integer
+wind_allies_falling:2
+#The contribution to the trigger threshold when the wind light conditions are met | default= 3 | type= Integer
+wind_allies_conditions:3
+
+#The contribution to the trigger threshold when the caster is in danger and very low health | default= 4 | type= Integer
+aqua_all_very_low_health:4
+#The contribution to the trigger threshold when the caster is surrounded. (If enabled) | default= 1 | type= Integer
+aqua_all_surrounded:1
+#The contribution to the trigger threshold when the caster's allies have low durability armor. (If enabled) | default= 1 | type= Integer
+aqua_all_ally_armor_durability:1
+#The contribution to the trigger threshold made by the caster drowning | default= 1 | type= Integer
+aqua_all_drowning:1
+#The contribution to the trigger threshold when the aqua light conditions are met | default= 3 | type= Integer
+aqua_all_conditions:3
+#The contribution to the trigger threshold when the caster is in danger and very low health (excludes low health) | default= 3 | type= Integer
+aqua_enemies_very_low_health:3
+#The contribution to the trigger threshold when the caster is in danger and low health | default= 2 | type= Integer
+aqua_enemies_low_health:2
+#The contribution to the trigger threshold when the caster is surrounded. (If enabled) | default= 1 | type= Integer
+aqua_enemies_surrounded:1
+#The contribution to the trigger threshold when the caster's allies have low durability armor. (If enabled) | default= 1 | type= Integer
+aqua_enemies_ally_armor_durability:1
+#The contribution to the trigger threshold made by the caster drowning | default= 1 | type= Integer
+aqua_enemies_drowning:1
+#The contribution to the trigger threshold when the aqua light conditions are met | default= 3 | type= Integer
+aqua_enemies_conditions:3
+#The contribution to the trigger threshold when the caster is in danger and very low health (excludes the low health) | default= 4 | type= Integer
+aqua_self_very_low_health:4
+#The contribution to the trigger threshold when the caster is in danger and low health | default= 2 | type= Integer
+aqua_self_low_health:2
+#The contribution to the trigger threshold when the caster has low durability armor. (If enabled) | default= 1 | type= Integer
+aqua_self_armor_durability:1
+#The contribution to the trigger threshold when the caster is surrounded. (If enabled) | default= 1 | type= Integer
+aqua_self_surrounded:1
+#The contribution to the trigger threshold made by the caster drowning | default= 1 | type= Integer
+aqua_self_drowning:1
+#The contribution to the trigger threshold when the aqua light conditions are met | default= 3 | type= Integer
+aqua_self_conditions:3
+#The contribution to the trigger threshold when the caster's ALLIES are in danger and on very low health | default= 4 | type= Integer
+aqua_allies_ally_low_health:4
+#The contribution to the trigger threshold when the caster is in danger and low health | default= 1 | type= Integer
+aqua_allies_very_low_health:1
+#The contribution to the trigger threshold when the caster is surrounded. (If enabled) | default= 1 | type= Integer
+aqua_allies_surrounded:1
+#The contribution to the trigger threshold when the caster's allies have low durability armor. (If enabled) | default= 1 | type= Integer
+aqua_allies_ally_armor_durability:1
+#The contribution to the trigger threshold made by the caster drowning | default= 1 | type= Integer
+aqua_allies_drowning:1
+#The contribution to the trigger threshold made by the caster's allies drowning | default= 1 | type= Integer
+aqua_allies_ally_drowning:1
+#The contribution to the trigger threshold when the aqua light conditions are met | default= 3 | type= Integer
+aqua_allies_conditions:3
+
+#The percent (0.0-100.0) of blocks around the player that need to be leaves | default= 70.0 | type= Double
+forest_aura_required_leaves_percent:70.0
+#The contribution to the trigger threshold when the caster is in danger and very low health | default= 3 | type= Integer
+forest_aura_all_very_low_health:3
+#The contribution to the trigger threshold when the caster is in danger and low health | default= 2 | type= Integer
+forest_aura_all_low_health:2
+#The contribution to the trigger threshold when the caster is surrounded. (If enabled) | default= 2 | type= Integer
+forest_aura_all_surrounded:2
+#The contribution to the trigger threshold when the caster's ALLIES are in danger and on very low health | default= 1 | type= Integer
+forest_aura_all_ally_low_health:1
+#The contribution to the trigger threshold when the caster is surrounded. (If enabled) | default= 2 | type= Integer
+forest_aura_all_surrounded:2
+#The contribution to the trigger threshold when the caster has a lot of leaves around them | default= 1 | type= Integer
+forest_aura_all_leaves:1
+#The contribution to the trigger threshold when the forest aura light conditions are met | default= 3 | type= Integer
+forest_aura_all_conditions:3
+#The contribution to the trigger threshold when the caster is in danger and very low health (excludes the low health) | default= 3 | type= Integer
+forest_aura_self_very_low_health:3
+#The contribution to the trigger threshold when the caster is in danger and low health | default= 2 | type= Integer
+forest_aura_self_low_health:2
+#The contribution to the trigger threshold when the caster is surrounded. (If enabled) | default= 2 | type= Integer
+forest_aura_self_surrounded:2
+#The contribution to the trigger threshold when the caster has an harmful status effect | default= 1 | type= Integer
+forest_aura_self_harmful_effect:1
+#The contribution to the trigger threshold when the forest aura light conditions are met | default= 3 | type= Integer
+forest_aura_self_conditions:3
+
+#The contribution to the trigger threshold when the caster is in danger and very low health | default= 3 | type= Integer
+thunder_aura_all_very_low_health:3
+#The contribution to the trigger threshold when the caster is in danger and low health | default= 2 | type= Integer
+thunder_aura_all_low_health:2
+#The contribution to the trigger threshold when the caster has low durability armor. (If enabled) | default= 1 | type= Integer
+thunder_aura_all_armor_durability:1
+#The contribution to the trigger threshold made by currently haiving a rainy weather in the world | default= 1 | type= Integer
+thunder_aura_all_raining:1
+#The contribution to the trigger threshold when the thunder aura light conditions are met | default= 3 | type= Integer
+thunder_aura_all_conditions:3
+#The contribution to the trigger threshold when the caster's ALLIES are in danger and on low health | default= 4 | type= Integer
+thunder_aura_allies_ally_very_low_health:4
+#The contribution to the trigger threshold when the caster's ALLIES are in danger and on very low health | default= 2 | type= Integer
+thunder_aura_allies_ally_low_health:2
+#The contribution to the trigger threshold when the caster is around/surrounded by many of its ALLIES. (If enabled) | default= 1 | type= Integer
+thunder_aura_allies_surrounded_by_allies:1
+#The contribution to the trigger threshold when the caster's ALLIES have recently been struck by a lightning | default= 1 | type= Integer
+thunder_aura_allies_ally_struck_by_lightning:1
+#The contribution to the trigger threshold made by currently haiving a rainy weather in the world | default= 1 | type= Integer
+thunder_aura_allies_raining:1
+#The contribution to the trigger threshold when the thunder aura light conditions are met | default= 3 | type= Integer
+thunder_aura_allies_conditions:3
+#The contribution to the trigger threshold when the caster is in danger and very low health | default= 3 | type= Integer
+thunder_aura_variant_very_low_health:3
+#The contribution to the trigger threshold when the caster is in danger and low health | default= 2 | type= Integer
+thunder_aura_variant_low_health:2
+#The contribution to the trigger threshold when the caster is surrounded. (If enabled) | default= 2 | type= Integer
+thunder_aura_variant_surrounded:2
+#The contribution to the trigger threshold made by currently haiving a rainy weather in the world | default= 2 | type= Integer
+thunder_aura_variant_raining:2
+#The contribution to the trigger threshold when the thunder aura light conditions are met | default= 3 | type= Integer
+thunder_aura_variant_conditions:3
+```
