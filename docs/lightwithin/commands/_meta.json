@@ -1,0 +1,39 @@
+{
+  "general.mdx": {
+    "name": "General info on the commands",
+    "icon": null
+  },
+  "light_set.mdx": {
+    "name": "Light Set command",
+    "icon": null
+  },
+  "light_get.mdx": {
+    "name": "Light Get command",
+    "icon": null
+  },
+  "light_reroll.mdx": {
+    "name": "Light Reroll command",
+    "icon": null
+  },
+  "light_activate.mdx": {
+    "name": "Light Activate command",
+    "icon": null
+  },
+  "light_ready.mdx": {
+    "name": "Light Ready command",
+    "icon": null
+  },
+  "light_reset.mdx": {
+    "name": "Light Reset command",
+    "icon": null
+  },
+  "light_charge.mdx": {
+    "name": "Light Charge command",
+    "icon": null
+  },
+  "light_reload.mdx": {
+    "name": "Light Reload command",
+    "icon": null
+  }
+
+}
