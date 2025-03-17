@@ -125,6 +125,7 @@ public class ThunderAuraLight extends InnerLight {
 
         //Allies shield thing
         if(component.getTargets().equals(TargetType.ALLIES)){
+            targets.remove(caster);
             targets.forEach(target -> {
                 if(!caster.getWorld().isClient && !caster.equals(target)){
                     Vec3d origin = caster.getPos().add(0, caster.getDimensions(caster.getPose()).height()/2, 0);
@@ -135,6 +136,7 @@ public class ThunderAuraLight extends InnerLight {
 
                     line.runFor(0.5);
                 }
+                target.addStatusEffect(new StatusEffectInstance(LightEffects.THUNDER_AURA, this.duration*20, (int) ((this.power_multiplier -1)/Config.DIV_SELF), false, true));
                 target.addStatusEffect(new StatusEffectInstance(LightEffects.THUNDER_AURA, this.duration*20, (int) this.power_multiplier -1, false, true));
             });
         }//Extra thundery weather (superstorm). The weather change is global, but the extra lightnings are in a localized area
