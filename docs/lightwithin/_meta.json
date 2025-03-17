@@ -19,6 +19,10 @@
     "name": "⌨\uFE0F Commands",
     "icon": null
   },
+  "items_and_misc": {
+    "name": "Items and Misc",
+    "icon": "Apple"
+  },
   "config_files": {
     "name": "Config files",
     "icon": "FileSliders"
