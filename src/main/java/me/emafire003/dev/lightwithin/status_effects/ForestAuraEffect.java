@@ -3,6 +3,7 @@ package me.emafire003.dev.lightwithin.status_effects;
 import com.mojang.datafixers.util.Pair;
 import me.emafire003.dev.lightwithin.LightWithin;
 import me.emafire003.dev.lightwithin.compat.coloredglowlib.CGLCompat;
+import me.emafire003.dev.lightwithin.mixin.block_passthrough_related.PassThroughBlocksMixin;
 import me.emafire003.dev.lightwithin.networking.GlowEntitiesPacketS2C;
 import me.emafire003.dev.lightwithin.util.CheckUtils;
 import me.emafire003.dev.lightwithin.util.ForestAuraRelation;
@@ -26,7 +27,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Players will be able to pass through natural blocks, the one in the tag list,
- * will not suffocate in these. For more info see {@link me.emafire003.dev.lightwithin.mixin.forest_aura_related.ForestBlocksMixin}
+ * will not suffocate in these. For more info see {@link PassThroughBlocksMixin}
  * and will also see the entities that are nearby them when they get the effect for the first time*/
 public class ForestAuraEffect extends StatusEffect {
 

@@ -37,6 +37,12 @@ The checks are performed when an ally is getting attacked or struck by lightning
 
 Get more info in the wiki, or just try it out! It of course comes with its icon, particle effect and sounds!
 
+### WindLight ALLIES update
+Added a new effect, called "Wind Walking", which will allow you and your allies to jump and walk on air blocks! Much like scaffolding and the ForestAura effect described above.
+
+### New wiki!
+The wiki has been updated and moved to [ModdedMc](https://moddedmc.wiki/en/project/lightwithin/)! The plan is to also allow you to use mods like Oracle Index to view the wiki in game, while waiting for ingame tutorials done by this mod itself.
+
 ### Trigger items and blocks are now tags
 The list of blocks and item that acted as triggers for some of the lights have now been moved away from the config files and into new tags, located in
 `..data/lightwithin/tags/` and you will be able to modify them via a datapack. 
