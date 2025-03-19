@@ -8,7 +8,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
-//TODO fix the wiki saying that now you can kind of see around you
 @Mixin(InGameOverlayRenderer.class)
 public class NoInGameOverlayInsideBlockMixin {
     @ModifyExpressionValue(
