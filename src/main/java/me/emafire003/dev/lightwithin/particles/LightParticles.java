@@ -44,9 +44,8 @@ public class LightParticles {
                 WINDLIGHT_PARTICLE);
         Registry.register(Registries.PARTICLE_TYPE, LightWithin.getIdentifier("aqua_light_particle"),
                 AQUALIGHT_PARTICLE);
-        Registry.register(Registries.PARTICLE_TYPE, LightWithin.getIdentifier("frog_light_particle"),
         Registry.register(Registries.PARTICLE_TYPE, LightWithin.getIdentifier("forest_aura_light_particle"),
-                FOREST_AURA_LIGHT_PARTICLE));
+                FOREST_AURA_LIGHT_PARTICLE);
         Registry.register(Registries.PARTICLE_TYPE, LightWithin.getIdentifier("thunder_aura_light_particle"),
                 THUNDER_AURA_LIGHT_PARTICLE);
         Registry.register(Registries.PARTICLE_TYPE, LightWithin.getIdentifier("frog_light_particle"),
