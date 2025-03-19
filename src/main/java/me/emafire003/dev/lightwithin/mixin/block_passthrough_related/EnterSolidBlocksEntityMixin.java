@@ -26,13 +26,16 @@ public abstract class EnterSolidBlocksEntityMixin {
         return original;
     }
 
+    //TODO inject into InGameOverlayRenderer renderOverlays to do the noclip thing/make blocks visible like in spectator
 
     @ModifyExpressionValue(
             method = "applyMovementInput",
             at = @At(value = "INVOKE", target = "Lnet/minecraft/block/BlockState;isOf(Lnet/minecraft/block/Block;)Z")
     )
     public boolean injectJumpIsBlock(boolean original){
-        if(((LivingEntity) (Object) this).getBlockStateAtPos().isIn(ForestAuraLight.FOREST_AURA_BLOCKS) || ((LivingEntity) (Object) this).getBlockStateAtPos().isOf(Blocks.AIR)){
+        if(((LivingEntity) (Object) this).getBlockStateAtPos().isIn(ForestAuraLight.FOREST_AURA_BLOCKS)){
+            return true;
+        }else if(((LivingEntity) (Object) this).hasStatusEffect(LightEffects.WIND_WALKING) && ((LivingEntity) (Object) this).getBlockStateAtPos().isOf(Blocks.AIR)){
             return true;
         }
         return original;
