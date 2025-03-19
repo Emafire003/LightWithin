@@ -7,7 +7,7 @@ These first ones added are ForestAura and ThunderAura, and you have a roughly 6%
 This light is linked to the essence of the forest, be it the soil or the plants. Whenever you activate it, you will be communing with the forest and thus you will turn green! (photosynthesis ehy?)
 It has two target types:
 - **SELF**: Once activate, your matter and the matter of the forest will become one thing, and you will be able to pass through forest blocks (defined in a dedicated tag), like dirt logs and leaves. 
-It works similarly to powder snow. Be careful tho! You are not a mole and you won't be able to see inside blocks, but you will be able to see other entities through a glow effect.
+It works similarly to powder snow. You will also be able to see other entities through a glow effect, and everything the borders of the terrain around you.
 Based on the power level of your light, you will also be able to tell apart friend from foe!
 - **ALL**: This variant will be harnessing the power of the secondary metabolites of forest plants: it will spawn a few different "puffs" of various substances around the caster, and they will affect every other entity around them,
 except for other fellow forest-aura light-bringers. The puffs will apply different potion effects, like blindness slowness, poison etc, their strength type and duration depeding on the light's duration and power level. A new potion effect has been added,
