@@ -26,8 +26,6 @@ public abstract class EnterSolidBlocksEntityMixin {
         return original;
     }
 
-    //TODO inject into InGameOverlayRenderer renderOverlays to do the noclip thing/make blocks visible like in spectator
-
     @ModifyExpressionValue(
             method = "applyMovementInput",
             at = @At(value = "INVOKE", target = "Lnet/minecraft/block/BlockState;isOf(Lnet/minecraft/block/Block;)Z")
