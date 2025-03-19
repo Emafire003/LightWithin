@@ -1,5 +1,6 @@
 package me.emafire003.dev.lightwithin;
 
+import me.emafire003.dev.lightwithin.events.PlayerRightClickInteractEvent;
 import me.emafire003.dev.lightwithin.items.components.LightItemComponents;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.minecraft.util.Identifier;
@@ -143,6 +144,7 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 		registerLightChargeConsumedPacket();
 		registerReadyLightCacheRemover();
 		registerSyncOptionsOnJoin();
+		registerInteractedPacket();
 		LightSounds.registerSounds();
 		LightEffects.registerModEffects();
 		LightItems.registerItems();
@@ -350,6 +352,25 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
             //var results = LightUsedPacketC2S.read(buf);
         }));
     }
+
+	private static void registerInteractedPacket(){
+		ServerPlayNetworking.registerGlobalReceiver(InteractedPayloadC2S.ID, ((payload, context) -> {
+			ServerPlayerEntity player = context.player();
+			if(player.getWorld().isClient){
+				return;
+			}
+			player.getServer().execute( () -> {
+				try{
+					PlayerRightClickInteractEvent.EVENT.invoker().interact(player);
+				}catch (NoSuchElementException e){
+					LOGGER.warn("No value in the packet!");
+				}catch (Exception e){
+					LOGGER.error("There was an error while getting the packet!");
+					e.printStackTrace();
+				}
+			});
+		}));
+	}
 
     public static boolean isPlayerInCooldown(PlayerEntity user){
         return user.hasStatusEffect(LightEffects.LIGHT_FATIGUE) || user.hasStatusEffect(LightEffects.LIGHT_ACTIVE);
