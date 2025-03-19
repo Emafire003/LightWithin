@@ -37,7 +37,8 @@
     "forest_aura_related.CameraMixin",
     "forest_aura_related.EntitiesGlowingForClientMixin",
     "renderer.GameRendererMixin",
-    "renderer.InGameHudMixin"
+    "renderer.InGameHudMixin",
+    "forest_aura_related.NoInGameOverlayInsideBlockMixin"
   ],
   "server": [
   ],
