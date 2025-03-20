@@ -10,6 +10,7 @@ import org.spongepowered.asm.mixin.injection.At;
 
 @Mixin(InGameOverlayRenderer.class)
 public class NoInGameOverlayInsideBlockMixin {
+    //TODO maybe make this server side configurable?
     @ModifyExpressionValue(
             method = "renderOverlays",
             at = @At(value = "FIELD", target = "Lnet/minecraft/entity/player/PlayerEntity;noClip:Z")
