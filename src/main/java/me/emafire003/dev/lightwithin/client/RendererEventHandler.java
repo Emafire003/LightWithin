@@ -64,6 +64,11 @@ public class RendererEventHandler {
         updateFromConfig();
         RenderEvents.HUD.register(drawContext -> {
 
+            //In the replay mod the player is by default in first person, so don't display the runes at all, since they are meant for first person.
+            if(ReplayModCompat.isInReplayMode()){
+                return;
+            }
+
             if(MinecraftClient.getInstance().player == null){
                 return;
             }
@@ -105,10 +110,6 @@ public class RendererEventHandler {
                 LightWithinClient.setLightReady(false);
             }
 
-            //In the replay mod the player is by default in first person, so don't display the runes at all, since they are meant for first person.
-            if(ReplayModCompat.isInReplayMode()){
-                return;
-            }
 
             center_x = MinecraftClient.getInstance().getWindow().getScaledWidth()/2;
             center_y = MinecraftClient.getInstance().getWindow().getScaledHeight()/2;
