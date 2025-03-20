@@ -6,6 +6,7 @@ import me.emafire003.dev.lightwithin.client.renderers.RunesRenderer;
 import me.emafire003.dev.lightwithin.client.renderers.TargetItemRenderer;
 import me.emafire003.dev.lightwithin.client.renderers.TargetRenderer;
 import me.emafire003.dev.lightwithin.client.renderers.TypeItemRenderer;
+import me.emafire003.dev.lightwithin.compat.flashback.FlashbackCompat;
 import me.emafire003.dev.lightwithin.compat.replaymod.ReplayModCompat;
 import me.emafire003.dev.lightwithin.component.LightComponent;
 import me.emafire003.dev.lightwithin.config.ClientConfig;
@@ -64,8 +65,8 @@ public class RendererEventHandler {
         updateFromConfig();
         RenderEvents.HUD.register(drawContext -> {
 
-            //In the replay mod the player is by default in first person, so don't display the runes at all, since they are meant for first person.
-            if(ReplayModCompat.isInReplayMode()){
+            //In the replay mod/flashback the player is by default in first person, so don't display the runes at all, since they are meant for first person.
+            if(ReplayModCompat.isInReplayMode() || FlashbackCompat.isInReplayMode()){
                 return;
             }
 
