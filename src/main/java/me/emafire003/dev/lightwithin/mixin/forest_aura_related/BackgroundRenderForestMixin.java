@@ -15,6 +15,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class BackgroundRenderForestMixin {
 
     //Needed for the forest aura effect
+    //TODO maybe make this color configurable?
     @Inject(
             method = "render",
             at = @At(value = "INVOKE",
