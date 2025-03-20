@@ -152,6 +152,8 @@ dependencies {
 	//Fixes
 	//ReplayMod (to fix the runes rendering)
 	modCompileOnly "maven.modrinth:replaymod:${project.replaymod_version}"
+	//Flashback (to fix the runes rendering)
+	modCompileOnly "maven.modrinth:flashback:${project.flashback_version}"
 
 	//Flan
 	modCompileOnly("maven.modrinth:flan:${project.flan_version}"){
