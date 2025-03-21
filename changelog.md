@@ -67,6 +67,7 @@ Updated to Loom 1.9, updated to the newer gradle version, updated to ParticleAni
 - Tweaked how the light types particle look, they now go a bit more horizontally before floating up. They also are a little less randomly coloured.
 - The area of search for entities (the one that checks for allies and enemies and does stuff) has been double to 12 blocks (from 6) by default
 - Added sound subtitles translations
+- Now when you activate a light, light rays will be displayed from you. If you did so using a light charge, some rays will be redder. (They won't be displayed at all if activate with a command)
 - Fixed how the sounds are played 
 - Fixed [#23](https://github.com/Emafire003/LightWithin/issues/23)
 - Fixed [#17](https://github.com/Emafire003/LightWithin/issues/17)
@@ -76,5 +77,6 @@ Updated to Loom 1.9, updated to the newer gradle version, updated to ParticleAni
 - Fixed FrostLight particles non spawning
 - Fixed HealLight sound being played too low
 - Fixed the `/light ready|activate delay` timers, they now work properly [#26](https://github.com/Emafire003/LightWithin/issues/27)
+- Probably other stuff I forgot
 
 
