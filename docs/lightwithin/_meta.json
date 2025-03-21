@@ -26,5 +26,9 @@
   "config_files": {
     "name": "Config files",
     "icon": "FileSliders"
+  },
+  "modcompat.mdx": {
+    "name": "Interaction with other mods",
+    "icon": "CircuitBoard"
   }
 }
