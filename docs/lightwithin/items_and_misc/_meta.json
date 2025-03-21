@@ -6,5 +6,9 @@
   "bottled_light.mdx": {
     "name": "Bottled Light",
     "icon": null
+  },
+  "blocks.mdx": {
+    "name": "Blocks",
+    "icon": null
   }
 }

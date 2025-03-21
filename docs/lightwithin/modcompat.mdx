@@ -1,0 +1,50 @@
+# Decoration
+When your light activates, you glow. Minecraft doesn't allow to change the color on its own, so you can download and install the [ColoredGlowLib](https://www.curseforge.com/minecraft/mc-mods/coloredglowlib) mod, the latest version for fabric, and enjoy an even better effect.
+Also from 1.2.0 it's a "soft-requirement", since it allows the player to distinguish between enemies and allies while under the effect of ForestAura.
+By downloading you will also help me a bit, since it's one of my mods.
+
+# Allies and Enemies
+I tried to make this mod compatible with most of the team/factions/guild/parties etc. mods currently available, so you are free to chose whichever you want, in order to establish who's a foe and who's an ally. Currently compatible options include:
+- [Factions](https://modrinth.com/mod/factions)
+- [Argonauts](https://modrinth.com/mod/argonauts) (both parties and guilds)
+- [Open Parties And Claims](https://modrinth.com/mod/open-parties-and-claims)
+- [FTBTeams](https://www.curseforge.com/minecraft/mc-mods/ftb-teams-fabric)
+
+And of course vanilla minecraft /team
+
+# Permissions
+Permissions to use the commands are currently implemented, and any mod that provides permission capabilities such as LuckPerms should do the trick.
+The current available permissions are:
+- "lightwithin.commands.get", 2 # Allows for the use of /light get command
+- "lightwithin.commands.set", 2 # Allows for the use of /light set command
+- "lightwithin.commands.reroll", 2 # Allows for the use of /light reroll command
+- "lightwithin.commands.reset", 2 # Allows for the use of /light reset command
+- "lightwithin.commands.reload", 2 # Allows for the use of /light reload command
+- "lightwithin.commands.activate", 2 # Allows for the use of /light activate command
+- "lightwithin.commands.ready", 2 # Allows for the use of /light ready command
+- "lightwithin.commands.charge", 2 # Allows for the use of /light charge command
+
+- "lightwithin.commands", 2 # It allows a player to use all light commands
+
+"2" represent the permission level required by vanilla minecraft, so it's command blocks, console, and /ops.
+
+# World protecion (worldgurad-likes)
+If you run a server you may want to restrict the light activation in certain areas, or at least block the spawning of structures in those regions.
+That's why compatibility with [Flan](https://modrinth.com/mod/flan) and [YetAnotherWorldProtector](https://modrinth.com/mod/yawp) has been added.
+
+### Flan
+There are custom rules togglable in the menu. It is advised to allow their use only by admins, since players should still be able to attack each other with their lights, so it wouldn't be fare for just the owners of the claim to be able to use the lights.
+
+The flag names are: `ACTIVATE_LIGHT` to allow/disallow light activation, and `LIGHT_GRIEFING` to allow/disallow the spawning of structures-
+
+### Yawp
+Since it's not possible yet to add custom flags, the `no-pvp` one will also disable light activation, whereas `break-blocks` will also disable lights spawning structures
+
+You can also set the default option of weather or not lights are "activatable" by default or not in the config file.
+
+# Config GUI
+You can modify the client side settings of the mod using YACL (YetAnotherConfigLib) and ModMenu
+
+# Replay Mod & Flashback
+The runes are displayed when the player is in first person. The ReplayMod (and Flashback) uses a sort of "spectator camera" entity to show the replay, so the runes would always be displayed by default.
+I've implemented a fix to prevent this from happening. If the player is in "Replay Mode", aka viewing or editing a replay, the runes and stuff won't show.
