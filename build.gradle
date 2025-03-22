@@ -101,7 +101,8 @@ dependencies {
 	include modImplementation("maven.modrinth:structureplacerapi:${project.structureplacerapi_version}")
 
 	//CustomBrewRecipes
-	include modImplementation("maven.modrinth:custombrewrecipes:${project.custombrewrecipes_version}")
+	//include
+	modImplementation("maven.modrinth:custombrewrecipes:${project.custombrewrecipes_version}")
 
 	//ParticleAnimationLib
 	include modImplementation("maven.modrinth:particleanimationlib:${project.pal_version}")
