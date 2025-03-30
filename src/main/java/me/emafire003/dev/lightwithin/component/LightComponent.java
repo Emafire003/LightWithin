@@ -4,20 +4,25 @@ import dev.onyxstudios.cca.api.v3.component.ComponentV3;
 import dev.onyxstudios.cca.api.v3.component.sync.AutoSyncedComponent;
 import me.emafire003.dev.lightwithin.LightWithin;
 import me.emafire003.dev.lightwithin.config.Config;
-import me.emafire003.dev.lightwithin.lights.InnerLightType;
+import me.emafire003.dev.lightwithin.lights.InnerLight;
+import me.emafire003.dev.lightwithin.lights.NoneLight;
 import me.emafire003.dev.lightwithin.util.TargetType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
+import net.minecraft.util.Identifier;
 
-import static me.emafire003.dev.lightwithin.LightWithin.LOGGER;
+import static me.emafire003.dev.lightwithin.LightWithin.*;
 
 public class LightComponent implements ComponentV3, AutoSyncedComponent {
 
-    public static final int CURRENT_VERSION = 2;
+    //TODO make a converter from the old format of for the type
+    //  Actually should not be needed since the identife
+    public static final int CURRENT_VERSION = 3;
 
-    protected InnerLightType type = InnerLightType.NONE;
+    /// This is going to be stored as the light's id in the component
+    protected InnerLight type = new NoneLight();
     protected TargetType targets =  TargetType.NONE;
     protected int max_cooldown_time = -1;
     protected double power_multiplier = -1;
@@ -42,13 +47,20 @@ public class LightComponent implements ComponentV3, AutoSyncedComponent {
 
     @Override
     public void readFromNbt(NbtCompound tag) {
+
         if(tag.contains("type")){
             if(debug){
                 LOGGER.info("the type got: " + tag.getString("type"));
             }
-            this.type = InnerLightType.valueOf(tag.getString("type"));
+
+            //If it's an older version of the component, update it to the new version TODO make sure this works
+            if(tag.getInt("version") < CURRENT_VERSION){
+                this.type = INNERLIGHT_REGISTRY.get(Identifier.tryParse(MOD_ID+":"+tag.getString("type")));
+            }
+
+            this.type = INNERLIGHT_REGISTRY.get(Identifier.tryParse(tag.getString("type")));
         }else{
-            this.type = InnerLightType.NONE;
+            this.type = new NoneLight();
         }
 
         if(tag.contains("targets")){
@@ -137,7 +149,12 @@ public class LightComponent implements ComponentV3, AutoSyncedComponent {
 
     @Override
     public void writeToNbt(NbtCompound tag) {
-        tag.putString("type", this.type.toString());
+        String typeId = "none";
+        LOGGER.warn("The typeId found is: " + this.type);
+        if(INNERLIGHT_REGISTRY.getId(this.type) != null){
+            typeId = INNERLIGHT_REGISTRY.getId(this.type).toString();
+        }
+        tag.putString("type", typeId);
         tag.putString("targets", this.targets.toString());
         tag.putDouble("cooldown_time", this.max_cooldown_time);
         tag.putDouble("power_multiplier", this.power_multiplier);
@@ -152,7 +169,7 @@ public class LightComponent implements ComponentV3, AutoSyncedComponent {
     }
 
 
-    public InnerLightType getType() {
+    public InnerLight getType() {
         return this.type;
     }
 
@@ -201,7 +218,7 @@ public class LightComponent implements ComponentV3, AutoSyncedComponent {
         return this.version;
     }
 
-    public void setType(InnerLightType type) {
+    public void setType(InnerLight type) {
         this.type = type;
         LightWithin.LIGHT_COMPONENT.sync(caster);
     }
@@ -283,7 +300,7 @@ public class LightComponent implements ComponentV3, AutoSyncedComponent {
         LightWithin.LIGHT_COMPONENT.sync(caster);
     }
 
-    public void setAll(InnerLightType type, TargetType targets, int max_cooldown, double power, int duration, int max_increment, int max_light_stack, boolean locked, int version){
+    public void setAll(InnerLight type, TargetType targets, int max_cooldown, double power, int duration, int max_increment, int max_light_stack, boolean locked, int version){
         this.type = type;
         this.targets = targets;
         this.max_cooldown_time = max_cooldown;
@@ -302,7 +319,7 @@ public class LightComponent implements ComponentV3, AutoSyncedComponent {
         this.power_multiplier = -1;
         this.duration = -1;
         //this.version = CURRENT_VERSION;
-        this.type = InnerLightType.NONE;
+        this.type = new NoneLight();
         this.max_increment_percent = -1;
         this.max_light_stack = 1;
         this.isLocked = false;

@@ -1,9 +1,12 @@
 package me.emafire003.dev.lightwithin.lights;
 
+import com.mojang.datafixers.util.Pair;
+import me.emafire003.dev.lightwithin.LightWithin;
 import me.emafire003.dev.lightwithin.compat.coloredglowlib.CGLCompat;
 import me.emafire003.dev.lightwithin.component.LightComponent;
 import me.emafire003.dev.lightwithin.config.BalanceConfig;
 import me.emafire003.dev.lightwithin.config.Config;
+import me.emafire003.dev.lightwithin.config.TriggerConfig;
 import me.emafire003.dev.lightwithin.particles.LightParticles;
 import me.emafire003.dev.lightwithin.particles.LightParticlesUtil;
 import me.emafire003.dev.lightwithin.sounds.LightSounds;
@@ -11,6 +14,7 @@ import me.emafire003.dev.lightwithin.status_effects.LightEffects;
 import me.emafire003.dev.lightwithin.util.CheckUtils;
 import me.emafire003.dev.lightwithin.util.SpawnUtils;
 import me.emafire003.dev.lightwithin.util.TargetType;
+import me.emafire003.dev.lightwithin.util.TriggerChecks;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.Block;
@@ -32,78 +36,123 @@ import net.minecraft.fluid.Fluids;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.potion.Potion;
-import net.minecraft.potion.Potions;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.tag.TagKey;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
+import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
 import static me.emafire003.dev.lightwithin.LightWithin.*;
+import static me.emafire003.dev.lightwithin.util.CheckUtils.checkWaterLoggedOrTag;
+import static me.emafire003.dev.lightwithin.util.LightTriggerChecks.getMinTrigger;
+import static me.emafire003.dev.lightwithin.util.LightTriggerChecks.sendLightTriggered;
 
 public class AquaLight extends InnerLight {
 
     public static final Item INGREDIENT = Items.SEAGRASS;
-    public static final Potion INGREDIENT_V = Potions.WATER;
 
     public static final TagKey<Block> AQUA_TRIGGER_BLOCKS = TagKey.of(RegistryKeys.BLOCK, new Identifier(MOD_ID, "aqua_trigger_blocks"));
     public static final TagKey<Item> AQUA_TRIGGER_ITEMS = TagKey.of(RegistryKeys.ITEM, new Identifier(MOD_ID, "aqua_trigger_items"));
 
+    private final List<TargetType> possibleTargetTypes = Arrays.asList(TargetType.SELF, TargetType.ENEMIES, TargetType.ALLIES,  TargetType.ALL);
+    private final List<TriggerChecks> triggerChecks = List.of(TriggerChecks.ENTITY_ATTACKS_ENTITY, TriggerChecks.ALLY_ATTACKED, TriggerChecks.ALLY_DIES, TriggerChecks.ENTITY_DROWNING);
+    private final Identifier lightId = LightWithin.getIdentifier("aqua");
 
-    public AquaLight(List<LivingEntity> targets, double cooldown_time, double power_multiplier, int duration, String color, PlayerEntity caster, boolean rainbow_col) {
-        super(targets, cooldown_time, power_multiplier, duration, color, caster, rainbow_col);
-        type = InnerLightType.AQUA;
+    /**
+     * Creates an instance of this InnerLight. Remember to register it!
+     *
+     * @param regex A lambda function, which provides you with a string representing the UUID portion dedicated to type determination.
+     *              You have to provide a check based on the string for which the player will have that particular light.
+     *              Remember that the order with which the lights are registered matters a lot!
+     */
+    public AquaLight(TypeCreationRegex regex) {
+        super(regex);
+        this.color = "aqua";
     }
 
-    public AquaLight(List<LivingEntity> targets, double cooldown_time, double power_multiplier, int duration, PlayerEntity caster, boolean rainbow_col) {
-        super(targets, cooldown_time, power_multiplier, duration, caster, rainbow_col);
-        type = InnerLightType.AQUA;
-        color = "35f4d1";
+    @Override
+    public List<TargetType> getPossibleTargetTypes() {
+        return possibleTargetTypes;
     }
 
-    public AquaLight(List<LivingEntity> targets, double cooldown_time, double power_multiplier, int duration, PlayerEntity caster) {
-        super(targets, cooldown_time, power_multiplier, duration, caster);
-        type = InnerLightType.AQUA;
-        //color = "#35f4d1";
-        color = "aqua";
+    @Override
+    public List<TriggerChecks> getTriggerChecks() {
+        return triggerChecks;
     }
 
-    private void checkSafety(){
-        if(this.power_multiplier > BalanceConfig.AQUA_MAX_POWER){
+    @Override
+    public Item getIngredient() {
+        return INGREDIENT;
+    }
+
+    @Override
+    public Identifier getLightId() {
+        return lightId;
+    }
+
+
+    @Override
+    protected Pair<Double, Integer>  checkSafety(double power_multiplier, int duration){
+        if(power_multiplier > BalanceConfig.AQUA_MAX_POWER){
             power_multiplier = BalanceConfig.AQUA_MAX_POWER;
         }
-        if(this.power_multiplier < BalanceConfig.AQUA_MIN_POWER){
+        if(power_multiplier < BalanceConfig.AQUA_MIN_POWER){
             power_multiplier = BalanceConfig.AQUA_MIN_POWER;
         }
         int max_duration = BalanceConfig.AQUA_MAX_DURATION;
         if(Config.MULTIPLY_DURATION_LIMIT){
             max_duration = (int) (BalanceConfig.AQUA_MAX_DURATION * Config.DURATION_MULTIPLIER);
         }
-        if(this.duration > max_duration){
-            this.duration = max_duration;
+        if(duration > max_duration){
+            duration = max_duration;
         }
-        if(this.duration < BalanceConfig.AQUA_MIN_DURATION){
-            this.duration = BalanceConfig.AQUA_MIN_DURATION;
+        if(duration < BalanceConfig.AQUA_MIN_DURATION){
+            duration = BalanceConfig.AQUA_MIN_DURATION;
         }
+        return new Pair<Double, Integer>(power_multiplier, duration);
     }
 
     @Override
-    public void execute(){
-        checkSafety();
+    public void startActivation(LightComponent component, PlayerEntity player) {
+        List<LivingEntity> targets = new ArrayList<>();
+        if(component.getTargets().equals(TargetType.ALL)){
+            targets.addAll(player.getWorld().getEntitiesByClass(LivingEntity.class, new Box(player.getBlockPos()).expand(getBoxExpansionAmount()), (entity1 -> true)));
+            targets.remove(player);
+            player.sendMessage(Text.translatable("light.description.activation.aqua.all"), true);
+        }
+
+        else if(component.getTargets().equals(TargetType.ENEMIES)){
+            targets.addAll(getEnemies(player));
+            player.sendMessage(Text.translatable("light.description.activation.aqua.enemies"), true);
+        }else if(component.getTargets().equals(TargetType.ALLIES)){
+            targets.addAll(getAllies(player));
+            player.sendMessage(Text.translatable("light.description.activation.aqua.allies"), true);
+        }if(component.getTargets().equals(TargetType.SELF)){
+            targets.add(player);
+            player.sendMessage(Text.translatable("light.description.activation.aqua.self"), true);
+        }
+        activate(player, targets, component.getPowerMultiplier(), component.getDuration(), component.getMaxCooldown());
+    }
+
+    @Override
+    public void activate(PlayerEntity caster, List<LivingEntity> targets, double power_multiplier, int duration, double cooldown_time){
+        power_multiplier = checkSafety(power_multiplier, duration).getFirst();
+        duration = checkSafety(power_multiplier, duration).getSecond();
+
         if(FabricLoader.getInstance().isModLoaded("coloredglowlib")){
-            if(this.rainbow_col){
-                CGLCompat.getLib().setRainbowColor(this.caster);
-            }else{
-                CGLCompat.getLib().setColor(this.caster, this.color);
-            }
+            CGLCompat.getLib().setColor(caster, color);
         }
 
 
@@ -125,7 +174,7 @@ public class AquaLight extends InnerLight {
                 turtle_helmet.addEnchantment(Enchantments.PROJECTILE_PROTECTION, 3);
 
                 ItemStack trident = new ItemStack(Items.TRIDENT);
-                if(this.power_multiplier > 5){
+                if(power_multiplier > 5){
                     trident.addEnchantment(Enchantments.CHANNELING, 1);
                     turtle_helmet.addEnchantment(Enchantments.THORNS, caster.getRandom().nextBetween(1, 2));
                     iron_chest.addEnchantment(Enchantments.THORNS, caster.getRandom().nextBetween(1, 2));
@@ -140,7 +189,7 @@ public class AquaLight extends InnerLight {
                     drowned.equipStack(EquipmentSlot.MAINHAND, trident);
                 }
 
-                if(this.power_multiplier > 5 && caster.getRandom().nextBetween(1, 100) == 1){
+                if(power_multiplier > 5 && caster.getRandom().nextBetween(1, 100) == 1){
                     drowned.equipStack(EquipmentSlot.OFFHAND, trident);
                     drowned.equipStack(EquipmentSlot.MAINHAND, trident);
                 }
@@ -155,19 +204,19 @@ public class AquaLight extends InnerLight {
 
         //Allies/self section (boosts & water slide)
         if(component.getTargets().equals(TargetType.ALLIES) || component.getTargets().equals(TargetType.SELF)){
-            for(LivingEntity target : this.targets){
+            for(LivingEntity target : targets){
                 //target.playSound(LightSounds.AQUA_LIGHT, 0.9f, 1);
-                if(this.power_multiplier < 4){
-                    target.addStatusEffect(new StatusEffectInstance(LightEffects.WATER_SLIDE, this.duration*20, 2, false, false));
+                if(power_multiplier < 4){
+                    target.addStatusEffect(new StatusEffectInstance(LightEffects.WATER_SLIDE, duration*20, 2, false, false));
                 }else{
-                    target.addStatusEffect(new StatusEffectInstance(LightEffects.WATER_SLIDE, this.duration*20, 3, false, false));
+                    target.addStatusEffect(new StatusEffectInstance(LightEffects.WATER_SLIDE, duration*20, 3, false, false));
                 }
                 if(target.equals(caster) && component.getTargets().equals(TargetType.ALLIES)){
-                    target.addStatusEffect(new StatusEffectInstance(StatusEffects.DOLPHINS_GRACE, this.duration*20, (int) (this.power_multiplier/Config.DIV_SELF), false, false));
-                    target.addStatusEffect(new StatusEffectInstance(StatusEffects.CONDUIT_POWER, this.duration*20, (int) (this.power_multiplier/Config.DIV_SELF), false, false));
+                    target.addStatusEffect(new StatusEffectInstance(StatusEffects.DOLPHINS_GRACE, duration*20, (int) (power_multiplier/Config.DIV_SELF), false, false));
+                    target.addStatusEffect(new StatusEffectInstance(StatusEffects.CONDUIT_POWER, duration*20, (int) (power_multiplier/Config.DIV_SELF), false, false));
                 }else{
-                    target.addStatusEffect(new StatusEffectInstance(StatusEffects.DOLPHINS_GRACE, this.duration*20, (int) (this.power_multiplier), false, false));
-                    target.addStatusEffect(new StatusEffectInstance(StatusEffects.CONDUIT_POWER, this.duration*20, (int) (this.power_multiplier), false, false));
+                    target.addStatusEffect(new StatusEffectInstance(StatusEffects.DOLPHINS_GRACE, duration*20, (int) (power_multiplier), false, false));
+                    target.addStatusEffect(new StatusEffectInstance(StatusEffects.CONDUIT_POWER, duration*20, (int) (power_multiplier), false, false));
                 }
 
                 LightParticlesUtil.spawnLightTypeParticle(LightParticles.AQUALIGHT_PARTICLE, (ServerWorld) target.getWorld(), target.getPos());
@@ -180,23 +229,23 @@ public class AquaLight extends InnerLight {
         else if(component.getTargets().equals(TargetType.ENEMIES)) {
             LightParticlesUtil.spawnLightTypeParticle(LightParticles.AQUALIGHT_PARTICLE, (ServerWorld) caster.getWorld(), caster.getPos());
 
-            for(LivingEntity target : this.targets){
+            for(LivingEntity target : targets){
                 //TODO should I play the sound for every enemy? Nah
                 //target.playSound(LightSounds.AQUA_LIGHT, 0.9f, 1);
 
                 if(!caster.getWorld().isClient && CheckUtils.checkGriefable((ServerPlayerEntity) caster)) {
                     if(target instanceof PlayerEntity){
-                        applyWaterCascade(target, (int) (this.power_multiplier*3));
+                        applyWaterCascade(target, (int) (power_multiplier*3));
                     }else{
-                        target.addStatusEffect(new StatusEffectInstance(LightEffects.WATER_CASCADE, (int) (this.power_multiplier*3), 0, false, false));
+                        target.addStatusEffect(new StatusEffectInstance(LightEffects.WATER_CASCADE, (int) (power_multiplier*3), 0, false, false));
                     }
-                    if(this.power_multiplier >= 5){
+                    if(power_multiplier >= 5){
                         ItemStack trident = new ItemStack(Items.TRIDENT);
                         trident.addEnchantment(Enchantments.CHANNELING, 1);
                         TridentEntity tridentEntity = new TridentEntity(caster.getWorld(), caster, trident);
                         tridentEntity.setPos(target.getX(), target.getY()+10, target.getZ());
                         tridentEntity.addVelocity(0, -1, 0);
-                        if(this.power_multiplier >= 8){
+                        if(power_multiplier >= 8){
                             LightningEntity lightning = new LightningEntity(EntityType.LIGHTNING_BOLT, caster.getWorld());
                             lightning.setPos(target.getX(), target.getY(), target.getZ());
                             target.getWorld().spawnEntity(lightning);
@@ -259,4 +308,137 @@ public class AquaLight extends InnerLight {
         }));
     }
 
+    @Override
+    public void triggerCheck(PlayerEntity player, LightComponent component, @Nullable LivingEntity attacker, @Nullable LivingEntity target) {
+        double trigger_sum = 0;
+        /**If the player has ALL as target, he needs to be hurt (or an ally has to die, but that depends on the trigger)*/
+        if(component.getTargets().equals(TargetType.ALL)){
+            if(CheckUtils.checkSelfDanger(player, Config.HP_PERCENTAGE_SELF)){
+                trigger_sum = trigger_sum + TriggerConfig.AQUA_ALL_VERY_LOW_HEALTH;
+            }
+
+            if(Config.CHECK_SURROUNDED && (CheckUtils.checkSurrounded(player))){
+                trigger_sum = trigger_sum + TriggerConfig.AQUA_ALL_SURROUNDED;
+            }
+
+            //Checks if the player'sallies have low armor durability
+            if(!player.equals(target) && Config.CHECK_ARMOR_DURABILITY && CheckUtils.checkAllyArmor(player, target, Config.DUR_PERCENTAGE_ALLIES)){
+                trigger_sum=trigger_sum+TriggerConfig.AQUA_ALL_ALLY_ARMOR_DURABILITY;
+            }
+
+            if(player.getAir() == 0){
+                trigger_sum=trigger_sum+TriggerConfig.AQUA_ALL_DROWNING;
+            }
+
+            if(checkLightConditions(player)){
+                trigger_sum = trigger_sum + TriggerConfig.AQUA_ALL_CONDITIONS;
+            }
+
+            if(trigger_sum >= getMinTrigger()) {
+                sendLightTriggered((ServerPlayerEntity) player);
+            }
+        }
+        /**CHECKS if the player has ENEMIES as target, either his or his allies health needs to be low*/
+        else if(component.getTargets().equals(TargetType.ENEMIES)){
+            if(CheckUtils.checkSelfDanger(player, Config.HP_PERCENTAGE_SELF)){
+                trigger_sum = trigger_sum + TriggerConfig.AQUA_ENEMIES_VERY_LOW_HEALTH;
+            }else if(CheckUtils.checkSelfDanger(player, Config.HP_PERCENTAGE_SELF+Config.HP_PERCENTAGE_INCREMENT)){
+                trigger_sum = trigger_sum + TriggerConfig.AQUA_ENEMIES_LOW_HEALTH;
+            }
+
+            if(Config.CHECK_SURROUNDED && (CheckUtils.checkSurrounded(player))){
+                trigger_sum = trigger_sum + TriggerConfig.AQUA_ENEMIES_SURROUNDED;
+            }
+            if(player.getAir() == 0){
+                trigger_sum=trigger_sum+TriggerConfig.AQUA_ENEMIES_DROWNING;
+            }
+
+            //Checks if the player'sallies have low armor durability
+            if(!player.equals(target) && Config.CHECK_ARMOR_DURABILITY && CheckUtils.checkAllyArmor(player, target, Config.DUR_PERCENTAGE_ALLIES)){
+                trigger_sum=trigger_sum+TriggerConfig.AQUA_ENEMIES_ALLY_ARMOR_DURABILITY;
+            }
+
+            if(checkLightConditions(player)){
+                trigger_sum = trigger_sum + TriggerConfig.AQUA_ENEMIES_CONDITIONS;
+            }
+
+            if(trigger_sum >= getMinTrigger()) {
+                sendLightTriggered((ServerPlayerEntity) player);
+            }
+        }else if(component.getTargets().equals(TargetType.SELF)){
+            if(CheckUtils.checkSelfDanger(player, Config.HP_PERCENTAGE_SELF)){
+                trigger_sum = trigger_sum + TriggerConfig.AQUA_SELF_VERY_LOW_HEALTH;
+            }else if(CheckUtils.checkSelfDanger(player, Config.HP_PERCENTAGE_SELF+Config.HP_PERCENTAGE_INCREMENT)){
+                trigger_sum = trigger_sum + TriggerConfig.AQUA_SELF_LOW_HEALTH;
+            }
+
+            if(Config.CHECK_SURROUNDED && (CheckUtils.checkSurrounded(player))){
+                trigger_sum = trigger_sum + TriggerConfig.AQUA_SELF_SURROUNDED;
+            }
+            if(player.getAir() == 0){
+                trigger_sum=trigger_sum+TriggerConfig.AQUA_SELF_DROWNING;
+            }
+
+            if(Config.CHECK_ARMOR_DURABILITY && CheckUtils.checkArmorDurability(player, Config.DUR_PERCENTAGE_SELF)){
+                trigger_sum=trigger_sum+TriggerConfig.AQUA_SELF_ARMOR_DURABILITY;
+            }
+
+            if(checkLightConditions(player)){
+                trigger_sum = trigger_sum + TriggerConfig.AQUA_SELF_CONDITIONS;
+            }
+
+            if(trigger_sum >= getMinTrigger()) {
+                sendLightTriggered((ServerPlayerEntity) player);
+            }
+
+        }else if(component.getTargets().equals(TargetType.ALLIES)){
+            if(!player.equals(target) && CheckUtils.checkAllyHealth(player, attacker, Config.HP_PERCENTAGE_ALLIES+5)){
+                trigger_sum = trigger_sum + TriggerConfig.AQUA_ALLIES_ALLY_LOW_HEALTH;
+            }
+            if(CheckUtils.checkSelfDanger(player, Config.HP_PERCENTAGE_SELF)){
+                trigger_sum = trigger_sum + TriggerConfig.AQUA_ALLIES_VERY_LOW_HEALTH;
+            }
+
+            //Checks if the player'sallies have low armor durability
+            if(!player.equals(target) && Config.CHECK_ARMOR_DURABILITY && CheckUtils.checkAllyArmor(player, target, Config.DUR_PERCENTAGE_ALLIES)){
+                trigger_sum=trigger_sum+TriggerConfig.AQUA_ALLIES_ALLY_ARMOR_DURABILITY;
+            }
+            if(player.getAir() == 0){
+                trigger_sum=trigger_sum+TriggerConfig.AQUA_ALLIES_DROWNING;
+            }
+            if(CheckUtils.CheckAllies.checkAlly(player, target) && target.getAir() == 0){
+                trigger_sum=trigger_sum+TriggerConfig.AQUA_ALLIES_ALLY_DROWNING;
+            }
+
+            //Checks if the player is surrounded
+            if(Config.CHECK_SURROUNDED && CheckUtils.checkSurrounded(player)){
+                trigger_sum=trigger_sum+TriggerConfig.AQUA_ALLIES_SURROUNDED;
+            }
+
+            if(checkLightConditions(player)){
+                trigger_sum=trigger_sum+TriggerConfig.AQUA_ALLIES_CONDITIONS;
+            }
+
+            if(trigger_sum >= getMinTrigger()) {
+                sendLightTriggered((ServerPlayerEntity) player);
+            }
+        }
+    }
+
+    /**Used to check if the player has something that can be considered a Aqua source
+     *
+     * @param player The player to perform checks on*/
+    @Override
+    public boolean checkLightConditions(PlayerEntity player) {
+        if(player.isTouchingWaterOrRain()){
+            return true;
+        }
+
+        ItemStack main = player.getMainHandStack();
+        ItemStack off = player.getOffHandStack();
+        if(main.isIn(AquaLight.AQUA_TRIGGER_ITEMS) || off.isIn(AquaLight.AQUA_TRIGGER_ITEMS)){
+            return true;
+        }
+        return checkWaterLoggedOrTag(player, Config.TRIGGER_BLOCK_RADIUS, AquaLight.AQUA_TRIGGER_BLOCKS);
+    }
 }

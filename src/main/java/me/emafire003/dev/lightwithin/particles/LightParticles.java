@@ -10,6 +10,7 @@ import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
 
 public class LightParticles {
+    //TODO should i move this to the innerlight thingy?
     public static final DefaultParticleType HEALLIGHT_PARTICLE = FabricParticleTypes.simple();
     public static final DefaultParticleType DEFENSELIGHT_PARTICLE = FabricParticleTypes.simple();
     public static final DefaultParticleType STRENGTHLIGHT_PARTICLE = FabricParticleTypes.simple();

@@ -2,7 +2,8 @@ package me.emafire003.dev.lightwithin.mixin;
 
 import com.llamalad7.mixinextras.sugar.Local;
 import me.emafire003.dev.lightwithin.LightWithin;
-import me.emafire003.dev.lightwithin.lights.InnerLightType;
+import me.emafire003.dev.lightwithin.lights.ForestAuraLight;
+import me.emafire003.dev.lightwithin.lights.ThunderAuraLight;
 import me.emafire003.dev.lightwithin.status_effects.LightEffects;
 import net.minecraft.client.render.entity.EntityRenderer;
 import net.minecraft.client.render.entity.EntityRendererFactory;
@@ -24,8 +25,6 @@ import java.awt.Color;
 @Mixin(LivingEntityRenderer.class)
 public abstract class EntityColorOverlayRendererMixin<T extends LivingEntity, M extends EntityModel<T>> extends EntityRenderer<T> implements FeatureRendererContext<T, M> {
 
-    @Shadow @Final private static Logger LOGGER;
-
     protected EntityColorOverlayRendererMixin(EntityRendererFactory.Context ctx) {
         super(ctx);
     }
@@ -39,7 +38,7 @@ public abstract class EntityColorOverlayRendererMixin<T extends LivingEntity, M 
         //for the Aura things, a bit of transparency i think it's cool, so i'll modify the alpha value too
         if(livingEntity.getType().equals(EntityType.PLAYER)){
             if(livingEntity.hasStatusEffect(LightEffects.LIGHT_ACTIVE)){
-                if(LightWithin.LIGHT_COMPONENT.get(livingEntity).getType().equals(InnerLightType.FOREST_AURA)){
+                if(LightWithin.LIGHT_COMPONENT.get(livingEntity).getType() instanceof ForestAuraLight){
                     float or = args.get(4); //Original values, like OriginalRed
                     float og = args.get(5);
                     float ob = args.get(6);
@@ -51,7 +50,7 @@ public abstract class EntityColorOverlayRendererMixin<T extends LivingEntity, M 
                     args.set(7, oa*0.77f);//before it was 0.5 which is alright. It does work but is veeeery green
                 }
 
-                if(LightWithin.LIGHT_COMPONENT.get(livingEntity).getType().equals(InnerLightType.THUNDER_AURA)){
+                if(LightWithin.LIGHT_COMPONENT.get(livingEntity).getType() instanceof ThunderAuraLight){
                     float or = args.get(4); //Original values, like OriginalRed
                     float og = args.get(5);
                     float ob = args.get(6);

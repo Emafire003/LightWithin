@@ -2,7 +2,8 @@ package me.emafire003.dev.lightwithin.items;
 
 import me.emafire003.dev.lightwithin.LightWithin;
 import me.emafire003.dev.lightwithin.config.Config;
-import me.emafire003.dev.lightwithin.lights.InnerLightType;
+import me.emafire003.dev.lightwithin.lights.InnerLight;
+import me.emafire003.dev.lightwithin.lights.NoneLight;
 import me.emafire003.dev.lightwithin.networking.PlayRenderEffectPacketS2C;
 import me.emafire003.dev.lightwithin.sounds.LightSounds;
 import me.emafire003.dev.lightwithin.util.RenderEffect;
@@ -89,8 +90,8 @@ public class LuxcognitaBerryItem extends Item {
             return;
         }
         //light blue is 6288592
-        InnerLightType type = LightWithin.LIGHT_COMPONENT.get(user).getType();
-        if(type.equals(InnerLightType.NONE)){
+        InnerLight type = LightWithin.LIGHT_COMPONENT.get(user).getType();
+        if(type instanceof NoneLight){
             user.sendMessage(Text.translatable("light.description.error").formatted(Formatting.RED), true);
             return;
         }

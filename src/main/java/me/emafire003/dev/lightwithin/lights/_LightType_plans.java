@@ -1,6 +1,6 @@
 package me.emafire003.dev.lightwithin.lights;
 
-public enum InnerLightType {
+public enum _LightType_plans {
     HEAL,
     STRENGTH,
     DEFENCE,
@@ -54,5 +54,6 @@ public enum InnerLightType {
     FIREFLIES_MASTER, //Welp, not coming with 1.19 sooooo. It's gonna shoot out firefiles that attack or explode integrations with the Fireflally mod xD
     GENERIC,*/
     FROG, //What's it doing here?
-    NONE
+    NONE;
+
 }

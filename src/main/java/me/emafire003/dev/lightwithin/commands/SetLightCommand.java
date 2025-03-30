@@ -11,7 +11,7 @@ import me.emafire003.dev.lightwithin.commands.arguments.LightTypeArgument;
 import me.emafire003.dev.lightwithin.compat.permissions.PermissionsChecker;
 import me.emafire003.dev.lightwithin.component.LightComponent;
 import me.emafire003.dev.lightwithin.config.Config;
-import me.emafire003.dev.lightwithin.lights.InnerLightType;
+import me.emafire003.dev.lightwithin.lights.InnerLight;
 import me.emafire003.dev.lightwithin.util.TargetType;
 import net.minecraft.command.argument.EntityArgumentType;
 import net.minecraft.server.command.CommandManager;
@@ -20,28 +20,21 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
 public class SetLightCommand implements LightCommand{
 
-    //Temporary, will remove once all lights have been implemented
-    //TODO i should probably use something better
-    public static List<InnerLightType> currently_usable_lights = Arrays.asList(InnerLightType.HEAL, InnerLightType.DEFENCE,
-            InnerLightType.STRENGTH, InnerLightType.BLAZING, InnerLightType.FROST, InnerLightType.EARTHEN,
-            InnerLightType.WIND, InnerLightType.FROG, InnerLightType.AQUA, InnerLightType.FOREST_AURA, InnerLightType.THUNDER_AURA);
-
-
     private int changeType(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
         Collection<ServerPlayerEntity> targets = EntityArgumentType.getPlayers(context, "player");
-        InnerLightType type = LightTypeArgument.getType(context, "light_type");
+        InnerLight type = LightTypeArgument.getType(context, "light_type");
         ServerCommandSource source = context.getSource();
 
         try{
             for(ServerPlayerEntity target : targets){
-                if(!currently_usable_lights.contains(type)){
+
+                if(!LightWithin.INNERLIGHT_REGISTRY.containsId(type.getLightId())){
                     source.sendError(Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA)
                             .append(Text.literal("Error! The light you have specified does not exists or is not yet available!" ).formatted(Formatting.RED)));
                     return 0;
@@ -50,7 +43,7 @@ public class SetLightCommand implements LightCommand{
                 component.setType(type);
                 TargetType target_type = component.getTargets();
 
-                List<TargetType> possible = LightWithin.POSSIBLE_TARGETS.get(type);
+                List<TargetType> possible = type.getPossibleTargetTypes();
 
                 if(!possible.contains(target_type)){
                     int r = target.getRandom().nextBetween(0, possible.size()-1);
@@ -84,8 +77,8 @@ public class SetLightCommand implements LightCommand{
 
         for(ServerPlayerEntity target : targets){
             LightComponent component = LightWithin.LIGHT_COMPONENT.get(target);
-            InnerLightType light = component.getType();
-            List<TargetType> possible = LightWithin.POSSIBLE_TARGETS.get(light);
+            InnerLight light = component.getType();
+            List<TargetType> possible = light.getPossibleTargetTypes();
 
             if(!possible.contains(type)){
                 source.sendError(Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA)

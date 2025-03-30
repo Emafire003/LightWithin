@@ -9,15 +9,9 @@ import me.emafire003.dev.lightwithin.compat.open_parties_and_claims.OPACChecker;
 import me.emafire003.dev.lightwithin.compat.yawp.YawpCompat;
 import me.emafire003.dev.lightwithin.component.SummonedByComponent;
 import me.emafire003.dev.lightwithin.config.Config;
-import me.emafire003.dev.lightwithin.lights.AquaLight;
-import me.emafire003.dev.lightwithin.lights.BlazingLight;
-import me.emafire003.dev.lightwithin.lights.FrostLight;
-import me.emafire003.dev.lightwithin.lights.WindLight;
-import me.emafire003.dev.lightwithin.lights.ThunderAuraLight;
 import me.emafire003.dev.lightwithin.status_effects.LightEffects;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.DamageUtil;
 import net.minecraft.entity.Entity;
@@ -33,9 +27,6 @@ import net.minecraft.entity.passive.PassiveEntity;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.tag.*;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.state.property.Properties;
@@ -43,7 +34,6 @@ import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -715,104 +705,7 @@ public class CheckUtils {
         return percent >= ( (double) (100 * n)/tot );
     }
 
-    /**Used to check if the player has something that can be considered a Heat Source
-     * for the Blazing Light
-     *
-     * @param player The player to perform checks on*/
-    public static boolean checkBlazing(PlayerEntity player){
-        if(player.isOnFire()){
-            return true;
-        }
 
-        ItemStack main = player.getMainHandStack();
-        ItemStack off = player.getOffHandStack();
-        if(main.isIn(BlazingLight.BLAZING_TRIGGER_ITEMS) || off.isIn(BlazingLight.BLAZING_TRIGGER_ITEMS)){
-            return true;
-        }
-        return checkBlocksWithTag(player, Config.TRIGGER_BLOCK_RADIUS, BlazingLight.BLAZING_TRIGGER_BLOCKS);
-    }
-
-    /**Used to check if the player has something that can be considered a Cold Source
-     * for the Frost Light
-     *
-     * @param player The player to perform checks on*/
-    public static boolean checkFrost(PlayerEntity player){
-        if(player.isFrozen()){
-            return true;
-        }
-
-        ItemStack main = player.getMainHandStack();
-        ItemStack off = player.getOffHandStack();
-        if(main.isIn(FrostLight.FROST_TRIGGER_ITEMS) || off.isIn(FrostLight.FROST_TRIGGER_ITEMS)){
-            return true;
-        }
-        return checkBlocksWithTag(player, Config.TRIGGER_BLOCK_RADIUS, FrostLight.FROST_TRIGGER_BLOCKS);
-    }
-
-    /**Used to check if the player can trigger the Earthen Light, aka if they have
-     * dirt in their inventory or are sourronded by natural blocks
-     *
-     * @param player The player to perform checks on*/
-    public static boolean checkEarthen(PlayerEntity player){
-
-        //Moved this so it doesn't consume the dirt unless needed
-        if(checkMultipleBlocksWithTags(player, Config.TRIGGER_BLOCK_RADIUS, 3, TagKey.of(RegistryKeys.BLOCK, BlockTags.LUSH_GROUND_REPLACEABLE.id()))){
-            return true;
-        }
-        if(player.getInventory().contains(new ItemStack(Items.DIRT, 64))){
-            player.getInventory().removeStack(player.getInventory().getSlotWithStack(new ItemStack(Items.DIRT, 64)));
-            return true;
-        }
-
-        return false;
-    }
-
-    /**Used to check if the player has something that can be considered a Cold Source
-     * for the Frost Light
-     *
-     * @param player The player to perform checks on*/
-    public static boolean checkWind(PlayerEntity player){
-        //If the player is above sea level and can see the sky winds are there right?
-        if(player.getY() >= 64){
-            if(!player.getEntityWorld().isSkyVisible(player.getBlockPos())){
-                return true;
-            }
-            return true;
-        }
-
-        return checkMultipleBlocksWithTags(player, Config.TRIGGER_BLOCK_RADIUS, 7, WindLight.WIND_TRIGGER_BLOCKS);
-    }
-
-
-    /**Used to check if the player has something that can be considered a Aqua source
-     *
-     * @param player The player to perform checks on*/
-    public static boolean checkAqua(PlayerEntity player){
-        if(player.isTouchingWaterOrRain()){
-            return true;
-        }
-
-        ItemStack main = player.getMainHandStack();
-        ItemStack off = player.getOffHandStack();
-        if(main.isIn(AquaLight.AQUA_TRIGGER_ITEMS) || off.isIn(AquaLight.AQUA_TRIGGER_ITEMS)){
-            return true;
-        }
-        return checkWaterLoggedOrTag(player, Config.TRIGGER_BLOCK_RADIUS, AquaLight.AQUA_TRIGGER_BLOCKS);
-    }
-
-    /**Used to check if the player has something that can be considered a ForestAura source
-     *
-     * @param player The player to perform checks on*/
-    public static boolean checkForestAura(PlayerEntity player){
-        RegistryEntry<Biome> biome = player.getWorld().getBiome(player.getBlockPos());
-        if(biome.isIn(BiomeTags.IS_FOREST) || biome.isIn(BiomeTags.IS_JUNGLE) || biome.isIn(BiomeTags.IS_TAIGA)){
-            return true;
-        }
-
-        ItemStack main = player.getMainHandStack();
-        ItemStack off = player.getOffHandStack();
-        return main.isIn(ItemTags.SAPLINGS) || off.isIn(ItemTags.SAPLINGS);
-    }
 
     /**Used to check if the player is near some leaves
      *
@@ -823,27 +716,6 @@ public class CheckUtils {
         return checkMultipleBlocksPercent(player, BlockTags.LEAVES, Config.TRIGGER_BLOCK_RADIUS, percent);
     }
 
-    /**Used to check if the player has something that can be considered a ThunderAura source
-     *
-     * @param player The player to perform checks on*/
-    //TODO somehow make these datadriven/customizable at some point?
-    public static boolean checkThunderAura(PlayerEntity player){
-        if(checkThundering(player.getWorld())){
-            return true;
-        }
-        //If the player is standing on a is copper rod then lightning conditions met
-        if(player.getWorld().getBlockState(player.getBlockPos().down()).isOf(Blocks.LIGHTNING_ROD)
-            || player.getWorld().getBlockState(player.getBlockPos()).isOf(Blocks.LIGHTNING_ROD)){
-            return true;
-        }
-        if(checkRecentlyStruckByLightning(player)){
-            return true;
-        }
-
-        ItemStack main = player.getMainHandStack();
-        ItemStack off = player.getOffHandStack();
-        return main.isIn(ThunderAuraLight.THUNDER_AURA_TRIGGER_ITEMS) || off.isIn(ThunderAuraLight.THUNDER_AURA_TRIGGER_ITEMS);
-    }
 
     public static boolean checkFalling(LivingEntity entity) {
         if(entity instanceof PlayerEntity){

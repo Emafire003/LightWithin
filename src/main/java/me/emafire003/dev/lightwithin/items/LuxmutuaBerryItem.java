@@ -4,7 +4,7 @@ import com.mojang.datafixers.util.Pair;
 import me.emafire003.dev.lightwithin.LightWithin;
 import me.emafire003.dev.lightwithin.component.LightComponent;
 import me.emafire003.dev.lightwithin.config.Config;
-import me.emafire003.dev.lightwithin.lights.InnerLightType;
+import me.emafire003.dev.lightwithin.lights.InnerLight;
 import me.emafire003.dev.lightwithin.sounds.LightSounds;
 import me.emafire003.dev.lightwithin.events.LightCreationAndEvent;
 import me.emafire003.dev.lightwithin.util.TargetType;
@@ -60,9 +60,9 @@ public class LuxmutuaBerryItem extends Item {
             }
             LightComponent component = LightWithin.LIGHT_COMPONENT.get(user);
 
-            Pair<InnerLightType, TargetType> current = new Pair<>(component.getType(), component.getTargets());
+            Pair<InnerLight, TargetType> current = new Pair<>(component.getType(), component.getTargets());
             String[] id_bits = UUID.randomUUID().toString().toLowerCase().split("-");
-            Pair<InnerLightType, TargetType> newone = LightCreationAndEvent.determineTypeAndTarget(id_bits, LightCreationAndEvent.TYPE_BIT,LightCreationAndEvent.TARGET_BIT);
+            Pair<InnerLight, TargetType> newone = LightCreationAndEvent.determineTypeAndTarget(id_bits, LightCreationAndEvent.TYPE_BIT,LightCreationAndEvent.TARGET_BIT);
 
             while(current.getFirst().equals(newone.getFirst())){
                 id_bits = UUID.randomUUID().toString().toLowerCase().split("-");
