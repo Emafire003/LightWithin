@@ -8,7 +8,7 @@ import me.emafire003.dev.lightwithin.LightWithin;
 import me.emafire003.dev.lightwithin.compat.permissions.PermissionsChecker;
 import me.emafire003.dev.lightwithin.component.LightComponent;
 import me.emafire003.dev.lightwithin.events.LightCreationAndEvent;
-import me.emafire003.dev.lightwithin.lights.InnerLightType;
+import me.emafire003.dev.lightwithin.lights.InnerLight;
 import me.emafire003.dev.lightwithin.status_effects.LightEffects;
 import me.emafire003.dev.lightwithin.util.TargetType;
 import net.minecraft.command.argument.EntityArgumentType;
@@ -53,7 +53,7 @@ public class GetLightCommand implements LightCommand{
         ServerCommandSource source = context.getSource();
 
         try{
-            InnerLightType type = LightWithin.LIGHT_COMPONENT.get(target).getType();
+            InnerLight type = LightWithin.LIGHT_COMPONENT.get(target).getType();
             source.sendFeedback(() -> Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The InnerLight type of §d" + target.getName().getString() + "§e is: " ).formatted(Formatting.YELLOW)
                     .append(Text.literal(type.toString()).formatted(Formatting.GREEN))), true);
             return 1;
@@ -195,10 +195,10 @@ public class GetLightCommand implements LightCommand{
 
         try{
             String[] originalUUID = target.getUuid().toString().toLowerCase().split("-");
-            Pair<InnerLightType, TargetType> original_type_target = LightCreationAndEvent.determineTypeAndTarget(originalUUID, LightCreationAndEvent.TYPE_BIT, LightCreationAndEvent.TARGET_BIT);
+            Pair<InnerLight, TargetType> original_type_target = LightCreationAndEvent.determineTypeAndTarget(originalUUID, LightCreationAndEvent.TYPE_BIT, LightCreationAndEvent.TARGET_BIT);
 
             LightComponent component = LightWithin.LIGHT_COMPONENT.get(target);
-            InnerLightType type = component.getType();
+            InnerLight type = component.getType();
             source.sendFeedback(() -> Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The InnerLight type of §d" + target.getName().getString() + "§e is: " ).formatted(Formatting.YELLOW)
                     .append(Text.literal(type.toString()).formatted(Formatting.GREEN)).append(Text.literal(", was: ").formatted(Formatting.YELLOW)).append(Text.literal(original_type_target.getFirst().toString()).formatted(Formatting.GREEN))), true);
             TargetType target_type = component.getTargets();
@@ -255,7 +255,7 @@ public class GetLightCommand implements LightCommand{
 
         try{
             source.sendFeedback(() -> Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The light-types available at this moment are: " ).formatted(Formatting.YELLOW)
-                    .append(Text.literal(SetLightCommand.currently_usable_lights.toString()).formatted(Formatting.GREEN))), true);
+                    .append(Text.literal(LightWithin.INNERLIGHT_REGISTRY.stream().toList().toString()).formatted(Formatting.GREEN))), true);
             return 1;
         }catch(Exception e){
             e.printStackTrace();

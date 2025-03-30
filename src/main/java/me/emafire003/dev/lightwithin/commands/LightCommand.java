@@ -3,7 +3,8 @@ package me.emafire003.dev.lightwithin.commands;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import me.emafire003.dev.lightwithin.LightWithin;
-import me.emafire003.dev.lightwithin.lights.InnerLightType;
+import me.emafire003.dev.lightwithin.lights.InnerLight;
+import me.emafire003.dev.lightwithin.lights.NoneLight;
 import me.emafire003.dev.lightwithin.util.TargetType;
 import net.minecraft.command.argument.EntityArgumentType;
 import net.minecraft.server.command.ServerCommandSource;
@@ -24,8 +25,9 @@ public interface LightCommand {
 
                 Collection<ServerPlayerEntity> targets = EntityArgumentType.getPlayers(context, "player");
                 for(ServerPlayerEntity player : targets){
-                    InnerLightType light = LightWithin.LIGHT_COMPONENT.get(player).getType();
-                    List<TargetType> possible = LightWithin.POSSIBLE_TARGETS.get(light);
+                    InnerLight light = LightWithin.LIGHT_COMPONENT.get(player).getType();
+
+                    List<TargetType> possible = light.getPossibleTargetTypes();
 
                     for(TargetType type : possible){
                         builder.suggest(type.toString());
@@ -39,12 +41,13 @@ public interface LightCommand {
 
         static SuggestionProvider<ServerCommandSource> allLightTypes() {
             return (context, builder) -> {
-                for(InnerLightType type : InnerLightType.values()){
-                    if(type.equals(InnerLightType.NONE)){
-                        continue;
+                LightWithin.INNERLIGHT_REGISTRY.forEach( type-> {
+                    if(type instanceof NoneLight){
+                        return;
                     }
                     builder.suggest(type.toString());
-                }
+                });
+
 
                 return builder.buildFuture();
             };

@@ -3,19 +3,21 @@ package me.emafire003.dev.lightwithin.events;
 import me.emafire003.dev.lightwithin.LightWithin;
 import me.emafire003.dev.lightwithin.component.LightComponent;
 import me.emafire003.dev.lightwithin.config.BalanceConfig;
-import me.emafire003.dev.lightwithin.lights.InnerLightType;
+import me.emafire003.dev.lightwithin.lights.NoneLight;
 import me.emafire003.dev.lightwithin.lights.ThunderAuraLight;
 import me.emafire003.dev.lightwithin.status_effects.LightEffects;
 import me.emafire003.dev.lightwithin.util.CheckUtils;
 import me.emafire003.dev.lightwithin.util.TargetType;
+import me.emafire003.dev.lightwithin.util.TriggerChecks;
 import net.fabricmc.fabric.api.event.player.AttackEntityCallback;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LightningEntity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.passive.PassiveEntity;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.hit.HitResult;
@@ -24,7 +26,6 @@ import net.minecraft.util.math.Box;
 import java.util.List;
 
 import static me.emafire003.dev.lightwithin.LightWithin.*;
-import static me.emafire003.dev.lightwithin.util.LightTriggerChecks.*;
 
 //TODO maybe add a generic "damaged" event
 public class LightTriggeringAndEvents {
@@ -39,7 +40,7 @@ public class LightTriggeringAndEvents {
             return false;
         }
         LightComponent component = LIGHT_COMPONENT.get(player);
-        if(component.getType().equals(InnerLightType.NONE)){
+        if(component.getType() instanceof NoneLight) {
             return false;
         }
         if(component.getLocked()){
@@ -57,29 +58,46 @@ public class LightTriggeringAndEvents {
             return;
         }
         LightComponent component = LIGHT_COMPONENT.get(player);
-        if(component.getType().equals(InnerLightType.STRENGTH)){
-            checkStrength(player, component, attacker, target);
-        }
-        if(component.getType().equals(InnerLightType.BLAZING)){
-            checkBlazing(player, component, attacker, target);
-        }
-        if(component.getType().equals(InnerLightType.AQUA)){
-            checkAqua(player, component, attacker, target);
-        }
-        if(component.getType().equals(InnerLightType.THUNDER_AURA)){
-            checkThunderAura(player, component, attacker, target);
-        }
+        INNERLIGHT_REGISTRY.forEach(light -> {
+            if(light.getTriggerChecks().contains(TriggerChecks.ALLY_ATTACKED)){
+                light.triggerCheck(player, component, attacker, target);
+            }
+        });
     }
 
-    /**Triggers the light that require the player to attack and entity
-     * or the player to be attacked*/
-    public static void entityAttackEntityTriggerCheck(PlayerEntity player, LivingEntity attacker, LivingEntity target){
+    /** Triggers the lights that require the caster (or similar entity) to attack another entity
+     *
+     * Requires the {@link TriggerChecks#ENTITY_ATTACKS_ENTITY}*/
+    public static void entityAttacksEntityTriggerCheck(PlayerEntity player, LivingEntity attacker, LivingEntity target){
         if(!isTriggerable(player)){
             return;
         }
         LightComponent component = LIGHT_COMPONENT.get(player);
-        if(component.getType().equals(InnerLightType.HEAL)){
-            checkHeal(player, component, attacker, target);
+        INNERLIGHT_REGISTRY.forEach(light -> {
+            if(light.getTriggerChecks().contains(TriggerChecks.ENTITY_ATTACKS_ENTITY)){
+                light.triggerCheck(player, component, attacker, target);
+            }
+        });
+    }
+
+    /**Triggers the light that require the player to attack and entity
+     * or the player to be attacked
+     * <p>
+     * The lights need to have {@link TriggerChecks#ENTITY_ATTACKED}
+     * */
+    public static void entityAttackedTriggerCheck(PlayerEntity player, LivingEntity attacker, LivingEntity target){
+        if(!isTriggerable(player)){
+            return;
+        }
+        LightComponent component = LIGHT_COMPONENT.get(player);
+        //TODO test
+        INNERLIGHT_REGISTRY.forEach(light -> {
+            if(light.getTriggerChecks().contains(TriggerChecks.ENTITY_ATTACKED)){
+                light.triggerCheck(player, component, attacker, target);
+            }
+        });
+        /*if(component.getType().equals(InnerLightType.HEAL)){
+            //checkHeal(player, component, attacker, target);
         }
         if(component.getType().equals(InnerLightType.DEFENCE)){
             checkDefense(player, component, attacker, target);
@@ -98,7 +116,7 @@ public class LightTriggeringAndEvents {
         }
         if(component.getType().equals(InnerLightType.FROG)){
             checkFrog(player, component, attacker, target);
-        }
+        }*/
     }
 
     /**Triggers the lights that relay on falling aka Wind for example*/
@@ -107,9 +125,13 @@ public class LightTriggeringAndEvents {
             return;
         }
         LightComponent component = LIGHT_COMPONENT.get(player);
-        if(component.getType().equals(InnerLightType.WIND)){
-            checkWind(player, component, player, falling_entity);
-        }
+
+        INNERLIGHT_REGISTRY.forEach(light -> {
+            if(light.getTriggerChecks().contains(TriggerChecks.ENTITY_FALLING)){
+                light.triggerCheck(player, component, null, falling_entity);
+            }
+        });
+
 
     }
 
@@ -119,9 +141,12 @@ public class LightTriggeringAndEvents {
             return;
         }
         LightComponent component = LIGHT_COMPONENT.get(player);
-        if(component.getType().equals(InnerLightType.BLAZING)){
-            checkBlazing(player, component, player, target);
-        }
+        INNERLIGHT_REGISTRY.forEach(light -> {
+            if(light.getTriggerChecks().contains(TriggerChecks.ENTITY_BURNING)){
+                light.triggerCheck(player, component, null, target);
+            }
+        });
+
     }
 
     /**Triggers that lighs on Freezing damage taken by the player*/
@@ -130,9 +155,11 @@ public class LightTriggeringAndEvents {
             return;
         }
         LightComponent component = LIGHT_COMPONENT.get(player);
-        if(component.getType().equals(InnerLightType.FROST)){
-            checkFrost(player, component, player, target);
-        }
+        INNERLIGHT_REGISTRY.forEach(light -> {
+            if(light.getTriggerChecks().contains(TriggerChecks.ENTITY_FREEZING)){
+                light.triggerCheck(player, component, null, target);
+            }
+        });
 
     }
 
@@ -142,20 +169,57 @@ public class LightTriggeringAndEvents {
             return;
         }
         LightComponent component = LIGHT_COMPONENT.get(player);
-        if(component.getType().equals(InnerLightType.AQUA)){
-            checkAqua(player, component, player, target);
-        }
+        INNERLIGHT_REGISTRY.forEach(light -> {
+            if(light.getTriggerChecks().contains(TriggerChecks.ENTITY_DROWNING)){
+                light.triggerCheck(player, component, null, target);
+            }
+        });
     }
 
-    /**Triggers that lighs on Lightning damage taken by the player*/
+    /**Triggers that light on Lightning damage taken by the player*/
     public static void entityStruckByLightningTriggerCheck(PlayerEntity player, LivingEntity target){
         if(!isTriggerable(player)){
             return;
         }
         LightComponent component = LIGHT_COMPONENT.get(player);
-        if(component.getType().equals(InnerLightType.THUNDER_AURA)){
-            checkThunderAura(player, component, player, target);
+        INNERLIGHT_REGISTRY.forEach(light -> {
+            if(light.getTriggerChecks().contains(TriggerChecks.ENTITY_ATTACKED)){
+                light.triggerCheck(player, component, null, target);
+            }
+        });
+    }
+
+    /**Triggers that light when a piece of equipment breaks for the player */
+    public static void entityEquipmentBrokenTriggerCheck(PlayerEntity player, ItemStack brokenItem){
+        if(!isTriggerable(player)){
+            return;
         }
+        LightComponent component = LIGHT_COMPONENT.get(player);
+        INNERLIGHT_REGISTRY.forEach(light -> {
+            if(light.getTriggerChecks().contains(TriggerChecks.ARMOR_OR_TOOL_BREAKS)){
+                light.triggerCheck(player, component, null, null);
+            }
+        });
+    }
+
+    public static void allyDeadTriggerCheck(PlayerEntity player, LivingEntity target, DamageSource source){
+        if(!isTriggerable(player)){
+            return;
+        }
+        //TODO implement and send to separate method
+        //needs to default to something sooo
+        LivingEntity attacker;
+        if(source.getSource() != null && source.getSource() instanceof LivingEntity){
+            attacker = (LivingEntity) source.getSource();
+        } else {
+            attacker = null;
+        }
+        LightComponent component = LIGHT_COMPONENT.get(player);
+        INNERLIGHT_REGISTRY.forEach(light -> {
+            if(light.getTriggerChecks().contains(TriggerChecks.ALLY_DIES)){
+                light.triggerCheck(player, component, attacker, target);
+            }
+        });
 
     }
 
@@ -328,6 +392,41 @@ public class LightTriggeringAndEvents {
         }));
     }
 
+    //TODO make sure this works
+    private static void registerEquipmentBreakListener(){
+        //Triggers when someone/thing is struck by lightning
+        ArmorOrToolBreakEvent.EVENT.register( (entity, brokenItem) -> {
+            if(entity instanceof PlayerEntity){
+                entityEquipmentBrokenTriggerCheck((PlayerEntity) entity, brokenItem);
+            }
+            //if the target is a pet of someone with a light, the pet is the target. (He is also considered an ally)
+            if(entity instanceof TameableEntity){
+                if(((TameableEntity) entity).getOwner() instanceof PlayerEntity){
+                    entityEquipmentBrokenTriggerCheck((PlayerEntity) ((TameableEntity) entity).getOwner(), brokenItem);
+                }
+            }
+
+            //TODO most likely remove this bit here, for AQUA light too
+            //if the one getting attacked is a passive entity, the entity is the target
+            //while the player who triggers the light is the one nearby
+            if(entity instanceof PassiveEntity){
+                List<PlayerEntity> entities1 = entity.getWorld().getEntitiesByClass(PlayerEntity.class, new Box(entity.getBlockPos()).expand(LightWithin.getBoxExpansionAmount()), (entity1 -> true));
+                for(PlayerEntity p : entities1){
+                    //Note: the player can't be the passive entity so no need for the check
+                    entityEquipmentBrokenTriggerCheck(p, brokenItem);
+                }
+            }
+
+            //if someone is a teammate of a player that can trigger their light by being lighting bolted in the face, this will check for it
+            List<PlayerEntity> entities = entity.getWorld().getEntitiesByClass(PlayerEntity.class, new Box(entity.getBlockPos()).expand(LightWithin.getBoxExpansionAmount()), (entity1 -> true));
+            for(PlayerEntity p : entities){
+                if(CheckUtils.CheckAllies.checkAlly(p, entity) && !p.equals(entity)){
+                    entityEquipmentBrokenTriggerCheck(p, brokenItem);
+                }
+            }
+        });
+    }
+
     public static void registerListeners(){
         LOGGER.debug("Registering events listeners...");
 
@@ -336,6 +435,7 @@ public class LightTriggeringAndEvents {
         registerBurningListener();
         registerFreezingListener();
         registerStruckByLightningListener();
+        registerEquipmentBreakListener();
 
         //may need to re-add those return statemes on every if
         //Player (or other entity) being attacked by something else
@@ -343,12 +443,12 @@ public class LightTriggeringAndEvents {
             //Checks if someone is attacked and if they are the one getting attacked
             //If the target is the player with the light, he is also the target
             if(target instanceof PlayerEntity){
-                entityAttackEntityTriggerCheck((PlayerEntity) target, attacker, target);
+                entityAttackedTriggerCheck((PlayerEntity) target, attacker, target);
             }
             //if the target is a pet of someone with a light, the pet is the target. (He is also considered an ally)
             if(target instanceof TameableEntity){
                 if(((TameableEntity) target).getOwner() instanceof PlayerEntity){
-                    entityAttackEntityTriggerCheck((PlayerEntity) ((TameableEntity) target).getOwner(), attacker, target);
+                    entityAttackedTriggerCheck((PlayerEntity) ((TameableEntity) target).getOwner(), attacker, target);
                 }
             }
 
@@ -359,7 +459,7 @@ public class LightTriggeringAndEvents {
                 List<PlayerEntity> entities1 = target.getWorld().getEntitiesByClass(PlayerEntity.class, new Box(target.getBlockPos()).expand(LightWithin.getBoxExpansionAmount()), (entity1 -> true));
                 for(PlayerEntity p : entities1){
                     if(!p.equals(target)){
-                        entityAttackEntityTriggerCheck(p, attacker, target);
+                        entityAttackedTriggerCheck(p, attacker, target);
                     }
                 }
             }
@@ -370,7 +470,7 @@ public class LightTriggeringAndEvents {
             List<PlayerEntity> entities = target.getWorld().getEntitiesByClass(PlayerEntity.class, new Box(target.getBlockPos()).expand(LightWithin.getBoxExpansionAmount()), (entity1 -> true));
             for(PlayerEntity p : entities){
                 if(CheckUtils.CheckAllies.checkAlly(p, target) && !p.equals(target)){
-                    entityAttackEntityTriggerCheck(p, attacker, target);
+                    entityAttackedTriggerCheck(p, attacker, target);
                     entityAttackAllyEntityTriggerCheck(p, attacker, target);
                 }
             }
@@ -380,25 +480,13 @@ public class LightTriggeringAndEvents {
 
         //Player attacking something
         //Will need the stuff that is here to the other thingy up there
+        // TODO entity attacks entity
+        // TODO move to separe method
         AttackEntityCallback.EVENT.register((player, world, hand, entity, hitResult) ->{
-            if(!isTriggerable(player)){
-                return ActionResult.PASS;
-            }
-            LightComponent component = LIGHT_COMPONENT.get(player);
-            if(component.getType().equals(InnerLightType.STRENGTH)){
-                checkStrength(player, component, player, entity);
-            }
-            if(component.getType().equals(InnerLightType.BLAZING)){
-                checkBlazing(player, component, player, entity);
-            }
-            if(component.getType().equals(InnerLightType.AQUA) && entity instanceof LivingEntity){
-                checkAqua(player, component, player, (LivingEntity) entity);
-            }
-            if(component.getType().equals(InnerLightType.FOREST_AURA)){
-                checkForestAura(player, component, player, entity);
-            }
-            if(component.getType().equals(InnerLightType.THUNDER_AURA)){
-                checkThunderAura(player, component, player, entity);
+            if(entity instanceof LivingEntity){
+                entityAttacksEntityTriggerCheck(player, player, (LivingEntity) entity);
+            }else{
+                entityAttacksEntityTriggerCheck(player, player, null);
             }
             return ActionResult.PASS;
         } );
@@ -409,15 +497,9 @@ public class LightTriggeringAndEvents {
             for(PlayerEntity player : players){
                 if(CheckUtils.CheckAllies.checkAlly(entity, player)){
                     ///Start to check for potential lights from here
-                    if(!isTriggerable(player)){
-                        return;
-                    }
-                    LightComponent component = LIGHT_COMPONENT.get(player);
-                    //needs to default to something sooo
-                    Entity attacker = entity;
-                    if(source.getSource() != null){
-                        attacker = source.getSource();
-                    }
+                    allyDeadTriggerCheck(player, entity, source);
+                    /*
+                    TODO remove
                     if(component.getType().equals(InnerLightType.BLAZING)){
                         checkBlazing(player, component, attacker, entity);
                     }
@@ -435,7 +517,7 @@ public class LightTriggeringAndEvents {
                     }
                     if(component.getType().equals(InnerLightType.THUNDER_AURA)){
                         checkThunderAura(player, component, attacker, entity);
-                    }
+                    }*/
                     ///End
                 }
             }
@@ -456,7 +538,7 @@ public class LightTriggeringAndEvents {
             // It will also check how many times they have already summoned a lightning bolt, and if it is above their power multiplier it won't allow to spawn new ones
             if(player.hasStatusEffect(LightEffects.LIGHT_ACTIVE)){
                 LightComponent component = LIGHT_COMPONENT.get(player);
-                if(component.getType().equals(InnerLightType.THUNDER_AURA) && component.getTargets().equals(TargetType.ALL)
+                if(component.getType() instanceof ThunderAuraLight && component.getTargets().equals(TargetType.ALL)
                         && ThunderAuraLight.LIGHTNING_USES_LEFT.getOrDefault(player.getUuid(), 0) < component.getPowerMultiplier()*BalanceConfig.THUNDER_AURA_ALL_LIGHTNINGS_PER_LEVEL
                 ){
 

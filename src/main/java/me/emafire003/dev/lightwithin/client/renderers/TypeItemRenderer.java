@@ -1,7 +1,9 @@
 package me.emafire003.dev.lightwithin.client.renderers;
 
 import me.emafire003.dev.lightwithin.LightWithin;
-import me.emafire003.dev.lightwithin.lights.InnerLightType;
+import me.emafire003.dev.lightwithin.lights.EarthenLight;
+import me.emafire003.dev.lightwithin.lights.FrogLight;
+import me.emafire003.dev.lightwithin.lights.InnerLight;
 import me.x150.renderer.ClipStack;
 import me.x150.renderer.Rectangle;
 import me.x150.renderer.Renderer2d;
@@ -44,7 +46,7 @@ public class TypeItemRenderer {
 
     private static int frog_number = 0;
 
-    public static void render(InnerLightType type, DrawContext drawContext){
+    public static void render(InnerLight type, DrawContext drawContext){
         ClientPlayerEntity player = MinecraftClient.getInstance().player;
         if(player == null){
             LOGGER.error("Can't display Luxcognita items renders! Client player is null!");
@@ -58,14 +60,14 @@ public class TypeItemRenderer {
         //The blocks are 48px so the there is x3 scale "builtin" so i scale it back by 3
         double blockLength = 48 * scale/3 * item_animation_multiplier;
 
-        if(type.equals(InnerLightType.EARTHEN)){
+        if(type instanceof EarthenLight) {
             ClipStack.addWindow(drawContext.getMatrices(), new Rectangle((center_x-blockLength/2)-40,(center_y-blockLength/2),(center_x+blockLength/2)+40,(center_y+blockLength/2)));
             Renderer2d.renderTexture(drawContext.getMatrices(), LightWithin.getIdentifier("textures/lights/ingredients/type/earthen.png"), center_x-blockLength/2, center_y-blockLength/2, blockLength, blockLength);
             renderOverlay(drawContext, center_x, center_y, length);
             ClipStack.popWindow();
             return;
         }
-        if(type.equals(InnerLightType.FROG)){
+        if(type instanceof FrogLight){
             if(ticks%15 == 0){
                 frog_number++;
                 if(frog_number > 2){
