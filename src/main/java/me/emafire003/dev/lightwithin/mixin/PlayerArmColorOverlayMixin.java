@@ -4,7 +4,8 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 import me.emafire003.dev.lightwithin.LightWithin;
-import me.emafire003.dev.lightwithin.lights.InnerLightType;
+import me.emafire003.dev.lightwithin.lights.ForestAuraLight;
+import me.emafire003.dev.lightwithin.lights.ThunderAuraLight;
 import me.emafire003.dev.lightwithin.status_effects.LightEffects;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.model.ModelPart;
@@ -44,11 +45,11 @@ public abstract class PlayerArmColorOverlayMixin extends LivingEntityRenderer<Ab
             return;
         }
         if(player.hasStatusEffect(LightEffects.LIGHT_ACTIVE)){
-            if(LightWithin.LIGHT_COMPONENT.get(player).getType().equals(InnerLightType.FOREST_AURA)){
+            if(LightWithin.LIGHT_COMPONENT.get(player).getType() instanceof ForestAuraLight){
                 arm.render(matrices, vertices, light, overlay, ColorHelper.Argb.fromFloats(0.4F, 0.4f, 0.9f, 0.4f));
                 return;
             }
-            if(LightWithin.LIGHT_COMPONENT.get(player).getType().equals(InnerLightType.THUNDER_AURA)){
+            if(LightWithin.LIGHT_COMPONENT.get(player).getType() instanceof ThunderAuraLight){
                 arm.render(matrices, vertices, light, overlay, ColorHelper.Argb.fromFloats(0.4F, 0.8f, 0.8f, 0.15f));
                 return;
             }
@@ -75,11 +76,11 @@ public abstract class PlayerArmColorOverlayMixin extends LivingEntityRenderer<Ab
             return;
         }
         if(player.hasStatusEffect(LightEffects.LIGHT_ACTIVE)){
-            if(LightWithin.LIGHT_COMPONENT.get(player).getType().equals(InnerLightType.FOREST_AURA)){
+            if(LightWithin.LIGHT_COMPONENT.get(player).getType() instanceof ForestAuraLight){
                 sleeve.render(matrices, vertices, light, overlay, ColorHelper.Argb.fromFloats(0.7F, 0.4f, 0.9f, 0.4f));
                 return;
             }
-            if(LightWithin.LIGHT_COMPONENT.get(player).getType().equals(InnerLightType.THUNDER_AURA)){
+            if(LightWithin.LIGHT_COMPONENT.get(player).getType() instanceof ThunderAuraLight){
                 sleeve.render(matrices, vertices, light, overlay, ColorHelper.Argb.fromFloats(0.7F, 0.8f, 0.8f, 0.15f));
                 return;
             }

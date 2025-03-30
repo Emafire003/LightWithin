@@ -11,6 +11,7 @@ import static me.emafire003.dev.lightwithin.LightWithin.LOGGER;
 public class LightSounds {
 
     //TODO see https://docs.fabricmc.net/develop/sounds/dynamic-sounds and maybe add a static noise while the thunder aura effect is active
+    //TODO should i move this to the innerlight thingy?
     public static SoundEvent HEAL_LIGHT = registerSoundEvent("heal_light");
     public static SoundEvent LIGHT_READY = registerSoundEvent("light_ready");
     public static SoundEvent LIGHT_CHARGED = registerSoundEvent("light_charged");

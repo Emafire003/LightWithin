@@ -10,7 +10,7 @@ import me.emafire003.dev.lightwithin.compat.flashback.FlashbackCompat;
 import me.emafire003.dev.lightwithin.compat.replaymod.ReplayModCompat;
 import me.emafire003.dev.lightwithin.component.LightComponent;
 import me.emafire003.dev.lightwithin.config.ClientConfig;
-import me.emafire003.dev.lightwithin.lights.InnerLightType;
+import me.emafire003.dev.lightwithin.lights.InnerLight;
 import me.emafire003.dev.lightwithin.util.TargetType;
 import me.x150.renderer.ClipStack;
 import me.x150.renderer.Rectangle;
@@ -81,7 +81,7 @@ public class RendererEventHandler {
 
             if(MinecraftClient.getInstance().options.getPerspective().equals(Perspective.FIRST_PERSON)){
                 //In the replay mod the player is by default in first person, so don't display the runes at all, since they are meant for first person.
-                InnerLightType type = component.getType();
+                InnerLight type = component.getType();
                 TargetType targetType = component.getTargets();
                 if(RunesRenderer.shouldRender() && allow_draw_runes){
                     RunesRenderer.render(type, drawContext);
