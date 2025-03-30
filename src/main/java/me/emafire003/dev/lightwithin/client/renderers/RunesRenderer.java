@@ -1,7 +1,7 @@
 package me.emafire003.dev.lightwithin.client.renderers;
 
 import me.emafire003.dev.lightwithin.LightWithin;
-import me.emafire003.dev.lightwithin.lights.InnerLightType;
+import me.emafire003.dev.lightwithin.lights.InnerLight;
 import me.x150.renderer.ClipStack;
 import me.x150.renderer.Rectangle;
 import me.x150.renderer.Renderer2d;
@@ -36,7 +36,7 @@ public class RunesRenderer {
         runes_scale = scale;
     }
 
-    public static void render(InnerLightType type, DrawContext drawContext){
+    public static void render(InnerLight type, DrawContext drawContext){
         ClientPlayerEntity player = MinecraftClient.getInstance().player;
         if(player == null){
             LOGGER.error("Can't display light runes renders! Client player is null!");

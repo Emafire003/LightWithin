@@ -1,6 +1,6 @@
 package me.emafire003.dev.lightwithin.util;
 
-import me.emafire003.dev.lightwithin.lights.InnerLightType;
+import me.emafire003.dev.lightwithin.lights.*;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.text.Text;
 
@@ -64,28 +64,28 @@ public class Tests {
         UUID id = UUID.randomUUID();
         for(int i = 0; i<run_times; i++){
             String[] id_bits = id.toString().split("-");
-            InnerLightType type = determineTypeAndTarget(id_bits, TYPE_BIT, TARGET_BIT).getFirst();
-            if(type.equals(InnerLightType.HEAL)){
+            InnerLight type = determineTypeAndTarget(id_bits, TYPE_BIT, TARGET_BIT).getFirst();
+            if(type instanceof HealLight){
                 heal++;
-            }else if(type.equals(InnerLightType.DEFENCE)){
+            }else if(type instanceof DefenceLight){
                 defence++;
-            }else if(type.equals(InnerLightType.STRENGTH)){
+            }else if(type instanceof StrengthLight){
                 strength++;
-            }else if(type.equals(InnerLightType.BLAZING)){
+            }else if(type instanceof BlazingLight){
                 blazing++;
-            }else if(type.equals(InnerLightType.FROST)){
+            }else if(type instanceof FrostLight){
                 frost++;
-            }else if(type.equals(InnerLightType.EARTHEN)){
+            }else if(type instanceof EarthenLight){
                 earthen++;
-            }else if(type.equals(InnerLightType.AQUA)){
+            }else if(type instanceof AquaLight){
                 aqua++;
-            }else if(type.equals(InnerLightType.WIND)){
+            }else if(type instanceof WindLight){
                 wind++;
-            }else if(type.equals(InnerLightType.FOREST_AURA)){
+            }else if(type instanceof ForestAuraLight){
                 forest++;
-            }else if(type.equals(InnerLightType.THUNDER_AURA)){
+            }else if(type instanceof ThunderAuraLight){
                 thunder++;
-            }else if(type.equals(InnerLightType.FROG)){
+            }else if(type instanceof FrogLight){
                 frog++;
             }else{
                 error++;
