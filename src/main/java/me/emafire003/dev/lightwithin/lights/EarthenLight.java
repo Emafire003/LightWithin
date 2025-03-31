@@ -369,4 +369,9 @@ public class EarthenLight extends InnerLight {
 
         return false;
     }
+
+    @Override
+    public String toString() {
+        return this.lightId.getPath();
+    }
 }

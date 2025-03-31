@@ -37,7 +37,6 @@ public class LightComponent implements ComponentV3, AutoSyncedComponent {
     protected int version = CURRENT_VERSION;
 
     private final PlayerEntity caster;
-    private final boolean debug = false;
 
     public LightComponent(PlayerEntity playerEntity) {
         this.caster = playerEntity;
@@ -45,6 +44,7 @@ public class LightComponent implements ComponentV3, AutoSyncedComponent {
 
     @Override
     public void readFromNbt(NbtCompound tag, RegistryWrapper.WrapperLookup registryLookup) {
+        boolean debug = false;
         if(tag.contains("type")){
             if(debug){
                 LOGGER.info("the type got: " + tag.getString("type"));

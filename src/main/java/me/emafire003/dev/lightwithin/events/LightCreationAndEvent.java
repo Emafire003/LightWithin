@@ -63,9 +63,13 @@ public class LightCreationAndEvent {
             component.setVersion(2);
         }
 
+        //TODO oh the fix shoudl be implemented here
+
+        /* why was this check even here?
         if(!component.getType().equals(LightWithin.INNERLIGHT_REGISTRY.get(LightWithin.getIdentifier("none"))) || component.getType() == null){
+            LOGGER.warn("ok returning way early");
             return;
-        }
+        }*/
 
         //Type bit & target bit
         //If the second part of the UUID starts with a letter form a to h && the second character is a digit -> Heal

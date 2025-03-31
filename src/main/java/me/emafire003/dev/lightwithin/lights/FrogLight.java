@@ -151,4 +151,9 @@ public class FrogLight extends InnerLight {
             sendLightTriggered((ServerPlayerEntity) player);
         }
     }
+
+    @Override
+    public String toString() {
+        return this.lightId.getPath();
+    }
 }
