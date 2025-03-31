@@ -69,7 +69,6 @@ public class BottledLightItem extends Item {
             }
 
             if(nbt.contains(BrewRecipes.TYPE_INGREDIENT_KEY)){
-                //TODO make sure this works
                 InnerLight bottled_type = LightWithin.INNERLIGHT_REGISTRY.get(Identifier.tryParse(nbt.getString(BrewRecipes.TYPE_INGREDIENT_KEY)));
                 if(component.getType().equals(bottled_type)){
                     if(nbt.contains(BrewRecipes.TARGET_INGREDIENT_KEY)){
@@ -157,7 +156,7 @@ public class BottledLightItem extends Item {
             if(stack.hasNbt() && stack.getNbt().getUuid(BrewRecipes.PLAYER_NBT_KEY).equals(UUID.fromString("00000000-0000-0000-0000-000000000000"))){
                 tooltip.add(Text.translatable("item.lightwithin.bottled_light.tooltip.warning").formatted(Formatting.AQUA).formatted(Formatting.ITALIC));
                 if(stack.getNbt().contains(BrewRecipes.TYPE_INGREDIENT_KEY)){
-                    tooltip.add(Text.translatable("item.lightwithin.bottled_light.tooltip.type").formatted(Formatting.GREEN).append(Text.literal(stack.getNbt().getString(BrewRecipes.TYPE_INGREDIENT_KEY)).formatted(Formatting.LIGHT_PURPLE)));
+                    tooltip.add(Text.translatable("item.lightwithin.bottled_light.tooltip.type").formatted(Formatting.GREEN).append(Text.literal(stack.getNbt().getString(BrewRecipes.TYPE_INGREDIENT_KEY).replaceFirst("lightwithin:", "").toUpperCase()).formatted(Formatting.LIGHT_PURPLE)));
                 }
                 if(stack.getNbt().contains(BrewRecipes.TARGET_INGREDIENT_KEY)){
                     tooltip.add(Text.translatable("item.lightwithin.bottled_light.tooltip.target").formatted(Formatting.GREEN).append(Text.literal(stack.getNbt().getString(BrewRecipes.TARGET_INGREDIENT_KEY)).formatted(Formatting.LIGHT_PURPLE)));
