@@ -39,11 +39,10 @@ public class LightTypeArgument implements ArgumentType<InnerLight> {
         }
 
         // Now we substring the specific part we want to see using the starting cursor position and the ends where the next argument starts.
-        String typeString = reader.getString().substring(argBeginning, reader.getCursor()).toUpperCase();
+        String typeString = reader.getString().substring(argBeginning, reader.getCursor());
         try {
             // Now our actual logic.
-            InnerLight type = LightWithin.INNERLIGHT_REGISTRY.get(LightWithin.getIdentifier(typeString));
-            return type; // And we return our type, in this case the parser will consider this argument to have parsed properly and then move on.
+            return LightWithin.INNERLIGHT_REGISTRY.get(LightWithin.getIdentifier(typeString)); // And we return our type, in this case the parser will consider this argument to have parsed properly and then move on.
         } catch (Exception ex) {
             // UUIDs can throw an exception when made by a string, so we catch the exception and repackage it into a CommandSyntaxException type.
             // Create with context tells Brigadier to supply some context to tell the user where the command failed at.

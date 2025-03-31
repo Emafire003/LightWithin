@@ -294,4 +294,9 @@ public class WindLight extends InnerLight {
 
         return checkMultipleBlocksWithTags(player, Config.TRIGGER_BLOCK_RADIUS, 7, WindLight.WIND_TRIGGER_BLOCKS);
     }
+
+    @Override
+    public String toString() {
+        return this.lightId.getPath();
+    }
 }

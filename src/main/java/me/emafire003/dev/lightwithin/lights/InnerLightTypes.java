@@ -5,6 +5,7 @@ import net.minecraft.registry.Registry;
 
 import static me.emafire003.dev.lightwithin.LightWithin.INNERLIGHT_REGISTRY;
 
+@SuppressWarnings("unused")
 public class InnerLightTypes {
 
     public static final InnerLight NONE = registerLight(new NoneLight(), "none");
@@ -44,7 +45,6 @@ public class InnerLightTypes {
 
     public static final InnerLight AQUA = registerLight(new AquaLight(
             type_bit -> String.valueOf(type_bit.charAt(1)).matches("[8-9]")), new AquaLight(null).getLightId().getPath());
-
 
 
     //TODO
