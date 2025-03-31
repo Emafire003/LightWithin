@@ -182,4 +182,8 @@ public class StrengthLight extends InnerLight {
         }
     }
 
+    @Override
+    public String toString() {
+        return this.lightId.getPath();
+    }
 }
