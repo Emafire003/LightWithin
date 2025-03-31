@@ -72,6 +72,7 @@ public class ThunderAuraLight extends InnerLight {
     private final List<TriggerChecks> triggerChecks = List.of(TriggerChecks.ENTITY_ATTACKS_ENTITY, TriggerChecks.ALLY_ATTACKED, TriggerChecks.ALLY_DIES, TriggerChecks.ENTITY_STRUCK_BY_LIGHTNING);
     private final Identifier lightId = LightWithin.getIdentifier("thunder_aura");
 
+    //TODO verify that this is ok not to be used
     public static final String COLOR = "AFCE23";
 
     /// Used in the ALL target type, is the amount of lightnings that a player can still spawn in
@@ -300,7 +301,7 @@ public class ThunderAuraLight extends InnerLight {
             if(CheckUtils.checkRaining(player.getWorld())){
                 trigger_sum = trigger_sum+TriggerConfig.THUNDER_AURA_ALLIES_RAINING; //+1
             }
-            if(!player.equals(target) && target instanceof LivingEntity && CheckUtils.CheckAllies.checkAlly(player, (LivingEntity) target) && checkRecentlyStruckByLightning((LivingEntity) target)){
+            if(!player.equals(target) && target instanceof LivingEntity && CheckUtils.CheckAllies.checkAlly(player, target) && checkRecentlyStruckByLightning(target)){
                 trigger_sum=trigger_sum+TriggerConfig.THUNDER_AURA_ALLIES_STRUCK_BY_LIGHTNING; //+1
             }
             //Checks if the player is surrounded
@@ -365,5 +366,10 @@ public class ThunderAuraLight extends InnerLight {
         ItemStack off = player.getOffHandStack();
         return main.isIn(ThunderAuraLight.THUNDER_AURA_TRIGGER_ITEMS) || off.isIn(ThunderAuraLight.THUNDER_AURA_TRIGGER_ITEMS);
 
+    }
+
+    @Override
+    public String toString() {
+        return this.lightId.getPath();
     }
 }

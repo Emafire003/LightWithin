@@ -199,4 +199,9 @@ public class DefenceLight extends InnerLight {
     public Identifier getLightId() {
         return lightId;
     }
+
+    @Override
+    public String toString() {
+        return this.lightId.getPath();
+    }
 }

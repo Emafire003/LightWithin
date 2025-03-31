@@ -290,4 +290,9 @@ public class BlazingLight extends InnerLight {
         }
         return checkBlocksWithTag(player, Config.TRIGGER_BLOCK_RADIUS, BlazingLight.BLAZING_TRIGGER_BLOCKS);
     }
+
+    @Override
+    public String toString() {
+        return this.lightId.getPath();
+    }
 }

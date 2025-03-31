@@ -196,7 +196,7 @@ public class AquaLight extends InnerLight {
                 SUMMONED_BY_COMPONENT.get(drowned).setSummonerUUID(caster.getUuid());
                 SUMMONED_BY_COMPONENT.get(drowned).setIsSummoned(true);
 
-                boolean b = SpawnUtils.spawnAround(caster, 1, 5, drowned, (ServerWorld) caster.getWorld(), SpawnRestriction.Location.NO_RESTRICTIONS);
+                SpawnUtils.spawnAround(caster, 1, 5, drowned, (ServerWorld) caster.getWorld(), SpawnRestriction.Location.NO_RESTRICTIONS);
                 LightParticlesUtil.spawnLightTypeParticle(LightParticles.AQUALIGHT_PARTICLE, (ServerWorld) drowned.getWorld(), drowned.getPos());
             }
 
@@ -440,5 +440,10 @@ public class AquaLight extends InnerLight {
             return true;
         }
         return checkWaterLoggedOrTag(player, Config.TRIGGER_BLOCK_RADIUS, AquaLight.AQUA_TRIGGER_BLOCKS);
+    }
+
+    @Override
+    public String toString() {
+        return this.lightId.getPath();
     }
 }

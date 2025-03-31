@@ -110,7 +110,7 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 		// However, some things (like resources) may still be uninitialized.
 		// Proceed with mild caution.
 
-		InnerLightTypes.registerLights();
+
 		LightCreationAndEvent.registerCreationListener();
 		LightTriggeringAndEvents.registerListeners();
 		registerLightUsedPacket();
@@ -127,6 +127,8 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 		LightCommands.registerArguments();
 		LightEntities.registerEntities();
 		registerTags();
+
+		InnerLightTypes.registerLights();
 
 		if(FabricLoader.getInstance().isModLoaded("flan")){
 			FlanCompat.registerFlan();

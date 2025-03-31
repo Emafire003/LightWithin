@@ -333,4 +333,9 @@ public class FrostLight extends InnerLight {
         }
         return checkBlocksWithTag(player, Config.TRIGGER_BLOCK_RADIUS, FrostLight.FROST_TRIGGER_BLOCKS);
     }
+
+    @Override
+    public String toString() {
+        return this.lightId.getPath();
+    }
 }

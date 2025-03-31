@@ -445,4 +445,9 @@ public class ForestAuraLight extends InnerLight {
         ItemStack off = player.getOffHandStack();
         return main.isIn(ItemTags.SAPLINGS) || off.isIn(ItemTags.SAPLINGS);
     }
+
+    @Override
+    public String toString() {
+        return this.lightId.getPath();
+    }
 }

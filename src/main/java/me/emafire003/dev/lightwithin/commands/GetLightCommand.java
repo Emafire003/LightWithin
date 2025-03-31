@@ -54,7 +54,7 @@ public class GetLightCommand implements LightCommand{
         try{
             InnerLight type = LightWithin.LIGHT_COMPONENT.get(target).getType();
             source.sendFeedback(() -> Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The InnerLight type of §d" + target.getName().getString() + "§e is: " ).formatted(Formatting.YELLOW)
-                    .append(Text.literal(type.toString()).formatted(Formatting.GREEN))), true);
+                    .append(Text.literal(type.toString().toUpperCase()).formatted(Formatting.GREEN))), true);
             return 1;
         }catch(Exception e){
             e.printStackTrace();
@@ -71,7 +71,7 @@ public class GetLightCommand implements LightCommand{
         try{
             TargetType type = LightWithin.LIGHT_COMPONENT.get(target).getTargets();
             source.sendFeedback(() -> Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The TargetType of §d" + target.getName().getString() + "§e is: " ).formatted(Formatting.YELLOW)
-                    .append(Text.literal(type.toString()).formatted(Formatting.GREEN))), true);
+                    .append(Text.literal(type.toString().toUpperCase()).formatted(Formatting.GREEN))), true);
             return 1;
         }catch(Exception e){
             e.printStackTrace();
@@ -199,7 +199,7 @@ public class GetLightCommand implements LightCommand{
             LightComponent component = LightWithin.LIGHT_COMPONENT.get(target);
             InnerLight type = component.getType();
             source.sendFeedback(() -> Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The InnerLight type of §d" + target.getName().getString() + "§e is: " ).formatted(Formatting.YELLOW)
-                    .append(Text.literal(type.toString()).formatted(Formatting.GREEN)).append(Text.literal(", was: ").formatted(Formatting.YELLOW)).append(Text.literal(original_type_target.getFirst().toString()).formatted(Formatting.GREEN))), true);
+                    .append(Text.literal(type.toString().toUpperCase()).formatted(Formatting.GREEN)).append(Text.literal(", was: ").formatted(Formatting.YELLOW)).append(Text.literal(original_type_target.getFirst().toString().toUpperCase()).formatted(Formatting.GREEN))), true);
             TargetType target_type = component.getTargets();
             source.sendFeedback(() -> Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The TargetType is: " ).formatted(Formatting.YELLOW)
                     .append(Text.literal(target_type.toString()).formatted(Formatting.GREEN)).append(Text.literal(", was: ").formatted(Formatting.YELLOW)).append(Text.literal(original_type_target.getSecond().toString()).formatted(Formatting.GREEN))), true);

@@ -39,7 +39,6 @@ public class LightComponent implements ComponentV3, AutoSyncedComponent {
     protected int version = CURRENT_VERSION;
 
     private final PlayerEntity caster;
-    private final boolean debug = false;
 
     public LightComponent(PlayerEntity playerEntity) {
         this.caster = playerEntity;
@@ -48,6 +47,7 @@ public class LightComponent implements ComponentV3, AutoSyncedComponent {
     @Override
     public void readFromNbt(NbtCompound tag) {
 
+        boolean debug = false;
         if(tag.contains("type")){
             if(debug){
                 LOGGER.info("the type got: " + tag.getString("type"));
@@ -150,7 +150,6 @@ public class LightComponent implements ComponentV3, AutoSyncedComponent {
     @Override
     public void writeToNbt(NbtCompound tag) {
         String typeId = "none";
-        LOGGER.warn("The typeId found is: " + this.type);
         if(INNERLIGHT_REGISTRY.getId(this.type) != null){
             typeId = INNERLIGHT_REGISTRY.getId(this.type).toString();
         }
