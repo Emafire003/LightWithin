@@ -44,8 +44,10 @@ public class LightComponent implements ComponentV3, AutoSyncedComponent {
         this.caster = playerEntity;
     }
 
+    @SuppressWarnings("ConstantValue")
     @Override
     public void readFromNbt(NbtCompound tag) {
+        boolean shouldWrite = false;
 
         boolean debug = false;
         if(tag.contains("type")){
@@ -54,11 +56,14 @@ public class LightComponent implements ComponentV3, AutoSyncedComponent {
             }
 
             //If it's an older version of the component, update it to the new version TODO make sure this works
-            if(tag.getInt("version") < CURRENT_VERSION){
-                this.type = INNERLIGHT_REGISTRY.get(Identifier.tryParse(MOD_ID+":"+tag.getString("type")));
+            if(tag.getInt("version") < 3){
+                LOGGER.warn("Older LightComponent found, trying to parse type: " + MOD_ID+":"+tag.getString("type").toLowerCase());
+                this.type = INNERLIGHT_REGISTRY.get(Identifier.tryParse(MOD_ID+":"+tag.getString("type").toLowerCase()));
+                shouldWrite = true;
+            }else{
+                this.type = INNERLIGHT_REGISTRY.get(Identifier.tryParse(tag.getString("type")));
             }
 
-            this.type = INNERLIGHT_REGISTRY.get(Identifier.tryParse(tag.getString("type")));
         }else{
             this.type = new NoneLight();
         }
@@ -145,12 +150,17 @@ public class LightComponent implements ComponentV3, AutoSyncedComponent {
             this.has_triggered_naturally = false;
         }
 
+        if(shouldWrite){
+            this.writeToNbt(tag);
+        }
+
     }
 
     @Override
     public void writeToNbt(NbtCompound tag) {
         String typeId = "none";
         if(INNERLIGHT_REGISTRY.getId(this.type) != null){
+            //noinspection DataFlowIssue
             typeId = INNERLIGHT_REGISTRY.getId(this.type).toString();
         }
         tag.putString("type", typeId);

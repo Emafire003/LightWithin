@@ -61,15 +61,17 @@ public class LightCreationAndEvent {
             component.setMaxLightStack(determineMaxLightCharges(id_bits, COOLDOWN_BIT));
             component.setLightCharges(0);
             component.setVersion(2);
+        }if(component.getVersion() == 2){
+            component.setVersion(3);
         }
 
-        //TODO oh the fix shoudl be implemented here
 
-        /* why was this check even here?
-        if(!component.getType().equals(LightWithin.INNERLIGHT_REGISTRY.get(LightWithin.getIdentifier("none"))) || component.getType() == null){
-            LOGGER.warn("ok returning way early");
+        // This check is here to non-reset the light unless it became invalid (somehow)
+        if(!(component.getType() instanceof NoneLight || component.getType() == null)){
             return;
-        }*/
+        }else{
+            LOGGER.warn("The light of " + player.getName().toString() + " has (somehow) become invalid (it now is: " + component.getType() + " ). Resetting it it!");
+        }
 
         //Type bit & target bit
         //If the second part of the UUID starts with a letter form a to h && the second character is a digit -> Heal

@@ -336,7 +336,7 @@ public class CheckUtils {
         //and they are not the entity that has been hit then add them to the team_entities and check if their health is ok
         for(LivingEntity ent : entities){
             //Checks if the entity in the list is in the same team/faction/party/pet or not
-            if(!player.equals(attacker) && !attacker.equals(ent) && !player.equals(ent) && CheckAllies.checkAlly(player, ent) ){
+            if(attacker != null && !player.equals(attacker) && !attacker.equals(ent) && !player.equals(ent) && CheckAllies.checkAlly(player, ent) ){
                 //if it is, check the health
                 if(checkSelfDanger(ent, health_percent)){
                     n_allies_low_health++;
