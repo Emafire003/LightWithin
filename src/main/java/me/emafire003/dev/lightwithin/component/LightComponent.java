@@ -17,8 +17,6 @@ import static me.emafire003.dev.lightwithin.LightWithin.*;
 
 public class LightComponent implements ComponentV3, AutoSyncedComponent {
 
-    //TODO make a converter from the old format of for the type
-    //  Actually should not be needed since the identife
     public static final int CURRENT_VERSION = 3;
 
     /// This is going to be stored as the light's id in the component

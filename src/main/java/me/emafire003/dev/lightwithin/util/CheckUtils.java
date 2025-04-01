@@ -370,38 +370,65 @@ public class CheckUtils {
     public static class CheckAllies {
 
         public static boolean checkTeam(LivingEntity entity, LivingEntity teammate){
+            if(entity == null || teammate == null){
+                return false;
+            }
             return entity.getScoreboardTeam() != null && entity.isTeammate(teammate);
         }
 
         public static boolean checkFaction(PlayerEntity player, PlayerEntity player1){
+            if(player == null || player1 == null){
+                return false;
+            }
             return FactionChecker.areInSameFaction(player, player1) || FactionChecker.areAllies(player, player1);
         }
 
         public static boolean checkEnemyFaction(PlayerEntity player, PlayerEntity player1){
+            if(player == null || player1 == null){
+                return false;
+            }
             return FactionChecker.areEnemies(player, player1);
         }
 
         public static boolean checkPartyArgo(PlayerEntity player, PlayerEntity player1){
+            if(player == null || player1 == null){
+                return false;
+            }
             return ArgonautsChecker.areInSameParty(player,player1);
         }
 
         public static boolean checkGuildArgo(PlayerEntity player, PlayerEntity player1){
+            if(player == null || player1 == null){
+                return false;
+            }
             return ArgonautsChecker.areInSameGuild(player,player1);
         }
 
         public static boolean checkArgonauts(PlayerEntity player, PlayerEntity player1){
+            if(player == null || player1 == null){
+                return false;
+            }
             return checkPartyArgo(player,player1) || checkGuildArgo(player,player1);
         }
 
         public static boolean checkOPACParty(PlayerEntity player, PlayerEntity player1){
+            if(player == null || player1 == null){
+                return false;
+            }
             return OPACChecker.areInSameParty(player, player1) || OPACChecker.areInAlliedParties(player, player1);
         }
 
         public static boolean checkFTBTeams(ServerPlayerEntity player, ServerPlayerEntity player1){
+            if(player == null || player1 == null){
+                return false;
+            }
             return FTBTeamsChecker.areInSameParty(player, player1) || FTBTeamsChecker.areInAlliedPartis(player, player1);
         }
 
         public static boolean checkPet(LivingEntity entity, LivingEntity ent){
+            if(ent == null || entity == null){
+                return false;
+            }
             if(ent instanceof TameableEntity){
                 return entity.equals(((TameableEntity) ent).getOwner());
             }
@@ -409,6 +436,9 @@ public class CheckUtils {
         }
 
         public static boolean checkSummoned(LivingEntity summoner, LivingEntity ent){
+            if(ent == null || summoner == null){
+                return false;
+            }
             SummonedByComponent component = SUMMONED_BY_COMPONENT.getNullable(ent);
             if(component != null && component.getIsSummoned()){
                 return component.getSummonerUUID().equals(summoner.getUuid());
@@ -417,6 +447,9 @@ public class CheckUtils {
         }
 
         public static boolean checkAlly(LivingEntity entity, LivingEntity teammate){
+            if(entity == null || teammate == null){
+                return false;
+            }
             if(entity.getWorld().isClient()){
                 return false;
             }
@@ -445,6 +478,9 @@ public class CheckUtils {
         }
 
         public static boolean checkEnemies(LivingEntity entity, LivingEntity enemy){
+            if(entity == null || enemy == null){
+                return false;
+            }
             if(FabricLoader.getInstance().isModLoaded("factions") && entity instanceof PlayerEntity && enemy instanceof PlayerEntity){
                 if(Config.NOT_ALLY_THEN_ENEMY){
                     return !checkAlly(entity, enemy);
