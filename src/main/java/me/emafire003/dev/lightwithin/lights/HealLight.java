@@ -186,6 +186,11 @@ public class HealLight extends InnerLight {
                 remove_status_list.forEach(target::removeStatusEffect);
 
                 remove_status_list.clear();
+
+                if(target instanceof PassiveEntity){
+                    //TODO wiki
+                    target.addStatusEffect(new StatusEffectInstance(StatusEffects.REGENERATION, caster.getStatusEffect(LightEffects.LIGHT_ACTIVE).getDuration(), (int) power_multiplier/2, false, false));
+                }
             }else{
                 target.addStatusEffect(new StatusEffectInstance(StatusEffects.REGENERATION, caster.getStatusEffect(LightEffects.LIGHT_ACTIVE).getDuration(), (int) power_multiplier, false, false));
             }

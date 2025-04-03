@@ -119,7 +119,6 @@ public class EarthenLight extends InnerLight {
         if(component.getTargets().equals(TargetType.VARIANT)){
             player.sendMessage(Text.translatable("light.description.activation.earthen.variant"), true);
         }
-
         else if(component.getTargets().equals(TargetType.ENEMIES)){
             targets.addAll(getEnemies(player));
             player.sendMessage(Text.translatable("light.description.activation.earthen.enemies"), true);
@@ -137,7 +136,7 @@ public class EarthenLight extends InnerLight {
     protected void activate(PlayerEntity caster, List<LivingEntity> targets, double power_multiplier, int duration, double cooldown_time) {
         super.activate(caster, targets, power_multiplier, duration, cooldown_time);
         power_multiplier = checkSafety(power_multiplier, duration).getFirst();
-        duration = checkSafety(power_multiplier, duration).getSecond();
+        //duration = checkSafety(power_multiplier, duration).getSecond();
         LightComponent component = LightWithin.LIGHT_COMPONENT.get(caster);
 
         LightParticlesUtil.spawnLightTypeParticle(LightParticles.EARTHENLIGHT_PARTICLE, (ServerWorld) caster.getWorld(), caster.getPos());
@@ -271,6 +270,7 @@ public class EarthenLight extends InnerLight {
     @Override
     public void triggerCheck(PlayerEntity player, LightComponent component, @Nullable LivingEntity attacker, @Nullable LivingEntity target) {
         double trigger_sum = 0;
+
         /// If the player or their allies are on low health or surrounded, a golem will spawn if the player has the OTHER target*/
         if(component.getTargets().equals(TargetType.VARIANT)){
             if(CheckUtils.checkAllyHealth(player, attacker, Config.HP_PERCENTAGE_ALLIES)){
@@ -293,8 +293,8 @@ public class EarthenLight extends InnerLight {
             }
         }
         /**CHECKS if the player has ENEMIES as target, either his or his allies health needs to be low*/
-        else if(component.getTargets().equals(TargetType.ENEMIES) && (CheckUtils.CheckAllies.checkAlly(player, target) || player.equals(target))){
-            if(CheckUtils.checkAllyHealth(player, attacker, Config.HP_PERCENTAGE_ALLIES)){
+        else if(component.getTargets().equals(TargetType.ENEMIES)){
+            if(CheckUtils.CheckAllies.checkAlly(player, target) && CheckUtils.checkAllyHealth(player, attacker, Config.HP_PERCENTAGE_ALLIES)){
                 trigger_sum = trigger_sum + TriggerConfig.EARTHEN_ENEMIES_ALLY_LOW_HEALTH;
             }
             if(CheckUtils.checkSelfDanger(player, Config.HP_PERCENTAGE_SELF)){
@@ -309,11 +309,11 @@ public class EarthenLight extends InnerLight {
                 trigger_sum = trigger_sum + TriggerConfig.EARTHEN_ENEMIES_CONDITIONS;
             }
 
+
             if(trigger_sum >= getMinTrigger()) {
                 sendLightTriggered((ServerPlayerEntity) player);
             }
-        }else if(component.getTargets().equals(TargetType.SELF) && player.equals(target)){
-
+        }else if(component.getTargets().equals(TargetType.SELF)){
             if(CheckUtils.checkSelfDanger(player, Config.HP_PERCENTAGE_SELF)){
                 trigger_sum = trigger_sum+TriggerConfig.EARTHEN_SELF_VERY_LOW_HEALTH;
             }else if(CheckUtils.checkSelfDanger(player, Config.HP_PERCENTAGE_SELF+Config.HP_PERCENTAGE_INCREMENT)){
