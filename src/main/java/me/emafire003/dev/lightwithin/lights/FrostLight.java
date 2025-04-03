@@ -163,7 +163,7 @@ public class FrostLight extends InnerLight {
                 if(target.equals(caster) && component.getTargets().equals(TargetType.ALLIES)){
                     target.addStatusEffect(new StatusEffectInstance(LightEffects.FREEZE_RESISTANCE, (int) (duration*20/Config.DIV_SELF)));
                 }else{
-                    target.addStatusEffect(new StatusEffectInstance(LightEffects.FREEZE_RESISTANCE, (int) (duration)*20));
+                    target.addStatusEffect(new StatusEffectInstance(LightEffects.FREEZE_RESISTANCE, (duration)*20));
                 }
 
                 Direction facing = target.getHorizontalFacing();
@@ -233,9 +233,9 @@ public class FrostLight extends InnerLight {
             }
 
         }
-        /**CHECKS if the player has ENEMIES as target, either him or his allies health needs to be low*/
-        else if(component.getTargets().equals(TargetType.ENEMIES) && (CheckUtils.CheckAllies.checkAlly(player, target) || player.equals(target))){
-            if(CheckUtils.checkAllyHealth(player, attacker, Config.HP_PERCENTAGE_ALLIES)){
+        /**CHECKS if the player has ENEMIES as target, either them or their allies health needs to be low*/
+        else if(component.getTargets().equals(TargetType.ENEMIES)){
+            if(CheckUtils.CheckAllies.checkAlly(player, target) && CheckUtils.checkAllyHealth(player,target, Config.HP_PERCENTAGE_ALLIES)){
                 trigger_sum = trigger_sum + TriggerConfig.FROST_ENEMIES_ALLY_LOW_HEALTH;
             }
             if(CheckUtils.checkSelfDanger(player, Config.HP_PERCENTAGE_SELF+5)){
@@ -245,7 +245,7 @@ public class FrostLight extends InnerLight {
                 trigger_sum=trigger_sum+TriggerConfig.FROST_ENEMIES_FREEZING;
             }
             //Checks if the player'sallies have low armor durability
-            if(Config.CHECK_ARMOR_DURABILITY && CheckUtils.checkAllyArmor(player, target, Config.DUR_PERCENTAGE_ALLIES)){
+            if(CheckUtils.CheckAllies.checkAlly(player, target) && Config.CHECK_ARMOR_DURABILITY && CheckUtils.checkAllyArmor(player, target, Config.DUR_PERCENTAGE_ALLIES)){
                 trigger_sum=trigger_sum+TriggerConfig.FROST_ENEMIES_ALLY_ARMOR_DURABILITY;
             }
             //Checks if the player has low armor durability
