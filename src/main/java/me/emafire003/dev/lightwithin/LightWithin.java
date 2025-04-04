@@ -1,6 +1,5 @@
 package me.emafire003.dev.lightwithin;
 
-import com.mojang.serialization.Codec;
 import dev.onyxstudios.cca.api.v3.component.ComponentKey;
 import dev.onyxstudios.cca.api.v3.component.ComponentRegistry;
 import dev.onyxstudios.cca.api.v3.entity.EntityComponentFactoryRegistry;
@@ -68,7 +67,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import static me.emafire003.dev.lightwithin.lights.ForestAuraLight.FOREST_AURA_BLOCKS;
 
 public class LightWithin implements ModInitializer, EntityComponentInitializer {
-	public static final Codec<LightWithin> CODEC = Codec.unit(LightWithin::new);
 	// This logger is used to write text to the console and the log file.
 	// It is considered best practice to use your mod id as the logger's name.
 	// That way, it's clear which mod wrote info, warnings, and errors.
@@ -80,7 +78,6 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 
 	public static boolean AP1 = false;
 
-	private static final boolean debug = false;
 	public static Path PATH = Path.of(FabricLoader.getInstance().getConfigDir() + "/" + MOD_ID + "/");
 
 	public static boolean overrideTeamColorsPrev = false;
@@ -90,8 +87,12 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 
 	public static final RegistryKey<Registry<InnerLight>> INNER_LIGHT_REGISTRY_KEY = RegistryKey.ofRegistry(getIdentifier("light_types"));
 
+	///  The registry for the InnerLights. Every light type is registered in here
 	public static final SimpleRegistry<InnerLight> INNERLIGHT_REGISTRY =
 			FabricRegistryBuilder.createSimple(INNER_LIGHT_REGISTRY_KEY).attribute(RegistryAttribute.SYNCED).buildAndRegister();
+
+	/// It's used to set the limit of the power level with commands
+	public static int MAX_POWER_COMMANDS = 10;
 
 	public static Identifier getIdentifier(String path){
 		return new Identifier(MOD_ID, path);
@@ -133,7 +134,6 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 		if(FabricLoader.getInstance().isModLoaded("flan")){
 			FlanCompat.registerFlan();
 		}
-		CommandRegistrationCallback.EVENT.register(LightCommands::registerCommands);
 
 
 		ServerLifecycleEvents.SERVER_STARTED.register(minecraftServer -> {
@@ -153,6 +153,11 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 
 			LightTriggerChecks.MIN_TRIGGER = TriggerConfig.TRIGGER_THRESHOLD;
 		});
+
+		//done to get the power command value thingy
+		Config.reloadConfig();
+		setMaxPowerWithCommands(Config.MAX_POWER_WITH_COMMANDS);
+		CommandRegistrationCallback.EVENT.register(LightCommands::registerCommands);
 
 		LocalDate currentDate = LocalDate.now();
 		int day = currentDate.getDayOfMonth();
@@ -205,6 +210,17 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 	 * for entities in that radius*/
 	public static int getBoxExpansionAmount(){
 		return Config.AREA_OF_SEARCH_FOR_ENTITIES;
+	}
+
+	/** Sets the new value for the maximum power settable using commands
+	 * If below 1, it will be set to 1*/
+	public static void setMaxPowerWithCommands(int max){
+		MAX_POWER_COMMANDS = Math.max(max, 1);
+	}
+
+	/** Returns the maximum power settable using commands */
+	public static int getMaxPowerCommands(){
+		return Math.max(MAX_POWER_COMMANDS, 1);
 	}
 
 	/**Sends a packet with updated config options to the client
