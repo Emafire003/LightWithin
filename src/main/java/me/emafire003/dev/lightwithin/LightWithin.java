@@ -80,7 +80,6 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 
 	public static boolean AP1 = false;
 
-	private static final boolean debug = false;
 	public static Path PATH = Path.of(FabricLoader.getInstance().getConfigDir() + "/" + MOD_ID + "/");
 
     public static boolean overrideTeamColorsPrev = false;
@@ -90,10 +89,13 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 
 	public static final RegistryKey<Registry<InnerLight>> INNER_LIGHT_REGISTRY_KEY = RegistryKey.ofRegistry(getIdentifier("light_types"));
 
+	///  The registry for the InnerLights. Every light type is registered in here
 	public static final SimpleRegistry<InnerLight> INNERLIGHT_REGISTRY =
 			FabricRegistryBuilder.createSimple(INNER_LIGHT_REGISTRY_KEY).attribute(RegistryAttribute.SYNCED).buildAndRegister();
 
-    /**Returns an identifier for this mod's stuff*/
+	/// It's used to set the limit of the power level with commands
+	public static int MAX_POWER_COMMANDS = 10;
+
 	public static Identifier getIdentifier(String path){
 		return new Identifier(MOD_ID, path);
 	}
@@ -115,8 +117,6 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 		InnerLightTypes.registerLights();
         //Must be run before the packt stuff
         registerPayloadIds();
-		//must be before the particles & sounds so it's on top
-		InnerLightTypes.registerLights();
 
 		LightCreationAndEvent.registerCreationListener();
 		LightTriggeringAndEvents.registerListeners();
@@ -144,7 +144,6 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 		if(FabricLoader.getInstance().isModLoaded("flan")){
 			FlanCompat.registerFlan();
 		}
-		CommandRegistrationCallback.EVENT.register(LightCommands::registerCommands);
 
 
 		ServerLifecycleEvents.SERVER_STARTED.register(minecraftServer -> {
@@ -164,6 +163,11 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 
 			LightTriggerChecks.MIN_TRIGGER = TriggerConfig.TRIGGER_THRESHOLD;
 		});
+
+		//done to get the power command value thingy
+		Config.reloadConfig();
+		setMaxPowerWithCommands(Config.MAX_POWER_WITH_COMMANDS);
+		CommandRegistrationCallback.EVENT.register(LightCommands::registerCommands);
 
 		LocalDate currentDate = LocalDate.now();
 		int day = currentDate.getDayOfMonth();
@@ -244,6 +248,26 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 		PayloadTypeRegistry.playS2C().register(GlowEntitiesPayloadS2C.ID, GlowEntitiesPayloadS2C.PACKET_CODEC);
 
     }
+	/** Sets the new value for the maximum power settable using commands
+	 * If below 1, it will be set to 1*/
+	public static void setMaxPowerWithCommands(int max){
+		MAX_POWER_COMMANDS = Math.max(max, 1);
+	}
+
+	/** Returns the maximum power settable using commands */
+	public static int getMaxPowerCommands(){
+		return Math.max(MAX_POWER_COMMANDS, 1);
+	}
+
+	/**Sends a packet with updated config options to the client
+	 * such as the auto light activation permission*/
+	public static void syncCustomConfigOptions(ServerPlayerEntity player){
+		Map<String, Boolean> booleanMap = new HashMap<>();
+		booleanMap.put(ConfigPacketConstants.AUTO_LIGHT_ACTIVATION, Config.AUTO_LIGHT_ACTIVATION);
+		//TODO if needed i'll add other settings ecct
+		ConfigOptionsSyncPacketS2C optionsPacket = new ConfigOptionsSyncPacketS2C(booleanMap);
+		ServerPlayNetworking.send(player, ConfigOptionsSyncPacketS2C.ID, optionsPacket);
+	}
 
     private static void registerLightUsedPacket(){
         ServerPlayNetworking.registerGlobalReceiver(LightUsedPayloadC2S.ID, ((payload, context) -> {
