@@ -368,7 +368,6 @@ public class LightTriggeringAndEvents {
         }));
     }
 
-    //TODO make sure this works
     private static void registerEquipmentBreakListener(){
         //Triggers when someone/thing is struck by lightning
         ArmorOrToolBreakEvent.EVENT.register( (entity, brokenItem) -> {
@@ -454,10 +453,7 @@ public class LightTriggeringAndEvents {
 
         }));
 
-        //Player attacking something
-        //Will need the stuff that is here to the other thingy up there
-        // TODO entity attacks entity
-        // TODO move to separe method
+        ///  Entity Attack Entity trigger check
         AttackEntityCallback.EVENT.register((player, world, hand, entity, hitResult) ->{
             if(entity instanceof LivingEntity){
                 entityAttacksEntityTriggerCheck(player, player, (LivingEntity) entity);

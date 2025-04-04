@@ -17,6 +17,13 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
+
+/**
+ * This class is the base InnerLight class. You have to extended it and override (pretty much all of) its methods
+ * to implement the functionality. (as well as the fields)
+ * <p>
+ * Particles and sounds are registered using the light's id on initialization, and the files should be named "{id}_light_particle.png" and "{id}_light.ogg" for sounds.
+ * */
 public abstract class InnerLight {
 
     ///  The color used for the ColoredGlowLib color, aka the outline/glowing effect/spectral glowy arrow thingy
