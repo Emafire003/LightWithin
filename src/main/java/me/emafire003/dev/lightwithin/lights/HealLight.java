@@ -161,7 +161,7 @@ public class HealLight extends InnerLight {
         LightComponent component = LightWithin.LIGHT_COMPONENT.get(caster);
         super.activate(caster, targets, power_multiplier, duration, cooldown_time);
 
-        caster.getWorld().playSound(null, BlockPos.ofFloored(caster.getPos()), LightSounds.HEAL_LIGHT, SoundCategory.PLAYERS, 1f, 1f);
+        caster.getWorld().playSound(null, BlockPos.ofFloored(caster.getPos()), LightSounds.TYPES_SOUNDS.get(lightId), SoundCategory.PLAYERS, 1f, 1f);
 
         //caster.getWorld().playSound(caster.getX(), caster.getY(), caster.getZ(), LightSounds.HEAL_LIGHT, SoundCategory.PLAYERS, 0.1f, 1, true);
         //caster.getWorld().playSound(caster, caster.getBlockPos(), LightSounds.HEAL_LIGHT, SoundCategory.AMBIENT, 1,1);
@@ -171,9 +171,9 @@ public class HealLight extends InnerLight {
 
             //target.playSound(LightSounds.HEAL_LIGHT, 1, 1);
             if(!caster.getWorld().isClient){
-                LightParticlesUtil.spawnLightTypeParticle(LightParticles.HEALLIGHT_PARTICLE, (ServerWorld) caster.getWorld(), target.getPos());
+                LightParticlesUtil.spawnLightTypeParticle(LightParticles.TYPES_PARTICLES.get(lightId), (ServerWorld) caster.getWorld(), target.getPos());
             }
-            //LightParticlesUtil.spawnLightTypeParticle(LightParticles.HEALLIGHT_PARTICLE, target);
+            //LightParticlesUtil.spawnLightTypeParticle(LightParticles.TYPES_PARTICLES.get(lightId), target);
             if(target.equals(caster) && component.getTargets().equals(TargetType.ALLIES)){
                 target.addStatusEffect(new StatusEffectInstance(StatusEffects.REGENERATION, caster.getStatusEffect(LightEffects.LIGHT_ACTIVE).getDuration(), (int) (power_multiplier/Config.DIV_SELF), false, false));
             }else if(component.getTargets().equals(TargetType.VARIANT)){

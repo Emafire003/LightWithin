@@ -151,11 +151,11 @@ public class ForestAuraLight extends InnerLight {
         power_multiplier = checkSafety(power_multiplier, duration).getFirst();
         duration = checkSafety(power_multiplier, duration).getSecond();
         
-        caster.getWorld().playSound(null, BlockPos.ofFloored(caster.getPos()),LightSounds.FOREST_AURA_LIGHT, SoundCategory.PLAYERS, 1f, 1f);
+        caster.getWorld().playSound(null, BlockPos.ofFloored(caster.getPos()), LightSounds.TYPES_SOUNDS.get(lightId), SoundCategory.PLAYERS, 1f, 1f);
         LightComponent component = LIGHT_COMPONENT.get(caster);
 
         if(!caster.getWorld().isClient()){
-            LightParticlesUtil.spawnLightTypeParticle(LightParticles.FOREST_AURA_LIGHT_PARTICLE, (ServerWorld) caster.getWorld(), caster.getPos());
+            LightParticlesUtil.spawnLightTypeParticle(LightParticles.TYPES_PARTICLES.get(lightId), (ServerWorld) caster.getWorld(), caster.getPos());
         }
 
         //The self target type adds the forest aura effect, making the player merge with natural blocks and travel trough them, but not see through them
@@ -308,7 +308,7 @@ public class ForestAuraLight extends InnerLight {
                     //TODO if i ever allow entities to have the light powers remember to change this bit here
 
                     if(entity instanceof PlayerEntity && LIGHT_COMPONENT.get(entity).getType() instanceof ForestAuraLight){
-                        world.spawnParticles(LightParticles.FOREST_AURA_LIGHT_PARTICLE, entity.getX(), entity.getY(), entity.getZ(), 10, 0.11, 0.11, 0.11, 0.01);
+                        world.spawnParticles(LightParticles.TYPES_PARTICLES.get(lightId), entity.getX(), entity.getY(), entity.getZ(), 10, 0.11, 0.11, 0.11, 0.01);
                         ((PlayerEntity) entity).sendMessage(Text.translatable("light.description.negated.forest_aura"), true);
                         return false;
                     }

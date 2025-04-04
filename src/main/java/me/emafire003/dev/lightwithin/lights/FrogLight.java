@@ -107,7 +107,7 @@ public class FrogLight extends InnerLight {
         checkSafety(power_multiplier, duration);
         Random random = caster.getRandom();
         int frogs = (int) (power_multiplier+random.nextBetween(0, 5));
-        LightParticlesUtil.spawnLightTypeParticle(LightParticles.FROGLIGHT_PARTICLE, (ServerWorld) caster.getWorld(), caster.getPos());
+        LightParticlesUtil.spawnLightTypeParticle(LightParticles.TYPES_PARTICLES.get(lightId), (ServerWorld) caster.getWorld(), caster.getPos());
         caster.getWorld().playSound(null, BlockPos.ofFloored(caster.getPos()), SoundEvents.ENTITY_FROG_HURT, SoundCategory.PLAYERS, 1, 0.8f);
 
         for(int i = 0; i<frogs; i++){

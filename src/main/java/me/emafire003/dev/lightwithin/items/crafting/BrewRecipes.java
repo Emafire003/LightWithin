@@ -16,8 +16,6 @@ import static java.util.Map.entry;
 
 public class BrewRecipes {
 
-    //TODO this is broken
-
     public static final String TYPE_INGREDIENT_KEY = LightWithin.MOD_ID+":typeIngredient";
     public static final String TARGET_INGREDIENT_KEY = LightWithin.MOD_ID+":targetIngredient";
     public static final String PLAYER_NBT_KEY = LightWithin.MOD_ID+":playerUUID";

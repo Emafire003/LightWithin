@@ -133,13 +133,13 @@ public class WindLight extends InnerLight {
             return;
         }
 
-        caster.getWorld().playSound(null, BlockPos.ofFloored(caster.getPos()), LightSounds.WIND_LIGHT, SoundCategory.PLAYERS, 1f, 1f);
+        caster.getWorld().playSound(null, BlockPos.ofFloored(caster.getPos()), LightSounds.TYPES_SOUNDS.get(lightId), SoundCategory.PLAYERS, 1f, 1f);
 
         //caster.getWorld().playSound(caster, caster.getBlockPos(), LightSounds.WIND_LIGHT, SoundCategory.PLAYERS, 1, 1);
         ServerWorld world = (ServerWorld) (caster).getWorld();
         //If the light target is OTHER it will blow away every entity in radius
         if(component.getTargets().equals(TargetType.ALL)){
-            LightParticlesUtil.spawnLightTypeParticle(LightParticles.WINDLIGHT_PARTICLE, (ServerWorld) caster.getWorld(), caster.getPos());
+            LightParticlesUtil.spawnLightTypeParticle(LightParticles.TYPES_PARTICLES.get(lightId), (ServerWorld) caster.getWorld(), caster.getPos());
             world.spawnParticles(((ServerPlayerEntity )caster), ParticleTypes.CLOUD, false, caster.getX(), caster.getY()+1, caster.getZ(), 65, 0, 0.2, 0, 0.35);
             for(LivingEntity target : targets){
                 FabriDash.dash(target, (float) power_multiplier, true);
@@ -166,11 +166,11 @@ public class WindLight extends InnerLight {
                     target.addStatusEffect(new StatusEffectInstance(LightEffects.WIND_WALKING, duration*20, 0, false, true));
                 }
 
-                LightParticlesUtil.spawnLightTypeParticle(LightParticles.WINDLIGHT_PARTICLE, (ServerWorld) target.getWorld(), target.getPos());
+                LightParticlesUtil.spawnLightTypeParticle(LightParticles.TYPES_PARTICLES.get(lightId), (ServerWorld) target.getWorld(), target.getPos());
             }
         }//If the target is self, the player will perform a dash (will be launched forward)
         else if(component.getTargets().equals(TargetType.SELF)) {
-            LightParticlesUtil.spawnLightTypeParticle(LightParticles.WINDLIGHT_PARTICLE, (ServerWorld) caster.getWorld(), caster.getPos());
+            LightParticlesUtil.spawnLightTypeParticle(LightParticles.TYPES_PARTICLES.get(lightId), (ServerWorld) caster.getWorld(), caster.getPos());
 
             world.spawnParticles(((ServerPlayerEntity )caster), ParticleTypes.CLOUD, false, caster.getX(), caster.getY()+1, caster.getZ(), 200, 0.1, 0.2, 0.1, 0.35);
 
@@ -254,7 +254,7 @@ public class WindLight extends InnerLight {
                 trigger_sum = trigger_sum + TriggerConfig.WIND_ALLIES_VERY_LOW_HEALTH;
             }
 
-            if(Config.CHECK_SURROUNDED && (CheckUtils.checkSurrounded(player)  || CheckUtils.checkSurrounded(target))){
+            if(Config.CHECK_SURROUNDED && (CheckUtils.checkSurrounded(player)  || (target != null && CheckUtils.checkSurrounded(target)))){
                 trigger_sum = trigger_sum + TriggerConfig.WIND_ALLIES_SURROUNDED;
             }
 

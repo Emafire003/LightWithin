@@ -166,11 +166,11 @@ public class StrengthLight extends InnerLight {
         LightComponent component = LightWithin.LIGHT_COMPONENT.get(caster);
         super.activate(caster, targets, power_multiplier, duration, cooldown_time);
 
-        caster.getWorld().playSound(null, BlockPos.ofFloored(caster.getPos()), LightSounds.STRENGTH_LIGHT, SoundCategory.PLAYERS, 1f, 1f);
+        caster.getWorld().playSound(null, BlockPos.ofFloored(caster.getPos()), LightSounds.TYPES_SOUNDS.get(lightId), SoundCategory.PLAYERS, 1f, 1f);
         for(LivingEntity target : targets){
             //target.playSound(LightSounds.STRENGTH_LIGHT, 1, 1);
             if(!caster.getWorld().isClient){
-                LightParticlesUtil.spawnLightTypeParticle(LightParticles.STRENGTHLIGHT_PARTICLE, (ServerWorld) caster.getWorld(), target.getPos());
+                LightParticlesUtil.spawnLightTypeParticle(LightParticles.TYPES_PARTICLES.get(lightId), (ServerWorld) caster.getWorld(), target.getPos());
             }
             if(component.getTargets().equals(TargetType.VARIANT)){
                 target.addStatusEffect(new StatusEffectInstance(StatusEffects.HASTE, caster.getStatusEffect(LightEffects.LIGHT_ACTIVE).getDuration(), (int) power_multiplier, false, false));
