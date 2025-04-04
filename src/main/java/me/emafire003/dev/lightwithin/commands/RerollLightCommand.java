@@ -34,7 +34,6 @@ public class RerollLightCommand implements LightCommand{
                 Pair<InnerLight, TargetType> current = new Pair<>(component.getType(), component.getTargets());
                 Pair<InnerLight, TargetType> newone = LightCreationAndEvent.determineTypeAndTarget(UUID.randomUUID().toString().toLowerCase().split("-"), LightCreationAndEvent.TYPE_BIT,LightCreationAndEvent.TARGET_BIT);
 
-                //TODO make sure this works
                 while(current.getFirst().equals(newone.getFirst())){
                     newone = LightCreationAndEvent.determineTypeAndTarget(UUID.randomUUID().toString().toLowerCase().split("-"), LightCreationAndEvent.TYPE_BIT,LightCreationAndEvent.TARGET_BIT);
                 }
@@ -46,7 +45,7 @@ public class RerollLightCommand implements LightCommand{
 
                 if(Config.TARGET_FEEDBACK){
                     target.sendMessage(Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The target type, and the type of your InnerLight have been changed, your new ones are: " ).formatted(Formatting.YELLOW)
-                            .append(Text.literal(type.toString()).formatted(Formatting.GREEN)).append(" and ").formatted(Formatting.YELLOW).append(Text.literal(targets_new.toString()).formatted(Formatting.GREEN))));
+                            .append(Text.literal(type.toString().toUpperCase()).formatted(Formatting.GREEN)).append(" and ").formatted(Formatting.YELLOW).append(Text.literal(targets_new.toString()).formatted(Formatting.GREEN))));
                 }
                 source.sendFeedback( () -> Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("§eThe new light type and target type for " + target.getName().getString() + " are: §a" + type + " §eand §a" + targets_new)), false);
 
@@ -112,7 +111,7 @@ public class RerollLightCommand implements LightCommand{
                 source.sendFeedback( () -> Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("§eThe new light type for " + target.getName().getString() + " is: §a" + type )), false);
                 if(Config.TARGET_FEEDBACK){
                     target.sendMessage(Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The type of your InnerLight has been changed, your new one is: " ).formatted(Formatting.YELLOW)
-                            .append(Text.literal(type.toString()).formatted(Formatting.GREEN))));
+                            .append(Text.literal(type.toString().toUpperCase()).formatted(Formatting.GREEN))));
                 }
 
                 if(!component.getType().getPossibleTargetTypes().contains(current.getSecond())){

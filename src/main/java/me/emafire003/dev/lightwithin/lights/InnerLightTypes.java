@@ -47,7 +47,6 @@ public class InnerLightTypes {
             type_bit -> String.valueOf(type_bit.charAt(1)).matches("[8-9]")), new AquaLight(null).getLightId().getPath());
 
 
-    //TODO
     /**Registers a new InnerLight type to the {@link me.emafire003.dev.lightwithin.LightWithin#INNERLIGHT_REGISTRY}*/
     public static InnerLight registerLight(InnerLight light, String id){
         return Registry.register(INNERLIGHT_REGISTRY, LightWithin.getIdentifier(id), light);

@@ -139,7 +139,7 @@ public class FrostLight extends InnerLight {
 
         LightComponent component = LightWithin.LIGHT_COMPONENT.get(caster);
 
-        caster.getWorld().playSound(null, BlockPos.ofFloored(caster.getPos()), LightSounds.FROST_LIGHT, SoundCategory.PLAYERS, 1f, 1f);
+        caster.getWorld().playSound(null, BlockPos.ofFloored(caster.getPos()), LightSounds.TYPES_SOUNDS.get(lightId), SoundCategory.PLAYERS, 1f, 1f);
 
         if(!caster.getWorld().isClient && (CheckUtils.checkGriefable((ServerPlayerEntity) caster) || Config.NON_FUNDAMENTAL_STRUCTURE_GRIEFING) && (component.getTargets().equals(TargetType.ALL) || component.getTargets().equals(TargetType.ENEMIES))) {
             StructurePlacerAPI placer = new StructurePlacerAPI((ServerWorld) caster.getWorld(), LightWithin.getIdentifier("frost_light"), caster.getBlockPos(), BlockMirror.NONE, BlockRotation.NONE, true, 1.0f, new BlockPos(-4, -3, -3));
@@ -152,12 +152,12 @@ public class FrostLight extends InnerLight {
         }
 
         if(!caster.getWorld().isClient()){
-            LightParticlesUtil.spawnLightTypeParticle(LightParticles.FROSTLIGHT_PARTICLE, (ServerWorld) caster.getWorld(), caster.getPos());
+            LightParticlesUtil.spawnLightTypeParticle(LightParticles.TYPES_PARTICLES.get(lightId), (ServerWorld) caster.getWorld(), caster.getPos());
             PrecompiledParticleEffects.spawnSnowflake((ServerWorld) caster.getWorld(), caster.getPos().add(0, 2, 0));
         }
 
         for(LivingEntity target : targets){
-            //target.playSound(LightSounds.FROST_LIGHT, 1, 1);
+            //target.playSound(LightSounds.TYPES_SOUNDS.get(lightId), 1, 1);
 
             if((component.getTargets().equals(TargetType.SELF) || component.getTargets().equals(TargetType.ALLIES))){
                 if(target.equals(caster) && component.getTargets().equals(TargetType.ALLIES)){
@@ -186,7 +186,7 @@ public class FrostLight extends InnerLight {
                 }
             }else{
                 if(!caster.getWorld().isClient){
-                    LightParticlesUtil.spawnLightTypeParticle(LightParticles.FROSTLIGHT_PARTICLE, (ServerWorld) caster.getWorld(), target.getPos());
+                    LightParticlesUtil.spawnLightTypeParticle(LightParticles.TYPES_PARTICLES.get(lightId), (ServerWorld) caster.getWorld(), target.getPos());
 
                     target.addStatusEffect(new StatusEffectInstance(LightEffects.FROST, caster.getStatusEffect(LightEffects.LIGHT_ACTIVE).getDuration(), 0, false, false));
 

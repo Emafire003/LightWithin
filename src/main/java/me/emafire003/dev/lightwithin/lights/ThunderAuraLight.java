@@ -159,8 +159,8 @@ public class ThunderAuraLight extends InnerLight {
         LightComponent component = LIGHT_COMPONENT.get(caster);
 
         if(!caster.getWorld().isClient()){
-            LightParticlesUtil.spawnLightTypeParticle(LightParticles.THUNDER_AURA_LIGHT_PARTICLE, (ServerWorld) caster.getWorld(), caster.getPos());
-            caster.getWorld().playSound(null, BlockPos.ofFloored(caster.getPos()), LightSounds.THUNDER_AURA_LIGHT, SoundCategory.PLAYERS, 1f, 1f);
+            LightParticlesUtil.spawnLightTypeParticle(LightParticles.TYPES_PARTICLES.get(lightId), (ServerWorld) caster.getWorld(), caster.getPos());
+            caster.getWorld().playSound(null, BlockPos.ofFloored(caster.getPos()), LightSounds.TYPES_SOUNDS.get(lightId), SoundCategory.PLAYERS, 1f, 1f);
         }
 
         //Allies shield thing
@@ -257,8 +257,6 @@ public class ThunderAuraLight extends InnerLight {
         double trigger_sum = 0;
 
         if(component.getTargets().equals(TargetType.ALL)){
-
-            //TODO wiki
             //Triggers with: Low health, Very low health, Self Armor broken,
             // thunder aura, raining +1
 

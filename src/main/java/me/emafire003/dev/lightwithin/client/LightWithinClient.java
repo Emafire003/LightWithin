@@ -154,7 +154,12 @@ public class LightWithinClient implements ClientModInitializer {
     }
 
     public void registerParticlesRenderer(){
-        ParticleFactoryRegistry.getInstance().register(LightParticles.HEALLIGHT_PARTICLE, LightTypeParticleV3.Factory::new);
+
+        LightWithin.INNERLIGHT_REGISTRY.forEach( innerLight -> {
+            ParticleFactoryRegistry.getInstance().register(LightParticles.TYPES_PARTICLES.get(innerLight.getLightId()), LightTypeParticleV3.Factory::new);
+        });
+
+/*        ParticleFactoryRegistry.getInstance().register(LightParticles.HEALLIGHT_PARTICLE, LightTypeParticleV3.Factory::new);
         ParticleFactoryRegistry.getInstance().register(LightParticles.DEFENSELIGHT_PARTICLE, LightTypeParticleV3.Factory::new);
         ParticleFactoryRegistry.getInstance().register(LightParticles.STRENGTHLIGHT_PARTICLE, LightTypeParticleV3.Factory::new);
 
@@ -166,7 +171,7 @@ public class LightWithinClient implements ClientModInitializer {
         ParticleFactoryRegistry.getInstance().register(LightParticles.FOREST_AURA_LIGHT_PARTICLE, LightTypeParticleV3.Factory::new);
         ParticleFactoryRegistry.getInstance().register(LightParticles.THUNDER_AURA_LIGHT_PARTICLE, LightTypeParticleV3.Factory::new);
         ParticleFactoryRegistry.getInstance().register(LightParticles.FROGLIGHT_PARTICLE, LightTypeParticleV3.Factory::new);
-
+*/
         ParticleFactoryRegistry.getInstance().register(LightParticles.LIGHT_PARTICLE, LightParticle.Factory::new);
         ParticleFactoryRegistry.getInstance().register(LightParticles.SHINE_PARTICLE, LightParticle.Factory::new);
 

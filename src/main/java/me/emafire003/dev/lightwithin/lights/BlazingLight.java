@@ -160,7 +160,7 @@ public class BlazingLight extends InnerLight {
            CGLCompat.getLib().setColor(caster, color);
         }
 
-        caster.getWorld().playSound(null, BlockPos.ofFloored(caster.getPos()), LightSounds.BLAZING_LIGHT, SoundCategory.PLAYERS, 1f, 1f);
+        caster.getWorld().playSound(null, BlockPos.ofFloored(caster.getPos()), LightSounds.TYPES_SOUNDS.get(lightId), SoundCategory.PLAYERS, 1f, 1f);
         caster.addStatusEffect(new StatusEffectInstance(StatusEffects.FIRE_RESISTANCE, caster.getStatusEffect(LightEffects. LIGHT_ACTIVE).getDuration(), 0, false, false));
 
 
@@ -177,13 +177,13 @@ public class BlazingLight extends InnerLight {
         }
 
         if(!caster.getWorld().isClient) {
-            LightParticlesUtil.spawnLightTypeParticle(LightParticles.BLAZINGLIGHT_PARTICLE, (ServerWorld) caster.getWorld(), caster.getPos());
+            LightParticlesUtil.spawnLightTypeParticle(LightParticles.TYPES_PARTICLES.get(lightId), (ServerWorld) caster.getWorld(), caster.getPos());
         }
         for(LivingEntity target : targets){
-            //target.playSound(LightSounds.BLAZING_LIGHT, 1, 1);
+            //target.playSound(LightSounds.TYPES_SOUNDS.get(lightId), 1, 1);
 
             if(!caster.getWorld().isClient){
-                LightParticlesUtil.spawnLightTypeParticle(LightParticles.BLAZINGLIGHT_PARTICLE, (ServerWorld) caster.getWorld(), target.getPos());
+                LightParticlesUtil.spawnLightTypeParticle(LightParticles.TYPES_PARTICLES.get(lightId), (ServerWorld) caster.getWorld(), target.getPos());
             }
 
             //TODO make the chance configable EDIT: Maybe not
