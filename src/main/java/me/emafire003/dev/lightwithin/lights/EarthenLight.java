@@ -138,8 +138,8 @@ public class EarthenLight extends InnerLight {
         //duration = checkSafety(power_multiplier, duration).getSecond();
         LightComponent component = LightWithin.LIGHT_COMPONENT.get(caster);
 
-        LightParticlesUtil.spawnLightTypeParticle(LightParticles.EARTHENLIGHT_PARTICLE, (ServerWorld) caster.getWorld(), caster.getPos());
-        caster.getWorld().playSound(null, BlockPos.ofFloored(caster.getPos()), LightSounds.EARTHEN_LIGHT, SoundCategory.PLAYERS, 1f, 1f);
+        LightParticlesUtil.spawnLightTypeParticle(LightParticles.TYPES_PARTICLES.get(lightId), (ServerWorld) caster.getWorld(), caster.getPos());
+        caster.getWorld().playSound(null, BlockPos.ofFloored(caster.getPos()), LightSounds.TYPES_SOUNDS.get(lightId), SoundCategory.PLAYERS, 1f, 1f);
 
         if(caster.getWorld().isClient){
             return;
@@ -177,10 +177,10 @@ public class EarthenLight extends InnerLight {
                         placer.loadStructure();
                     }
                     //It also plays here since a hole opens under things
-                    caster.getWorld().playSound(null, BlockPos.ofFloored(caster.getPos()), LightSounds.EARTHEN_LIGHT, SoundCategory.PLAYERS, 1f, 1f);
+                    caster.getWorld().playSound(null, BlockPos.ofFloored(caster.getPos()), LightSounds.TYPES_SOUNDS.get(lightId), SoundCategory.PLAYERS, 1f, 1f);
                 }
                 oldtarget = target;
-                //target.playSound(LightSounds.EARTHEN_LIGHT, 0.9f, 1);
+                //target.playSound(LightSounds.TYPES_SOUNDS.get(lightId), 0.9f, 1);
                 target.addStatusEffect(new StatusEffectInstance(StatusEffects.MINING_FATIGUE, caster.getStatusEffect(LightEffects.LIGHT_ACTIVE).getDuration(), (int) power_multiplier, false, true));
             }
             //It will spawn a wall around the allies and self, depending on the power level it could have a secret tunnel to escape underneath
@@ -189,8 +189,8 @@ public class EarthenLight extends InnerLight {
             LivingEntity oldtarget = null;
             for(LivingEntity target : targets){
 
-                //target.playSound(LightSounds.EARTHEN_LIGHT, 0.9f, 1);
-                LightParticlesUtil.spawnLightTypeParticle(LightParticles.EARTHENLIGHT_PARTICLE, (ServerWorld) target.getWorld(), target.getPos());
+                //target.playSound(LightSounds.TYPES_SOUNDS.get(lightId), 0.9f, 1);
+                LightParticlesUtil.spawnLightTypeParticle(LightParticles.TYPES_PARTICLES.get(lightId), (ServerWorld) target.getWorld(), target.getPos());
 
                 if(target.equals(caster)){
                     target.addStatusEffect(new StatusEffectInstance(LightEffects.STURDY_ROCK, caster.getStatusEffect(LightEffects.LIGHT_ACTIVE).getDuration(), (int) (power_multiplier/Config.DIV_SELF), false, false));
@@ -251,7 +251,7 @@ public class EarthenLight extends InnerLight {
                 }else{
                     placer.loadStructure();
                 }
-                LightParticlesUtil.spawnLightTypeParticle(LightParticles.EARTHENLIGHT_PARTICLE, (ServerWorld) caster.getWorld(), caster.getPos());
+                LightParticlesUtil.spawnLightTypeParticle(LightParticles.TYPES_PARTICLES.get(lightId), (ServerWorld) caster.getWorld(), caster.getPos());
             }
         }else if(component.getTargets().equals(TargetType.VARIANT)){
             int rx = caster.getRandom().nextBetween(0, 5);

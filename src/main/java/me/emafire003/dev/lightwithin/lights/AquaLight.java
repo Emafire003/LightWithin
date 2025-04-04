@@ -157,12 +157,12 @@ public class AquaLight extends InnerLight {
         }
 
 
-        caster.getWorld().playSound(null, BlockPos.ofFloored(caster.getPos()), LightSounds.AQUA_LIGHT, SoundCategory.PLAYERS, 1f, 1f);
+        caster.getWorld().playSound(null, BlockPos.ofFloored(caster.getPos()), LightSounds.TYPES_SOUNDS.get(lightId), SoundCategory.PLAYERS, 1f, 1f);
         LightComponent component = LIGHT_COMPONENT.get(caster);
 
         //ALL section (drowneds)
         if(component.getTargets().equals(TargetType.ALL)){
-            LightParticlesUtil.spawnLightTypeParticle(LightParticles.AQUALIGHT_PARTICLE, (ServerWorld) caster.getWorld(), caster.getPos());
+            LightParticlesUtil.spawnLightTypeParticle(LightParticles.TYPES_PARTICLES.get(lightId), (ServerWorld) caster.getWorld(), caster.getPos());
 
             for(int i = 0; i<power_multiplier; i++){
                 DrownedEntity drowned = new DrownedEntity(EntityType.DROWNED, caster.getWorld());
@@ -268,7 +268,7 @@ public class AquaLight extends InnerLight {
                     target.addStatusEffect(new StatusEffectInstance(StatusEffects.CONDUIT_POWER, this.duration*20, (int) (this.power_multiplier), false, false));
                 }
 
-                LightParticlesUtil.spawnLightTypeParticle(LightParticles.AQUALIGHT_PARTICLE, (ServerWorld) target.getWorld(), target.getPos());
+                LightParticlesUtil.spawnLightTypeParticle(LightParticles.TYPES_PARTICLES.get(lightId), (ServerWorld) target.getWorld(), target.getPos());
             }
             //Depending on the level it will spawn a small moat and pillar around the user, a big pillar only and a big pillar with a big moat.
             //And will also give Solid Rock effect to self, making the player more resistant to knokback
@@ -276,11 +276,11 @@ public class AquaLight extends InnerLight {
 
         //enemies section (water cage & tridents)
         else if(component.getTargets().equals(TargetType.ENEMIES)) {
-            LightParticlesUtil.spawnLightTypeParticle(LightParticles.AQUALIGHT_PARTICLE, (ServerWorld) caster.getWorld(), caster.getPos());
+            LightParticlesUtil.spawnLightTypeParticle(LightParticles.TYPES_PARTICLES.get(lightId), (ServerWorld) caster.getWorld(), caster.getPos());
 
             for(LivingEntity target : targets){
                 //TODO should I play the sound for every enemy? Nah
-                //target.playSound(LightSounds.AQUA_LIGHT, 0.9f, 1);
+                //target.playSound(LightSounds.TYPES_SOUNDS.get(lightId), 0.9f, 1);
 
                 if(!caster.getWorld().isClient && CheckUtils.checkGriefable((ServerPlayerEntity) caster)) {
                     if(target instanceof PlayerEntity){
@@ -500,5 +500,10 @@ public class AquaLight extends InnerLight {
             return true;
         }
         return checkWaterLoggedOrTag(player, Config.TRIGGER_BLOCK_RADIUS, AquaLight.AQUA_TRIGGER_BLOCKS);
+    }
+
+    @Override
+    public String toString() {
+        return this.lightId.getPath();
     }
 }

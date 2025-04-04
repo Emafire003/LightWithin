@@ -120,12 +120,12 @@ public class DefenceLight extends InnerLight {
         LightComponent component = LightWithin.LIGHT_COMPONENT.get(caster);
         super.activate(caster, targets, power_multiplier, duration, cooldown_time);
 
-        caster.getWorld().playSound(null, BlockPos.ofFloored(caster.getPos()), LightSounds.DEFENSE_LIGHT, SoundCategory.PLAYERS, 1f, 1f);
+        caster.getWorld().playSound(null, BlockPos.ofFloored(caster.getPos()), LightSounds.TYPES_SOUNDS.get(lightId), SoundCategory.PLAYERS, 1f, 1f);
         for(LivingEntity target : targets){
-            //target.playSound(LightSounds.DEFENSE_LIGHT, 1, 1);
-            //LightParticlesUtil.spawnLightTypeParticle(LightParticles.DEFENSELIGHT_PARTICLE, target);
+            //target.playSound(LightSounds.TYPES_SOUNDS.get(lightId), 1, 1);
+            //LightParticlesUtil.spawnLightTypeParticle(LightParticles.TYPES_PARTICLES.get(lightId), target);
             if(!caster.getWorld().isClient){
-                LightParticlesUtil.spawnLightTypeParticle(LightParticles.DEFENSELIGHT_PARTICLE, (ServerWorld) caster.getWorld(), target.getPos());
+                LightParticlesUtil.spawnLightTypeParticle(LightParticles.TYPES_PARTICLES.get(lightId), (ServerWorld) caster.getWorld(), target.getPos());
             }
             if(target.equals(caster) && component.getTargets().equals(TargetType.ALLIES)){
                 target.addStatusEffect(new StatusEffectInstance(StatusEffects.RESISTANCE, caster.getStatusEffect(LightEffects.LIGHT_ACTIVE).getDuration(), (int) (power_multiplier/Config.DIV_SELF), false, false));
@@ -179,7 +179,7 @@ public class DefenceLight extends InnerLight {
             }
 
         }else if(component.getTargets().equals(TargetType.VARIANT)){
-            if(CheckUtils.checkPassiveHealth(player, target, Config.HP_PERCENTAGE_VARIANT)){
+            if(target != null && CheckUtils.checkPassiveHealth(player, target, Config.HP_PERCENTAGE_VARIANT)){
                 trigger_sum = trigger_sum + TriggerConfig.DEF_VARIANT_PASSIVE_LOW_HEALTH;
             }
 

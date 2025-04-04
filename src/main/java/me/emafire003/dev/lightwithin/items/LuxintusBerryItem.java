@@ -3,7 +3,6 @@ package me.emafire003.dev.lightwithin.items;
 import me.emafire003.dev.lightwithin.LightWithin;
 import me.emafire003.dev.lightwithin.component.LightComponent;
 import me.emafire003.dev.lightwithin.config.Config;
-import me.emafire003.dev.lightwithin.sounds.LightSounds;
 import me.emafire003.dev.lightwithin.status_effects.LightEffects;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.component.DataComponentTypes;
@@ -61,7 +60,6 @@ public class LuxintusBerryItem extends Item {
             }
             if(user.hasStatusEffect(LightEffects.LIGHT_FATIGUE)){
                 user.removeStatusEffect(LightEffects.LIGHT_FATIGUE);
-                user.playSound(LightSounds.HEAL_LIGHT, 1, 1);
             }
             LightWithin.activateLight((ServerPlayerEntity) user);
         }

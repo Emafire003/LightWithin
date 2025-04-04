@@ -115,6 +115,8 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 		InnerLightTypes.registerLights();
         //Must be run before the packt stuff
         registerPayloadIds();
+		//must be before the particles & sounds so it's on top
+		InnerLightTypes.registerLights();
 
 		LightCreationAndEvent.registerCreationListener();
 		LightTriggeringAndEvents.registerListeners();
@@ -138,6 +140,11 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
             FlanCompat.registerFlan();
         }
         CommandRegistrationCallback.EVENT.register(LightCommands::registerCommands);
+
+		if(FabricLoader.getInstance().isModLoaded("flan")){
+			FlanCompat.registerFlan();
+		}
+		CommandRegistrationCallback.EVENT.register(LightCommands::registerCommands);
 
 
 		ServerLifecycleEvents.SERVER_STARTED.register(minecraftServer -> {
