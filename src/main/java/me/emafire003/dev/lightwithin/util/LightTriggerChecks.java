@@ -8,7 +8,7 @@ import static me.emafire003.dev.lightwithin.LightWithin.*;
 
 public class LightTriggerChecks {
     //If the sum of the things happening to player is greater than this the light activates
-    //TODO also this probalbly can't be modified using the config file
+    /// this is updatet in LightWithin class, when the server starts.
     public static double MIN_TRIGGER = 5;
     
     public static double getMinTrigger(){
