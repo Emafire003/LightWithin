@@ -107,7 +107,7 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 	public static int MAX_POWER_COMMANDS = 10;
 
 	public static Identifier getIdentifier(String path){
-		return new Identifier(MOD_ID, path);
+		return Identifier.of(MOD_ID, path);
 	}
 
 
@@ -269,15 +269,6 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 		return Math.max(MAX_POWER_COMMANDS, 1);
 	}
 
-	/**Sends a packet with updated config options to the client
-	 * such as the auto light activation permission*/
-	public static void syncCustomConfigOptions(ServerPlayerEntity player){
-		Map<String, Boolean> booleanMap = new HashMap<>();
-		booleanMap.put(ConfigPacketConstants.AUTO_LIGHT_ACTIVATION, Config.AUTO_LIGHT_ACTIVATION);
-		//TODO if needed i'll add other settings ecct
-		ConfigOptionsSyncPacketS2C optionsPacket = new ConfigOptionsSyncPacketS2C(booleanMap);
-		ServerPlayNetworking.send(player, ConfigOptionsSyncPacketS2C.ID, optionsPacket);
-	}
 
     private static void registerLightUsedPacket(){
         ServerPlayNetworking.registerGlobalReceiver(LightUsedPayloadC2S.ID, ((payload, context) -> {

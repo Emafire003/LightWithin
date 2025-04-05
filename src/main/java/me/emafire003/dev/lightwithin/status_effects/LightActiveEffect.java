@@ -4,8 +4,8 @@ import me.emafire003.dev.lightwithin.LightWithin;
 import me.emafire003.dev.lightwithin.compat.coloredglowlib.CGLCompat;
 import me.emafire003.dev.lightwithin.component.LightComponent;
 import me.emafire003.dev.lightwithin.config.Config;
-import me.emafire003.dev.lightwithin.lights.InnerLightType;
 import me.emafire003.dev.lightwithin.lights.ThunderAuraLight;
+import me.emafire003.dev.lightwithin.lights.WindLight;
 import me.emafire003.dev.lightwithin.util.TargetType;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.entity.LivingEntity;
@@ -55,7 +55,7 @@ public class LightActiveEffect extends StatusEffect {
         }
         if(entity instanceof ServerPlayerEntity){
             LightComponent component = LIGHT_COMPONENT.get(entity);
-            if(component.getType().equals(InnerLightType.WIND) && !component.getTargets().equals(TargetType.ALL)){
+            if(component.getType() instanceof WindLight  && !component.getTargets().equals(TargetType.ALL)){
 
                 ((ServerWorld) (entity).getWorld()).spawnParticles((ServerPlayerEntity) entity, ParticleTypes.CLOUD, false, entity.getX(), entity.getY(), entity.getZ(), 5, 0, 0, 0, 0.1);
             }
@@ -90,7 +90,7 @@ public class LightActiveEffect extends StatusEffect {
                 Objects.requireNonNull(targetedLivingEntity.getServer()).executeSync(()-> targetedLivingEntity.addStatusEffect(new StatusEffectInstance(LightEffects.LIGHT_FATIGUE, (int) (Config.COOLDOWN_MULTIPLIER*20*component.getMaxCooldown()))));
             }
             //Resets the lightnings uses for the player
-            if(component.getType().equals(InnerLightType.THUNDER_AURA) && component.getTargets().equals(TargetType.ALL)){
+            if(component.getType() instanceof ThunderAuraLight && component.getTargets().equals(TargetType.ALL)){
                 ThunderAuraLight.LIGHTNING_USES_LEFT.remove(targetedLivingEntity.getUuid());
             }
 

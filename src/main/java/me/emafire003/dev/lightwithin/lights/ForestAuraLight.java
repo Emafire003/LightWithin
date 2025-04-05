@@ -1,9 +1,7 @@
 package me.emafire003.dev.lightwithin.lights;
 
 import me.emafire003.dev.lightwithin.LightWithin;
-import me.emafire003.dev.lightwithin.compat.coloredglowlib.CGLCompat;
 import com.mojang.datafixers.util.Pair;
-import me.emafire003.dev.lightwithin.LightWithin;
 import me.emafire003.dev.lightwithin.component.LightComponent;
 import me.emafire003.dev.lightwithin.config.BalanceConfig;
 import me.emafire003.dev.lightwithin.config.Config;
@@ -33,6 +31,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.text.Text;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.MathHelper;
