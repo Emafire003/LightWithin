@@ -1,6 +1,6 @@
 package me.emafire003.dev.lightwithin.util;
 
-import me.emafire003.dev.lightwithin.networking.LightReadyPacketS2C;
+import me.emafire003.dev.lightwithin.networking.LightReadyPayloadS2C;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.server.network.ServerPlayerEntity;
 
@@ -17,7 +17,7 @@ public class LightTriggerChecks {
 
     public static void sendReadyPacket(ServerPlayerEntity player, boolean b){
         try{
-            ServerPlayNetworking.send(player, LightReadyPacketS2C.ID, new LightReadyPacketS2C(b));
+            ServerPlayNetworking.send(player, new LightReadyPayloadS2C(b));
             addToReadyList(player);
         }catch(Exception e){
             LOGGER.error("FAILED to send data packets to the client!");

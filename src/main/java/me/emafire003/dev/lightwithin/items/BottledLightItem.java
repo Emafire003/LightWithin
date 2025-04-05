@@ -5,7 +5,7 @@ import me.emafire003.dev.lightwithin.component.LightComponent;
 import me.emafire003.dev.lightwithin.config.Config;
 import me.emafire003.dev.lightwithin.items.components.LightItemComponents;
 import me.emafire003.dev.lightwithin.items.crafting.BrewRecipes;
-import me.emafire003.dev.lightwithin.lights.InnerLightType;
+import me.emafire003.dev.lightwithin.lights.InnerLight;
 import me.emafire003.dev.lightwithin.particles.LightParticlesUtil;
 import me.emafire003.dev.lightwithin.sounds.LightSounds;
 import me.emafire003.dev.lightwithin.status_effects.LightEffects;
@@ -27,6 +27,7 @@ import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
 
@@ -67,7 +68,7 @@ public class BottledLightItem extends Item {
             //NbtCompound nbt = stack.getNbt();
 
             if(stack.getComponents().contains(LightItemComponents.BOTTLED_LIGHT_TYPE_INGREDIENT)){
-                InnerLightType bottled_type = InnerLightType.valueOf(stack.getComponents().get(LightItemComponents.BOTTLED_LIGHT_TYPE_INGREDIENT));
+                InnerLight bottled_type = LightWithin.INNERLIGHT_REGISTRY.get(Identifier.tryParse(Objects.requireNonNull(stack.getComponents().get(LightItemComponents.BOTTLED_LIGHT_TYPE_INGREDIENT))));
                 if(component.getType().equals(bottled_type)){
                     if(stack.getComponents().contains(LightItemComponents.BOTTLED_LIGHT_TARGET_INGREDIENT)){
                         TargetType bottled_target = TargetType.valueOf(stack.getComponents().get(LightItemComponents.BOTTLED_LIGHT_TARGET_INGREDIENT));
@@ -108,7 +109,7 @@ public class BottledLightItem extends Item {
                     return TypedActionResult.pass(stack);
                 }
                 if(nbtComponent.contains(BrewRecipes.TYPE_INGREDIENT_KEY)){
-                    InnerLightType bottled_type = InnerLightType.valueOf(nbtComponent.copyNbt().getString(BrewRecipes.TYPE_INGREDIENT_KEY));
+                    InnerLight bottled_type = LightWithin.INNERLIGHT_REGISTRY.get(Identifier.tryParse(nbtComponent.copyNbt().getString(BrewRecipes.TYPE_INGREDIENT_KEY)));
                     if(component.getType().equals(bottled_type)){
                         if(nbtComponent.contains(BrewRecipes.TARGET_INGREDIENT_KEY)){
                             TargetType bottled_target = TargetType.valueOf(nbtComponent.copyNbt().getString(BrewRecipes.TARGET_INGREDIENT_KEY));

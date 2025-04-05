@@ -37,6 +37,7 @@ import net.minecraft.sound.SoundCategory;
 import net.minecraft.text.Text;
 import net.minecraft.util.BlockMirror;
 import net.minecraft.util.BlockRotation;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import org.jetbrains.annotations.Nullable;
 
@@ -151,8 +152,8 @@ public class EarthenLight extends InnerLight {
             //TODO probably need to extend the enemy radius
             LivingEntity oldtarget = null;
             for(LivingEntity target : targets){
-                float r = target.getDimensions(EntityPose.STANDING).width/2;
-                float h = target.getDimensions(EntityPose.STANDING).height;
+                float r = target.getDimensions(EntityPose.STANDING).width()/2;
+                float h = target.getDimensions(EntityPose.STANDING).height();
 
                 //This are used to immobilize the target ad let it fall down
                 target.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, 1, 255, false, false));
@@ -202,7 +203,7 @@ public class EarthenLight extends InnerLight {
                     if(oldtarget == null || oldtarget.distanceTo(target) > 3){
                         StructurePlacerAPI placer;
                         if(power_multiplier > 4){
-                            placer = new StructurePlacerAPI((ServerWorld) caster.getWorld(), new Identifier(MOD_ID, "earth_wall"), caster.getBlockPos(), BlockMirror.NONE, BlockRotation.NONE, true, 1f, new BlockPos(-3, -5, -6));
+                            placer = new StructurePlacerAPI((ServerWorld) caster.getWorld(), LightWithin.getIdentifier("earth_wall"), caster.getBlockPos(), BlockMirror.NONE, BlockRotation.NONE, true, 1f, new BlockPos(-3, -5, -6));
                         }else{
                             placer = new StructurePlacerAPI((ServerWorld) caster.getWorld(), LightWithin.getIdentifier("earth_wall1"), caster.getBlockPos(), BlockMirror.NONE, BlockRotation.NONE, true, 1f, new BlockPos(-3, -1, -4));
                         }

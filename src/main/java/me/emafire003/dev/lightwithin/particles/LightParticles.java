@@ -5,7 +5,7 @@ import me.emafire003.dev.lightwithin.lights.InnerLight;
 import me.emafire003.dev.lightwithin.lights.NoneLight;
 import me.emafire003.dev.lightwithin.particles.coloredpuff.ColoredPuffParticleEffect;
 import net.fabricmc.fabric.api.particle.v1.FabricParticleTypes;
-import net.minecraft.particle.DefaultParticleType;
+import net.minecraft.particle.SimpleParticleType;
 import net.minecraft.particle.ParticleType;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
@@ -15,7 +15,7 @@ import java.util.HashMap;
 
 public class LightParticles {
 
-    public static final HashMap<Identifier, DefaultParticleType> TYPES_PARTICLES = new HashMap<>();
+    public static final HashMap<Identifier, SimpleParticleType> TYPES_PARTICLES = new HashMap<>();
 
     private static void registerLightTypeParticle(InnerLight type){
         TYPES_PARTICLES.put(type.getLightId(),
@@ -24,11 +24,12 @@ public class LightParticles {
         LightWithin.LOGGER.info("Registering particle: " + TYPES_PARTICLES);
     }
 
-    public static final DefaultParticleType LIGHTNING_PARTICLE = FabricParticleTypes.simple();
+    public static final SimpleParticleType LIGHTNING_PARTICLE = FabricParticleTypes.simple();
 
-    public static final DefaultParticleType LIGHT_PARTICLE = FabricParticleTypes.simple();
-    public static final DefaultParticleType SHINE_PARTICLE = FabricParticleTypes.simple();
-    public static final ParticleType<ColoredPuffParticleEffect> COLORED_PUFF_PARTICLE = FabricParticleTypes.complex(ColoredPuffParticleEffect.FACTORY);
+    public static final SimpleParticleType LIGHT_PARTICLE = FabricParticleTypes.simple();
+    public static final SimpleParticleType SHINE_PARTICLE = FabricParticleTypes.simple();
+    public static final ParticleType<ColoredPuffParticleEffect> COLORED_PUFF_PARTICLE = FabricParticleTypes.complex(ColoredPuffParticleEffect.CODEC, ColoredPuffParticleEffect.PACKET_CODEC);
+
 
     /** MUST BE CALLED AFTER REGISTERING THE LIGHTS! */
     public static void registerParticles() {
@@ -40,15 +41,15 @@ public class LightParticles {
             registerLightTypeParticle(type);
         });
 
-        Registry.register(Registries.PARTICLE_TYPE, new Identifier(LightWithin.MOD_ID, "light_particle"),
+        Registry.register(Registries.PARTICLE_TYPE, LightWithin.getIdentifier("light_particle"),
                 LIGHT_PARTICLE);
 
-        Registry.register(Registries.PARTICLE_TYPE, new Identifier(LightWithin.MOD_ID, "shine_particle"),
+        Registry.register(Registries.PARTICLE_TYPE, LightWithin.getIdentifier("shine_particle"),
                 SHINE_PARTICLE);
-        Registry.register(Registries.PARTICLE_TYPE, new Identifier(LightWithin.MOD_ID, "colored_puff_particle"),
+        Registry.register(Registries.PARTICLE_TYPE, LightWithin.getIdentifier("colored_puff_particle"),
                 COLORED_PUFF_PARTICLE);
 
-        Registry.register(Registries.PARTICLE_TYPE, new Identifier(LightWithin.MOD_ID, "lightning_particle"),
+        Registry.register(Registries.PARTICLE_TYPE, LightWithin.getIdentifier("lightning_particle"),
                 LIGHTNING_PARTICLE);
     }
 }
