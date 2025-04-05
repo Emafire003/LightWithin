@@ -40,7 +40,7 @@ import static me.emafire003.dev.lightwithin.util.LightTriggerChecks.sendLightTri
 
 public class DefenceLight extends InnerLight {
 
-    public static final Item INGREDIENT = Items.SCUTE;
+    public static final Item INGREDIENT = Items.TURTLE_SCUTE;
     private final List<TargetType> possibleTargetTypes = Arrays.asList(TargetType.SELF, TargetType.ALLIES, TargetType.VARIANT);
     private final List<TriggerChecks> triggerChecks = List.of(TriggerChecks.ENTITY_ATTACKED);
     private final Identifier lightId = LightWithin.getIdentifier("defence");

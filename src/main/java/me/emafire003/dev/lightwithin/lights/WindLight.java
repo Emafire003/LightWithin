@@ -15,6 +15,7 @@ import me.emafire003.dev.lightwithin.particles.LightParticlesUtil;
 import me.emafire003.dev.lightwithin.sounds.LightSounds;
 import me.emafire003.dev.lightwithin.util.TargetType;
 import net.minecraft.block.Block;
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.LivingEntity;
@@ -26,6 +27,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.registry.RegistryKeys;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.tag.TagKey;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
@@ -39,6 +41,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static me.emafire003.dev.lightwithin.LightWithin.*;
 import static me.emafire003.dev.lightwithin.util.CheckUtils.checkMultipleBlocksWithTags;
@@ -189,7 +192,13 @@ public class WindLight extends InnerLight {
         //Yes it ignores protection but whatever. It's a feature not a bug. I can always add it later
         ItemStack boots = player.getInventory().getArmorStack(3);
         int fall_trigger = Config.FALL_TRIGGER;
-        int fe_fa_level = EnchantmentHelper.getLevel(Enchantments.FEATHER_FALLING, boots);
+        Optional<RegistryEntry.Reference<Enchantment>> f_falling = player.getWorld().getRegistryManager().get(RegistryKeys.ENCHANTMENT).getEntry(Enchantments.FEATHER_FALLING);
+        int fe_fa_level = 0;
+        if(f_falling.isPresent()){
+            fe_fa_level = EnchantmentHelper.getLevel(f_falling.get(), boots);
+        }else{
+            LOGGER.info("Who the heck removed feather falling from the enchants list? (The drowneds spawned with AquaLight won't be equipped with it, but it's not a critical issue");
+        }
 
         for(int i = 0; i < fe_fa_level; i++){
             fall_trigger = fall_trigger+10;

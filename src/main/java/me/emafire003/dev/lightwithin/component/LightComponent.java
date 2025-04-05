@@ -1,7 +1,5 @@
 package me.emafire003.dev.lightwithin.component;
 
-import dev.onyxstudios.cca.api.v3.component.ComponentV3;
-import dev.onyxstudios.cca.api.v3.component.sync.AutoSyncedComponent;
 import me.emafire003.dev.lightwithin.LightWithin;
 import me.emafire003.dev.lightwithin.config.Config;
 import me.emafire003.dev.lightwithin.lights.InnerLight;
@@ -9,8 +7,12 @@ import me.emafire003.dev.lightwithin.lights.NoneLight;
 import me.emafire003.dev.lightwithin.util.TargetType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
+import net.minecraft.util.Identifier;
+import org.ladysnake.cca.api.v3.component.ComponentV3;
+import org.ladysnake.cca.api.v3.component.sync.AutoSyncedComponent;
 
 import static me.emafire003.dev.lightwithin.LightWithin.*;
 
@@ -43,7 +45,7 @@ public class LightComponent implements ComponentV3, AutoSyncedComponent {
 
     @SuppressWarnings("ConstantValue")
     @Override
-    public void readFromNbt(NbtCompound tag, RegistryWrapper.WrapperLookup registryLookup) {
+    public void readFromNbt(NbtCompound tag, RegistryWrapper.WrapperLookup wrapperLookup) {
         boolean shouldWrite = false;
 
         boolean debug = false;
@@ -148,7 +150,7 @@ public class LightComponent implements ComponentV3, AutoSyncedComponent {
         }
 
         if(shouldWrite){
-            this.writeToNbt(tag);
+            this.writeToNbt(tag, wrapperLookup);
         }
 
     }
@@ -331,4 +333,5 @@ public class LightComponent implements ComponentV3, AutoSyncedComponent {
         this.isLocked = false;
         LightWithin.LIGHT_COMPONENT.sync(caster);
     }
+
 }

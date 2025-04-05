@@ -2,7 +2,8 @@ package me.emafire003.dev.lightwithin.mixin;
 
 import com.llamalad7.mixinextras.sugar.Local;
 import me.emafire003.dev.lightwithin.LightWithin;
-import me.emafire003.dev.lightwithin.lights.InnerLightType;
+import me.emafire003.dev.lightwithin.lights.ForestAuraLight;
+import me.emafire003.dev.lightwithin.lights.ThunderAuraLight;
 import me.emafire003.dev.lightwithin.status_effects.LightEffects;
 import net.minecraft.client.render.entity.EntityRenderer;
 import net.minecraft.client.render.entity.EntityRendererFactory;
@@ -34,12 +35,12 @@ public abstract class EntityColorOverlayRendererMixin<T extends LivingEntity, M 
         //for the Aura things, a bit of transparency i think it's cool, so i'll modify the alpha value too
         if(livingEntity.getType().equals(EntityType.PLAYER)){
             if(livingEntity.hasStatusEffect(LightEffects.LIGHT_ACTIVE)){
-                if(LightWithin.LIGHT_COMPONENT.get(livingEntity).getType().equals(InnerLightType.FOREST_AURA)){
+                if(LightWithin.LIGHT_COMPONENT.get(livingEntity).getType() instanceof ForestAuraLight){
                     int og = args.get(4);
                     int color = ColorHelper.Argb.mixColor(og, ColorHelper.Argb.fromFloats(0.84F, 0.300f, 0.908f, 0.300f));
                     args.set(4, color);
                 }
-                if(LightWithin.LIGHT_COMPONENT.get(livingEntity).getType().equals(InnerLightType.THUNDER_AURA)){
+                if(LightWithin.LIGHT_COMPONENT.get(livingEntity).getType() instanceof ThunderAuraLight){
                     int og = args.get(4);
                     int color = ColorHelper.Argb.mixColor(og, ColorHelper.Argb.fromFloats(0.84F, 0.750f, 0.750f, 0.150f));
                     args.set(4, color);

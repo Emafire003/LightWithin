@@ -2,7 +2,6 @@ package me.emafire003.dev.lightwithin.lights;
 
 import me.emafire003.dev.lightwithin.LightWithin;
 import com.mojang.datafixers.util.Pair;
-import me.emafire003.dev.lightwithin.LightWithin;
 import me.emafire003.dev.lightwithin.compat.coloredglowlib.CGLCompat;
 import me.emafire003.dev.lightwithin.component.LightComponent;
 import me.emafire003.dev.lightwithin.config.BalanceConfig;
@@ -80,7 +79,7 @@ public class AquaLight extends InnerLight {
      */
     public AquaLight(TypeCreationRegex regex) {
         super(regex);
-        this.color = "aqua";
+        color = "aqua";
     }
 
     @Override
@@ -201,8 +200,6 @@ public class AquaLight extends InnerLight {
 
                 ItemStack trident = new ItemStack(Items.TRIDENT);
                 if(power_multiplier > 5){
-                    trident.addEnchantment(Enchantments.CHANNELING, 1);
-                if(this.power_multiplier > 5){
                     /*trident.addEnchantment(Enchantments.CHANNELING, 1);
                     turtle_helmet.addEnchantment(Enchantments.THORNS, caster.getRandom().nextBetween(1, 2));
                     iron_chest.addEnchantment(Enchantments.THORNS, caster.getRandom().nextBetween(1, 2));*/
@@ -246,7 +243,7 @@ public class AquaLight extends InnerLight {
                 SUMMONED_BY_COMPONENT.get(drowned).setIsSummoned(true);
 
                 boolean b = SpawnUtils.spawnAround(caster, 1, 5, drowned, (ServerWorld) caster.getWorld(), SpawnLocationTypes.UNRESTRICTED);
-                LightParticlesUtil.spawnLightTypeParticle(LightParticles.AQUALIGHT_PARTICLE, (ServerWorld) drowned.getWorld(), drowned.getPos());
+                LightParticlesUtil.spawnLightTypeParticle(LightParticles.TYPES_PARTICLES.get(lightId), (ServerWorld) drowned.getWorld(), drowned.getPos());
             }
 
         }
@@ -255,17 +252,17 @@ public class AquaLight extends InnerLight {
         if(component.getTargets().equals(TargetType.ALLIES) || component.getTargets().equals(TargetType.SELF)){
             for(LivingEntity target : targets){
                 //target.playSound(LightSounds.AQUA_LIGHT, 0.9f, 1);
-                if(this.power_multiplier < 4){
-                    target.addStatusEffect(new StatusEffectInstance(LightEffects.WATER_SLIDE, this.duration*20, 2, false, false));
+                if(power_multiplier < 4){
+                    target.addStatusEffect(new StatusEffectInstance(LightEffects.WATER_SLIDE, duration*20, 2, false, false));
                 }else{
-                    target.addStatusEffect(new StatusEffectInstance(LightEffects.WATER_SLIDE, this.duration*20, 3, false, false));
+                    target.addStatusEffect(new StatusEffectInstance(LightEffects.WATER_SLIDE, duration*20, 3, false, false));
                 }
                 if(target.equals(caster) && component.getTargets().equals(TargetType.ALLIES)){
-                    target.addStatusEffect(new StatusEffectInstance(StatusEffects.DOLPHINS_GRACE, this.duration*20, (int) (this.power_multiplier/Config.DIV_SELF), false, false));
-                    target.addStatusEffect(new StatusEffectInstance(StatusEffects.CONDUIT_POWER, this.duration*20, (int) (this.power_multiplier/Config.DIV_SELF), false, false));
+                    target.addStatusEffect(new StatusEffectInstance(StatusEffects.DOLPHINS_GRACE, duration*20, (int) (power_multiplier/Config.DIV_SELF), false, false));
+                    target.addStatusEffect(new StatusEffectInstance(StatusEffects.CONDUIT_POWER, duration*20, (int) (power_multiplier/Config.DIV_SELF), false, false));
                 }else{
-                    target.addStatusEffect(new StatusEffectInstance(StatusEffects.DOLPHINS_GRACE, this.duration*20, (int) (this.power_multiplier), false, false));
-                    target.addStatusEffect(new StatusEffectInstance(StatusEffects.CONDUIT_POWER, this.duration*20, (int) (this.power_multiplier), false, false));
+                    target.addStatusEffect(new StatusEffectInstance(StatusEffects.DOLPHINS_GRACE, duration*20, (int) (power_multiplier), false, false));
+                    target.addStatusEffect(new StatusEffectInstance(StatusEffects.CONDUIT_POWER, duration*20, (int) (power_multiplier), false, false));
                 }
 
                 LightParticlesUtil.spawnLightTypeParticle(LightParticles.TYPES_PARTICLES.get(lightId), (ServerWorld) target.getWorld(), target.getPos());
@@ -504,6 +501,6 @@ public class AquaLight extends InnerLight {
 
     @Override
     public String toString() {
-        return this.lightId.getPath();
+        return lightId.getPath();
     }
 }
