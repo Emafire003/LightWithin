@@ -4,6 +4,7 @@ import com.mojang.datafixers.util.Pair;
 import dev.isxander.yacl3.api.*;
 import dev.isxander.yacl3.api.controller.*;
 import me.emafire003.dev.lightwithin.config.ClientConfig;
+import me.emafire003.dev.lightwithin.util.ScreenPositionsPresets;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.text.Text;
@@ -30,23 +31,23 @@ public class YaclScreenMaker {
     }
 
 
-    public static Pair<Integer, Integer> getXY(IconPositionPresets preset, double icon_scale){
-        if(preset.equals(IconPositionPresets.TOP_LEFT)){
+    public static Pair<Integer, Integer> getXY(ScreenPositionsPresets preset, double icon_scale){
+        if(preset.equals(ScreenPositionsPresets.TOP_LEFT)){
             return new Pair<>(10, 10);
         }
-        if(preset.equals(IconPositionPresets.TOP_RIGHT)){
+        if(preset.equals(ScreenPositionsPresets.TOP_RIGHT)){
             return new Pair<>((int) (MinecraftClient.getInstance().getWindow().getScaledWidth()-(10+20*icon_scale)), 10);
         }
-        if(preset.equals(IconPositionPresets.BOTTOM_LEFT)){
+        if(preset.equals(ScreenPositionsPresets.BOTTOM_LEFT)){
             return new Pair<>(10, (int)(MinecraftClient.getInstance().getWindow().getScaledHeight()-(10+20*icon_scale)));
         }
-        if(preset.equals(IconPositionPresets.BOTTOM_RIGHT)){
+        if(preset.equals(ScreenPositionsPresets.BOTTOM_RIGHT)){
             return new Pair<>((int) (MinecraftClient.getInstance().getWindow().getScaledWidth()-(10+20*icon_scale)), (int)(MinecraftClient.getInstance().getWindow().getScaledHeight()-(10+20*icon_scale)));
         }
-        if(preset.equals(IconPositionPresets.CENTER)){
+        if(preset.equals(ScreenPositionsPresets.CENTER)){
             return new Pair<>((int) (MinecraftClient.getInstance().getWindow().getScaledWidth()-(10+20*icon_scale))/2, (int)(MinecraftClient.getInstance().getWindow().getScaledHeight()-(10+20*icon_scale))/2);
         }
-        if(preset.equals(IconPositionPresets.TOP_CENTER)){
+        if(preset.equals(ScreenPositionsPresets.TOP_CENTER)){
             return new Pair<>((int) (MinecraftClient.getInstance().getWindow().getScaledWidth()-(10+20*icon_scale))/2, 10);
         }
         return null;
@@ -60,12 +61,12 @@ public class YaclScreenMaker {
 
         // The xy positions of the icons
         options.add(
-                Option.<IconPositionPresets>createBuilder()
+                Option.<ScreenPositionsPresets>createBuilder()
                         .name(Text.translatable("config.lightwithin.light_ready_icon_preset"))
                         .description(OptionDescription.of(Text.translatable("config.lightwithin.light_ready_icon_preset.tooltip")))
                         .binding(
-                                IconPositionPresets.TOP_LEFT, // the default value
-                                () -> IconPositionPresets.valueOf(ClientConfig.LIGHT_READY_PRESET), // a field to get the current value from
+                                ScreenPositionsPresets.TOP_LEFT, // the default value
+                                () -> ScreenPositionsPresets.valueOf(ClientConfig.LIGHT_READY_PRESET), // a field to get the current value from
                                 newVal -> {
                                     Pair<Integer, Integer> xy = getXY(newVal, ClientConfig.LIGHT_READY_SCALE_FACTOR);
                                     if(xy != null){
@@ -77,18 +78,18 @@ public class YaclScreenMaker {
                                     }
                                 }
                         )
-                        .controller(opt -> EnumControllerBuilder.create(opt).enumClass(IconPositionPresets.class))
+                        .controller(opt -> EnumControllerBuilder.create(opt).enumClass(ScreenPositionsPresets.class))
                         .build()
         );
 
         // The xy positions of the icons
         options.add(
-                Option.<IconPositionPresets>createBuilder()
+                Option.<ScreenPositionsPresets>createBuilder()
                         .name(Text.translatable("config.lightwithin.light_charge_icon_preset"))
                         .description(OptionDescription.of(Text.translatable("config.lightwithin.light_charge_icon_preset.tooltip")))
                         .binding(
-                                IconPositionPresets.TOP_LEFT, // the default value
-                                () -> IconPositionPresets.valueOf(ClientConfig.LIGHT_CHARGE_PRESET), // a field to get the current value from
+                                ScreenPositionsPresets.TOP_LEFT, // the default value
+                                () -> ScreenPositionsPresets.valueOf(ClientConfig.LIGHT_CHARGE_PRESET), // a field to get the current value from
                                 newVal -> {
                                     Pair<Integer, Integer> xy = getXY(newVal, ClientConfig.LIGHT_CHARGE_SCALE_FACTOR);
                                     if(xy != null){
@@ -100,7 +101,7 @@ public class YaclScreenMaker {
                                     }
                                 }
                         )
-                        .controller(opt -> EnumControllerBuilder.create(opt).enumClass(IconPositionPresets.class))
+                        .controller(opt -> EnumControllerBuilder.create(opt).enumClass(ScreenPositionsPresets.class))
                         .build()
         );
 

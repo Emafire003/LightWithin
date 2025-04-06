@@ -4,6 +4,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import me.emafire003.dev.lightwithin.LightWithin;
 import me.emafire003.dev.lightwithin.client.LightRenderLayer;
 import me.emafire003.dev.lightwithin.client.LightWithinClient;
+import me.emafire003.dev.lightwithin.items.LightItems;
 import me.emafire003.dev.lightwithin.items.LuxcognitaBerryItem;
 import me.emafire003.dev.lightwithin.sounds.LightSounds;
 import net.minecraft.client.MinecraftClient;
@@ -15,11 +16,13 @@ import net.minecraft.client.gui.widget.SimplePositioningWidget;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import org.joml.Matrix4f;
 
 
+//TODO when this is open the player should be mostly transparent and should also be invulnerable for a time. An attack will cancel the screen and make the player vulnerable again after 2/3 seconds.
 public class LuxcognitaScreen extends Screen{
     private static final long MIN_LOAD_TIME_MS = 60000L;
     private final long loadStartTime;
@@ -151,8 +154,16 @@ public class LuxcognitaScreen extends Screen{
         float textScale = 1.5f;
         matrixStack.scale(textScale, textScale, textScale);
         //2406703 16777215
+        //TODO ok both of this work
+
         context.drawCenteredTextWithShadow(this.textRenderer, Text.translatable("screen.luxcognita_dialogue.luxcognitaTalk"), (int) ((this.width / 2)/textScale), (int) ((this.height / 2 - 70)/textScale), getTextColor());
+
+        matrixStack.scale(4f, 4f, 4f);
+        //context.drawTexture(LightWithin.getIdentifier("textures/item/luxcognita_berry.png"), 20, 20, 1, 1, 16, 16, 16, 16);
+        context.drawItem(new ItemStack(LightItems.LUXCOGNITA_BERRY), 10, 1);
+
         matrixStack.pop();
+
 
     }
 

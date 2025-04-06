@@ -1,6 +1,6 @@
-package me.emafire003.dev.lightwithin.compat.yacl;
+package me.emafire003.dev.lightwithin.util;
 
-public enum IconPositionPresets {
+public enum ScreenPositionsPresets {
     TOP_LEFT,
     TOP_RIGHT,
     TOP_CENTER,

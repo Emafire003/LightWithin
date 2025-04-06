@@ -3,9 +3,9 @@ package me.emafire003.dev.lightwithin.client;
 import com.mojang.datafixers.util.Pair;
 import me.emafire003.dev.lightwithin.LightWithin;
 import me.emafire003.dev.lightwithin.blocks.LightBlocks;
+import me.emafire003.dev.lightwithin.client.luxcognita_dialogues.LuxDialogue;
 import me.emafire003.dev.lightwithin.client.screens.LuxcognitaScreen;
 import me.emafire003.dev.lightwithin.client.shaders.LightShaders;
-import me.emafire003.dev.lightwithin.commands.client.ClientLightCommands;
 import me.emafire003.dev.lightwithin.compat.coloredglowlib.CGLCompat;
 import me.emafire003.dev.lightwithin.compat.yacl.YaclScreenMaker;
 import me.emafire003.dev.lightwithin.config.ClientConfig;
@@ -28,7 +28,6 @@ import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
-import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
@@ -87,7 +86,11 @@ public class LightWithinClient implements ClientModInitializer {
         registerParticlesRenderer();
         LightShaders.registerShaders();
 
-        ClientCommandRegistrationCallback.EVENT.register(ClientLightCommands::registerCommands);
+        //TODO test remove later
+        LuxDialogue dialogue = new LuxDialogue();
+        dialogue.serialize();
+
+
         event_handler.registerRenderEvent();
         event_handler.registerRunesRenderer();
 
@@ -161,23 +164,8 @@ public class LightWithinClient implements ClientModInitializer {
 
     public void registerParticlesRenderer(){
 
-        LightWithin.INNERLIGHT_REGISTRY.forEach( innerLight -> {
-            ParticleFactoryRegistry.getInstance().register(LightParticles.TYPES_PARTICLES.get(innerLight.getLightId()), LightTypeParticleV3.Factory::new);
-        });
+        LightWithin.INNERLIGHT_REGISTRY.forEach( innerLight -> ParticleFactoryRegistry.getInstance().register(LightParticles.TYPES_PARTICLES.get(innerLight.getLightId()), LightTypeParticleV3.Factory::new));
 
-/*        ParticleFactoryRegistry.getInstance().register(LightParticles.HEALLIGHT_PARTICLE, LightTypeParticleV3.Factory::new);
-        ParticleFactoryRegistry.getInstance().register(LightParticles.DEFENSELIGHT_PARTICLE, LightTypeParticleV3.Factory::new);
-        ParticleFactoryRegistry.getInstance().register(LightParticles.STRENGTHLIGHT_PARTICLE, LightTypeParticleV3.Factory::new);
-
-        ParticleFactoryRegistry.getInstance().register(LightParticles.BLAZINGLIGHT_PARTICLE, LightTypeParticleV3.Factory::new);
-        ParticleFactoryRegistry.getInstance().register(LightParticles.FROSTLIGHT_PARTICLE, LightTypeParticleV3.Factory::new);
-        ParticleFactoryRegistry.getInstance().register(LightParticles.EARTHENLIGHT_PARTICLE, LightTypeParticleV3.Factory::new);
-        ParticleFactoryRegistry.getInstance().register(LightParticles.WINDLIGHT_PARTICLE, LightTypeParticleV3.Factory::new);
-        ParticleFactoryRegistry.getInstance().register(LightParticles.AQUALIGHT_PARTICLE, LightTypeParticleV3.Factory::new);
-        ParticleFactoryRegistry.getInstance().register(LightParticles.FOREST_AURA_LIGHT_PARTICLE, LightTypeParticleV3.Factory::new);
-        ParticleFactoryRegistry.getInstance().register(LightParticles.THUNDER_AURA_LIGHT_PARTICLE, LightTypeParticleV3.Factory::new);
-        ParticleFactoryRegistry.getInstance().register(LightParticles.FROGLIGHT_PARTICLE, LightTypeParticleV3.Factory::new);
-*/
         ParticleFactoryRegistry.getInstance().register(LightParticles.LIGHT_PARTICLE, LightParticle.Factory::new);
         ParticleFactoryRegistry.getInstance().register(LightParticles.SHINE_PARTICLE, LightParticle.Factory::new);
 
