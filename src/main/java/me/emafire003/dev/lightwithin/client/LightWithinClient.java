@@ -4,7 +4,8 @@ import com.mojang.datafixers.util.Pair;
 import me.emafire003.dev.lightwithin.LightWithin;
 import me.emafire003.dev.lightwithin.blocks.LightBlocks;
 import me.emafire003.dev.lightwithin.client.luxcognita_dialogues.LuxDialogue;
-import me.emafire003.dev.lightwithin.client.screens.LuxcognitaScreen;
+import me.emafire003.dev.lightwithin.client.screens.LuxcognitaScreenV1;
+import me.emafire003.dev.lightwithin.client.screens.LuxdialogueScreens;
 import me.emafire003.dev.lightwithin.client.shaders.LightShaders;
 import me.emafire003.dev.lightwithin.compat.coloredglowlib.CGLCompat;
 import me.emafire003.dev.lightwithin.compat.yacl.YaclScreenMaker;
@@ -89,6 +90,8 @@ public class LightWithinClient implements ClientModInitializer {
         //TODO test remove later
         LuxDialogue dialogue = new LuxDialogue();
         dialogue.serialize();
+
+        LuxdialogueScreens.registerDialogueScreens();
 
 
         event_handler.registerRenderEvent();
@@ -277,7 +280,8 @@ public class LightWithinClient implements ClientModInitializer {
                         }
 
                         else if(effect.equals(RenderEffect.LUXCOGNITA_SCREEN)){
-                            MinecraftClient.getInstance().setScreen(new LuxcognitaScreen(Text.literal("LightWithin - Luxcognita Dialogue")));
+                            MinecraftClient.getInstance().setScreen(LuxdialogueScreens.LUXDIALOGUE_SCREENS.get("mod1"));
+                            //MinecraftClient.getInstance().setScreen(new LuxcognitaScreenV1(Text.literal("LightWithin - Luxcognita Dialogue")));
                         }
 
                         else if(effect.equals(RenderEffect.RUNES)){

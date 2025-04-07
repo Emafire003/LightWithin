@@ -4,6 +4,8 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import me.emafire003.dev.lightwithin.LightWithin;
 import me.emafire003.dev.lightwithin.client.LightRenderLayer;
 import me.emafire003.dev.lightwithin.client.LightWithinClient;
+import me.emafire003.dev.lightwithin.client.luxcognita_dialogues.ClickActions;
+import me.emafire003.dev.lightwithin.client.luxcognita_dialogues.LuxDialogue;
 import me.emafire003.dev.lightwithin.items.LightItems;
 import me.emafire003.dev.lightwithin.items.LuxcognitaBerryItem;
 import me.emafire003.dev.lightwithin.sounds.LightSounds;
@@ -21,51 +23,116 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import org.joml.Matrix4f;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+
 
 //TODO when this is open the player should be mostly transparent and should also be invulnerable for a time. An attack will cancel the screen and make the player vulnerable again after 2/3 seconds.
-public class LuxcognitaScreen extends Screen{
+public class LuxcognitaScreenV2 extends Screen{
     private static final long MIN_LOAD_TIME_MS = 60000L;
-    private final long loadStartTime;
+    private long loadStartTime;
+    private final LuxDialogue dialogue;
 
-    public LuxcognitaScreen(Text title) {
+    @Override
+    public String toString() {
+        return "LuxcognitaScreenV2{" +
+                "dialogue=" + dialogue +
+                ", title=" + title +
+                '}';
+    }
+
+    public LuxcognitaScreenV2(Text title, LuxDialogue dialogue) {
         super(title);
-        this.loadStartTime = System.currentTimeMillis();
+        this.dialogue = dialogue;
+
 
     }
 
     @Override
     public void init(){
+        this.loadStartTime = System.currentTimeMillis();
         int center_x = MinecraftClient.getInstance().getWindow().getScaledWidth()/2;
+
 
         GridWidget gridWidget = new GridWidget();
         gridWidget.getMainPositioner().margin(4, this.height/2, 4, 0);
         gridWidget.setSpacing(10);
-        GridWidget.Adder adder = gridWidget.createAdder(4);
+        //TODO i should probably scale things if i want to have more that 4 buttons
+        GridWidget.Adder adder = gridWidget.createAdder(dialogue.buttons.size());
 
-        ButtonWidget lightTypeButton = ButtonWidget
-                .builder(Text.translatable("screen.luxcognita_dialogue.lightTypeButton").formatted(Formatting.YELLOW),
-                        this::lightTypeAction
-                        //(buttonWidget) -> this.close()
-                )
-                .size((int) (center_x/2.3), 20)
-                .build();
+        List<ButtonWidget> buttons = new ArrayList<>();
 
-        ButtonWidget lightTypeIngredientButton = ButtonWidget.builder(Text.translatable("screen.luxcognita_dialogue.lightTypeIngredientButton").formatted(Formatting.YELLOW), this::lightTypeIngredientAction)
-                .size((int) (center_x/2.3), 20)
-                .build();
 
-        ButtonWidget lightTargetButton = ButtonWidget.builder(Text.translatable("screen.luxcognita_dialogue.lightTargetButton").formatted(Formatting.YELLOW), this::lightTargetAction)
-                .size((int) (center_x/2.3), 20)
-                .build();
+        if(MinecraftClient.getInstance().player == null){
+            LightWithin.LOGGER.error("ERROR! The ClientPlayer is null!");
+            return;
+        }
 
-        ButtonWidget lightTargetIngredientButton = ButtonWidget.builder(Text.translatable("screen.luxcognita_dialogue.lightTargetIngredientButton").formatted(Formatting.YELLOW), this::lightTargetIngredientAction)
-                .size((int) (center_x/2.3), 20)
-                .build();
+        dialogue.buttons.forEach( (text, action) -> {
 
-        adder.add(lightTypeButton);
-        adder.add(lightTargetButton);
-        adder.add(lightTypeIngredientButton);
-        adder.add(lightTargetIngredientButton);
+            ClickActions clickAction;
+            String target = "screen.lightwithin.luxdialogue.text_error";
+            if(action.contains("<")){
+                String[] stringParts = action.split("<");
+                //TODO actually find out where the "<" goes
+                clickAction = ClickActions.valueOf(stringParts[0].replaceAll("<", ""));
+                //TODO see if there could be a possibility of multiple arguments
+                target = stringParts[1].replaceAll("<", "").replaceAll(">", "");
+            }else{
+                try{
+                    clickAction = ClickActions.valueOf(action);
+                }catch (IllegalArgumentException e){
+                    clickAction = ClickActions.SEND_CHAT_MSG;
+                    target = "screen.lightwithin.luxdialogue.action_error";
+                    LightWithin.LOGGER.error("Invalid action '"+ action + "', defaulting to 'CLOSE' for dialogue with id: '" + dialogue.dialogueId + "'");
+                    e.printStackTrace();
+                }
+
+            }
+
+            ButtonWidget.PressAction pressAction = (buttonWidget) -> {
+                Objects.requireNonNull(MinecraftClient.getInstance().player).sendMessage(Text.literal(LightWithin.PREFIX_MSG+"Something went wrong trying to perform that action").formatted(Formatting.DARK_RED));
+                this.close();
+            };
+
+            if(clickAction.equals(ClickActions.CLOSE)){
+                pressAction = (buttonWidget) -> this.close();
+            }else if(clickAction.equals(ClickActions.SHOW_RUNE)){
+                pressAction = this::lightTypeAndRuneAction;
+            }else if(clickAction.equals(ClickActions.SHOW_TARGET)){
+                pressAction = this::lightTargetAction;
+            }else if(clickAction.equals(ClickActions.SHOW_TYPE_INGREDIENT)){
+                pressAction = this::lightTypeIngredientAction;
+            }else if(clickAction.equals(ClickActions.SHOW_TARGET_INGREDIENT)){
+                pressAction = this::lightTargetIngredientAction;
+            }//Action with a target
+            else if(clickAction.equals(ClickActions.GO_DIALOGUE)){
+                LuxcognitaScreenV2 targetScreen = LuxdialogueScreens.LUXDIALOGUE_SCREENS.get(target);
+                if(targetScreen == null){
+                    //TODO add a defualt/error screen
+                }
+                pressAction = (button) -> MinecraftClient.getInstance().setScreen(targetScreen);
+            }else if(clickAction.equals(ClickActions.SEND_CHAT_MSG)){
+                String finalTarget = target;
+                pressAction = (button -> MinecraftClient.getInstance().player.sendMessage(Text.translatable(finalTarget)));
+            }else if(clickAction.equals(ClickActions.SEND_OVERLAY_MSG)){
+                String finalTarget = target;
+                pressAction = (button -> MinecraftClient.getInstance().player.sendMessage(Text.translatable(finalTarget), true));
+            }
+
+
+            ButtonWidget new_button = ButtonWidget
+                    .builder(Text.translatable(text).formatted(Formatting.YELLOW),
+                            pressAction
+                    )
+                    .size((int) (center_x/2.3), 20)
+                    .build();
+            buttons.add(new_button);
+        });
+
+        buttons.forEach(adder::add);
+
 
         gridWidget.refreshPositions();
         SimplePositioningWidget.setPos(gridWidget, 0, 0, this.width, this.height, 0.5F, 0.25F);
@@ -79,7 +146,8 @@ public class LuxcognitaScreen extends Screen{
         }
         MinecraftClient.getInstance().player.playSound(LightSounds.LUXCOGNITA_DISPLAY, 1f, 1f);
     }
-    public void lightTypeAction(ButtonWidget buttonWidget) {
+
+    public void lightTypeAndRuneAction(ButtonWidget buttonWidget) {
         LightWithinClient.getRendererEventHandler().renderRunes();
         LuxcognitaBerryItem.sendLightTypeMessage(MinecraftClient.getInstance().player);
         this.close();
@@ -142,7 +210,6 @@ public class LuxcognitaScreen extends Screen{
 
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-        //TODO draw the LuxCognita berry at the center of the screen
         this.renderBackground(context);
         super.render(context, mouseX, mouseY, delta);
 
@@ -154,7 +221,6 @@ public class LuxcognitaScreen extends Screen{
         float textScale = 1.5f;
         matrixStack.scale(textScale, textScale, textScale);
         //2406703 16777215
-        //TODO ok both of this work
 
         context.drawCenteredTextWithShadow(this.textRenderer, Text.translatable("screen.luxcognita_dialogue.luxcognitaTalk"), (int) ((this.width / 2)/textScale), (int) ((this.height / 2 - 70)/textScale), getTextColor());
 
@@ -195,6 +261,7 @@ public class LuxcognitaScreen extends Screen{
 
     @Override
     public void close() {
+        //TODO maybe remove especially if it's not a "finish" screen
         playLuxcognitaDisplaySound();
         super.close();
     }

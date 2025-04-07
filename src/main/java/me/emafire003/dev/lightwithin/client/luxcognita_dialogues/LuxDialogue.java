@@ -47,7 +47,7 @@ public class LuxDialogue {
     /// The dialogue file version. DO NOT CHANGE
     public int fileVersion = 1;
     /// A translation string for the main text displayed in the dialogue
-    public String mainText = "lightwithin.screen.luxdialogue.0";
+    public String mainText = "screen.lightwithin.luxdialogue.default";
     /// Weather or not to show the Luxcognita Berry in the screen
     public boolean showBerry = true;
     /// The position of the berry as described in {@link me.emafire003.dev.lightwithin.util.ScreenPositionsPresets}
@@ -66,7 +66,7 @@ public class LuxDialogue {
     public Identifier item = LightWithin.getIdentifier("item/luxintus_berry_powder");
 
     /// The first string is a translatable string representing the text displayed on the button, while the second one represents an action that is performed on click, along with its potetential target
-    public Map<String, String> buttons = Map.of("lightwithin.screen.luxdialogue.0.button0", "CLOSE");
+    public Map<String, String> buttons = Map.of("screen.lightwithin.luxdialogue.default.button0", "CLOSE");
 
 
     public void serialize() {

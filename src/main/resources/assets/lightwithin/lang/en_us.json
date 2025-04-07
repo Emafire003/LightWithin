@@ -213,5 +213,11 @@
   "tag.blocks.lightwithin.frost_trigger_blocks": "FrostLight triggering blocks",
   "tag.blocks.lightwithin.wind_trigger_blocks": "WindLight triggering blocks",
   "tag.blocks.lightwithin.aqua_trigger_blocks": "AquaLight triggering blocks",
-  "tag.blocks.lightwithin.forest_aura_trigger_blocks": "ForestAuraLight triggering blocks"
+  "tag.blocks.lightwithin.forest_aura_trigger_blocks": "ForestAuraLight triggering blocks",
+
+
+  "screen.lightwithin.luxdialogue.text_error": "Urrr... something went a little wrong!",
+  "screen.lightwithin.luxdialogue.action_error": "The action specified is invalid!",
+  "screen.lightwithin.luxdialogue.default": "Default text!",
+  "screen.lightwithin.luxdialogue.default.button0": "Default text!"
 }
