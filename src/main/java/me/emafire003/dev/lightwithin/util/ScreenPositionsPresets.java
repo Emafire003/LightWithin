@@ -6,5 +6,6 @@ public enum ScreenPositionsPresets {
     TOP_CENTER,
     BOTTOM_LEFT,
     BOTTOM_RIGHT,
+    BOTTOM_CENTER,
     CENTER
 }

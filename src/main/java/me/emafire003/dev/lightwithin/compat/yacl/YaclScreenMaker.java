@@ -5,6 +5,7 @@ import dev.isxander.yacl3.api.*;
 import dev.isxander.yacl3.api.controller.*;
 import me.emafire003.dev.lightwithin.config.ClientConfig;
 import me.emafire003.dev.lightwithin.util.ScreenPositionsPresets;
+import me.emafire003.dev.lightwithin.util.ScreenUtils;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.text.Text;
@@ -31,29 +32,6 @@ public class YaclScreenMaker {
     }
 
 
-    public static Pair<Integer, Integer> getXY(ScreenPositionsPresets preset, double icon_scale){
-        if(preset.equals(ScreenPositionsPresets.TOP_LEFT)){
-            return new Pair<>(10, 10);
-        }
-        if(preset.equals(ScreenPositionsPresets.TOP_RIGHT)){
-            return new Pair<>((int) (MinecraftClient.getInstance().getWindow().getScaledWidth()-(10+20*icon_scale)), 10);
-        }
-        if(preset.equals(ScreenPositionsPresets.BOTTOM_LEFT)){
-            return new Pair<>(10, (int)(MinecraftClient.getInstance().getWindow().getScaledHeight()-(10+20*icon_scale)));
-        }
-        if(preset.equals(ScreenPositionsPresets.BOTTOM_RIGHT)){
-            return new Pair<>((int) (MinecraftClient.getInstance().getWindow().getScaledWidth()-(10+20*icon_scale)), (int)(MinecraftClient.getInstance().getWindow().getScaledHeight()-(10+20*icon_scale)));
-        }
-        if(preset.equals(ScreenPositionsPresets.CENTER)){
-            return new Pair<>((int) (MinecraftClient.getInstance().getWindow().getScaledWidth()-(10+20*icon_scale))/2, (int)(MinecraftClient.getInstance().getWindow().getScaledHeight()-(10+20*icon_scale))/2);
-        }
-        if(preset.equals(ScreenPositionsPresets.TOP_CENTER)){
-            return new Pair<>((int) (MinecraftClient.getInstance().getWindow().getScaledWidth()-(10+20*icon_scale))/2, 10);
-        }
-        return null;
-    }
-
-
     public static @NotNull Collection<? extends Option<?>> createOptions(){
         List<Option<?>> options = new ArrayList<>();
         AtomicBoolean updatedFromActivePreset = new AtomicBoolean(false);
@@ -68,7 +46,7 @@ public class YaclScreenMaker {
                                 ScreenPositionsPresets.TOP_LEFT, // the default value
                                 () -> ScreenPositionsPresets.valueOf(ClientConfig.LIGHT_READY_PRESET), // a field to get the current value from
                                 newVal -> {
-                                    Pair<Integer, Integer> xy = getXY(newVal, ClientConfig.LIGHT_READY_SCALE_FACTOR);
+                                    Pair<Integer, Integer> xy = ScreenUtils.getXY(newVal, ClientConfig.LIGHT_READY_SCALE_FACTOR);
                                     if(xy != null){
                                         ClientConfig.LIGHT_READY_ICON_X = xy.getFirst();
                                         ClientConfig.LIGHT_READY_ICON_Y = xy.getSecond();
@@ -91,7 +69,7 @@ public class YaclScreenMaker {
                                 ScreenPositionsPresets.TOP_LEFT, // the default value
                                 () -> ScreenPositionsPresets.valueOf(ClientConfig.LIGHT_CHARGE_PRESET), // a field to get the current value from
                                 newVal -> {
-                                    Pair<Integer, Integer> xy = getXY(newVal, ClientConfig.LIGHT_CHARGE_SCALE_FACTOR);
+                                    Pair<Integer, Integer> xy = ScreenUtils.getXY(newVal, ClientConfig.LIGHT_CHARGE_SCALE_FACTOR);
                                     if(xy != null){
                                         ClientConfig.LIGHT_CHARGE_ICON_X = xy.getFirst();
                                         ClientConfig.LIGHT_CHARGE_ICON_Y = xy.getSecond();

@@ -4,7 +4,6 @@ import com.mojang.datafixers.util.Pair;
 import me.emafire003.dev.lightwithin.LightWithin;
 import me.emafire003.dev.lightwithin.blocks.LightBlocks;
 import me.emafire003.dev.lightwithin.client.luxcognita_dialogues.LuxDialogue;
-import me.emafire003.dev.lightwithin.client.screens.LuxcognitaScreenV1;
 import me.emafire003.dev.lightwithin.client.screens.LuxdialogueScreens;
 import me.emafire003.dev.lightwithin.client.shaders.LightShaders;
 import me.emafire003.dev.lightwithin.compat.coloredglowlib.CGLCompat;
@@ -29,6 +28,7 @@ import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
@@ -87,12 +87,6 @@ public class LightWithinClient implements ClientModInitializer {
         registerParticlesRenderer();
         LightShaders.registerShaders();
 
-        //TODO test remove later
-        LuxDialogue dialogue = new LuxDialogue();
-        dialogue.serialize();
-
-        LuxdialogueScreens.registerDialogueScreens();
-
 
         event_handler.registerRenderEvent();
         event_handler.registerRunesRenderer();
@@ -109,6 +103,18 @@ public class LightWithinClient implements ClientModInitializer {
         EntityModelLayerRegistry.registerModelLayer(MODEL_EARTH_GOLEM_LAYER, EarthGolemEntityModel::getTexturedModelData);
 
         ClientConfig.reloadConfig();
+
+        ClientLifecycleEvents.CLIENT_STARTED.register(minecraftClient -> {
+            //TODO test remove later
+            LuxDialogue dialogue = new LuxDialogue();
+            dialogue.serialize();
+
+            LuxdialogueScreens.registerDialogueScreens();
+        });
+
+        ClientLifecycleEvents.CLIENT_STOPPING.register(minecraftClient -> {
+            LuxdialogueScreens.LUXDIALOGUE_SCREENS.clear();
+        });
 
         ClientTickEvents.END_CLIENT_TICK.register((minecraftClient -> {
             //This is done as to not display another Light Ready icon when it just triggered

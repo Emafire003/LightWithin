@@ -1,6 +1,7 @@
 package me.emafire003.dev.lightwithin.client.screens;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.datafixers.util.Pair;
 import me.emafire003.dev.lightwithin.LightWithin;
 import me.emafire003.dev.lightwithin.client.LightRenderLayer;
 import me.emafire003.dev.lightwithin.client.LightWithinClient;
@@ -9,6 +10,7 @@ import me.emafire003.dev.lightwithin.client.luxcognita_dialogues.LuxDialogue;
 import me.emafire003.dev.lightwithin.items.LightItems;
 import me.emafire003.dev.lightwithin.items.LuxcognitaBerryItem;
 import me.emafire003.dev.lightwithin.sounds.LightSounds;
+import me.emafire003.dev.lightwithin.util.ScreenUtils;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
@@ -19,6 +21,7 @@ import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
+import net.minecraft.registry.Registries;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import org.joml.Matrix4f;
@@ -52,8 +55,6 @@ public class LuxcognitaScreenV2 extends Screen{
     @Override
     public void init(){
         this.loadStartTime = System.currentTimeMillis();
-        int center_x = MinecraftClient.getInstance().getWindow().getScaledWidth()/2;
-
 
         GridWidget gridWidget = new GridWidget();
         gridWidget.getMainPositioner().margin(4, this.height/2, 4, 0);
@@ -61,14 +62,29 @@ public class LuxcognitaScreenV2 extends Screen{
         //TODO i should probably scale things if i want to have more that 4 buttons
         GridWidget.Adder adder = gridWidget.createAdder(dialogue.buttons.size());
 
-        List<ButtonWidget> buttons = new ArrayList<>();
-
+        List<ButtonWidget> buttons = getButtons();
 
         if(MinecraftClient.getInstance().player == null){
             LightWithin.LOGGER.error("ERROR! The ClientPlayer is null!");
             return;
         }
 
+
+
+        buttons.forEach(adder::add);
+
+
+        gridWidget.refreshPositions();
+        SimplePositioningWidget.setPos(gridWidget, 0, 0, this.width, this.height, 0.5F, 0.25F);
+        gridWidget.forEachChild(this::addDrawableChild);
+    }
+
+    private List<ButtonWidget> getButtons(){
+        if(MinecraftClient.getInstance().player == null){
+            return null;
+        }
+        int center_x = MinecraftClient.getInstance().getWindow().getScaledWidth()/2;
+        List<ButtonWidget> buttons = new ArrayList<>();
         dialogue.buttons.forEach( (text, action) -> {
 
             ClickActions clickAction;
@@ -130,13 +146,7 @@ public class LuxcognitaScreenV2 extends Screen{
                     .build();
             buttons.add(new_button);
         });
-
-        buttons.forEach(adder::add);
-
-
-        gridWidget.refreshPositions();
-        SimplePositioningWidget.setPos(gridWidget, 0, 0, this.width, this.height, 0.5F, 0.25F);
-        gridWidget.forEachChild(this::addDrawableChild);
+        return buttons;
     }
 
     public void playLuxcognitaDisplaySound(){
@@ -217,16 +227,45 @@ public class LuxcognitaScreenV2 extends Screen{
         //Middle 2415936
         // Top (darker) 2406703
         MatrixStack matrixStack = context.getMatrices();
+
         matrixStack.push();
-        float textScale = 1.5f;
-        matrixStack.scale(textScale, textScale, textScale);
-        //2406703 16777215
 
-        context.drawCenteredTextWithShadow(this.textRenderer, Text.translatable("screen.luxcognita_dialogue.luxcognitaTalk"), (int) ((this.width / 2)/textScale), (int) ((this.height / 2 - 70)/textScale), getTextColor());
 
-        matrixStack.scale(4f, 4f, 4f);
-        //context.drawTexture(LightWithin.getIdentifier("textures/item/luxcognita_berry.png"), 20, 20, 1, 1, 16, 16, 16, 16);
-        context.drawItem(new ItemStack(LightItems.LUXCOGNITA_BERRY), 10, 1);
+
+        matrixStack.scale(dialogue.textScale, dialogue.textScale, dialogue.textScale);
+        context.drawCenteredTextWithShadow(this.textRenderer, Text.translatable(dialogue.mainText), (int) (((float) this.width / 2)/dialogue.textScale), (int) (((float) this.height / 2 - 70)/dialogue.textScale), getTextColor());
+        matrixStack.pop();
+        matrixStack.push();
+
+        if(dialogue.showBerry){
+            //TODO adjust with the screen's or config's scale
+            matrixStack.scale(2f, 2f, 2f);
+            Pair<Integer, Integer> xy = ScreenUtils.getXY(dialogue.berryPos, 2, width, height, 15, 16, 16);
+            context.drawItem(new ItemStack(LightItems.LUXCOGNITA_BERRY), xy.getFirst()/3, xy.getSecond()/3);
+
+            matrixStack.pop();
+            matrixStack.push();
+        }
+
+        if(dialogue.showItem){
+            Pair<Integer, Integer> xy = ScreenUtils.getXY(dialogue.itemPos, dialogue.itemScale, this.width, this.height, 0, 16, 16);
+
+            matrixStack.scale(dialogue.itemScale, dialogue.itemScale, dialogue.itemScale);
+
+            context.drawItem(new ItemStack(Registries.ITEM.get(dialogue.item)), xy.getFirst(), xy.getSecond());
+
+            matrixStack.pop();
+            matrixStack.push();
+        }
+
+        
+        if(dialogue.showImage){
+            matrixStack.scale(dialogue.imageScale, dialogue.imageScale, dialogue.imageScale);
+            Pair<Integer, Integer> xy = ScreenUtils.getXY(dialogue.imagePos, dialogue.imageScale, width, height, 5, dialogue.imageWidth, dialogue.imageHeight);
+            context.drawTexture(dialogue.imagePath, xy.getFirst(), xy.getSecond(), 1, 1, dialogue.imageWidth, dialogue.imageHeight, dialogue.imageWidth, dialogue.imageHeight);
+            matrixStack.pop();
+            matrixStack.push();
+        }
 
         matrixStack.pop();
 
