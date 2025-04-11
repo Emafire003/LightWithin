@@ -91,6 +91,8 @@ public class Config {
 
     // Added with version 6
     public static int MAX_POWER_WITH_COMMANDS = 10;
+    // TODO maybe this is version 7? cuz the alpha release
+    public static boolean LUXCOGNITA_ON_JOIN = false;
 
     public enum UsableInFactionOptions{
         EVERYONE,
@@ -246,6 +248,10 @@ public class Config {
 
         configs.addKeyValuePair(new Pair<>("bypass_natural_trigger", false), "If true will bypass the requirement of having to activate the light naturally before using a light charge");
         configs.addKeyValuePair(new Pair<>("light_usable_in_faction", UsableInFactionOptions.EVERYONE.toString()), "If Factions is installed, who can activate a light in a faction territory? Options: EVERYONE, MEMBER, OWNER, LEADER, COMMANDER, GUEST, ALLIES, ENEMIES. The last two include members as well.");
+
+        //V6-7
+        configs.addKeyValuePair(new Pair<>("luxcognita_on_join", false), "Weather or not to give the player a luxcognita berry on join, as a sort of 'tutorial'");
+
     }
 
     public static void reloadConfig(){
@@ -325,6 +331,9 @@ public class Config {
 
         //Config version 6
         MAX_POWER_WITH_COMMANDS = CONFIG.getOrDefault("max_power_with_commands", 10);
+        //6-7
+        //TODO test
+        LUXCOGNITA_ON_JOIN = CONFIG.getOrDefault("luxcognita_on_join", false);
     }
 }
 

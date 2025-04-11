@@ -103,12 +103,10 @@ public class LightWithinClient implements ClientModInitializer {
         EntityModelLayerRegistry.registerModelLayer(MODEL_EARTH_GOLEM_LAYER, EarthGolemEntityModel::getTexturedModelData);
 
         ClientConfig.reloadConfig();
+        LuxDialogue def = new LuxDialogue();
+        def.serialize();
 
-        ClientLifecycleEvents.CLIENT_STARTED.register(minecraftClient -> {
-            //TODO test remove later
-            LuxDialogue dialogue = new LuxDialogue();
-            dialogue.serialize();
-
+        ClientLifecycleEvents.CLIENT_STARTED.register( minecraftClient -> {
             LuxdialogueScreens.registerDialogueScreens();
         });
 
@@ -286,7 +284,8 @@ public class LightWithinClient implements ClientModInitializer {
                         }
 
                         else if(effect.equals(RenderEffect.LUXCOGNITA_SCREEN)){
-                            MinecraftClient.getInstance().setScreen(LuxdialogueScreens.LUXDIALOGUE_SCREENS.get("mod1"));
+                            //TODO the add the other stuff
+                            MinecraftClient.getInstance().setScreen(LuxdialogueScreens.LUXDIALOGUE_SCREENS.get("intro/intro"));
                             //MinecraftClient.getInstance().setScreen(new LuxcognitaScreenV1(Text.literal("LightWithin - Luxcognita Dialogue")));
                         }
 

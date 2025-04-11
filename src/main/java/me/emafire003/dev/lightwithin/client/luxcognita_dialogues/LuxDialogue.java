@@ -8,9 +8,11 @@ import me.emafire003.dev.lightwithin.items.LightItems;
 import me.emafire003.dev.lightwithin.util.ScreenPositionsPresets;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.registry.Registries;
+import net.minecraft.resource.Resource;
 import net.minecraft.util.Identifier;
 
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -63,6 +65,10 @@ public class LuxDialogue {
     /// The first string is a translatable string representing the text displayed on the button, while the second one represents an action that is performed on click, along with its potetential target
     public Map<String, String> buttons = Map.of("screen.lightwithin.luxdialogue.default.button0", "CLOSE");
 
+    /// Weather or not seeing this screen/dialogue updates the dialogue progress
+    public boolean dialogueProgress = false;
+    /// The code of the dialogue progress state that is achieved one this dialogue has been seen see {@link DialogueProgressState}
+    public DialogueProgressState dialogueProgressState = DialogueProgressState.NONE;
 
     public void serialize() {
         Gson serializedDialogue = new GsonBuilder().setPrettyPrinting()//.excludeFieldsWithoutExposeAnnotation()
@@ -90,6 +96,24 @@ public class LuxDialogue {
         }
     }
 
+    public static LuxDialogue deserialize(File file){
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        try {
+            return gson.fromJson(new FileReader(file), LuxDialogue.class);
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static LuxDialogue deserialize(Resource resource){
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        try {
+            return gson.fromJson(resource.getReader(), LuxDialogue.class);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     //TODO maybe add support for UV if needed
 
     @Override
@@ -112,6 +136,8 @@ public class LuxDialogue {
                 ", item=" + item +
                 ", itemScale=" + itemScale +
                 ", buttons=" + buttons +
+                ", dialogueProgress=" + dialogueProgress +
+                ", dialogueProgressState=" + dialogueProgressState +
                 '}';
     }
 }

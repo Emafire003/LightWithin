@@ -16,9 +16,7 @@ import me.emafire003.dev.lightwithin.config.Config;
 import me.emafire003.dev.lightwithin.config.TriggerConfig;
 import me.emafire003.dev.lightwithin.entities.LightEntities;
 import me.emafire003.dev.lightwithin.entities.earth_golem.EarthGolemEntity;
-import me.emafire003.dev.lightwithin.events.LightTriggeringAndEvents;
-import me.emafire003.dev.lightwithin.events.PlayerJoinEvent;
-import me.emafire003.dev.lightwithin.events.PlayerRightClickInteractEvent;
+import me.emafire003.dev.lightwithin.events.*;
 import me.emafire003.dev.lightwithin.items.LightItems;
 import me.emafire003.dev.lightwithin.items.crafting.BrewRecipes;
 import me.emafire003.dev.lightwithin.lights.*;
@@ -27,7 +25,6 @@ import me.emafire003.dev.lightwithin.particles.LightParticles;
 import me.emafire003.dev.lightwithin.sounds.LightSounds;
 import me.emafire003.dev.lightwithin.status_effects.LightEffects;
 import me.emafire003.dev.lightwithin.particles.LightParticlesUtil;
-import me.emafire003.dev.lightwithin.events.LightCreationAndEvent;
 import me.emafire003.dev.lightwithin.util.*;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
@@ -45,6 +42,7 @@ import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.registry.*;
 import net.minecraft.registry.entry.RegistryEntryList;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -130,6 +128,7 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 		LightCommands.registerArguments();
 		LightEntities.registerEntities();
 		registerTags();
+		registerLuxCognitaOnFirstJoin();
 
 		if(FabricLoader.getInstance().isModLoaded("flan")){
 			FlanCompat.registerFlan();
@@ -182,6 +181,17 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 			}
 			syncCustomConfigOptions(player);
 			return ActionResult.PASS;
+		});
+	}
+
+	private static void registerLuxCognitaOnFirstJoin(){
+		PlayerFirstJoinEvent.EVENT.register((player, server) -> {
+			if(player.getWorld().isClient){
+				return;
+			}
+			if(Config.LUXCOGNITA_ON_JOIN){
+				player.giveItemStack(new ItemStack(LightItems.LUXCOGNITA_BERRY, 1));
+			}
 		});
 	}
 
