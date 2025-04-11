@@ -114,7 +114,7 @@ public class LuxcognitaScreenV2 extends Screen{
             };
 
             if(clickAction.equals(ClickActions.CLOSE)){
-                pressAction = (buttonWidget) -> this.close();
+                pressAction = (button) -> this.closeWithAnimation();
             }else if(clickAction.equals(ClickActions.SHOW_TYPE_RUNES)){
                 pressAction = this::lightTypeAndRuneAction;
             }else if(clickAction.equals(ClickActions.SHOW_TARGET)){
@@ -134,19 +134,22 @@ public class LuxcognitaScreenV2 extends Screen{
                 LuxcognitaScreenV2 targetScreen = LuxdialogueScreens.LUXDIALOGUE_SCREENS.get(target);
                 if(targetScreen == null){
                     this.client.player.sendMessage(Text.literal(LightWithin.PREFIX_MSG + "Could not find the screen with id: " + target).formatted(Formatting.RED));
+                    pressAction = (button -> this.close());
+                }else{
+                    TransitionScreen transitionScreen = new TransitionScreen(Text.literal("transition_to:"+targetScreen.title), targetScreen);
+                    pressAction = (button) -> MinecraftClient.getInstance().setScreen(transitionScreen);
                 }
-                pressAction = (button) -> MinecraftClient.getInstance().setScreen(targetScreen);
             }else if(clickAction.equals(ClickActions.SEND_CHAT_MSG)){
                 String finalTarget = target;
                 pressAction = (button -> {
                     this.client.player.sendMessage(Text.translatable(finalTarget));
-                    this.close();
+                    this.closeWithAnimation();
                 });
             }else if(clickAction.equals(ClickActions.SEND_OVERLAY_MSG)){
                 String finalTarget = target;
                 pressAction = (button -> {
                     this.client.player.sendMessage(Text.translatable(finalTarget), true);
-                    this.close();
+                    this.closeWithAnimation();
                 });
             }else{
                 this.client.player.sendMessage(Text.literal(LightWithin.PREFIX_MSG+"Could not parse click action: " + action).formatted(Formatting.RED));
@@ -164,6 +167,11 @@ public class LuxcognitaScreenV2 extends Screen{
         return buttons;
     }
 
+    public void closeWithAnimation(){
+        TransitionScreen transitionScreen = new TransitionScreen(Text.literal("closing_transition"), null, true);
+        MinecraftClient.getInstance().setScreen(transitionScreen);
+    }
+
     public void playLuxcognitaDisplaySound(){
         if(this.client.player == null){
             LightWithin.LOGGER.error("Error! Can't play the Luxcognita sound the ClientPlayerEntity is null");
@@ -175,33 +183,33 @@ public class LuxcognitaScreenV2 extends Screen{
     public void lightTypeAndRuneAction(ButtonWidget buttonWidget) {
         LightWithinClient.getRendererEventHandler().renderRunes();
         LuxcognitaBerryItem.sendLightTypeMessage(this.client.player);
-        this.close();
+        this.closeWithAnimation();
     }
 
     public void lightTypeIngredientAction(ButtonWidget buttonWidget) {
         LightWithinClient.getRendererEventHandler().renderLuxTypeItem();
-        this.close();
+        this.closeWithAnimation();
     }
 
     public void lightTargetAction(ButtonWidget buttonWidget) {
         LightWithinClient.getRendererEventHandler().renderTargetIcon();
         LuxcognitaBerryItem.sendLightTargetMessage(this.client.player);
-        this.close();
+        this.closeWithAnimation();
     }
 
     public void lightTargetIngredientAction(ButtonWidget buttonWidget) {
         LightWithinClient.getRendererEventHandler().renderLuxTargetItem();
-        this.close();
+        this.closeWithAnimation();
     }
 
     public void lightPowerAction(ButtonWidget buttonWidget) {
         LuxcognitaBerryItem.sendLightPowerMessage(this.client.player);
-        this.close();
+        this.closeWithAnimation();
     }
 
     public void lightDurationAction(ButtonWidget buttonWidget) {
         LuxcognitaBerryItem.sendLightDurationMessage(this.client.player);
-        this.close();
+        this.closeWithAnimation();
     }
 
     private int colorTicks = 0;
