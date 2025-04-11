@@ -113,4 +113,24 @@ public class LuxcognitaBerryItem extends Item {
         user.sendMessage(Text.translatable("light.description.target." + type.toString().toLowerCase()).setStyle(style), true);
     }
 
+    /** Sends the power level of the light to the player*/
+    public static void sendLightPowerMessage(PlayerEntity user){
+        if(user == null){
+            LightWithin.LOGGER.error("Error! Can't send light target messages, the player is null!");
+            return;
+        }
+        double power = LightWithin.LIGHT_COMPONENT.get(user).getPowerMultiplier();
+        user.sendMessage(Text.translatable("light.description.power").append(Text.literal(String.valueOf(power))).setStyle(style), true);
+    }
+
+    /** Sends the duration of the light to the player*/
+    public static void sendLightDurationMessage(PlayerEntity user){
+        if(user == null){
+            LightWithin.LOGGER.error("Error! Can't send light target messages, the player is null!");
+            return;
+        }
+        double duration = LightWithin.LIGHT_COMPONENT.get(user).getDuration();
+        user.sendMessage(Text.translatable("light.description.duration").append(Text.literal(String.valueOf(duration))).setStyle(style), true);
+    }
+
 }

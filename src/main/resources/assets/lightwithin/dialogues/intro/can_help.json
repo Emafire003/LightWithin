@@ -1,0 +1,34 @@
+{
+  "dialogueId": "can_help",
+  "fileVersion": 1,
+  "mainText": "screen.lightwithin.luxdialogue.intro.can_help",
+  "mainTextScale": 1.5,
+  "subTextPresent": true,
+  "subText": "screen.lightwithin.luxdialogue.intro.can_help.sub",
+  "subTextScale": 1,
+  "showBerry": true,
+  "berryPos": "CENTER",
+  "berryScale": 4,
+  "showImage": false,
+  "imagePos": "CENTER",
+  "imagePath": {
+    "namespace": "lightwithin",
+    "path": "textures/lux_dialogue/default.png"
+  },
+  "imageWidth": 32,
+  "imageHeight": 32,
+  "imageScale": 1.0,
+  "showItem": false,
+  "itemPos": "CENTER",
+  "item": {
+    "namespace": "lightwithin",
+    "path": "luxintus_berry_powder"
+  },
+  "itemScale": 3.0,
+  "buttons": {
+    "screen.lightwithin.luxdialogue.intro.can_help.btn.wow": "GO_DIALOGUE<intro/eat_new_berry>",
+    "screen.lightwithin.luxdialogue.intro.can_help.btn.guidance": "GO_DIALOGUE<guidance/guidance_first>"
+  },
+  "dialogueProgress": false,
+  "dialogueProgressState": "INTRO_DONE"
+}

@@ -4,6 +4,7 @@ package me.emafire003.dev.lightwithin.client.luxcognita_dialogues;
 public enum DialogueProgressState {
     INTRO_DONE,
     NONE,
-    TOLD_NAME/*,
+    TOLD_NAME,
+    FIRST_GUIDANCE_GOT/*,
     ALREADY_MET_IN_OTHER_SAVE // if i end up using the option of saving to local progress file*/
 }

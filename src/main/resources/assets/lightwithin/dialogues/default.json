@@ -1,0 +1,29 @@
+{
+  "dialogueId": "default",
+  "fileVersion": 1,
+  "mainText": "screen.lightwithin.luxdialogue.default",
+  "textScale": 1.5,
+  "showBerry": true,
+  "berryPos": "TOP_LEFT",
+  "showImage": false,
+  "imagePos": "CENTER",
+  "imagePath": {
+    "namespace": "lightwithin",
+    "path": "textures/lux_dialogue/default.png"
+  },
+  "imageWidth": 32,
+  "imageHeight": 32,
+  "imageScale": 1.0,
+  "showItem": false,
+  "itemPos": "CENTER",
+  "item": {
+    "namespace": "lightwithin",
+    "path": "luxintus_berry_powder"
+  },
+  "itemScale": 3.0,
+  "buttons": {
+    "screen.lightwithin.luxdialogue.default.button0": "CLOSE"
+  },
+  "dialogueProgress": false,
+  "dialogueProgressState": "NONE"
+}

@@ -64,15 +64,16 @@ public class LuxcognitaScreenV2 extends Screen{
 
         List<ButtonWidget> buttons = getButtons();
 
-        if(MinecraftClient.getInstance().player == null){
+        if(this.client.player == null){
             LightWithin.LOGGER.error("ERROR! The ClientPlayer is null!");
             return;
         }
 
-
+        if(dialogue.dialogueProgress){
+            this.client.player.sendMessage(Text.literal("Ohi, implement the dialogue progress state!"));
+        }
 
         buttons.forEach(adder::add);
-
 
         gridWidget.refreshPositions();
         SimplePositioningWidget.setPos(gridWidget, 0, 0, this.width, this.height, 0.5F, 0.25F);
@@ -80,7 +81,7 @@ public class LuxcognitaScreenV2 extends Screen{
     }
 
     private List<ButtonWidget> getButtons(){
-        if(MinecraftClient.getInstance().player == null){
+        if(this.client.player == null){
             return null;
         }
         int center_x = MinecraftClient.getInstance().getWindow().getScaledWidth()/2;
@@ -108,13 +109,13 @@ public class LuxcognitaScreenV2 extends Screen{
             }
 
             ButtonWidget.PressAction pressAction = (buttonWidget) -> {
-                Objects.requireNonNull(MinecraftClient.getInstance().player).sendMessage(Text.literal(LightWithin.PREFIX_MSG+"Something went wrong trying to perform that action").formatted(Formatting.DARK_RED));
+                Objects.requireNonNull(this.client.player).sendMessage(Text.literal(LightWithin.PREFIX_MSG+"Something went wrong trying to perform that action").formatted(Formatting.DARK_RED));
                 this.close();
             };
 
             if(clickAction.equals(ClickActions.CLOSE)){
                 pressAction = (buttonWidget) -> this.close();
-            }else if(clickAction.equals(ClickActions.SHOW_RUNE)){
+            }else if(clickAction.equals(ClickActions.SHOW_TYPE_RUNES)){
                 pressAction = this::lightTypeAndRuneAction;
             }else if(clickAction.equals(ClickActions.SHOW_TARGET)){
                 pressAction = this::lightTargetAction;
@@ -122,19 +123,33 @@ public class LuxcognitaScreenV2 extends Screen{
                 pressAction = this::lightTypeIngredientAction;
             }else if(clickAction.equals(ClickActions.SHOW_TARGET_INGREDIENT)){
                 pressAction = this::lightTargetIngredientAction;
-            }//Action with a target
+            }else if(clickAction.equals(ClickActions.SHOW_POWER)){
+                pressAction = this::lightPowerAction;
+            }else if(clickAction.equals(ClickActions.SHOW_DURATION)){
+                pressAction = this::lightDurationAction;
+            }
+
+            //Action with a target
             else if(clickAction.equals(ClickActions.GO_DIALOGUE)){
                 LuxcognitaScreenV2 targetScreen = LuxdialogueScreens.LUXDIALOGUE_SCREENS.get(target);
                 if(targetScreen == null){
-                    //TODO add a defualt/error screen
+                    this.client.player.sendMessage(Text.literal(LightWithin.PREFIX_MSG + "Could not find the screen with id: " + target).formatted(Formatting.RED));
                 }
                 pressAction = (button) -> MinecraftClient.getInstance().setScreen(targetScreen);
             }else if(clickAction.equals(ClickActions.SEND_CHAT_MSG)){
                 String finalTarget = target;
-                pressAction = (button -> MinecraftClient.getInstance().player.sendMessage(Text.translatable(finalTarget)));
+                pressAction = (button -> {
+                    this.client.player.sendMessage(Text.translatable(finalTarget));
+                    this.close();
+                });
             }else if(clickAction.equals(ClickActions.SEND_OVERLAY_MSG)){
                 String finalTarget = target;
-                pressAction = (button -> MinecraftClient.getInstance().player.sendMessage(Text.translatable(finalTarget), true));
+                pressAction = (button -> {
+                    this.client.player.sendMessage(Text.translatable(finalTarget), true);
+                    this.close();
+                });
+            }else{
+                this.client.player.sendMessage(Text.literal(LightWithin.PREFIX_MSG+"Could not parse click action: " + action).formatted(Formatting.RED));
             }
 
 
@@ -150,16 +165,16 @@ public class LuxcognitaScreenV2 extends Screen{
     }
 
     public void playLuxcognitaDisplaySound(){
-        if(MinecraftClient.getInstance().player == null){
+        if(this.client.player == null){
             LightWithin.LOGGER.error("Error! Can't play the Luxcognita sound the ClientPlayerEntity is null");
             return;
         }
-        MinecraftClient.getInstance().player.playSound(LightSounds.LUXCOGNITA_DISPLAY, 1f, 1f);
+        this.client.player.playSound(LightSounds.LUXCOGNITA_DISPLAY, 1f, 1f);
     }
 
     public void lightTypeAndRuneAction(ButtonWidget buttonWidget) {
         LightWithinClient.getRendererEventHandler().renderRunes();
-        LuxcognitaBerryItem.sendLightTypeMessage(MinecraftClient.getInstance().player);
+        LuxcognitaBerryItem.sendLightTypeMessage(this.client.player);
         this.close();
     }
 
@@ -170,12 +185,22 @@ public class LuxcognitaScreenV2 extends Screen{
 
     public void lightTargetAction(ButtonWidget buttonWidget) {
         LightWithinClient.getRendererEventHandler().renderTargetIcon();
-        LuxcognitaBerryItem.sendLightTargetMessage(MinecraftClient.getInstance().player);
+        LuxcognitaBerryItem.sendLightTargetMessage(this.client.player);
         this.close();
     }
 
     public void lightTargetIngredientAction(ButtonWidget buttonWidget) {
         LightWithinClient.getRendererEventHandler().renderLuxTargetItem();
+        this.close();
+    }
+
+    public void lightPowerAction(ButtonWidget buttonWidget) {
+        LuxcognitaBerryItem.sendLightPowerMessage(this.client.player);
+        this.close();
+    }
+
+    public void lightDurationAction(ButtonWidget buttonWidget) {
+        LuxcognitaBerryItem.sendLightDurationMessage(this.client.player);
         this.close();
     }
 
@@ -232,16 +257,26 @@ public class LuxcognitaScreenV2 extends Screen{
 
 
 
-        matrixStack.scale(dialogue.textScale, dialogue.textScale, dialogue.textScale);
-        context.drawCenteredTextWithShadow(this.textRenderer, Text.translatable(dialogue.mainText), (int) (((float) this.width / 2)/dialogue.textScale), (int) (((float) this.height / 2 - 70)/dialogue.textScale), getTextColor());
+        matrixStack.scale(dialogue.mainTextScale, dialogue.mainTextScale, dialogue.mainTextScale);
+        context.drawCenteredTextWithShadow(this.textRenderer, Text.translatable(dialogue.mainText), (int) (((float) this.width / 2)/dialogue.mainTextScale), (int) (((float) this.height / 2 - 70)/dialogue.mainTextScale), getTextColor());
         matrixStack.pop();
         matrixStack.push();
 
+        if(dialogue.subTextPresent){
+            matrixStack.scale(dialogue.subTextScale, dialogue.subTextScale, dialogue.subTextScale);
+            context.drawCenteredTextWithShadow(this.textRenderer, Text.translatable(dialogue.subText), (int) (((float) this.width / 2)/dialogue.subTextScale), (int) (((float) this.height / 2 - 40)/dialogue.subTextScale), getTextColor());
+            matrixStack.pop();
+            matrixStack.push();
+        }
+
         if(dialogue.showBerry){
             //TODO adjust with the screen's or config's scale
-            matrixStack.scale(2f, 2f, 2f);
-            Pair<Integer, Integer> xy = ScreenUtils.getXY(dialogue.berryPos, 2, width, height, 15, 16, 16);
-            context.drawItem(new ItemStack(LightItems.LUXCOGNITA_BERRY), xy.getFirst()/3, xy.getSecond()/3);
+            float berryScale = 2f;
+            //TODO the padding fucks up things a little
+            Pair<Integer, Integer> xy = ScreenUtils.getXY(dialogue.berryPos, berryScale, this.width, this.height, 0, 16, 16);
+
+            matrixStack.scale(berryScale, berryScale, berryScale);
+            context.drawItem(new ItemStack(LightItems.LUXCOGNITA_BERRY), xy.getFirst(), xy.getSecond());
 
             matrixStack.pop();
             matrixStack.push();

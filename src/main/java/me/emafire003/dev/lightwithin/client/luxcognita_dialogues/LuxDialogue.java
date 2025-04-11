@@ -35,12 +35,20 @@ public class LuxDialogue {
     public int fileVersion = 1;
     /// A translation string for the main text displayed in the dialogue
     public String mainText = "screen.lightwithin.luxdialogue.default";
-    /// The text's scale
-    public float textScale = 1.5f;
+    /// The main text's scale
+    public float mainTextScale = 1.5f;
+    /// Weather or not to have a sub text
+    public boolean subTextPresent = false;
+    /// A translation string for the text displayed under the main text
+    public String subText = "screen.lightwithin.luxdialogue.default";
+    /// The sub text's scale
+    public float subTextScale = 1f;
     /// Weather or not to show the Luxcognita Berry in the screen
     public boolean showBerry = true;
     /// The position of the berry as described in {@link me.emafire003.dev.lightwithin.util.ScreenPositionsPresets}
     public ScreenPositionsPresets berryPos = ScreenPositionsPresets.TOP_LEFT;
+    ///  The scale of the berry (the item is 16x16 so by default is 2)
+    public float berryScale = 2f;
     ///  Weather or not to show an image
     public boolean showImage = false;
     /// The image's position as described for the berry
@@ -122,9 +130,13 @@ public class LuxDialogue {
                 "dialogueId='" + dialogueId + '\'' +
                 ", fileVersion=" + fileVersion +
                 ", mainText='" + mainText + '\'' +
-                ", textScale=" + textScale +
+                ", mainTextScale=" + mainTextScale +
+                ", subTextPresent=" + subTextPresent +
+                ", subText='" + subText + '\'' +
+                ", subTextScale=" + subTextScale +
                 ", showBerry=" + showBerry +
                 ", berryPos=" + berryPos +
+                ", berryScale=" + berryScale +
                 ", showImage=" + showImage +
                 ", imagePos=" + imagePos +
                 ", imagePath=" + imagePath +

@@ -6,6 +6,7 @@ import me.emafire003.dev.lightwithin.blocks.LightBlocks;
 import me.emafire003.dev.lightwithin.client.luxcognita_dialogues.LuxDialogue;
 import me.emafire003.dev.lightwithin.client.screens.LuxdialogueScreens;
 import me.emafire003.dev.lightwithin.client.shaders.LightShaders;
+import me.emafire003.dev.lightwithin.commands.client.ClientLightCommands;
 import me.emafire003.dev.lightwithin.compat.coloredglowlib.CGLCompat;
 import me.emafire003.dev.lightwithin.compat.yacl.YaclScreenMaker;
 import me.emafire003.dev.lightwithin.config.ClientConfig;
@@ -28,6 +29,7 @@ import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
+import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
@@ -103,6 +105,8 @@ public class LightWithinClient implements ClientModInitializer {
         EntityModelLayerRegistry.registerModelLayer(MODEL_EARTH_GOLEM_LAYER, EarthGolemEntityModel::getTexturedModelData);
 
         ClientConfig.reloadConfig();
+        ClientCommandRegistrationCallback.EVENT.register(ClientLightCommands::registerCommands);
+        //TODO remove once finished
         LuxDialogue def = new LuxDialogue();
         def.serialize();
 
