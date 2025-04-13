@@ -30,15 +30,5 @@ public class LuxdialogueScreens {
                     }
                 }
                 );
-        /*LuxDialogue dialogue = LuxDialogue.deserialize("mod1");
-        LUXDIALOGUE_SCREENS.put("mod1", new LuxcognitaScreenV2(Text.literal("mod1"), dialogue));
-        LuxDialogue dialogue1 = LuxDialogue.deserialize("default");
-        LUXDIALOGUE_SCREENS.put("default", new LuxcognitaScreenV2(Text.literal("default"), dialogue1));
-        LuxDialogue dialogue2 = LuxDialogue.deserialize("modder");
-        LightWithin.LOGGER.info("The deserialized modder: " + dialogue2);
-        LUXDIALOGUE_SCREENS.put("modder", new LuxcognitaScreenV2(Text.literal("modder"), dialogue2));
-        LightWithin.LOGGER.warn("The modder screen: " + LUXDIALOGUE_SCREENS.get("modder"));*/
-        LightWithin.LOGGER.info("Registered the files as: \n\n" + LUXDIALOGUE_SCREENS);
-        LightWithin.LOGGER.info("The ids are: " + LUXDIALOGUE_SCREENS.keySet());
     }
 }

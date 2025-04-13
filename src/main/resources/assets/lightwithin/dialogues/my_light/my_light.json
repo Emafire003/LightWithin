@@ -29,7 +29,8 @@
     "screen.lightwithin.luxdialogue.my_light.type": "SHOW_TYPE_RUNES",
     "screen.lightwithin.luxdialogue.my_light.target": "SHOW_TARGET",
     "screen.lightwithin.luxdialogue.my_light.power": "SHOW_POWER",
-    "screen.lightwithin.luxdialogue.my_light.duration": "SHOW_DURATION"
+    "screen.lightwithin.luxdialogue.my_light.duration": "SHOW_DURATION",
+    "screen.lightwithin.luxdialogue.my_light.maxcooldown": "SHOW_MAXCOOLDOWN"
   },
   "dialogueProgress": false,
   "dialogueProgressState": "INTRO_DONE"

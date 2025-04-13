@@ -58,6 +58,8 @@
   "light.description.error": "Uhm... your light is... an error? Light not found, report please!",
   "light.description.power": "Your light's power gets this score for me: ",
   "light.description.duration": "It seems it can last for seconds, a total of: ",
+  "light.description.maxcooldown": "You shall rest your light for these many seconds: ",
+  "light.description.maxcharges": "Your light can sustain some charges, ",
   "light.description.heal": "Your light, yes, is a gentle and caring one indeed",
   "light.description.defense": "Resilience, that's what your light is made of",
   "light.description.strength": "You have a strong light, ready to land its strength to you",
@@ -274,6 +276,8 @@
   "screen.lightwithin.luxdialogue.my_light.type": "About my LightType!",
   "screen.lightwithin.luxdialogue.my_light.target": "About my LightTargets!",
   "screen.lightwithin.luxdialogue.my_light.power": "How strong it is!",
-  "screen.lightwithin.luxdialogue.my_light.duration": "How long it lasts!"
+  "screen.lightwithin.luxdialogue.my_light.duration": "How long it lasts!",
+  "screen.lightwithin.luxdialogue.my_light.maxcooldown": "About its rest period!",
+  "screen.lightwithin.luxdialogue.my_light.maxcharges": "My LightCharge limits"
 
 }

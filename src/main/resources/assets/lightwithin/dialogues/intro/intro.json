@@ -7,19 +7,12 @@
   "subText": "screen.lightwithin.luxdialogue.default",
   "subTextScale": 1.0,
   "showBerry": true,
-  "berryPos": "TOP_LEFT",
-  "berryScale": 2,
   "showImage": false,
   "imagePos": "CENTER",
   "imagePath": {
     "namespace": "lightwithin",
     "path": "textures/lux_dialogue/default.png"
   },
-  "imageWidth": 32,
-  "imageHeight": 32,
-  "imageScale": 1.0,
-  "showItem": false,
-  "itemPos": "CENTER",
   "item": {
     "namespace": "lightwithin",
     "path": "luxintus_berry_powder"

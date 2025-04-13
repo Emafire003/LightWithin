@@ -61,6 +61,9 @@ public class LuxDialogue {
     public int imageHeight = 32;
     /// The image's scale
     public float imageScale = 1f;
+    /// Weather or not the image has stages. If it has they will start from name_0.png to name_x.png
+    //TODO tbf, i can add them later apparently without issue.
+    public boolean imageHasStages = false;
     ///  Weather or not to show an item
     public boolean showItem = false;
     /// The image's position as described for the berry

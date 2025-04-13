@@ -133,4 +133,24 @@ public class LuxcognitaBerryItem extends Item {
         user.sendMessage(Text.translatable("light.description.duration").append(Text.literal(String.valueOf(duration))).setStyle(style), true);
     }
 
+    /** Sends the max cooldown of the light to the player*/
+    public static void sendLightMaxCooldownMessage(PlayerEntity user){
+        if(user == null){
+            LightWithin.LOGGER.error("Error! Can't send light target messages, the player is null!");
+            return;
+        }
+        int cooldown = LightWithin.LIGHT_COMPONENT.get(user).getMaxCooldown();
+        user.sendMessage(Text.translatable("light.description.maxcooldown").append(Text.literal(String.valueOf(cooldown))).setStyle(style), true);
+    }
+
+    /** Sends the max charges of the light to the player*/
+    public static void sendLightMaxChargesMessage(PlayerEntity user){
+        if(user == null){
+            LightWithin.LOGGER.error("Error! Can't send light target messages, the player is null!");
+            return;
+        }
+        int charges = LightWithin.LIGHT_COMPONENT.get(user).getMaxLightCharges();
+        user.sendMessage(Text.translatable("light.description.maxcharges").append(Text.literal(String.valueOf(charges))).setStyle(style), true);
+    }
+
 }

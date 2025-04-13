@@ -6,15 +6,19 @@ import me.emafire003.dev.lightwithin.LightWithin;
 import me.emafire003.dev.lightwithin.client.LightRenderLayer;
 import me.emafire003.dev.lightwithin.client.LightWithinClient;
 import me.emafire003.dev.lightwithin.client.luxcognita_dialogues.ClickActions;
+import me.emafire003.dev.lightwithin.client.luxcognita_dialogues.DialogueProgressState;
 import me.emafire003.dev.lightwithin.client.luxcognita_dialogues.LuxDialogue;
 import me.emafire003.dev.lightwithin.items.LightItems;
 import me.emafire003.dev.lightwithin.items.LuxcognitaBerryItem;
+import me.emafire003.dev.lightwithin.networking.DialogueProgressUpdatePacketC2S;
 import me.emafire003.dev.lightwithin.sounds.LightSounds;
 import me.emafire003.dev.lightwithin.util.ScreenUtils;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.client.gui.widget.EmptyWidget;
 import net.minecraft.client.gui.widget.GridWidget;
 import net.minecraft.client.gui.widget.SimplePositioningWidget;
 import net.minecraft.client.render.RenderLayer;
@@ -29,6 +33,7 @@ import org.joml.Matrix4f;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicInteger;
 
 
 //TODO when this is open the player should be mostly transparent and should also be invulnerable for a time. An attack will cancel the screen and make the player vulnerable again after 2/3 seconds.
@@ -57,10 +62,14 @@ public class LuxcognitaScreenV2 extends Screen{
         this.loadStartTime = System.currentTimeMillis();
 
         GridWidget gridWidget = new GridWidget();
-        gridWidget.getMainPositioner().margin(4, this.height/2, 4, 0);
+        gridWidget.getMainPositioner().margin(4, 10, 4, 0);
         gridWidget.setSpacing(10);
-        //TODO i should probably scale things if i want to have more that 4 buttons
-        GridWidget.Adder adder = gridWidget.createAdder(dialogue.buttons.size());
+        int maxButtonsPerRow = 4;
+        if(dialogue.buttons.size() > 4 && dialogue.buttons.size()%2==1 ){
+            maxButtonsPerRow = 3;
+        }
+        GridWidget.Adder adder = gridWidget.createAdder(Math.min(dialogue.buttons.size(), maxButtonsPerRow));
+
 
         List<ButtonWidget> buttons = getButtons();
 
@@ -73,11 +82,70 @@ public class LuxcognitaScreenV2 extends Screen{
             this.client.player.sendMessage(Text.literal("Ohi, implement the dialogue progress state!"));
         }
 
-        buttons.forEach(adder::add);
+        AtomicInteger buttonCount = new AtomicInteger(1);
+        AtomicInteger emptyWidgetsAdded = new AtomicInteger();
+        buttons.forEach(buttonWidget -> {
+
+
+            if(buttonCount.get() > 3 && dialogue.buttons.size() > 4){
+                if(dialogue.buttons.size() == 5){
+                    // Button | Button | Button
+                    // button | button (can't do better)
+                    /*if(emptyWidgetsAdded.get() == 0 && buttonCount.get() == 4){
+                        adder.add(new EmptyWidget((int) 10, 20));
+                        emptyWidgetsAdded.getAndIncrement();
+                        buttonCount.getAndIncrement();
+                    }*/
+                    adder.add(buttonWidget);
+                    buttonCount.getAndIncrement();
+                }
+                else if(dialogue.buttons.size() == 6){
+                    // button button button button
+                    //        button button
+                    if(emptyWidgetsAdded.get() == 0 && buttonCount.get() == 5){
+                        adder.add(new EmptyWidget((int) (((this.width/2) /2.3)), 20));
+                        emptyWidgetsAdded.getAndIncrement();
+                        buttonCount.getAndIncrement();
+                    }
+                    adder.add(buttonWidget);
+                    buttonCount.getAndIncrement();
+                }else if(dialogue.buttons.size() == 7){
+                    // button button button button
+                    //     button button button
+                    //
+                    if(emptyWidgetsAdded.get() == 0 && buttonCount.get() == 7){
+                        adder.add(new EmptyWidget((int) (((this.width/2) /2.3))/2, 20));
+                        emptyWidgetsAdded.getAndIncrement();
+                        buttonCount.getAndIncrement();
+                    }
+                    adder.add(buttonWidget);
+                    buttonCount.getAndIncrement();
+                }
+            }else{
+                adder.add(buttonWidget);
+                buttonCount.getAndIncrement();
+            }
+
+
+
+
+            /*if(buttonCount.get() > 3 && dialogue.buttons.size() > 4){
+                //dialogue.buttons.size()-buttonCount.get() questi sono i button rimanenti. Se è solo uno deve stare al c
+                adder.add(new EmptyWidget((int) ((this.width/2) /2.3), 20));
+                adder.add(buttonWidget, 1);
+                this.client.player.sendMessage(Text.literal("yes adding on new row"));
+            }else{
+                adder.add(buttonWidget);
+            }*/
+        });
+
+        //adder.add(gridWidget.getMainPositioner().relativeY(-10));
+
 
         gridWidget.refreshPositions();
-        SimplePositioningWidget.setPos(gridWidget, 0, 0, this.width, this.height, 0.5F, 0.25F);
+        SimplePositioningWidget.setPos(gridWidget, 0, this.height/2 - 60, this.width, this.height, 0.5F, 0.25F);
         gridWidget.forEachChild(this::addDrawableChild);
+
     }
 
     private List<ButtonWidget> getButtons(){
@@ -127,6 +195,10 @@ public class LuxcognitaScreenV2 extends Screen{
                 pressAction = this::lightPowerAction;
             }else if(clickAction.equals(ClickActions.SHOW_DURATION)){
                 pressAction = this::lightDurationAction;
+            }else if(clickAction.equals(ClickActions.SHOW_MAXCOOLDOWN)){
+                pressAction = this::lightMaxCooldownAction;
+            }else if(clickAction.equals(ClickActions.SHOW_MAXCHARGES)){
+                pressAction = this::lightMaxChargesAction;
             }
 
             //Action with a target
@@ -209,6 +281,16 @@ public class LuxcognitaScreenV2 extends Screen{
 
     public void lightDurationAction(ButtonWidget buttonWidget) {
         LuxcognitaBerryItem.sendLightDurationMessage(this.client.player);
+        this.closeWithAnimation();
+    }
+
+    public void lightMaxCooldownAction(ButtonWidget buttonWidget) {
+        LuxcognitaBerryItem.sendLightMaxCooldownMessage(this.client.player);
+        this.closeWithAnimation();
+    }
+
+    public void lightMaxChargesAction(ButtonWidget buttonWidget) {
+        LuxcognitaBerryItem.sendLightMaxChargesMessage(this.client.player);
         this.closeWithAnimation();
     }
 
@@ -331,6 +413,10 @@ public class LuxcognitaScreenV2 extends Screen{
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
         fillWithLayer(context, LightRenderLayer.getLightScreen(), 0, 0, this.width, this.height, 0);
+    }
+
+    public static void sendDialogueStateUpdatePacket(DialogueProgressState state, boolean shouldRemove){
+        ClientPlayNetworking.send(DialogueProgressUpdatePacketC2S.ID, new DialogueProgressUpdatePacketC2S(state, shouldRemove));
     }
 
     @Override

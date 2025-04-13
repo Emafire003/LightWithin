@@ -35,7 +35,7 @@ public class LightComponent implements ComponentV3, AutoSyncedComponent {
 
     protected String prev_color = "ffffff";
     protected int max_increment_percent = -1;
-    protected int max_light_stack = 1;
+    protected int max_light_charges = 1;
     protected int current_light_charges = 0;
     protected boolean has_triggered_naturally = false;
 
@@ -132,9 +132,9 @@ public class LightComponent implements ComponentV3, AutoSyncedComponent {
 
         if(tag.contains("max_light_stack")){
             if(debug){LOGGER.info("the max_light_stack got: " + tag.getInt("max_light_stack"));}
-            this.max_light_stack = tag.getInt("max_light_stack");
+            this.max_light_charges = tag.getInt("max_light_stack");
         }else{
-            this.max_light_stack = 1;
+            this.max_light_charges = 1;
         }
 
         if(tag.contains("light_charges")){
@@ -196,7 +196,7 @@ public class LightComponent implements ComponentV3, AutoSyncedComponent {
         tag.putInt("duration", this.duration);
         tag.putString("prev_color", this.prev_color);
         tag.putInt("max_increment", this.max_increment_percent);
-        tag.putInt("max_light_stack", this.max_light_stack);
+        tag.putInt("max_light_stack", this.max_light_charges);
         tag.putInt("light_charges", this.current_light_charges);
         tag.putBoolean("isLocked", this.isLocked);
         tag.putBoolean("hasTriggeredNaturally", this.has_triggered_naturally);
@@ -233,8 +233,8 @@ public class LightComponent implements ComponentV3, AutoSyncedComponent {
     public int getMaxIncrementPercent() {
         return this.max_increment_percent;
     }
-    public int getMaxLightStack(){
-        return this.max_light_stack;
+    public int getMaxLightCharges(){
+        return this.max_light_charges;
     }
     public int getCurrentLightCharges(){
         return this.current_light_charges;
@@ -341,7 +341,7 @@ public class LightComponent implements ComponentV3, AutoSyncedComponent {
 
 
     public void setMaxLightStack(int max_stack) {
-        this.max_light_stack = max_stack;
+        this.max_light_charges = max_stack;
         LightWithin.LIGHT_COMPONENT.sync(caster);
     }
 
@@ -371,7 +371,7 @@ public class LightComponent implements ComponentV3, AutoSyncedComponent {
         this.power_multiplier = power;
         this.duration = duration;
         this.max_increment_percent = max_increment;
-        this.max_light_stack = max_light_stack;
+        this.max_light_charges = max_light_stack;
         this.isLocked = locked;
         this.version = version;
         LightWithin.LIGHT_COMPONENT.sync(caster);
@@ -385,7 +385,7 @@ public class LightComponent implements ComponentV3, AutoSyncedComponent {
         //this.version = CURRENT_VERSION;
         this.type = new NoneLight();
         this.max_increment_percent = -1;
-        this.max_light_stack = 1;
+        this.max_light_charges = 1;
         this.isLocked = false;
         LightWithin.LIGHT_COMPONENT.sync(caster);
     }

@@ -6,6 +6,7 @@ import dev.onyxstudios.cca.api.v3.entity.EntityComponentFactoryRegistry;
 import dev.onyxstudios.cca.api.v3.entity.EntityComponentInitializer;
 import dev.onyxstudios.cca.api.v3.entity.RespawnCopyStrategy;
 import me.emafire003.dev.lightwithin.blocks.LightBlocks;
+import me.emafire003.dev.lightwithin.client.luxcognita_dialogues.DialogueProgressState;
 import me.emafire003.dev.lightwithin.commands.LightCommands;
 import me.emafire003.dev.lightwithin.compat.coloredglowlib.CGLCompat;
 import me.emafire003.dev.lightwithin.compat.flan.FlanCompat;
@@ -119,6 +120,7 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 		registerInteractPacket();
 		registerReadyLightCacheRemover();
 		registerSyncOptionsOnJoin();
+		registerDialogueStateUpdatePacket();
 		LightSounds.registerSounds();
 		LightEffects.registerModEffects();
 		LightItems.registerItems();
@@ -297,6 +299,24 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 				return;
 			}
 			server.execute(() -> PlayerRightClickInteractEvent.EVENT.invoker().interact(player));
+		})));
+	}
+
+	/**Fires when the player sees a dialogue which ahs to update a certain dialogue state*/
+	private static void registerDialogueStateUpdatePacket(){
+		ServerPlayNetworking.registerGlobalReceiver(DialogueProgressUpdatePacketC2S.ID, (((server, player, handler, buf, responseSender) -> {
+			if(player.getWorld().isClient){
+				return;
+			}
+			DialogueProgressState state = DialogueProgressUpdatePacketC2S.readState(buf);
+			boolean shouldRemove = DialogueProgressUpdatePacketC2S.readRemove(buf);
+			if(shouldRemove){
+				LIGHT_COMPONENT.get(player).removeDialogueProgressState(state);
+			}else{
+				LIGHT_COMPONENT.get(player).addDialogueProgressState(state);
+			}
+
+
 		})));
 	}
 

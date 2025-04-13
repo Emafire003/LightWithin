@@ -134,7 +134,7 @@ public class GetLightCommand implements LightCommand{
         ServerCommandSource source = context.getSource();
 
         try{
-            int maxLightStack = LightWithin.LIGHT_COMPONENT.get(target).getMaxLightStack();
+            int maxLightStack = LightWithin.LIGHT_COMPONENT.get(target).getMaxLightCharges();
             source.sendFeedback(() -> Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The max number of light charges for §d" + target.getName().getString() + "§e is: " ).formatted(Formatting.YELLOW)
                     .append(Text.literal("§a"+maxLightStack))), true);
             return 1;
@@ -212,7 +212,7 @@ public class GetLightCommand implements LightCommand{
             int mcooldown = component.getMaxCooldown();
             source.sendFeedback(() -> Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The max cooldown is: " ).formatted(Formatting.YELLOW)
                     .append(Text.literal("§a"+mcooldown)).append(Text.literal(", was: ").formatted(Formatting.YELLOW)).append(Text.literal(String.valueOf(LightCreationAndEvent.determineCooldown(originalUUID, LightCreationAndEvent.COOLDOWN_BIT))).formatted(Formatting.GREEN))), true);
-            int maxLightStacks = component.getMaxLightStack();
+            int maxLightStacks = component.getMaxLightCharges();
             source.sendFeedback(() -> Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The max light charges number is: " ).formatted(Formatting.YELLOW)
                     .append(Text.literal("§a"+maxLightStacks)).append(Text.literal(", was: ").formatted(Formatting.YELLOW)).append(Text.literal(String.valueOf(LightCreationAndEvent.determineMaxLightCharges(originalUUID, LightCreationAndEvent.COOLDOWN_BIT))).formatted(Formatting.GREEN))), true);
 
