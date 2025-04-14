@@ -80,6 +80,13 @@ public class LuxDialogue {
     public boolean dialogueProgress = false;
     /// The code of the dialogue progress state that is achieved one this dialogue has been seen see {@link DialogueProgressState}
     public DialogueProgressState dialogueProgressState = DialogueProgressState.NONE;
+    /// Weather or not this screen can redirect to another one if a certain progress in dialogue is made
+    public boolean canRedirect = false;
+    /// Redirects to this screen if the player has the right dialogue progress state
+    public String redirectTo = "default";
+    /// The dialogue state the player has to have in order to have the redirection
+    public DialogueProgressState redirectStateRequired = DialogueProgressState.NONE;
+
 
     public void serialize() {
         Gson serializedDialogue = new GsonBuilder().setPrettyPrinting()//.excludeFieldsWithoutExposeAnnotation()

@@ -226,9 +226,14 @@
   "screen.lightwithin.luxdialogue.default.button0": "Default text!",
 
 
+  "screen.lightwithin.luxdialogue.main": "Pleased to meet you again",
+  "screen.lightwithin.luxdialogue.main.sub": "What do you want to know this time?",
+  "screen.lightwithin.luxdialogue.main.button.guidance": "I seek guidance",
+  "screen.lightwithin.luxdialogue.main.button.about_you": "Something about you",
+  "screen.lightwithin.luxdialogue.main.button.potions": "Help with alchemy",
+
   "screen.lightwithin.luxdialogue.intro": "Ah. You have awoken me. What do you seek?",
   "screen.lightwithin.luxdialogue.intro.button.ate_berry": "What?! I only ate a berry!",
-  "comment0": "=======================TODO create",
   "screen.lightwithin.luxdialogue.intro.button.guidance": "I seek guidance",
   "comment1": "=======================TODO create",
   "screen.lightwithin.luxdialogue.intro.button.what_are": "What are you? Where am I?",
@@ -257,20 +262,12 @@
   "screen.lightwithin.luxdialogue.intro.eat_new_berry.will": "I will!",
   "screen.lightwithin.luxdialogue.intro.eat_new_berry.will.msg": "sure you will...",
 
-  "comment4": "=======================TODO add the corresponding buttons screens and make the 'normal' one",
-  "screen.lightwithin.luxdialogue.guidance.first": "What wisdom shall I bestow upon you then?",
-  "comment5": "===========needs to go to a 'first' as well maybe",
-  "screen.lightwithin.luxdialogue.guidance.first.button.what_lights": "What are the InnerLights?",
-  "screen.lightwithin.luxdialogue.guidance.first.button.my_light": "Tell me about my InnerLight!",
-  "screen.lightwithin.luxdialogue.guidance.first.button.activate": "How do I activate my InnerLight?",
-
-  "comment6": "=======needs to go to a 'first' as well maybe and also this could be THE MAIN SCREEN THINGY",
-  "screen.lightwithin.luxdialogue.guidance": "Welcome back. What do you want to know this time?",
+  "comment4": "=======================TODO add the corresponding buttons screens and make the 'normal' one ALSO REMOVE THE 'first' ",
+  "screen.lightwithin.luxdialogue.guidance": "What wisdom shall I bestow upon you?",
   "screen.lightwithin.luxdialogue.guidance.button.what_lights": "What are the InnerLights?",
-  "screen.lightwithin.luxdialogue.guidance.button.my_light": "Tell me about my light!",
+  "screen.lightwithin.luxdialogue.guidance.button.my_light": "Tell me about my InnerLight!",
   "comment7": "========== Either add another button explaining the light charges, or add one inside the activation one.",
-  "screen.lightwithin.luxdialogue.guidance.button.activate": "How do I activate my light?",
-  "screen.lightwithin.luxdialogue.guidance.button.about_you": "Something about you",
+  "screen.lightwithin.luxdialogue.guidance.button.activate": "How do I activate my InnerLight?",
 
   "screen.lightwithin.luxdialogue.my_light": "What do you wish to know about?",
   "screen.lightwithin.luxdialogue.my_light.type": "About my LightType!",

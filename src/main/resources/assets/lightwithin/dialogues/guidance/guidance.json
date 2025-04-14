@@ -1,7 +1,7 @@
 {
-  "dialogueId": "guidance_first",
+  "dialogueId": "guidance",
   "fileVersion": 1,
-  "mainText": "screen.lightwithin.luxdialogue.guidance.first",
+  "mainText": "screen.lightwithin.luxdialogue.guidance",
   "mainTextScale": 1.5,
   "subTextPresent": false,
   "subText": "screen.lightwithin.luxdialogue.default",
@@ -26,9 +26,9 @@
   },
   "itemScale": 3.0,
   "buttons": {
-    "screen.lightwithin.luxdialogue.guidance.first.button.what_lights": "CLOSE",
-    "screen.lightwithin.luxdialogue.guidance.first.button.my_light": "GO_DIALOGUE<my_light/my_light>",
-    "screen.lightwithin.luxdialogue.guidance.first.button.activate": "CLOSE"
+    "screen.lightwithin.luxdialogue.guidance.button.what_lights": "CLOSE",
+    "screen.lightwithin.luxdialogue.guidance.button.my_light": "GO_DIALOGUE<my_light/my_light>",
+    "screen.lightwithin.luxdialogue.guidance.button.activate": "CLOSE"
   },
   "dialogueProgress": true,
   "dialogueProgressState": "INTRO_DONE"

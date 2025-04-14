@@ -61,26 +61,51 @@ public class LuxcognitaScreenV2 extends Screen{
     public void init(){
         this.loadStartTime = System.currentTimeMillis();
 
+        if(this.client.player == null){
+            LightWithin.LOGGER.error("ERROR! The ClientPlayer is null!");
+            return;
+        }
+
+        // Check to see if this is a dialogue that can be redirected if the player has a certain dialogue progress
+        // for example, "intro" will redirect to "main" once its completed.
+        if(dialogue.canRedirect){
+            if(LightWithin.LIGHT_COMPONENT.get(this.client.player).getDialogueProgressStates().contains(dialogue.redirectStateRequired)){
+                if(!LuxdialogueScreens.LUXDIALOGUE_SCREENS.containsKey(dialogue.redirectTo)){
+                    this.client.player.sendMessage(Text.literal(LightWithin.PREFIX_MSG + "Error! Cannot redirect to screen '" + dialogue.redirectTo + "' since it's not registered!").formatted(Formatting.RED));
+                    // TODO make sure these returns don't mess up stuff
+                    return;
+                }
+                this.client.setScreen(LuxdialogueScreens.LUXDIALOGUE_SCREENS.get(dialogue.redirectTo));
+                return;
+            }
+        }
+
+        // If this screen produces a dialogue progress state, update it
+        if(dialogue.dialogueProgress){
+            this.client.player.sendMessage(Text.literal("Sending the progress state, "+ dialogue.dialogueProgressState +"!"));
+            if(!LightWithin.LIGHT_COMPONENT.get(this.client.player).getDialogueProgressStates().contains(dialogue.dialogueProgressState)){
+                sendDialogueStateUpdatePacket(dialogue.dialogueProgressState, false);
+            }else{
+                //TODO debug remove
+                this.client.player.sendMessage(Text.literal("Progress not set since the player already had it"));
+            }
+
+        }
+
+        // Sets up the grid for the screen
         GridWidget gridWidget = new GridWidget();
         gridWidget.getMainPositioner().margin(4, 10, 4, 0);
         gridWidget.setSpacing(10);
         int maxButtonsPerRow = 4;
+        // adjusts the number of columns based on the amount of buttons
         if(dialogue.buttons.size() > 4 && dialogue.buttons.size()%2==1 ){
             maxButtonsPerRow = 3;
         }
         GridWidget.Adder adder = gridWidget.createAdder(Math.min(dialogue.buttons.size(), maxButtonsPerRow));
 
 
+        // Gets the buttons for this screen and the action
         List<ButtonWidget> buttons = getButtons();
-
-        if(this.client.player == null){
-            LightWithin.LOGGER.error("ERROR! The ClientPlayer is null!");
-            return;
-        }
-
-        if(dialogue.dialogueProgress){
-            this.client.player.sendMessage(Text.literal("Ohi, implement the dialogue progress state!"));
-        }
 
         AtomicInteger buttonCount = new AtomicInteger(1);
         AtomicInteger emptyWidgetsAdded = new AtomicInteger();
@@ -302,31 +327,31 @@ public class LuxcognitaScreenV2 extends Screen{
         //#3ad94f #31c83f #28b72f #1ea71e #129706
         //TODO make better?
         colorTicks++;
-        if(colorTicks < 10){
+        if(colorTicks < 15){
             return 3856719;
         }
-        if(colorTicks < 20){
+        if(colorTicks < 25){
             return 3262527;
         }
-        if(colorTicks < 30){
+        if(colorTicks < 35){
             return 2668335;
         }
-        if(colorTicks < 40){
+        if(colorTicks < 45){
             return 2008862;
         }
-        if(colorTicks < 50){
+        if(colorTicks < 55){
             return 1218310;
         }
-        if(colorTicks < 60){
+        if(colorTicks < 65){
             return 2008862;
         }
-        if(colorTicks < 70){
+        if(colorTicks < 75){
             return 2668335;
         }
-        if(colorTicks < 80){
+        if(colorTicks < 85){
             return 3262527;
         }
-        if(colorTicks < 90){
+        if(colorTicks < 95){
             return 3856719;
         }
         colorTicks = 0;

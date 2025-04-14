@@ -3,35 +3,11 @@
   "fileVersion": 1,
   "mainText": "screen.lightwithin.luxdialogue.my_light",
   "mainTextScale": 1.5,
-  "subTextPresent": false,
-  "subText": "screen.lightwithin.luxdialogue.default",
-  "subTextScale": 1.0,
-  "showBerry": true,
-  "berryPos": "TOP_LEFT",
-  "berryScale": 2,
-  "showImage": false,
-  "imagePos": "CENTER",
-  "imagePath": {
-    "namespace": "lightwithin",
-    "path": "textures/lux_dialogue/default.png"
-  },
-  "imageWidth": 32,
-  "imageHeight": 32,
-  "imageScale": 1.0,
-  "showItem": false,
-  "itemPos": "CENTER",
-  "item": {
-    "namespace": "lightwithin",
-    "path": "luxintus_berry_powder"
-  },
-  "itemScale": 3.0,
   "buttons": {
     "screen.lightwithin.luxdialogue.my_light.type": "SHOW_TYPE_RUNES",
     "screen.lightwithin.luxdialogue.my_light.target": "SHOW_TARGET",
     "screen.lightwithin.luxdialogue.my_light.power": "SHOW_POWER",
     "screen.lightwithin.luxdialogue.my_light.duration": "SHOW_DURATION",
     "screen.lightwithin.luxdialogue.my_light.maxcooldown": "SHOW_MAXCOOLDOWN"
-  },
-  "dialogueProgress": false,
-  "dialogueProgressState": "INTRO_DONE"
+  }
 }

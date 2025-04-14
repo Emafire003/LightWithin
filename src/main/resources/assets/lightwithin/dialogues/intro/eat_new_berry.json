@@ -9,22 +9,6 @@
   "showBerry": true,
   "berryPos": "TOP_LEFT",
   "berryScale": 2.5,
-  "showImage": false,
-  "imagePos": "CENTER",
-  "imagePath": {
-    "namespace": "lightwithin",
-    "path": "textures/lux_dialogue/default.png"
-  },
-  "imageWidth": 32,
-  "imageHeight": 32,
-  "imageScale": 1.0,
-  "showItem": false,
-  "itemPos": "CENTER",
-  "item": {
-    "namespace": "lightwithin",
-    "path": "luxintus_berry_powder"
-  },
-  "itemScale": 3.0,
   "buttons": {
     "screen.lightwithin.luxdialogue.intro.eat_new_berry.thanks": "CLOSE",
     "screen.lightwithin.luxdialogue.intro.eat_new_berry.will": "SEND_OVERLAY_MSG<screen.lightwithin.luxdialogue.intro.eat_new_berry.will.msg>"

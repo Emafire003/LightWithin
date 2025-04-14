@@ -27,7 +27,7 @@
   "itemScale": 3.0,
   "buttons": {
     "screen.lightwithin.luxdialogue.intro.can_help.btn.wow": "GO_DIALOGUE<intro/eat_new_berry>",
-    "screen.lightwithin.luxdialogue.intro.can_help.btn.guidance": "GO_DIALOGUE<guidance/guidance_first>"
+    "screen.lightwithin.luxdialogue.intro.can_help.btn.guidance": "GO_DIALOGUE<guidance/guidance>"
   },
   "dialogueProgress": false,
   "dialogueProgressState": "INTRO_DONE"

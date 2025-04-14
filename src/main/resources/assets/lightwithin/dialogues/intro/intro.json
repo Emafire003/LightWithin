@@ -3,27 +3,13 @@
   "fileVersion": 1,
   "mainText": "screen.lightwithin.luxdialogue.intro",
   "mainTextScale": 1.5,
-  "subTextPresent": false,
-  "subText": "screen.lightwithin.luxdialogue.default",
-  "subTextScale": 1.0,
-  "showBerry": true,
-  "showImage": false,
-  "imagePos": "CENTER",
-  "imagePath": {
-    "namespace": "lightwithin",
-    "path": "textures/lux_dialogue/default.png"
-  },
-  "item": {
-    "namespace": "lightwithin",
-    "path": "luxintus_berry_powder"
-  },
-  "itemScale": 3.0,
   "buttons": {
     "screen.lightwithin.luxdialogue.intro.button.ate_berry": "GO_DIALOGUE<intro/ate_berry>",
-    "screen.lightwithin.luxdialogue.intro.button.guidance": "GO_DIALOGUE<guidance/guidance_first>",
+    "screen.lightwithin.luxdialogue.intro.button.guidance": "GO_DIALOGUE<guidance/guidance>",
     "screen.lightwithin.luxdialogue.intro.button.what_are": "CLOSE",
     "screen.lightwithin.luxdialogue.intro.button.can_help": "GO_DIALOGUE<intro/can_help>"
   },
-  "dialogueProgress": false,
-  "dialogueProgressState": "INTRO_DONE"
+  "canRedirect": true,
+  "redirectTo": "main",
+  "redirectStateRequired": "INTRO_DONE"
 }

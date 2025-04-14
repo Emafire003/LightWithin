@@ -3,6 +3,7 @@ package me.emafire003.dev.lightwithin.commands;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import me.emafire003.dev.lightwithin.LightWithin;
+import me.emafire003.dev.lightwithin.client.luxcognita_dialogues.DialogueProgressState;
 import me.emafire003.dev.lightwithin.lights.InnerLight;
 import me.emafire003.dev.lightwithin.lights.NoneLight;
 import me.emafire003.dev.lightwithin.util.TargetType;
@@ -49,6 +50,15 @@ public interface LightCommand {
                 });
 
 
+                return builder.buildFuture();
+            };
+        }
+
+        static SuggestionProvider<ServerCommandSource> dialogueState() {
+            return (context, builder) -> {
+                for(DialogueProgressState state : DialogueProgressState.values()) {
+                    builder.suggest(state.toString());
+                }
                 return builder.buildFuture();
             };
         }

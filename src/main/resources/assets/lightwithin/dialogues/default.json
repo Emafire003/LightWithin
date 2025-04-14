@@ -2,9 +2,13 @@
   "dialogueId": "default",
   "fileVersion": 1,
   "mainText": "screen.lightwithin.luxdialogue.default",
-  "textScale": 1.5,
+  "mainTextScale": 1.5,
+  "subTextPresent": false,
+  "subText": "screen.lightwithin.luxdialogue.default",
+  "subTextScale": 1.0,
   "showBerry": true,
   "berryPos": "TOP_LEFT",
+  "berryScale": 2.0,
   "showImage": false,
   "imagePos": "CENTER",
   "imagePath": {
@@ -14,6 +18,7 @@
   "imageWidth": 32,
   "imageHeight": 32,
   "imageScale": 1.0,
+  "imageHasStages": false,
   "showItem": false,
   "itemPos": "CENTER",
   "item": {
@@ -25,5 +30,8 @@
     "screen.lightwithin.luxdialogue.default.button0": "CLOSE"
   },
   "dialogueProgress": false,
-  "dialogueProgressState": "NONE"
+  "dialogueProgressState": "NONE",
+  "canRedirect": false,
+  "redirectTo": "default",
+  "redirectStateRequired": "NONE"
 }

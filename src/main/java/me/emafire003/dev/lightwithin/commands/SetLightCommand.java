@@ -6,8 +6,10 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import me.emafire003.dev.lightwithin.LightWithin;
+import me.emafire003.dev.lightwithin.client.luxcognita_dialogues.DialogueProgressState;
 import me.emafire003.dev.lightwithin.commands.arguments.LightTargetArgument;
 import me.emafire003.dev.lightwithin.commands.arguments.LightTypeArgument;
+import me.emafire003.dev.lightwithin.commands.arguments.LuxdialogueStateArgument;
 import me.emafire003.dev.lightwithin.compat.permissions.PermissionsChecker;
 import me.emafire003.dev.lightwithin.component.LightComponent;
 import me.emafire003.dev.lightwithin.config.Config;
@@ -259,6 +261,53 @@ public class SetLightCommand implements LightCommand{
         return 1;
     }
 
+    //TODO update wiki with this thingies (and permissions and such)
+    private int addLuxDialogueState(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
+        Collection<ServerPlayerEntity> targets = EntityArgumentType.getPlayers(context, "player");
+        DialogueProgressState state = LuxdialogueStateArgument.getState(context, "dialogueState");
+        ServerCommandSource source = context.getSource();
+
+        for(ServerPlayerEntity target : targets){
+            LightComponent component = LightWithin.LIGHT_COMPONENT.get(target);
+            component.addDialogueProgressState(state);
+
+            if(Config.TARGET_FEEDBACK){
+                target.sendMessage(Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("A new progress state has been added to your LuxCognita dialogue: " ).formatted(Formatting.YELLOW)
+                        .append(Text.literal(String.valueOf(state)).formatted(Formatting.GREEN))));
+            }
+
+            if(!Objects.requireNonNull(source.getPlayer()).equals(target) || !Config.TARGET_FEEDBACK){
+                source.sendFeedback( () -> Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The LuxDialogue of §d" + target.getName().getString() + "§e has been updated, adding: " ).formatted(Formatting.YELLOW)
+                        .append(Text.literal(String.valueOf(state)).formatted(Formatting.GREEN))), true);
+            }
+
+        }
+        return 1;
+    }
+
+    private int removeLuxDialogueState(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
+        Collection<ServerPlayerEntity> targets = EntityArgumentType.getPlayers(context, "player");
+        DialogueProgressState state = LuxdialogueStateArgument.getState(context, "dialogueState");
+        ServerCommandSource source = context.getSource();
+
+        for(ServerPlayerEntity target : targets){
+            LightComponent component = LightWithin.LIGHT_COMPONENT.get(target);
+            component.removeDialogueProgressState(state);
+
+            if(Config.TARGET_FEEDBACK){
+                target.sendMessage(Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("A progress state has been removed from your LuxCognita dialogue: " ).formatted(Formatting.YELLOW)
+                        .append(Text.literal(String.valueOf(state)).formatted(Formatting.RED))));
+            }
+
+            if(!Objects.requireNonNull(source.getPlayer()).equals(target) || !Config.TARGET_FEEDBACK){
+                source.sendFeedback( () -> Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The LuxDialogue of §d" + target.getName().getString() + "§e has been updated, removing: " ).formatted(Formatting.YELLOW)
+                        .append(Text.literal(String.valueOf(state)).formatted(Formatting.RED))), true);
+            }
+
+        }
+        return 1;
+    }
+
     public LiteralCommandNode<ServerCommandSource> getNode() {
         return CommandManager
                 .literal("set")
@@ -357,6 +406,30 @@ public class SetLightCommand implements LightCommand{
                                                 .then(
                                                         CommandManager.argument("triggeredNaturally", BoolArgumentType.bool())
                                                                 .executes(this::changeTriggeredNaturally)
+                                                )
+
+                                )
+                )
+                .then(
+                        CommandManager
+                                .literal("dialogueProgress")
+                                .then(
+                                        CommandManager.argument("player", EntityArgumentType.players())
+                                                .then(
+                                                        CommandManager.literal("add")
+                                                                .then(
+                                                                        CommandManager.argument("dialogueState", LuxdialogueStateArgument.state())
+                                                                                .suggests(LightCommand.Suggests.dialogueState())
+                                                                                .executes(this::addLuxDialogueState)
+                                                        )
+                                                )
+                                                .then(
+                                                        CommandManager.literal("remove")
+                                                                .then(
+                                                                        CommandManager.argument("dialogueState", LuxdialogueStateArgument.state())
+                                                                                .suggests(LightCommand.Suggests.dialogueState())
+                                                                                .executes(this::removeLuxDialogueState)
+                                                                )
                                                 )
 
                                 )

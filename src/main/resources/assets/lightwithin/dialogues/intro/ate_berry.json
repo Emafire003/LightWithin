@@ -27,7 +27,7 @@
   "itemScale": 3.0,
   "buttons": {
     "screen.lightwithin.luxdialogue.intro.ate_berry.button.cool": "GO_DIALOGUE<intro/what_do>",
-    "screen.lightwithin.luxdialogue.intro.ate_berry.button.guidance": "GO_DIALOGUE<guidance/guidance_first>",
+    "screen.lightwithin.luxdialogue.intro.ate_berry.button.guidance": "GO_DIALOGUE<guidance/guidance>",
     "screen.lightwithin.luxdialogue.intro.ate_berry.button.name": "GO_DIALOGUE<personal/name>"
   },
   "dialogueProgress": false,
