@@ -9,7 +9,7 @@ import net.minecraft.text.Text;
 
 public class LuxcognitaScreenAttacked extends LuxcognitaScreenV2{
 
-    public static final long CLOSING_TIME = 2000L; //should be 2 seconds, maybe i should do 3?
+    public static final long CLOSING_TIME = 3000L; //should be 2 seconds, maybe i should do 3?
 
     public LuxcognitaScreenAttacked(Text title, LuxDialogue dialogue) {
         super(title, dialogue);

@@ -39,9 +39,9 @@ public abstract class LuxcognitaDreamAttackedMixin extends Entity implements Att
         if(((LivingEntity) (Object) this) instanceof PlayerEntity){
             if(this.hasStatusEffect(LightEffects.LUXCOGNITA_DREAM)){
                 StatusEffectInstance effect = this.getStatusEffect(LightEffects.LUXCOGNITA_DREAM);
-                if(effect.getDuration() > 40){
-                    /// Starts the clock for the automatic exclusion from the dialogue screen
-                    ((IStatusEffectWithSettableDuration) effect).lightWithin$setDuration(40);
+                if(effect.getDuration() > 60){
+                    /// Starts the clock for the automatic exclusion from the dialogue screen after 3 seconds
+                    ((IStatusEffectWithSettableDuration) effect).lightWithin$setDuration(60);
                     if(!this.getWorld().isClient()){
                         ServerPlayNetworking.send(((ServerPlayerEntity) (Object) this), LuxdreamAttackScreenPacketS2C.ID, new LuxdreamAttackScreenPacketS2C());
                     }
