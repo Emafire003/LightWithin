@@ -6,12 +6,14 @@ import me.emafire003.dev.lightwithin.lights.InnerLight;
 import me.emafire003.dev.lightwithin.lights.NoneLight;
 import me.emafire003.dev.lightwithin.networking.PlayRenderEffectPacketS2C;
 import me.emafire003.dev.lightwithin.sounds.LightSounds;
+import me.emafire003.dev.lightwithin.status_effects.LightEffects;
 import me.emafire003.dev.lightwithin.util.RenderEffect;
 import me.emafire003.dev.lightwithin.util.TargetType;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -62,6 +64,7 @@ public class LuxcognitaBerryItem extends Item {
             user.playSound(LightSounds.LIGHT_READY, 1, 0.8f);
 
             ServerPlayNetworking.send((ServerPlayerEntity) user, PlayRenderEffectPacketS2C.ID, new PlayRenderEffectPacketS2C(RenderEffect.LUXCOGNITA_SCREEN));
+            user.addStatusEffect(new StatusEffectInstance(LightEffects.LUXCOGNITA_DREAM, 999999999, 0, false, false));
         }
         return this.isFood() ? user.eatFood(world, stack) : stack;
     }

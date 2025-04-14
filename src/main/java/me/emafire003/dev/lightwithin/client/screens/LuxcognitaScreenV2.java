@@ -11,6 +11,7 @@ import me.emafire003.dev.lightwithin.client.luxcognita_dialogues.LuxDialogue;
 import me.emafire003.dev.lightwithin.items.LightItems;
 import me.emafire003.dev.lightwithin.items.LuxcognitaBerryItem;
 import me.emafire003.dev.lightwithin.networking.DialogueProgressUpdatePacketC2S;
+import me.emafire003.dev.lightwithin.networking.LuxdreamStopPacketC2S;
 import me.emafire003.dev.lightwithin.sounds.LightSounds;
 import me.emafire003.dev.lightwithin.util.ScreenUtils;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
@@ -35,11 +36,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 
-
-//TODO when this is open the player should be mostly transparent and should also be invulnerable for a time. An attack will cancel the screen and make the player vulnerable again after 2/3 seconds.
 public class LuxcognitaScreenV2 extends Screen{
     private static final long MIN_LOAD_TIME_MS = 60000L;
-    private long loadStartTime;
+    protected long loadStartTime;
     private final LuxDialogue dialogue;
 
     @Override
@@ -53,9 +52,8 @@ public class LuxcognitaScreenV2 extends Screen{
     public LuxcognitaScreenV2(Text title, LuxDialogue dialogue) {
         super(title);
         this.dialogue = dialogue;
-
-
     }
+
 
     @Override
     public void init(){
@@ -207,7 +205,10 @@ public class LuxcognitaScreenV2 extends Screen{
             };
 
             if(clickAction.equals(ClickActions.CLOSE)){
-                pressAction = (button) -> this.closeWithAnimation();
+                pressAction = (button) -> {
+                    this.closeWithAnimation();
+                    sendDialogueStopDreamPacket();
+                };
             }else if(clickAction.equals(ClickActions.SHOW_TYPE_RUNES)){
                 pressAction = this::lightTypeAndRuneAction;
             }else if(clickAction.equals(ClickActions.SHOW_TARGET)){
@@ -280,42 +281,50 @@ public class LuxcognitaScreenV2 extends Screen{
     public void lightTypeAndRuneAction(ButtonWidget buttonWidget) {
         LightWithinClient.getRendererEventHandler().renderRunes();
         LuxcognitaBerryItem.sendLightTypeMessage(this.client.player);
+        sendDialogueStopDreamPacket();
         this.closeWithAnimation();
     }
 
     public void lightTypeIngredientAction(ButtonWidget buttonWidget) {
         LightWithinClient.getRendererEventHandler().renderLuxTypeItem();
+        sendDialogueStopDreamPacket();
         this.closeWithAnimation();
     }
 
     public void lightTargetAction(ButtonWidget buttonWidget) {
         LightWithinClient.getRendererEventHandler().renderTargetIcon();
         LuxcognitaBerryItem.sendLightTargetMessage(this.client.player);
+        sendDialogueStopDreamPacket();
         this.closeWithAnimation();
     }
 
     public void lightTargetIngredientAction(ButtonWidget buttonWidget) {
         LightWithinClient.getRendererEventHandler().renderLuxTargetItem();
+        sendDialogueStopDreamPacket();
         this.closeWithAnimation();
     }
 
     public void lightPowerAction(ButtonWidget buttonWidget) {
         LuxcognitaBerryItem.sendLightPowerMessage(this.client.player);
+        sendDialogueStopDreamPacket();
         this.closeWithAnimation();
     }
 
     public void lightDurationAction(ButtonWidget buttonWidget) {
         LuxcognitaBerryItem.sendLightDurationMessage(this.client.player);
+        sendDialogueStopDreamPacket();
         this.closeWithAnimation();
     }
 
     public void lightMaxCooldownAction(ButtonWidget buttonWidget) {
         LuxcognitaBerryItem.sendLightMaxCooldownMessage(this.client.player);
+        sendDialogueStopDreamPacket();
         this.closeWithAnimation();
     }
 
     public void lightMaxChargesAction(ButtonWidget buttonWidget) {
         LuxcognitaBerryItem.sendLightMaxChargesMessage(this.client.player);
+        sendDialogueStopDreamPacket();
         this.closeWithAnimation();
     }
 
@@ -363,13 +372,15 @@ public class LuxcognitaScreenV2 extends Screen{
         this.renderBackground(context);
         super.render(context, mouseX, mouseY, delta);
 
+        RenderSystem.enableBlend();
+        RenderSystem.defaultBlendFunc();
+
         // Low (lighter) 3735330
         //Middle 2415936
         // Top (darker) 2406703
         MatrixStack matrixStack = context.getMatrices();
 
         matrixStack.push();
-
 
 
         matrixStack.scale(dialogue.mainTextScale, dialogue.mainTextScale, dialogue.mainTextScale);
@@ -442,6 +453,10 @@ public class LuxcognitaScreenV2 extends Screen{
 
     public static void sendDialogueStateUpdatePacket(DialogueProgressState state, boolean shouldRemove){
         ClientPlayNetworking.send(DialogueProgressUpdatePacketC2S.ID, new DialogueProgressUpdatePacketC2S(state, shouldRemove));
+    }
+
+    public static void sendDialogueStopDreamPacket(){
+        ClientPlayNetworking.send(LuxdreamStopPacketC2S.ID, new LuxdreamStopPacketC2S());
     }
 
     @Override

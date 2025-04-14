@@ -12,6 +12,7 @@
   "effect.lightwithin.thunder_aura": "Thunder Aura",
   "effect.lightwithin.storm_aura": "Storm Aura",
   "effect.lightwithin.intoxication": "Intoxication",
+  "effect.lightwithin.luxcognita_dream": "Luxcognita Dream",
   "item.lightwithin.luxintus_berry": "Luxintus Berry",
   "item.lightwithin.luxmutua_berry": "Luxmutua Berry",
   "item.lightwithin.luxcognita_berry": "Luxcognita Berry",
@@ -275,6 +276,9 @@
   "screen.lightwithin.luxdialogue.my_light.power": "How strong it is!",
   "screen.lightwithin.luxdialogue.my_light.duration": "How long it lasts!",
   "screen.lightwithin.luxdialogue.my_light.maxcooldown": "About its rest period!",
-  "screen.lightwithin.luxdialogue.my_light.maxcharges": "My LightCharge limits"
+  "screen.lightwithin.luxdialogue.my_light.maxcharges": "My LightCharge limits",
 
+  "screen.lightwithin.luxdialogue.attacked": "You have been attacked!",
+  "screen.lightwithin.luxdialogue.attacked.sub": "We'll talk later, go defend yourself!",
+  "screen.lightwithin.luxdialogue.attacked.button": "Ok"
 }

@@ -4,6 +4,7 @@ import com.llamalad7.mixinextras.sugar.Local;
 import me.emafire003.dev.lightwithin.LightWithin;
 import me.emafire003.dev.lightwithin.lights.ForestAuraLight;
 import me.emafire003.dev.lightwithin.lights.ThunderAuraLight;
+import me.emafire003.dev.lightwithin.particles.LightParticles;
 import me.emafire003.dev.lightwithin.status_effects.LightEffects;
 import net.minecraft.client.render.entity.EntityRenderer;
 import net.minecraft.client.render.entity.EntityRendererFactory;
@@ -12,6 +13,8 @@ import net.minecraft.client.render.entity.feature.FeatureRendererContext;
 import net.minecraft.client.render.entity.model.EntityModel;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.math.random.Random;
 import org.slf4j.Logger;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -73,6 +76,29 @@ public abstract class EntityColorOverlayRendererMixin<T extends LivingEntity, M 
                 args.set(5, (float) (color.getBlue())/255);
                 args.set(6, (float) (color.getGreen())/255);
                 args.set(7, oa*0.75f);
+            }else if(livingEntity.hasStatusEffect(LightEffects.LUXCOGNITA_DREAM)){
+                float or = args.get(4); //Original values, like OriginalRed
+                float og = args.get(5);
+                float ob = args.get(6);
+                float oa = args.get(7);
+                //This is done for compatibility with other changes
+                args.set(4, or*0.318f); //50 -> 0.318
+                args.set(5, og*0.859f); // 229 -> 0.859
+                args.set(6, ob*0.655f); // 137 -> 0.655
+                args.set(7, oa*0.4f); // 0.341
+
+                Random random = livingEntity.getRandom();
+                if(random.nextInt(170) == 1){
+                    int filp_x = -1;
+                    if(random.nextBoolean()){
+                        filp_x = 1;
+                    }
+                    int filp_z = -1;
+                    if(random.nextBoolean()){
+                        filp_z = 1;
+                    }
+                    livingEntity.getWorld().addParticle(LightParticles.SHINE_PARTICLE, false, livingEntity.getX()+ (double) random.nextInt(15) /10*filp_x, livingEntity.getY()+1, livingEntity.getZ()+(double) random.nextInt(15)/10*filp_z, (double) random.nextInt(4) /100, (double) random.nextInt(4) /100, (double) random.nextInt(4) /100);
+                }
             }
         }
         /*TEST STUFF

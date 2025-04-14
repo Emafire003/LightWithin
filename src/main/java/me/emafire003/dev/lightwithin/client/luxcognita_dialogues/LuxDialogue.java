@@ -88,6 +88,7 @@ public class LuxDialogue {
     public DialogueProgressState redirectStateRequired = DialogueProgressState.NONE;
 
 
+
     public void serialize() {
         Gson serializedDialogue = new GsonBuilder().setPrettyPrinting()//.excludeFieldsWithoutExposeAnnotation()
                 .create();

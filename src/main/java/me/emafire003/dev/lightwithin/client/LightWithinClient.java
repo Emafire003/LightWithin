@@ -86,6 +86,8 @@ public class LightWithinClient implements ClientModInitializer {
         registerWindLightVelocityPacket();
         registerConfigOptionsSyncPacket();
         registerGlowingEntitiesPacket();
+        registerLuxdreamAttackedScreenPacket();
+
         registerParticlesRenderer();
         LightShaders.registerShaders();
 
@@ -308,6 +310,15 @@ public class LightWithinClient implements ClientModInitializer {
                     LOGGER.error("There was an error while getting the packet!");
                     e.printStackTrace();
                 }
+            });
+        }));
+    }
+
+    private void registerLuxdreamAttackedScreenPacket(){
+        ClientPlayNetworking.registerGlobalReceiver(LuxdreamAttackScreenPacketS2C.ID, ((client, handler, buf, responseSender) -> {
+
+            client.execute(() -> {
+                MinecraftClient.getInstance().setScreen(LuxdialogueScreens.LUXDIALOGUE_SCREENS.get("attacked"));
             });
         }));
     }

@@ -60,7 +60,12 @@ import org.slf4j.LoggerFactory;
 import java.nio.file.Path;
 import java.time.LocalDate;
 import java.time.Month;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static me.emafire003.dev.lightwithin.lights.ForestAuraLight.FOREST_AURA_BLOCKS;
@@ -121,6 +126,7 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 		registerReadyLightCacheRemover();
 		registerSyncOptionsOnJoin();
 		registerDialogueStateUpdatePacket();
+		registerLuxdreamDialogueStopPacket();
 		LightSounds.registerSounds();
 		LightEffects.registerModEffects();
 		LightItems.registerItems();
@@ -317,6 +323,22 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 			}
 
 
+		})));
+	}
+
+	/**Triggered when a player has finished their luxdialogue / dream*/
+	private static void registerLuxdreamDialogueStopPacket(){
+		ServerPlayNetworking.registerGlobalReceiver(LuxdreamStopPacketC2S.ID, (((server, player, handler, buf, responseSender) -> {
+			if(player.getWorld().isClient){
+				return;
+			}
+			server.execute(() -> {
+				if(!player.hasStatusEffect(LightEffects.LUXCOGNITA_DREAM)){
+					LOGGER.warn("Luxdream termination packet sent but there was no Luxcognita Dream effect to be removed!");
+					return;
+				}
+				player.removeStatusEffect(LightEffects.LUXCOGNITA_DREAM);
+			});
 		})));
 	}
 

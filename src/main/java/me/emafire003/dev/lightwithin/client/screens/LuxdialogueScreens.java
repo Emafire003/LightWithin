@@ -25,6 +25,11 @@ public class LuxdialogueScreens {
                     if(LUXDIALOGUE_SCREENS.containsKey(dialogueId)){
                         LightWithin.LOGGER.error("There is a duplicate screen with the id '" + dialogueId + "', skipping it!");
                     }else{
+                        if(dialogueId.equals("attacked")){
+                            LUXDIALOGUE_SCREENS.put(dialogueId, new LuxcognitaScreenAttacked(Text.literal(dialogueId),
+                                    LuxDialogue.deserialize(dialogueFile.get(0))));
+                            return;
+                        }
                         LUXDIALOGUE_SCREENS.put(dialogueId, new LuxcognitaScreenV2(Text.literal(dialogueId),
                                 LuxDialogue.deserialize(dialogueFile.get(0))));
                     }

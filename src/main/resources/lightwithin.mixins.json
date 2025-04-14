@@ -10,10 +10,13 @@
     "FreezeEntityLookMixin",
     "FreezeEntityMixin",
     "ImmunitiesMixin",
+    "LuxcognitaDreamAttackedMixin",
+    "LuxcognitaDreamNoNudgingMixin",
     "MilkNotCleanLightEffectsMixin",
     "PlayerFreezeMixin",
     "PlayerJoinMixin",
     "PreventLightEffectClearLivingEntityMixin",
+    "StatusEffectSetDurMixin",
     "WorldPropertiesAccessor",
     "block_passthrough_related.EnterSolidBlocksEntityMixin",
     "block_passthrough_related.PassThroughBlocksMixin",
@@ -36,9 +39,9 @@
     "forest_aura_related.BackgroundRenderForestMixin",
     "forest_aura_related.CameraMixin",
     "forest_aura_related.EntitiesGlowingForClientMixin",
+    "forest_aura_related.NoInGameOverlayInsideBlockMixin",
     "renderer.GameRendererMixin",
-    "renderer.InGameHudMixin",
-    "forest_aura_related.NoInGameOverlayInsideBlockMixin"
+    "renderer.InGameHudMixin"
   ],
   "server": [
   ],
