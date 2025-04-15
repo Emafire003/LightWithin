@@ -197,6 +197,7 @@
   "audio.lightwithin.light_critical_hit": "Light critical hit",
   "audio.lightwithin.forest_puff_bursting": "ForestAura puffs bursting",
   "audio.lightwithin.thunder_aura_zap": "ThunderAura zaps",
+  "audio.lightwithin.luxcognita_damage_block": "Damaged blocked by Luxcognita",
 
 
   "screen.luxcognita_dialogue.lightTypeButton": "About LightType",

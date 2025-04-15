@@ -232,7 +232,10 @@ public class LuxcognitaScreenV2 extends Screen{
                 LuxcognitaScreenV2 targetScreen = LuxdialogueScreens.LUXDIALOGUE_SCREENS.get(target);
                 if(targetScreen == null){
                     this.client.player.sendMessage(Text.literal(LightWithin.PREFIX_MSG + "Could not find the screen with id: " + target).formatted(Formatting.RED));
-                    pressAction = (button -> this.close());
+                    pressAction = (button -> {
+                        sendDialogueStopDreamPacket();
+                        this.close();
+                    });
                 }else{
                     TransitionScreen transitionScreen = new TransitionScreen(Text.literal("transition_to:"+targetScreen.title), targetScreen);
                     pressAction = (button) -> MinecraftClient.getInstance().setScreen(transitionScreen);
