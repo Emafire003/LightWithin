@@ -1,0 +1,22 @@
+{
+  "dialogueId": "natural_0",
+  "fileVersion": 1,
+  "mainText": "screen.lightwithin.luxdialogue.activation.natural_0",
+  "textScale": 1.5,
+  "subTextPresent": true,
+  "subText": "screen.lightwithin.luxdialogue.activation.natural_0.sub",
+  "subTextScale": 1,
+  "showImage": true,
+  "imagePos": "CENTER",
+  "imagePath": {
+    "namespace": "lightwithin",
+    "path": "textures/lights/light.png"
+  },
+  "imageWidth": 16,
+  "imageHeight": 16,
+  "imageScale": 2.0,
+  "imageHasStages": false,
+  "buttons": {
+    "screen.lightwithin.luxdialogue.next": "GO_DIALOGUE<activation/natural_1>"
+  }
+}

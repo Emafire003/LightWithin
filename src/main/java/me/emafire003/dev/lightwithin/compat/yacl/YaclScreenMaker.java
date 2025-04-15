@@ -46,14 +46,12 @@ public class YaclScreenMaker {
                                 ScreenPositionsPresets.TOP_LEFT, // the default value
                                 () -> ScreenPositionsPresets.valueOf(ClientConfig.LIGHT_READY_PRESET), // a field to get the current value from
                                 newVal -> {
-                                    Pair<Integer, Integer> xy = ScreenUtils.getXY(newVal, ClientConfig.LIGHT_READY_SCALE_FACTOR);
-                                    if(xy != null){
-                                        ClientConfig.LIGHT_READY_ICON_X = xy.getFirst();
-                                        ClientConfig.LIGHT_READY_ICON_Y = xy.getSecond();
-                                        ClientConfig.LIGHT_READY_PRESET = newVal.name();
-                                        ClientConfig.saveToFile();
-                                        updatedFromActivePreset.set(true);
-                                    }
+                                    Pair<Integer, Integer> xy = ScreenUtils.getXYIcons(newVal, ClientConfig.LIGHT_READY_SCALE_FACTOR);
+                                    ClientConfig.LIGHT_READY_ICON_X = xy.getFirst();
+                                    ClientConfig.LIGHT_READY_ICON_Y = xy.getSecond();
+                                    ClientConfig.LIGHT_READY_PRESET = newVal.name();
+                                    ClientConfig.saveToFile();
+                                    updatedFromActivePreset.set(true);
                                 }
                         )
                         .controller(opt -> EnumControllerBuilder.create(opt).enumClass(ScreenPositionsPresets.class))
@@ -69,14 +67,12 @@ public class YaclScreenMaker {
                                 ScreenPositionsPresets.TOP_LEFT, // the default value
                                 () -> ScreenPositionsPresets.valueOf(ClientConfig.LIGHT_CHARGE_PRESET), // a field to get the current value from
                                 newVal -> {
-                                    Pair<Integer, Integer> xy = ScreenUtils.getXY(newVal, ClientConfig.LIGHT_CHARGE_SCALE_FACTOR);
-                                    if(xy != null){
-                                        ClientConfig.LIGHT_CHARGE_ICON_X = xy.getFirst();
-                                        ClientConfig.LIGHT_CHARGE_ICON_Y = xy.getSecond();
-                                        ClientConfig.LIGHT_CHARGE_PRESET = newVal.name();
-                                        ClientConfig.saveToFile();
-                                        updatedFromChargePreset.set(true);
-                                    }
+                                    Pair<Integer, Integer> xy = ScreenUtils.getXYIcons(newVal, ClientConfig.LIGHT_CHARGE_SCALE_FACTOR);
+                                    ClientConfig.LIGHT_CHARGE_ICON_X = xy.getFirst();
+                                    ClientConfig.LIGHT_CHARGE_ICON_Y = xy.getSecond();
+                                    ClientConfig.LIGHT_CHARGE_PRESET = newVal.name();
+                                    ClientConfig.saveToFile();
+                                    updatedFromChargePreset.set(true);
                                 }
                         )
                         .controller(opt -> EnumControllerBuilder.create(opt).enumClass(ScreenPositionsPresets.class))

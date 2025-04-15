@@ -14,6 +14,9 @@ import me.emafire003.dev.lightwithin.networking.DialogueProgressUpdatePacketC2S;
 import me.emafire003.dev.lightwithin.networking.LuxdreamStopPacketC2S;
 import me.emafire003.dev.lightwithin.sounds.LightSounds;
 import me.emafire003.dev.lightwithin.util.ScreenUtils;
+import me.x150.renderer.ClipStack;
+import me.x150.renderer.Rectangle;
+import me.x150.renderer.Renderer2d;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
@@ -166,7 +169,8 @@ public class LuxcognitaScreenV2 extends Screen{
 
         
         gridWidget.refreshPositions();
-        SimplePositioningWidget.setPos(gridWidget, 0, this.height/2 - 60, this.width, this.height, 0.5F, 0.25F);
+        //TODO do something with this for smaller screens and stuff
+        SimplePositioningWidget.setPos(gridWidget, 0, this.height/2 - this.height/10, this.width, this.height, 0.5F, 0.25F);
         gridWidget.forEachChild(this::addDrawableChild);
 
     }
@@ -375,9 +379,6 @@ public class LuxcognitaScreenV2 extends Screen{
         this.renderBackground(context);
         super.render(context, mouseX, mouseY, delta);
 
-        RenderSystem.enableBlend();
-        RenderSystem.defaultBlendFunc();
-
         // Low (lighter) 3735330
         //Middle 2415936
         // Top (darker) 2406703
@@ -402,7 +403,7 @@ public class LuxcognitaScreenV2 extends Screen{
             //TODO adjust with the screen's or config's scale
             float berryScale = 2f;
             //TODO the padding fucks up things a little
-            Pair<Integer, Integer> xy = ScreenUtils.getXY(dialogue.berryPos, berryScale, this.width, this.height, 0, 16, 16);
+            Pair<Integer, Integer> xy = ScreenUtils.getXYItems(dialogue.berryPos, berryScale, this.width, this.height, 0, 16, 16);
 
             matrixStack.scale(berryScale, berryScale, berryScale);
             context.drawItem(new ItemStack(LightItems.LUXCOGNITA_BERRY), xy.getFirst(), xy.getSecond());
@@ -412,7 +413,7 @@ public class LuxcognitaScreenV2 extends Screen{
         }
 
         if(dialogue.showItem){
-            Pair<Integer, Integer> xy = ScreenUtils.getXY(dialogue.itemPos, dialogue.itemScale, this.width, this.height, 0, 16, 16);
+            Pair<Integer, Integer> xy = ScreenUtils.getXYItems(dialogue.itemPos, dialogue.itemScale, this.width, this.height, 0, 16, 16);
 
             matrixStack.scale(dialogue.itemScale, dialogue.itemScale, dialogue.itemScale);
 
@@ -424,11 +425,20 @@ public class LuxcognitaScreenV2 extends Screen{
 
         
         if(dialogue.showImage){
-            matrixStack.scale(dialogue.imageScale, dialogue.imageScale, dialogue.imageScale);
-            Pair<Integer, Integer> xy = ScreenUtils.getXY(dialogue.imagePos, dialogue.imageScale, width, height, 5, dialogue.imageWidth, dialogue.imageHeight);
+            Pair<Integer, Integer> xy = ScreenUtils.getXYImgs(dialogue.imagePos, dialogue.imageScale, dialogue.imageWidth, dialogue.imageHeight, 0);
+
+            RenderSystem.enableBlend();
+            RenderSystem.defaultBlendFunc();
+            ClipStack.addWindow(context.getMatrices(), new Rectangle(0,0, width, height));
+
+            //ClipStack.addWindow(context.getMatrices(), new Rectangle(xy.getFirst()-(dialogue.imageWidth*dialogue.imageScale)/2,xy.getSecond()-(dialogue.imageHeight*dialogue.imageScale)/2, xy.getFirst()+(dialogue.imageWidth*dialogue.imageScale)/2, xy.getSecond()+(dialogue.imageHeight*dialogue.imageScale)/2));
+            Renderer2d.renderTexture(context.getMatrices(), dialogue.imagePath, xy.getFirst(), xy.getSecond(), dialogue.imageWidth*dialogue.imageScale, dialogue.imageHeight*dialogue.imageScale);
+            ClipStack.popWindow();
+
+            /*matrixStack.scale(dialogue.imageScale, dialogue.imageScale, dialogue.imageScale);
             context.drawTexture(dialogue.imagePath, xy.getFirst(), xy.getSecond(), 1, 1, dialogue.imageWidth, dialogue.imageHeight, dialogue.imageWidth, dialogue.imageHeight);
             matrixStack.pop();
-            matrixStack.push();
+            matrixStack.push();*/
         }
 
         matrixStack.pop();

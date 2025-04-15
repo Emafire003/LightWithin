@@ -23,6 +23,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -38,6 +39,8 @@ public abstract class LuxcognitaDreamAttackedMixin extends Entity implements Att
     @Shadow public abstract StatusEffectInstance getStatusEffect(StatusEffect effect);
 
     @Shadow public abstract EntityDimensions getDimensions(EntityPose pose);
+
+    @Shadow public abstract Random getRandom();
 
     public LuxcognitaDreamAttackedMixin(EntityType<?> type, World world) {
         super(type, world);
@@ -61,7 +64,8 @@ public abstract class LuxcognitaDreamAttackedMixin extends Entity implements Att
                 }
                 /// Makes it immune to attacks while the effect lasts, so for the next 2 seconds. Also spawns particles and sound effect
                 if(!this.getWorld().isClient()){
-                    this.getWorld().playSound(null, BlockPos.ofFloored(this.getPos()), LightSounds.LUXCOGNITA_DAMAGE_BLOCK, SoundCategory.PLAYERS, 1f, 1f);
+                    //TODO seems a bit to similar each time, test it out
+                    this.getWorld().playSound(null, BlockPos.ofFloored(this.getPos()), LightSounds.LUXCOGNITA_DAMAGE_BLOCK, SoundCategory.PLAYERS, 1f, 1f + (float) this.getRandom().nextBetween(0, 2) /10);
 
                     ((ServerWorld) this.getWorld()).spawnParticles(new ItemStackParticleEffect(ParticleTypes.ITEM, new ItemStack(LightItems.LUXCOGNITA_BERRY)),
                             this.getX(), this.getY()+this.getDimensions(this.getPose()).height/2, this.getZ(), 20, 0.2, 0.2, 0.2, 0.1

@@ -7,8 +7,8 @@
   "subText": "screen.lightwithin.luxdialogue.main.sub",
   "subTextScale": 1.3,
   "buttons": {
-    "screen.lightwithin.luxdialogue.main.button.guidance": "GO_DIALOGUE<guidance/guidance>",
     "screen.lightwithin.luxdialogue.main.button.about_you": "GO_DIALOGUE<personal/personal>",
+    "screen.lightwithin.luxdialogue.main.button.guidance": "GO_DIALOGUE<guidance/guidance>",
     "screen.lightwithin.luxdialogue.main.button.potions": "GO_DIALOGUE<alchemy/alchemy>"
   }
 }

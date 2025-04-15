@@ -197,7 +197,7 @@
   "audio.lightwithin.light_critical_hit": "Light critical hit",
   "audio.lightwithin.forest_puff_bursting": "ForestAura puffs bursting",
   "audio.lightwithin.thunder_aura_zap": "ThunderAura zaps",
-  "audio.lightwithin.luxcognita_damage_block": "Damaged blocked by Luxcognita",
+  "audio.lightwithin.luxcognita_damage_block": "Damage blocked by Luxcognita",
 
 
   "screen.luxcognita_dialogue.lightTypeButton": "About LightType",
@@ -226,6 +226,7 @@
   "screen.lightwithin.luxdialogue.action_error": "The action specified is invalid!",
   "screen.lightwithin.luxdialogue.default": "Default text!",
   "screen.lightwithin.luxdialogue.default.button0": "Default text!",
+  "screen.lightwithin.luxdialogue.next": "->",
 
   "screen.lightwithin.luxdialogue.main": "Pleased to meet you again",
   "screen.lightwithin.luxdialogue.main.sub": "What do you want to know this time?",
@@ -299,6 +300,18 @@
   "screen.lightwithin.luxdialogue.my_light.duration": "How long it lasts!",
   "screen.lightwithin.luxdialogue.my_light.maxcooldown": "About its rest period!",
   "screen.lightwithin.luxdialogue.my_light.maxcharges": "My LightCharge limits",
+
+  "screen.lightwithin.luxdialogue.activation": "There are a few ways",
+  "screen.lightwithin.luxdialogue.activation.sub": "Some more safe and natural, some dangerous but convenient",
+  "screen.lightwithin.luxdialogue.activation.safe": "The safe one",
+  "screen.lightwithin.luxdialogue.activation.alchemy": "The convenient one",
+
+  "screen.lightwithin.luxdialogue.activation.natural_0": "Your light will help you whenever you are in need",
+  "screen.lightwithin.luxdialogue.activation.natural_0.sub": "When in dangerous places or times, it will show itself to you, with this symbol:",
+
+  "screen.lightwithin.luxdialogue.activation.natural_1": "When you are ready to activate, do It!",
+  "todo112": "actually implent the text substituion thingy",
+  "screen.lightwithin.luxdialogue.activation.natural_1.sub": "I learned your kind calls it 'pressing the activate button', %s",
 
   "screen.lightwithin.luxdialogue.attacked": "You have been attacked!",
   "screen.lightwithin.luxdialogue.attacked.sub": "We'll talk later, go defend yourself!",
