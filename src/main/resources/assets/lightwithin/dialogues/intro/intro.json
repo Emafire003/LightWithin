@@ -6,7 +6,7 @@
   "buttons": {
     "screen.lightwithin.luxdialogue.intro.button.ate_berry": "GO_DIALOGUE<intro/ate_berry>",
     "screen.lightwithin.luxdialogue.intro.button.guidance": "GO_DIALOGUE<guidance/guidance>",
-    "screen.lightwithin.luxdialogue.intro.button.what_are": "CLOSE",
+    "screen.lightwithin.luxdialogue.intro.button.what_are": "GO_DIALOGUE<intro/what_are_you>",
     "screen.lightwithin.luxdialogue.intro.button.can_help": "GO_DIALOGUE<intro/can_help>"
   },
   "canRedirect": true,

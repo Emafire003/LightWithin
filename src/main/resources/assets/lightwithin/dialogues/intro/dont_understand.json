@@ -1,0 +1,17 @@
+{
+  "dialogueId": "dont_understand",
+  "fileVersion": 1,
+  "mainText": "screen.lightwithin.luxdialogue.intro.dont_understand",
+  "mainTextScale": 1.5,
+  "subTextPresent": true,
+  "subText": "screen.lightwithin.luxdialogue.intro.dont_understand.sub",
+  "subTextScale": 1.3,
+  "showBerry": true,
+  "berryPos": "TOP_LEFT",
+  "berryScale": 2.5,
+  "buttons": {
+    "screen.lightwithin.luxdialogue.intro.dont_understand.button.are_you_real": "GO_DIALOGUE<intro/are_you_real>",
+    "screen.lightwithin.luxdialogue.intro.dont_understand.button.guidance": "GO_DIALOGUE<guidance/guidance>",
+    "screen.lightwithin.luxdialogue.intro.dont_understand.button.about_you": "GO_DIALOGUE<personal/luxdream"
+  }
+}

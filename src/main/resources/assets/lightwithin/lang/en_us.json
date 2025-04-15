@@ -226,7 +226,6 @@
   "screen.lightwithin.luxdialogue.default": "Default text!",
   "screen.lightwithin.luxdialogue.default.button0": "Default text!",
 
-
   "screen.lightwithin.luxdialogue.main": "Pleased to meet you again",
   "screen.lightwithin.luxdialogue.main.sub": "What do you want to know this time?",
   "screen.lightwithin.luxdialogue.main.button.guidance": "I seek guidance",
@@ -236,16 +235,14 @@
   "screen.lightwithin.luxdialogue.intro": "Ah. You have awoken me. What do you seek?",
   "screen.lightwithin.luxdialogue.intro.button.ate_berry": "What?! I only ate a berry!",
   "screen.lightwithin.luxdialogue.intro.button.guidance": "I seek guidance",
-  "comment1": "=======================TODO create",
   "screen.lightwithin.luxdialogue.intro.button.what_are": "What are you? Where am I?",
-  "comment2": "=======================TODO create",
   "screen.lightwithin.luxdialogue.intro.button.can_help": "Can you help me?",
   
   "screen.lightwithin.luxdialogue.intro.ate_berry": "Yes. That was... me. Sort of. It's complicated",
-  "screen.lightwithin.luxdialogue.intro.ate_berry.sub": "I am LuxCognita, a light of guidance for other lights.",
+  "screen.lightwithin.luxdialogue.intro.ate_berry.sub": "I am a LuxCognita, a light of guidance for other lights.",
   "screen.lightwithin.luxdialogue.intro.ate_berry.button.cool": "Cool. So what do you do?",
-  "comment3": "=======================TODO create all button actions",
   "screen.lightwithin.luxdialogue.intro.ate_berry.button.guidance": "I seek guidance then!",
+  "comment3": "=======================TODO create all button actions",
   "screen.lightwithin.luxdialogue.intro.ate_berry.button.name": "What's your name?",
 
   "screen.lightwithin.luxdialogue.intro.what_do": "I guide other lights and light bearers to information",
@@ -258,13 +255,37 @@
   "screen.lightwithin.luxdialogue.intro.can_help.btn.wow": "Wow.",
   "screen.lightwithin.luxdialogue.intro.can_help.btn.guidance": "Oh. I need guidance then!",
 
+  "screen.lightwithin.luxdialogue.intro.what_are_you": "I am a LuxCognita, a light of guidance for other lights.",
+  "screen.lightwithin.luxdialogue.intro.what_are_you.sub": "And you are right where you where before, and somewhere else at the same time.",
+  "screen.lightwithin.luxdialogue.intro.what_are_you.button.cool": "Oh cool. So what do you do?",
+  "screen.lightwithin.luxdialogue.intro.what_are_you.button.dont_understand": "I still don't understand",
+  "screen.lightwithin.luxdialogue.intro.what_are_you.button.in_danger": "Am I in danger?",
+
+  "screen.lightwithin.luxdialogue.intro.dont_understand": "Well... I'm a 'thing' that is here to guide you ok?",
+  "screen.lightwithin.luxdialogue.intro.dont_understand.sub": "What do you wish to know then?",
+  "screen.lightwithin.luxdialogue.intro.dont_understand.button.are_you_real": "Are you real?",
+  "screen.lightwithin.luxdialogue.intro.dont_understand.button.guidance": "Oh. I'll seek your guidance then.",
+  "comment18": "=======================TODO finish this",
+  "screen.lightwithin.luxdialogue.intro.dont_understand.button.about_you": "More about you and 'this'",
+
+  "screen.lightwithin.luxdialogue.intro.are_you_real": "Of course!",
+  "screen.lightwithin.luxdialogue.intro.are_you_real.sub": "I'll ask again. Do. You. Need. Anything?",
+  "screen.lightwithin.luxdialogue.intro.are_you_real.button.nope": "Not really",
+  "screen.lightwithin.luxdialogue.intro.are_you_real.button.guidance": "Guidance",
+
+  "screen.lightwithin.luxdialogue.intro.in_danger": "No you don't need to worry.",
+  "screen.lightwithin.luxdialogue.intro.in_danger.sub": "I will alert and protect you if needed",
+  "screen.lightwithin.luxdialogue.intro.in_danger.button.can_help": "Then... Can you help me?",
+  "screen.lightwithin.luxdialogue.intro.in_danger.button.let_go": "Can you let me go?",
+
   "screen.lightwithin.luxdialogue.intro.eat_new_berry": "If you need me again, eat a new berry.",
   "screen.lightwithin.luxdialogue.intro.eat_new_berry.thanks": "Thanks again!",
   "screen.lightwithin.luxdialogue.intro.eat_new_berry.will": "I will!",
   "screen.lightwithin.luxdialogue.intro.eat_new_berry.will.msg": "sure you will...",
 
-  "comment4": "=======================TODO add the corresponding buttons screens and make the 'normal' one ALSO REMOVE THE 'first' ",
+  "comment4": "=======================TODO add the corresponding buttons screens and make the 'normal'",
   "screen.lightwithin.luxdialogue.guidance": "What wisdom shall I bestow upon you?",
+  "TODO": "========== TODO",
   "screen.lightwithin.luxdialogue.guidance.button.what_lights": "What are the InnerLights?",
   "screen.lightwithin.luxdialogue.guidance.button.my_light": "Tell me about my InnerLight!",
   "comment7": "========== Either add another button explaining the light charges, or add one inside the activation one.",

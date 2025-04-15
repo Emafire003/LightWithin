@@ -36,6 +36,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 
+@SuppressWarnings("ALL")
 public class LuxcognitaScreenV2 extends Screen{
     private static final long MIN_LOAD_TIME_MS = 60000L;
     protected long loadStartTime;
@@ -59,8 +60,8 @@ public class LuxcognitaScreenV2 extends Screen{
     public void init(){
         this.loadStartTime = System.currentTimeMillis();
 
-        if(this.client.player == null){
-            LightWithin.LOGGER.error("ERROR! The ClientPlayer is null!");
+        if(this.client == null || this.client.player == null){
+            LightWithin.LOGGER.error("ERROR! The ClientPlayer is null! (or the client itself, somehow)");
             return;
         }
 
@@ -80,12 +81,8 @@ public class LuxcognitaScreenV2 extends Screen{
 
         // If this screen produces a dialogue progress state, update it
         if(dialogue.dialogueProgress){
-            this.client.player.sendMessage(Text.literal("Sending the progress state, "+ dialogue.dialogueProgressState +"!"));
             if(!LightWithin.LIGHT_COMPONENT.get(this.client.player).getDialogueProgressStates().contains(dialogue.dialogueProgressState)){
                 sendDialogueStateUpdatePacket(dialogue.dialogueProgressState, false);
-            }else{
-                //TODO debug remove
-                this.client.player.sendMessage(Text.literal("Progress not set since the player already had it"));
             }
 
         }
@@ -107,47 +104,49 @@ public class LuxcognitaScreenV2 extends Screen{
 
         AtomicInteger buttonCount = new AtomicInteger(1);
         AtomicInteger emptyWidgetsAdded = new AtomicInteger();
-        buttons.forEach(buttonWidget -> {
+        if(buttons.isEmpty()){
+            LightWithin.LOGGER.warn("The button list for dialogueId '" + dialogue.dialogueId + "' is empty!");
+        }else{
+            buttons.forEach(buttonWidget -> {
 
-
-            if(buttonCount.get() > 3 && dialogue.buttons.size() > 4){
-                if(dialogue.buttons.size() == 5){
-                    // Button | Button | Button
-                    // button | button (can't do better)
+                if(buttonCount.get() > 3 && dialogue.buttons.size() > 4){
+                    if(dialogue.buttons.size() == 5){
+                        // Button | Button | Button
+                        // button | button (can't do better)
                     /*if(emptyWidgetsAdded.get() == 0 && buttonCount.get() == 4){
                         adder.add(new EmptyWidget((int) 10, 20));
                         emptyWidgetsAdded.getAndIncrement();
                         buttonCount.getAndIncrement();
                     }*/
+                        adder.add(buttonWidget);
+                        buttonCount.getAndIncrement();
+                    }
+                    else if(dialogue.buttons.size() == 6){
+                        // button button button button
+                        //        button button
+                        if(emptyWidgetsAdded.get() == 0 && buttonCount.get() == 5){
+                            adder.add(new EmptyWidget((int) (((this.width/2) /2.3)), 20));
+                            emptyWidgetsAdded.getAndIncrement();
+                            buttonCount.getAndIncrement();
+                        }
+                        adder.add(buttonWidget);
+                        buttonCount.getAndIncrement();
+                    }else if(dialogue.buttons.size() == 7){
+                        // button button button button
+                        //     button button button
+                        //
+                        if(emptyWidgetsAdded.get() == 0 && buttonCount.get() == 7){
+                            adder.add(new EmptyWidget((int) (((this.width/2) /2.3))/2, 20));
+                            emptyWidgetsAdded.getAndIncrement();
+                            buttonCount.getAndIncrement();
+                        }
+                        adder.add(buttonWidget);
+                        buttonCount.getAndIncrement();
+                    }
+                }else{
                     adder.add(buttonWidget);
                     buttonCount.getAndIncrement();
                 }
-                else if(dialogue.buttons.size() == 6){
-                    // button button button button
-                    //        button button
-                    if(emptyWidgetsAdded.get() == 0 && buttonCount.get() == 5){
-                        adder.add(new EmptyWidget((int) (((this.width/2) /2.3)), 20));
-                        emptyWidgetsAdded.getAndIncrement();
-                        buttonCount.getAndIncrement();
-                    }
-                    adder.add(buttonWidget);
-                    buttonCount.getAndIncrement();
-                }else if(dialogue.buttons.size() == 7){
-                    // button button button button
-                    //     button button button
-                    //
-                    if(emptyWidgetsAdded.get() == 0 && buttonCount.get() == 7){
-                        adder.add(new EmptyWidget((int) (((this.width/2) /2.3))/2, 20));
-                        emptyWidgetsAdded.getAndIncrement();
-                        buttonCount.getAndIncrement();
-                    }
-                    adder.add(buttonWidget);
-                    buttonCount.getAndIncrement();
-                }
-            }else{
-                adder.add(buttonWidget);
-                buttonCount.getAndIncrement();
-            }
 
 
 
@@ -160,11 +159,12 @@ public class LuxcognitaScreenV2 extends Screen{
             }else{
                 adder.add(buttonWidget);
             }*/
-        });
+            });
 
-        //adder.add(gridWidget.getMainPositioner().relativeY(-10));
+            //adder.add(gridWidget.getMainPositioner().relativeY(-10));
+        }
 
-
+        
         gridWidget.refreshPositions();
         SimplePositioningWidget.setPos(gridWidget, 0, this.height/2 - 60, this.width, this.height, 0.5F, 0.25F);
         gridWidget.forEachChild(this::addDrawableChild);
@@ -172,7 +172,7 @@ public class LuxcognitaScreenV2 extends Screen{
     }
 
     private List<ButtonWidget> getButtons(){
-        if(this.client.player == null){
+        if(this.client == null || this.client.player == null){
             return null;
         }
         int center_x = MinecraftClient.getInstance().getWindow().getScaledWidth()/2;
@@ -271,7 +271,7 @@ public class LuxcognitaScreenV2 extends Screen{
     }
 
     public void playLuxcognitaDisplaySound(){
-        if(this.client.player == null){
+        if(this.client == null || this.client.player == null){
             LightWithin.LOGGER.error("Error! Can't play the Luxcognita sound the ClientPlayerEntity is null");
             return;
         }
