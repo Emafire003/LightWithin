@@ -3,11 +3,13 @@ package me.emafire003.dev.lightwithin.client.screens;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.datafixers.util.Pair;
 import me.emafire003.dev.lightwithin.LightWithin;
+import me.emafire003.dev.lightwithin.client.ActivationKey;
 import me.emafire003.dev.lightwithin.client.LightRenderLayer;
 import me.emafire003.dev.lightwithin.client.LightWithinClient;
 import me.emafire003.dev.lightwithin.client.luxcognita_dialogues.ClickActions;
 import me.emafire003.dev.lightwithin.client.luxcognita_dialogues.DialogueProgressState;
 import me.emafire003.dev.lightwithin.client.luxcognita_dialogues.LuxDialogue;
+import me.emafire003.dev.lightwithin.client.luxcognita_dialogues.Replaceables;
 import me.emafire003.dev.lightwithin.items.LightItems;
 import me.emafire003.dev.lightwithin.items.LuxcognitaBerryItem;
 import me.emafire003.dev.lightwithin.networking.DialogueProgressUpdatePacketC2S;
@@ -169,7 +171,6 @@ public class LuxcognitaScreenV2 extends Screen{
 
         
         gridWidget.refreshPositions();
-        //TODO do something with this for smaller screens and stuff
         SimplePositioningWidget.setPos(gridWidget, 0, this.height/2 - this.height/10, this.width, this.height, 0.5F, 0.25F);
         gridWidget.forEachChild(this::addDrawableChild);
 
@@ -388,13 +389,29 @@ public class LuxcognitaScreenV2 extends Screen{
 
 
         matrixStack.scale(dialogue.mainTextScale, dialogue.mainTextScale, dialogue.mainTextScale);
-        context.drawCenteredTextWithShadow(this.textRenderer, Text.translatable(dialogue.mainText), (int) (((float) this.width / 2)/dialogue.mainTextScale), (int) (((float) this.height / 2 - 70)/dialogue.mainTextScale), getTextColor());
+        Text mainText = Text.translatable(dialogue.mainText);
+        if(dialogue.hasReplaceableMainText){
+            List<String> toReplace = new ArrayList<>(dialogue.replaceablesListMain.size());
+            dialogue.replaceablesListMain.forEach( replaceable -> {
+                toReplace.add(parseReplacable(replaceable));
+            });
+            mainText = Text.translatable(dialogue.mainText, toReplace.toArray());
+        }
+        context.drawCenteredTextWithShadow(this.textRenderer, mainText, (int) (((float) this.width / 2)/dialogue.mainTextScale), (int) (((float) this.height / 2 - 70)/dialogue.mainTextScale), getTextColor());
         matrixStack.pop();
         matrixStack.push();
 
         if(dialogue.subTextPresent){
+            Text subText = Text.translatable(dialogue.subText);
+            if(dialogue.hasReplaceableSubText){
+                List<String> toReplace = new ArrayList<>(dialogue.replaceablesListMain.size());
+                dialogue.replaceablesListMain.forEach( replaceable -> {
+                    toReplace.add(parseReplacable(replaceable));
+                });
+                subText = Text.translatable(dialogue.subText, toReplace.toArray());
+            }
             matrixStack.scale(dialogue.subTextScale, dialogue.subTextScale, dialogue.subTextScale);
-            context.drawCenteredTextWithShadow(this.textRenderer, Text.translatable(dialogue.subText), (int) (((float) this.width / 2)/dialogue.subTextScale), (int) (((float) this.height / 2 - 40)/dialogue.subTextScale), getTextColor());
+            context.drawCenteredTextWithShadow(this.textRenderer, subText, (int) (((float) this.width / 2)/dialogue.subTextScale), (int) (((float) this.height / 2 - 40)/dialogue.subTextScale), getTextColor());
             matrixStack.pop();
             matrixStack.push();
         }
@@ -444,6 +461,17 @@ public class LuxcognitaScreenV2 extends Screen{
         matrixStack.pop();
 
 
+    }
+
+    public String parseReplacable(Replaceables replaceable){
+        if(replaceable.equals(Replaceables.ACTIVATION_KEY)){
+            //TODO remove
+            return ActivationKey.lightActivationKey.getBoundKeyLocalizedText().getString();
+        }else if(replaceable.equals(Replaceables.PLAYER_NAME)){
+            return this.client.player.getName().getString();
+        }
+        LightWithin.LOGGER.warn("The replacable: " + replaceable + " could not be parsed correctly");
+        return "";
     }
 
     public void fillWithLayer(DrawContext context, RenderLayer layer, int startX, int startY, int endX, int endY, int z) {

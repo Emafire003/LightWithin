@@ -19,6 +19,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.util.List;
 import java.util.Map;
 
 import static me.emafire003.dev.lightwithin.LightWithin.MOD_ID;
@@ -37,12 +38,20 @@ public class LuxDialogue {
     public String mainText = "screen.lightwithin.luxdialogue.default";
     /// The main text's scale
     public float mainTextScale = 1.5f;
+    /// Weather or not the presented string has placeholders that need to be replaced with something
+    public boolean hasReplaceableMainText = false;
+    /// The list of the things the placeholder(s) are going to be replaced by
+    public List<Replaceables> replaceablesListMain = List.of(Replaceables.ACTIVATION_KEY);
     /// Weather or not to have a sub text
     public boolean subTextPresent = false;
     /// A translation string for the text displayed under the main text
     public String subText = "screen.lightwithin.luxdialogue.default";
     /// The sub text's scale
     public float subTextScale = 1f;
+    /// Weather or not the presented string has placeholders that need to be replaced with something
+    public boolean hasReplaceableSubText = false;
+    /// The list of the things the placeholder(s) are going to be replaced by
+    public List<Replaceables> replaceablesListSub = List.of(Replaceables.ACTIVATION_KEY);
     /// Weather or not to show the Luxcognita Berry in the screen
     public boolean showBerry = true;
     /// The position of the berry as described in {@link me.emafire003.dev.lightwithin.util.ScreenPositionsPresets}

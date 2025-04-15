@@ -3,9 +3,17 @@
   "fileVersion": 1,
   "mainText": "screen.lightwithin.luxdialogue.default",
   "mainTextScale": 1.5,
+  "hasReplaceableMainText": false,
+  "replaceablesListMain": [
+    "ACTIVATION_KEY"
+  ],
   "subTextPresent": false,
   "subText": "screen.lightwithin.luxdialogue.default",
   "subTextScale": 1.0,
+  "hasReplaceableSubText": false,
+  "replaceablesListSub": [
+    "ACTIVATION_KEY"
+  ],
   "showBerry": true,
   "berryPos": "TOP_LEFT",
   "berryScale": 2.0,

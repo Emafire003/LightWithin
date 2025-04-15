@@ -1,0 +1,24 @@
+{
+  "dialogueId": "natural_2",
+  "fileVersion": 1,
+  "mainText": "screen.lightwithin.luxdialogue.activation.natural_2",
+  "textScale": 1.5,
+  "subTextPresent": true,
+  "subText": "screen.lightwithin.luxdialogue.activation.natural_2.sub",
+  "subTextScale": 1.3,
+  "showImage": true,
+  "imagePos": "CENTER",
+  "imagePath": {
+    "namespace": "lightwithin",
+    "path": "textures/lights/light.png"
+  },
+  "imageWidth": 16,
+  "imageHeight": 16,
+  "imageScale": 2.0,
+  "imageHasStages": false,
+  "buttons": {
+    "screen.lightwithin.luxdialogue.activation.natural_2.yes": "GO_DIALOGUE<my_light/triggers>",
+    "screen.lightwithin.luxdialogue.activation.natural_2.no": "CLOSE",
+    "screen.lightwithin.luxdialogue.activation.natural_2.more": "GO_DIALOGUE<activation/in_general>"
+  }
+}
