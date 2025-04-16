@@ -1,0 +1,34 @@
+{
+  "dialogueId": "general_info_3",
+  "fileVersion": 1,
+  "mainText": "screen.lightwithin.luxdialogue.activation.general_info_3",
+  "textScale": 1.5,
+  "subTextPresent": true,
+  "subText": "screen.lightwithin.luxdialogue.activation.general_info_3.sub",
+  "subTextScale": 1.4,
+  "berryPos": "TOP_LEFT",
+  "showImage": true,
+  "imagePos": "TOP_CENTER",
+  "imageWidth": 64,
+  "imageHeight": 64,
+  "imageScale": 1.0,
+  "imageHasStages": true,
+  "imageStages": [
+    {
+      "namespace": "lightwithin",
+      "path": "textures/dialogues/activation/torch_catalyst.png"
+    },
+    {
+      "namespace": "lightwithin",
+      "path": "textures/dialogues/activation/snow_catalyst.png"
+    },
+    {
+      "namespace": "lightwithin",
+      "path": "textures/dialogues/activation/water_catalyst.png"
+    }
+  ],
+  "imageInterval": 60,
+  "buttons": {
+    "screen.lightwithin.luxdialogue.next": "GO_DIALOGUE<activation/general_info_4>"
+  }
+}

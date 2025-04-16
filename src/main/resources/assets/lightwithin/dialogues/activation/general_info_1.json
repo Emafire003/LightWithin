@@ -25,6 +25,14 @@
     {
       "namespace": "lightwithin",
       "path": "textures/dialogues/activation/trigger_dmg_2.png"
+    },
+    {
+      "namespace": "lightwithin",
+      "path": "textures/dialogues/activation/falling_0.png"
+    },
+    {
+      "namespace": "lightwithin",
+      "path": "textures/dialogues/activation/falling_1.png"
     }
   ],
   "imageInterval": 40,

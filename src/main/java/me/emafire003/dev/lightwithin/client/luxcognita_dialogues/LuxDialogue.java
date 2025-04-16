@@ -63,6 +63,7 @@ public class LuxDialogue {
     /// The image's position as described for the berry
     public ScreenPositionsPresets imagePos = ScreenPositionsPresets.CENTER;
     /// The image's path location. It's an identifier
+    //TODO maybe make all of these into lists? To have more images in one screen
     public Identifier imagePath = LightWithin.getIdentifier("textures/dialogues/default.png");
     /// Image width
     public int imageWidth = 32;
@@ -71,7 +72,6 @@ public class LuxDialogue {
     /// The image's scale
     public float imageScale = 1f;
     /// Weather or not the image has stages. If it has they will start from name_0.png to name_x.png
-    //TODO tbf, i can add them later apparently without issue.
     public boolean imageHasStages = false;
     /// A map of the texture files
     public List<Identifier> imageStages = List.of(LightWithin.getIdentifier("textures/lux_dialogue/default.png"));

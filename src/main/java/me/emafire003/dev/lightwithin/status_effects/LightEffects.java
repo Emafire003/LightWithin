@@ -36,6 +36,8 @@ public class LightEffects {
             new StormAuraEffect());
     public static final StatusEffect LUXCOGNITA_DREAM = registerStatusEffect("luxcognita_dream",
             new LuxcognitaDreamEffect());
+    public static final StatusEffect LUXCOGNITA_OFFENDED = registerStatusEffect("luxcognita_offended",
+            new LuxcognitaDreamEffect());
 
     private static StatusEffect registerStatusEffect(String name, StatusEffect effect){
         return Registry.register(Registries.STATUS_EFFECT, new Identifier(LightWithin.MOD_ID, name),effect);

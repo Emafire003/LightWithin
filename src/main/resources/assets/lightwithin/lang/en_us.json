@@ -13,19 +13,17 @@
   "effect.lightwithin.storm_aura": "Storm Aura",
   "effect.lightwithin.intoxication": "Intoxication",
   "effect.lightwithin.luxcognita_dream": "Luxcognita Dream",
+  "effect.lightwithin.luxcognita_offended": "Luxcognita Offended :(",
+
   "item.lightwithin.luxintus_berry": "Luxintus Berry",
   "item.lightwithin.luxmutua_berry": "Luxmutua Berry",
   "item.lightwithin.luxcognita_berry": "Luxcognita Berry",
   "item.lightwithin.bottled_light": "Bottled Light",
   "item.lightwithin.luxintus_berry_powder": "Luxintus Berry Powder",
 
-  "item.lightwithin.berry.tooltip": "Press §dSHIFT§r to know what this berry does!",
-  "item.lightwithin.luxintus_berry.tooltip": "§eThis light-dense berry will §aunleash§e your",
-  "item.lightwithin.luxintus_berry.tooltip1": "§binner light§e!",
-  "item.lightwithin.luxmutua_berry.tooltip": "§eThe ever-twisting light of this berry will",
-  "item.lightwithin.luxmutua_berry.tooltip1": "§achange§e your §binner light§e!",
-  "item.lightwithin.luxcognita_berry.tooltip": "§eThe all-knowing light of this berry will",
-  "item.lightwithin.luxcognita_berry.tooltip1": "§atell you the secrets§e of your §binner light§e!",
+  "item.lightwithin.luxintus_berry.tooltip": "§eLight of §blight",
+  "item.lightwithin.luxmutua_berry.tooltip": "§eLight of §dchange",
+  "item.lightwithin.luxcognita_berry.tooltip": "§eLight of §aknowledge",
   "item.lightwithin.bottled_light.tooltip": "§eA fresh charge of Inner Light!",
   "item.lightwithin.bottled_light.tooltip.warning": "Warning! Artificially brewed, highly unstable!",
   "item.lightwithin.bottled_light.tooltip.type": "Type: ",
@@ -304,6 +302,7 @@
   "screen.lightwithin.luxdialogue.activation": "There are a few ways",
   "screen.lightwithin.luxdialogue.activation.sub": "Some more safe and natural, some dangerous but convenient",
   "screen.lightwithin.luxdialogue.activation.safe": "The safe one",
+  "TODO1": "========================= TODO",
   "screen.lightwithin.luxdialogue.activation.alchemy": "The convenient one",
 
   "screen.lightwithin.luxdialogue.activation.natural_0": "Your light will help you whenever you are in need",
@@ -318,10 +317,26 @@
   "screen.lightwithin.luxdialogue.activation.natural_2.no": "No need",
   "screen.lightwithin.luxdialogue.activation.natural_2.more": "Tell me more, in general",
 
-  "screen.lightwithin.luxdialogue.activation.general_info_0": "Typically, most lights detect danger in two steps",
+  "screen.lightwithin.luxdialogue.activation.general_info_0": "Typically, most lights detect danger in two or three steps",
 
   "screen.lightwithin.luxdialogue.activation.general_info_1": "The first consists of a 'wake up' when a potentially harmful event occurs",
   "screen.lightwithin.luxdialogue.activation.general_info_1.sub": "For example, when you get slightly harmed by a foe or fall from a height",
+
+  "screen.lightwithin.luxdialogue.activation.general_info_2": "In the next step, it verifies how many 'dangers' are present",
+  "screen.lightwithin.luxdialogue.activation.general_info_2.sub": "Like you (or your allies!) being surrounded, or badly wounded, and so on",
+
+  "screen.lightwithin.luxdialogue.activation.general_info_3": "Finally, some lights benefit from a 'catalyst' of sorts",
+  "screen.lightwithin.luxdialogue.activation.general_info_3.sub": "The likes of: source of fire or frost, the rain and others",
+
+  "screen.lightwithin.luxdialogue.activation.general_info_4": "If enough of these 'conditions' are met, then it will 'trigger'",
+  "screen.lightwithin.luxdialogue.activation.general_info_4.sub": "And you will be able to harness its powers",
+
+  "screen.lightwithin.luxdialogue.activation.general_info_5": "Are you satisfied with the explanation?",
+  "screen.lightwithin.luxdialogue.activation.general_info_5.yes": "Yes, thank you",
+  "screen.lightwithin.luxdialogue.activation.general_info_5.no": "Ah ah, no.",
+
+  "screen.lightwithin.luxdialogue.offended": "I decided I won't talk to you for a while.",
+  "screen.lightwithin.luxcognita.offended.msg": "I told you I won't talk to you. And no, you can't eat me.",
 
   "screen.lightwithin.luxdialogue.attacked": "You have been attacked!",
   "screen.lightwithin.luxdialogue.attacked.sub": "We'll talk later, go defend yourself!",

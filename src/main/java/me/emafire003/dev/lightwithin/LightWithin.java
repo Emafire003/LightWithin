@@ -44,7 +44,10 @@ import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.registry.*;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.SimpleRegistry;
 import net.minecraft.registry.entry.RegistryEntryList;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
@@ -315,6 +318,10 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 				return;
 			}
 			DialogueProgressState state = DialogueProgressUpdatePacketC2S.readState(buf);
+			if(state != null && state.equals(DialogueProgressState.PISSED_OFF)){
+				player.addStatusEffect(new StatusEffectInstance(LightEffects.LUXCOGNITA_OFFENDED, 60*20));
+				return;
+			}
 			boolean shouldRemove = DialogueProgressUpdatePacketC2S.readRemove(buf);
 			if(shouldRemove){
 				LIGHT_COMPONENT.get(player).removeDialogueProgressState(state);

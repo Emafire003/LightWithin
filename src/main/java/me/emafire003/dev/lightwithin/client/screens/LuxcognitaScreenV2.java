@@ -201,6 +201,7 @@ public class LuxcognitaScreenV2 extends Screen{
                     target = "screen.lightwithin.luxdialogue.action_error";
                     LightWithin.LOGGER.error("Invalid action '"+ action + "', defaulting to 'CLOSE' for dialogue with id: '" + dialogue.dialogueId + "'");
                     e.printStackTrace();
+                    sendDialogueStopDreamPacket();
                 }
 
             }
@@ -236,6 +237,8 @@ public class LuxcognitaScreenV2 extends Screen{
             //Action with a target
             else if(clickAction.equals(ClickActions.GO_DIALOGUE)){
                 LuxcognitaScreenV2 targetScreen = LuxdialogueScreens.LUXDIALOGUE_SCREENS.get(target);
+                LightWithin.LOGGER.info("The target screen pulled is: " + targetScreen + " from name: " + target);
+                LightWithin.LOGGER.info("Contains: " + LuxdialogueScreens.LUXDIALOGUE_SCREENS.containsKey(targetScreen));
                 if(targetScreen == null){
                     this.client.player.sendMessage(Text.literal(LightWithin.PREFIX_MSG + "Could not find the screen with id: " + target).formatted(Formatting.RED));
                     pressAction = (button -> {
@@ -452,8 +455,6 @@ public class LuxcognitaScreenV2 extends Screen{
 
             Identifier image = dialogue.imagePath;
             if(dialogue.imageHasStages){
-                //means it has yet to start the cycle, so i'll set up the first path
-                LightWithin.LOGGER.info("The current ticker is: " + imageTicker + " while the current image is: " + currentImage);
                 //checks if it should change the
                 if(imageTicker > dialogue.imageInterval){
                     currentImage++;
@@ -461,7 +462,6 @@ public class LuxcognitaScreenV2 extends Screen{
                         currentImage = 0;
                     }
                     imageTicker = 0;
-                    LightWithin.LOGGER.info("The current image is: " + image);
                 }
                 image = dialogue.imageStages.get(currentImage);
                 imageTicker++;
@@ -532,6 +532,7 @@ public class LuxcognitaScreenV2 extends Screen{
         //TODO maybe remove especially if it's not a "finish" screen
         playLuxcognitaDisplaySound();
         imageTicker = -1;
+        currentImage = 0;
         super.close();
     }
 

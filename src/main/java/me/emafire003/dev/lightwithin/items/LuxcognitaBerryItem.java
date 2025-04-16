@@ -10,7 +10,6 @@ import me.emafire003.dev.lightwithin.status_effects.LightEffects;
 import me.emafire003.dev.lightwithin.util.RenderEffect;
 import me.emafire003.dev.lightwithin.util.TargetType;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
@@ -37,6 +36,11 @@ public class LuxcognitaBerryItem extends Item {
     @Override
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
         if(LightWithin.isPlayerInCooldown(user) && Config.LUXCOGNITA_BYPASS_COOLDOWN){
+            return TypedActionResult.pass(user.getStackInHand(hand));
+        }
+        if(user.hasStatusEffect(LightEffects.LUXCOGNITA_OFFENDED)){
+            user.sendMessage(Text.translatable("screen.lightwithin.luxcognita.offended.msg").formatted(Formatting.YELLOW), true);
+            user.playSound(LightSounds.LUXCOGNITA_DAMAGE_BLOCK, 1f, 2f);
             return TypedActionResult.pass(user.getStackInHand(hand));
         }
         if (this.isFood()) {
@@ -71,12 +75,7 @@ public class LuxcognitaBerryItem extends Item {
 
     @Override
     public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
-        if(!Screen.hasShiftDown()) {
-            tooltip.add(Text.translatable("item.lightwithin.berry.tooltip"));
-        } else {
-            tooltip.add(Text.translatable("item.lightwithin.luxcognita_berry.tooltip"));
-            tooltip.add(Text.translatable("item.lightwithin.luxcognita_berry.tooltip1"));
-        }
+        tooltip.add(Text.translatable("item.lightwithin.luxcognita_berry.tooltip"));
     }
 
 

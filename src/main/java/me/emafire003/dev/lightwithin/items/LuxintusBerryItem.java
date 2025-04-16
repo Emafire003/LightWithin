@@ -67,12 +67,7 @@ public class LuxintusBerryItem extends Item {
 
     @Override
     public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
-        if(!Screen.hasShiftDown()) {
-            tooltip.add(Text.translatable("item.lightwithin.berry.tooltip"));
-        } else {
-            tooltip.add(Text.translatable("item.lightwithin.luxintus_berry.tooltip"));
-            tooltip.add(Text.translatable("item.lightwithin.luxintus_berry.tooltip1"));
-        }
+        tooltip.add(Text.translatable("item.lightwithin.luxintus_berry.tooltip"));
     }
 
 

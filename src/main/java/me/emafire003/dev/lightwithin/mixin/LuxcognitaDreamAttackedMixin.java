@@ -64,7 +64,6 @@ public abstract class LuxcognitaDreamAttackedMixin extends Entity implements Att
                 }
                 /// Makes it immune to attacks while the effect lasts, so for the next 2 seconds. Also spawns particles and sound effect
                 if(!this.getWorld().isClient()){
-                    //TODO seems a bit to similar each time, test it out
                     this.getWorld().playSound(null, BlockPos.ofFloored(this.getPos()), LightSounds.LUXCOGNITA_DAMAGE_BLOCK, SoundCategory.PLAYERS, 1f, 1f + (float) this.getRandom().nextBetween(0, 2) /10);
 
                     ((ServerWorld) this.getWorld()).spawnParticles(new ItemStackParticleEffect(ParticleTypes.ITEM, new ItemStack(LightItems.LUXCOGNITA_BERRY)),
