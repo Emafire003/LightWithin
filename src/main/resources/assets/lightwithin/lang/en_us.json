@@ -309,15 +309,19 @@
   "screen.lightwithin.luxdialogue.activation.natural_0": "Your light will help you whenever you are in need",
   "screen.lightwithin.luxdialogue.activation.natural_0.sub": "When in dangerous places or times, it will show itself to you, with this symbol:",
 
-  "screen.lightwithin.luxdialogue.activation.natural_1": "When you are ready to activate, do it!",
+  "screen.lightwithin.luxdialogue.activation.natural_1": "When you are ready to activate it, do it!",
   "screen.lightwithin.luxdialogue.activation.natural_1.sub": "I believe your kind calls it 'pressing the activate button %s'",
 
-  "screen.lightwithin.luxdialogue.activation.natural_2": "In which ways your light sense danger, varies",
-  "screen.lightwithin.luxdialogue.activation.natural_2.sub": "Would like to know how your light does it?",
+  "screen.lightwithin.luxdialogue.activation.natural_2": "In which ways your light senses danger, varies",
+  "screen.lightwithin.luxdialogue.activation.natural_2.sub": "Would you like to know how your light does it?",
   "screen.lightwithin.luxdialogue.activation.natural_2.yes": "Yes please",
   "screen.lightwithin.luxdialogue.activation.natural_2.no": "No need",
   "screen.lightwithin.luxdialogue.activation.natural_2.more": "Tell me more, in general",
 
+  "screen.lightwithin.luxdialogue.activation.general_info_0": "Typically, most lights detect danger in two steps",
+
+  "screen.lightwithin.luxdialogue.activation.general_info_1": "The first consists of a 'wake up' when a potentially harmful event occurs",
+  "screen.lightwithin.luxdialogue.activation.general_info_1.sub": "For example, when you get slightly harmed by a foe or fall from a height",
 
   "screen.lightwithin.luxdialogue.attacked": "You have been attacked!",
   "screen.lightwithin.luxdialogue.attacked.sub": "We'll talk later, go defend yourself!",

@@ -25,8 +25,15 @@
   },
   "imageWidth": 32,
   "imageHeight": 32,
-  "imageScale": 1.0,
+  "imageScale": 1.5,
   "imageHasStages": false,
+  "imageStages": [
+    {
+      "namespace": "lightwithin",
+      "path": "textures/lux_dialogue/default.png"
+    }
+  ],
+  "imageInterval": 20,
   "showItem": false,
   "itemPos": "CENTER",
   "item": {
@@ -39,6 +46,7 @@
   },
   "dialogueProgress": false,
   "dialogueProgressState": "NONE",
+  "removeDialogueProgress": false,
   "canRedirect": false,
   "redirectTo": "default",
   "redirectStateRequired": "NONE"

@@ -19,6 +19,6 @@
   "buttons": {
     "screen.lightwithin.luxdialogue.activation.natural_2.yes": "GO_DIALOGUE<my_light/triggers>",
     "screen.lightwithin.luxdialogue.activation.natural_2.no": "CLOSE",
-    "screen.lightwithin.luxdialogue.activation.natural_2.more": "GO_DIALOGUE<activation/in_general>"
+    "screen.lightwithin.luxdialogue.activation.natural_2.more": "GO_DIALOGUE<activation/general_info_0>"
   }
 }

@@ -1,0 +1,9 @@
+{
+  "dialogueId": "general_info_0",
+  "fileVersion": 1,
+  "mainText": "screen.lightwithin.luxdialogue.activation.general_info_0",
+  "textScale": 1.5,
+  "buttons": {
+    "screen.lightwithin.luxdialogue.next": "GO_DIALOGUE<activation/general_info_1>"
+  }
+}

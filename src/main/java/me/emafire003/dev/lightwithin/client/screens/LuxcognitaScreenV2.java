@@ -34,6 +34,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.registry.Registries;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
+import net.minecraft.util.Identifier;
 import org.joml.Matrix4f;
 
 import java.util.ArrayList;
@@ -87,7 +88,7 @@ public class LuxcognitaScreenV2 extends Screen{
         // If this screen produces a dialogue progress state, update it
         if(dialogue.dialogueProgress){
             if(!LightWithin.LIGHT_COMPONENT.get(this.client.player).getDialogueProgressStates().contains(dialogue.dialogueProgressState)){
-                sendDialogueStateUpdatePacket(dialogue.dialogueProgressState, false);
+                sendDialogueStateUpdatePacket(dialogue.dialogueProgressState, dialogue.removeDialogueProgress);
             }
 
         }
@@ -275,6 +276,7 @@ public class LuxcognitaScreenV2 extends Screen{
 
     public void closeWithAnimation(){
         TransitionScreen transitionScreen = new TransitionScreen(Text.literal("closing_transition"), null, true);
+        imageTicker = -1;
         MinecraftClient.getInstance().setScreen(transitionScreen);
     }
 
@@ -375,6 +377,10 @@ public class LuxcognitaScreenV2 extends Screen{
         return 3856719;
     }
 
+
+    private int imageTicker = -1;
+    private int currentImage = 0;
+
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
         this.renderBackground(context);
@@ -444,18 +450,30 @@ public class LuxcognitaScreenV2 extends Screen{
         if(dialogue.showImage){
             Pair<Integer, Integer> xy = ScreenUtils.getXYImgs(dialogue.imagePos, dialogue.imageScale, dialogue.imageWidth, dialogue.imageHeight, 0);
 
+            Identifier image = dialogue.imagePath;
+            if(dialogue.imageHasStages){
+                //means it has yet to start the cycle, so i'll set up the first path
+                LightWithin.LOGGER.info("The current ticker is: " + imageTicker + " while the current image is: " + currentImage);
+                //checks if it should change the
+                if(imageTicker > dialogue.imageInterval){
+                    currentImage++;
+                    if(currentImage >= dialogue.imageStages.size()){
+                        currentImage = 0;
+                    }
+                    imageTicker = 0;
+                    LightWithin.LOGGER.info("The current image is: " + image);
+                }
+                image = dialogue.imageStages.get(currentImage);
+                imageTicker++;
+            }
+
             RenderSystem.enableBlend();
             RenderSystem.defaultBlendFunc();
             ClipStack.addWindow(context.getMatrices(), new Rectangle(0,0, width, height));
 
-            //ClipStack.addWindow(context.getMatrices(), new Rectangle(xy.getFirst()-(dialogue.imageWidth*dialogue.imageScale)/2,xy.getSecond()-(dialogue.imageHeight*dialogue.imageScale)/2, xy.getFirst()+(dialogue.imageWidth*dialogue.imageScale)/2, xy.getSecond()+(dialogue.imageHeight*dialogue.imageScale)/2));
-            Renderer2d.renderTexture(context.getMatrices(), dialogue.imagePath, xy.getFirst(), xy.getSecond(), dialogue.imageWidth*dialogue.imageScale, dialogue.imageHeight*dialogue.imageScale);
+            Renderer2d.renderTexture(context.getMatrices(), image, xy.getFirst(), xy.getSecond(), dialogue.imageWidth*dialogue.imageScale, dialogue.imageHeight*dialogue.imageScale);
             ClipStack.popWindow();
 
-            /*matrixStack.scale(dialogue.imageScale, dialogue.imageScale, dialogue.imageScale);
-            context.drawTexture(dialogue.imagePath, xy.getFirst(), xy.getSecond(), 1, 1, dialogue.imageWidth, dialogue.imageHeight, dialogue.imageWidth, dialogue.imageHeight);
-            matrixStack.pop();
-            matrixStack.push();*/
         }
 
         matrixStack.pop();
@@ -504,6 +522,7 @@ public class LuxcognitaScreenV2 extends Screen{
     public void tick() {
         super.tick();
         if (System.currentTimeMillis() > this.loadStartTime + MIN_LOAD_TIME_MS) {
+            sendDialogueStopDreamPacket();
             this.close();
         }
     }
@@ -512,6 +531,7 @@ public class LuxcognitaScreenV2 extends Screen{
     public void close() {
         //TODO maybe remove especially if it's not a "finish" screen
         playLuxcognitaDisplaySound();
+        imageTicker = -1;
         super.close();
     }
 

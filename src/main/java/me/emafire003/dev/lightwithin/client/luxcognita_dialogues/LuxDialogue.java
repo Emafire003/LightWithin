@@ -63,7 +63,7 @@ public class LuxDialogue {
     /// The image's position as described for the berry
     public ScreenPositionsPresets imagePos = ScreenPositionsPresets.CENTER;
     /// The image's path location. It's an identifier
-    public Identifier imagePath = LightWithin.getIdentifier("textures/lux_dialogue/default.png");
+    public Identifier imagePath = LightWithin.getIdentifier("textures/dialogues/default.png");
     /// Image width
     public int imageWidth = 32;
     /// Image height
@@ -73,6 +73,10 @@ public class LuxDialogue {
     /// Weather or not the image has stages. If it has they will start from name_0.png to name_x.png
     //TODO tbf, i can add them later apparently without issue.
     public boolean imageHasStages = false;
+    /// A map of the texture files
+    public List<Identifier> imageStages = List.of(LightWithin.getIdentifier("textures/lux_dialogue/default.png"));
+    ///  The interval between each frame, in ticks (1s = 20t)
+    public int imageInterval = 20;
     ///  Weather or not to show an item
     public boolean showItem = false;
     /// The image's position as described for the berry
@@ -81,7 +85,6 @@ public class LuxDialogue {
     public Identifier item = Registries.ITEM.getId(LightItems.LUXINTUS_BERRY_POWDER);
     /// The item's scale
     public float itemScale = 3f;
-
     /// The first string is a translatable string representing the text displayed on the button, while the second one represents an action that is performed on click, along with its potetential target
     public Map<String, String> buttons = Map.of("screen.lightwithin.luxdialogue.default.button0", "CLOSE");
 
@@ -89,13 +92,14 @@ public class LuxDialogue {
     public boolean dialogueProgress = false;
     /// The code of the dialogue progress state that is achieved one this dialogue has been seen see {@link DialogueProgressState}
     public DialogueProgressState dialogueProgressState = DialogueProgressState.NONE;
+    /// if true adds the dialogue progress, otherwise removes it
+    public boolean removeDialogueProgress = false;
     /// Weather or not this screen can redirect to another one if a certain progress in dialogue is made
     public boolean canRedirect = false;
     /// Redirects to this screen if the player has the right dialogue progress state
     public String redirectTo = "default";
     /// The dialogue state the player has to have in order to have the redirection
     public DialogueProgressState redirectStateRequired = DialogueProgressState.NONE;
-
 
 
     public void serialize() {
@@ -142,8 +146,6 @@ public class LuxDialogue {
         }
     }
 
-    //TODO maybe add support for UV if needed
-
     @Override
     public String toString() {
         return "LuxDialogue{" +
@@ -151,9 +153,13 @@ public class LuxDialogue {
                 ", fileVersion=" + fileVersion +
                 ", mainText='" + mainText + '\'' +
                 ", mainTextScale=" + mainTextScale +
+                ", hasReplaceableMainText=" + hasReplaceableMainText +
+                ", replaceablesListMain=" + replaceablesListMain +
                 ", subTextPresent=" + subTextPresent +
                 ", subText='" + subText + '\'' +
                 ", subTextScale=" + subTextScale +
+                ", hasReplaceableSubText=" + hasReplaceableSubText +
+                ", replaceablesListSub=" + replaceablesListSub +
                 ", showBerry=" + showBerry +
                 ", berryPos=" + berryPos +
                 ", berryScale=" + berryScale +
@@ -163,6 +169,8 @@ public class LuxDialogue {
                 ", imageWidth=" + imageWidth +
                 ", imageHeight=" + imageHeight +
                 ", imageScale=" + imageScale +
+                ", imageHasStages=" + imageHasStages +
+                ", imageStages=" + imageStages +
                 ", showItem=" + showItem +
                 ", itemPos=" + itemPos +
                 ", item=" + item +
@@ -170,6 +178,10 @@ public class LuxDialogue {
                 ", buttons=" + buttons +
                 ", dialogueProgress=" + dialogueProgress +
                 ", dialogueProgressState=" + dialogueProgressState +
+                ", removeDialogueProgress=" + removeDialogueProgress +
+                ", canRedirect=" + canRedirect +
+                ", redirectTo='" + redirectTo + '\'' +
+                ", redirectStateRequired=" + redirectStateRequired +
                 '}';
     }
 }
