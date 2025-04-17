@@ -237,8 +237,6 @@ public class LuxcognitaScreenV2 extends Screen{
             //Action with a target
             else if(clickAction.equals(ClickActions.GO_DIALOGUE)){
                 LuxcognitaScreenV2 targetScreen = LuxdialogueScreens.LUXDIALOGUE_SCREENS.get(target);
-                LightWithin.LOGGER.info("The target screen pulled is: " + targetScreen + " from name: " + target);
-                LightWithin.LOGGER.info("Contains: " + LuxdialogueScreens.LUXDIALOGUE_SCREENS.containsKey(targetScreen));
                 if(targetScreen == null){
                     this.client.player.sendMessage(Text.literal(LightWithin.PREFIX_MSG + "Could not find the screen with id: " + target).formatted(Formatting.RED));
                     pressAction = (button -> {
@@ -406,6 +404,7 @@ public class LuxcognitaScreenV2 extends Screen{
             });
             mainText = Text.translatable(dialogue.mainText, toReplace.toArray());
         }
+        
         context.drawCenteredTextWithShadow(this.textRenderer, mainText, (int) (((float) this.width / 2)/dialogue.mainTextScale), (int) (((float) this.height / 2 - 70)/dialogue.mainTextScale), getTextColor());
         matrixStack.pop();
         matrixStack.push();

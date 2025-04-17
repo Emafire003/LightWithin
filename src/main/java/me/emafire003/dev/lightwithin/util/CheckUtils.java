@@ -34,6 +34,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -784,6 +785,11 @@ public class CheckUtils {
     /** Checks if there is currently a stormy weather in the selected world*/
     public static boolean checkThundering(World world){
         return world.isThundering();
+    }
+
+    /** Checks if there is currently a snowy weather in the selected world at that position*/
+    public static boolean checkSnowing(World world, BlockPos pos){
+        return world.isRaining() && world.getBiome(pos).value().getPrecipitation(pos).equals(Biome.Precipitation.SNOW);
     }
 
     /** Checks if there is currently a rainy weather in the selected world*/

@@ -44,6 +44,7 @@ import java.util.stream.Stream;
 
 import static me.emafire003.dev.lightwithin.LightWithin.*;
 import static me.emafire003.dev.lightwithin.util.CheckUtils.checkBlocksWithTag;
+import static me.emafire003.dev.lightwithin.util.CheckUtils.checkSnowing;
 import static me.emafire003.dev.lightwithin.util.LightTriggerChecks.getMinTrigger;
 import static me.emafire003.dev.lightwithin.util.LightTriggerChecks.sendLightTriggered;
 
@@ -323,6 +324,9 @@ public class FrostLight extends InnerLight {
     @Override
     public boolean checkLightConditions(PlayerEntity player) {
         if(player.isFrozen()){
+            return true;
+        }
+        if(checkSnowing(player.getWorld(), player.getBlockPos())){
             return true;
         }
 
