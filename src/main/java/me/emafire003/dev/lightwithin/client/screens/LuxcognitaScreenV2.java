@@ -232,6 +232,10 @@ public class LuxcognitaScreenV2 extends Screen{
                 pressAction = this::lightMaxCooldownAction;
             }else if(clickAction.equals(ClickActions.SHOW_MAXCHARGES)){
                 pressAction = this::lightMaxChargesAction;
+            }else if(clickAction.equals(ClickActions.SHOW_LIGHT_CONDITIONS)){
+                pressAction = this::lightLightConditionsAction;
+            }else if(clickAction.equals(ClickActions.SHOW_TRIGGER_EVENTS)){
+                pressAction = this::lightLightTriggerEventsAction;
             }
 
             //Action with a target
@@ -339,6 +343,18 @@ public class LuxcognitaScreenV2 extends Screen{
         this.closeWithAnimation();
     }
 
+    public void lightLightConditionsAction(ButtonWidget buttonWidget) {
+        LuxcognitaBerryItem.sendLightConditionsMessage(this.client.player);
+        sendDialogueStopDreamPacket();
+        this.closeWithAnimation();
+    }
+
+    public void lightLightTriggerEventsAction(ButtonWidget buttonWidget) {
+        LuxcognitaBerryItem.sendLightTriggerEventsMessage(this.client.player);
+        sendDialogueStopDreamPacket();
+        this.closeWithAnimation();
+    }
+
     private int colorTicks = 0;
 
     /**Periodically changes the color, to make a little animation thing.
@@ -394,8 +410,17 @@ public class LuxcognitaScreenV2 extends Screen{
 
         matrixStack.push();
 
+        float mainTextScale = dialogue.mainTextScale;
 
-        matrixStack.scale(dialogue.mainTextScale, dialogue.mainTextScale, dialogue.mainTextScale);
+        if(this.width <= 450 && mainTextScale != dialogue.mainTextScale){
+            //TODO i dunno i kinda need to fix the scaling here
+            LightWithin.LOGGER.info("Updating mainTextScale to " + dialogue.mainTextScale*0.6);
+            mainTextScale = (float) (dialogue.mainTextScale*0.6);
+        }
+
+        matrixStack.scale(mainTextScale, mainTextScale, mainTextScale); //640 331 fullscreen //433 246 windowed (If around this value i should make the text smaller)
+
+
         Text mainText = Text.translatable(dialogue.mainText);
         if(dialogue.hasReplaceableMainText){
             List<String> toReplace = new ArrayList<>(dialogue.replaceablesListMain.size());
@@ -404,13 +429,19 @@ public class LuxcognitaScreenV2 extends Screen{
             });
             mainText = Text.translatable(dialogue.mainText, toReplace.toArray());
         }
-        
+
         context.drawCenteredTextWithShadow(this.textRenderer, mainText, (int) (((float) this.width / 2)/dialogue.mainTextScale), (int) (((float) this.height / 2 - 70)/dialogue.mainTextScale), getTextColor());
         matrixStack.pop();
         matrixStack.push();
 
         if(dialogue.subTextPresent){
             Text subText = Text.translatable(dialogue.subText);
+            float subTextScale = dialogue.subTextScale;
+
+            if(this.width <= 450 && subTextScale != dialogue.subTextScale){
+                subTextScale = (float) (dialogue.subTextScale*0.8);
+            }
+
             if(dialogue.hasReplaceableSubText){
                 List<String> toReplace = new ArrayList<>(dialogue.replaceablesListMain.size());
                 dialogue.replaceablesListMain.forEach( replaceable -> {
@@ -418,7 +449,7 @@ public class LuxcognitaScreenV2 extends Screen{
                 });
                 subText = Text.translatable(dialogue.subText, toReplace.toArray());
             }
-            matrixStack.scale(dialogue.subTextScale, dialogue.subTextScale, dialogue.subTextScale);
+            matrixStack.scale(subTextScale, subTextScale, subTextScale);
             context.drawCenteredTextWithShadow(this.textRenderer, subText, (int) (((float) this.width / 2)/dialogue.subTextScale), (int) (((float) this.height / 2 - 40)/dialogue.subTextScale), getTextColor());
             matrixStack.pop();
             matrixStack.push();

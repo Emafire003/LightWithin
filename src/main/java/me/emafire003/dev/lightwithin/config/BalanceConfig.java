@@ -22,10 +22,10 @@ public class BalanceConfig {
     public static int HEAL_MIN_POWER;
     public static int HEAL_MIN_DURATION;
 
-    public static int DEFENSE_MAX_POWER;
-    public static int DEFENSE_MAX_DURATION;
-    public static int DEFENSE_MIN_POWER;
-    public static int DEFENSE_MIN_DURATION;
+    public static int DEFENCE_MAX_POWER;
+    public static int DEFENCE_MAX_DURATION;
+    public static int DEFENCE_MIN_POWER;
+    public static int DEFENCE_MIN_DURATION;
 
     public static int STRENGTH_MAX_POWER;
     public static int STRENGTH_MAX_DURATION;
@@ -233,10 +233,10 @@ public class BalanceConfig {
         HEAL_MIN_POWER = CONFIG.getOrDefault("heal_min_power", 1);
         HEAL_MIN_DURATION = CONFIG.getOrDefault("heal_min_duration", 4);
 
-        DEFENSE_MAX_POWER = CONFIG.getOrDefault("defense_max_power", 8);
-        DEFENSE_MAX_DURATION = CONFIG.getOrDefault("defense_max_duration", 10);
-        DEFENSE_MIN_POWER = CONFIG.getOrDefault("defense_min_power", 1);
-        DEFENSE_MIN_DURATION = CONFIG.getOrDefault("defense_min_duration", 5);
+        DEFENCE_MAX_POWER = CONFIG.getOrDefault("defense_max_power", 8);
+        DEFENCE_MAX_DURATION = CONFIG.getOrDefault("defense_max_duration", 10);
+        DEFENCE_MIN_POWER = CONFIG.getOrDefault("defense_min_power", 1);
+        DEFENCE_MIN_DURATION = CONFIG.getOrDefault("defense_min_duration", 5);
 
         STRENGTH_MAX_POWER = CONFIG.getOrDefault("strength_max_power", 6);
         STRENGTH_MAX_DURATION = CONFIG.getOrDefault("strength_max_duration", 10);

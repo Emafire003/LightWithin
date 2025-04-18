@@ -55,10 +55,23 @@
   "light.charge.cant_use_here": "You are not allowed to use your InnerLight here!",
 
   "light.description.error": "Uhm... your light is... an error? Light not found, report please!",
-  "light.description.power": "Your light's power gets this score for me: ",
-  "light.description.duration": "It seems it can last for seconds, a total of: ",
-  "light.description.maxcooldown": "You shall rest your light for these many seconds: ",
-  "light.description.maxcharges": "Your light can sustain some charges, ",
+  "light.description.power": "Your light's power gets a %s out of 10 for me",
+  "light.description.duration": "It seems it can last for %s seconds",
+  "light.description.maxcooldown": "You shall let your light rest for %s seconds",
+  "light.description.maxcharges": "Your light can sustain, at most, %s charges",
+  "light.description.trigger_events": "Your light interpreters danger as:",
+
+  "light.trigger_check.entity_attacked": "A being (like you) being attacked by another",
+  "light.trigger_check.entity_attacks_entity": "A being (like you) attacking another",
+  "light.trigger_check.ally_dies": "An ally dying",
+  "light.trigger_check.ally_attacked": "An ally being attacked",
+  "light.trigger_check.entity_falling": "A being falling from a height",
+  "light.trigger_check.entity_drowning": "A being drowning",
+  "light.trigger_check.entity_struck_by_lightning": "A being being struck by lightning",
+  "light.trigger_check.entity_burning": "A being enveloped by flames",
+  "light.trigger_check.entity_freezing":"A being freezing",
+  "light.trigger_check.equipment_break": "A being's equipment breaking apart",
+
   "light.description.heal": "Your light, yes, is a gentle and caring one indeed",
   "light.description.defense": "Resilience, that's what your light is made of",
   "light.description.strength": "You have a strong light, ready to land its strength to you",
@@ -77,51 +90,64 @@
   "light.description.target.all": "Your light won't discern from good and evil, lighting all things!",
   "light.description.target.variant": "Your light is very peculiar and strange indeed!",
 
+  "light.description.triggering.light_conditions": "Your light would benefit from: ",
+
   "light.description.activation.heal.self": "Your light flows trough you, sewing your wounds!",
   "light.description.activation.heal.allies": "Your light flows trough you and your allies, sewing your wounds!",
   "light.description.activation.heal.variant": "Your light flows trough all friendly creatures, healing their sickness!",
-
-  "light.description.activation.defense.self": "Your light tensed up, shielding you from an hurtful future!",
-  "light.description.activation.defense.allies": "Your light tensed up, shielding your allies from an hurtful future!",
-  "light.description.activation.defense.variant": "Your light tensed up, shielding peaceful creatures from an hurtful future!",
-
+  "light.description.triggering.light_conditions.heal": "Nothing in particular!",
+  
+  "light.description.activation.defence.self": "Your light tensed up, shielding you from an hurtful future!",
+  "light.description.activation.defence.allies": "Your light tensed up, shielding your allies from an hurtful future!",
+  "light.description.activation.defence.variant": "Your light tensed up, shielding peaceful creatures from an hurtful future!",
+  "light.description.triggering.light_conditions.defence": "Nothing in particular!",
+  
   "light.description.activation.strength.self": "Your light shone bright, strengthening your attacks!",
   "light.description.activation.strength.allies": "Your light shone bright, strengthening your allies!",
   "light.description.activation.strength.variant": "Your light shone bright, speeding up your attacks!",
+  "light.description.triggering.light_conditions.strength": "Nothing in particular!",
 
   "light.description.activation.blazing.enemies": "Your light wants to incinerate the enemies that stand before you!",
   "light.description.activation.blazing.all": "Your light will incinerate everything that stands in your way!",
+  "light.description.triggering.light_conditions.blazing": "A source of fire or heat",
 
   "light.description.activation.frost.enemies": "All your enemies will be made into a statue of ice!",
   "light.description.activation.frost.all": "Everything will be frozen in ice!",
   "light.description.activation.frost.self": "A wall of ice shall protect you!",
   "light.description.activation.frost.allies": "A wall of ice shall protect you!",
+  "light.description.triggering.light_conditions.frost": "A source of frost or snow",
 
   "light.description.activation.earthen.enemies": "The earth shall split under the soles of the enemy!",
   "light.description.activation.earthen.variant": "The light crystallized into an Earthen Golem!",
   "light.description.activation.earthen.self": "Earth shall split and grow around you!",
   "light.description.activation.earthen.allies": "The Rock shall protect us!",
+  "light.description.triggering.light_conditions.earthen": "Being close to earth, or bringing it with you",
 
   "light.description.activation.frog": "Croak!",
   "light.description.activation.frog.damage": "You are confused, so confused that you hit yourself.",
+  "light.description.triggering.light_conditions.frog": "*croak*",
 
   "light.description.activation.wind.self": "The wind shall carry you onwards!",
   "light.description.activation.wind.allies": "Oh winds, aid our movements!",
   "light.description.activation.wind.all": "Blow them away!",
+  "light.description.triggering.light_conditions.wind": "Fresh air and winds!",
 
   "light.description.activation.aqua.enemies": "Your enemy shall be launched away by the waters!",
   "light.description.activation.aqua.all": "Inhabitants of the depths, hear my call and aid me!",
   "light.description.activation.aqua.self": "Let me swiftly move on a watery carpet!",
   "light.description.activation.aqua.allies": "Let us swiftly move on a watery carpet!",
+  "light.description.triggering.light_conditions.aqua": "A source of water",
 
   "light.description.activation.forest_aura.all": "The forest grants you its power!",
   "light.description.activation.forest_aura.self": "The forest will become one with you!",
+  "light.description.triggering.light_conditions.forest_aura:": "A forest, or holding a piece of it",
 
   "light.description.negated.forest_aura": "Your light sensed its kin, and shielded you from its tricks!",
 
   "light.description.activation.thunder_aura.all": "The storm lends you its greatest weapon!",
   "light.description.activation.thunder_aura.allies": "The Thunder shall protect your allies!",
   "light.description.activation.thunder_aura.variant": "The Thunder has come to protect its children!",
+  "light.description.triggering.light_conditions.thunder_aura": "The Thunder and what attracts its children",
 
   "config.lightwithin.name": "LightWithin client options",
   "config.lightwithin.category_name": "Options",
@@ -288,7 +314,6 @@
   "TODO": "========== TODO",
   "screen.lightwithin.luxdialogue.guidance.button.what_lights": "What are the InnerLights?",
   "screen.lightwithin.luxdialogue.guidance.button.my_light": "Tell me about my InnerLight!",
-  "comment7": "========== Either add another button explaining the light charges, or add one inside the activation one.",
   "screen.lightwithin.luxdialogue.guidance.button.activate": "How do I activate my InnerLight?",
 
   "screen.lightwithin.luxdialogue.my_light": "What do you wish to know about?",
@@ -298,6 +323,11 @@
   "screen.lightwithin.luxdialogue.my_light.duration": "How long it lasts!",
   "screen.lightwithin.luxdialogue.my_light.maxcooldown": "About its rest period!",
   "screen.lightwithin.luxdialogue.my_light.maxcharges": "My LightCharge limits",
+
+  "screen.lightwithin.luxdialogue.my_light.triggers": "What in particular?",
+  "screen.lightwithin.luxdialogue.my_light.triggers.light_conditions": "My light's catalysts",
+  "screen.lightwithin.luxdialogue.my_light.triggers.trigger_events": "The dangers it detects",
+  "screen.lightwithin.luxdialogue.my_light.triggers.danger_cond": "WIP MAYBE NOT, Dangerous conditions it detects",
 
   "screen.lightwithin.luxdialogue.activation": "There are a few ways",
   "screen.lightwithin.luxdialogue.activation.sub": "Some more safe and natural, some dangerous but convenient",
@@ -310,9 +340,9 @@
 
   "screen.lightwithin.luxdialogue.activation.natural_1": "When you are ready to activate it, do it!",
   "screen.lightwithin.luxdialogue.activation.natural_1.sub": "I believe your kind calls it 'pressing the activate button %s'",
-
   "screen.lightwithin.luxdialogue.activation.natural_2": "In which ways your light senses danger, varies",
   "screen.lightwithin.luxdialogue.activation.natural_2.sub": "Would you like to know how your light does it?",
+  "TODO2": "========================= TODO",
   "screen.lightwithin.luxdialogue.activation.natural_2.yes": "Yes please",
   "screen.lightwithin.luxdialogue.activation.natural_2.no": "No need",
   "screen.lightwithin.luxdialogue.activation.natural_2.more": "Tell me more, in general",

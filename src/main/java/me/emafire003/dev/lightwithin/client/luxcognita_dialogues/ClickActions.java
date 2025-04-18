@@ -3,9 +3,8 @@ package me.emafire003.dev.lightwithin.client.luxcognita_dialogues;
 public enum ClickActions {
     GO_DIALOGUE, /// needs to have a parameter like "GO_DIALOGUE<"id">"
     CLOSE,
-    SEND_CHAT_MSG,
-    SEND_OVERLAY_MSG,
-    CHANGE_BACKGROUND,
+    SEND_CHAT_MSG, /// needs to have a parameter like "SEND_CHAT_MSG<"translation_string">"
+    SEND_OVERLAY_MSG, /// needs to have a parameter like "SEND_OVERLAY_MSG<"translation_string">"
 
     SHOW_TYPE_RUNES,
     SHOW_TARGET,
@@ -14,5 +13,7 @@ public enum ClickActions {
     SHOW_POWER,
     SHOW_DURATION,
     SHOW_MAXCOOLDOWN,
-    SHOW_MAXCHARGES
+    SHOW_MAXCHARGES,
+    SHOW_LIGHT_CONDITIONS,
+    SHOW_TRIGGER_EVENTS
 }

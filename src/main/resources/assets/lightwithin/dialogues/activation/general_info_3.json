@@ -8,10 +8,10 @@
   "subTextScale": 1.4,
   "berryPos": "TOP_LEFT",
   "showImage": true,
-  "imagePos": "TOP_CENTER",
+  "imagePos": "CENTER",
   "imageWidth": 64,
   "imageHeight": 64,
-  "imageScale": 1.0,
+  "imageScale": 1.3,
   "imageHasStages": true,
   "imageStages": [
     {

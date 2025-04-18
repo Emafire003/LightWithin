@@ -9,6 +9,7 @@ import me.emafire003.dev.lightwithin.sounds.LightSounds;
 import me.emafire003.dev.lightwithin.status_effects.LightEffects;
 import me.emafire003.dev.lightwithin.util.RenderEffect;
 import me.emafire003.dev.lightwithin.util.TargetType;
+import me.emafire003.dev.lightwithin.util.TriggerChecks;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.LivingEntity;
@@ -85,6 +86,8 @@ public class LuxcognitaBerryItem extends Item {
     //#f1f657
     private static final Style style = Style.EMPTY.withColor(15857239);
 
+    public static final String LUXCOGNITA_PREFIX = "§b[§a§iLuxCognita§b]§r: ";
+
     /**Sends a player the description of their InnerLight type*/
     public static void sendLightTypeMessage(PlayerEntity user){
         if(user == null){
@@ -122,7 +125,7 @@ public class LuxcognitaBerryItem extends Item {
             return;
         }
         double power = LightWithin.LIGHT_COMPONENT.get(user).getPowerMultiplier();
-        user.sendMessage(Text.translatable("light.description.power").append(Text.literal(String.valueOf(power))).setStyle(style), true);
+        user.sendMessage(Text.translatable("light.description.power", String.valueOf(power)).setStyle(style), true);
     }
 
     /** Sends the duration of the light to the player*/
@@ -132,7 +135,7 @@ public class LuxcognitaBerryItem extends Item {
             return;
         }
         double duration = LightWithin.LIGHT_COMPONENT.get(user).getDuration();
-        user.sendMessage(Text.translatable("light.description.duration").append(Text.literal(String.valueOf(duration))).setStyle(style), true);
+        user.sendMessage(Text.translatable("light.description.duration", String.valueOf(duration)).setStyle(style), true);
     }
 
     /** Sends the max cooldown of the light to the player*/
@@ -142,7 +145,7 @@ public class LuxcognitaBerryItem extends Item {
             return;
         }
         int cooldown = LightWithin.LIGHT_COMPONENT.get(user).getMaxCooldown();
-        user.sendMessage(Text.translatable("light.description.maxcooldown").append(Text.literal(String.valueOf(cooldown))).setStyle(style), true);
+        user.sendMessage(Text.translatable("light.description.maxcooldown", String.valueOf(cooldown)).setStyle(style), true);
     }
 
     /** Sends the max charges of the light to the player*/
@@ -152,7 +155,28 @@ public class LuxcognitaBerryItem extends Item {
             return;
         }
         int charges = LightWithin.LIGHT_COMPONENT.get(user).getMaxLightCharges();
-        user.sendMessage(Text.translatable("light.description.maxcharges").append(Text.literal(String.valueOf(charges))).setStyle(style), true);
+        user.sendMessage(Text.translatable("light.description.maxcharges", String.valueOf(charges)).setStyle(style), true);
+    }
+
+    /** Sends the conditions useful to trigger the light of the player*/
+    public static void sendLightConditionsMessage(PlayerEntity user){
+        if(user == null){
+            LightWithin.LOGGER.error("Error! Can't send light target messages, the player is null!");
+            return;
+        }
+        user.sendMessage(Text.translatable("light.description.triggering.light_conditions").setStyle(style)
+                .append(Text.translatable("light.description.triggering.light_conditions."+LightWithin.LIGHT_COMPONENT.get(user).getType().toString()).formatted(Formatting.AQUA)), true);
+    }
+
+    /** Sends the conditions useful to trigger the light of the player*/
+    public static void sendLightTriggerEventsMessage(PlayerEntity user){
+        if(user == null){
+            LightWithin.LOGGER.error("Error! Can't send light target messages, the player is null!");
+            return;
+        }
+        List<TriggerChecks> checks = LightWithin.LIGHT_COMPONENT.get(user).getType().getTriggerChecks();
+        user.sendMessage(Text.literal(LUXCOGNITA_PREFIX).append(Text.translatable("light.description.trigger_events").formatted(Formatting.AQUA)));
+        checks.forEach(triggerCheck -> user.sendMessage(Text.literal(" > ").setStyle(style).append(Text.translatable(triggerCheck.getTranslationString()))));
     }
 
 }

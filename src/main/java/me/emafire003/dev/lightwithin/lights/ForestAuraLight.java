@@ -40,9 +40,7 @@ import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.biome.Biome;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static me.emafire003.dev.lightwithin.LightWithin.*;
