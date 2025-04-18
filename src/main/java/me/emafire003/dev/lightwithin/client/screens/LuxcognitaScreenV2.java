@@ -10,6 +10,7 @@ import me.emafire003.dev.lightwithin.client.luxcognita_dialogues.ClickActions;
 import me.emafire003.dev.lightwithin.client.luxcognita_dialogues.DialogueProgressState;
 import me.emafire003.dev.lightwithin.client.luxcognita_dialogues.LuxDialogue;
 import me.emafire003.dev.lightwithin.client.luxcognita_dialogues.Replaceables;
+import me.emafire003.dev.lightwithin.config.ClientConfig;
 import me.emafire003.dev.lightwithin.items.LightItems;
 import me.emafire003.dev.lightwithin.items.LuxcognitaBerryItem;
 import me.emafire003.dev.lightwithin.networking.DialogueProgressUpdatePacketC2S;
@@ -44,7 +45,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 @SuppressWarnings("ALL")
 public class LuxcognitaScreenV2 extends Screen{
-    private static final long MIN_LOAD_TIME_MS = 60000L;
     protected long loadStartTime;
     private final LuxDialogue dialogue;
 
@@ -410,15 +410,8 @@ public class LuxcognitaScreenV2 extends Screen{
 
         matrixStack.push();
 
-        float mainTextScale = dialogue.mainTextScale;
 
-        if(this.width <= 450 && mainTextScale != dialogue.mainTextScale){
-            //TODO i dunno i kinda need to fix the scaling here
-            LightWithin.LOGGER.info("Updating mainTextScale to " + dialogue.mainTextScale*0.6);
-            mainTextScale = (float) (dialogue.mainTextScale*0.6);
-        }
-
-        matrixStack.scale(mainTextScale, mainTextScale, mainTextScale); //640 331 fullscreen //433 246 windowed (If around this value i should make the text smaller)
+        matrixStack.scale(dialogue.mainTextScale*ClientConfig.LUXDIALOGUE_TEXT_SCALE, dialogue.mainTextScale*ClientConfig.LUXDIALOGUE_TEXT_SCALE, dialogue.mainTextScale*ClientConfig.LUXDIALOGUE_TEXT_SCALE);
 
 
         Text mainText = Text.translatable(dialogue.mainText);
@@ -430,17 +423,13 @@ public class LuxcognitaScreenV2 extends Screen{
             mainText = Text.translatable(dialogue.mainText, toReplace.toArray());
         }
 
-        context.drawCenteredTextWithShadow(this.textRenderer, mainText, (int) (((float) this.width / 2)/dialogue.mainTextScale), (int) (((float) this.height / 2 - 70)/dialogue.mainTextScale), getTextColor());
+        context.drawCenteredTextWithShadow(this.textRenderer, mainText, (int) (((float) this.width / 2)/(dialogue.mainTextScale*ClientConfig.LUXDIALOGUE_TEXT_SCALE)), (int) (((float) this.height / 2 - 70)/(dialogue.mainTextScale*ClientConfig.LUXDIALOGUE_TEXT_SCALE)), getTextColor());
         matrixStack.pop();
         matrixStack.push();
 
         if(dialogue.subTextPresent){
             Text subText = Text.translatable(dialogue.subText);
-            float subTextScale = dialogue.subTextScale;
 
-            if(this.width <= 450 && subTextScale != dialogue.subTextScale){
-                subTextScale = (float) (dialogue.subTextScale*0.8);
-            }
 
             if(dialogue.hasReplaceableSubText){
                 List<String> toReplace = new ArrayList<>(dialogue.replaceablesListMain.size());
@@ -449,8 +438,8 @@ public class LuxcognitaScreenV2 extends Screen{
                 });
                 subText = Text.translatable(dialogue.subText, toReplace.toArray());
             }
-            matrixStack.scale(subTextScale, subTextScale, subTextScale);
-            context.drawCenteredTextWithShadow(this.textRenderer, subText, (int) (((float) this.width / 2)/dialogue.subTextScale), (int) (((float) this.height / 2 - 40)/dialogue.subTextScale), getTextColor());
+            matrixStack.scale(dialogue.subTextScale*ClientConfig.LUXDIALOGUE_TEXT_SCALE, dialogue.subTextScale*ClientConfig.LUXDIALOGUE_TEXT_SCALE, dialogue.subTextScale*ClientConfig.LUXDIALOGUE_TEXT_SCALE);
+            context.drawCenteredTextWithShadow(this.textRenderer, subText, (int) (((float) this.width / 2)/(dialogue.subTextScale*ClientConfig.LUXDIALOGUE_TEXT_SCALE)), (int) (((float) this.height / 2 - 40)/(dialogue.subTextScale*ClientConfig.LUXDIALOGUE_TEXT_SCALE)), getTextColor());
             matrixStack.pop();
             matrixStack.push();
         }
@@ -551,7 +540,7 @@ public class LuxcognitaScreenV2 extends Screen{
     @Override
     public void tick() {
         super.tick();
-        if (System.currentTimeMillis() > this.loadStartTime + MIN_LOAD_TIME_MS) {
+        if (System.currentTimeMillis() > this.loadStartTime + ClientConfig.CLOSE_LUXDIALOGUE_SCREEN_AFTER*1000) {
             sendDialogueStopDreamPacket();
             this.close();
         }

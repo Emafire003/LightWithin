@@ -204,6 +204,11 @@
   "config.lightwithin.intoxication_shader_warning": "Intoxication Shader Warning",
   "config.lightwithin.intoxication_shader_warning.tooltip": "Accessibility setting. Turn this off to not see the warning message every time the intoxication effect is applied to you",
 
+  "config.lightwithin.luxdialogue.text_scale": "Luxdialogue text scale",
+  "config.lightwithin.luxdialogue.text_scale.tooltip": "The scale of the text rendered in the dialogue screen with Luxcognita berry",
+  "config.lightwithin.luxdialogue.close_after": "Close Luxdialogue screen after",
+  "config.lightwithin.luxdialogue.close_after.tooltip": "After how many seconds should the luxdialogue screen automatically close? (to prevent being stuck seeing it forever)",
+
   "audio.lightwithin.heal_light_triggered": "Heal Light has triggered",
   "audio.lightwithin.defense_light_triggered": "Defense Light has triggered",
   "audio.lightwithin.strength_light_triggered": "Strength Light has triggered",

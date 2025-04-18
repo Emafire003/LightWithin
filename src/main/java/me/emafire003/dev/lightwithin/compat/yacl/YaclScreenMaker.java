@@ -399,6 +399,40 @@ public class YaclScreenMaker {
                         .controller(TickBoxControllerBuilder::create)
                         .build()
         );
+        options.add(
+                Option.<Float>createBuilder()
+                        .name(Text.translatable("config.lightwithin.luxdialogue.text_scale"))
+                        .description(OptionDescription.of(Text.translatable("config.lightwithin.luxdialogue.text_scale.tooltip")))
+                        .binding(
+                                ClientConfig.LUXDIALOGYE_TEXT_SCALE_default, // the default value
+                                () -> ClientConfig.LUXDIALOGUE_TEXT_SCALE, // a field to get the current value from
+                                newVal -> {
+                                    ClientConfig.LUXDIALOGUE_TEXT_SCALE = newVal;
+                                    ClientConfig.saveToFile();
+                                }
+                        )
+                        .controller(opt -> FloatSliderControllerBuilder.create(opt)
+                                .range(0.0f, 2.0f)
+                                .step(0.05f))
+                        .build()
+        );
+        options.add(
+                Option.<Integer>createBuilder()
+                        .name(Text.translatable("config.lightwithin.luxdialogue.close_after"))
+                        .description(OptionDescription.of(Text.translatable("config.lightwithin.luxdialogue.close_after.tooltip")))
+                        .binding(
+                                ClientConfig.CLOSE_LUXDIALOGUE_SCREEN_AFTER_default, // the default value
+                                () -> ClientConfig.CLOSE_LUXDIALOGUE_SCREEN_AFTER, // a field to get the current value from
+                                newVal -> {
+                                    ClientConfig.CLOSE_LUXDIALOGUE_SCREEN_AFTER= newVal;
+                                    ClientConfig.saveToFile();
+                                }
+                        )
+                        .controller(opt -> IntegerFieldControllerBuilder.create(opt)
+                                .min(5)
+                        )
+                        .build()
+        );
 
         updatedFromActivePreset.set(false);
         return options;

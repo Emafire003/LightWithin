@@ -52,6 +52,10 @@ public class ClientConfig {
     public static boolean FORESTAURA_INTOXICATION_SHADER_default = true;
     public static boolean INTOXICATION_SHADER_WARNING = true;
     public static boolean INTOXICATION_SHADER_WARNING_default = true;
+    public static float LUXDIALOGUE_TEXT_SCALE = 1.0f;
+    public static float LUXDIALOGYE_TEXT_SCALE_default = 1.0f;
+    public static int CLOSE_LUXDIALOGUE_SCREEN_AFTER = 60;
+    public static int CLOSE_LUXDIALOGUE_SCREEN_AFTER_default = 60;
 
     public static final int light_icon_default_position = 10;
     public static final double light_icon_default_scale = 1.0;
@@ -101,6 +105,8 @@ public class ClientConfig {
             CONFIG.set("forestaura_ally_color", FORESTAURA_ALLY_COLOR);
             CONFIG.set("forestaura_intoxication_shader", FORESTAURA_INTOXICATION_SHADER);
             CONFIG.set("intoxication_shader_warning", INTOXICATION_SHADER_WARNING);
+            CONFIG.set("luxdialogue_text_scale", LUXDIALOGUE_TEXT_SCALE);
+            CONFIG.set("close_luxdialogue_screen_after", CLOSE_LUXDIALOGUE_SCREEN_AFTER);
             CONFIG.update();
             RendererEventHandler.updateFromConfig();
         } catch (IOException e) {
@@ -190,6 +196,10 @@ public class ClientConfig {
         configs.addKeyValuePair(new Pair<>("forestaura_intoxication_shader", FORESTAURA_INTOXICATION_SHADER), "Accessibility setting. Disable this if you don't want to see the Intoxicated effect shader (may give motion sickness)");
         configs.addKeyValuePair(new Pair<>("intoxication_shader_warning", INTOXICATION_SHADER_WARNING), "Accessibility setting. Turn this off to not see the warning message every time the intoxication effect is applied to you");
 
+
+        configs.addKeyValuePair(new Pair<>("luxdialogue_text_scale", LUXDIALOGUE_TEXT_SCALE), "Scale of the text rendered while talking with luxcognita berry");
+        configs.addKeyValuePair(new Pair<>("close_luxdialogue_screen_after", CLOSE_LUXDIALOGUE_SCREEN_AFTER), "After how many seconds should the dialogue screen (with luxcognita berry) automatically close?");
+
     }
 
     public static void reloadConfig(){
@@ -220,8 +230,10 @@ public class ClientConfig {
         AUTO_LIGHT_ACTIVATION = CONFIG.getOrDefault("auto_light_activation", AUTO_LIGHT_ACTIVATION_default);
         FORESTAURA_ENEMY_COLOR = CONFIG.getOrDefault("forestaura_enemy_color", FORESTAURA_ENEMY_COLOR_default);
         FORESTAURA_ALLY_COLOR = CONFIG.getOrDefault("forestaura_ally_color", FORESTAURA_ALLY_COLOR_default);
-        FORESTAURA_INTOXICATION_SHADER = CONFIG.getOrDefault("forestaura_intoxication_shader", FORESTAURA_INTOXICATION_SHADER);
-        INTOXICATION_SHADER_WARNING = CONFIG.getOrDefault("intoxication_shader", INTOXICATION_SHADER_WARNING);
+        FORESTAURA_INTOXICATION_SHADER = CONFIG.getOrDefault("forestaura_intoxication_shader", FORESTAURA_INTOXICATION_SHADER_default);
+        INTOXICATION_SHADER_WARNING = CONFIG.getOrDefault("intoxication_shader", INTOXICATION_SHADER_WARNING_default);
+        LUXDIALOGUE_TEXT_SCALE = CONFIG.getOrDefault("luxdialogue_text_scale", LUXDIALOGYE_TEXT_SCALE_default);
+        CLOSE_LUXDIALOGUE_SCREEN_AFTER = CONFIG.getOrDefault("close_luxdialogue_screen_after", CLOSE_LUXDIALOGUE_SCREEN_AFTER_default);
     }
 }
 
