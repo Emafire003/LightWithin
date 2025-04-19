@@ -21,11 +21,11 @@
   "imagePos": "CENTER",
   "imagePath": {
     "namespace": "lightwithin",
-    "path": "textures/lux_dialogue/default.png"
+    "path": "textures/dialogues/default.png"
   },
   "imageWidth": 32,
   "imageHeight": 32,
-  "imageScale": 1.5,
+  "imageScale": 1.0,
   "imageHasStages": false,
   "imageStages": [
     {

@@ -332,6 +332,7 @@
   "screen.lightwithin.luxdialogue.my_light.triggers": "What in particular?",
   "screen.lightwithin.luxdialogue.my_light.triggers.light_conditions": "My light's catalysts",
   "screen.lightwithin.luxdialogue.my_light.triggers.trigger_events": "The dangers it detects",
+  "TODO0": "========================= TODO",
   "screen.lightwithin.luxdialogue.my_light.triggers.danger_cond": "WIP MAYBE NOT, Dangerous conditions it detects",
 
   "screen.lightwithin.luxdialogue.activation": "There are a few ways",
@@ -347,7 +348,6 @@
   "screen.lightwithin.luxdialogue.activation.natural_1.sub": "I believe your kind calls it 'pressing the activate button %s'",
   "screen.lightwithin.luxdialogue.activation.natural_2": "In which ways your light senses danger, varies",
   "screen.lightwithin.luxdialogue.activation.natural_2.sub": "Would you like to know how your light does it?",
-  "TODO2": "========================= TODO",
   "screen.lightwithin.luxdialogue.activation.natural_2.yes": "Yes please",
   "screen.lightwithin.luxdialogue.activation.natural_2.no": "No need",
   "screen.lightwithin.luxdialogue.activation.natural_2.more": "Tell me more, in general",
@@ -369,6 +369,32 @@
   "screen.lightwithin.luxdialogue.activation.general_info_5": "Are you satisfied with the explanation?",
   "screen.lightwithin.luxdialogue.activation.general_info_5.yes": "Yes, thank you",
   "screen.lightwithin.luxdialogue.activation.general_info_5.no": "Ah ah, no.",
+
+  "screen.lightwithin.luxdialogue.activation.convenient_0": "There actually is a way to store 'light charges'",
+  "screen.lightwithin.luxdialogue.activation.convenient_0.sub": "These charges allow you to unleash your light in whichever moment you desire",
+
+  "screen.lightwithin.luxdialogue.activation.convenient_1": "But there is a catch",
+  "screen.lightwithin.luxdialogue.activation.convenient_1.sub": "They usually put quite the strain on your light",
+
+  "screen.lightwithin.luxdialogue.activation.convenient_2": "You can only store a few of them at a time",
+  "screen.lightwithin.luxdialogue.activation.convenient_2.sub": "and when you use them, your light will need a longer rest",
+
+  "screen.lightwithin.luxdialogue.activation.convenient_3": "Not everyone's light can support the same amount of charges",
+  "screen.lightwithin.luxdialogue.activation.convenient_3.sub": "Some may not even support any number of them!",
+
+  "screen.lightwithin.luxdialogue.activation.convenient_4": "You can even see if another light bearer is storing them because",
+  "screen.lightwithin.luxdialogue.activation.convenient_4.sub": "they will glow and emit some particles if they have a lot of them",
+
+  "screen.lightwithin.luxdialogue.activation.convenient_5": "On top of that, they are quite tricky to obtain",
+  "screen.lightwithin.luxdialogue.activation.convenient_5.sub": "I can, however, teach you how. Would like to know?",
+  "screen.lightwithin.luxdialogue.activation.convenient_5.yes": "Yes please",
+  "screen.lightwithin.luxdialogue.activation.convenient_5.no": "No, I've changed my mind",
+
+  "screen.lightwithin.luxdialogue.obtain": "To obtain a light charge you need a special item",
+  "screen.lightwithin.luxdialogue.obtain.sub": "A BottledLight, which you can use to obtain one charge",
+
+  "screen.lightwithin.luxdialogue.obtain": "Once you have obtain that item",
+  "screen.lightwithin.luxdialogue.obtain.sub": "A BottledLight, which you can use to obtain one charge",
 
   "screen.lightwithin.luxdialogue.offended": "I decided I won't talk to you for a while.",
   "screen.lightwithin.luxcognita.offended.msg": "I told you I won't talk to you. And no, you can't eat me.",

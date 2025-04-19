@@ -1,0 +1,23 @@
+{
+  "dialogueId": "convenient_5",
+  "fileVersion": 1,
+  "mainText": "screen.lightwithin.luxdialogue.activation.convenient_5",
+  "textScale": 1.5,
+  "subTextPresent": true,
+  "subText": "screen.lightwithin.luxdialogue.activation.convenient_5.sub",
+  "subTextScale": 1.3,
+  "showImage": true,
+  "imagePos": "CENTER",
+  "imagePath": {
+    "namespace": "lightwithin",
+    "path": "textures/lights/light_charge_base.png"
+  },
+  "imageWidth": 16,
+  "imageHeight": 16,
+  "imageScale": 2.0,
+  "imageHasStages": false,
+  "buttons": {
+    "screen.lightwithin.luxdialogue.activation.convenient_5.yes": "GO_DIALOGUE<light_charges/obtain>",
+    "screen.lightwithin.luxdialogue.activation.convenient_5.no": "CLOSE"
+  }
+}

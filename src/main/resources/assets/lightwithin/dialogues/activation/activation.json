@@ -8,6 +8,6 @@
   "subTextScale": 1.3,
   "buttons": {
     "screen.lightwithin.luxdialogue.activation.safe": "GO_DIALOGUE<activation/natural_0>",
-    "screen.lightwithin.luxdialogue.activation.alchemy": "GO_DIALOGUE<activation/alchemy>"
+    "screen.lightwithin.luxdialogue.activation.alchemy": "GO_DIALOGUE<activation/convenient_0>"
   }
 }
