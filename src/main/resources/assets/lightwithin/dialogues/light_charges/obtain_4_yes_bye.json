@@ -1,0 +1,11 @@
+{
+  "dialogueId": "obtain_4_yes_bye",
+  "fileVersion": 1,
+  "mainText": "screen.lightwithin.luxdialogue.light_charge.obtain_4_yes_bye",
+  "textScale": 1.5,
+  "buttons": {
+    "screen.lightwithin.luxdialogue.next": "CLOSE"
+  },
+  "dialogueProgress": true,
+  "dialogueProgressState": "PISSED_OFF"
+}

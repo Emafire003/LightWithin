@@ -388,13 +388,39 @@
   "screen.lightwithin.luxdialogue.activation.convenient_5": "On top of that, they are quite tricky to obtain",
   "screen.lightwithin.luxdialogue.activation.convenient_5.sub": "I can, however, teach you how. Would like to know?",
   "screen.lightwithin.luxdialogue.activation.convenient_5.yes": "Yes please",
-  "screen.lightwithin.luxdialogue.activation.convenient_5.no": "No, I've changed my mind",
+  "screen.lightwithin.luxdialogue.activation.convenient_5.no": "No, changed my mind",
 
-  "screen.lightwithin.luxdialogue.obtain": "To obtain a light charge you need a special item",
-  "screen.lightwithin.luxdialogue.obtain.sub": "A BottledLight, which you can use to obtain one charge",
+  "screen.lightwithin.luxdialogue.light_charge.obtain_0": "To gain a light charge you need a special item",
+  "screen.lightwithin.luxdialogue.light_charge.obtain_0.sub": "A BottledLight, which you can use to obtain one charge",
 
-  "screen.lightwithin.luxdialogue.obtain": "Once you have obtain that item",
-  "screen.lightwithin.luxdialogue.obtain.sub": "A BottledLight, which you can use to obtain one charge",
+  "screen.lightwithin.luxdialogue.light_charge.obtain_1": "You can get one of this item in two ways:",
+
+  "TODO11": "=======TODO images and icons and stuff",
+  "screen.lightwithin.luxdialogue.light_charge.obtain_2": "By 'scooping up' your light when it's ready using a glass bottle...",
+  "screen.lightwithin.luxdialogue.light_charge.obtain_2.sub": "You people usually call this 'right click with an empty bottle in hand'",
+
+  "screen.lightwithin.luxdialogue.light_charge.obtain_3": "...Or by making a brew of light yourself! This process, however, is rather perilous.",
+  "screen.lightwithin.luxdialogue.light_charge.obtain_3.sub": "Are you certain you are capable of handling it?",
+  "screen.lightwithin.luxdialogue.light_charge.obtain_3.yes": "Yes, I am.",
+  "screen.lightwithin.luxdialogue.light_charge.obtain_3.maybe": "Maybe",
+  "screen.lightwithin.luxdialogue.light_charge.obtain_3.no": "Not really",
+
+  "screen.lightwithin.luxdialogue.light_charge.obtain_4_yes": "How bold of you...",
+  "screen.lightwithin.luxdialogue.light_charge.obtain_4_yes.sub": "I haven't even told you what this process is yet.",
+  "screen.lightwithin.luxdialogue.light_charge.obtain_4_yes.knew": "I knew of it already",
+  "screen.lightwithin.luxdialogue.light_charge.obtain_4_yes.confident": "I like danger.",
+
+  "screen.lightwithin.luxdialogue.light_charge.obtain_4_yes_bye": "Ok. You don't need my help then.",
+
+  "screen.lightwithin.luxdialogue.light_charge.obtain_4_maybe": "Fair enough, good answer. After all,",
+  "screen.lightwithin.luxdialogue.light_charge.obtain_4_maybe.sub": "I haven't even told you what this process is yet.",
+
+  "screen.lightwithin.luxdialogue.light_charge.alchemy.step_0": "Be warned!",
+  "screen.lightwithin.luxdialogue.light_charge.alchemy.step_0.sub": "You, and your surroundings could be subject to detonations!",
+
+  "screen.lightwithin.luxdialogue.light_charge.alchemy.step_1": "Firstly, you should get another lux berry...",
+  "screen.lightwithin.luxdialogue.light_charge.alchemy.step_1.sub": "My cousin, with questionable sanity, LuxIntus berry",
+
 
   "screen.lightwithin.luxdialogue.offended": "I decided I won't talk to you for a while.",
   "screen.lightwithin.luxcognita.offended.msg": "I told you I won't talk to you. And no, you can't eat me.",

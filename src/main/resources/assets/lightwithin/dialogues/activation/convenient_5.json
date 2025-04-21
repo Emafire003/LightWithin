@@ -17,7 +17,7 @@
   "imageScale": 2.0,
   "imageHasStages": false,
   "buttons": {
-    "screen.lightwithin.luxdialogue.activation.convenient_5.yes": "GO_DIALOGUE<light_charges/obtain>",
+    "screen.lightwithin.luxdialogue.activation.convenient_5.yes": "GO_DIALOGUE<light_charges/obtain_0>",
     "screen.lightwithin.luxdialogue.activation.convenient_5.no": "CLOSE"
   }
 }
