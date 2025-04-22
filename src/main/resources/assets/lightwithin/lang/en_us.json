@@ -396,11 +396,11 @@
   "screen.lightwithin.luxdialogue.light_charge.obtain_1": "You can get one of this item in two ways:",
 
   "TODO11": "=======TODO images and icons and stuff",
-  "screen.lightwithin.luxdialogue.light_charge.obtain_2": "By 'scooping up' your light when it's ready using a glass bottle...",
+  "screen.lightwithin.luxdialogue.light_charge.obtain_2": "By 'scooping up' your light when it's ready, using a glass bottle...",
   "screen.lightwithin.luxdialogue.light_charge.obtain_2.sub": "You people usually call this 'right click with an empty bottle in hand'",
 
-  "screen.lightwithin.luxdialogue.light_charge.obtain_3": "...Or by making a brew of light yourself! This process, however, is rather perilous.",
-  "screen.lightwithin.luxdialogue.light_charge.obtain_3.sub": "Are you certain you are capable of handling it?",
+  "screen.lightwithin.luxdialogue.light_charge.obtain_3": "...Or by making a brew of light yourself! ",
+  "screen.lightwithin.luxdialogue.light_charge.obtain_3.sub": "This process, however, is rather perilous. Are you certain you are capable of handling it?",
   "screen.lightwithin.luxdialogue.light_charge.obtain_3.yes": "Yes, I am.",
   "screen.lightwithin.luxdialogue.light_charge.obtain_3.maybe": "Maybe",
   "screen.lightwithin.luxdialogue.light_charge.obtain_3.no": "Not really",
@@ -410,10 +410,10 @@
   "screen.lightwithin.luxdialogue.light_charge.obtain_4_yes.knew": "I knew of it already",
   "screen.lightwithin.luxdialogue.light_charge.obtain_4_yes.confident": "I like danger.",
 
-  "screen.lightwithin.luxdialogue.light_charge.obtain_4_yes_bye": "Ok. You don't need my help then.",
+  "screen.lightwithin.luxdialogue.light_charge.obtain_4_yes_bye": "Ah. My help isn't needed after all.",
 
-  "screen.lightwithin.luxdialogue.light_charge.obtain_4_maybe": "Fair enough, good answer. After all,",
-  "screen.lightwithin.luxdialogue.light_charge.obtain_4_maybe.sub": "I haven't even told you what this process is yet.",
+  "screen.lightwithin.luxdialogue.light_charge.obtain_4_maybe": "Fair enough, good answer. ",
+  "screen.lightwithin.luxdialogue.light_charge.obtain_4_maybe.sub": "After all, I haven't even told you what this process is yet.",
 
   "screen.lightwithin.luxdialogue.light_charge.alchemy.step_0": "Be warned!",
   "screen.lightwithin.luxdialogue.light_charge.alchemy.step_0.sub": "You, and your surroundings could be subject to detonations!",
@@ -421,9 +421,50 @@
   "screen.lightwithin.luxdialogue.light_charge.alchemy.step_1": "Firstly, you should get another lux berry...",
   "screen.lightwithin.luxdialogue.light_charge.alchemy.step_1.sub": "My cousin, with questionable sanity, LuxIntus berry",
 
+  "screen.lightwithin.luxdialogue.light_charge.alchemy.step_2": "Now you need to obtain LuxIntus's powder",
+
+  "screen.lightwithin.luxdialogue.light_charge.alchemy.step_3": "You will need to quickly generate pressure",
+  "screen.lightwithin.luxdialogue.light_charge.alchemy.step_3.sub": "So grab a sturdy heavy anvil.",
+
+  "screen.lightwithin.luxdialogue.light_charge.alchemy.step_4": "And then drop it on top of LuxIntus",
+  "screen.lightwithin.luxdialogue.light_charge.alchemy.step_4.sub": "Don't worry, SOMEHOW, they like it. Feels ticklish they say",
+
+  "screen.lightwithin.luxdialogue.light_charge.alchemy.step_5": "Be careful tho, this process isn't really stable",
+  "screen.lightwithin.luxdialogue.light_charge.alchemy.step_5.sub": "Depending on the amount of pressure you generate...",
+
+  "screen.lightwithin.luxdialogue.light_charge.alchemy.step_6": "You could either lose the berry, without getting powder...",
+  "screen.lightwithin.luxdialogue.light_charge.alchemy.step_6.sub": "or... explode!",
+
+  "screen.lightwithin.luxdialogue.light_charge.alchemy.step_7": "This is more likely if you have more berries together",
+  "screen.lightwithin.luxdialogue.light_charge.alchemy.step_7.sub": "Or if the anvil is dropped from a high altitude",
+
+  "screen.lightwithin.luxdialogue.light_charge.alchemy.step_8": "Now you need to get the base for the brew",
+  "screen.lightwithin.luxdialogue.light_charge.alchemy.step_8.sub": "An experience bottle o' enchanting, or whatever it's called, will do.",
+
+  "screen.lightwithin.luxdialogue.light_charge.alchemy.step_9": "Take a brewing stand and put your exp bottles in it",
+  "screen.lightwithin.luxdialogue.light_charge.alchemy.step_9.sub": "Then add, as an ingredient, the LuxIntus Berry Powder",
+
+  "screen.lightwithin.luxdialogue.light_charge.alchemy.step_10": "Once it's finished you will have your base brew of BottledLight",
+  "screen.lightwithin.luxdialogue.light_charge.alchemy.step_10.sub": "In this state, it's useless. The next steps are crucial!",
+
+  "screen.lightwithin.luxdialogue.light_charge.alchemy.step_11": "Add the first proper ingredient, the one of  your light's type",
+  "screen.lightwithin.luxdialogue.light_charge.alchemy.step_11.sub": "If you don't know which one it is, you can ask me another time",
+
+  "screen.lightwithin.luxdialogue.light_charge.alchemy.step_12": "BE SURE THAT YOU USED THE RIGHT INGREDIENT!",
+  "screen.lightwithin.luxdialogue.light_charge.alchemy.step_12.sub": "Otherwise, if you use it you will... explode!",
+
+  "screen.lightwithin.luxdialogue.light_charge.alchemy.step_13": "The final step, is adding your light's target ingredient",
+  "screen.lightwithin.luxdialogue.light_charge.alchemy.step_13.sub": "If you don't know which one it is, you can ask me another time",
+
+  "screen.lightwithin.luxdialogue.light_charge.alchemy.step_14": "If you have done everything correctly, you can now use the BottledLight",
+  "screen.lightwithin.luxdialogue.light_charge.alchemy.step_14.sub": "If you made a mistake, or use the wrong brew of BottledLight...",
+
+  "screen.lightwithin.luxdialogue.light_charge.alchemy.step_15": "You know what happens",
+
+
 
   "screen.lightwithin.luxdialogue.offended": "I decided I won't talk to you for a while.",
-  "screen.lightwithin.luxcognita.offended.msg": "I told you I won't talk to you. And no, you can't eat me.",
+  "screen.lightwithin.luxcognita.offended.msg": "I won't talk to you. And no, you can't eat me. Eat brioches.",
 
   "screen.lightwithin.luxdialogue.attacked": "You have been attacked!",
   "screen.lightwithin.luxdialogue.attacked.sub": "We'll talk later, go defend yourself!",

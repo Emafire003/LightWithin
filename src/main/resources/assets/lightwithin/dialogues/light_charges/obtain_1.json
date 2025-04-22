@@ -3,9 +3,6 @@
   "fileVersion": 1,
   "mainText": "screen.lightwithin.luxdialogue.light_charge.obtain_1",
   "textScale": 1.5,
-  "subTextPresent": true,
-  "subText": "screen.lightwithin.luxdialogue.light_charge.obtain_1.sub",
-  "subTextScale": 1.3,
   "showItem": true,
   "itemPos": "CENTER",
   "item": {

@@ -83,8 +83,58 @@ public class LuxDialogue {
     public ScreenPositionsPresets itemPos = ScreenPositionsPresets.CENTER;
     /// The item's identifier
     public Identifier item = Registries.ITEM.getId(LightItems.LUXINTUS_BERRY_POWDER);
+
+    @Override
+    public String toString() {
+        return "LuxDialogue{" +
+                "dialogueId='" + dialogueId + '\'' +
+                ", fileVersion=" + fileVersion +
+                ", mainText='" + mainText + '\'' +
+                ", mainTextScale=" + mainTextScale +
+                ", hasReplaceableMainText=" + hasReplaceableMainText +
+                ", replaceablesListMain=" + replaceablesListMain +
+                ", subTextPresent=" + subTextPresent +
+                ", subText='" + subText + '\'' +
+                ", subTextScale=" + subTextScale +
+                ", hasReplaceableSubText=" + hasReplaceableSubText +
+                ", replaceablesListSub=" + replaceablesListSub +
+                ", showBerry=" + showBerry +
+                ", berryPos=" + berryPos +
+                ", berryScale=" + berryScale +
+                ", showImage=" + showImage +
+                ", imagePos=" + imagePos +
+                ", imagePath=" + imagePath +
+                ", imageWidth=" + imageWidth +
+                ", imageHeight=" + imageHeight +
+                ", imageScale=" + imageScale +
+                ", imageHasStages=" + imageHasStages +
+                ", imageStages=" + imageStages +
+                ", imageInterval=" + imageInterval +
+                ", showItem=" + showItem +
+                ", itemPos=" + itemPos +
+                ", item=" + item +
+                ", itemScale=" + itemScale +
+                ", multipleItems=" + multipleItems +
+                ", items=" + items +
+                ", itemsInterval=" + itemsInterval +
+                ", buttons=" + buttons +
+                ", dialogueProgress=" + dialogueProgress +
+                ", dialogueProgressState=" + dialogueProgressState +
+                ", removeDialogueProgress=" + removeDialogueProgress +
+                ", canRedirect=" + canRedirect +
+                ", redirectTo='" + redirectTo + '\'' +
+                ", redirectStateRequired=" + redirectStateRequired +
+                '}';
+    }
+
     /// The item's scale
     public float itemScale = 3f;
+    /// Weather or not to have multiple items show in sequence
+    public boolean multipleItems = false;
+    /// A List of the items
+    public List<Identifier> items = List.of(Registries.ITEM.getId(LightItems.LUXINTUS_BERRY_POWDER), Registries.ITEM.getId(LightItems.LUXINTUS_BERRY));
+    /// the interval between each display of an item
+    public int itemsInterval = 20;
     /// The first string is a translatable string representing the text displayed on the button, while the second one represents an action that is performed on click, along with its potetential target
     public Map<String, String> buttons = Map.of("screen.lightwithin.luxdialogue.default.button0", "CLOSE");
 
@@ -146,42 +196,4 @@ public class LuxDialogue {
         }
     }
 
-    @Override
-    public String toString() {
-        return "LuxDialogue{" +
-                "dialogueId='" + dialogueId + '\'' +
-                ", fileVersion=" + fileVersion +
-                ", mainText='" + mainText + '\'' +
-                ", mainTextScale=" + mainTextScale +
-                ", hasReplaceableMainText=" + hasReplaceableMainText +
-                ", replaceablesListMain=" + replaceablesListMain +
-                ", subTextPresent=" + subTextPresent +
-                ", subText='" + subText + '\'' +
-                ", subTextScale=" + subTextScale +
-                ", hasReplaceableSubText=" + hasReplaceableSubText +
-                ", replaceablesListSub=" + replaceablesListSub +
-                ", showBerry=" + showBerry +
-                ", berryPos=" + berryPos +
-                ", berryScale=" + berryScale +
-                ", showImage=" + showImage +
-                ", imagePos=" + imagePos +
-                ", imagePath=" + imagePath +
-                ", imageWidth=" + imageWidth +
-                ", imageHeight=" + imageHeight +
-                ", imageScale=" + imageScale +
-                ", imageHasStages=" + imageHasStages +
-                ", imageStages=" + imageStages +
-                ", showItem=" + showItem +
-                ", itemPos=" + itemPos +
-                ", item=" + item +
-                ", itemScale=" + itemScale +
-                ", buttons=" + buttons +
-                ", dialogueProgress=" + dialogueProgress +
-                ", dialogueProgressState=" + dialogueProgressState +
-                ", removeDialogueProgress=" + removeDialogueProgress +
-                ", canRedirect=" + canRedirect +
-                ", redirectTo='" + redirectTo + '\'' +
-                ", redirectStateRequired=" + redirectStateRequired +
-                '}';
-    }
 }

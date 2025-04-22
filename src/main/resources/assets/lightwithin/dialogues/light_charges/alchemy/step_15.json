@@ -1,0 +1,19 @@
+{
+  "dialogueId": "step_15",
+  "fileVersion": 1,
+  "mainText": "screen.lightwithin.luxdialogue.light_charge.alchemy.step_15",
+  "textScale": 1.45,
+  "subTextPresent": true,
+  "subText": "screen.lightwithin.luxdialogue.light_charge.alchemy.step_15.sub",
+  "subTextScale": 1.25,
+  "showItem": false,
+  "itemPos": "CENTER",
+  "item": {
+    "namespace": "lightwithin",
+    "path": "bottled_light"
+  },
+  "itemScale": 3.0,
+  "buttons": {
+    "screen.lightwithin.luxdialogue.next": "CLOSE"
+  }
+}

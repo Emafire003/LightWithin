@@ -398,6 +398,10 @@ public class LuxcognitaScreenV2 extends Screen{
     private int imageTicker = -1;
     private int currentImage = 0;
 
+    private int itemTicker = -1;
+    private int currentItem = 0;
+
+
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
         this.renderBackground(context);
@@ -460,9 +464,24 @@ public class LuxcognitaScreenV2 extends Screen{
         if(dialogue.showItem){
             Pair<Integer, Integer> xy = ScreenUtils.getXYItems(dialogue.itemPos, dialogue.itemScale, this.width, this.height, 0, 16, 16);
 
+            Identifier item = dialogue.item;
+
+            if(dialogue.multipleItems){
+                //checks if it should change the
+                if(itemTicker > dialogue.itemsInterval){
+                    currentItem++;
+                    if(currentItem >= dialogue.items.size()){
+                        currentItem = 0;
+                    }
+                    itemTicker = 0;
+                }
+                item = dialogue.items.get(currentItem);
+                itemTicker++;
+            }
+
             matrixStack.scale(dialogue.itemScale, dialogue.itemScale, dialogue.itemScale);
 
-            context.drawItem(new ItemStack(Registries.ITEM.get(dialogue.item)), xy.getFirst(), xy.getSecond());
+            context.drawItem(new ItemStack(Registries.ITEM.get(item)), xy.getFirst(), xy.getSecond());
 
             matrixStack.pop();
             matrixStack.push();
@@ -552,6 +571,8 @@ public class LuxcognitaScreenV2 extends Screen{
         playLuxcognitaDisplaySound();
         imageTicker = -1;
         currentImage = 0;
+        itemTicker = -1;
+        currentItem = 0;
         super.close();
     }
 

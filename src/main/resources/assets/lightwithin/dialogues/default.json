@@ -41,6 +41,18 @@
     "path": "luxintus_berry_powder"
   },
   "itemScale": 3.0,
+  "multipleItems": false,
+  "items": [
+    {
+      "namespace": "lightwithin",
+      "path": "luxintus_berry_powder"
+    },
+    {
+      "namespace": "lightwithin",
+      "path": "luxintus_berry"
+    }
+  ],
+  "itemsInterval": 20,
   "buttons": {
     "screen.lightwithin.luxdialogue.default.button0": "CLOSE"
   },
