@@ -415,6 +415,7 @@
   "screen.lightwithin.luxdialogue.light_charge.obtain_4_maybe": "Fair enough, good answer. ",
   "screen.lightwithin.luxdialogue.light_charge.obtain_4_maybe.sub": "After all, I haven't even told you what this process is yet.",
 
+  "TODO10": "=======TODO images and icons and stuff",
   "screen.lightwithin.luxdialogue.light_charge.alchemy.step_0": "Be warned!",
   "screen.lightwithin.luxdialogue.light_charge.alchemy.step_0.sub": "You, and your surroundings could be subject to detonations!",
 
@@ -459,8 +460,84 @@
   "screen.lightwithin.luxdialogue.light_charge.alchemy.step_14": "If you have done everything correctly, you can now use the BottledLight",
   "screen.lightwithin.luxdialogue.light_charge.alchemy.step_14.sub": "If you made a mistake, or use the wrong brew of BottledLight...",
 
+  "TODOTODO": "add explosion VFX to the whole screen",
   "screen.lightwithin.luxdialogue.light_charge.alchemy.step_15": "You know what happens",
 
+  "screen.lightwithin.luxdialogue.what_are_lights.start": "That, is a rather complex inquiry.",
+  "screen.lightwithin.luxdialogue.what_are_lights.start.sub": "Do you want to know more on what they do or their (our) 'essence'?",
+  "screen.lightwithin.luxdialogue.what_are_lights.start.do": "What they do",
+  "TODOloro": "TODO this stuff here. Also this is more like the lore",
+  "screen.lightwithin.luxdialogue.what_are_lights.start.are": "What they are",
+
+  "screen.lightwithin.luxdialogue.what_are_lights.do_0": "InnerLights are '''powers''' granted to special people or beings",
+  "screen.lightwithin.luxdialogue.what_are_lights.do_0.sub": "These people are called 'light bearers' ",
+
+  "screen.lightwithin.luxdialogue.what_are_lights.do_1": "When a light bearer is in danger, they can call upon their InnerLight",
+  "screen.lightwithin.luxdialogue.what_are_lights.do_1.sub": "They will then be aided by its powers",
+  "screen.lightwithin.luxdialogue.what_are_lights.do_1.am_i": "Am I one of them?",
+
+  "screen.lightwithin.luxdialogue.what_are_lights.do_1.1": "Yes, otherwise we would not be having this conversation",
+
+  "screen.lightwithin.luxdialogue.what_are_lights.do_2": "EVERY light bearer has a (somewhat) unique light",
+  "screen.lightwithin.luxdialogue.what_are_lights.do_2.sub": "It's like their fingerprint!",
+
+  "screen.lightwithin.luxdialogue.what_are_lights.do_3": "There are a lot of different types of InnerLight",
+  "TODO-1": "Explain the light targets? Like maybe explain the various light attributes and what they mean? Yeah like this the 'intro' then a button can be added explainig all of em. Or maybe in guidance",
+  "screen.lightwithin.luxdialogue.what_are_lights.do_3.sub": "with different 'targets', level of power, duration, rest period...",
+
+  "screen.lightwithin.luxdialogue.what_are_lights.do_4": "All of this characteristics make a light unique",
+  "screen.lightwithin.luxdialogue.what_are_lights.do_4.sub": "A bit like you being you because of your character(istics)!",
+
+  "screen.lightwithin.luxdialogue.what_are_lights.type_0": "The predominant trait is the light's type",
+  "screen.lightwithin.luxdialogue.what_are_lights.type_0.sub": "Its dedication to a specific concept, element, or thing",
+
+  "screen.lightwithin.luxdialogue.what_are_lights.type_1": "For me, it's knowledge.",
+  "screen.lightwithin.luxdialogue.what_are_lights.type_1.sub": "For other lights it may be fire, frost, healing, the forest...",
+
+  "screen.lightwithin.luxdialogue.what_are_lights.target_0": "The predominant trait is the light's type",
+  "screen.lightwithin.luxdialogue.what_are_lights.target_0.sub": "Its dedication to a specific concept, element, or thing",
+
+
+  "screen.lightwithin.luxdialogue.what_are_lights.do_finish": "Do you want to know your light's characteristics?",
+  "screen.lightwithin.luxdialogue.what_are_lights.do_finish.yes": "Yes please",
+  "screen.lightwithin.luxdialogue.what_are_lights.do_finish.no": "No thank you",
+
+
+  "screen.lightwithin.luxdialogue.what_are_lights.lore_0": "Well, you can think about us as '''spirits of light''' (kinda)",
+  "screen.lightwithin.luxdialogue.what_are_lights.lore_0.sub": "InnerLights, or simply lights, often chose a partner",
+
+  "screen.lightwithin.luxdialogue.what_are_lights.lore_1": "A 'light bearer', like you or what you refer as 'players'",
+  "screen.lightwithin.luxdialogue.what_are_lights.lore_1.sub": "They usually help them with their struggles",
+
+  "screen.lightwithin.luxdialogue.what_are_lights.lore_2": "They have a particular attunity for some kind of 'concept' or element",
+  "screen.lightwithin.luxdialogue.what_are_lights.lore_2.sub": "For me, it's knowledge, for others it may be fire, frost or healing",
+
+  "screen.lightwithin.luxdialogue.what_are_lights.lore_3": "That's what defines their/our type",
+  "screen.lightwithin.luxdialogue.what_are_lights.lore_3.sub": "They also have other attributes that influence their activation",
+
+  "screen.lightwithin.luxdialogue.what_are_lights.lore_4": "Normally, they are dormant.",
+  "screen.lightwithin.luxdialogue.what_are_lights.lore_4.sub": "Only when their bearer is in trouble they awaken",
+
+  "screen.lightwithin.luxdialogue.what_are_lights.lore_5": "The light concentrates, and bursts out as the power of the light",
+  "screen.lightwithin.luxdialogue.what_are_lights.lore_5.sub": "For me, it's knowledge, for others it may be fire, frost or healing",
+
+  "screen.lightwithin.luxdialogue.what_are_lights.lore_6": "There would be more to talk about but...",
+  "screen.lightwithin.luxdialogue.what_are_lights.lore_6.sub": "I don't have enough energy to talk about it now, dismayed!",
+  "screen.lightwithin.luxdialogue.what_are_lights.lore_6.ok": "It's ok",
+  "screen.lightwithin.luxdialogue.what_are_lights.lore_6.more": "No, talk more!",
+
+
+
+  "TODO TODO TODO": "link this up somewhere. There is like a mistery behind the lux berries stories, maybe tyed to legerdary lighrs",
+  "screen.lightwithin.luxdialogue.personal.bearer_0": "My bearer is the berry itself, the one you ate.",
+  "screen.lightwithin.luxdialogue.personal.bearer_0.sub": "Although, I was not able to chose it",
+
+  "screen.lightwithin.luxdialogue.personal.bearer_1": "Someone or something else chose for me",
+  "screen.lightwithin.luxdialogue.personal.bearer_1.sub": "The first time I awoken I was already linked to it",
+
+  "screen.lightwithin.luxdialogue.personal.bearer_2": "It's not that bad. I used to be able to soak in the sunlight",
+  "screen.lightwithin.luxdialogue.personal.bearer_2.sub": "It's been a while since i've been able to tho...",
+  "TODO personal": "are you unique? Why? Why aren't you linked to a player/human/whatever? What happened? What are legendary lights? Can i get one? Why do you talk like this? (answer->knowledgbale people tend to talk like this? I think=",
 
 
   "screen.lightwithin.luxdialogue.offended": "I decided I won't talk to you for a while.",

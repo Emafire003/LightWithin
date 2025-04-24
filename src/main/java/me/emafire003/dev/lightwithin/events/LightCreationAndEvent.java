@@ -11,6 +11,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ActionResult;
 
 import java.util.List;
+import java.util.UUID;
 
 import static me.emafire003.dev.lightwithin.LightWithin.LIGHT_COMPONENT;
 import static me.emafire003.dev.lightwithin.LightWithin.LOGGER;
@@ -240,5 +241,30 @@ public class LightCreationAndEvent {
             max = 7;
         }
         return max;
+    }
+
+
+    /** Changes the all of a light's parameters/attributes using a new UUID
+     *
+     * @param targetsComponent The {@link LightComponent} of the target entity, the one whose light is going to be changed to a new one
+     * @param uuid The new UUID used to determine the new light parameters/attributes*/
+
+    public static void mutateLightToUUID(LightComponent targetsComponent, UUID uuid){
+        mutateLightToUUID(targetsComponent, uuid.toString().toLowerCase());
+    }
+
+    /** Changes the all of a light's parameters/attributes using a new UUID
+     *
+     * @param targetsComponent The {@link LightComponent} of the target entity, the one whose light is going to be changed to a new one
+     * @param uuidString The string representation of the new UUID used to determine the new light parameters/attributes*/
+    public static void mutateLightToUUID(LightComponent targetsComponent, String uuidString){
+        String[] id_bits = uuidString.split("-");
+        targetsComponent.setType(LightCreationAndEvent.determineTypeAndTarget(id_bits, LightCreationAndEvent.TYPE_BIT, LightCreationAndEvent.TARGET_BIT).getFirst());
+        targetsComponent.setTargets(LightCreationAndEvent.determineTypeAndTarget(id_bits, LightCreationAndEvent.TYPE_BIT, LightCreationAndEvent.TARGET_BIT).getSecond());
+
+        targetsComponent.setPowerMultiplier(LightCreationAndEvent.determinePower(id_bits, LightCreationAndEvent.POWER_BIT));
+        targetsComponent.setDuration(LightCreationAndEvent.determineDuration(id_bits, LightCreationAndEvent.DURATION_BIT));
+        targetsComponent.setMaxCooldown(LightCreationAndEvent.determineCooldown(id_bits, LightCreationAndEvent.COOLDOWN_BIT));
+        targetsComponent.setMaxLightStack(LightCreationAndEvent.determineMaxLightCharges(id_bits, LightCreationAndEvent.COOLDOWN_BIT));
     }
 }

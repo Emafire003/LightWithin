@@ -26,7 +26,7 @@
   },
   "itemScale": 3.0,
   "buttons": {
-    "screen.lightwithin.luxdialogue.guidance.button.what_lights": "CLOSE",
+    "screen.lightwithin.luxdialogue.guidance.button.what_lights": "GO_DIALOGUE<what_are_lights/start>",
     "screen.lightwithin.luxdialogue.guidance.button.my_light": "GO_DIALOGUE<my_light/my_light>",
     "screen.lightwithin.luxdialogue.guidance.button.activate": "GO_DIALOGUE<activation/activation>"
   },

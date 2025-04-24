@@ -9,6 +9,7 @@ import me.emafire003.dev.lightwithin.component.LightComponent;
 import me.emafire003.dev.lightwithin.events.LightCreationAndEvent;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.minecraft.command.argument.EntityArgumentType;
+import net.minecraft.command.argument.UuidArgumentType;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -16,26 +17,29 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
 import java.util.Collection;
+import java.util.UUID;
 
-public class ResetLightCommand implements LightCommand{
+//TODO wiki add this to the wiki
+public class SpoofLightCommand implements LightCommand{
 
     private boolean confirming = false;
     private int tickCounter = 0;
 
-    private int reset(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
+    private int spoof(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
         Collection<ServerPlayerEntity> targets = EntityArgumentType.getPlayers(context, "player");
+        UUID spoofingUUID = UuidArgumentType.getUuid(context, "uuid");
         ServerCommandSource source = context.getSource();
         if(!confirming){
-            resetConfirm(context);
+            spoofConfirm(context);
             return 0;
         }
 
         try{
             for(ServerPlayerEntity target : targets){
                 LightComponent component = LightWithin.LIGHT_COMPONENT.get(target);
-                component.clear();
-                LightCreationAndEvent.createUniqueLight(target);
-                source.sendFeedback( () -> Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The InnerLight of §d" + target.getName().getString() + "§e has been resetted to its original values!" ).formatted(Formatting.YELLOW)), true);
+                LightCreationAndEvent.mutateLightToUUID(component, spoofingUUID);
+                source.sendFeedback( () -> Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The InnerLight of §d" + target.getName().getString() + "§e has been modeled after the player with uuid: ").formatted(Formatting.YELLOW)
+                        .append(Text.literal(spoofingUUID.toString()).formatted(Formatting.GREEN))), true);
             }
             return 1;
         }catch(Exception e){
@@ -46,9 +50,9 @@ public class ResetLightCommand implements LightCommand{
 
     }
 
-    private int resetConfirm(CommandContext<ServerCommandSource> context) {
+    private int spoofConfirm(CommandContext<ServerCommandSource> context) {
         ServerCommandSource source = context.getSource();
-        source.sendFeedback( () -> Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("§ePlease type §a/light reset <player/s> confirm §eto §c§lreset §etheir InnerLight")), false);
+        source.sendFeedback( () -> Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("§ePlease type §a/light spoof <player/s> confirm §eto §c§loverride §etheir InnerLight with the spoofed one!")), false);
         confirming = true;
         ServerTickEvents.END_SERVER_TICK.register(server -> {
             if(confirming){
@@ -66,16 +70,24 @@ public class ResetLightCommand implements LightCommand{
 
     public LiteralCommandNode<ServerCommandSource> getNode() {
         return CommandManager
-                .literal("reset")
-                .requires(PermissionsChecker.hasPerms("lightwithin.commands.reset", 2))
+                .literal("spoof")
+                .requires(PermissionsChecker.hasPerms("lightwithin.commands.spoof", 2))
                 .then(
                         CommandManager.argument("player", EntityArgumentType.players())
-                                .executes(this::resetConfirm)
+                                .then(
+                                       CommandManager.argument("uuid", UuidArgumentType.uuid())
+                                               .executes(this::spoofConfirm)
+                                )
+
                 )
                 .then(
-                        CommandManager.argument("player", EntityArgumentType.players()).then(
-                                        CommandManager.literal("confirm")
-                                                .executes(this::reset)
+                        CommandManager.argument("player", EntityArgumentType.players())
+                                .then(
+                                        CommandManager.argument("uuid", UuidArgumentType.uuid())
+                                                .then(
+                                                        CommandManager.literal("confirm")
+                                                                .executes(this::spoof)
+                                                )
                                 )
                 )
                 .build();

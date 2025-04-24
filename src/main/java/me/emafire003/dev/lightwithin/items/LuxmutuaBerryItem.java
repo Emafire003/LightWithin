@@ -8,7 +8,6 @@ import me.emafire003.dev.lightwithin.lights.InnerLight;
 import me.emafire003.dev.lightwithin.sounds.LightSounds;
 import me.emafire003.dev.lightwithin.events.LightCreationAndEvent;
 import me.emafire003.dev.lightwithin.util.TargetType;
-import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -49,6 +48,9 @@ public class LuxmutuaBerryItem extends Item {
         }
     }
 
+    //TODO wiki/changelog: say that now using a luxmutua berry changes all attributes of the light
+    //TODO maybe make a screen for it selecting which attribute you want to change?
+
     @Override
     public ItemStack finishUsing(ItemStack stack, World world, LivingEntity user) {
         if(world.isClient){
@@ -61,21 +63,24 @@ public class LuxmutuaBerryItem extends Item {
             LightComponent component = LightWithin.LIGHT_COMPONENT.get(user);
 
             Pair<InnerLight, TargetType> current = new Pair<>(component.getType(), component.getTargets());
-            String[] id_bits = UUID.randomUUID().toString().toLowerCase().split("-");
+            String randomUUID = UUID.randomUUID().toString().toLowerCase();
+            String[] id_bits = randomUUID.split("-");
             Pair<InnerLight, TargetType> newone = LightCreationAndEvent.determineTypeAndTarget(id_bits, LightCreationAndEvent.TYPE_BIT,LightCreationAndEvent.TARGET_BIT);
 
             while(current.getFirst().equals(newone.getFirst())){
-                id_bits = UUID.randomUUID().toString().toLowerCase().split("-");
+                randomUUID = UUID.randomUUID().toString().toLowerCase();
+                id_bits = randomUUID.split("-");
                 newone = LightCreationAndEvent.determineTypeAndTarget(id_bits, LightCreationAndEvent.TYPE_BIT,LightCreationAndEvent.TARGET_BIT);
+
             }
 
-            component.setType(newone.getFirst());
-            component.setTargets(newone.getSecond());
+            LightCreationAndEvent.mutateLightToUUID(component, randomUUID);
 
             ((ServerPlayerEntity) user).sendMessage(Text.translatable("item.lightwithin.luxmutua_berry.lightchange"), true);
         }
         return this.isFood() ? user.eatFood(world, stack) : stack;
     }
+
 
     @Override
     public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {

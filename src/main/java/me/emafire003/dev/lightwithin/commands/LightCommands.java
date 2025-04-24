@@ -44,7 +44,8 @@ public class LightCommands {
                 new RerollLightCommand(),
                 new ReloadConfigCommand(),
                 new ReadyLightCommand(),
-                new ChargeCommand()
+                new ChargeCommand(),
+                new SpoofLightCommand()
         };
 
         ActivateLightCommand.createScheduler();
