@@ -488,14 +488,35 @@
   "screen.lightwithin.luxdialogue.what_are_lights.do_4": "All of this characteristics make a light unique",
   "screen.lightwithin.luxdialogue.what_are_lights.do_4.sub": "A bit like you being you because of your character(istics)!",
 
-  "screen.lightwithin.luxdialogue.what_are_lights.type_0": "The predominant trait is the light's type",
-  "screen.lightwithin.luxdialogue.what_are_lights.type_0.sub": "Its dedication to a specific concept, element, or thing",
+  "screen.lightwithin.luxdialogue.what_are_lights.attributes.type_0": "The predominant trait is the light's type",
+  "screen.lightwithin.luxdialogue.what_are_lights.attributes.type_0.sub": "Its dedication to a specific concept, element, or thing",
 
-  "screen.lightwithin.luxdialogue.what_are_lights.type_1": "For me, it's knowledge.",
-  "screen.lightwithin.luxdialogue.what_are_lights.type_1.sub": "For other lights it may be fire, frost, healing, the forest...",
+  "screen.lightwithin.luxdialogue.what_are_lights.attributes.type_1": "For me, it's knowledge.",
+  "screen.lightwithin.luxdialogue.what_are_lights.attributes.type_1.sub": "For other lights it may be fire, frost, healing, the forest...",
 
-  "screen.lightwithin.luxdialogue.what_are_lights.target_0": "The predominant trait is the light's type",
-  "screen.lightwithin.luxdialogue.what_are_lights.target_0.sub": "Its dedication to a specific concept, element, or thing",
+  "screen.lightwithin.luxdialogue.what_are_lights.attributes.target_0": "After that, there is its target type",
+  "screen.lightwithin.luxdialogue.what_are_lights.attributes.target_0.sub": "The target type is in relative to your relationships",
+
+  "screen.lightwithin.luxdialogue.what_are_lights.attributes.target_1": "The target's type determines what the lights power affects",
+  "screen.lightwithin.luxdialogue.what_are_lights.attributes.target_1.sub": "It could be you, your enemies or nobody, who knows!",
+
+  "screen.lightwithin.luxdialogue.what_are_lights.attributes.duration": "Then, we have the light's effects duration",
+  "screen.lightwithin.luxdialogue.what_are_lights.attributes.duration.sub": "Meaning how long your light can channel its powers into you",
+
+  "screen.lightwithin.luxdialogue.what_are_lights.attributes.power": "Next up, the power level or multiplier",
+  "screen.lightwithin.luxdialogue.what_are_lights.attributes.power.sub": "It's a score used to tell how strong a light's power is",
+
+  "screen.lightwithin.luxdialogue.what_are_lights.attributes.cooldown": "An important trait is the rest time, or cooldown time",
+  "screen.lightwithin.luxdialogue.what_are_lights.attributes.cooldown.sub": "Defines how long the light needs to rest, before being newly activated",
+
+  "screen.lightwithin.luxdialogue.what_are_lights.attributes.charges": "Lastly, we have the amount of bearable light charges",
+  "screen.lightwithin.luxdialogue.what_are_lights.attributes.charges.sub": "No light can be able to store more than a few of these charges",
+
+  "screen.lightwithin.luxdialogue.what_are_lights.attributes.know_yours": "Would you like to know your InnerLight's traits?",
+  "screen.lightwithin.luxdialogue.what_are_lights.attributes.know_yours.yes": "Yes",
+  "screen.lightwithin.luxdialogue.what_are_lights.attributes.know_yours.no": "No",
+
+  "comment": "TODO comment: fare magari un altro bottone che fa partirre dal type_0, ma comunque farli tutti in sequenza da type a chargs",
 
 
   "screen.lightwithin.luxdialogue.what_are_lights.do_finish": "Do you want to know your light's characteristics?",
