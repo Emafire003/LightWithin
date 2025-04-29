@@ -84,49 +84,6 @@ public class LuxDialogue {
     /// The item's identifier
     public Identifier item = Registries.ITEM.getId(LightItems.LUXINTUS_BERRY_POWDER);
 
-    @Override
-    public String toString() {
-        return "LuxDialogue{" +
-                "dialogueId='" + dialogueId + '\'' +
-                ", fileVersion=" + fileVersion +
-                ", mainText='" + mainText + '\'' +
-                ", mainTextScale=" + mainTextScale +
-                ", hasReplaceableMainText=" + hasReplaceableMainText +
-                ", replaceablesListMain=" + replaceablesListMain +
-                ", subTextPresent=" + subTextPresent +
-                ", subText='" + subText + '\'' +
-                ", subTextScale=" + subTextScale +
-                ", hasReplaceableSubText=" + hasReplaceableSubText +
-                ", replaceablesListSub=" + replaceablesListSub +
-                ", showBerry=" + showBerry +
-                ", berryPos=" + berryPos +
-                ", berryScale=" + berryScale +
-                ", showImage=" + showImage +
-                ", imagePos=" + imagePos +
-                ", imagePath=" + imagePath +
-                ", imageWidth=" + imageWidth +
-                ", imageHeight=" + imageHeight +
-                ", imageScale=" + imageScale +
-                ", imageHasStages=" + imageHasStages +
-                ", imageStages=" + imageStages +
-                ", imageInterval=" + imageInterval +
-                ", showItem=" + showItem +
-                ", itemPos=" + itemPos +
-                ", item=" + item +
-                ", itemScale=" + itemScale +
-                ", multipleItems=" + multipleItems +
-                ", items=" + items +
-                ", itemsInterval=" + itemsInterval +
-                ", buttons=" + buttons +
-                ", dialogueProgress=" + dialogueProgress +
-                ", dialogueProgressState=" + dialogueProgressState +
-                ", removeDialogueProgress=" + removeDialogueProgress +
-                ", canRedirect=" + canRedirect +
-                ", redirectTo='" + redirectTo + '\'' +
-                ", redirectStateRequired=" + redirectStateRequired +
-                '}';
-    }
-
     /// The item's scale
     public float itemScale = 3f;
     /// Weather or not to have multiple items show in sequence
@@ -150,6 +107,8 @@ public class LuxDialogue {
     public String redirectTo = "default";
     /// The dialogue state the player has to have in order to have the redirection
     public DialogueProgressState redirectStateRequired = DialogueProgressState.NONE;
+    /// Weather or not the required state is inverted, aka must not have the state
+    public boolean invertRedirectRequirement = false;
 
 
     public void serialize() {

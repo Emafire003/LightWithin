@@ -466,7 +466,6 @@
   "screen.lightwithin.luxdialogue.what_are_lights.start": "That, is a rather complex inquiry.",
   "screen.lightwithin.luxdialogue.what_are_lights.start.sub": "Do you want to know more on what they do or their (our) 'essence'?",
   "screen.lightwithin.luxdialogue.what_are_lights.start.do": "What they do",
-  "TODOloro": "TODO this stuff here. Also this is more like the lore",
   "screen.lightwithin.luxdialogue.what_are_lights.start.are": "What they are",
 
   "screen.lightwithin.luxdialogue.what_are_lights.do_0": "InnerLights are '''powers''' granted to special people or beings",
@@ -547,7 +546,14 @@
   "screen.lightwithin.luxdialogue.what_are_lights.lore_6.ok": "It's ok",
   "screen.lightwithin.luxdialogue.what_are_lights.lore_6.more": "No, talk more!",
 
+  "screen.lightwithin.luxdialogue.light_charge.alchemy.ingredients": "What do you need?",
+  "screen.lightwithin.luxdialogue.light_charge.alchemy.ingredients.recap": "Recap of how this works",
+  "screen.lightwithin.luxdialogue.light_charge.alchemy.ingredients.type": "Type Ingredient",
+  "screen.lightwithin.luxdialogue.light_charge.alchemy.ingredients.target": "Target Ingredient",
 
+  "screen.lightwithin.luxdialogue.light_charge.alchemy.know_charge": "Do you at least know what a Light Charge is?",
+  "screen.lightwithin.luxdialogue.light_charge.alchemy.know_charge.yes": "Yes of course",
+  "screen.lightwithin.luxdialogue.light_charge.alchemy.know_charge.no": "No?",
 
   "TODO TODO TODO": "link this up somewhere. There is like a mistery behind the lux berries stories, maybe tyed to legerdary lighrs",
   "screen.lightwithin.luxdialogue.personal.bearer_0": "My bearer is the berry itself, the one you ate.",

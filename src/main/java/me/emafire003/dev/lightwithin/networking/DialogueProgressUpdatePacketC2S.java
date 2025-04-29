@@ -43,7 +43,6 @@ public class DialogueProgressUpdatePacketC2S extends PacketByteBuf {
     public static boolean readRemove(PacketByteBuf buf) {
         try{
             buf.readEnumConstant(DialogueProgressState.class);
-            buf.readInt();
             return buf.readBoolean();
         }catch (NoSuchElementException e){
             LOGGER.warn("No value in the packet while reading, probably not a big problem");

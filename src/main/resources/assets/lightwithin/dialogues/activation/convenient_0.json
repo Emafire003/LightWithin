@@ -18,5 +18,7 @@
   "imageHasStages": false,
   "buttons": {
     "screen.lightwithin.luxdialogue.next": "GO_DIALOGUE<activation/convenient_1>"
-  }
+  },
+  "dialogueProgress": true,
+  "dialogueProgressState": "KNOW_CHARGE"
 }

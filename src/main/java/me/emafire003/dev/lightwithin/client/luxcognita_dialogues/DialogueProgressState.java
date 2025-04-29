@@ -6,6 +6,8 @@ public enum DialogueProgressState {
     NONE,
     TOLD_NAME,
     FIRST_GUIDANCE_GOT,
-    PISSED_OFF/*,
+    PISSED_OFF,
+    ALCHEMY_TAUGHT,
+    KNOW_CHARGE/*,
     ALREADY_MET_IN_OTHER_SAVE // if i end up using the option of saving to local progress file*/
 }

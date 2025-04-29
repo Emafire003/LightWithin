@@ -70,7 +70,8 @@ public class LightCreationAndEvent {
         // This check is here to non-reset the light unless it became invalid (somehow)
         if(!(component.getType() instanceof NoneLight || component.getType() == null)){
             return;
-        }else{
+            //Basically checks if it's not the first join for the player
+        }else if(component.getDuration() != -1){
             LOGGER.warn("The light of " + player.getName().toString() + " has (somehow) become invalid (it now is: " + component.getType() + " ). Resetting it it!");
         }
 

@@ -15,5 +15,7 @@
   "itemScale": 3.0,
   "buttons": {
     "screen.lightwithin.luxdialogue.next": "CLOSE"
-  }
+  },
+  "dialogueProgress": true,
+  "dialogueProgressState": "ALCHEMY_TAUGHT"
 }

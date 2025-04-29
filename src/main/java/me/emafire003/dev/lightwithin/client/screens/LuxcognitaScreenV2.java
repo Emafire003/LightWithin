@@ -74,10 +74,17 @@ public class LuxcognitaScreenV2 extends Screen{
         // Check to see if this is a dialogue that can be redirected if the player has a certain dialogue progress
         // for example, "intro" will redirect to "main" once its completed.
         if(dialogue.canRedirect){
-            if(LightWithin.LIGHT_COMPONENT.get(this.client.player).getDialogueProgressStates().contains(dialogue.redirectStateRequired)){
+            if(LightWithin.LIGHT_COMPONENT.get(this.client.player).getDialogueProgressStates().contains(dialogue.redirectStateRequired) && !dialogue.invertRedirectRequirement){
                 if(!LuxdialogueScreens.LUXDIALOGUE_SCREENS.containsKey(dialogue.redirectTo)){
                     this.client.player.sendMessage(Text.literal(LightWithin.PREFIX_MSG + "Error! Cannot redirect to screen '" + dialogue.redirectTo + "' since it's not registered!").formatted(Formatting.RED));
-                    // TODO make sure these returns don't mess up stuff
+                    return;
+                }
+                this.client.setScreen(LuxdialogueScreens.LUXDIALOGUE_SCREENS.get(dialogue.redirectTo));
+                return;
+            }
+            if(!LightWithin.LIGHT_COMPONENT.get(this.client.player).getDialogueProgressStates().contains(dialogue.redirectStateRequired) && dialogue.invertRedirectRequirement){
+                if(!LuxdialogueScreens.LUXDIALOGUE_SCREENS.containsKey(dialogue.redirectTo)){
+                    this.client.player.sendMessage(Text.literal(LightWithin.PREFIX_MSG + "Error! Cannot redirect to screen '" + dialogue.redirectTo + "' since it's not registered!").formatted(Formatting.RED));
                     return;
                 }
                 this.client.setScreen(LuxdialogueScreens.LUXDIALOGUE_SCREENS.get(dialogue.redirectTo));
@@ -401,6 +408,7 @@ public class LuxcognitaScreenV2 extends Screen{
     private int itemTicker = -1;
     private int currentItem = 0;
 
+//TODO this kinda conflicts with ModernFix's something. aaand not only that. probably sodium and stuff too.
 
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
@@ -436,8 +444,8 @@ public class LuxcognitaScreenV2 extends Screen{
 
 
             if(dialogue.hasReplaceableSubText){
-                List<String> toReplace = new ArrayList<>(dialogue.replaceablesListMain.size());
-                dialogue.replaceablesListMain.forEach( replaceable -> {
+                List<String> toReplace = new ArrayList<>(dialogue.replaceablesListSub.size());
+                dialogue.replaceablesListSub.forEach( replaceable -> {
                     toReplace.add(parseReplacable(replaceable));
                 });
                 subText = Text.translatable(dialogue.subText, toReplace.toArray());
@@ -509,6 +517,7 @@ public class LuxcognitaScreenV2 extends Screen{
             RenderSystem.defaultBlendFunc();
             ClipStack.addWindow(context.getMatrices(), new Rectangle(0,0, width, height));
 
+            LightWithin.LOGGER.info("Trying to display: " + image + "");
             Renderer2d.renderTexture(context.getMatrices(), image, xy.getFirst(), xy.getSecond(), dialogue.imageWidth*dialogue.imageScale, dialogue.imageHeight*dialogue.imageScale);
             ClipStack.popWindow();
 

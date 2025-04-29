@@ -1,7 +1,7 @@
 {
   "dialogueId": "triggers",
   "fileVersion": 1,
-  "mainText": "screen.lightwithin.luxdialogue.triggers",
+  "mainText": "screen.lightwithin.luxdialogue.my_light.triggers",
   "mainTextScale": 1.5,
   "buttons": {
     "screen.lightwithin.luxdialogue.my_light.triggers.light_conditions": "SHOW_LIGHT_CONDITIONS",
