@@ -106,8 +106,8 @@ dependencies {
 	//Factions
 	modImplementation "maven.modrinth:factions:${project.factions_version}"
 
-	//Argonauts
-	modCompileOnly "maven.modrinth:argonauts:${project.argonauts_version}"
+	//odyssey-allies
+	modCompileOnly "maven.modrinth:odyssey-allies:${project.odyssey_allies_version}"
 	modCompileOnly "maven.modrinth:resourceful-lib:${project.resourcefullib_version}"
 	//Which requires maybe: resourceful-lib
 

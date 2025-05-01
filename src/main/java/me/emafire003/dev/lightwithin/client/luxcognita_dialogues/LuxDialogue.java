@@ -92,6 +92,11 @@ public class LuxDialogue {
     public List<Identifier> items = List.of(Registries.ITEM.getId(LightItems.LUXINTUS_BERRY_POWDER), Registries.ITEM.getId(LightItems.LUXINTUS_BERRY));
     /// the interval between each display of an item
     public int itemsInterval = 20;
+
+    /// Weather or not to pick only some of the buttons
+    public boolean randomizedButtons = false;
+    /// How many buttons to pick each time
+    public int randomButtonsAmount = 3;
     /// The first string is a translatable string representing the text displayed on the button, while the second one represents an action that is performed on click, along with its potetential target
     public Map<String, String> buttons = Map.of("screen.lightwithin.luxdialogue.default.button0", "CLOSE");
 

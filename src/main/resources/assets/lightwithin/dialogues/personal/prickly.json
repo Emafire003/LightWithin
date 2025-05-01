@@ -1,0 +1,10 @@
+{
+  "dialogueId": "prickly",
+  "fileVersion": 1,
+  "mainText": "screen.lightwithin.luxdialogue.personal.prickly",
+  "mainTextScale": 1.5,
+  "berryPos": "CENTER",
+  "buttons": {
+    "screen.lightwithin.luxdialogue.next": "GO_DIALOGUE<personal/offended>"
+  }
+}

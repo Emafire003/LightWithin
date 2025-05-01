@@ -21,7 +21,7 @@
   "item.lightwithin.bottled_light": "Bottled Light",
   "item.lightwithin.luxintus_berry_powder": "Luxintus Berry Powder",
 
-  "item.lightwithin.luxintus_berry.tooltip": "§eLight of §blight",
+  "item.lightwithin.luxintus_berry.tooltip": "§eLight of §blight-energy",
   "item.lightwithin.luxmutua_berry.tooltip": "§eLight of §dchange",
   "item.lightwithin.luxcognita_berry.tooltip": "§eLight of §aknowledge",
   "item.lightwithin.bottled_light.tooltip": "§eA fresh charge of Inner Light!",
@@ -481,7 +481,6 @@
   "screen.lightwithin.luxdialogue.what_are_lights.do_2.sub": "It's like their fingerprint!",
 
   "screen.lightwithin.luxdialogue.what_are_lights.do_3": "There are a lot of different types of InnerLight",
-  "TODO-1": "Explain the light targets? Like maybe explain the various light attributes and what they mean? Yeah like this the 'intro' then a button can be added explainig all of em. Or maybe in guidance",
   "screen.lightwithin.luxdialogue.what_are_lights.do_3.sub": "with different 'targets', level of power, duration, rest period...",
 
   "screen.lightwithin.luxdialogue.what_are_lights.do_4": "All of this characteristics make a light unique",
@@ -555,8 +554,50 @@
   "screen.lightwithin.luxdialogue.light_charge.alchemy.know_charge.yes": "Yes of course",
   "screen.lightwithin.luxdialogue.light_charge.alchemy.know_charge.no": "No?",
 
-  "TODO TODO TODO": "link this up somewhere. There is like a mistery behind the lux berries stories, maybe tyed to legerdary lighrs",
-  "screen.lightwithin.luxdialogue.personal.bearer_0": "My bearer is the berry itself, the one you ate.",
+
+  "screen.lightwithin.luxdialogue.personal": "You want to know something... about me?",
+  "screen.lightwithin.luxdialogue.personal.sub": "What?",
+
+  "screen.lightwithin.luxdialogue.personal.button": "Your name",
+  "screen.lightwithin.luxdialogue.personal.name_0": "My name?",
+  "screen.lightwithin.luxdialogue.personal.name_0.sub": "Well, somebody once gave me a proper name...",
+
+  "screen.lightwithin.luxdialogue.personal.name_1": "Mary, I think. ",
+  "screen.lightwithin.luxdialogue.personal.name_1.sub": "It's been a long time ago. You can still call me LuxCognita",
+  "screen.lightwithin.luxdialogue.personal.name_1.nice": "Nice name",
+  "screen.lightwithin.luxdialogue.personal.name_1.ok": "Ok",
+
+  "screen.lightwithin.luxdialogue.personal.luxberries.button": "About you Luxberries...",
+  "screen.lightwithin.luxdialogue.personal.luxberries": "Yes, what do you want to know?",
+  "screen.lightwithin.luxdialogue.personal.luxberries.many": "Who are you?",
+  "screen.lightwithin.luxdialogue.personal.luxberries.what": "What are you?",
+
+  "screen.lightwithin.luxdialogue.personal.luxberries.many_0": "Well, there are three of us. Me, LuxIntus and LuxMutua",
+  "screen.lightwithin.luxdialogue.personal.luxberries.many_0.sub": "We are all dedicated to our passions",
+
+  "screen.lightwithin.luxdialogue.personal.luxberries.many_1": "Except LuxIntus, they're just kinda crazy",
+  "screen.lightwithin.luxdialogue.personal.luxberries.many_1.sub": "And yes, the other two don't talk as much as I do",
+  "screen.lightwithin.luxdialogue.personal.luxberries.many_1.talk": "Is yours talking?",
+  "screen.lightwithin.luxdialogue.personal.luxberries.many_1.why_luxintus": "Why is Luxintus crazy?",
+
+  "screen.lightwithin.luxdialogue.personal.luxberries.many.talking": "Ah-ah. No it's knowledge.",
+  "screen.lightwithin.luxdialogue.personal.luxberries.many.talking.sure": "Sure... :)",
+  
+  "screen.lightwithin.luxdialogue.personal.luxberries.many.why_luxintus_0": "We don't really know",
+  "screen.lightwithin.luxdialogue.personal.luxberries.many.why_luxintus_0.sub": "They really like to 'burst' their light",
+
+  "screen.lightwithin.luxdialogue.personal.luxberries.many.why_luxintus_1": "Which is why you can activate your light by eating it",
+  "screen.lightwithin.luxdialogue.personal.luxberries.many.why_luxintus_1.sub": "(And why you can get its power after squashing em with an anvil)",
+  "screen.lightwithin.luxdialogue.personal.luxberries.many.why_luxintus_1.wow": "Oh wow",
+
+  "screen.lightwithin.luxdialogue.personal.luxberries.what_0": "Well, it's kind of complicated",
+  "screen.lightwithin.luxdialogue.personal.luxberries.what_0.sub": "Technically, we are lights as well. Like the one bear",
+
+  "screen.lightwithin.luxdialogue.personal.luxberries.what_1": "But we serve the purpose of aiding other lights and bearers",
+  "screen.lightwithin.luxdialogue.personal.luxberries.what_1.sub": "And also we are bound to vegetation as you can see",
+  "screen.lightwithin.luxdialogue.personal.luxberries.what_1.bearer": "Who's your light-bearer?",
+  
+  "screen.lightwithin.luxdialogue.personal.bearer_0": "My light bearer is the berry itself, the one you ate.",
   "screen.lightwithin.luxdialogue.personal.bearer_0.sub": "Although, I was not able to chose it",
 
   "screen.lightwithin.luxdialogue.personal.bearer_1": "Someone or something else chose for me",
@@ -564,7 +605,30 @@
 
   "screen.lightwithin.luxdialogue.personal.bearer_2": "It's not that bad. I used to be able to soak in the sunlight",
   "screen.lightwithin.luxdialogue.personal.bearer_2.sub": "It's been a while since i've been able to tho...",
-  "TODO personal": "are you unique? Why? Why aren't you linked to a player/human/whatever? What happened? What are legendary lights? Can i get one? Why do you talk like this? (answer->knowledgbale people tend to talk like this? I think=",
+  
+  "screen.lightwithin.luxdialogue.personal.unique.button": "Are you unique?",
+  "screen.lightwithin.luxdialogue.personal.unique_0": "It depends on your definition of it.",
+  "screen.lightwithin.luxdialogue.personal.unique_0.sub": "Each light is unique, so I am too.",
+
+  "screen.lightwithin.luxdialogue.personal.unique_1": "But I am also present in multiple 'LuxCognita berries'",
+  "screen.lightwithin.luxdialogue.personal.unique_1.sub": "So I'll leave the answer to you.",
+  
+  "screen.lightwithin.luxdialogue.personal.prickly.button": "Why so prickly?",
+  "screen.lightwithin.luxdialogue.personal.prickly": "What?! No I'm not!!!",
+
+  "screen.lightwithin.luxdialogue.personal.talkway.button": "Why you talk like this?",
+  "screen.lightwithin.luxdialogue.personal.talkway": "Well I gained a lot of knowledge,",
+  "screen.lightwithin.luxdialogue.personal.talkway.sub": "and this is how knowledgeable people talk, I think ?",
+
+  "screen.lightwithin.luxdialogue.personal.dream.button": "What is your dream?",
+  "screen.lightwithin.luxdialogue.personal.dream_0": "My... dream?",
+  "screen.lightwithin.luxdialogue.personal.dream_0.sub": "I don't actually know... It's been so long...",
+
+  "screen.lightwithin.luxdialogue.personal.dream_1": "I will think about it...",
+  "screen.lightwithin.luxdialogue.personal.dream_1.sub": "Thank you for this question tho...",
+  "screen.lightwithin.luxdialogue.personal.dream_1.no_worries": "No worries!",
+
+  "TODO-1": "Explain the light targets? And the light types. List them. Like maybe explain the various light attributes and what they mean? Yeah like this the 'intro' then a button can be added explainig all of em. Or maybe in guidance",
 
 
   "screen.lightwithin.luxdialogue.offended": "I decided I won't talk to you for a while.",
@@ -572,5 +636,7 @@
 
   "screen.lightwithin.luxdialogue.attacked": "You have been attacked!",
   "screen.lightwithin.luxdialogue.attacked.sub": "We'll talk later, go defend yourself!",
-  "screen.lightwithin.luxdialogue.attacked.button": "Ok"
+  "screen.lightwithin.luxdialogue.attacked.button": "Ok",
+
+  "TODO personal": "are you unique? Why? Why aren't you linked to a player/human/whatever? What happened? What are legendary lights? Can i get one?"
 }

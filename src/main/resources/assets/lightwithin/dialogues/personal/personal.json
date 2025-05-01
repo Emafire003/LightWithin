@@ -1,0 +1,21 @@
+{
+  "dialogueId": "personal",
+  "fileVersion": 1,
+  "mainText": "screen.lightwithin.luxdialogue.personal",
+  "mainTextScale": 1.5,
+  "subTextPresent": true,
+
+  "subText": "screen.lightwithin.luxdialogue.personal.sub",
+  "subTextScale": 1.3,
+  "berryPos": "CENTER",
+  "randomizedButtons": true,
+  "randomButtonsAmount": 3,
+  "buttons": {
+    "screen.lightwithin.luxdialogue.personal.button": "GO_DIALOGUE<personal/name_0>",
+    "screen.lightwithin.luxdialogue.personal.luxberries.button": "GO_DIALOGUE<personal/luxberries/luxberries>",
+    "screen.lightwithin.luxdialogue.personal.prickly.button": "GO_DIALOGUE<personal/prickly>",
+    "screen.lightwithin.luxdialogue.personal.talkway.button": "GO_DIALOGUE<personal/talkway>",
+    "screen.lightwithin.luxdialogue.personal.unique.button": "GO_DIALOGUE<personal/unique_0>",
+    "screen.lightwithin.luxdialogue.personal.dream.button": "GO_DIALOGUE<personal/dream_0>"
+  }
+}

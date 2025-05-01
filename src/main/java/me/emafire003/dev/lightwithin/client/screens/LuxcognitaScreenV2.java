@@ -38,9 +38,7 @@ import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import org.joml.Matrix4f;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @SuppressWarnings("ALL")
@@ -106,10 +104,11 @@ public class LuxcognitaScreenV2 extends Screen{
         gridWidget.setSpacing(10);
         int maxButtonsPerRow = 4;
         // adjusts the number of columns based on the amount of buttons
-        if(dialogue.buttons.size() > 4 && dialogue.buttons.size()%2==1 ){
+        int buttonAmount = dialogue.buttons.size();
+        if(buttonAmount > 4 && buttonAmount%2==1 ){
             maxButtonsPerRow = 3;
         }
-        GridWidget.Adder adder = gridWidget.createAdder(Math.min(dialogue.buttons.size(), maxButtonsPerRow));
+        GridWidget.Adder adder = gridWidget.createAdder(Math.min(buttonAmount, maxButtonsPerRow));
 
 
         // Gets the buttons for this screen and the action
@@ -122,8 +121,8 @@ public class LuxcognitaScreenV2 extends Screen{
         }else{
             buttons.forEach(buttonWidget -> {
 
-                if(buttonCount.get() > 3 && dialogue.buttons.size() > 4){
-                    if(dialogue.buttons.size() == 5){
+                if(buttonCount.get() > 3 && buttonAmount > 4){
+                    if(buttonAmount == 5){
                         // Button | Button | Button
                         // button | button (can't do better)
                     /*if(emptyWidgetsAdded.get() == 0 && buttonCount.get() == 4){
@@ -134,7 +133,7 @@ public class LuxcognitaScreenV2 extends Screen{
                         adder.add(buttonWidget);
                         buttonCount.getAndIncrement();
                     }
-                    else if(dialogue.buttons.size() == 6){
+                    else if(buttonAmount == 6){
                         // button button button button
                         //        button button
                         if(emptyWidgetsAdded.get() == 0 && buttonCount.get() == 5){
@@ -144,7 +143,7 @@ public class LuxcognitaScreenV2 extends Screen{
                         }
                         adder.add(buttonWidget);
                         buttonCount.getAndIncrement();
-                    }else if(dialogue.buttons.size() == 7){
+                    }else if(buttonAmount == 7){
                         // button button button button
                         //     button button button
                         //
@@ -164,8 +163,8 @@ public class LuxcognitaScreenV2 extends Screen{
 
 
 
-            /*if(buttonCount.get() > 3 && dialogue.buttons.size() > 4){
-                //dialogue.buttons.size()-buttonCount.get() questi sono i button rimanenti. Se è solo uno deve stare al c
+            /*if(buttonCount.get() > 3 && buttonAmount > 4){
+                //buttonAmount-buttonCount.get() questi sono i button rimanenti. Se è solo uno deve stare al c
                 adder.add(new EmptyWidget((int) ((this.width/2) /2.3), 20));
                 adder.add(buttonWidget, 1);
                 this.client.player.sendMessage(Text.literal("yes adding on new row"));
@@ -190,7 +189,23 @@ public class LuxcognitaScreenV2 extends Screen{
         }
         int center_x = MinecraftClient.getInstance().getWindow().getScaledWidth()/2;
         List<ButtonWidget> buttons = new ArrayList<>();
-        dialogue.buttons.forEach( (text, action) -> {
+        HashMap<String, String> pickedButtons = new HashMap<>(dialogue.buttons);
+
+        if(dialogue.randomizedButtons){
+            List<String> buttonKeys = dialogue.buttons.keySet().stream().toList();
+            pickedButtons.clear();
+            // generates randomButtonsAmonut numbers, and picks the corresponding button from the map
+            for (int i = 0; i < dialogue.randomButtonsAmount; i++){
+                int n = this.client.player.getRandom().nextBetween(0, dialogue.buttons.size()-1);
+                //Check to avoid duplicates
+                while(pickedButtons.containsKey(buttonKeys.get(n))){
+                    n = this.client.player.getRandom().nextBetween(0, dialogue.buttons.size()-1);
+                }
+                pickedButtons.put(buttonKeys.get(n), dialogue.buttons.get(buttonKeys.get(n)));
+            }
+        }
+
+        pickedButtons.forEach( (text, action) -> {
 
             ClickActions clickAction;
             String target = "screen.lightwithin.luxdialogue.text_error";
