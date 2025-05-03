@@ -17,6 +17,7 @@ import me.emafire003.dev.lightwithin.networking.DialogueProgressUpdatePacketC2S;
 import me.emafire003.dev.lightwithin.networking.LuxdreamStopPacketC2S;
 import me.emafire003.dev.lightwithin.sounds.LightSounds;
 import me.emafire003.dev.lightwithin.util.ScreenUtils;
+import me.emafire003.dev.lightwithin.util.TargetType;
 import me.x150.renderer.ClipStack;
 import me.x150.renderer.Rectangle;
 import me.x150.renderer.Renderer2d;
@@ -24,10 +25,7 @@ import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.gui.widget.EmptyWidget;
-import net.minecraft.client.gui.widget.GridWidget;
-import net.minecraft.client.gui.widget.SimplePositioningWidget;
+import net.minecraft.client.gui.widget.*;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.util.math.MatrixStack;
@@ -36,9 +34,11 @@ import net.minecraft.registry.Registries;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
+import org.jetbrains.annotations.NotNull;
 import org.joml.Matrix4f;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @SuppressWarnings("ALL")
@@ -74,6 +74,11 @@ public class LuxcognitaScreenV2 extends Screen{
         if(dialogue.canRedirect){
             if(LightWithin.LIGHT_COMPONENT.get(this.client.player).getDialogueProgressStates().contains(dialogue.redirectStateRequired) && !dialogue.invertRedirectRequirement){
                 if(!LuxdialogueScreens.LUXDIALOGUE_SCREENS.containsKey(dialogue.redirectTo)){
+                    if(dialogue.redirectTo.equals("CLOSE")){
+                        this.closeWithAnimation();
+                        sendDialogueStopDreamPacket();
+                        return;
+                    }
                     this.client.player.sendMessage(Text.literal(LightWithin.PREFIX_MSG + "Error! Cannot redirect to screen '" + dialogue.redirectTo + "' since it's not registered!").formatted(Formatting.RED));
                     return;
                 }
@@ -82,6 +87,11 @@ public class LuxcognitaScreenV2 extends Screen{
             }
             if(!LightWithin.LIGHT_COMPONENT.get(this.client.player).getDialogueProgressStates().contains(dialogue.redirectStateRequired) && dialogue.invertRedirectRequirement){
                 if(!LuxdialogueScreens.LUXDIALOGUE_SCREENS.containsKey(dialogue.redirectTo)){
+                    if(dialogue.redirectTo.equals("CLOSE")){
+                        this.closeWithAnimation();
+                        sendDialogueStopDreamPacket();
+                        return;
+                    }
                     this.client.player.sendMessage(Text.literal(LightWithin.PREFIX_MSG + "Error! Cannot redirect to screen '" + dialogue.redirectTo + "' since it's not registered!").formatted(Formatting.RED));
                     return;
                 }
@@ -112,7 +122,7 @@ public class LuxcognitaScreenV2 extends Screen{
 
 
         // Gets the buttons for this screen and the action
-        List<ButtonWidget> buttons = getButtons();
+        List<Widget> buttons = getButtons();
 
         AtomicInteger buttonCount = new AtomicInteger(1);
         AtomicInteger emptyWidgetsAdded = new AtomicInteger();
@@ -183,12 +193,12 @@ public class LuxcognitaScreenV2 extends Screen{
 
     }
 
-    private List<ButtonWidget> getButtons(){
+    private List<Widget> getButtons(){
         if(this.client == null || this.client.player == null){
             return null;
         }
         int center_x = MinecraftClient.getInstance().getWindow().getScaledWidth()/2;
-        List<ButtonWidget> buttons = new ArrayList<>();
+        List<Widget> buttons = new ArrayList<>();
         HashMap<String, String> pickedButtons = new HashMap<>(dialogue.buttons);
 
         if(dialogue.randomizedButtons){
@@ -205,15 +215,16 @@ public class LuxcognitaScreenV2 extends Screen{
             }
         }
 
+        AtomicBoolean textFieldAlreadyPresent = new AtomicBoolean(false);
+
         pickedButtons.forEach( (text, action) -> {
 
             ClickActions clickAction;
             String target = "screen.lightwithin.luxdialogue.text_error";
             if(action.contains("<")){
                 String[] stringParts = action.split("<");
-                //TODO actually find out where the "<" goes
+
                 clickAction = ClickActions.valueOf(stringParts[0].replaceAll("<", ""));
-                //TODO see if there could be a possibility of multiple arguments
                 target = stringParts[1].replaceAll("<", "").replaceAll(">", "");
             }else{
                 try{
@@ -230,8 +241,11 @@ public class LuxcognitaScreenV2 extends Screen{
 
             ButtonWidget.PressAction pressAction = (buttonWidget) -> {
                 Objects.requireNonNull(this.client.player).sendMessage(Text.literal(LightWithin.PREFIX_MSG+"Something went wrong trying to perform that action").formatted(Formatting.DARK_RED));
+                sendDialogueStopDreamPacket();
                 this.close();
             };
+
+            Widget new_button;
 
             if(clickAction.equals(ClickActions.CLOSE)){
                 pressAction = (button) -> {
@@ -258,6 +272,22 @@ public class LuxcognitaScreenV2 extends Screen{
                 pressAction = this::lightLightConditionsAction;
             }else if(clickAction.equals(ClickActions.SHOW_TRIGGER_EVENTS)){
                 pressAction = this::lightLightTriggerEventsAction;
+            }else if(clickAction.equals(ClickActions.TEXT_INPUT)) {
+                if (textFieldAlreadyPresent.get()) {
+                    LightWithin.LOGGER.warn("A TextField is already present in this screen! You can't have more than one currently! DialogueId: " + dialogue.dialogueId);
+                }
+                new_button = new TextFieldWidget(this.textRenderer, 20, 20, (int) (center_x / 2.3), 20, Text.literal("you should not see this. Report please!"));
+                ((TextFieldWidget) new_button).setEditable(true);
+                ((TextFieldWidget) new_button).setChangedListener(this::onTextChanged);
+                textFieldAlreadyPresent.set(true);
+                //Adds the text field and goes to the next one
+                buttons.add(new_button);
+                return;
+            }else if(clickAction.equals(ClickActions.GO_TYPE_AFTER_INPUT)){
+                pressAction = this::goTypeAfterInput;
+            }
+            else if(clickAction.equals(ClickActions.GO_TARGET_AFTER_INPUT)){
+                pressAction = this::goTargetAfterInput;
             }
 
             //Action with a target
@@ -265,13 +295,38 @@ public class LuxcognitaScreenV2 extends Screen{
                 LuxcognitaScreenV2 targetScreen = LuxdialogueScreens.LUXDIALOGUE_SCREENS.get(target);
                 if(targetScreen == null){
                     this.client.player.sendMessage(Text.literal(LightWithin.PREFIX_MSG + "Could not find the screen with id: " + target).formatted(Formatting.RED));
-                    pressAction = (button -> {
-                        sendDialogueStopDreamPacket();
-                        this.close();
-                    });
                 }else{
                     TransitionScreen transitionScreen = new TransitionScreen(Text.literal("transition_to:"+targetScreen.title), targetScreen);
                     pressAction = (button) -> MinecraftClient.getInstance().setScreen(transitionScreen);
+                }
+            }else if(clickAction.equals(ClickActions.GO_IF_PROGRESS)){
+                @NotNull String[] args = target.split(",");
+
+                args[0] = args[0].replaceAll(",", "").replaceAll(" ", "");
+                args[1] = args[1].replaceAll(",", "").replaceAll(" ", "");
+                DialogueProgressState state = DialogueProgressState.valueOf(args[1]);
+                if(state == null){
+                    this.client.player.sendMessage(Text.literal(LightWithin.PREFIX_MSG + "Could not find the dialogue progress: '" + args[1] + "'").formatted(Formatting.RED));
+                    return;
+                }
+                if(LightWithin.LIGHT_COMPONENT.get(this.client.player).getDialogueProgressStates().contains(state)){
+                    LuxcognitaScreenV2 targetScreen = LuxdialogueScreens.LUXDIALOGUE_SCREENS.get(args[0]);
+                    if(targetScreen == null){
+                        this.client.player.sendMessage(Text.literal(LightWithin.PREFIX_MSG + "Could not find the screen with id: " + args[0]).formatted(Formatting.RED));
+                        pressAction = (button -> {
+                            sendDialogueStopDreamPacket();
+                            this.close();
+                        });
+                    }else{
+                        TransitionScreen transitionScreen = new TransitionScreen(Text.literal("transition_to:"+targetScreen.title), targetScreen);
+                        pressAction = (button) -> MinecraftClient.getInstance().setScreen(transitionScreen);
+                    }
+                }
+                else{
+                    pressAction = (button -> {
+                        sendDialogueStopDreamPacket();
+                        this.closeWithAnimation();
+                    });
                 }
             }else if(clickAction.equals(ClickActions.SEND_CHAT_MSG)){
                 String finalTarget = target;
@@ -285,17 +340,18 @@ public class LuxcognitaScreenV2 extends Screen{
                     this.client.player.sendMessage(Text.translatable(finalTarget), true);
                     this.closeWithAnimation();
                 });
-            }else{
+            }
+            else{
                 this.client.player.sendMessage(Text.literal(LightWithin.PREFIX_MSG+"Could not parse click action: " + action).formatted(Formatting.RED));
             }
 
-
-            ButtonWidget new_button = ButtonWidget
+             new_button = ButtonWidget
                     .builder(Text.translatable(text).formatted(Formatting.YELLOW),
                             pressAction
                     )
                     .size((int) (center_x/2.3), 20)
                     .build();
+
             buttons.add(new_button);
         });
         return buttons;
@@ -375,6 +431,70 @@ public class LuxcognitaScreenV2 extends Screen{
         LuxcognitaBerryItem.sendLightTriggerEventsMessage(this.client.player);
         sendDialogueStopDreamPacket();
         this.closeWithAnimation();
+    }
+
+    /// The string currently written in a text field
+    private String currentField = "";
+
+    /** Updates the */
+    public void onTextChanged(String input){
+        this.currentField = input;
+    }
+
+    /** Goes to the screen linked to the light type written in a text field*/
+    public void goTypeAfterInput(ButtonWidget buttonWidget){
+        if(currentField.equals("")){
+            LightWithin.LOGGER.warn("Maybe a TextField hasn't been updated or inserted in the screen!");
+        }
+
+        //removes potential stuff like spaces and "_light" ecc.
+        currentField = currentField.toLowerCase().replaceAll("_light", "")
+                .replaceAll("light", "").replaceAll(" ", "");
+
+        LuxcognitaScreenV2 targetScreen = LuxdialogueScreens.LUXDIALOGUE_SCREENS.get("light_info/type_unrecognized");
+
+        if(LightWithin.INNERLIGHT_REGISTRY.containsId(LightWithin.getIdentifier(currentField))){
+            targetScreen = LuxdialogueScreens.LUXDIALOGUE_SCREENS.get("light_info/"+currentField);
+        }
+
+
+        if(targetScreen == null){
+            this.client.player.sendMessage(Text.literal(LightWithin.PREFIX_MSG + "Could not find the screen with id: light_info/" + currentField).formatted(Formatting.RED));
+            sendDialogueStopDreamPacket();
+            this.close();
+        }else{
+            TransitionScreen transitionScreen = new TransitionScreen(Text.literal("transition_to:"+targetScreen.title), targetScreen);
+            MinecraftClient.getInstance().setScreen(transitionScreen);
+        }
+
+    }
+
+    /** Goes to the screen linked to the light target type written in a text field*/
+    public void goTargetAfterInput(ButtonWidget buttonWidget){
+        if(currentField.equals("")){
+            //TODO actually the player could leave it blank on purpose
+            LightWithin.LOGGER.warn("Maybe a TextField hasn't been updated or inserted in the screen!");
+        }
+
+        //removes potential stuff
+        currentField = currentField.toLowerCase().replaceAll("_", "").replaceAll(" ", "");
+
+        LuxcognitaScreenV2 targetScreen = LuxdialogueScreens.LUXDIALOGUE_SCREENS.get("light_info/target_unrecognized");
+
+        if(TargetType.valueOf(currentField) != null){
+            targetScreen = LuxdialogueScreens.LUXDIALOGUE_SCREENS.get("light_info/"+currentField);
+        }
+
+
+        if(targetScreen == null){
+            this.client.player.sendMessage(Text.literal(LightWithin.PREFIX_MSG + "Could not find the screen with id: light_info/" + currentField).formatted(Formatting.RED));
+            sendDialogueStopDreamPacket();
+            this.close();
+        }else{
+            TransitionScreen transitionScreen = new TransitionScreen(Text.literal("transition_to:"+targetScreen.title), targetScreen);
+            MinecraftClient.getInstance().setScreen(transitionScreen);
+        }
+
     }
 
     private int colorTicks = 0;
@@ -597,6 +717,7 @@ public class LuxcognitaScreenV2 extends Screen{
         currentImage = 0;
         itemTicker = -1;
         currentItem = 0;
+        currentField = "";
         super.close();
     }
 

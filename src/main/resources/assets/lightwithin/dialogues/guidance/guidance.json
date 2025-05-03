@@ -28,7 +28,8 @@
   "buttons": {
     "screen.lightwithin.luxdialogue.guidance.button.what_lights": "GO_DIALOGUE<what_are_lights/start>",
     "screen.lightwithin.luxdialogue.guidance.button.my_light": "GO_DIALOGUE<my_light/my_light>",
-    "screen.lightwithin.luxdialogue.guidance.button.activate": "GO_DIALOGUE<activation/activation>"
+    "screen.lightwithin.luxdialogue.guidance.button.activate": "GO_DIALOGUE<activation/activation>",
+    "screen.lightwithin.luxdialogue.guidance.button.potions": "GO_DIALOGUE<light_charges/alchemy/know_charge>"
   },
   "dialogueProgress": true,
   "dialogueProgressState": "INTRO_DONE"

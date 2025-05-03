@@ -12,6 +12,6 @@
   "buttons": {
     "screen.lightwithin.luxdialogue.intro.dont_understand.button.are_you_real": "GO_DIALOGUE<intro/are_you_real>",
     "screen.lightwithin.luxdialogue.intro.dont_understand.button.guidance": "GO_DIALOGUE<guidance/guidance>",
-    "screen.lightwithin.luxdialogue.intro.dont_understand.button.about_you": "GO_DIALOGUE<personal/luxdream"
+    "screen.lightwithin.luxdialogue.intro.dont_understand.button.about_you": "GO_DIALOGUE<personal/luxdream>"
   }
 }

@@ -4,10 +4,11 @@ package me.emafire003.dev.lightwithin.client.luxcognita_dialogues;
 public enum DialogueProgressState {
     INTRO_DONE,
     NONE,
-    TOLD_NAME,
-    FIRST_GUIDANCE_GOT,
     PISSED_OFF,
     ALCHEMY_TAUGHT,
-    KNOW_CHARGE/*,
+    KNOW_CHARGE,
+    LISTING_TYPES,
+    LISTING_TARGETS
+    /*,
     ALREADY_MET_IN_OTHER_SAVE // if i end up using the option of saving to local progress file*/
 }

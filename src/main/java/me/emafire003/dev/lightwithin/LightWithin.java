@@ -191,6 +191,11 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 				return ActionResult.PASS;
 			}
 			syncCustomConfigOptions(player);
+
+			//Not really meant to be here, but it remvoes the effect of luxdream if the player crashed or quit and then logged back in
+			if(player.hasStatusEffect(LightEffects.LUXCOGNITA_DREAM)){
+				player.removeStatusEffect(LightEffects.LUXCOGNITA_DREAM);
+			}
 			return ActionResult.PASS;
 		});
 	}

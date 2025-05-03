@@ -261,7 +261,7 @@
   "screen.lightwithin.luxdialogue.main.sub": "What do you want to know this time?",
   "screen.lightwithin.luxdialogue.main.button.guidance": "I seek guidance",
   "screen.lightwithin.luxdialogue.main.button.about_you": "Something about you",
-  "screen.lightwithin.luxdialogue.main.button.potions": "Help with alchemy",
+  "screen.lightwithin.luxdialogue.main.button.lights": "Info on lights",
 
   "screen.lightwithin.luxdialogue.intro": "Ah. You have awoken me. What do you seek?",
   "screen.lightwithin.luxdialogue.intro.button.ate_berry": "What?! I only ate a berry!",
@@ -273,7 +273,6 @@
   "screen.lightwithin.luxdialogue.intro.ate_berry.sub": "I am a LuxCognita, a light of guidance for other lights.",
   "screen.lightwithin.luxdialogue.intro.ate_berry.button.cool": "Cool. So what do you do?",
   "screen.lightwithin.luxdialogue.intro.ate_berry.button.guidance": "I seek guidance then!",
-  "comment3": "=======================TODO create all button actions",
   "screen.lightwithin.luxdialogue.intro.ate_berry.button.name": "What's your name?",
 
   "screen.lightwithin.luxdialogue.intro.what_do": "I guide other lights and light bearers to information",
@@ -296,7 +295,6 @@
   "screen.lightwithin.luxdialogue.intro.dont_understand.sub": "What do you wish to know then?",
   "screen.lightwithin.luxdialogue.intro.dont_understand.button.are_you_real": "Are you real?",
   "screen.lightwithin.luxdialogue.intro.dont_understand.button.guidance": "Oh. I'll seek your guidance then.",
-  "comment18": "=======================TODO finish this",
   "screen.lightwithin.luxdialogue.intro.dont_understand.button.about_you": "More about you and 'this'",
 
   "screen.lightwithin.luxdialogue.intro.are_you_real": "Of course!",
@@ -320,6 +318,7 @@
   "screen.lightwithin.luxdialogue.guidance.button.what_lights": "What are the InnerLights?",
   "screen.lightwithin.luxdialogue.guidance.button.my_light": "Tell me about my InnerLight!",
   "screen.lightwithin.luxdialogue.guidance.button.activate": "How do I activate my InnerLight?",
+  "screen.lightwithin.luxdialogue.guidance.button.potions": "Help with alchemy",
 
   "screen.lightwithin.luxdialogue.my_light": "What do you wish to know about?",
   "screen.lightwithin.luxdialogue.my_light.type": "About my LightType!",
@@ -581,7 +580,7 @@
   "screen.lightwithin.luxdialogue.personal.luxberries.many_1.why_luxintus": "Why is Luxintus crazy?",
 
   "screen.lightwithin.luxdialogue.personal.luxberries.many.talking": "Ah-ah. No it's knowledge.",
-  "screen.lightwithin.luxdialogue.personal.luxberries.many.talking.sure": "Sure... :)",
+  "screen.lightwithin.luxdialogue.personal.luxberries.many.talking.sure": "Sure... =)",
   
   "screen.lightwithin.luxdialogue.personal.luxberries.many.why_luxintus_0": "We don't really know",
   "screen.lightwithin.luxdialogue.personal.luxberries.many.why_luxintus_0.sub": "They really like to 'burst' their light",
@@ -628,8 +627,33 @@
   "screen.lightwithin.luxdialogue.personal.dream_1.sub": "Thank you for this question tho...",
   "screen.lightwithin.luxdialogue.personal.dream_1.no_worries": "No worries!",
 
+  "TODO write somethign about lux dream": "============================",
+
   "TODO-1": "Explain the light targets? And the light types. List them. Like maybe explain the various light attributes and what they mean? Yeah like this the 'intro' then a button can be added explainig all of em. Or maybe in guidance",
 
+  "screen.lightwithin.luxdialogue.light_info": "About what?",
+  "screen.lightwithin.luxdialogue.light_info.types": "The LightTypes",
+  "screen.lightwithin.luxdialogue.light_info.targets": "The TargetTypes",
+
+  "screen.lightwithin.luxdialogue.light_info.all_or_specific": "Do you want to know about a specific one or all of them?",
+  "screen.lightwithin.luxdialogue.light_info.all_or_specific.specific": "A specific one",
+  "screen.lightwithin.luxdialogue.light_info.all_or_specific.all": "All of them please",
+
+  "screen.lightwithin.luxdialogue.light_info.specific": "Which one is it then?",
+  "screen.lightwithin.luxdialogue.light_info.all": "Ok let's start with...",
+  "screen.lightwithin.luxdialogue.light_info.finish": "And that is all!",
+  "screen.lightwithin.luxdialogue.light_info.finish.sub": "For now at least...",
+  "screen.lightwithin.luxdialogue.light_info.finish.ok": "Ok, thanks!",
+  "screen.lightwithin.luxdialogue.light_info.finish.boring": "Boring =/",
+  "screen.lightwithin.luxdialogue.light_info.this": "<-- This one",
+
+  "screen.lightwithin.luxdialogue.light_info.type_unrecognized": "I'm sorry, but I don't recognize that light type",
+  "screen.lightwithin.luxdialogue.light_info.type_unrecognized.sub": "Could you try again?",
+  "screen.lightwithin.luxdialogue.light_info.type_unrecognized.nah": "Nah, never mind.",
+
+  "screen.lightwithin.luxdialogue.light_info.heal": "HealLight's power consists of, well, healing",
+
+  "screen.lightwithin.luxdialogue.light_info.defence": "DefenceLight",
 
   "screen.lightwithin.luxdialogue.offended": "I decided I won't talk to you for a while.",
   "screen.lightwithin.luxcognita.offended.msg": "I won't talk to you. And no, you can't eat me. Eat brioches.",

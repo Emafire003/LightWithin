@@ -104,11 +104,11 @@ public class LuxDialogue {
     public boolean dialogueProgress = false;
     /// The code of the dialogue progress state that is achieved one this dialogue has been seen see {@link DialogueProgressState}
     public DialogueProgressState dialogueProgressState = DialogueProgressState.NONE;
-    /// if true adds the dialogue progress, otherwise removes it
+    /// if true removes the dialogue progress, otherwise adds it
     public boolean removeDialogueProgress = false;
     /// Weather or not this screen can redirect to another one if a certain progress in dialogue is made
     public boolean canRedirect = false;
-    /// Redirects to this screen if the player has the right dialogue progress state
+    /// Redirects to this screen if the player has the right dialogue progress state. Can also be "CLOSE" to close the screen
     public String redirectTo = "default";
     /// The dialogue state the player has to have in order to have the redirection
     public DialogueProgressState redirectStateRequired = DialogueProgressState.NONE;

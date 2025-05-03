@@ -1,0 +1,9 @@
+{
+  "dialogueId": "defence",
+  "fileVersion": 1,
+  "mainText": "screen.lightwithin.luxdialogue.light_info.defence",
+  "mainTextScale": 1.5,
+  "buttons": {
+    "screen.lightwithin.luxdialogue.next": "GO_IF_PROGRESS<personal/smile, LISTING_TYPES>"
+  }
+}

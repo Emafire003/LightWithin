@@ -1,0 +1,12 @@
+{
+  "TODO: ": "Se all usare tipo un dialogue progress per andare lungo tutti gli altri, se diretto redirectare verso il prossimo che senza il progress redirecta al close o qualcosa del geenre",
+
+  "dialogueId": "types",
+  "fileVersion": 1,
+  "mainText": "screen.lightwithin.luxdialogue.light_info.all_or_specific",
+  "mainTextScale": 1.5,
+  "buttons": {
+    "screen.lightwithin.luxdialogue.light_info.all_or_specific.specific": "GO_DIALOGUE<light_info/type_specific>",
+    "screen.lightwithin.luxdialogue.light_info.all_or_specific.all": "GO_DIALOGUE<light_info/type_all>"
+  }
+}

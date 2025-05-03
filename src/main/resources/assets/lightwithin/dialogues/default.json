@@ -53,6 +53,8 @@
     }
   ],
   "itemsInterval": 20,
+  "randomizedButtons": false,
+  "randomButtonsAmount": 3,
   "buttons": {
     "screen.lightwithin.luxdialogue.default.button0": "CLOSE"
   },
@@ -61,5 +63,6 @@
   "removeDialogueProgress": false,
   "canRedirect": false,
   "redirectTo": "default",
-  "redirectStateRequired": "NONE"
+  "redirectStateRequired": "NONE",
+  "invertRedirectRequirement": false
 }
