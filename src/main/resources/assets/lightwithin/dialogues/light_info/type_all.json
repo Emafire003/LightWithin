@@ -4,7 +4,7 @@
   "mainText": "screen.lightwithin.luxdialogue.light_info.all",
   "mainTextScale": 1.5,
   "buttons": {
-    "screen.lightwithin.luxdialogue.next": "GO_DIALOGUE<light_info/heal>"
+    "screen.lightwithin.luxdialogue.next": "GO_DIALOGUE<light_info/heal/start>"
   },
   "dialogueProgress": true,
   "dialogueProgressState": "LISTING_TYPES"

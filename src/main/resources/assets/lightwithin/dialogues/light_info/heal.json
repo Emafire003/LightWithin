@@ -1,9 +1,0 @@
-{
-  "dialogueId": "heal",
-  "fileVersion": 1,
-  "mainText": "screen.lightwithin.luxdialogue.light_info.heal",
-  "mainTextScale": 1.5,
-  "buttons": {
-    "screen.lightwithin.luxdialogue.next": "GO_IF_PROGRESS<light_info/defence, LISTING_TYPES>"
-  }
-}

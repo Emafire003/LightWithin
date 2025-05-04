@@ -4,7 +4,7 @@
   "mainText": "screen.lightwithin.luxdialogue.light_info.type_unrecognized",
   "mainTextScale": 1.5,
   "subTextPresent": true,
-  "subText": "screen.lightwithin.luxdialogue.light_info.type_unrecognized",
+  "subText": "screen.lightwithin.luxdialogue.light_info.type_unrecognized.sub",
   "subTextScale": 1.3,
   "buttons": {
     "screen.lightwithin.luxdialogue.next": "TEXT_INPUT",

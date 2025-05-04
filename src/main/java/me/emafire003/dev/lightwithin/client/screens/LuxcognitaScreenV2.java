@@ -451,10 +451,15 @@ public class LuxcognitaScreenV2 extends Screen{
         currentField = currentField.toLowerCase().replaceAll("_light", "")
                 .replaceAll("light", "").replaceAll(" ", "");
 
+        //could easily happen as a typo or mistake whatever
+        if(currentField.equals("defense")){
+            currentField = "defence";
+        }
+
         LuxcognitaScreenV2 targetScreen = LuxdialogueScreens.LUXDIALOGUE_SCREENS.get("light_info/type_unrecognized");
 
         if(LightWithin.INNERLIGHT_REGISTRY.containsId(LightWithin.getIdentifier(currentField))){
-            targetScreen = LuxdialogueScreens.LUXDIALOGUE_SCREENS.get("light_info/"+currentField);
+            targetScreen = LuxdialogueScreens.LUXDIALOGUE_SCREENS.get("light_info/"+currentField+"/start");
         }
 
 
@@ -652,7 +657,6 @@ public class LuxcognitaScreenV2 extends Screen{
             RenderSystem.defaultBlendFunc();
             ClipStack.addWindow(context.getMatrices(), new Rectangle(0,0, width, height));
 
-            LightWithin.LOGGER.info("Trying to display: " + image + "");
             Renderer2d.renderTexture(context.getMatrices(), image, xy.getFirst(), xy.getSecond(), dialogue.imageWidth*dialogue.imageScale, dialogue.imageHeight*dialogue.imageScale);
             ClipStack.popWindow();
 
