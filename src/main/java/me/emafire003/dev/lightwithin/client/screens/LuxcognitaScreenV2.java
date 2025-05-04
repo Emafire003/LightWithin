@@ -441,20 +441,61 @@ public class LuxcognitaScreenV2 extends Screen{
         this.currentField = input;
     }
 
+
+    /**Parses a string that could be similar to a light's name but isn't quite it, and returns
+     * the correct name
+     * @param input The wannabe name of the light type
+     * @return The true name/id of the light type
+     */
+    public String parsePossibleTypeString(String input){
+        if(input.equals("defense")){
+            input = "defence";
+        }else if(input.equals("earth")){
+            input = "earthen";
+        }else if(input.equals("blaze")){
+            input = "blazing";
+        } else if(input.equals("fire")){
+            input = "blazing";
+        }else if(input.equals("ice")){
+            input = "frost";
+        }else if(input.equals("snow")){
+            input = "frost";
+        }else if(input.equals("water")){
+            input = "aqua";
+        }else if(input.equals("rock")){
+            input = "earthen";
+        }else if(input.equals("water")){
+            input = "aqua";
+        }else if(input.equals("air")){
+            input = "wind";
+        }else if(input.equals("forest")){
+            input = "forest_aura";
+        }else if(input.equals("thunder")){
+            input = "thunder_aura";
+        }else if(input.equals("forestaura")){
+            input = "forest_aura";
+        }else if(input.equals("thunderaura")){
+            input = "thunder_aura";
+        }else if(input.equals("air")){
+            input = "wind";
+        }else if(input.equals("nature")){
+            input = "forest_aura";
+        }
+
+        return input;
+    }
+    
     /** Goes to the screen linked to the light type written in a text field*/
     public void goTypeAfterInput(ButtonWidget buttonWidget){
         if(currentField.equals("")){
             LightWithin.LOGGER.warn("Maybe a TextField hasn't been updated or inserted in the screen!");
         }
 
+        // If the input is not really correct, tries to guess
+        currentField = parsePossibleTypeString(currentField);
         //removes potential stuff like spaces and "_light" ecc.
         currentField = currentField.toLowerCase().replaceAll("_light", "")
                 .replaceAll("light", "").replaceAll(" ", "");
-
-        //could easily happen as a typo or mistake whatever
-        if(currentField.equals("defense")){
-            currentField = "defence";
-        }
 
         LuxcognitaScreenV2 targetScreen = LuxdialogueScreens.LUXDIALOGUE_SCREENS.get("light_info/type_unrecognized");
 
