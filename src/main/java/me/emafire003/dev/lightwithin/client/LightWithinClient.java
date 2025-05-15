@@ -68,12 +68,18 @@ public class LightWithinClient implements ClientModInitializer {
     int tickCounter = 0;
     static RendererEventHandler event_handler = new RendererEventHandler();
 
+    /// Says if the BGM music for the luxcognita dialogue is playing or not
+    private static boolean isLuxcognitaBGMPlaying = false;
+    /// The tick counter for the luxcognita BGM music
+    private static int luxcognitaBGMTicker = -1;
+
     private static boolean shouldDrawChargesCount = true;
 
     public static final EntityModelLayer MODEL_EARTH_GOLEM_LAYER = new EntityModelLayer(new Identifier(LightWithin.MOD_ID, "earth_golem"), "main");
 
     //The first one is the player the second one is the entity
     private static final List<UUID> entitiesGlowingForPlayer = new ArrayList<>();
+
     //If the player has the forest aura effect they will see the things nearby.
     // The entities get added to the list only when the player has said effect. So they must have the forest light and stuff.
     // The only player that will see the entities glowing is the client player
@@ -427,6 +433,22 @@ public class LightWithinClient implements ClientModInitializer {
                 }
             });
         }));
+    }
+
+    public static boolean isIsLuxcognitaBGMPlaying() {
+        return isLuxcognitaBGMPlaying;
+    }
+
+    public static void setIsLuxcognitaBGMPlaying(boolean isLuxcognitaBGMPlaying) {
+        LightWithinClient.isLuxcognitaBGMPlaying = isLuxcognitaBGMPlaying;
+    }
+
+    public static int getLuxcognitaBGMTicker() {
+        return luxcognitaBGMTicker;
+    }
+
+    public static void setLuxcognitaBGMTicker(int luxcognitaBGMTicker) {
+        LightWithinClient.luxcognitaBGMTicker = luxcognitaBGMTicker;
     }
 
 }

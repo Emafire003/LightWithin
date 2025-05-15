@@ -363,14 +363,6 @@ public class LuxcognitaScreenV2 extends Screen{
         MinecraftClient.getInstance().setScreen(transitionScreen);
     }
 
-    public void playLuxcognitaDisplaySound(){
-        if(this.client == null || this.client.player == null){
-            LightWithin.LOGGER.error("Error! Can't play the Luxcognita sound the ClientPlayerEntity is null");
-            return;
-        }
-        this.client.player.playSound(LightSounds.LUXCOGNITA_DISPLAY, 1f, 1f);
-    }
-
     public void lightTypeAndRuneAction(ButtonWidget buttonWidget) {
         LightWithinClient.getRendererEventHandler().renderRunes();
         LuxcognitaBerryItem.sendLightTypeMessage(this.client.player);
@@ -741,8 +733,23 @@ public class LuxcognitaScreenV2 extends Screen{
         ClientPlayNetworking.send(DialogueProgressUpdatePacketC2S.ID, new DialogueProgressUpdatePacketC2S(state, shouldRemove));
     }
 
+    /**Stops the dialogue with luxcognita and also clears the {@link me.emafire003.dev.lightwithin.status_effects.LuxcognitaDreamEffect}
+     * as well as stopping the ticking of the Luxcognita BGM song, as well as the song itself*/
     public static void sendDialogueStopDreamPacket(){
         ClientPlayNetworking.send(LuxdreamStopPacketC2S.ID, new LuxdreamStopPacketC2S());
+        LightWithinClient.setIsLuxcognitaBGMPlaying(false);
+        LightWithinClient.setLuxcognitaBGMTicker(-1);
+        MinecraftClient.getInstance().getSoundManager().stopSounds(LightItems.MUSIC_DISC_LUXCOGNITA_DREAM.getSound().getId(), null);
+        playLuxcognitaDisplaySound();
+    }
+
+    public static void playLuxcognitaDisplaySound(){
+        MinecraftClient client = MinecraftClient.getInstance();
+        if(client == null || client.player == null){
+            LightWithin.LOGGER.error("Error! Can't play the Luxcognita sound the ClientPlayerEntity is null");
+            return;
+        }
+        client.player.playSound(LightSounds.LUXCOGNITA_DISPLAY, 1f, 1f);
     }
 
     @Override
@@ -756,8 +763,6 @@ public class LuxcognitaScreenV2 extends Screen{
 
     @Override
     public void close() {
-        //TODO maybe remove especially if it's not a "finish" screen
-        playLuxcognitaDisplaySound();
         imageTicker = -1;
         currentImage = 0;
         itemTicker = -1;

@@ -19,7 +19,9 @@
   "item.lightwithin.luxmutua_berry": "Luxmutua Berry",
   "item.lightwithin.luxcognita_berry": "Luxcognita Berry",
   "item.lightwithin.bottled_light": "Bottled Light",
-  "item.lightwithin.luxintus_berry_powder": "Luxintus Berry Powder",
+  "item.lightwithin.luxintus_berry_powder": "Luxintus Berry powder",
+  "item.lightwithin.music_disc_luxcognita_dream": "Music Disc",
+  "item.lightwithin.music_disc_luxcognita_dream.desc": "FranzleOrange - Luxcognita Dream",
 
   "item.lightwithin.luxintus_berry.tooltip": "§eLight of §blight-energy",
   "item.lightwithin.luxmutua_berry.tooltip": "§eLight of §dchange",
@@ -722,6 +724,15 @@
   "screen.lightwithin.luxdialogue.light_info.aqua.desc.sub": "VARIANT summons Drowned guards, ENEMIES places geysers under enemies",
   "screen.lightwithin.luxdialogue.light_info.aqua.triggers": "Activation happens with a source of water, your or allies",
   "screen.lightwithin.luxdialogue.light_info.aqua.triggers.sub": "drowning, or being wounded, or surrounded or with broken armor!",
+
+  "screen.lightwithin.luxdialogue.light_info.forest_aura": "ForestAuraLight makes you one with the forest (literally!)",
+  "screen.lightwithin.luxdialogue.light_info.forest_aura.sub": "Allows you to pass through it or release powerful toxins!",
+  "screen.lightwithin.luxdialogue.light_info.forest_aura.targets": "It has two target types:",
+  "screen.lightwithin.luxdialogue.light_info.forest_aura.targets.sub": "SELF, ALL",
+  "screen.lightwithin.luxdialogue.light_info.forest_aura.desc": "You will be able to melt yourself with the forest's blocks",
+  "screen.lightwithin.luxdialogue.light_info.forest_aura.desc.sub": "or you will release puffs of toxins with various effects!",
+  "screen.lightwithin.luxdialogue.light_info.forest_aura.triggers": "Activation happens within a forest, your allies wounded, ",
+  "screen.lightwithin.luxdialogue.light_info.forest_aura.triggers.sub": "being near leaves or surrounded, or under harmful potion effects!",
 
   "screen.lightwithin.luxdialogue.offended": "I decided I won't talk to you for a while.",
   "screen.lightwithin.luxcognita.offended.msg": "I won't talk to you. And no, you can't eat me. Eat brioches.",

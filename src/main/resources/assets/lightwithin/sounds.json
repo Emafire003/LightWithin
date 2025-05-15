@@ -110,5 +110,14 @@
     "sounds": [
       "lightwithin:thunder_aura_light"
     ]
+  },
+  "luxcognita_dream": {
+    "subtitle": "audio.lightwithin.luxcognita_dream",
+    "sounds": [
+      {
+        "name": "lightwithin:luxcognita_dream",
+        "stream": true
+      }
+    ]
   }
 }
