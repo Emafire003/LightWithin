@@ -653,6 +653,37 @@
   "screen.lightwithin.luxdialogue.light_info.type_unrecognized.sub": "Could you try again?",
   "screen.lightwithin.luxdialogue.light_info.type_unrecognized.nah": "Nah, never mind.",
 
+  "screen.lightwithin.luxdialogue.light_info.target_unrecognized": "I'm sorry, but I don't recognize that light target",
+  "screen.lightwithin.luxdialogue.light_info.target_unrecognized.sub": "Could you try again?",
+  "screen.lightwithin.luxdialogue.light_info.target_unrecognized.nah": "Nah, never mind.",
+
+
+  "screen.lightwithin.luxdialogue.light_info.targets.self": "The SELF target type refers to all those powers which",
+  "screen.lightwithin.luxdialogue.light_info.targets.self.sub": "have a direct effect only on the light's bearer upon activation",
+  "screen.lightwithin.luxdialogue.light_info.targets.self.example": "For example, when a bearer activates their light they will be",
+  "screen.lightwithin.luxdialogue.light_info.targets.self.example.sub": "the target of some effect, like Regeneration with HealLight",
+
+  "screen.lightwithin.luxdialogue.light_info.targets.allies": "The target type ALLIES affects the light's bearer allies",
+  "screen.lightwithin.luxdialogue.light_info.targets.allies.sub": "near them, as well as the bearer themselves with, albeit with lower power",
+  "screen.lightwithin.luxdialogue.light_info.targets.allies.example": "Whenever bearer activates their light, their Allies will be",
+  "screen.lightwithin.luxdialogue.light_info.targets.allies.example.sub": "the main target of the light's effects, like EarthenLight's walls",
+
+  "screen.lightwithin.luxdialogue.light_info.targets.all": "ALL is a target type that will affect everyone around,",
+  "screen.lightwithin.luxdialogue.light_info.targets.all.sub": "without discerning from friend or foe.",
+  "screen.lightwithin.luxdialogue.light_info.targets.all.example": "As soon as the light gets activated, all creatures around the bearer",
+  "screen.lightwithin.luxdialogue.light_info.targets.all.example.sub": "will be affected, except themselves, like BlazingLight's fire",
+
+  "screen.lightwithin.luxdialogue.light_info.targets.enemies": "The ENEMIES target type will only affect the light bearer's",
+  "screen.lightwithin.luxdialogue.light_info.targets.enemies.sub": "foes, and will leave alone other creatures",
+  "screen.lightwithin.luxdialogue.light_info.targets.enemies.example": "When the light gets activated, all enemies in range",
+  "screen.lightwithin.luxdialogue.light_info.targets.enemies.example.sub": "will get affected. As an example, the FrostLight's ice-trap",
+
+  "screen.lightwithin.luxdialogue.light_info.targets.variant": "VARIANT target type is the most unpredictable of the five",
+  "screen.lightwithin.luxdialogue.light_info.targets.variant.sub": "It changes from light type to light type, without a precise rule",
+  "screen.lightwithin.luxdialogue.light_info.targets.variant.example": "Could affect the light bearer in some more particular way, ",
+  "screen.lightwithin.luxdialogue.light_info.targets.variant.example.sub": "or do something without a fixed target, like ThunderLight's superstorm",
+  
+  
   "screen.lightwithin.luxdialogue.light_info.heal": "HealLight's power consists of, well, healing!",
   "screen.lightwithin.luxdialogue.light_info.heal.sub": "Your wounds, your allies', or even harmful potions!",
   "screen.lightwithin.luxdialogue.light_info.heal.targets": "It can posses one of three target types:",
@@ -733,6 +764,16 @@
   "screen.lightwithin.luxdialogue.light_info.forest_aura.desc.sub": "or you will release puffs of toxins with various effects!",
   "screen.lightwithin.luxdialogue.light_info.forest_aura.triggers": "Activation happens within a forest, your allies wounded, ",
   "screen.lightwithin.luxdialogue.light_info.forest_aura.triggers.sub": "being near leaves or surrounded, or under harmful potion effects!",
+
+  "screen.lightwithin.luxdialogue.light_info.thunder_aura": "ThunderAuraLight protects you and allies",
+  "screen.lightwithin.luxdialogue.light_info.thunder_aura.sub": "with barriers of lightning, and summons mighty thunderstorms!",
+  "screen.lightwithin.luxdialogue.light_info.thunder_aura.targets": "It has three target types:",
+  "screen.lightwithin.luxdialogue.light_info.thunder_aura.targets.sub": "ALLIES, ALL, VARIANT",
+  "screen.lightwithin.luxdialogue.light_info.thunder_aura.desc": "You can create barriers of lightning around you and allies",
+  "screen.lightwithin.luxdialogue.light_info.thunder_aura.desc.sub": "or have lightning wherever you please, or summon an enormous thunderstorm!",
+  "screen.lightwithin.luxdialogue.light_info.thunder_aura.triggers": "Will activate near thunder-calling blocks,",
+  "screen.lightwithin.luxdialogue.light_info.thunder_aura.triggers.sub": " when you or allies are wounded, when raining or with low armor!",
+
 
   "screen.lightwithin.luxdialogue.offended": "I decided I won't talk to you for a while.",
   "screen.lightwithin.luxcognita.offended.msg": "I won't talk to you. And no, you can't eat me. Eat brioches.",

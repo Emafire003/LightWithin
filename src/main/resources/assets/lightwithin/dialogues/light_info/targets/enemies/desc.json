@@ -1,0 +1,21 @@
+{
+  "dialogueId": "desc",
+  "fileVersion": 1,
+  "mainText": "screen.lightwithin.luxdialogue.light_info.targets.enemies",
+  "mainTextScale": 1.5,
+  "subTextPresent": true,
+  "subText": "screen.lightwithin.luxdialogue.light_info.targets.enemies.sub",
+  "subTextScale": 1.2,
+  "showImage": true,
+  "imagePos": "CENTER",
+  "imagePath": {
+    "namespace": "lightwithin",
+    "path": "textures/lights/target_icons/enemies.png"
+  },
+  "imageWidth": 18,
+  "imageHeight": 18,
+  "imageScale": 2.0,
+  "buttons": {
+    "screen.lightwithin.luxdialogue.next": "GO_DIALOGUE<light_info/targets/enemies/example>"
+  }
+}

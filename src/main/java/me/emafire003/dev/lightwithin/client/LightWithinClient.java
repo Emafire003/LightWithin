@@ -13,6 +13,7 @@ import me.emafire003.dev.lightwithin.config.ClientConfig;
 import me.emafire003.dev.lightwithin.entities.LightEntities;
 import me.emafire003.dev.lightwithin.entities.earth_golem.EarthGolemEntityModel;
 import me.emafire003.dev.lightwithin.entities.earth_golem.EarthGolemEntityRenderer;
+import me.emafire003.dev.lightwithin.items.LightItems;
 import me.emafire003.dev.lightwithin.lights.ForestAuraLight;
 import me.emafire003.dev.lightwithin.networking.*;
 import me.emafire003.dev.lightwithin.particles.LightParticle;
@@ -68,11 +69,6 @@ public class LightWithinClient implements ClientModInitializer {
     int tickCounter = 0;
     static RendererEventHandler event_handler = new RendererEventHandler();
 
-    /// Says if the BGM music for the luxcognita dialogue is playing or not
-    private static boolean isLuxcognitaBGMPlaying = false;
-    /// The tick counter for the luxcognita BGM music
-    private static int luxcognitaBGMTicker = -1;
-
     private static boolean shouldDrawChargesCount = true;
 
     public static final EntityModelLayer MODEL_EARTH_GOLEM_LAYER = new EntityModelLayer(new Identifier(LightWithin.MOD_ID, "earth_golem"), "main");
@@ -92,7 +88,7 @@ public class LightWithinClient implements ClientModInitializer {
         registerWindLightVelocityPacket();
         registerConfigOptionsSyncPacket();
         registerGlowingEntitiesPacket();
-        registerLuxdreamAttackedScreenPacket();
+        registerLuxdreamPacketClient();
 
         registerParticlesRenderer();
         LightShaders.registerShaders();
@@ -319,11 +315,20 @@ public class LightWithinClient implements ClientModInitializer {
         }));
     }
 
-    private void registerLuxdreamAttackedScreenPacket(){
-        ClientPlayNetworking.registerGlobalReceiver(LuxdreamAttackScreenPacketS2C.ID, ((client, handler, buf, responseSender) -> {
-
+    private void registerLuxdreamPacketClient(){
+        ClientPlayNetworking.registerGlobalReceiver(LuxdreamServerPacketS2C.ID, ((client, handler, buf, responseSender) -> {
+            LuxDialogueActions action = LuxdreamServerPacketS2C.read(buf);
             client.execute(() -> {
-                MinecraftClient.getInstance().setScreen(LuxdialogueScreens.LUXDIALOGUE_SCREENS.get("attacked"));
+
+                if(action.equals(LuxDialogueActions.ATTACKED)){
+                    MinecraftClient.getInstance().setScreen(LuxdialogueScreens.LUXDIALOGUE_SCREENS.get("attacked"));
+                }else if(action.equals(LuxDialogueActions.START_BGM)){
+                    LOGGER.warn("Starting again");
+                    client.player.playSound(LightItems.MUSIC_DISC_LUXCOGNITA_DREAM.getSound(), 0.65f, 1f);
+                }else if(action.equals(LuxDialogueActions.STOP_BGM)){
+                    client.getSoundManager().stopSounds(LightItems.MUSIC_DISC_LUXCOGNITA_DREAM.getSound().getId(), null);
+                }
+
             });
         }));
     }
@@ -433,22 +438,6 @@ public class LightWithinClient implements ClientModInitializer {
                 }
             });
         }));
-    }
-
-    public static boolean isIsLuxcognitaBGMPlaying() {
-        return isLuxcognitaBGMPlaying;
-    }
-
-    public static void setIsLuxcognitaBGMPlaying(boolean isLuxcognitaBGMPlaying) {
-        LightWithinClient.isLuxcognitaBGMPlaying = isLuxcognitaBGMPlaying;
-    }
-
-    public static int getLuxcognitaBGMTicker() {
-        return luxcognitaBGMTicker;
-    }
-
-    public static void setLuxcognitaBGMTicker(int luxcognitaBGMTicker) {
-        LightWithinClient.luxcognitaBGMTicker = luxcognitaBGMTicker;
     }
 
 }

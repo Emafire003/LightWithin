@@ -1,0 +1,10 @@
+{
+  "dialogueId": "target_specific",
+  "fileVersion": 1,
+  "mainText": "screen.lightwithin.luxdialogue.light_info.specific",
+  "mainTextScale": 1.5,
+  "buttons": {
+    "screen.lightwithin.luxdialogue.next": "TEXT_INPUT",
+    "screen.lightwithin.luxdialogue.light_info.this": "GO_TARGET_AFTER_INPUT"
+  }
+}

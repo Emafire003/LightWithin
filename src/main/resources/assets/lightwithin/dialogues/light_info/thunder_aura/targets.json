@@ -1,0 +1,21 @@
+{
+  "dialogueId": "targets",
+  "fileVersion": 1,
+  "mainText": "screen.lightwithin.luxdialogue.light_info.thunder_aura.targets",
+  "mainTextScale": 1.5,
+  "subTextPresent": true,
+  "subText": "screen.lightwithin.luxdialogue.light_info.thunder_aura.targets.sub",
+  "subTextScale": 1.3,
+  "showImage": true,
+  "imagePos": "CENTER",
+  "imagePath": {
+    "namespace": "lightwithin",
+    "path": "textures/particle/thunder_aura_light.png"
+  },
+  "imageWidth": 18,
+  "imageHeight": 18,
+  "imageScale": 2.0,
+  "buttons": {
+    "screen.lightwithin.luxdialogue.next": "GO_DIALOGUE<light_info/thunder_aura/desc>"
+  }
+}

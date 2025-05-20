@@ -14,7 +14,8 @@ import me.emafire003.dev.lightwithin.config.ClientConfig;
 import me.emafire003.dev.lightwithin.items.LightItems;
 import me.emafire003.dev.lightwithin.items.LuxcognitaBerryItem;
 import me.emafire003.dev.lightwithin.networking.DialogueProgressUpdatePacketC2S;
-import me.emafire003.dev.lightwithin.networking.LuxdreamStopPacketC2S;
+import me.emafire003.dev.lightwithin.networking.LuxDialogueActions;
+import me.emafire003.dev.lightwithin.networking.LuxdreamClientPacketC2S;
 import me.emafire003.dev.lightwithin.sounds.LightSounds;
 import me.emafire003.dev.lightwithin.util.ScreenUtils;
 import me.emafire003.dev.lightwithin.util.TargetType;
@@ -519,13 +520,18 @@ public class LuxcognitaScreenV2 extends Screen{
 
         LuxcognitaScreenV2 targetScreen = LuxdialogueScreens.LUXDIALOGUE_SCREENS.get("light_info/target_unrecognized");
 
-        if(TargetType.valueOf(currentField) != null){
-            targetScreen = LuxdialogueScreens.LUXDIALOGUE_SCREENS.get("light_info/"+currentField);
+        try{
+            if(TargetType.valueOf(currentField.toUpperCase()) != null){
+                targetScreen = LuxdialogueScreens.LUXDIALOGUE_SCREENS.get("light_info/targets/"+currentField+"/desc");
+            }
+        }catch (IllegalArgumentException e){
+            //transition screen to unrecognized target
         }
 
 
+
         if(targetScreen == null){
-            this.client.player.sendMessage(Text.literal(LightWithin.PREFIX_MSG + "Could not find the screen with id: light_info/" + currentField).formatted(Formatting.RED));
+            this.client.player.sendMessage(Text.literal(LightWithin.PREFIX_MSG + "Could not find the screen with id: light_info/targets/" + currentField+"/desc").formatted(Formatting.RED));
             sendDialogueStopDreamPacket();
             this.close();
         }else{
@@ -736,10 +742,7 @@ public class LuxcognitaScreenV2 extends Screen{
     /**Stops the dialogue with luxcognita and also clears the {@link me.emafire003.dev.lightwithin.status_effects.LuxcognitaDreamEffect}
      * as well as stopping the ticking of the Luxcognita BGM song, as well as the song itself*/
     public static void sendDialogueStopDreamPacket(){
-        ClientPlayNetworking.send(LuxdreamStopPacketC2S.ID, new LuxdreamStopPacketC2S());
-        LightWithinClient.setIsLuxcognitaBGMPlaying(false);
-        LightWithinClient.setLuxcognitaBGMTicker(-1);
-        MinecraftClient.getInstance().getSoundManager().stopSounds(LightItems.MUSIC_DISC_LUXCOGNITA_DREAM.getSound().getId(), null);
+        ClientPlayNetworking.send(LuxdreamClientPacketC2S.ID, new LuxdreamClientPacketC2S(LuxDialogueActions.STOP_DREAM));
         playLuxcognitaDisplaySound();
     }
 

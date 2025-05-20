@@ -1,0 +1,10 @@
+{
+  "dialogueId": "targets",
+  "fileVersion": 1,
+  "mainText": "screen.lightwithin.luxdialogue.light_info.all_or_specific",
+  "mainTextScale": 1.5,
+  "buttons": {
+    "screen.lightwithin.luxdialogue.light_info.all_or_specific.specific": "GO_DIALOGUE<light_info/target_specific>",
+    "screen.lightwithin.luxdialogue.light_info.all_or_specific.all": "GO_DIALOGUE<light_info/target_all>"
+  }
+}

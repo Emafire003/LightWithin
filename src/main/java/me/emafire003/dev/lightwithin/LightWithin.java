@@ -56,6 +56,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.Pair;
 import net.minecraft.util.math.Box;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -63,12 +64,7 @@ import org.slf4j.LoggerFactory;
 import java.nio.file.Path;
 import java.time.LocalDate;
 import java.time.Month;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.NoSuchElementException;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static me.emafire003.dev.lightwithin.lights.ForestAuraLight.FOREST_AURA_BLOCKS;
@@ -322,17 +318,22 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 			if(player.getWorld().isClient){
 				return;
 			}
-			DialogueProgressState state = DialogueProgressUpdatePacketC2S.readState(buf);
-			if(state != null && state.equals(DialogueProgressState.PISSED_OFF)){
-				player.addStatusEffect(new StatusEffectInstance(LightEffects.LUXCOGNITA_OFFENDED, 60*20));
-				return;
-			}
-			boolean shouldRemove = DialogueProgressUpdatePacketC2S.readRemove(buf);
-			if(shouldRemove){
-				LIGHT_COMPONENT.get(player).removeDialogueProgressState(state);
-			}else{
-				LIGHT_COMPONENT.get(player).addDialogueProgressState(state);
-			}
+			Pair<DialogueProgressState, Boolean> pair = DialogueProgressUpdatePacketC2S.read(buf);
+			DialogueProgressState state = Objects.requireNonNull(pair).getLeft();
+			boolean shouldRemove = pair.getRight();
+
+			server.execute(()->{
+				if(state != null && state.equals(DialogueProgressState.PISSED_OFF)){
+					player.addStatusEffect(new StatusEffectInstance(LightEffects.LUXCOGNITA_OFFENDED, 60*20));
+					return;
+				}
+
+				if(shouldRemove){
+					LIGHT_COMPONENT.get(player).removeDialogueProgressState(state);
+				}else{
+					LIGHT_COMPONENT.get(player).addDialogueProgressState(state);
+				}
+			});
 
 
 		})));
@@ -340,16 +341,21 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 
 	/**Triggered when a player has finished their luxdialogue / dream*/
 	private static void registerLuxdreamDialogueStopPacket(){
-		ServerPlayNetworking.registerGlobalReceiver(LuxdreamStopPacketC2S.ID, (((server, player, handler, buf, responseSender) -> {
+		ServerPlayNetworking.registerGlobalReceiver(LuxdreamClientPacketC2S.ID, (((server, player, handler, buf, responseSender) -> {
 			if(player.getWorld().isClient){
 				return;
 			}
+			LuxDialogueActions action = LuxdreamClientPacketC2S.read(buf);
 			server.execute(() -> {
-				if(!player.hasStatusEffect(LightEffects.LUXCOGNITA_DREAM)){
-					LOGGER.warn("Luxdream termination packet sent but there was no Luxcognita Dream effect to be removed!");
-					return;
+				//StopDream packet thing
+				if(action.equals(LuxDialogueActions.STOP_DREAM)){
+					if(!player.hasStatusEffect(LightEffects.LUXCOGNITA_DREAM)){
+						LOGGER.warn("Luxdream termination packet sent but there was no Luxcognita Dream effect to be removed!");
+						return;
+					}
+					player.removeStatusEffect(LightEffects.LUXCOGNITA_DREAM);
 				}
-				player.removeStatusEffect(LightEffects.LUXCOGNITA_DREAM);
+
 			});
 		})));
 	}

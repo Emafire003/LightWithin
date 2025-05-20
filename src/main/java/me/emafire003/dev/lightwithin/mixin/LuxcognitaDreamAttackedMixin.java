@@ -1,7 +1,8 @@
 package me.emafire003.dev.lightwithin.mixin;
 
 import me.emafire003.dev.lightwithin.items.LightItems;
-import me.emafire003.dev.lightwithin.networking.LuxdreamAttackScreenPacketS2C;
+import me.emafire003.dev.lightwithin.networking.LuxDialogueActions;
+import me.emafire003.dev.lightwithin.networking.LuxdreamServerPacketS2C;
 import me.emafire003.dev.lightwithin.sounds.LightSounds;
 import me.emafire003.dev.lightwithin.status_effects.LightEffects;
 import me.emafire003.dev.lightwithin.util.IStatusEffectWithSettableDuration;
@@ -58,7 +59,7 @@ public abstract class LuxcognitaDreamAttackedMixin extends Entity implements Att
                     /// Starts the clock for the automatic exclusion from the dialogue screen after 3 seconds
                     ((IStatusEffectWithSettableDuration) effect).lightWithin$setDuration(60);
                     if(!this.getWorld().isClient()){
-                        ServerPlayNetworking.send(((ServerPlayerEntity) (Object) this), LuxdreamAttackScreenPacketS2C.ID, new LuxdreamAttackScreenPacketS2C());
+                        ServerPlayNetworking.send(((ServerPlayerEntity) (Object) this), LuxdreamServerPacketS2C.ID, new LuxdreamServerPacketS2C(LuxDialogueActions.ATTACKED));
                     }
 
                 }
