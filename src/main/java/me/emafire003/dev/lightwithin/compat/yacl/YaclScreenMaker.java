@@ -424,7 +424,7 @@ public class YaclScreenMaker {
                                 ClientConfig.CLOSE_LUXDIALOGUE_SCREEN_AFTER_default, // the default value
                                 () -> ClientConfig.CLOSE_LUXDIALOGUE_SCREEN_AFTER, // a field to get the current value from
                                 newVal -> {
-                                    ClientConfig.CLOSE_LUXDIALOGUE_SCREEN_AFTER= newVal;
+                                    ClientConfig.CLOSE_LUXDIALOGUE_SCREEN_AFTER = newVal;
                                     ClientConfig.saveToFile();
                                 }
                         )
@@ -450,7 +450,23 @@ public class YaclScreenMaker {
                                 .step(0.01f))
                         .build()
         );
-
+        options.add(
+                Option.<Integer>createBuilder()
+                        .name(Text.translatable("config.lightwithin.overlay_text_duration"))
+                        .description(OptionDescription.of(Text.translatable("config.lightwithin.overlay_text_duratio.tooltip")))
+                        .binding(
+                                ClientConfig.OVERLAY_TEXT_DURATION_default, // the default value
+                                () -> ClientConfig.OVERLAY_TEXT_DURATION, // a field to get the current value from
+                                newVal -> {
+                                    ClientConfig.OVERLAY_TEXT_DURATION = newVal;
+                                    ClientConfig.saveToFile();
+                                }
+                        )
+                        .controller(opt -> IntegerFieldControllerBuilder.create(opt)
+                                .range(0, 60)
+                        )
+                        .build()
+        );
         updatedFromActivePreset.set(false);
         return options;
     }

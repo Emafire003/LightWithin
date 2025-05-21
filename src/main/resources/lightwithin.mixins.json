@@ -33,6 +33,7 @@
     "CustomEffectsLivingRendererMixin",
     "EmptyItemInteractMixin",
     "EntityColorOverlayRendererMixin",
+    "InGameHudOverlayMessageMixin",
     "PlayerArmColorOverlayMixin",
     "PlayerChargedGlowRendererMixin",
     "RenderEffectsEntityMixin",

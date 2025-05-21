@@ -2,14 +2,10 @@ package me.emafire003.dev.lightwithin.items;
 
 import me.emafire003.dev.lightwithin.LightWithin;
 import me.emafire003.dev.lightwithin.config.Config;
-import me.emafire003.dev.lightwithin.lights.InnerLight;
-import me.emafire003.dev.lightwithin.lights.NoneLight;
 import me.emafire003.dev.lightwithin.networking.PlayRenderEffectPacketS2C;
 import me.emafire003.dev.lightwithin.sounds.LightSounds;
 import me.emafire003.dev.lightwithin.status_effects.LightEffects;
 import me.emafire003.dev.lightwithin.util.RenderEffect;
-import me.emafire003.dev.lightwithin.util.TargetType;
-import me.emafire003.dev.lightwithin.util.TriggerChecks;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.LivingEntity;
@@ -18,7 +14,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
@@ -77,106 +72,6 @@ public class LuxcognitaBerryItem extends Item {
     @Override
     public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
         tooltip.add(Text.translatable("item.lightwithin.luxcognita_berry.tooltip"));
-    }
-
-
-
-    // Utility methods not necessarily used in here but in the screen class
-
-    //#f1f657
-    private static final Style style = Style.EMPTY.withColor(15857239);
-
-    public static final String LUXCOGNITA_PREFIX = "§b[§a§iLuxCognita§b]§r: ";
-
-    /**Sends a player the description of their InnerLight type*/
-    public static void sendLightTypeMessage(PlayerEntity user){
-        if(user == null){
-            LightWithin.LOGGER.error("Error! Can't send light type messages, the player is null!");
-            return;
-        }
-        //light blue is 6288592
-        InnerLight type = LightWithin.LIGHT_COMPONENT.get(user).getType();
-        if(type instanceof NoneLight){
-            user.sendMessage(Text.translatable("light.description.error").formatted(Formatting.RED), true);
-            return;
-        }
-        user.sendMessage(Text.translatable("light.description." + type.toString().toLowerCase()).setStyle(style), true);
-    }
-
-    /**Sends a player the description of their InnerLight type*/
-    public static void sendLightTargetMessage(PlayerEntity user){
-        if(user == null){
-            LightWithin.LOGGER.error("Error! Can't send light target messages, the player is null!");
-            return;
-        }
-        //TODO see what can be done with custom fonts maybe?
-        TargetType type = LightWithin.LIGHT_COMPONENT.get(user).getTargets();
-        if(type.equals(TargetType.NONE)){
-            user.sendMessage(Text.translatable("light.description.error").formatted(Formatting.RED), true);
-            return;
-        }
-        user.sendMessage(Text.translatable("light.description.target." + type.toString().toLowerCase()).setStyle(style), true);
-    }
-
-    /** Sends the power level of the light to the player*/
-    public static void sendLightPowerMessage(PlayerEntity user){
-        if(user == null){
-            LightWithin.LOGGER.error("Error! Can't send light target messages, the player is null!");
-            return;
-        }
-        double power = LightWithin.LIGHT_COMPONENT.get(user).getPowerMultiplier();
-        user.sendMessage(Text.translatable("light.description.power", String.valueOf(power)).setStyle(style), true);
-    }
-
-    /** Sends the duration of the light to the player*/
-    public static void sendLightDurationMessage(PlayerEntity user){
-        if(user == null){
-            LightWithin.LOGGER.error("Error! Can't send light target messages, the player is null!");
-            return;
-        }
-        double duration = LightWithin.LIGHT_COMPONENT.get(user).getDuration();
-        user.sendMessage(Text.translatable("light.description.duration", String.valueOf(duration)).setStyle(style), true);
-    }
-
-    /** Sends the max cooldown of the light to the player*/
-    public static void sendLightMaxCooldownMessage(PlayerEntity user){
-        if(user == null){
-            LightWithin.LOGGER.error("Error! Can't send light target messages, the player is null!");
-            return;
-        }
-        int cooldown = LightWithin.LIGHT_COMPONENT.get(user).getMaxCooldown();
-        user.sendMessage(Text.translatable("light.description.maxcooldown", String.valueOf(cooldown)).setStyle(style), true);
-    }
-
-    /** Sends the max charges of the light to the player*/
-    public static void sendLightMaxChargesMessage(PlayerEntity user){
-        if(user == null){
-            LightWithin.LOGGER.error("Error! Can't send light target messages, the player is null!");
-            return;
-        }
-        int charges = LightWithin.LIGHT_COMPONENT.get(user).getMaxLightCharges();
-        user.sendMessage(Text.translatable("light.description.maxcharges", String.valueOf(charges)).setStyle(style), true);
-    }
-
-    /** Sends the conditions useful to trigger the light of the player*/
-    public static void sendLightConditionsMessage(PlayerEntity user){
-        if(user == null){
-            LightWithin.LOGGER.error("Error! Can't send light target messages, the player is null!");
-            return;
-        }
-        user.sendMessage(Text.translatable("light.description.triggering.light_conditions").setStyle(style)
-                .append(Text.translatable("light.description.triggering.light_conditions."+LightWithin.LIGHT_COMPONENT.get(user).getType().toString()).formatted(Formatting.AQUA)), true);
-    }
-
-    /** Sends the conditions useful to trigger the light of the player*/
-    public static void sendLightTriggerEventsMessage(PlayerEntity user){
-        if(user == null){
-            LightWithin.LOGGER.error("Error! Can't send light target messages, the player is null!");
-            return;
-        }
-        List<TriggerChecks> checks = LightWithin.LIGHT_COMPONENT.get(user).getType().getTriggerChecks();
-        user.sendMessage(Text.literal(LUXCOGNITA_PREFIX).append(Text.translatable("light.description.trigger_events").formatted(Formatting.AQUA)));
-        checks.forEach(triggerCheck -> user.sendMessage(Text.literal(" > ").setStyle(style).append(Text.translatable(triggerCheck.getTranslationString()))));
     }
 
 }

@@ -1,6 +1,5 @@
 package me.emafire003.dev.lightwithin.status_effects;
 
-import me.emafire003.dev.lightwithin.LightWithin;
 import me.emafire003.dev.lightwithin.items.LightItems;
 import me.emafire003.dev.lightwithin.networking.LuxDialogueActions;
 import me.emafire003.dev.lightwithin.networking.LuxdreamServerPacketS2C;
@@ -41,14 +40,11 @@ public class LuxcognitaDreamEffect extends StatusEffect {
             return;
         }
         if(songTicker > LightItems.MUSIC_DISC_LUXCOGNITA_DREAM.getSongLengthInTicks()){
-            LightWithin.LOGGER.info("The songTicker is: " + songTicker + " while the song lenght: " + LightItems.MUSIC_DISC_LUXCOGNITA_DREAM.getSongLengthInTicks());
-            LightWithin.LOGGER.info("In seconds: " + songTicker/20 + " song: " + LightItems.MUSIC_DISC_LUXCOGNITA_DREAM.getSongLengthInTicks()/20);
-
             songTicker = 0;
             if(entity instanceof  PlayerEntity && !entity.getWorld().isClient()){
                 ServerPlayNetworking.send((ServerPlayerEntity) entity, LuxdreamServerPacketS2C.ID, new LuxdreamServerPacketS2C(LuxDialogueActions.START_BGM));
             }
-            return; //retuns so it doesn't already tick the next one
+            return; //returns so it doesn't already tick the next one
         }
         songTicker++;
 

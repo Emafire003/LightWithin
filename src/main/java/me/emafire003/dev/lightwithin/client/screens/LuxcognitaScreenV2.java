@@ -12,13 +12,15 @@ import me.emafire003.dev.lightwithin.client.luxcognita_dialogues.LuxDialogue;
 import me.emafire003.dev.lightwithin.client.luxcognita_dialogues.Replaceables;
 import me.emafire003.dev.lightwithin.config.ClientConfig;
 import me.emafire003.dev.lightwithin.items.LightItems;
-import me.emafire003.dev.lightwithin.items.LuxcognitaBerryItem;
+import me.emafire003.dev.lightwithin.lights.InnerLight;
+import me.emafire003.dev.lightwithin.lights.NoneLight;
 import me.emafire003.dev.lightwithin.networking.DialogueProgressUpdatePacketC2S;
 import me.emafire003.dev.lightwithin.networking.LuxDialogueActions;
 import me.emafire003.dev.lightwithin.networking.LuxdreamClientPacketC2S;
 import me.emafire003.dev.lightwithin.sounds.LightSounds;
 import me.emafire003.dev.lightwithin.util.ScreenUtils;
 import me.emafire003.dev.lightwithin.util.TargetType;
+import me.emafire003.dev.lightwithin.util.TriggerChecks;
 import me.x150.renderer.ClipStack;
 import me.x150.renderer.Rectangle;
 import me.x150.renderer.Renderer2d;
@@ -32,6 +34,7 @@ import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.Registries;
+import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
@@ -364,9 +367,23 @@ public class LuxcognitaScreenV2 extends Screen{
         MinecraftClient.getInstance().setScreen(transitionScreen);
     }
 
+    // Utility methods not necessarily used in here but in the screen class
+
+    //#f1f657
+    private static final Style style = Style.EMPTY.withColor(15857239);
+
+    public static final String LUXCOGNITA_PREFIX = "§b[§a§iLuxCognita§b]§r: ";
+
     public void lightTypeAndRuneAction(ButtonWidget buttonWidget) {
         LightWithinClient.getRendererEventHandler().renderRunes();
-        LuxcognitaBerryItem.sendLightTypeMessage(this.client.player);
+        //light blue is 6288592
+        InnerLight type = LightWithin.LIGHT_COMPONENT.get(this.client.player).getType();
+        if(type instanceof NoneLight){
+            LightWithinClient.sendOverlayMessageWithDuration(Text.translatable("light.description.error").formatted(Formatting.RED), ClientConfig.OVERLAY_TEXT_DURATION);
+            return;
+        }
+        LightWithinClient.sendOverlayMessageWithDuration(Text.translatable("light.description." + type.toString().toLowerCase()).setStyle(style), ClientConfig.OVERLAY_TEXT_DURATION);
+
         sendDialogueStopDreamPacket();
         this.closeWithAnimation();
     }
@@ -379,7 +396,13 @@ public class LuxcognitaScreenV2 extends Screen{
 
     public void lightTargetAction(ButtonWidget buttonWidget) {
         LightWithinClient.getRendererEventHandler().renderTargetIcon();
-        LuxcognitaBerryItem.sendLightTargetMessage(this.client.player);
+        TargetType type = LightWithin.LIGHT_COMPONENT.get(this.client.player).getTargets();
+        if(type.equals(TargetType.NONE)){
+            LightWithinClient.sendOverlayMessageWithDuration(Text.translatable("light.description.error").formatted(Formatting.RED), ClientConfig.OVERLAY_TEXT_DURATION);
+            return;
+        }
+        LightWithinClient.sendOverlayMessageWithDuration(Text.translatable("light.description.target." + type.toString().toLowerCase()).setStyle(style), ClientConfig.OVERLAY_TEXT_DURATION);
+
         sendDialogueStopDreamPacket();
         this.closeWithAnimation();
     }
@@ -391,37 +414,48 @@ public class LuxcognitaScreenV2 extends Screen{
     }
 
     public void lightPowerAction(ButtonWidget buttonWidget) {
-        LuxcognitaBerryItem.sendLightPowerMessage(this.client.player);
+        double power = LightWithin.LIGHT_COMPONENT.get(this.client.player).getPowerMultiplier();
+        LightWithinClient.sendOverlayMessageWithDuration(Text.translatable("light.description.power", String.valueOf(power)).setStyle(style), ClientConfig.OVERLAY_TEXT_DURATION);
+
         sendDialogueStopDreamPacket();
         this.closeWithAnimation();
     }
 
     public void lightDurationAction(ButtonWidget buttonWidget) {
-        LuxcognitaBerryItem.sendLightDurationMessage(this.client.player);
+        double duration = LightWithin.LIGHT_COMPONENT.get(this.client.player).getDuration();
+        LightWithinClient.sendOverlayMessageWithDuration(Text.translatable("light.description.duration", String.valueOf(duration)).setStyle(style), ClientConfig.OVERLAY_TEXT_DURATION);
         sendDialogueStopDreamPacket();
         this.closeWithAnimation();
     }
 
     public void lightMaxCooldownAction(ButtonWidget buttonWidget) {
-        LuxcognitaBerryItem.sendLightMaxCooldownMessage(this.client.player);
+        int cooldown = LightWithin.LIGHT_COMPONENT.get(this.client.player).getMaxCooldown();
+        LightWithinClient.sendOverlayMessageWithDuration(Text.translatable("light.description.maxcooldown", String.valueOf(cooldown)).setStyle(style), ClientConfig.OVERLAY_TEXT_DURATION);
+
         sendDialogueStopDreamPacket();
         this.closeWithAnimation();
     }
 
     public void lightMaxChargesAction(ButtonWidget buttonWidget) {
-        LuxcognitaBerryItem.sendLightMaxChargesMessage(this.client.player);
+        int charges = LightWithin.LIGHT_COMPONENT.get(this.client.player).getMaxLightCharges();
+        LightWithinClient.sendOverlayMessageWithDuration(Text.translatable("light.description.maxcharges", String.valueOf(charges)).setStyle(style), ClientConfig.OVERLAY_TEXT_DURATION);
         sendDialogueStopDreamPacket();
         this.closeWithAnimation();
     }
 
     public void lightLightConditionsAction(ButtonWidget buttonWidget) {
-        LuxcognitaBerryItem.sendLightConditionsMessage(this.client.player);
+        LightWithinClient.sendOverlayMessageWithDuration(Text.translatable("light.description.triggering.light_conditions").setStyle(style)
+                .append(Text.translatable("light.description.triggering.light_conditions."+LightWithin.LIGHT_COMPONENT.get(this.client.player).getType().toString()).formatted(Formatting.AQUA)), ClientConfig.OVERLAY_TEXT_DURATION);
+
         sendDialogueStopDreamPacket();
         this.closeWithAnimation();
     }
 
     public void lightLightTriggerEventsAction(ButtonWidget buttonWidget) {
-        LuxcognitaBerryItem.sendLightTriggerEventsMessage(this.client.player);
+        List<TriggerChecks> checks = LightWithin.LIGHT_COMPONENT.get(this.client.player).getType().getTriggerChecks();
+        this.client.player.sendMessage(Text.literal(LUXCOGNITA_PREFIX).append(Text.translatable("light.description.trigger_events").formatted(Formatting.AQUA)));
+        checks.forEach(triggerCheck -> this.client.player.sendMessage(Text.literal(" > ").setStyle(style).append(Text.translatable(triggerCheck.getTranslationString()))));
+
         sendDialogueStopDreamPacket();
         this.closeWithAnimation();
     }

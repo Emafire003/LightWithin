@@ -22,10 +22,7 @@ import me.emafire003.dev.lightwithin.particles.LightParticles;
 import me.emafire003.dev.lightwithin.particles.LightningParticle;
 import me.emafire003.dev.lightwithin.particles.coloredpuff.ColoredPuffParticle;
 import me.emafire003.dev.lightwithin.sounds.LightSounds;
-import me.emafire003.dev.lightwithin.util.ConfigPacketConstants;
-import me.emafire003.dev.lightwithin.util.ForestAuraRelation;
-import me.emafire003.dev.lightwithin.util.IRenderEffectsEntity;
-import me.emafire003.dev.lightwithin.util.RenderEffect;
+import me.emafire003.dev.lightwithin.util.*;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -200,6 +197,11 @@ public class LightWithinClient implements ClientModInitializer {
         return event_handler;
     }
 
+    /**Sends an overlay message to the client player that displayes for a custom duration, expressed in seconds*/
+    public static void sendOverlayMessageWithDuration(Text text, int secondsDuration){
+        ((IGameHudOverlayMessage) MinecraftClient.getInstance().inGameHud).lightwithin$setOverlayMessageWithDuration(text, secondsDuration*20, false);
+    }
+
     private void registerLightReadyPacket(){
         ClientPlayNetworking.registerGlobalReceiver(LightReadyPacketS2C.ID, ((client, handler, buf, responseSender) -> {
             var results = LightReadyPacketS2C.read(buf);
@@ -326,7 +328,7 @@ public class LightWithinClient implements ClientModInitializer {
                     MinecraftClient.getInstance().setScreen(LuxdialogueScreens.LUXDIALOGUE_SCREENS.get("attacked"));
                 }else if(action.equals(LuxDialogueActions.START_BGM)){
                     LOGGER.warn("Starting again");
-                    client.player.playSound(LightItems.MUSIC_DISC_LUXCOGNITA_DREAM.getSound(), 0.65f, 1f);
+                    client.player.playSound(LightItems.MUSIC_DISC_LUXCOGNITA_DREAM.getSound(), ClientConfig.LUXCOGNITA_DREAM_BGM_VOLUME, 1f);
                 }else if(action.equals(LuxDialogueActions.STOP_BGM)){
                     client.getSoundManager().stopSounds(LightItems.MUSIC_DISC_LUXCOGNITA_DREAM.getSound().getId(), null);
                 }
