@@ -13,7 +13,7 @@ import java.util.HashMap;
 
 import static me.emafire003.dev.lightwithin.LightWithin.LOGGER;
 
-//TODO add option to configure in how much time the luxdialogue screen closes
+//TODO add option to configure BGM volume
 public class ClientConfig {
     public static SimpleConfig CONFIG;
     private static ConfigProvider configs;

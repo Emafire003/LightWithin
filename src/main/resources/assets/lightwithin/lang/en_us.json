@@ -314,9 +314,7 @@
   "screen.lightwithin.luxdialogue.intro.eat_new_berry.will": "I will!",
   "screen.lightwithin.luxdialogue.intro.eat_new_berry.will.msg": "sure you will...",
 
-  "comment4": "=======================TODO add the corresponding buttons screens and make the 'normal'",
   "screen.lightwithin.luxdialogue.guidance": "What wisdom shall I bestow upon you?",
-  "TODO": "========== TODO",
   "screen.lightwithin.luxdialogue.guidance.button.what_lights": "What are the InnerLights?",
   "screen.lightwithin.luxdialogue.guidance.button.my_light": "Tell me about my InnerLight!",
   "screen.lightwithin.luxdialogue.guidance.button.activate": "How do I activate my InnerLight?",
@@ -339,7 +337,6 @@
   "screen.lightwithin.luxdialogue.activation": "There are a few ways",
   "screen.lightwithin.luxdialogue.activation.sub": "Some more safe and natural, some dangerous but convenient",
   "screen.lightwithin.luxdialogue.activation.safe": "The safe one",
-  "TODO1": "========================= TODO",
   "screen.lightwithin.luxdialogue.activation.alchemy": "The convenient one",
 
   "screen.lightwithin.luxdialogue.activation.natural_0": "Your light will help you whenever you are in need",
@@ -461,8 +458,7 @@
   "screen.lightwithin.luxdialogue.light_charge.alchemy.step_14": "If you have done everything correctly, you can now use the BottledLight",
   "screen.lightwithin.luxdialogue.light_charge.alchemy.step_14.sub": "If you made a mistake, or use the wrong brew of BottledLight...",
 
-  "TODOTODO": "add explosion VFX to the whole screen",
-  "screen.lightwithin.luxdialogue.light_charge.alchemy.step_15": "You know what happens",
+  "screen.lightwithin.luxdialogue.light_charge.alchemy.step_15": "You know what happens...",
 
   "screen.lightwithin.luxdialogue.what_are_lights.start": "That, is a rather complex inquiry.",
   "screen.lightwithin.luxdialogue.what_are_lights.start.sub": "Do you want to know more on what they do or their (our) 'essence'?",
@@ -514,9 +510,6 @@
   "screen.lightwithin.luxdialogue.what_are_lights.attributes.know_yours": "Would you like to know your InnerLight's traits?",
   "screen.lightwithin.luxdialogue.what_are_lights.attributes.know_yours.yes": "Yes",
   "screen.lightwithin.luxdialogue.what_are_lights.attributes.know_yours.no": "No",
-
-  "comment": "TODO comment: fare magari un altro bottone che fa partirre dal type_0, ma comunque farli tutti in sequenza da type a chargs",
-
 
   "screen.lightwithin.luxdialogue.what_are_lights.do_finish": "Do you want to know your light's characteristics?",
   "screen.lightwithin.luxdialogue.what_are_lights.do_finish.yes": "Yes please",
@@ -630,8 +623,6 @@
   "screen.lightwithin.luxdialogue.personal.dream_1.no_worries": "No worries!",
 
   "TODO write somethign about lux dream": "============================",
-
-  "TODO-1": "Explain the light targets? And the light types. List them. Like maybe explain the various light attributes and what they mean? Yeah like this the 'intro' then a button can be added explainig all of em. Or maybe in guidance",
 
   "screen.lightwithin.luxdialogue.light_info": "About what?",
   "screen.lightwithin.luxdialogue.light_info.types": "The LightTypes",

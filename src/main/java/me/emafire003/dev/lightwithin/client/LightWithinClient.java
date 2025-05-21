@@ -204,6 +204,8 @@ public class LightWithinClient implements ClientModInitializer {
         ClientPlayNetworking.registerGlobalReceiver(LightReadyPacketS2C.ID, ((client, handler, buf, responseSender) -> {
             var results = LightReadyPacketS2C.read(buf);
 
+            client.player.sendMessage(Text.literal("a"), true);
+
             client.execute(() -> {
                 try{
                     if(!results){

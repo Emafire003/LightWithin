@@ -6,13 +6,63 @@
   "subTextPresent": true,
   "subText": "screen.lightwithin.luxdialogue.light_charge.alchemy.step_12.sub",
   "subTextScale": 1.4,
-  "showItem": true,
-  "itemPos": "CENTER",
-  "item": {
-    "namespace": "minecraft",
-    "path": "tnt"
-  },
-  "itemScale": 2.5,
+  "showImage": true,
+  "imagePos": "CENTER",
+  "imageWidth": 16,
+  "imageHeight": 16,
+  "imageScale": 3,
+  "imageHasStages": true,
+  "imageStages": [
+    {
+      "namespace": "minecraft",
+      "path": "textures/block/tnt_side.png"
+    },
+    {
+      "namespace": "minecraft",
+      "path": "textures/block/tnt_side.png"
+    },
+    {
+      "namespace": "minecraft",
+      "path": "textures/particle/explosion_2.png"
+    },
+    {
+      "namespace": "minecraft",
+      "path": "textures/particle/explosion_4.png"
+    },
+    {
+      "namespace": "minecraft",
+      "path": "textures/particle/explosion_6.png"
+    },
+    {
+      "namespace": "minecraft",
+      "path": "textures/particle/explosion_8.png"
+    },
+    {
+      "namespace": "minecraft",
+      "path": "textures/particle/explosion_9.png"
+    },
+    {
+      "namespace": "minecraft",
+      "path": "textures/particle/explosion_10.png"
+    },
+    {
+      "namespace": "minecraft",
+      "path": "textures/particle/explosion_11.png"
+    },
+    {
+      "namespace": "minecraft",
+      "path": "textures/particle/explosion_12.png"
+    },
+    {
+      "namespace": "minecraft",
+      "path": "textures/particle/explosion_13.png"
+    },
+    {
+      "namespace": "minecraft",
+      "path": "textures/particle/explosion_14.png"
+    }
+  ],
+  "imageInterval": 5,
   "buttons": {
     "screen.lightwithin.luxdialogue.next": "GO_DIALOGUE<light_charges/alchemy/step_13>"
   }

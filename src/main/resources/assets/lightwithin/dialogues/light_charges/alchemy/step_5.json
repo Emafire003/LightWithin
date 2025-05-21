@@ -6,13 +6,15 @@
   "subTextPresent": true,
   "subText": "screen.lightwithin.luxdialogue.light_charge.alchemy.step_5.sub",
   "subTextScale": 1.3,
-  "showItem": true,
-  "itemPos": "CENTER",
-  "item": {
-    "namespace": "minecraft",
-    "path": "anvil"
+  "showImage": true,
+  "imagePos": "CENTER",
+  "imagePath": {
+    "namespace": "lightwithin",
+    "path": "textures/dialogues/!.png"
   },
-  "itemScale": 2.5,
+  "imageWidth": 16,
+  "imageHeight": 16,
+  "imageScale": 2.0,
   "buttons": {
     "screen.lightwithin.luxdialogue.next": "GO_DIALOGUE<light_charges/alchemy/step_6>"
   }
