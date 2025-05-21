@@ -5,7 +5,6 @@
   "mainTextScale": 1.5,
   "buttons": {
     "screen.lightwithin.luxdialogue.my_light.triggers.light_conditions": "SHOW_LIGHT_CONDITIONS",
-    "screen.lightwithin.luxdialogue.my_light.triggers.trigger_events": "SHOW_TRIGGER_EVENTS",
-    "screen.lightwithin.luxdialogue.my_light.triggers.danger_cond": "CLOSE"
+    "screen.lightwithin.luxdialogue.my_light.triggers.trigger_events": "SHOW_TRIGGER_EVENTS"
   }
 }

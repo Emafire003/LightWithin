@@ -211,6 +211,9 @@
   "config.lightwithin.luxdialogue.close_after": "Close Luxdialogue screen after",
   "config.lightwithin.luxdialogue.close_after.tooltip": "After how many seconds should the luxdialogue screen automatically close? (to prevent being stuck seeing it forever)",
 
+  "config.lightwithin.luxdialogue.bgm_volume": "Luxdialogue BGM volume",
+  "config.lightwithin.luxdialogue.bgm_volume.tooltip": "The volume of the song that plays in the background of the Luxdialogue screen",
+
   "audio.lightwithin.heal_light_triggered": "Heal Light has triggered",
   "audio.lightwithin.defense_light_triggered": "Defense Light has triggered",
   "audio.lightwithin.strength_light_triggered": "Strength Light has triggered",
@@ -327,12 +330,11 @@
   "screen.lightwithin.luxdialogue.my_light.duration": "How long it lasts!",
   "screen.lightwithin.luxdialogue.my_light.maxcooldown": "About its rest period!",
   "screen.lightwithin.luxdialogue.my_light.maxcharges": "My LightCharge limits",
+  "screen.lightwithin.luxdialogue.my_light.my_triggers": "My light's triggers",
 
   "screen.lightwithin.luxdialogue.my_light.triggers": "What in particular?",
   "screen.lightwithin.luxdialogue.my_light.triggers.light_conditions": "My light's catalysts",
   "screen.lightwithin.luxdialogue.my_light.triggers.trigger_events": "The dangers it detects",
-  "TODO0": "========================= TODO",
-  "screen.lightwithin.luxdialogue.my_light.triggers.danger_cond": "WIP MAYBE NOT, Dangerous conditions it detects",
 
   "screen.lightwithin.luxdialogue.activation": "There are a few ways",
   "screen.lightwithin.luxdialogue.activation.sub": "Some more safe and natural, some dangerous but convenient",

@@ -433,6 +433,23 @@ public class YaclScreenMaker {
                         )
                         .build()
         );
+        options.add(
+                Option.<Float>createBuilder()
+                        .name(Text.translatable("config.lightwithin.luxdialogue.bgm_volume"))
+                        .description(OptionDescription.of(Text.translatable("config.lightwithin.luxdialogue.bgm_volume.tooltip")))
+                        .binding(
+                                ClientConfig.LUXCOGNITA_DREAM_BGM_VOLUME_default, // the default value
+                                () -> ClientConfig.LUXCOGNITA_DREAM_BGM_VOLUME, // a field to get the current value from
+                                newVal -> {
+                                    ClientConfig.LUXCOGNITA_DREAM_BGM_VOLUME = newVal;
+                                    ClientConfig.saveToFile();
+                                }
+                        )
+                        .controller(opt -> FloatSliderControllerBuilder.create(opt)
+                                .range(0.0f, 1.0f)
+                                .step(0.01f))
+                        .build()
+        );
 
         updatedFromActivePreset.set(false);
         return options;

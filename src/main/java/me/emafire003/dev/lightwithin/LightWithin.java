@@ -335,7 +335,6 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 				}
 			});
 
-
 		})));
 	}
 
