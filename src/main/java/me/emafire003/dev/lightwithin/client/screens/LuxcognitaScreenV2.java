@@ -106,7 +106,7 @@ public class LuxcognitaScreenV2 extends Screen{
 
         // If this screen produces a dialogue progress state, update it
         if(dialogue.dialogueProgress){
-            if(!LightWithin.LIGHT_COMPONENT.get(this.client.player).getDialogueProgressStates().contains(dialogue.dialogueProgressState)){
+            if(dialogue.removeDialogueProgress || !LightWithin.LIGHT_COMPONENT.get(this.client.player).getDialogueProgressStates().contains(dialogue.dialogueProgressState)){
                 sendDialogueStateUpdatePacket(dialogue.dialogueProgressState, dialogue.removeDialogueProgress);
             }
 
