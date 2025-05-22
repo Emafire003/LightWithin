@@ -83,7 +83,6 @@ public class LuxDialogue {
     public ScreenPositionsPresets itemPos = ScreenPositionsPresets.CENTER;
     /// The item's identifier
     public Identifier item = Registries.ITEM.getId(LightItems.LUXINTUS_BERRY_POWDER);
-
     /// The item's scale
     public float itemScale = 3f;
     /// Weather or not to have multiple items show in sequence

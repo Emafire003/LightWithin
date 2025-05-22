@@ -3,7 +3,6 @@ package me.emafire003.dev.lightwithin.client;
 import com.mojang.datafixers.util.Pair;
 import me.emafire003.dev.lightwithin.LightWithin;
 import me.emafire003.dev.lightwithin.blocks.LightBlocks;
-import me.emafire003.dev.lightwithin.client.luxcognita_dialogues.LuxDialogue;
 import me.emafire003.dev.lightwithin.client.screens.LuxdialogueScreens;
 import me.emafire003.dev.lightwithin.client.shaders.LightShaders;
 import me.emafire003.dev.lightwithin.commands.client.ClientLightCommands;
@@ -107,9 +106,9 @@ public class LightWithinClient implements ClientModInitializer {
 
         ClientConfig.reloadConfig();
         ClientCommandRegistrationCallback.EVENT.register(ClientLightCommands::registerCommands);
-        //TODO remove once finished
-        LuxDialogue def = new LuxDialogue();
-        def.serialize();
+
+        /*LuxDialogue def = new LuxDialogue();
+        def.serialize();*/
 
         ClientLifecycleEvents.CLIENT_STARTED.register( minecraftClient -> {
             LuxdialogueScreens.registerDialogueScreens();

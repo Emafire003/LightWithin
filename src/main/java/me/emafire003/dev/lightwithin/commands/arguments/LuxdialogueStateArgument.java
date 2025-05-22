@@ -22,8 +22,7 @@ public class LuxdialogueStateArgument implements ArgumentType<DialogueProgressSt
         return context.getArgument(name, DialogueProgressState.class);
     }
 
-    //TODO put more of these
-    private static final Collection<String> EXAMPLES = Arrays.asList("INTRO_DONE");
+    private static final Collection<String> EXAMPLES = Arrays.asList("INTRO_DONE", "ALCHEMY_TAUGHT");
 
     @Override
     public DialogueProgressState parse(StringReader reader) throws CommandSyntaxException {

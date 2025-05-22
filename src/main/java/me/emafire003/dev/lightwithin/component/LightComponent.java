@@ -63,7 +63,6 @@ public class LightComponent implements ComponentV3, AutoSyncedComponent {
                 LOGGER.info("the type got: " + tag.getString("type"));
             }
 
-            //If it's an older version of the component, update it to the new version TODO make sure this works
             if(tag.getInt("version") < 3){
                 LOGGER.warn("Older LightComponent found, trying to parse type: " + MOD_ID+":"+tag.getString("type").toLowerCase());
                 this.type = INNERLIGHT_REGISTRY.get(Identifier.tryParse(MOD_ID+":"+tag.getString("type").toLowerCase()));

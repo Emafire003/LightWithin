@@ -14,7 +14,7 @@ public class Config {
     public static SimpleConfig CONFIG;
     private static ConfigProvider configs;
 
-    private static final int ver = 6;
+    private static final int ver = 7;
     public static int VERSION;
 
     //box expansion amount while searching for other entities, like when checking for allies or targets near the player
@@ -91,7 +91,7 @@ public class Config {
 
     // Added with version 6
     public static int MAX_POWER_WITH_COMMANDS = 10;
-    // TODO maybe this is version 7? cuz the alpha release
+
     public static boolean LUXCOGNITA_ON_JOIN = false;
 
     public enum UsableInFactionOptions{

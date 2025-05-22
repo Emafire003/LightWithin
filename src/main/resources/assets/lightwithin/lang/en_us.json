@@ -397,7 +397,6 @@
 
   "screen.lightwithin.luxdialogue.light_charge.obtain_1": "You can get one of this item in two ways:",
 
-  "TODO11": "=======TODO images and icons and stuff",
   "screen.lightwithin.luxdialogue.light_charge.obtain_2": "By 'scooping up' your light when it's ready, using a glass bottle...",
   "screen.lightwithin.luxdialogue.light_charge.obtain_2.sub": "You people usually call this 'right click with an empty bottle in hand'",
 
@@ -417,7 +416,6 @@
   "screen.lightwithin.luxdialogue.light_charge.obtain_4_maybe": "Fair enough, good answer. ",
   "screen.lightwithin.luxdialogue.light_charge.obtain_4_maybe.sub": "After all, I haven't even told you what this process is yet.",
 
-  "TODO10": "=======TODO images and icons and stuff",
   "screen.lightwithin.luxdialogue.light_charge.alchemy.step_0": "Be warned!",
   "screen.lightwithin.luxdialogue.light_charge.alchemy.step_0.sub": "You, and your surroundings could be subject to detonations!",
 
@@ -626,7 +624,15 @@
   "screen.lightwithin.luxdialogue.personal.dream_1.sub": "Thank you for this question tho...",
   "screen.lightwithin.luxdialogue.personal.dream_1.no_worries": "No worries!",
 
-  "TODO write somethign about lux dream": "============================",
+  "screen.lightwithin.luxdialogue.personal.luxdream.button": "Where are we?",
+  "screen.lightwithin.luxdialogue.personal.luxdream_0": "Nowhere in particular. You are in the same place as before.",
+  "screen.lightwithin.luxdialogue.personal.luxdream_0.dont": "I don't understand",
+  "screen.lightwithin.luxdialogue.personal.luxdream_0.ok": "Oh ok",
+
+  "screen.lightwithin.luxdialogue.personal.luxdream_1": "Well, for you it's a bit like a dream I guess",
+  "screen.lightwithin.luxdialogue.personal.luxdream_1.sub": "You haven't really moved, but through the light, we are talking.",
+  "screen.lightwithin.luxdialogue.personal.luxdream_1.dont": "Still a mystery...",
+  "screen.lightwithin.luxdialogue.personal.luxdream_1.ok": "Oh ok",
 
   "screen.lightwithin.luxdialogue.light_info": "About what?",
   "screen.lightwithin.luxdialogue.light_info.types": "The LightTypes",
@@ -777,5 +783,6 @@
   "screen.lightwithin.luxdialogue.attacked.sub": "We'll talk later, go defend yourself!",
   "screen.lightwithin.luxdialogue.attacked.button": "Ok",
 
+  "TODO write somethign about lux dream": "============================",
   "TODO personal": "are you unique? Why? Why aren't you linked to a player/human/whatever? What happened? What are legendary lights? Can i get one?"
 }

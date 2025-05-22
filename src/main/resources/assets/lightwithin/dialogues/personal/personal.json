@@ -16,6 +16,7 @@
     "screen.lightwithin.luxdialogue.personal.prickly.button": "GO_DIALOGUE<personal/prickly>",
     "screen.lightwithin.luxdialogue.personal.talkway.button": "GO_DIALOGUE<personal/talkway>",
     "screen.lightwithin.luxdialogue.personal.unique.button": "GO_DIALOGUE<personal/unique_0>",
-    "screen.lightwithin.luxdialogue.personal.dream.button": "GO_DIALOGUE<personal/dream_0>"
+    "screen.lightwithin.luxdialogue.personal.dream.button": "GO_DIALOGUE<personal/dream_0>",
+    "screen.lightwithin.luxdialogue.personal.luxdream.button": "GO_DIALOGUE<personal/luxdream_0>"
   }
 }

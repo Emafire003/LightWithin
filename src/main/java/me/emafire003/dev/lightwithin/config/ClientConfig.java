@@ -10,10 +10,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 
-
 import static me.emafire003.dev.lightwithin.LightWithin.LOGGER;
 
-//TODO add option to configure BGM volume
 public class ClientConfig {
     public static SimpleConfig CONFIG;
     private static ConfigProvider configs;
