@@ -122,6 +122,9 @@ dependencies {
 	modCompileOnly "curse.maven:architectury-419699:4663009"//home: https://www.curseforge.com/minecraft/mc-mods/architectury-api
 	modCompileOnly "curse.maven:ftblibrary-438495:4596510"//home: https://www.curseforge.com/minecraft/mc-mods/ftb-library-fabric
 
+	//Guilded
+	modCompileOnly "maven.modrinth:guilded-parties:${project.guilded}"
+
 	//Permissions
 	modCompileOnly "me.lucko:fabric-permissions-api:${project.fabricperms_version}"
 

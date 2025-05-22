@@ -5,6 +5,7 @@ import me.emafire003.dev.lightwithin.compat.argonauts.ArgonautsChecker;
 import me.emafire003.dev.lightwithin.compat.factions.FactionChecker;
 import me.emafire003.dev.lightwithin.compat.flan.FlanCompat;
 import me.emafire003.dev.lightwithin.compat.ftb_teams.FTBTeamsChecker;
+import me.emafire003.dev.lightwithin.compat.guilded.GuildedChecker;
 import me.emafire003.dev.lightwithin.compat.open_parties_and_claims.OPACChecker;
 import me.emafire003.dev.lightwithin.compat.yawp.YawpCompat;
 import me.emafire003.dev.lightwithin.component.SummonedByComponent;
@@ -214,7 +215,7 @@ public class CheckUtils {
     private static float getAttackDamageWithSpeed(@NotNull LivingEntity attacker,@NotNull LivingEntity target){
         if(!attacker.getAttributes().hasAttribute(EntityAttributes.GENERIC_ATTACK_DAMAGE)){
             //TODO maybe move to debug later
-            LOGGER.warn("The attacking entity: " + attacker.getName().toString() + " does not have GENERIC_ATTACK_DAMAGE attribute! May be a normal thing, like a projectile entity!");
+            //LOGGER.warn("The attacking entity: " + attacker.getName().toString() + " does not have GENERIC_ATTACK_DAMAGE attribute! May be a normal thing, like a projectile entity!");
             return -1;
         }
 
@@ -471,6 +472,11 @@ public class CheckUtils {
             }
             if(FabricLoader.getInstance().isModLoaded(FTBTeamsChecker.getModId()) && entity instanceof PlayerEntity && teammate instanceof PlayerEntity){
                 if(checkFTBTeams((ServerPlayerEntity) entity, (ServerPlayerEntity) teammate)){
+                    return true;
+                }
+            }
+            if(FabricLoader.getInstance().isModLoaded(GuildedChecker.getModId()) && entity.getWorld().isClient() && entity instanceof PlayerEntity && teammate instanceof PlayerEntity){
+                if(GuildedChecker.areInSameGuild((ServerPlayerEntity) entity, (ServerPlayerEntity) teammate)){
                     return true;
                 }
             }

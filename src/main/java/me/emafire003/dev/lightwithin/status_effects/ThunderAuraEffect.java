@@ -53,7 +53,6 @@ public class ThunderAuraEffect extends StatusEffect {
             cuboidEffect.run();
         }*/
 
-        //TODO wiki Gets the nearby entities that ARE NOT ALLIES (meaning anyone except allies will get zapped and knocked back)
         List<LivingEntity> nearby_entities = entity.getWorld().getEntitiesByClass(LivingEntity.class, box, (entity1 -> !CheckUtils.CheckAllies.checkAlly(entity, entity1) && !entity1.equals(entity)));
 
         nearby_entities.forEach(target -> {
