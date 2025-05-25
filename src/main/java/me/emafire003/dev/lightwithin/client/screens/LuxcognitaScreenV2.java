@@ -742,7 +742,6 @@ public class LuxcognitaScreenV2 extends Screen{
 
     public String parseReplacable(Replaceables replaceable){
         if(replaceable.equals(Replaceables.ACTIVATION_KEY)){
-            //TODO remove
             return ActivationKey.lightActivationKey.getBoundKeyLocalizedText().getString();
         }else if(replaceable.equals(Replaceables.PLAYER_NAME)){
             return this.client.player.getName().getString();

@@ -261,7 +261,6 @@ public class SetLightCommand implements LightCommand{
         return 1;
     }
 
-    //TODO update wiki with this thingies (and permissions and such)
     private int addLuxDialogueState(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
         Collection<ServerPlayerEntity> targets = EntityArgumentType.getPlayers(context, "player");
         DialogueProgressState state = LuxdialogueStateArgument.getState(context, "dialogueState");

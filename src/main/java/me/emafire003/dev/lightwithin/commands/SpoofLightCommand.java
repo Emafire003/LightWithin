@@ -19,7 +19,6 @@ import net.minecraft.util.Formatting;
 import java.util.Collection;
 import java.util.UUID;
 
-//TODO wiki add this to the wiki
 public class SpoofLightCommand implements LightCommand{
 
     private boolean confirming = false;

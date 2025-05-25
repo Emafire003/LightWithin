@@ -48,7 +48,6 @@ public class LuxmutuaBerryItem extends Item {
         }
     }
 
-    //TODO wiki/changelog: say that now using a luxmutua berry changes all attributes of the light
     //TODO maybe make a screen for it selecting which attribute you want to change?
 
     @Override

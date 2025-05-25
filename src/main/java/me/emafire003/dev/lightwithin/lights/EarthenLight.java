@@ -56,7 +56,6 @@ public class EarthenLight extends InnerLight {
     public static final Item INGREDIENT = Items.MOSSY_COBBLESTONE;
 
     private final List<TargetType> possibleTargetTypes = Arrays.asList(TargetType.SELF, TargetType.ENEMIES, TargetType.ALLIES, TargetType.VARIANT);
-    //TODO wiki update the checks for this one
     private final List<TriggerChecks> triggerChecks = List.of(TriggerChecks.ENTITY_ATTACKED, TriggerChecks.ARMOR_OR_TOOL_BREAKS);
     private final Identifier lightId = LightWithin.getIdentifier("earthen");
 
