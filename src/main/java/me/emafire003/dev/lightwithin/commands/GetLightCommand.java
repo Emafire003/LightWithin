@@ -5,6 +5,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import com.mojang.datafixers.util.Pair;
 import me.emafire003.dev.lightwithin.LightWithin;
+import me.emafire003.dev.lightwithin.client.luxcognita_dialogues.DialogueProgressState;
 import me.emafire003.dev.lightwithin.compat.permissions.PermissionsChecker;
 import me.emafire003.dev.lightwithin.component.LightComponent;
 import me.emafire003.dev.lightwithin.events.LightCreationAndEvent;
@@ -21,6 +22,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
+import java.util.List;
 import java.util.Map;
 
 public class GetLightCommand implements LightCommand{
@@ -135,7 +137,7 @@ public class GetLightCommand implements LightCommand{
         ServerCommandSource source = context.getSource();
 
         try{
-            int maxLightStack = LightWithin.LIGHT_COMPONENT.get(target).getMaxLightStack();
+            int maxLightStack = LightWithin.LIGHT_COMPONENT.get(target).getMaxLightCharges();
             source.sendFeedback(() -> Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The max number of light charges for §d" + target.getName().getString() + "§e is: " ).formatted(Formatting.YELLOW)
                     .append(Text.literal("§a"+maxLightStack))), true);
             return 1;
@@ -213,7 +215,7 @@ public class GetLightCommand implements LightCommand{
             int mcooldown = component.getMaxCooldown();
             source.sendFeedback(() -> Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The max cooldown is: " ).formatted(Formatting.YELLOW)
                     .append(Text.literal("§a"+mcooldown)).append(Text.literal(", was: ").formatted(Formatting.YELLOW)).append(Text.literal(String.valueOf(LightCreationAndEvent.determineCooldown(originalUUID, LightCreationAndEvent.COOLDOWN_BIT))).formatted(Formatting.GREEN))), true);
-            int maxLightStacks = component.getMaxLightStack();
+            int maxLightStacks = component.getMaxLightCharges();
             source.sendFeedback(() -> Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The max light charges number is: " ).formatted(Formatting.YELLOW)
                     .append(Text.literal("§a"+maxLightStacks)).append(Text.literal(", was: ").formatted(Formatting.YELLOW)).append(Text.literal(String.valueOf(LightCreationAndEvent.determineMaxLightCharges(originalUUID, LightCreationAndEvent.COOLDOWN_BIT))).formatted(Formatting.GREEN))), true);
 
@@ -241,6 +243,8 @@ public class GetLightCommand implements LightCommand{
             }
             source.sendFeedback(() -> Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The current number of light charges is: " ).formatted(Formatting.YELLOW)
                     .append(Text.literal("§a"+component.getCurrentLightCharges()))), true);
+            source.sendFeedback(() -> Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The current LuxDialogue progress is: " ).formatted(Formatting.YELLOW)
+                    .append(Text.literal("§a"+component.getDialogueProgressStates()))), true);
 
             return 1;
         }catch(Exception e){
@@ -248,6 +252,23 @@ public class GetLightCommand implements LightCommand{
             source.sendFeedback(() -> Text.literal("Error: " + e),false);
             return 0;
         }
+    }
+
+    private int getDialogueProgressState(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
+        ServerPlayerEntity target = EntityArgumentType.getPlayer(context, "player");
+        ServerCommandSource source = context.getSource();
+
+        try{
+            List<DialogueProgressState> dialogueStates = LightWithin.LIGHT_COMPONENT.get(target).getDialogueProgressStates();
+            source.sendFeedback(() -> Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The current dialogue progress states of §d" + target.getName().getString() + "§e are: " ).formatted(Formatting.YELLOW)
+                    .append(Text.literal(dialogueStates.toString()).formatted(Formatting.GREEN))), true);
+            return 1;
+        }catch(Exception e){
+            e.printStackTrace();
+            source.sendFeedback(() -> Text.literal("Error: " + e),false);
+            return 0;
+        }
+
     }
 
     private int getLights(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
@@ -366,6 +387,15 @@ public class GetLightCommand implements LightCommand{
                                 .then(
                                         CommandManager.argument("player", EntityArgumentType.player())
                                                 .executes(this::getNaturallyTriggered)
+
+                                )
+                )
+                .then(
+                        CommandManager
+                                .literal("luxDialogueProgress")
+                                .then(
+                                        CommandManager.argument("player", EntityArgumentType.player())
+                                                .executes(this::getDialogueProgressState)
 
                                 )
                 )

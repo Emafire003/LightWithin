@@ -1,0 +1,84 @@
+{
+  "dialogueId": "step_15",
+  "fileVersion": 1,
+  "mainText": "screen.lightwithin.luxdialogue.light_charge.alchemy.step_15",
+  "textScale": 1.45,
+  "showImage": true,
+  "imagePos": "CENTER",
+  "imageWidth": 16,
+  "imageHeight": 16,
+  "imageScale": 20,
+  "imageHasStages": true,
+  "imageStages": [
+    {
+      "namespace": "lightwithin",
+      "path": "textures/dialogues/transparency_woo.png"
+    },
+    {
+      "namespace": "lightwithin",
+      "path": "textures/dialogues/transparency_woo.png"
+    },
+    {
+      "namespace": "lightwithin",
+      "path": "textures/dialogues/transparency_woo.png"
+    },
+    {
+      "namespace": "lightwithin",
+      "path": "textures/dialogues/transparency_woo.png"
+    },
+    {
+      "namespace": "lightwithin",
+      "path": "textures/dialogues/transparency_woo.png"
+    },
+    {
+      "namespace": "lightwithin",
+      "path": "textures/dialogues/transparency_woo.png"
+    },
+    {
+      "namespace": "minecraft",
+      "path": "textures/particle/explosion_2.png"
+    },
+    {
+      "namespace": "minecraft",
+      "path": "textures/particle/explosion_4.png"
+    },
+    {
+      "namespace": "minecraft",
+      "path": "textures/particle/explosion_6.png"
+    },
+    {
+      "namespace": "minecraft",
+      "path": "textures/particle/explosion_8.png"
+    },
+    {
+      "namespace": "minecraft",
+      "path": "textures/particle/explosion_9.png"
+    },
+    {
+      "namespace": "minecraft",
+      "path": "textures/particle/explosion_10.png"
+    },
+    {
+      "namespace": "minecraft",
+      "path": "textures/particle/explosion_11.png"
+    },
+    {
+      "namespace": "minecraft",
+      "path": "textures/particle/explosion_12.png"
+    },
+    {
+      "namespace": "minecraft",
+      "path": "textures/particle/explosion_13.png"
+    },
+    {
+      "namespace": "minecraft",
+      "path": "textures/particle/explosion_14.png"
+    }
+  ],
+  "imageInterval": 5,
+  "buttons": {
+    "screen.lightwithin.luxdialogue.next": "CLOSE"
+  },
+  "dialogueProgress": true,
+  "dialogueProgressState": "ALCHEMY_TAUGHT"
+}

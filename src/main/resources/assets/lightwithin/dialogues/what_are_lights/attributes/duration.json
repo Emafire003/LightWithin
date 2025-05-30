@@ -1,0 +1,12 @@
+{
+  "dialogueId": "duration",
+  "fileVersion": 1,
+  "mainText": "screen.lightwithin.luxdialogue.what_are_lights.attributes.duration",
+  "textScale": 1.45,
+  "subTextPresent": true,
+  "subText": "screen.lightwithin.luxdialogue.what_are_lights.attributes.duration.sub",
+  "subTextScale": 1.2,
+  "buttons": {
+    "screen.lightwithin.luxdialogue.next": "GO_DIALOGUE<what_are_lights/attributes/power>"
+  }
+}

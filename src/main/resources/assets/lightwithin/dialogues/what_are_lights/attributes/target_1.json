@@ -1,0 +1,41 @@
+{
+  "dialogueId": "target_1",
+  "fileVersion": 1,
+  "mainText": "screen.lightwithin.luxdialogue.what_are_lights.attributes.target_1",
+  "textScale": 1.37,
+  "subTextPresent": true,
+  "subText": "screen.lightwithin.luxdialogue.what_are_lights.attributes.target_1.sub",
+  "subTextScale": 1.3,
+  "showImage": true,
+  "imagePos": "CENTER",
+  "imageWidth": 16,
+  "imageHeight": 16,
+  "imageScale": 2,
+  "imageHasStages": true,
+  "imageStages": [
+    {
+      "namespace": "lightwithin",
+      "path": "textures/lights/target_icons/blurred/self.png"
+    },
+    {
+      "namespace": "lightwithin",
+      "path": "textures/lights/target_icons/blurred/allies.png"
+    },
+    {
+      "namespace": "lightwithin",
+      "path": "textures/lights/target_icons/blurred/enemies.png"
+    },
+    {
+      "namespace": "lightwithin",
+      "path": "textures/lights/target_icons/blurred/all.png"
+    },
+    {
+      "namespace": "lightwithin",
+      "path": "textures/lights/target_icons/blurred/variant.png"
+    }
+  ],
+  "imageInterval": 60,
+  "buttons": {
+    "screen.lightwithin.luxdialogue.next": "GO_DIALOGUE<what_are_lights/attributes/power>"
+  }
+}

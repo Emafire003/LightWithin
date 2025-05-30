@@ -1,0 +1,19 @@
+{
+  "dialogueId": "step_10",
+  "fileVersion": 1,
+  "mainText": "screen.lightwithin.luxdialogue.light_charge.alchemy.step_10",
+  "textScale": 1.46,
+  "subTextPresent": true,
+  "subText": "screen.lightwithin.luxdialogue.light_charge.alchemy.step_10.sub",
+  "subTextScale": 1.38,
+  "showItem": true,
+  "itemPos": "CENTER",
+  "item": {
+    "namespace": "minecraft",
+    "path": "brewing_stand"
+  },
+  "itemScale": 2.5,
+  "buttons": {
+    "screen.lightwithin.luxdialogue.next": "GO_DIALOGUE<light_charges/alchemy/step_11>"
+  }
+}

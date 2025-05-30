@@ -67,7 +67,6 @@ public class StormAuraEffect extends StatusEffect {
 
         //it ranges from 15 to 25 blocksTODO WIKI
         Box storm_area  = Box.from(target.getPos()).expand(BalanceConfig.THUNDER_AURA_VARIANT_STORM_MIN_SIZE + amplifier);
-        //TODO wiki The number of lightnings is the same as the power multiplier, with a minimum of 1 (configurable)
         spawnStormLightnings(storm_area, dur, Math.max(BalanceConfig.THUNDER_AURA_VARIANT_LIGHTNINGS_PER_LEVEL, amplifier), target);
     }
 

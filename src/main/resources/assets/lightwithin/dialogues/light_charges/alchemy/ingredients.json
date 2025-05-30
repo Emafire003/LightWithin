@@ -1,0 +1,15 @@
+{
+  "dialogueId": "ingredients",
+  "fileVersion": 1,
+  "mainText": "screen.lightwithin.luxdialogue.light_charge.alchemy.ingredients",
+  "textScale": 1.45,
+  "buttons": {
+    "screen.lightwithin.luxdialogue.light_charge.alchemy.ingredients.recap": "GO_DIALOGUE<light_charges/alchemy/step_0>",
+    "screen.lightwithin.luxdialogue.light_charge.alchemy.ingredients.type": "SHOW_TYPE_INGREDIENT",
+    "screen.lightwithin.luxdialogue.light_charge.alchemy.ingredients.target": "SHOW_TARGET_INGREDIENT"
+  },
+  "canRedirect": true,
+  "redirectTo": "light_charges/alchemy/step_0",
+  "redirectStateRequired": "ALCHEMY_TAUGHT",
+  "invertRedirectRequirement": true
+}

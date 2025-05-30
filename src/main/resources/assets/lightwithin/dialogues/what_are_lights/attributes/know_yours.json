@@ -1,0 +1,10 @@
+{
+  "dialogueId": "know_yours",
+  "fileVersion": 1,
+  "mainText": "screen.lightwithin.luxdialogue.what_are_lights.attributes.know_yours",
+  "textScale": 1.45,
+  "buttons": {
+    "screen.lightwithin.luxdialogue.what_are_lights.attributes.know_yours.yes": "GO_DIALOGUE<my_light/my_light>",
+    "screen.lightwithin.luxdialogue.what_are_lights.attributes.know_yours.no": "CLOSE"
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "dialogueId": "convenient_4",
+  "fileVersion": 1,
+  "mainText": "screen.lightwithin.luxdialogue.activation.convenient_4",
+  "textScale": 1.43,
+  "subTextPresent": true,
+  "subText": "screen.lightwithin.luxdialogue.activation.convenient_4.sub",
+  "subTextScale": 1.25,
+  "showImage": true,
+  "imagePos": "CENTER",
+  "imagePath": {
+    "namespace": "lightwithin",
+    "path": "textures/lights/light_charge_base.png"
+  },
+  "imageWidth": 16,
+  "imageHeight": 16,
+  "imageScale": 2.0,
+  "imageHasStages": false,
+  "buttons": {
+    "screen.lightwithin.luxdialogue.next": "GO_DIALOGUE<activation/convenient_5>"
+  }
+}

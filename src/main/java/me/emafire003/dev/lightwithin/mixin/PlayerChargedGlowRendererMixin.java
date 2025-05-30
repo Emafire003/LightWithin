@@ -27,7 +27,7 @@ public abstract class PlayerChargedGlowRendererMixin<T extends Entity> {
             if(component.getCurrentLightCharges() == 0){
                 return;
             }
-            double charge_fraction = (double) component.getCurrentLightCharges() /component.getMaxLightStack();
+            double charge_fraction = (double) component.getCurrentLightCharges() /component.getMaxLightCharges();
             if(charge_fraction == 1){
 
                 Random random = ((PlayerEntity) entity).getRandom();

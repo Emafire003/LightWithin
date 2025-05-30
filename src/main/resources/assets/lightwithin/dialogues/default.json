@@ -1,0 +1,68 @@
+{
+  "dialogueId": "default",
+  "fileVersion": 1,
+  "mainText": "screen.lightwithin.luxdialogue.default",
+  "mainTextScale": 1.5,
+  "hasReplaceableMainText": false,
+  "replaceablesListMain": [
+    "ACTIVATION_KEY"
+  ],
+  "subTextPresent": false,
+  "subText": "screen.lightwithin.luxdialogue.default",
+  "subTextScale": 1.0,
+  "hasReplaceableSubText": false,
+  "replaceablesListSub": [
+    "ACTIVATION_KEY"
+  ],
+  "showBerry": true,
+  "berryPos": "TOP_LEFT",
+  "berryScale": 2.0,
+  "showImage": false,
+  "imagePos": "CENTER",
+  "imagePath": {
+    "namespace": "lightwithin",
+    "path": "textures/dialogues/default.png"
+  },
+  "imageWidth": 32,
+  "imageHeight": 32,
+  "imageScale": 1.0,
+  "imageHasStages": false,
+  "imageStages": [
+    {
+      "namespace": "lightwithin",
+      "path": "textures/lux_dialogue/default.png"
+    }
+  ],
+  "imageInterval": 20,
+  "showItem": false,
+  "itemPos": "CENTER",
+  "item": {
+    "namespace": "lightwithin",
+    "path": "luxintus_berry_powder"
+  },
+  "itemScale": 3.0,
+  "multipleItems": false,
+  "items": [
+    {
+      "namespace": "lightwithin",
+      "path": "luxintus_berry_powder"
+    },
+    {
+      "namespace": "lightwithin",
+      "path": "luxintus_berry"
+    }
+  ],
+  "itemsInterval": 20,
+  "randomizedButtons": false,
+  "randomButtonsAmount": 3,
+  "buttons": {
+    "screen.lightwithin.luxdialogue.default.button0": "CLOSE"
+  },
+  "dialogueProgress": false,
+  "dialogueProgressState": "NONE",
+  "removeDialogueProgress": false,
+  "canRedirect": false,
+  "redirectTo": "default",
+  "redirectStateRequired": "NONE",
+  "invertRedirectRequirement": false
+}

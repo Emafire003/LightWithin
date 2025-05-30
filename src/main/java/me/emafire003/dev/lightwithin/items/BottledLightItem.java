@@ -166,7 +166,7 @@ public class BottledLightItem extends Item {
     public boolean addCharge(PlayerEntity user, ItemStack stack, LightComponent component){
 
         int charges = component.getCurrentLightCharges()+1;
-        if(charges > component.getMaxLightStack()){
+        if(charges > component.getMaxLightCharges()){
             //Or another error-sound. Nah i think this fits
             if(!user.getWorld().isClient()){
                 user.sendMessage(Text.translatable("light.max_charges").formatted(Formatting.RED), true);

@@ -1,0 +1,16 @@
+{
+  "dialogueId": "obtain_1",
+  "fileVersion": 1,
+  "mainText": "screen.lightwithin.luxdialogue.light_charge.obtain_1",
+  "textScale": 1.5,
+  "showItem": true,
+  "itemPos": "CENTER",
+  "item": {
+    "namespace": "lightwithin",
+    "path": "bottled_light"
+  },
+  "itemScale": 3.0,
+  "buttons": {
+    "screen.lightwithin.luxdialogue.next": "GO_DIALOGUE<light_charges/obtain_2>"
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "dialogueId": "obtain_2",
+  "fileVersion": 1,
+  "mainText": "screen.lightwithin.luxdialogue.light_charge.obtain_2",
+  "textScale": 1.5,
+  "subTextPresent": true,
+  "subText": "screen.lightwithin.luxdialogue.light_charge.obtain_2.sub",
+  "subTextScale": 1.3,
+  "showImage": true,
+  "imagePos": "CENTER",
+  "imageWidth": 16,
+  "imageHeight": 16,
+  "imageScale": 2,
+  "imageHasStages": true,
+  "imageStages": [
+    {
+      "namespace": "minecraft",
+      "path": "textures/item/glass_bottle.png"
+    },
+    {
+      "namespace": "minecraft",
+      "path": "textures/item/glass_bottle.png"
+    },
+    {
+      "namespace": "lightwithin",
+      "path": "textures/lights/light.png"
+    },
+    {
+      "namespace": "lightwithin",
+      "path": "textures/dialogues/bottled_light.png"
+    },
+    {
+      "namespace": "lightwithin",
+      "path": "textures/dialogues/bottled_light.png"
+    }
+  ],
+  "imageInterval": 60,
+  "buttons": {
+    "screen.lightwithin.luxdialogue.next": "GO_DIALOGUE<light_charges/obtain_3>"
+  }
+}

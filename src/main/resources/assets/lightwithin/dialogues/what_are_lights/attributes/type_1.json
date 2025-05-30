@@ -1,0 +1,41 @@
+{
+  "dialogueId": "type_1",
+  "fileVersion": 1,
+  "mainText": "screen.lightwithin.luxdialogue.what_are_lights.attributes.type_1",
+  "textScale": 1.45,
+  "subTextPresent": true,
+  "subText": "screen.lightwithin.luxdialogue.what_are_lights.attributes.type_1.sub",
+  "subTextScale": 1.3,
+  "showImage": true,
+  "imagePos": "CENTER",
+  "imageWidth": 16,
+  "imageHeight": 16,
+  "imageScale": 2,
+  "imageHasStages": true,
+  "imageStages": [
+    {
+      "namespace": "lightwithin",
+      "path": "textures/particle/heal_light.png"
+    },
+    {
+      "namespace": "lightwithin",
+      "path": "textures/particle/blazing_light.png"
+    },
+    {
+      "namespace": "lightwithin",
+      "path": "textures/particle/aqua_light.png"
+    },
+    {
+      "namespace": "lightwithin",
+      "path": "textures/particle/wind_light.png"
+    },
+    {
+      "namespace": "lightwithin",
+      "path": "textures/particle/forest_aura_light.png"
+    }
+  ],
+  "imageInterval": 60,
+  "buttons": {
+    "screen.lightwithin.luxdialogue.next": "GO_DIALOGUE<what_are_lights/attributes/target_0>"
+  }
+}

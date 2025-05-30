@@ -1,0 +1,35 @@
+{
+  "dialogueId": "smile",
+  "fileVersion": 1,
+  "mainText": "",
+  "mainTextScale": 2,
+  "berryPos": "TOP_CENTER",
+  "showImage": true,
+  "imagePos": "CENTER",
+  "imageWidth": 8,
+  "imageHeight": 7,
+  "imageScale": 5.0,
+  "imageHasStages": true,
+  "imageStages": [
+    {
+      "namespace": "lightwithin",
+      "path": "textures/dialogues/smile_0.png"
+    },
+    {
+      "namespace": "lightwithin",
+      "path": "textures/dialogues/smile_1.png"
+    },
+    {
+      "namespace": "lightwithin",
+      "path": "textures/dialogues/smile_2.png"
+    },
+    {
+      "namespace": "lightwithin",
+      "path": "textures/dialogues/smile_1.png"
+    }
+  ],
+  "imageInterval": 10,
+  "buttons": {
+    "screen.lightwithin.luxdialogue.next": "CLOSE"
+  }
+}

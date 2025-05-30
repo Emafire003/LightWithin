@@ -19,7 +19,6 @@ import java.util.Collection;
 
 public class ResetLightCommand implements LightCommand{
 
-    //Temporary, will remove once all lights have been implemented
     private boolean confirming = false;
     private int tickCounter = 0;
 

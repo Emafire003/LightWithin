@@ -50,6 +50,8 @@ public class LuxmutuaBerryItem extends Item {
         }
     }
 
+    //TODO maybe make a screen for it selecting which attribute you want to change?
+
     @Override
     public ItemStack finishUsing(ItemStack stack, World world, LivingEntity user) {
         if(world.isClient){
@@ -62,16 +64,18 @@ public class LuxmutuaBerryItem extends Item {
             LightComponent component = LightWithin.LIGHT_COMPONENT.get(user);
 
             Pair<InnerLight, TargetType> current = new Pair<>(component.getType(), component.getTargets());
-            String[] id_bits = UUID.randomUUID().toString().toLowerCase().split("-");
+            String randomUUID = UUID.randomUUID().toString().toLowerCase();
+            String[] id_bits = randomUUID.split("-");
             Pair<InnerLight, TargetType> newone = LightCreationAndEvent.determineTypeAndTarget(id_bits, LightCreationAndEvent.TYPE_BIT,LightCreationAndEvent.TARGET_BIT);
 
             while(current.getFirst().equals(newone.getFirst())){
-                id_bits = UUID.randomUUID().toString().toLowerCase().split("-");
+                randomUUID = UUID.randomUUID().toString().toLowerCase();
+                id_bits = randomUUID.split("-");
                 newone = LightCreationAndEvent.determineTypeAndTarget(id_bits, LightCreationAndEvent.TYPE_BIT,LightCreationAndEvent.TARGET_BIT);
+
             }
 
-            component.setType(newone.getFirst());
-            component.setTargets(newone.getSecond());
+            LightCreationAndEvent.mutateLightToUUID(component, randomUUID);
 
             ((ServerPlayerEntity) user).sendMessage(Text.translatable("item.lightwithin.luxmutua_berry.lightchange"), true);
         }
@@ -79,13 +83,9 @@ public class LuxmutuaBerryItem extends Item {
         return foodComponent != null ? user.eatFood(world, stack, foodComponent) : stack;
     }
 
+
     @Override
-    public void appendTooltip(ItemStack stack, Item.TooltipContext context, List<Text> tooltip, TooltipType type) {
-        if(!Screen.hasShiftDown()) {
-            tooltip.add(Text.translatable("item.lightwithin.berry.tooltip"));
-        } else {
-            tooltip.add(Text.translatable("item.lightwithin.luxmutua_berry.tooltip"));
-            tooltip.add(Text.translatable("item.lightwithin.luxmutua_berry.tooltip1"));
-        }
+    public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
+        tooltip.add(Text.translatable("item.lightwithin.luxmutua_berry.tooltip"));
     }
 }

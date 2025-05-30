@@ -1,0 +1,21 @@
+{
+  "dialogueId": "charges",
+  "fileVersion": 1,
+  "mainText": "screen.lightwithin.luxdialogue.what_are_lights.attributes.charges",
+  "textScale": 1.45,
+  "subTextPresent": true,
+  "subText": "screen.lightwithin.luxdialogue.what_are_lights.attributes.charges.sub",
+  "subTextScale": 1.3,
+  "showImage": true,
+  "imagePos": "CENTER",
+  "imagePath": {
+    "namespace": "lightwithin",
+    "path": "textures/dialogues/activation/light_charge_limit_2.png"
+  },
+  "imageWidth": 16,
+  "imageHeight": 16,
+  "imageScale": 2.0,
+  "buttons": {
+    "screen.lightwithin.luxdialogue.next": "GO_DIALOGUE<what_are_lights/attributes/know_yours>"
+  }
+}

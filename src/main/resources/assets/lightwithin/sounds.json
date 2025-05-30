@@ -51,6 +51,12 @@
       "lightwithin:zap_3"
     ]
   },
+  "luxcognita_damage_block": {
+    "subtitle": "audio.lightwithin.luxcognita_damage_block",
+    "sounds": [
+      "lightwithin:luxcognita_damage_block"
+    ]
+  },
   "defense_light": {
   "subtitle": "audio.lightwithin.defense_light_triggered",
   "sounds": [
@@ -103,6 +109,15 @@
     "subtitle": "audio.lightwithin.thunder_aura_light_triggered",
     "sounds": [
       "lightwithin:thunder_aura_light"
+    ]
+  },
+  "luxcognita_dream": {
+    "subtitle": "audio.lightwithin.luxcognita_dream",
+    "sounds": [
+      {
+        "name": "lightwithin:luxcognita_dream",
+        "stream": true
+      }
     ]
   }
 }

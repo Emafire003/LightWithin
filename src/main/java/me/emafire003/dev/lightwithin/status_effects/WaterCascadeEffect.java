@@ -25,7 +25,7 @@ public class WaterCascadeEffect extends StatusEffect {
         return true;
     }
 
-    HashMap<BlockPos, BlockState> block_map = new HashMap();
+    HashMap<BlockPos, BlockState> block_map = new HashMap<>();
 
     BlockPos start_pos;
 

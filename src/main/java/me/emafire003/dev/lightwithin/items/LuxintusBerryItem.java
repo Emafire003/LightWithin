@@ -18,6 +18,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
 
+import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 public class LuxintusBerryItem extends Item {
@@ -68,13 +69,8 @@ public class LuxintusBerryItem extends Item {
     }
 
     @Override
-    public void appendTooltip(ItemStack stack, Item.TooltipContext context, List<Text> tooltip, TooltipType type) {
-        if(!Screen.hasShiftDown()) {
-            tooltip.add(Text.translatable("item.lightwithin.berry.tooltip"));
-        } else {
-            tooltip.add(Text.translatable("item.lightwithin.luxintus_berry.tooltip"));
-            tooltip.add(Text.translatable("item.lightwithin.luxintus_berry.tooltip1"));
-        }
+    public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
+        tooltip.add(Text.translatable("item.lightwithin.luxintus_berry.tooltip"));
     }
 
 

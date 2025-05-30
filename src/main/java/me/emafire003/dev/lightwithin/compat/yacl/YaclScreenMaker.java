@@ -4,6 +4,8 @@ import com.mojang.datafixers.util.Pair;
 import dev.isxander.yacl3.api.*;
 import dev.isxander.yacl3.api.controller.*;
 import me.emafire003.dev.lightwithin.config.ClientConfig;
+import me.emafire003.dev.lightwithin.util.ScreenPositionsPresets;
+import me.emafire003.dev.lightwithin.util.ScreenUtils;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.text.Text;
@@ -30,29 +32,6 @@ public class YaclScreenMaker {
     }
 
 
-    public static Pair<Integer, Integer> getXY(IconPositionPresets preset, double icon_scale){
-        if(preset.equals(IconPositionPresets.TOP_LEFT)){
-            return new Pair<>(10, 10);
-        }
-        if(preset.equals(IconPositionPresets.TOP_RIGHT)){
-            return new Pair<>((int) (MinecraftClient.getInstance().getWindow().getScaledWidth()-(10+20*icon_scale)), 10);
-        }
-        if(preset.equals(IconPositionPresets.BOTTOM_LEFT)){
-            return new Pair<>(10, (int)(MinecraftClient.getInstance().getWindow().getScaledHeight()-(10+20*icon_scale)));
-        }
-        if(preset.equals(IconPositionPresets.BOTTOM_RIGHT)){
-            return new Pair<>((int) (MinecraftClient.getInstance().getWindow().getScaledWidth()-(10+20*icon_scale)), (int)(MinecraftClient.getInstance().getWindow().getScaledHeight()-(10+20*icon_scale)));
-        }
-        if(preset.equals(IconPositionPresets.CENTER)){
-            return new Pair<>((int) (MinecraftClient.getInstance().getWindow().getScaledWidth()-(10+20*icon_scale))/2, (int)(MinecraftClient.getInstance().getWindow().getScaledHeight()-(10+20*icon_scale))/2);
-        }
-        if(preset.equals(IconPositionPresets.TOP_CENTER)){
-            return new Pair<>((int) (MinecraftClient.getInstance().getWindow().getScaledWidth()-(10+20*icon_scale))/2, 10);
-        }
-        return null;
-    }
-
-
     public static @NotNull Collection<? extends Option<?>> createOptions(){
         List<Option<?>> options = new ArrayList<>();
         AtomicBoolean updatedFromActivePreset = new AtomicBoolean(false);
@@ -60,47 +39,43 @@ public class YaclScreenMaker {
 
         // The xy positions of the icons
         options.add(
-                Option.<IconPositionPresets>createBuilder()
+                Option.<ScreenPositionsPresets>createBuilder()
                         .name(Text.translatable("config.lightwithin.light_ready_icon_preset"))
                         .description(OptionDescription.of(Text.translatable("config.lightwithin.light_ready_icon_preset.tooltip")))
                         .binding(
-                                IconPositionPresets.TOP_LEFT, // the default value
-                                () -> IconPositionPresets.valueOf(ClientConfig.LIGHT_READY_PRESET), // a field to get the current value from
+                                ScreenPositionsPresets.TOP_LEFT, // the default value
+                                () -> ScreenPositionsPresets.valueOf(ClientConfig.LIGHT_READY_PRESET), // a field to get the current value from
                                 newVal -> {
-                                    Pair<Integer, Integer> xy = getXY(newVal, ClientConfig.LIGHT_READY_SCALE_FACTOR);
-                                    if(xy != null){
-                                        ClientConfig.LIGHT_READY_ICON_X = xy.getFirst();
-                                        ClientConfig.LIGHT_READY_ICON_Y = xy.getSecond();
-                                        ClientConfig.LIGHT_READY_PRESET = newVal.name();
-                                        ClientConfig.saveToFile();
-                                        updatedFromActivePreset.set(true);
-                                    }
+                                    Pair<Integer, Integer> xy = ScreenUtils.getXYIcons(newVal, ClientConfig.LIGHT_READY_SCALE_FACTOR);
+                                    ClientConfig.LIGHT_READY_ICON_X = xy.getFirst();
+                                    ClientConfig.LIGHT_READY_ICON_Y = xy.getSecond();
+                                    ClientConfig.LIGHT_READY_PRESET = newVal.name();
+                                    ClientConfig.saveToFile();
+                                    updatedFromActivePreset.set(true);
                                 }
                         )
-                        .controller(opt -> EnumControllerBuilder.create(opt).enumClass(IconPositionPresets.class))
+                        .controller(opt -> EnumControllerBuilder.create(opt).enumClass(ScreenPositionsPresets.class))
                         .build()
         );
 
         // The xy positions of the icons
         options.add(
-                Option.<IconPositionPresets>createBuilder()
+                Option.<ScreenPositionsPresets>createBuilder()
                         .name(Text.translatable("config.lightwithin.light_charge_icon_preset"))
                         .description(OptionDescription.of(Text.translatable("config.lightwithin.light_charge_icon_preset.tooltip")))
                         .binding(
-                                IconPositionPresets.TOP_LEFT, // the default value
-                                () -> IconPositionPresets.valueOf(ClientConfig.LIGHT_CHARGE_PRESET), // a field to get the current value from
+                                ScreenPositionsPresets.TOP_LEFT, // the default value
+                                () -> ScreenPositionsPresets.valueOf(ClientConfig.LIGHT_CHARGE_PRESET), // a field to get the current value from
                                 newVal -> {
-                                    Pair<Integer, Integer> xy = getXY(newVal, ClientConfig.LIGHT_CHARGE_SCALE_FACTOR);
-                                    if(xy != null){
-                                        ClientConfig.LIGHT_CHARGE_ICON_X = xy.getFirst();
-                                        ClientConfig.LIGHT_CHARGE_ICON_Y = xy.getSecond();
-                                        ClientConfig.LIGHT_CHARGE_PRESET = newVal.name();
-                                        ClientConfig.saveToFile();
-                                        updatedFromChargePreset.set(true);
-                                    }
+                                    Pair<Integer, Integer> xy = ScreenUtils.getXYIcons(newVal, ClientConfig.LIGHT_CHARGE_SCALE_FACTOR);
+                                    ClientConfig.LIGHT_CHARGE_ICON_X = xy.getFirst();
+                                    ClientConfig.LIGHT_CHARGE_ICON_Y = xy.getSecond();
+                                    ClientConfig.LIGHT_CHARGE_PRESET = newVal.name();
+                                    ClientConfig.saveToFile();
+                                    updatedFromChargePreset.set(true);
                                 }
                         )
-                        .controller(opt -> EnumControllerBuilder.create(opt).enumClass(IconPositionPresets.class))
+                        .controller(opt -> EnumControllerBuilder.create(opt).enumClass(ScreenPositionsPresets.class))
                         .build()
         );
 
@@ -424,7 +399,74 @@ public class YaclScreenMaker {
                         .controller(TickBoxControllerBuilder::create)
                         .build()
         );
-
+        options.add(
+                Option.<Float>createBuilder()
+                        .name(Text.translatable("config.lightwithin.luxdialogue.text_scale"))
+                        .description(OptionDescription.of(Text.translatable("config.lightwithin.luxdialogue.text_scale.tooltip")))
+                        .binding(
+                                ClientConfig.LUXDIALOGYE_TEXT_SCALE_default, // the default value
+                                () -> ClientConfig.LUXDIALOGUE_TEXT_SCALE, // a field to get the current value from
+                                newVal -> {
+                                    ClientConfig.LUXDIALOGUE_TEXT_SCALE = newVal;
+                                    ClientConfig.saveToFile();
+                                }
+                        )
+                        .controller(opt -> FloatSliderControllerBuilder.create(opt)
+                                .range(0.0f, 2.0f)
+                                .step(0.05f))
+                        .build()
+        );
+        options.add(
+                Option.<Integer>createBuilder()
+                        .name(Text.translatable("config.lightwithin.luxdialogue.close_after"))
+                        .description(OptionDescription.of(Text.translatable("config.lightwithin.luxdialogue.close_after.tooltip")))
+                        .binding(
+                                ClientConfig.CLOSE_LUXDIALOGUE_SCREEN_AFTER_default, // the default value
+                                () -> ClientConfig.CLOSE_LUXDIALOGUE_SCREEN_AFTER, // a field to get the current value from
+                                newVal -> {
+                                    ClientConfig.CLOSE_LUXDIALOGUE_SCREEN_AFTER = newVal;
+                                    ClientConfig.saveToFile();
+                                }
+                        )
+                        .controller(opt -> IntegerFieldControllerBuilder.create(opt)
+                                .min(5)
+                        )
+                        .build()
+        );
+        options.add(
+                Option.<Float>createBuilder()
+                        .name(Text.translatable("config.lightwithin.luxdialogue.bgm_volume"))
+                        .description(OptionDescription.of(Text.translatable("config.lightwithin.luxdialogue.bgm_volume.tooltip")))
+                        .binding(
+                                ClientConfig.LUXCOGNITA_DREAM_BGM_VOLUME_default, // the default value
+                                () -> ClientConfig.LUXCOGNITA_DREAM_BGM_VOLUME, // a field to get the current value from
+                                newVal -> {
+                                    ClientConfig.LUXCOGNITA_DREAM_BGM_VOLUME = newVal;
+                                    ClientConfig.saveToFile();
+                                }
+                        )
+                        .controller(opt -> FloatSliderControllerBuilder.create(opt)
+                                .range(0.0f, 1.0f)
+                                .step(0.01f))
+                        .build()
+        );
+        options.add(
+                Option.<Integer>createBuilder()
+                        .name(Text.translatable("config.lightwithin.overlay_text_duration"))
+                        .description(OptionDescription.of(Text.translatable("config.lightwithin.overlay_text_duratio.tooltip")))
+                        .binding(
+                                ClientConfig.OVERLAY_TEXT_DURATION_default, // the default value
+                                () -> ClientConfig.OVERLAY_TEXT_DURATION, // a field to get the current value from
+                                newVal -> {
+                                    ClientConfig.OVERLAY_TEXT_DURATION = newVal;
+                                    ClientConfig.saveToFile();
+                                }
+                        )
+                        .controller(opt -> IntegerFieldControllerBuilder.create(opt)
+                                .range(0, 60)
+                        )
+                        .build()
+        );
         updatedFromActivePreset.set(false);
         return options;
     }

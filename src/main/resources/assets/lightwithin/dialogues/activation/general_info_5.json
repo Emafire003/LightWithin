@@ -1,0 +1,20 @@
+{
+  "dialogueId": "general_info_5",
+  "fileVersion": 1,
+  "mainText": "screen.lightwithin.luxdialogue.activation.general_info_5",
+  "textScale": 1.5,
+  "berryPos": "TOP_CENTER",
+  "showImage": true,
+  "imagePos": "CENTER",
+  "imagePath": {
+    "namespace": "lightwithin",
+    "path": "textures/dialogues/activation/conditions_ok.png"
+  },
+  "imageWidth": 16,
+  "imageHeight": 16,
+  "imageScale": 2.0,
+  "buttons": {
+    "screen.lightwithin.luxdialogue.activation.general_info_5.yes": "GO_DIALOGUE<personal/smile>",
+    "screen.lightwithin.luxdialogue.activation.general_info_5.no": "GO_DIALOGUE<personal/offended>"
+  }
+}

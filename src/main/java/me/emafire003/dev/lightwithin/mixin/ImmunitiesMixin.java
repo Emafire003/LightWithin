@@ -55,4 +55,6 @@ public abstract class ImmunitiesMixin extends Entity implements Attackable {
             }
         }
     }
+
+    /// The luxcognita immunity is {@link LuxcognitaDreamAttackedMixin}
 }

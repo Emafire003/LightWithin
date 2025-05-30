@@ -1,0 +1,21 @@
+{
+  "dialogueId": "triggers",
+  "fileVersion": 1,
+  "mainText": "screen.lightwithin.luxdialogue.light_info.earthen.triggers",
+  "mainTextScale": 1.5,
+  "subTextPresent": true,
+  "subText": "screen.lightwithin.luxdialogue.light_info.earthen.triggers.sub",
+  "subTextScale": 1.35,
+  "showImage": true,
+  "imagePos": "CENTER",
+  "imagePath": {
+    "namespace": "lightwithin",
+    "path": "textures/particle/earthen_light.png"
+  },
+  "imageWidth": 18,
+  "imageHeight": 18,
+  "imageScale": 2.0,
+  "buttons": {
+    "screen.lightwithin.luxdialogue.next": "GO_IF_PROGRESS<light_info/wind/start, LISTING_TYPES>"
+  }
+}

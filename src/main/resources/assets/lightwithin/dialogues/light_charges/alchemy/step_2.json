@@ -1,0 +1,16 @@
+{
+  "dialogueId": "step_2",
+  "fileVersion": 1,
+  "mainText": "screen.lightwithin.luxdialogue.light_charge.alchemy.step_2",
+  "textScale": 1.5,
+  "showItem": true,
+  "itemPos": "CENTER",
+  "item": {
+    "namespace": "lightwithin",
+    "path": "luxintus_berry_powder"
+  },
+  "itemScale": 3.0,
+  "buttons": {
+    "screen.lightwithin.luxdialogue.next": "GO_DIALOGUE<light_charges/alchemy/step_3>"
+  }
+}
