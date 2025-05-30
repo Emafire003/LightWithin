@@ -1,0 +1,12 @@
+{
+  "dialogueId": "power",
+  "fileVersion": 1,
+  "mainText": "screen.lightwithin.luxdialogue.what_are_lights.attributes.power",
+  "textScale": 1.45,
+  "subTextPresent": true,
+  "subText": "screen.lightwithin.luxdialogue.what_are_lights.attributes.power.sub",
+  "subTextScale": 1.3,
+  "buttons": {
+    "screen.lightwithin.luxdialogue.next": "GO_DIALOGUE<what_are_lights/attributes/cooldown>"
+  }
+}

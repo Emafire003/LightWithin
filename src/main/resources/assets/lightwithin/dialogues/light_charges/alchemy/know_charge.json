@@ -1,0 +1,13 @@
+{
+  "dialogueId": "ingredients",
+  "fileVersion": 1,
+  "mainText": "screen.lightwithin.luxdialogue.light_charge.alchemy.know_charge",
+  "textScale": 1.45,
+  "buttons": {
+    "screen.lightwithin.luxdialogue.light_charge.alchemy.know_charge.yes": "GO_DIALOGUE<light_charges/alchemy/step_0>",
+    "screen.lightwithin.luxdialogue.light_charge.alchemy.know_charge.no": "GO_DIALOGUE<activation/convenient_0>"
+  },
+  "canRedirect": true,
+  "redirectTo": "light_charges/alchemy/ingredients",
+  "redirectStateRequired": "KNOW_CHARGE"
+}

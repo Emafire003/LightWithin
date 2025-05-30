@@ -1,8 +1,8 @@
 package me.emafire003.dev.lightwithin.items;
 
 import me.emafire003.dev.lightwithin.LightWithin;
+import me.emafire003.dev.lightwithin.sounds.LightSounds;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
-import net.minecraft.client.particle.EndRodParticle;
 import net.minecraft.item.*;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
@@ -37,10 +37,14 @@ public class LightItems {
             new Item(new Item.Settings().rarity(Rarity.EPIC).maxCount(64)),
             ItemGroups.INGREDIENTS, Items.BLAZE_POWDER);
 
+    //Music disc for Luxcognita BGM dream song
+    //TODO maybe implement a way to have the longer version with a resourcepack
+    public static final MusicDiscItem MUSIC_DISC_LUXCOGNITA_DREAM = (MusicDiscItem)  registerItem("music_disc_luxcognita_dream",
+            new MusicDiscItem(6, LightSounds.LUXCOGNITA_DREAM_BGM, new Item.Settings().maxCount(1).rarity(Rarity.RARE), 54),
+            ItemGroups.TOOLS, Items.MUSIC_DISC_RELIC);
+
     private static Item registerItem(String name, Item item, RegistryKey<ItemGroup> group, Item add_after){
-        ItemGroupEvents.modifyEntriesEvent(group).register(content -> {
-            content.addAfter(add_after, item);
-        });
+        ItemGroupEvents.modifyEntriesEvent(group).register(content -> content.addAfter(add_after, item));
         return Registry.register(Registries.ITEM, new Identifier(LightWithin.MOD_ID, name), item);
     }
 

@@ -1,0 +1,22 @@
+{
+  "dialogueId": "general_info_4",
+  "fileVersion": 1,
+  "mainText": "screen.lightwithin.luxdialogue.activation.general_info_4",
+  "textScale": 1.5,
+  "subTextPresent": true,
+  "subText": "screen.lightwithin.luxdialogue.activation.general_info_4.sub",
+  "subTextScale": 1.4,
+  "berryPos": "TOP_CENTER",
+  "showImage": true,
+  "imagePos": "CENTER",
+  "imagePath": {
+    "namespace": "lightwithin",
+    "path": "textures/dialogues/activation/conditions_ok.png"
+  },
+  "imageWidth": 16,
+  "imageHeight": 16,
+  "imageScale": 2.0,
+  "buttons": {
+    "screen.lightwithin.luxdialogue.next": "GO_DIALOGUE<activation/general_info_5>"
+  }
+}

@@ -1,0 +1,105 @@
+{
+  "dialogueId": "step_6",
+  "fileVersion": 1,
+  "mainText": "screen.lightwithin.luxdialogue.light_charge.alchemy.step_6",
+  "textScale": 1.48,
+  "subTextPresent": true,
+  "subText": "screen.lightwithin.luxdialogue.light_charge.alchemy.step_6.sub",
+  "subTextScale": 1.3,
+  "showImage": true,
+  "imagePos": "CENTER",
+  "imageWidth": 16,
+  "imageHeight": 16,
+  "imageScale": 3,
+  "imageHasStages": true,
+  "imageStages": [
+    {
+      "namespace": "lightwithin",
+      "path": "textures/dialogues/falling_anvil.png"
+    },
+    {
+      "namespace": "lightwithin",
+      "path": "textures/dialogues/falling_anvil.png"
+    },
+    {
+      "namespace": "lightwithin",
+      "path": "textures/dialogues/falling_anvil.png"
+    },
+    {
+      "namespace": "lightwithin",
+      "path": "textures/dialogues/falling_anvil.png"
+    },
+    {
+      "namespace": "lightwithin",
+      "path": "textures/dialogues/falling_anvil.png"
+    },
+    {
+      "namespace": "lightwithin",
+      "path": "textures/dialogues/luxintus_powder_x.png"
+    },
+    {
+      "namespace": "lightwithin",
+      "path": "textures/dialogues/luxintus_powder_x.png"
+    },
+    {
+      "namespace": "lightwithin",
+      "path": "textures/dialogues/luxintus_powder_x.png"
+    },
+    {
+      "namespace": "lightwithin",
+      "path": "textures/dialogues/luxintus_powder_x.png"
+    },
+    {
+      "namespace": "lightwithin",
+      "path": "textures/dialogues/luxintus_powder_x.png"
+    },
+    {
+      "namespace": "lightwithin",
+      "path": "textures/dialogues/luxintus_powder_x.png"
+    },
+    {
+      "namespace": "minecraft",
+      "path": "textures/particle/explosion_2.png"
+    },
+    {
+      "namespace": "minecraft",
+      "path": "textures/particle/explosion_4.png"
+    },
+    {
+      "namespace": "minecraft",
+      "path": "textures/particle/explosion_6.png"
+    },
+    {
+      "namespace": "minecraft",
+      "path": "textures/particle/explosion_8.png"
+    },
+    {
+      "namespace": "minecraft",
+      "path": "textures/particle/explosion_9.png"
+    },
+    {
+      "namespace": "minecraft",
+      "path": "textures/particle/explosion_10.png"
+    },
+    {
+      "namespace": "minecraft",
+      "path": "textures/particle/explosion_11.png"
+    },
+    {
+      "namespace": "minecraft",
+      "path": "textures/particle/explosion_12.png"
+    },
+    {
+      "namespace": "minecraft",
+      "path": "textures/particle/explosion_13.png"
+    },
+    {
+      "namespace": "minecraft",
+      "path": "textures/particle/explosion_14.png"
+    }
+  ],
+  "imageInterval": 5,
+  "buttons": {
+    "screen.lightwithin.luxdialogue.next": "GO_DIALOGUE<light_charges/alchemy/step_7>"
+  }
+}

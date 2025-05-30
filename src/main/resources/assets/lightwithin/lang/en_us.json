@@ -12,19 +12,20 @@
   "effect.lightwithin.thunder_aura": "Thunder Aura",
   "effect.lightwithin.storm_aura": "Storm Aura",
   "effect.lightwithin.intoxication": "Intoxication",
+  "effect.lightwithin.luxcognita_dream": "Luxcognita Dream",
+  "effect.lightwithin.luxcognita_offended": "Luxcognita Offended :(",
+
   "item.lightwithin.luxintus_berry": "Luxintus Berry",
   "item.lightwithin.luxmutua_berry": "Luxmutua Berry",
   "item.lightwithin.luxcognita_berry": "Luxcognita Berry",
   "item.lightwithin.bottled_light": "Bottled Light",
-  "item.lightwithin.luxintus_berry_powder": "Luxintus Berry Powder",
+  "item.lightwithin.luxintus_berry_powder": "Luxintus Berry powder",
+  "item.lightwithin.music_disc_luxcognita_dream": "Music Disc",
+  "item.lightwithin.music_disc_luxcognita_dream.desc": "FranzleOrange - Luxcognita Dream",
 
-  "item.lightwithin.berry.tooltip": "Press §dSHIFT§r to know what this berry does!",
-  "item.lightwithin.luxintus_berry.tooltip": "§eThis light-dense berry will §aunleash§e your",
-  "item.lightwithin.luxintus_berry.tooltip1": "§binner light§e!",
-  "item.lightwithin.luxmutua_berry.tooltip": "§eThe ever-twisting light of this berry will",
-  "item.lightwithin.luxmutua_berry.tooltip1": "§achange§e your §binner light§e!",
-  "item.lightwithin.luxcognita_berry.tooltip": "§eThe all-knowing light of this berry will",
-  "item.lightwithin.luxcognita_berry.tooltip1": "§atell you the secrets§e of your §binner light§e!",
+  "item.lightwithin.luxintus_berry.tooltip": "§eLight of §blight-energy",
+  "item.lightwithin.luxmutua_berry.tooltip": "§eLight of §dchange",
+  "item.lightwithin.luxcognita_berry.tooltip": "§eLight of §aknowledge",
   "item.lightwithin.bottled_light.tooltip": "§eA fresh charge of Inner Light!",
   "item.lightwithin.bottled_light.tooltip.warning": "Warning! Artificially brewed, highly unstable!",
   "item.lightwithin.bottled_light.tooltip.type": "Type: ",
@@ -56,6 +57,23 @@
   "light.charge.cant_use_here": "You are not allowed to use your InnerLight here!",
 
   "light.description.error": "Uhm... your light is... an error? Light not found, report please!",
+  "light.description.power": "Your light's power gets a %s out of 10 from me",
+  "light.description.duration": "It seems it can last for %s seconds",
+  "light.description.maxcooldown": "You shall let your light rest for %s seconds",
+  "light.description.maxcharges": "Your light can sustain, at most, %s charges",
+  "light.description.trigger_events": "Your light interpreters danger as:",
+
+  "light.trigger_check.entity_attacked": "A being (like you) being attacked by another",
+  "light.trigger_check.entity_attacks_entity": "A being (like you) attacking another",
+  "light.trigger_check.ally_dies": "An ally dying",
+  "light.trigger_check.ally_attacked": "An ally being attacked",
+  "light.trigger_check.entity_falling": "A being falling from a height",
+  "light.trigger_check.entity_drowning": "A being drowning",
+  "light.trigger_check.entity_struck_by_lightning": "A being being struck by lightning",
+  "light.trigger_check.entity_burning": "A being enveloped by flames",
+  "light.trigger_check.entity_freezing":"A being freezing",
+  "light.trigger_check.equipment_break": "A being's equipment breaking apart",
+
   "light.description.heal": "Your light, yes, is a gentle and caring one indeed",
   "light.description.defense": "Resilience, that's what your light is made of",
   "light.description.strength": "You have a strong light, ready to land its strength to you",
@@ -74,51 +92,64 @@
   "light.description.target.all": "Your light won't discern from good and evil, lighting all things!",
   "light.description.target.variant": "Your light is very peculiar and strange indeed!",
 
+  "light.description.triggering.light_conditions": "Your light would benefit from: ",
+
   "light.description.activation.heal.self": "Your light flows trough you, sewing your wounds!",
   "light.description.activation.heal.allies": "Your light flows trough you and your allies, sewing your wounds!",
   "light.description.activation.heal.variant": "Your light flows trough all friendly creatures, healing their sickness!",
-
-  "light.description.activation.defense.self": "Your light tensed up, shielding you from an hurtful future!",
-  "light.description.activation.defense.allies": "Your light tensed up, shielding your allies from an hurtful future!",
-  "light.description.activation.defense.variant": "Your light tensed up, shielding peaceful creatures from an hurtful future!",
-
+  "light.description.triggering.light_conditions.heal": "Nothing in particular!",
+  
+  "light.description.activation.defence.self": "Your light tensed up, shielding you from an hurtful future!",
+  "light.description.activation.defence.allies": "Your light tensed up, shielding your allies from an hurtful future!",
+  "light.description.activation.defence.variant": "Your light tensed up, shielding peaceful creatures from an hurtful future!",
+  "light.description.triggering.light_conditions.defence": "Nothing in particular!",
+  
   "light.description.activation.strength.self": "Your light shone bright, strengthening your attacks!",
   "light.description.activation.strength.allies": "Your light shone bright, strengthening your allies!",
   "light.description.activation.strength.variant": "Your light shone bright, speeding up your attacks!",
+  "light.description.triggering.light_conditions.strength": "Nothing in particular!",
 
   "light.description.activation.blazing.enemies": "Your light wants to incinerate the enemies that stand before you!",
   "light.description.activation.blazing.all": "Your light will incinerate everything that stands in your way!",
+  "light.description.triggering.light_conditions.blazing": "A source of fire or heat",
 
   "light.description.activation.frost.enemies": "All your enemies will be made into a statue of ice!",
   "light.description.activation.frost.all": "Everything will be frozen in ice!",
   "light.description.activation.frost.self": "A wall of ice shall protect you!",
   "light.description.activation.frost.allies": "A wall of ice shall protect you!",
+  "light.description.triggering.light_conditions.frost": "A source of frost or snow",
 
   "light.description.activation.earthen.enemies": "The earth shall split under the soles of the enemy!",
   "light.description.activation.earthen.variant": "The light crystallized into an Earthen Golem!",
   "light.description.activation.earthen.self": "Earth shall split and grow around you!",
   "light.description.activation.earthen.allies": "The Rock shall protect us!",
+  "light.description.triggering.light_conditions.earthen": "Being close to earth, or bringing it with you",
 
   "light.description.activation.frog": "Croak!",
   "light.description.activation.frog.damage": "You are confused, so confused that you hit yourself.",
+  "light.description.triggering.light_conditions.frog": "*croak*",
 
   "light.description.activation.wind.self": "The wind shall carry you onwards!",
   "light.description.activation.wind.allies": "Oh winds, aid our movements!",
   "light.description.activation.wind.all": "Blow them away!",
+  "light.description.triggering.light_conditions.wind": "Fresh air and winds!",
 
   "light.description.activation.aqua.enemies": "Your enemy shall be launched away by the waters!",
   "light.description.activation.aqua.all": "Inhabitants of the depths, hear my call and aid me!",
   "light.description.activation.aqua.self": "Let me swiftly move on a watery carpet!",
   "light.description.activation.aqua.allies": "Let us swiftly move on a watery carpet!",
+  "light.description.triggering.light_conditions.aqua": "A source of water",
 
   "light.description.activation.forest_aura.all": "The forest grants you its power!",
   "light.description.activation.forest_aura.self": "The forest will become one with you!",
+  "light.description.triggering.light_conditions.forest_aura:": "A forest, or holding a piece of it",
 
   "light.description.negated.forest_aura": "Your light sensed its kin, and shielded you from its tricks!",
 
   "light.description.activation.thunder_aura.all": "The storm lends you its greatest weapon!",
   "light.description.activation.thunder_aura.allies": "The Thunder shall protect your allies!",
   "light.description.activation.thunder_aura.variant": "The Thunder has come to protect its children!",
+  "light.description.triggering.light_conditions.thunder_aura": "The Thunder and what attracts its children",
 
   "config.lightwithin.name": "LightWithin client options",
   "config.lightwithin.category_name": "Options",
@@ -175,6 +206,16 @@
   "config.lightwithin.intoxication_shader_warning": "Intoxication Shader Warning",
   "config.lightwithin.intoxication_shader_warning.tooltip": "Accessibility setting. Turn this off to not see the warning message every time the intoxication effect is applied to you",
 
+  "config.lightwithin.luxdialogue.text_scale": "Luxdialogue text scale",
+  "config.lightwithin.luxdialogue.text_scale.tooltip": "The scale of the text rendered in the dialogue screen with Luxcognita berry",
+  "config.lightwithin.luxdialogue.close_after": "Close Luxdialogue screen after",
+  "config.lightwithin.luxdialogue.close_after.tooltip": "After how many seconds should the luxdialogue screen automatically close? (to prevent being stuck seeing it forever)",
+  "config.lightwithin.luxdialogue.bgm_volume": "Luxdialogue BGM volume",
+  "config.lightwithin.luxdialogue.bgm_volume.tooltip": "The volume of the song that plays in the background of the Luxdialogue screen",
+
+  "config.lightwithin.overlay_text_duration": "Overlay text duration",
+  "config.lightwithin.overlay_text_duration.tooltip": "The amount of seconds for which some of the overlay texts remain displayed on screen",
+
   "audio.lightwithin.heal_light_triggered": "Heal Light has triggered",
   "audio.lightwithin.defense_light_triggered": "Defense Light has triggered",
   "audio.lightwithin.strength_light_triggered": "Strength Light has triggered",
@@ -192,6 +233,7 @@
   "audio.lightwithin.light_critical_hit": "Light critical hit",
   "audio.lightwithin.forest_puff_bursting": "ForestAura puffs bursting",
   "audio.lightwithin.thunder_aura_zap": "ThunderAura zaps",
+  "audio.lightwithin.luxcognita_damage_block": "Damage blocked by Luxcognita",
 
 
   "screen.luxcognita_dialogue.lightTypeButton": "About LightType",
@@ -213,5 +255,534 @@
   "tag.blocks.lightwithin.frost_trigger_blocks": "FrostLight triggering blocks",
   "tag.blocks.lightwithin.wind_trigger_blocks": "WindLight triggering blocks",
   "tag.blocks.lightwithin.aqua_trigger_blocks": "AquaLight triggering blocks",
-  "tag.blocks.lightwithin.forest_aura_trigger_blocks": "ForestAuraLight triggering blocks"
+  "tag.blocks.lightwithin.forest_aura_trigger_blocks": "ForestAuraLight triggering blocks",
+
+
+  "screen.lightwithin.luxdialogue.text_error": "Urrr... something went a little wrong!",
+  "screen.lightwithin.luxdialogue.action_error": "The action specified is invalid!",
+  "screen.lightwithin.luxdialogue.default": "Default text!",
+  "screen.lightwithin.luxdialogue.default.button0": "Default text!",
+  "screen.lightwithin.luxdialogue.next": "->",
+
+  "screen.lightwithin.luxdialogue.main": "Pleased to meet you again",
+  "screen.lightwithin.luxdialogue.main.sub": "What do you want to know this time?",
+  "screen.lightwithin.luxdialogue.main.button.guidance": "I seek guidance",
+  "screen.lightwithin.luxdialogue.main.button.about_you": "Something about you",
+  "screen.lightwithin.luxdialogue.main.button.lights": "Info on lights",
+
+  "screen.lightwithin.luxdialogue.intro": "Ah. You have awoken me. What do you seek?",
+  "screen.lightwithin.luxdialogue.intro.button.ate_berry": "What?! I only ate a berry!",
+  "screen.lightwithin.luxdialogue.intro.button.guidance": "I seek guidance",
+  "screen.lightwithin.luxdialogue.intro.button.what_are": "What are you? Where am I?",
+  "screen.lightwithin.luxdialogue.intro.button.can_help": "Can you help me?",
+  
+  "screen.lightwithin.luxdialogue.intro.ate_berry": "Yes. That was... me. Sort of. It's complicated",
+  "screen.lightwithin.luxdialogue.intro.ate_berry.sub": "I am a LuxCognita, a light of guidance for other lights.",
+  "screen.lightwithin.luxdialogue.intro.ate_berry.button.cool": "Cool. So what do you do?",
+  "screen.lightwithin.luxdialogue.intro.ate_berry.button.guidance": "I seek guidance then!",
+  "screen.lightwithin.luxdialogue.intro.ate_berry.button.name": "What's your name?",
+
+  "screen.lightwithin.luxdialogue.intro.what_do": "I guide other lights and light bearers to information",
+  "screen.lightwithin.luxdialogue.intro.what_do.sub": "For simple minds: You ask about the lights and I tell you stuff.",
+  "screen.lightwithin.luxdialogue.intro.what_do.btn.thanks": "Ah. Thanks!",
+  "screen.lightwithin.luxdialogue.intro.what_do.btn.guidance": "Ah. I need guidance then!",
+
+  "screen.lightwithin.luxdialogue.intro.can_help": "No",
+  "screen.lightwithin.luxdialogue.intro.can_help.sub": "Just kidding, what do you need?",
+  "screen.lightwithin.luxdialogue.intro.can_help.btn.wow": "Wow.",
+  "screen.lightwithin.luxdialogue.intro.can_help.btn.guidance": "Oh. I need guidance then!",
+
+  "screen.lightwithin.luxdialogue.intro.what_are_you": "I am a LuxCognita, a light of guidance for other lights.",
+  "screen.lightwithin.luxdialogue.intro.what_are_you.sub": "And you are right where you where before, and somewhere else at the same time.",
+  "screen.lightwithin.luxdialogue.intro.what_are_you.button.cool": "Oh cool. So what do you do?",
+  "screen.lightwithin.luxdialogue.intro.what_are_you.button.dont_understand": "I still don't understand",
+  "screen.lightwithin.luxdialogue.intro.what_are_you.button.in_danger": "Am I in danger?",
+
+  "screen.lightwithin.luxdialogue.intro.dont_understand": "Well... I'm a 'thing' that is here to guide you ok?",
+  "screen.lightwithin.luxdialogue.intro.dont_understand.sub": "What do you wish to know then?",
+  "screen.lightwithin.luxdialogue.intro.dont_understand.button.are_you_real": "Are you real?",
+  "screen.lightwithin.luxdialogue.intro.dont_understand.button.guidance": "Oh. I'll seek your guidance then.",
+  "screen.lightwithin.luxdialogue.intro.dont_understand.button.about_you": "More about you and 'this'",
+
+  "screen.lightwithin.luxdialogue.intro.are_you_real": "Of course!",
+  "screen.lightwithin.luxdialogue.intro.are_you_real.sub": "I'll ask again. Do. You. Need. Anything?",
+  "screen.lightwithin.luxdialogue.intro.are_you_real.button.nope": "Not really",
+  "screen.lightwithin.luxdialogue.intro.are_you_real.button.guidance": "Guidance",
+
+  "screen.lightwithin.luxdialogue.intro.in_danger": "No you don't need to worry.",
+  "screen.lightwithin.luxdialogue.intro.in_danger.sub": "I will alert and protect you if needed",
+  "screen.lightwithin.luxdialogue.intro.in_danger.button.can_help": "Then... Can you help me?",
+  "screen.lightwithin.luxdialogue.intro.in_danger.button.let_go": "Can you let me go?",
+
+  "screen.lightwithin.luxdialogue.intro.eat_new_berry": "If you need me again, eat a new berry.",
+  "screen.lightwithin.luxdialogue.intro.eat_new_berry.thanks": "Thanks again!",
+  "screen.lightwithin.luxdialogue.intro.eat_new_berry.will": "I will!",
+  "screen.lightwithin.luxdialogue.intro.eat_new_berry.will.msg": "sure you will...",
+
+  "screen.lightwithin.luxdialogue.guidance": "What wisdom shall I bestow upon you?",
+  "screen.lightwithin.luxdialogue.guidance.button.what_lights": "What are the InnerLights?",
+  "screen.lightwithin.luxdialogue.guidance.button.my_light": "Tell me about my InnerLight!",
+  "screen.lightwithin.luxdialogue.guidance.button.activate": "How do I activate my InnerLight?",
+  "screen.lightwithin.luxdialogue.guidance.button.potions": "Help with alchemy",
+
+  "screen.lightwithin.luxdialogue.my_light": "What do you wish to know about?",
+  "screen.lightwithin.luxdialogue.my_light.type": "About my LightType!",
+  "screen.lightwithin.luxdialogue.my_light.target": "About my LightTargets!",
+  "screen.lightwithin.luxdialogue.my_light.power": "How strong it is!",
+  "screen.lightwithin.luxdialogue.my_light.duration": "How long it lasts!",
+  "screen.lightwithin.luxdialogue.my_light.maxcooldown": "About its rest period!",
+  "screen.lightwithin.luxdialogue.my_light.maxcharges": "My LightCharge limits",
+  "screen.lightwithin.luxdialogue.my_light.my_triggers": "My light's triggers",
+
+  "screen.lightwithin.luxdialogue.my_light.triggers": "What in particular?",
+  "screen.lightwithin.luxdialogue.my_light.triggers.light_conditions": "My light's catalysts",
+  "screen.lightwithin.luxdialogue.my_light.triggers.trigger_events": "The dangers it detects",
+
+  "screen.lightwithin.luxdialogue.activation": "There are a few ways",
+  "screen.lightwithin.luxdialogue.activation.sub": "Some more safe and natural, some dangerous but convenient",
+  "screen.lightwithin.luxdialogue.activation.safe": "The safe one",
+  "screen.lightwithin.luxdialogue.activation.alchemy": "The convenient one",
+
+  "screen.lightwithin.luxdialogue.activation.natural_0": "Your light will help you whenever you are in need",
+  "screen.lightwithin.luxdialogue.activation.natural_0.sub": "When in dangerous places or times, it will show itself to you, with this symbol:",
+
+  "screen.lightwithin.luxdialogue.activation.natural_1": "When you are ready to activate it, do it!",
+  "screen.lightwithin.luxdialogue.activation.natural_1.sub": "I believe your kind calls it 'pressing the activate button %s'",
+  "screen.lightwithin.luxdialogue.activation.natural_2": "In which ways your light senses danger, varies",
+  "screen.lightwithin.luxdialogue.activation.natural_2.sub": "Would you like to know how your light does it?",
+  "screen.lightwithin.luxdialogue.activation.natural_2.yes": "Yes please",
+  "screen.lightwithin.luxdialogue.activation.natural_2.no": "No need",
+  "screen.lightwithin.luxdialogue.activation.natural_2.more": "Tell me more, in general",
+
+  "screen.lightwithin.luxdialogue.activation.general_info_0": "Typically, most lights detect danger in two or three steps",
+
+  "screen.lightwithin.luxdialogue.activation.general_info_1": "The first consists of a 'wake up' when a potentially harmful event occurs",
+  "screen.lightwithin.luxdialogue.activation.general_info_1.sub": "For example, when you get slightly harmed by a foe or fall from a height",
+
+  "screen.lightwithin.luxdialogue.activation.general_info_2": "In the next step, it verifies how many 'dangers' are present",
+  "screen.lightwithin.luxdialogue.activation.general_info_2.sub": "Like you (or your allies!) being surrounded, or badly wounded, and so on",
+
+  "screen.lightwithin.luxdialogue.activation.general_info_3": "Finally, some lights benefit from a 'catalyst' of sorts",
+  "screen.lightwithin.luxdialogue.activation.general_info_3.sub": "The likes of: source of fire or frost, the rain and others",
+
+  "screen.lightwithin.luxdialogue.activation.general_info_4": "If enough of these 'conditions' are met, then it will 'trigger'",
+  "screen.lightwithin.luxdialogue.activation.general_info_4.sub": "And you will be able to harness its powers",
+
+  "screen.lightwithin.luxdialogue.activation.general_info_5": "Are you satisfied with the explanation?",
+  "screen.lightwithin.luxdialogue.activation.general_info_5.yes": "Yes, thank you",
+  "screen.lightwithin.luxdialogue.activation.general_info_5.no": "Ah ah, no.",
+
+  "screen.lightwithin.luxdialogue.activation.convenient_0": "There actually is a way to store 'light charges'",
+  "screen.lightwithin.luxdialogue.activation.convenient_0.sub": "These charges allow you to unleash your light in whichever moment you desire",
+
+  "screen.lightwithin.luxdialogue.activation.convenient_1": "But there is a catch",
+  "screen.lightwithin.luxdialogue.activation.convenient_1.sub": "They usually put quite the strain on your light",
+
+  "screen.lightwithin.luxdialogue.activation.convenient_2": "You can only store a few of them at a time",
+  "screen.lightwithin.luxdialogue.activation.convenient_2.sub": "and when you use them, your light will need a longer rest",
+
+  "screen.lightwithin.luxdialogue.activation.convenient_3": "Not everyone's light can support the same amount of charges",
+  "screen.lightwithin.luxdialogue.activation.convenient_3.sub": "Some may not even support any number of them!",
+
+  "screen.lightwithin.luxdialogue.activation.convenient_4": "You can even see if another light bearer is storing them because",
+  "screen.lightwithin.luxdialogue.activation.convenient_4.sub": "they will glow and emit some particles if they have a lot of them",
+
+  "screen.lightwithin.luxdialogue.activation.convenient_5": "On top of that, they are quite tricky to obtain",
+  "screen.lightwithin.luxdialogue.activation.convenient_5.sub": "I can, however, teach you how. Would like to know?",
+  "screen.lightwithin.luxdialogue.activation.convenient_5.yes": "Yes please",
+  "screen.lightwithin.luxdialogue.activation.convenient_5.no": "No, changed my mind",
+
+  "screen.lightwithin.luxdialogue.light_charge.obtain_0": "To gain a light charge you need a special item",
+  "screen.lightwithin.luxdialogue.light_charge.obtain_0.sub": "A BottledLight, which you can use to obtain one charge",
+
+  "screen.lightwithin.luxdialogue.light_charge.obtain_1": "You can get one of this item in two ways:",
+
+  "screen.lightwithin.luxdialogue.light_charge.obtain_2": "By 'scooping up' your light when it's ready, using a glass bottle...",
+  "screen.lightwithin.luxdialogue.light_charge.obtain_2.sub": "You people usually call this 'right click with an empty bottle in hand'",
+
+  "screen.lightwithin.luxdialogue.light_charge.obtain_3": "...Or by making a brew of light yourself! ",
+  "screen.lightwithin.luxdialogue.light_charge.obtain_3.sub": "This process, however, is rather perilous. Are you certain you are capable of handling it?",
+  "screen.lightwithin.luxdialogue.light_charge.obtain_3.yes": "Yes, I am.",
+  "screen.lightwithin.luxdialogue.light_charge.obtain_3.maybe": "Maybe",
+  "screen.lightwithin.luxdialogue.light_charge.obtain_3.no": "Not really",
+
+  "screen.lightwithin.luxdialogue.light_charge.obtain_4_yes": "How bold of you...",
+  "screen.lightwithin.luxdialogue.light_charge.obtain_4_yes.sub": "I haven't even told you what this process is yet.",
+  "screen.lightwithin.luxdialogue.light_charge.obtain_4_yes.knew": "I knew of it already",
+  "screen.lightwithin.luxdialogue.light_charge.obtain_4_yes.confident": "I like danger.",
+
+  "screen.lightwithin.luxdialogue.light_charge.obtain_4_yes_bye": "Ah. My help isn't needed after all.",
+
+  "screen.lightwithin.luxdialogue.light_charge.obtain_4_maybe": "Fair enough, good answer. ",
+  "screen.lightwithin.luxdialogue.light_charge.obtain_4_maybe.sub": "After all, I haven't even told you what this process is yet.",
+
+  "screen.lightwithin.luxdialogue.light_charge.alchemy.step_0": "Be warned!",
+  "screen.lightwithin.luxdialogue.light_charge.alchemy.step_0.sub": "You, and your surroundings could be subject to detonations!",
+
+  "screen.lightwithin.luxdialogue.light_charge.alchemy.step_1": "Firstly, you should get another lux berry...",
+  "screen.lightwithin.luxdialogue.light_charge.alchemy.step_1.sub": "My cousin, with questionable sanity, LuxIntus berry",
+
+  "screen.lightwithin.luxdialogue.light_charge.alchemy.step_2": "Now you need to obtain LuxIntus's powder",
+
+  "screen.lightwithin.luxdialogue.light_charge.alchemy.step_3": "You will need to quickly generate pressure",
+  "screen.lightwithin.luxdialogue.light_charge.alchemy.step_3.sub": "So grab a sturdy heavy anvil.",
+
+  "screen.lightwithin.luxdialogue.light_charge.alchemy.step_4": "And then drop it on top of LuxIntus",
+  "screen.lightwithin.luxdialogue.light_charge.alchemy.step_4.sub": "Don't worry, SOMEHOW, they like it. Feels ticklish they say",
+
+  "screen.lightwithin.luxdialogue.light_charge.alchemy.step_5": "Be careful tho, this process isn't really stable",
+  "screen.lightwithin.luxdialogue.light_charge.alchemy.step_5.sub": "Depending on the amount of pressure you generate...",
+
+  "screen.lightwithin.luxdialogue.light_charge.alchemy.step_6": "You could either lose the berry, without getting powder...",
+  "screen.lightwithin.luxdialogue.light_charge.alchemy.step_6.sub": "or... explode!",
+
+  "screen.lightwithin.luxdialogue.light_charge.alchemy.step_7": "This is more likely if you have more berries together",
+  "screen.lightwithin.luxdialogue.light_charge.alchemy.step_7.sub": "Or if the anvil is dropped from a high altitude",
+
+  "screen.lightwithin.luxdialogue.light_charge.alchemy.step_8": "Now you need to get the base for the brew",
+  "screen.lightwithin.luxdialogue.light_charge.alchemy.step_8.sub": "An experience bottle o' enchanting, or whatever it's called, will do.",
+
+  "screen.lightwithin.luxdialogue.light_charge.alchemy.step_9": "Take a brewing stand and put your exp bottles in it",
+  "screen.lightwithin.luxdialogue.light_charge.alchemy.step_9.sub": "Then add, as an ingredient, the LuxIntus Berry Powder",
+
+  "screen.lightwithin.luxdialogue.light_charge.alchemy.step_10": "Once it's finished you will have your base brew of BottledLight",
+  "screen.lightwithin.luxdialogue.light_charge.alchemy.step_10.sub": "In this state, it's useless. The next steps are crucial!",
+
+  "screen.lightwithin.luxdialogue.light_charge.alchemy.step_11": "Add the first proper ingredient, the one of  your light's type",
+  "screen.lightwithin.luxdialogue.light_charge.alchemy.step_11.sub": "If you don't know which one it is, you can ask me another time",
+
+  "screen.lightwithin.luxdialogue.light_charge.alchemy.step_12": "BE SURE THAT YOU USED THE RIGHT INGREDIENT!",
+  "screen.lightwithin.luxdialogue.light_charge.alchemy.step_12.sub": "Otherwise, if you use it you will... explode!",
+
+  "screen.lightwithin.luxdialogue.light_charge.alchemy.step_13": "The final step, is adding your light's target ingredient",
+  "screen.lightwithin.luxdialogue.light_charge.alchemy.step_13.sub": "If you don't know which one it is, you can ask me another time",
+
+  "screen.lightwithin.luxdialogue.light_charge.alchemy.step_14": "If you have done everything correctly, you can now use the BottledLight",
+  "screen.lightwithin.luxdialogue.light_charge.alchemy.step_14.sub": "If you made a mistake, or use the wrong brew of BottledLight...",
+
+  "screen.lightwithin.luxdialogue.light_charge.alchemy.step_15": "You know what happens...",
+
+  "screen.lightwithin.luxdialogue.what_are_lights.start": "That, is a rather complex inquiry.",
+  "screen.lightwithin.luxdialogue.what_are_lights.start.sub": "Do you want to know more on what they do or their (our) 'essence'?",
+  "screen.lightwithin.luxdialogue.what_are_lights.start.do": "What they do",
+  "screen.lightwithin.luxdialogue.what_are_lights.start.are": "What they are",
+
+  "screen.lightwithin.luxdialogue.what_are_lights.do_0": "InnerLights are '''powers''' granted to special people or beings",
+  "screen.lightwithin.luxdialogue.what_are_lights.do_0.sub": "These people are called 'light bearers' ",
+
+  "screen.lightwithin.luxdialogue.what_are_lights.do_1": "When a light bearer is in danger, they can call upon their InnerLight",
+  "screen.lightwithin.luxdialogue.what_are_lights.do_1.sub": "They will then be aided by its powers",
+  "screen.lightwithin.luxdialogue.what_are_lights.do_1.am_i": "Am I one of them?",
+
+  "screen.lightwithin.luxdialogue.what_are_lights.do_1.1": "Yes, otherwise we would not be having this conversation",
+
+  "screen.lightwithin.luxdialogue.what_are_lights.do_2": "EVERY light bearer has a (somewhat) unique light",
+  "screen.lightwithin.luxdialogue.what_are_lights.do_2.sub": "It's like their fingerprint!",
+
+  "screen.lightwithin.luxdialogue.what_are_lights.do_3": "There are a lot of different types of InnerLight",
+  "screen.lightwithin.luxdialogue.what_are_lights.do_3.sub": "with different 'targets', level of power, duration, rest period...",
+
+  "screen.lightwithin.luxdialogue.what_are_lights.do_4": "All of this characteristics make a light unique",
+  "screen.lightwithin.luxdialogue.what_are_lights.do_4.sub": "A bit like you being you because of your character(istics)!",
+
+  "screen.lightwithin.luxdialogue.what_are_lights.attributes.type_0": "The predominant trait is the light's type",
+  "screen.lightwithin.luxdialogue.what_are_lights.attributes.type_0.sub": "Its dedication to a specific concept, element, or thing",
+
+  "screen.lightwithin.luxdialogue.what_are_lights.attributes.type_1": "For me, it's knowledge.",
+  "screen.lightwithin.luxdialogue.what_are_lights.attributes.type_1.sub": "For other lights it may be fire, frost, healing, the forest...",
+
+  "screen.lightwithin.luxdialogue.what_are_lights.attributes.target_0": "After that, there is its target type",
+  "screen.lightwithin.luxdialogue.what_are_lights.attributes.target_0.sub": "The target type is in relative to your relationships",
+
+  "screen.lightwithin.luxdialogue.what_are_lights.attributes.target_1": "The target's type determines what the lights power affects",
+  "screen.lightwithin.luxdialogue.what_are_lights.attributes.target_1.sub": "It could be you, your enemies or nobody, who knows!",
+
+  "screen.lightwithin.luxdialogue.what_are_lights.attributes.duration": "Then, we have the light's effects duration",
+  "screen.lightwithin.luxdialogue.what_are_lights.attributes.duration.sub": "Meaning how long your light can channel its powers into you",
+
+  "screen.lightwithin.luxdialogue.what_are_lights.attributes.power": "Next up, the power level or multiplier",
+  "screen.lightwithin.luxdialogue.what_are_lights.attributes.power.sub": "It's a score used to tell how strong a light's power is",
+
+  "screen.lightwithin.luxdialogue.what_are_lights.attributes.cooldown": "An important trait is the rest time, or cooldown time",
+  "screen.lightwithin.luxdialogue.what_are_lights.attributes.cooldown.sub": "Defines how long the light needs to rest, before being newly activated",
+
+  "screen.lightwithin.luxdialogue.what_are_lights.attributes.charges": "Lastly, we have the amount of bearable light charges",
+  "screen.lightwithin.luxdialogue.what_are_lights.attributes.charges.sub": "No light can be able to store more than a few of these charges",
+
+  "screen.lightwithin.luxdialogue.what_are_lights.attributes.know_yours": "Would you like to know your InnerLight's traits?",
+  "screen.lightwithin.luxdialogue.what_are_lights.attributes.know_yours.yes": "Yes",
+  "screen.lightwithin.luxdialogue.what_are_lights.attributes.know_yours.no": "No",
+
+  "screen.lightwithin.luxdialogue.what_are_lights.do_finish": "Do you want to know your light's characteristics?",
+  "screen.lightwithin.luxdialogue.what_are_lights.do_finish.yes": "Yes please",
+  "screen.lightwithin.luxdialogue.what_are_lights.do_finish.no": "No thank you",
+
+
+  "screen.lightwithin.luxdialogue.what_are_lights.lore_0": "Well, you can think about us as '''spirits of light''' (kinda)",
+  "screen.lightwithin.luxdialogue.what_are_lights.lore_0.sub": "InnerLights, or simply lights, often chose a partner",
+
+  "screen.lightwithin.luxdialogue.what_are_lights.lore_1": "A 'light bearer', like you or what you refer as 'players'",
+  "screen.lightwithin.luxdialogue.what_are_lights.lore_1.sub": "They usually help them with their struggles",
+
+  "screen.lightwithin.luxdialogue.what_are_lights.lore_2": "They have a particular attunity for some kind of 'concept' or element",
+  "screen.lightwithin.luxdialogue.what_are_lights.lore_2.sub": "For me, it's knowledge, for others it may be fire, frost or healing",
+
+  "screen.lightwithin.luxdialogue.what_are_lights.lore_3": "That's what defines their/our type",
+  "screen.lightwithin.luxdialogue.what_are_lights.lore_3.sub": "They also have other attributes that influence their activation",
+
+  "screen.lightwithin.luxdialogue.what_are_lights.lore_4": "Normally, they are dormant.",
+  "screen.lightwithin.luxdialogue.what_are_lights.lore_4.sub": "Only when their bearer is in trouble they awaken",
+
+  "screen.lightwithin.luxdialogue.what_are_lights.lore_5": "The light concentrates, and bursts out as the power of the light",
+  "screen.lightwithin.luxdialogue.what_are_lights.lore_5.sub": "For me, it's knowledge, for others it may be fire, frost or healing",
+
+  "screen.lightwithin.luxdialogue.what_are_lights.lore_6": "There would be more to talk about but...",
+  "screen.lightwithin.luxdialogue.what_are_lights.lore_6.sub": "I don't have enough energy to talk about it now, dismayed!",
+  "screen.lightwithin.luxdialogue.what_are_lights.lore_6.ok": "It's ok",
+  "screen.lightwithin.luxdialogue.what_are_lights.lore_6.more": "No, talk more!",
+
+  "screen.lightwithin.luxdialogue.light_charge.alchemy.ingredients": "What do you need?",
+  "screen.lightwithin.luxdialogue.light_charge.alchemy.ingredients.recap": "Recap of how this works",
+  "screen.lightwithin.luxdialogue.light_charge.alchemy.ingredients.type": "Type Ingredient",
+  "screen.lightwithin.luxdialogue.light_charge.alchemy.ingredients.target": "Target Ingredient",
+
+  "screen.lightwithin.luxdialogue.light_charge.alchemy.know_charge": "Do you at least know what a Light Charge is?",
+  "screen.lightwithin.luxdialogue.light_charge.alchemy.know_charge.yes": "Yes of course",
+  "screen.lightwithin.luxdialogue.light_charge.alchemy.know_charge.no": "No?",
+
+
+  "screen.lightwithin.luxdialogue.personal": "You want to know something... about me?",
+  "screen.lightwithin.luxdialogue.personal.sub": "What?",
+
+  "screen.lightwithin.luxdialogue.personal.button": "Your name",
+  "screen.lightwithin.luxdialogue.personal.name_0": "My name?",
+  "screen.lightwithin.luxdialogue.personal.name_0.sub": "Well, somebody once gave me a proper name...",
+
+  "screen.lightwithin.luxdialogue.personal.name_1": "Mary, I think. ",
+  "screen.lightwithin.luxdialogue.personal.name_1.sub": "It's been a long time ago. You can still call me LuxCognita",
+  "screen.lightwithin.luxdialogue.personal.name_1.nice": "Nice name",
+  "screen.lightwithin.luxdialogue.personal.name_1.ok": "Ok",
+
+  "screen.lightwithin.luxdialogue.personal.luxberries.button": "About you Luxberries...",
+  "screen.lightwithin.luxdialogue.personal.luxberries": "Yes, what do you want to know?",
+  "screen.lightwithin.luxdialogue.personal.luxberries.many": "Who are you?",
+  "screen.lightwithin.luxdialogue.personal.luxberries.what": "What are you?",
+
+  "screen.lightwithin.luxdialogue.personal.luxberries.many_0": "Well, there are three of us. Me, LuxIntus and LuxMutua",
+  "screen.lightwithin.luxdialogue.personal.luxberries.many_0.sub": "We are all dedicated to our passions",
+
+  "screen.lightwithin.luxdialogue.personal.luxberries.many_1": "Except LuxIntus, they're just kinda crazy",
+  "screen.lightwithin.luxdialogue.personal.luxberries.many_1.sub": "And yes, the other two don't talk as much as I do",
+  "screen.lightwithin.luxdialogue.personal.luxberries.many_1.talk": "Is yours talking?",
+  "screen.lightwithin.luxdialogue.personal.luxberries.many_1.why_luxintus": "Why is Luxintus crazy?",
+
+  "screen.lightwithin.luxdialogue.personal.luxberries.many.talking": "Ah-ah. No it's knowledge.",
+  "screen.lightwithin.luxdialogue.personal.luxberries.many.talking.sure": "Sure... =)",
+  
+  "screen.lightwithin.luxdialogue.personal.luxberries.many.why_luxintus_0": "We don't really know",
+  "screen.lightwithin.luxdialogue.personal.luxberries.many.why_luxintus_0.sub": "They really like to 'burst' their light",
+
+  "screen.lightwithin.luxdialogue.personal.luxberries.many.why_luxintus_1": "Which is why you can activate your light by eating it",
+  "screen.lightwithin.luxdialogue.personal.luxberries.many.why_luxintus_1.sub": "(And why you can get its power after squashing em with an anvil)",
+  "screen.lightwithin.luxdialogue.personal.luxberries.many.why_luxintus_1.wow": "Oh wow",
+
+  "screen.lightwithin.luxdialogue.personal.luxberries.what_0": "Well, it's kind of complicated",
+  "screen.lightwithin.luxdialogue.personal.luxberries.what_0.sub": "Technically, we are lights as well. Like the one bear",
+
+  "screen.lightwithin.luxdialogue.personal.luxberries.what_1": "But we serve the purpose of aiding other lights and bearers",
+  "screen.lightwithin.luxdialogue.personal.luxberries.what_1.sub": "And also we are bound to vegetation as you can see",
+  "screen.lightwithin.luxdialogue.personal.luxberries.what_1.bearer": "Who's your light-bearer?",
+  
+  "screen.lightwithin.luxdialogue.personal.bearer_0": "My light bearer is the berry itself, the one you ate.",
+  "screen.lightwithin.luxdialogue.personal.bearer_0.sub": "Although, I was not able to chose it",
+
+  "screen.lightwithin.luxdialogue.personal.bearer_1": "Someone or something else chose for me",
+  "screen.lightwithin.luxdialogue.personal.bearer_1.sub": "The first time I awoken I was already linked to it",
+
+  "screen.lightwithin.luxdialogue.personal.bearer_2": "It's not that bad. I used to be able to soak in the sunlight",
+  "screen.lightwithin.luxdialogue.personal.bearer_2.sub": "It's been a while since i've been able to tho...",
+  
+  "screen.lightwithin.luxdialogue.personal.unique.button": "Are you unique?",
+  "screen.lightwithin.luxdialogue.personal.unique_0": "It depends on your definition of it.",
+  "screen.lightwithin.luxdialogue.personal.unique_0.sub": "Each light is unique, so I am too.",
+
+  "screen.lightwithin.luxdialogue.personal.unique_1": "But I am also present in multiple 'LuxCognita berries'",
+  "screen.lightwithin.luxdialogue.personal.unique_1.sub": "So I'll leave the answer to you.",
+  
+  "screen.lightwithin.luxdialogue.personal.prickly.button": "Why so prickly?",
+  "screen.lightwithin.luxdialogue.personal.prickly": "What?! No I'm not!!!",
+
+  "screen.lightwithin.luxdialogue.personal.talkway.button": "Why you talk like this?",
+  "screen.lightwithin.luxdialogue.personal.talkway": "Well I gained a lot of knowledge,",
+  "screen.lightwithin.luxdialogue.personal.talkway.sub": "and this is how knowledgeable people talk, I think ?",
+
+  "screen.lightwithin.luxdialogue.personal.dream.button": "What is your dream?",
+  "screen.lightwithin.luxdialogue.personal.dream_0": "My... dream?",
+  "screen.lightwithin.luxdialogue.personal.dream_0.sub": "I don't actually know... It's been so long...",
+
+  "screen.lightwithin.luxdialogue.personal.dream_1": "I will think about it...",
+  "screen.lightwithin.luxdialogue.personal.dream_1.sub": "Thank you for this question tho...",
+  "screen.lightwithin.luxdialogue.personal.dream_1.no_worries": "No worries!",
+
+  "screen.lightwithin.luxdialogue.personal.luxdream.button": "Where are we?",
+  "screen.lightwithin.luxdialogue.personal.luxdream_0": "Nowhere in particular. You are in the same place as before.",
+  "screen.lightwithin.luxdialogue.personal.luxdream_0.dont": "I don't understand",
+  "screen.lightwithin.luxdialogue.personal.luxdream_0.ok": "Oh ok",
+
+  "screen.lightwithin.luxdialogue.personal.luxdream_1": "Well, for you it's a bit like a dream I guess",
+  "screen.lightwithin.luxdialogue.personal.luxdream_1.sub": "You haven't really moved, but through the light, we are talking.",
+  "screen.lightwithin.luxdialogue.personal.luxdream_1.dont": "Still a mystery...",
+  "screen.lightwithin.luxdialogue.personal.luxdream_1.ok": "Oh ok",
+
+  "screen.lightwithin.luxdialogue.light_info": "About what?",
+  "screen.lightwithin.luxdialogue.light_info.types": "The LightTypes",
+  "screen.lightwithin.luxdialogue.light_info.targets": "The TargetTypes",
+
+  "screen.lightwithin.luxdialogue.light_info.all_or_specific": "Do you want to know about a specific one or all of them?",
+  "screen.lightwithin.luxdialogue.light_info.all_or_specific.specific": "A specific one",
+  "screen.lightwithin.luxdialogue.light_info.all_or_specific.all": "All of them please",
+
+  "screen.lightwithin.luxdialogue.light_info.specific": "Which one is it then?",
+  "screen.lightwithin.luxdialogue.light_info.all": "Ok let's start with...",
+  "screen.lightwithin.luxdialogue.light_info.finish": "And that is all!",
+  "screen.lightwithin.luxdialogue.light_info.finish.sub": "For now at least...",
+  "screen.lightwithin.luxdialogue.light_info.finish.ok": "Ok, thanks!",
+  "screen.lightwithin.luxdialogue.light_info.finish.boring": "Boring =/",
+  "screen.lightwithin.luxdialogue.light_info.this": "<-- This one",
+
+  "screen.lightwithin.luxdialogue.light_info.type_unrecognized": "I'm sorry, but I don't recognize that light type",
+  "screen.lightwithin.luxdialogue.light_info.type_unrecognized.sub": "Could you try again?",
+  "screen.lightwithin.luxdialogue.light_info.type_unrecognized.nah": "Nah, never mind.",
+
+  "screen.lightwithin.luxdialogue.light_info.target_unrecognized": "I'm sorry, but I don't recognize that light target",
+  "screen.lightwithin.luxdialogue.light_info.target_unrecognized.sub": "Could you try again?",
+  "screen.lightwithin.luxdialogue.light_info.target_unrecognized.nah": "Nah, never mind.",
+
+
+  "screen.lightwithin.luxdialogue.light_info.targets.self": "The SELF target type refers to all those powers which",
+  "screen.lightwithin.luxdialogue.light_info.targets.self.sub": "have a direct effect only on the light's bearer upon activation",
+  "screen.lightwithin.luxdialogue.light_info.targets.self.example": "For example, when a bearer activates their light they will be",
+  "screen.lightwithin.luxdialogue.light_info.targets.self.example.sub": "the target of some effect, like Regeneration with HealLight",
+
+  "screen.lightwithin.luxdialogue.light_info.targets.allies": "The target type ALLIES affects the light's bearer allies",
+  "screen.lightwithin.luxdialogue.light_info.targets.allies.sub": "near them, as well as the bearer themselves with, albeit with lower power",
+  "screen.lightwithin.luxdialogue.light_info.targets.allies.example": "Whenever bearer activates their light, their Allies will be",
+  "screen.lightwithin.luxdialogue.light_info.targets.allies.example.sub": "the main target of the light's effects, like EarthenLight's walls",
+
+  "screen.lightwithin.luxdialogue.light_info.targets.all": "ALL is a target type that will affect everyone around,",
+  "screen.lightwithin.luxdialogue.light_info.targets.all.sub": "without discerning from friend or foe.",
+  "screen.lightwithin.luxdialogue.light_info.targets.all.example": "As soon as the light gets activated, all creatures around the bearer",
+  "screen.lightwithin.luxdialogue.light_info.targets.all.example.sub": "will be affected, except themselves, like BlazingLight's fire",
+
+  "screen.lightwithin.luxdialogue.light_info.targets.enemies": "The ENEMIES target type will only affect the light bearer's",
+  "screen.lightwithin.luxdialogue.light_info.targets.enemies.sub": "foes, and will leave alone other creatures",
+  "screen.lightwithin.luxdialogue.light_info.targets.enemies.example": "When the light gets activated, all enemies in range",
+  "screen.lightwithin.luxdialogue.light_info.targets.enemies.example.sub": "will get affected. As an example, the FrostLight's ice-trap",
+
+  "screen.lightwithin.luxdialogue.light_info.targets.variant": "VARIANT target type is the most unpredictable of the five",
+  "screen.lightwithin.luxdialogue.light_info.targets.variant.sub": "It changes from light type to light type, without a precise rule",
+  "screen.lightwithin.luxdialogue.light_info.targets.variant.example": "Could affect the light bearer in some more particular way, ",
+  "screen.lightwithin.luxdialogue.light_info.targets.variant.example.sub": "or do something without a fixed target, like ThunderLight's superstorm",
+  
+  
+  "screen.lightwithin.luxdialogue.light_info.heal": "HealLight's power consists of, well, healing!",
+  "screen.lightwithin.luxdialogue.light_info.heal.sub": "Your wounds, your allies', or even harmful potions!",
+  "screen.lightwithin.luxdialogue.light_info.heal.targets": "It can posses one of three target types:",
+  "screen.lightwithin.luxdialogue.light_info.heal.targets.sub": "SELF, ALLIES and VARIANT.",
+  "screen.lightwithin.luxdialogue.light_info.heal.desc": "It will grant you (or your allies) a Regeneration effect",
+  "screen.lightwithin.luxdialogue.light_info.heal.desc.sub": "If VARIANT, it will cleanse harmful effects from you and friendly beings nearby",
+  "screen.lightwithin.luxdialogue.light_info.heal.triggers": "Generally, it will activate when you or ur allies",
+  "screen.lightwithin.luxdialogue.light_info.heal.triggers.sub": "are badly wounded, sometimes even poisoned or surrounded",
+  
+  "screen.lightwithin.luxdialogue.light_info.defence": "DefenceLight is a strong shield for their bearers",
+  "screen.lightwithin.luxdialogue.light_info.defence.sub": "As well for their allies and friendly creatures!",
+  "screen.lightwithin.luxdialogue.light_info.defence.targets": "It can posses one of three target types:",
+  "screen.lightwithin.luxdialogue.light_info.defence.targets.sub": "SELF, ALLIES and VARIANT.",
+  "screen.lightwithin.luxdialogue.light_info.defence.desc": "It will grant you (or your allies) a Resistance effect",
+  "screen.lightwithin.luxdialogue.light_info.defence.desc.sub": "If VARIANT, it will grant that effect to friendly creatures too",
+  "screen.lightwithin.luxdialogue.light_info.defence.triggers": "Generally, will activate when you, allies or friendly creatures",
+  "screen.lightwithin.luxdialogue.light_info.defence.triggers.sub": "get wounded, are surrounded or with armor breaking apart",
+
+  "screen.lightwithin.luxdialogue.light_info.strength": "StrengthLight empowers you with its force!",
+  "screen.lightwithin.luxdialogue.light_info.strength.sub": "Makes you formidable in combat!",
+  "screen.lightwithin.luxdialogue.light_info.strength.targets": "It can posses one of three target types:",
+  "screen.lightwithin.luxdialogue.light_info.strength.targets.sub": "SELF, ALLIES and VARIANT.",
+  "screen.lightwithin.luxdialogue.light_info.strength.desc": "It will grant you (or your allies) a Strength effect",
+  "screen.lightwithin.luxdialogue.light_info.strength.desc.sub": "If VARIANT, it will increase your attack speed",
+  "screen.lightwithin.luxdialogue.light_info.strength.triggers": "Generally, will activate when you, or your allies",
+  "screen.lightwithin.luxdialogue.light_info.strength.triggers.sub": "are wounded or surrounded in a fight where YOU attack!",
+
+  "screen.lightwithin.luxdialogue.light_info.blazing": "BlazingLight burns to ashes whoever stands in your way!",
+  "screen.lightwithin.luxdialogue.light_info.blazing.sub": "Its flames damage your enemies or whoever is around you!",
+  "screen.lightwithin.luxdialogue.light_info.blazing.targets": "It has two* target types:",
+  "screen.lightwithin.luxdialogue.light_info.blazing.targets.sub": "ENEMIES and ALL",
+  "screen.lightwithin.luxdialogue.light_info.blazing.desc": "It will create waves of flames that damage and burn",
+  "screen.lightwithin.luxdialogue.light_info.blazing.desc.sub": "either your enemies or everyone around you",
+  "screen.lightwithin.luxdialogue.light_info.blazing.triggers": "Activates with a source of fire and you being wounded,",
+  "screen.lightwithin.luxdialogue.light_info.blazing.triggers.sub": "or surrounded, or broken armor, but YOU need to attack!",
+
+  "screen.lightwithin.luxdialogue.light_info.frost": "FrostLight freezes your enemies and",
+  "screen.lightwithin.luxdialogue.light_info.frost.sub": "protects you and your allies with ice!",
+  "screen.lightwithin.luxdialogue.light_info.frost.targets": "It has four target types:",
+  "screen.lightwithin.luxdialogue.light_info.frost.targets.sub": "SELF, ALLIES, ENEMIES, ALL",
+  "screen.lightwithin.luxdialogue.light_info.frost.desc": "For you and allies, it will summon a defensive ice wall",
+  "screen.lightwithin.luxdialogue.light_info.frost.desc.sub": "Or will encase creatures end enemies in ice!",
+  "screen.lightwithin.luxdialogue.light_info.frost.triggers": "Activates with a source of frost and you (or an ally),",
+  "screen.lightwithin.luxdialogue.light_info.frost.triggers.sub": " being wounded, surrounded, freezing or with broken armor!",
+
+  "screen.lightwithin.luxdialogue.light_info.earthen": "EarthenLight opens the earth beneath your enemies",
+  "screen.lightwithin.luxdialogue.light_info.earthen.sub": "and protects you and your allies with rock or a golem!",
+  "screen.lightwithin.luxdialogue.light_info.earthen.targets": "It has four target types:",
+  "screen.lightwithin.luxdialogue.light_info.earthen.targets.sub": "SELF, ALLIES, ENEMIES, VARIANT",
+  "screen.lightwithin.luxdialogue.light_info.earthen.desc": "For you and allies, it will summon protective rock formations",
+  "screen.lightwithin.luxdialogue.light_info.earthen.desc.sub": "Makes enemies fall into pits, and creates an EarthenGolem with VARIANT!",
+  "screen.lightwithin.luxdialogue.light_info.earthen.triggers": "Activation requires a source of earth",
+  "screen.lightwithin.luxdialogue.light_info.earthen.triggers.sub": "and you (or an ally) being wounded or surrounded!",
+
+  "screen.lightwithin.luxdialogue.light_info.wind": "WindLight lifts you and allies up with the wind,",
+  "screen.lightwithin.luxdialogue.light_info.wind.sub": "or blows away whoever is around you!",
+  "screen.lightwithin.luxdialogue.light_info.wind.targets": "It has three target types:",
+  "screen.lightwithin.luxdialogue.light_info.wind.targets.sub": "SELF, ALLIES, ALL",
+  "screen.lightwithin.luxdialogue.light_info.wind.desc": "You will be able to dash far away, and with your allies",
+  "screen.lightwithin.luxdialogue.light_info.wind.desc.sub": "you'll walk on air, whilst ALL will blow nearby creatures away",
+  "screen.lightwithin.luxdialogue.light_info.wind.triggers": "Activation happens with a source of wind, your or allies",
+  "screen.lightwithin.luxdialogue.light_info.wind.triggers.sub": "falling down, or being wounded, or surrounded!",
+
+  "screen.lightwithin.luxdialogue.light_info.aqua": "AquaLight makes water into a swift carpet for you and allies,",
+  "screen.lightwithin.luxdialogue.light_info.aqua.sub": "summons oceanic guards or geysers enemies away!",
+  "screen.lightwithin.luxdialogue.light_info.aqua.targets": "It has four target types:",
+  "screen.lightwithin.luxdialogue.light_info.aqua.targets.sub": "SELF, ALLIES, ALL, ENEMIES",
+  "screen.lightwithin.luxdialogue.light_info.aqua.desc": "You and your allies will gain a speed watery carpet,",
+  "screen.lightwithin.luxdialogue.light_info.aqua.desc.sub": "VARIANT summons Drowned guards, ENEMIES places geysers under enemies",
+  "screen.lightwithin.luxdialogue.light_info.aqua.triggers": "Activation happens with a source of water, your or allies",
+  "screen.lightwithin.luxdialogue.light_info.aqua.triggers.sub": "drowning, or being wounded, or surrounded or with broken armor!",
+
+  "screen.lightwithin.luxdialogue.light_info.forest_aura": "ForestAuraLight makes you one with the forest (literally!)",
+  "screen.lightwithin.luxdialogue.light_info.forest_aura.sub": "Allows you to pass through it or release powerful toxins!",
+  "screen.lightwithin.luxdialogue.light_info.forest_aura.targets": "It has two target types:",
+  "screen.lightwithin.luxdialogue.light_info.forest_aura.targets.sub": "SELF, ALL",
+  "screen.lightwithin.luxdialogue.light_info.forest_aura.desc": "You will be able to melt yourself with the forest's blocks",
+  "screen.lightwithin.luxdialogue.light_info.forest_aura.desc.sub": "or you will release puffs of toxins with various effects!",
+  "screen.lightwithin.luxdialogue.light_info.forest_aura.triggers": "Activation happens within a forest, your allies wounded, ",
+  "screen.lightwithin.luxdialogue.light_info.forest_aura.triggers.sub": "being near leaves or surrounded, or under harmful potion effects!",
+
+  "screen.lightwithin.luxdialogue.light_info.thunder_aura": "ThunderAuraLight protects you and allies",
+  "screen.lightwithin.luxdialogue.light_info.thunder_aura.sub": "with barriers of lightning, and summons mighty thunderstorms!",
+  "screen.lightwithin.luxdialogue.light_info.thunder_aura.targets": "It has three target types:",
+  "screen.lightwithin.luxdialogue.light_info.thunder_aura.targets.sub": "ALLIES, ALL, VARIANT",
+  "screen.lightwithin.luxdialogue.light_info.thunder_aura.desc": "You can create barriers of lightning around you and allies",
+  "screen.lightwithin.luxdialogue.light_info.thunder_aura.desc.sub": "or have lightning wherever you please, or summon an enormous thunderstorm!",
+  "screen.lightwithin.luxdialogue.light_info.thunder_aura.triggers": "Will activate near thunder-calling blocks,",
+  "screen.lightwithin.luxdialogue.light_info.thunder_aura.triggers.sub": " when you or allies are wounded, when raining or with low armor!",
+
+
+  "screen.lightwithin.luxdialogue.offended": "I decided I won't talk to you for a while.",
+  "screen.lightwithin.luxcognita.offended.msg": "I won't talk to you. And no, you can't eat me. Eat brioches.",
+
+  "screen.lightwithin.luxdialogue.attacked": "You have been attacked!",
+  "screen.lightwithin.luxdialogue.attacked.sub": "We'll talk later, go defend yourself!",
+  "screen.lightwithin.luxdialogue.attacked.button": "Ok",
+
+  "TODO write somethign about lux dream": "============================",
+  "TODO personal": "are you unique? Why? Why aren't you linked to a player/human/whatever? What happened? What are legendary lights? Can i get one?"
 }

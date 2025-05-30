@@ -5,27 +5,28 @@ import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
-import me.emafire003.dev.lightwithin.lights.InnerLightType;
+import me.emafire003.dev.lightwithin.LightWithin;
+import me.emafire003.dev.lightwithin.lights.InnerLight;
 import net.minecraft.text.Text;
 
 import java.util.Arrays;
 import java.util.Collection;
 
-public class LightTypeArgument implements ArgumentType<InnerLightType> {
+public class LightTypeArgument implements ArgumentType<InnerLight> {
     public static LightTypeArgument lightType() {
         return new LightTypeArgument();
     }
 
-    public static <S> InnerLightType getType(CommandContext<S> context, String name) {
+    public static <S> InnerLight getType(CommandContext<S> context, String name) {
         // Note that you should assume the CommandSource wrapped inside of the CommandContext will always be a generic type.
         // If you need to access the ServerCommandSource make sure you verify the source is a server command source before casting.
-        return context.getArgument(name, InnerLightType.class);
+        return context.getArgument(name, InnerLight.class);
     }
 
     private static final Collection<String> EXAMPLES = Arrays.asList("blazing", "heal", "defense");
 
     @Override
-    public InnerLightType parse(StringReader reader) throws CommandSyntaxException {
+    public InnerLight parse(StringReader reader) throws CommandSyntaxException {
         int argBeginning = reader.getCursor(); // The starting position of the cursor is at the beginning of the argument.
         if (!reader.canRead()) {
             reader.skip();
@@ -38,10 +39,10 @@ public class LightTypeArgument implements ArgumentType<InnerLightType> {
         }
 
         // Now we substring the specific part we want to see using the starting cursor position and the ends where the next argument starts.
-        String typeString = reader.getString().substring(argBeginning, reader.getCursor()).toUpperCase();
+        String typeString = reader.getString().substring(argBeginning, reader.getCursor());
         try {
-            InnerLightType type = InnerLightType.valueOf(typeString); // Now our actual logic.
-            return type; // And we return our type, in this case the parser will consider this argument to have parsed properly and then move on.
+            // Now our actual logic.
+            return LightWithin.INNERLIGHT_REGISTRY.get(LightWithin.getIdentifier(typeString)); // And we return our type, in this case the parser will consider this argument to have parsed properly and then move on.
         } catch (Exception ex) {
             // UUIDs can throw an exception when made by a string, so we catch the exception and repackage it into a CommandSyntaxException type.
             // Create with context tells Brigadier to supply some context to tell the user where the command failed at.

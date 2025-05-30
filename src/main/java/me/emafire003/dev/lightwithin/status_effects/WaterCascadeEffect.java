@@ -1,16 +1,13 @@
 package me.emafire003.dev.lightwithin.status_effects;
 
 import me.emafire003.dev.lightwithin.config.Config;
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.AttributeContainer;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectCategory;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.Fluids;
-import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 
@@ -28,7 +25,7 @@ public class WaterCascadeEffect extends StatusEffect {
         return true;
     }
 
-    HashMap<BlockPos, BlockState> block_map = new HashMap();
+    HashMap<BlockPos, BlockState> block_map = new HashMap<>();
 
     BlockPos start_pos;
 

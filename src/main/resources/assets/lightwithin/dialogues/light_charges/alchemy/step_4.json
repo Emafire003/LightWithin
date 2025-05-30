@@ -1,0 +1,33 @@
+{
+  "dialogueId": "step_4",
+  "fileVersion": 1,
+  "mainText": "screen.lightwithin.luxdialogue.light_charge.alchemy.step_4",
+  "textScale": 1.5,
+  "subTextPresent": true,
+  "subText": "screen.lightwithin.luxdialogue.light_charge.alchemy.step_4.sub",
+  "subTextScale": 1.3,
+  "showImage": true,
+  "imagePos": "CENTER",
+  "imageWidth": 16,
+  "imageHeight": 16,
+  "imageScale": 2,
+  "imageHasStages": true,
+  "imageStages": [
+    {
+      "namespace": "lightwithin",
+      "path": "textures/dialogues/falling_anvil.png"
+    },
+    {
+      "namespace": "lightwithin",
+      "path": "textures/dialogues/squashed_luxintus.png"
+    },
+    {
+      "namespace": "lightwithin",
+      "path": "textures/dialogues/luxintus_berry_powder.png"
+    }
+  ],
+  "imageInterval": 50,
+  "buttons": {
+    "screen.lightwithin.luxdialogue.next": "GO_DIALOGUE<light_charges/alchemy/step_5>"
+  }
+}

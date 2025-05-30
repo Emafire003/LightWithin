@@ -4,7 +4,7 @@ import me.emafire003.dev.lightwithin.LightWithin;
 import me.emafire003.dev.lightwithin.component.LightComponent;
 import me.emafire003.dev.lightwithin.config.Config;
 import me.emafire003.dev.lightwithin.items.crafting.BrewRecipes;
-import me.emafire003.dev.lightwithin.lights.InnerLightType;
+import me.emafire003.dev.lightwithin.lights.InnerLight;
 import me.emafire003.dev.lightwithin.particles.LightParticlesUtil;
 import me.emafire003.dev.lightwithin.sounds.LightSounds;
 import me.emafire003.dev.lightwithin.status_effects.LightEffects;
@@ -25,6 +25,7 @@ import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
@@ -68,7 +69,7 @@ public class BottledLightItem extends Item {
             }
 
             if(nbt.contains(BrewRecipes.TYPE_INGREDIENT_KEY)){
-                InnerLightType bottled_type = InnerLightType.valueOf(nbt.getString(BrewRecipes.TYPE_INGREDIENT_KEY));
+                InnerLight bottled_type = LightWithin.INNERLIGHT_REGISTRY.get(Identifier.tryParse(nbt.getString(BrewRecipes.TYPE_INGREDIENT_KEY)));
                 if(component.getType().equals(bottled_type)){
                     if(nbt.contains(BrewRecipes.TARGET_INGREDIENT_KEY)){
                         TargetType bottled_target = TargetType.valueOf(nbt.getString(BrewRecipes.TARGET_INGREDIENT_KEY));
@@ -124,7 +125,7 @@ public class BottledLightItem extends Item {
     public boolean addCharge(PlayerEntity user, ItemStack stack, LightComponent component){
 
         int charges = component.getCurrentLightCharges()+1;
-        if(charges > component.getMaxLightStack()){
+        if(charges > component.getMaxLightCharges()){
             //Or another error-sound. Nah i think this fits
             if(!user.getWorld().isClient()){
                 user.sendMessage(Text.translatable("light.max_charges").formatted(Formatting.RED), true);
@@ -155,7 +156,7 @@ public class BottledLightItem extends Item {
             if(stack.hasNbt() && stack.getNbt().getUuid(BrewRecipes.PLAYER_NBT_KEY).equals(UUID.fromString("00000000-0000-0000-0000-000000000000"))){
                 tooltip.add(Text.translatable("item.lightwithin.bottled_light.tooltip.warning").formatted(Formatting.AQUA).formatted(Formatting.ITALIC));
                 if(stack.getNbt().contains(BrewRecipes.TYPE_INGREDIENT_KEY)){
-                    tooltip.add(Text.translatable("item.lightwithin.bottled_light.tooltip.type").formatted(Formatting.GREEN).append(Text.literal(stack.getNbt().getString(BrewRecipes.TYPE_INGREDIENT_KEY)).formatted(Formatting.LIGHT_PURPLE)));
+                    tooltip.add(Text.translatable("item.lightwithin.bottled_light.tooltip.type").formatted(Formatting.GREEN).append(Text.literal(stack.getNbt().getString(BrewRecipes.TYPE_INGREDIENT_KEY).replaceFirst("lightwithin:", "").toUpperCase()).formatted(Formatting.LIGHT_PURPLE)));
                 }
                 if(stack.getNbt().contains(BrewRecipes.TARGET_INGREDIENT_KEY)){
                     tooltip.add(Text.translatable("item.lightwithin.bottled_light.tooltip.target").formatted(Formatting.GREEN).append(Text.literal(stack.getNbt().getString(BrewRecipes.TARGET_INGREDIENT_KEY)).formatted(Formatting.LIGHT_PURPLE)));

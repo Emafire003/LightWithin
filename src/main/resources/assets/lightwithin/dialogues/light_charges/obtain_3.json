@@ -1,0 +1,29 @@
+{
+  "dialogueId": "obtain_3",
+  "fileVersion": 1,
+  "mainText": "screen.lightwithin.luxdialogue.light_charge.obtain_3",
+  "textScale": 1.4,
+  "subTextPresent": true,
+  "subText": "screen.lightwithin.luxdialogue.light_charge.obtain_3.sub",
+  "subTextScale": 1.15,
+  "showItem": true,
+  "itemPos": "CENTER",
+  "multipleItems": true,
+  "items": [
+    {
+      "namespace": "lightwithin",
+      "path": "bottled_light"
+    },
+    {
+      "namespace": "minecraft",
+      "path": "brewing_stand"
+    }
+  ],
+  "itemsInterval": 60,
+  "itemScale": 3.0,
+  "buttons": {
+    "screen.lightwithin.luxdialogue.light_charge.obtain_3.yes": "GO_DIALOGUE<light_charges/obtain_4_yes>",
+    "screen.lightwithin.luxdialogue.light_charge.obtain_3.maybe": "GO_DIALOGUE<light_charges/obtain_4_maybe>",
+    "screen.lightwithin.luxdialogue.light_charge.obtain_3.no": "CLOSE"
+  }
+}

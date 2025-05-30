@@ -5,19 +5,14 @@ import me.emafire003.dev.lightwithin.compat.argonauts.ArgonautsChecker;
 import me.emafire003.dev.lightwithin.compat.factions.FactionChecker;
 import me.emafire003.dev.lightwithin.compat.flan.FlanCompat;
 import me.emafire003.dev.lightwithin.compat.ftb_teams.FTBTeamsChecker;
+import me.emafire003.dev.lightwithin.compat.guilded.GuildedChecker;
 import me.emafire003.dev.lightwithin.compat.open_parties_and_claims.OPACChecker;
 import me.emafire003.dev.lightwithin.compat.yawp.YawpCompat;
 import me.emafire003.dev.lightwithin.component.SummonedByComponent;
 import me.emafire003.dev.lightwithin.config.Config;
-import me.emafire003.dev.lightwithin.lights.AquaLight;
-import me.emafire003.dev.lightwithin.lights.BlazingLight;
-import me.emafire003.dev.lightwithin.lights.FrostLight;
-import me.emafire003.dev.lightwithin.lights.WindLight;
-import me.emafire003.dev.lightwithin.lights.ThunderAuraLight;
 import me.emafire003.dev.lightwithin.status_effects.LightEffects;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.DamageUtil;
 import net.minecraft.entity.Entity;
@@ -33,9 +28,6 @@ import net.minecraft.entity.passive.PassiveEntity;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.tag.*;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.state.property.Properties;
@@ -223,7 +215,7 @@ public class CheckUtils {
     private static float getAttackDamageWithSpeed(@NotNull LivingEntity attacker,@NotNull LivingEntity target){
         if(!attacker.getAttributes().hasAttribute(EntityAttributes.GENERIC_ATTACK_DAMAGE)){
             //TODO maybe move to debug later
-            LOGGER.warn("The attacking entity: " + attacker.getName().toString() + " does not have GENERIC_ATTACK_DAMAGE attribute! May be a normal thing, like a projectile entity!");
+            //LOGGER.warn("The attacking entity: " + attacker.getName().toString() + " does not have GENERIC_ATTACK_DAMAGE attribute! May be a normal thing, like a projectile entity!");
             return -1;
         }
 
@@ -346,7 +338,7 @@ public class CheckUtils {
         //and they are not the entity that has been hit then add them to the team_entities and check if their health is ok
         for(LivingEntity ent : entities){
             //Checks if the entity in the list is in the same team/faction/party/pet or not
-            if(!player.equals(attacker) && !attacker.equals(ent) && !player.equals(ent) && CheckAllies.checkAlly(player, ent) ){
+            if(attacker != null && !player.equals(attacker) && !attacker.equals(ent) && !player.equals(ent) && CheckAllies.checkAlly(player, ent) ){
                 //if it is, check the health
                 if(checkSelfDanger(ent, health_percent)){
                     n_allies_low_health++;
@@ -380,38 +372,65 @@ public class CheckUtils {
     public static class CheckAllies {
 
         public static boolean checkTeam(LivingEntity entity, LivingEntity teammate){
+            if(entity == null || teammate == null){
+                return false;
+            }
             return entity.getScoreboardTeam() != null && entity.isTeammate(teammate);
         }
 
         public static boolean checkFaction(PlayerEntity player, PlayerEntity player1){
+            if(player == null || player1 == null){
+                return false;
+            }
             return FactionChecker.areInSameFaction(player, player1) || FactionChecker.areAllies(player, player1);
         }
 
         public static boolean checkEnemyFaction(PlayerEntity player, PlayerEntity player1){
+            if(player == null || player1 == null){
+                return false;
+            }
             return FactionChecker.areEnemies(player, player1);
         }
 
         public static boolean checkPartyArgo(PlayerEntity player, PlayerEntity player1){
+            if(player == null || player1 == null){
+                return false;
+            }
             return ArgonautsChecker.areInSameParty(player,player1);
         }
 
         public static boolean checkGuildArgo(PlayerEntity player, PlayerEntity player1){
+            if(player == null || player1 == null){
+                return false;
+            }
             return ArgonautsChecker.areInSameGuild(player,player1);
         }
 
         public static boolean checkArgonauts(PlayerEntity player, PlayerEntity player1){
+            if(player == null || player1 == null){
+                return false;
+            }
             return checkPartyArgo(player,player1) || checkGuildArgo(player,player1);
         }
 
         public static boolean checkOPACParty(PlayerEntity player, PlayerEntity player1){
+            if(player == null || player1 == null){
+                return false;
+            }
             return OPACChecker.areInSameParty(player, player1) || OPACChecker.areInAlliedParties(player, player1);
         }
 
         public static boolean checkFTBTeams(ServerPlayerEntity player, ServerPlayerEntity player1){
+            if(player == null || player1 == null){
+                return false;
+            }
             return FTBTeamsChecker.areInSameParty(player, player1) || FTBTeamsChecker.areInAlliedPartis(player, player1);
         }
 
         public static boolean checkPet(LivingEntity entity, LivingEntity ent){
+            if(ent == null || entity == null){
+                return false;
+            }
             if(ent instanceof TameableEntity){
                 return entity.equals(((TameableEntity) ent).getOwner());
             }
@@ -419,6 +438,9 @@ public class CheckUtils {
         }
 
         public static boolean checkSummoned(LivingEntity summoner, LivingEntity ent){
+            if(ent == null || summoner == null){
+                return false;
+            }
             SummonedByComponent component = SUMMONED_BY_COMPONENT.getNullable(ent);
             if(component != null && component.getIsSummoned()){
                 return component.getSummonerUUID().equals(summoner.getUuid());
@@ -427,6 +449,9 @@ public class CheckUtils {
         }
 
         public static boolean checkAlly(LivingEntity entity, LivingEntity teammate){
+            if(entity == null || teammate == null){
+                return false;
+            }
             if(entity.getWorld().isClient()){
                 return false;
             }
@@ -450,11 +475,19 @@ public class CheckUtils {
                     return true;
                 }
             }
+            if(FabricLoader.getInstance().isModLoaded(GuildedChecker.getModId()) && entity.getWorld().isClient() && entity instanceof PlayerEntity && teammate instanceof PlayerEntity){
+                if(GuildedChecker.areInSameGuild((ServerPlayerEntity) entity, (ServerPlayerEntity) teammate)){
+                    return true;
+                }
+            }
             return checkTeam(entity, teammate) || checkPet(entity, teammate) || checkSummoned(entity, teammate);
 
         }
 
         public static boolean checkEnemies(LivingEntity entity, LivingEntity enemy){
+            if(entity == null || enemy == null){
+                return false;
+            }
             if(FabricLoader.getInstance().isModLoaded("factions") && entity instanceof PlayerEntity && enemy instanceof PlayerEntity){
                 if(Config.NOT_ALLY_THEN_ENEMY){
                     return !checkAlly(entity, enemy);
@@ -715,104 +748,7 @@ public class CheckUtils {
         return percent >= ( (double) (100 * n)/tot );
     }
 
-    /**Used to check if the player has something that can be considered a Heat Source
-     * for the Blazing Light
-     *
-     * @param player The player to perform checks on*/
-    public static boolean checkBlazing(PlayerEntity player){
-        if(player.isOnFire()){
-            return true;
-        }
 
-        ItemStack main = player.getMainHandStack();
-        ItemStack off = player.getOffHandStack();
-        if(main.isIn(BlazingLight.BLAZING_TRIGGER_ITEMS) || off.isIn(BlazingLight.BLAZING_TRIGGER_ITEMS)){
-            return true;
-        }
-        return checkBlocksWithTag(player, Config.TRIGGER_BLOCK_RADIUS, BlazingLight.BLAZING_TRIGGER_BLOCKS);
-    }
-
-    /**Used to check if the player has something that can be considered a Cold Source
-     * for the Frost Light
-     *
-     * @param player The player to perform checks on*/
-    public static boolean checkFrost(PlayerEntity player){
-        if(player.isFrozen()){
-            return true;
-        }
-
-        ItemStack main = player.getMainHandStack();
-        ItemStack off = player.getOffHandStack();
-        if(main.isIn(FrostLight.FROST_TRIGGER_ITEMS) || off.isIn(FrostLight.FROST_TRIGGER_ITEMS)){
-            return true;
-        }
-        return checkBlocksWithTag(player, Config.TRIGGER_BLOCK_RADIUS, FrostLight.FROST_TRIGGER_BLOCKS);
-    }
-
-    /**Used to check if the player can trigger the Earthen Light, aka if they have
-     * dirt in their inventory or are sourronded by natural blocks
-     *
-     * @param player The player to perform checks on*/
-    public static boolean checkEarthen(PlayerEntity player){
-
-        //Moved this so it doesn't consume the dirt unless needed
-        if(checkMultipleBlocksWithTags(player, Config.TRIGGER_BLOCK_RADIUS, 3, TagKey.of(RegistryKeys.BLOCK, BlockTags.LUSH_GROUND_REPLACEABLE.id()))){
-            return true;
-        }
-        if(player.getInventory().contains(new ItemStack(Items.DIRT, 64))){
-            player.getInventory().removeStack(player.getInventory().getSlotWithStack(new ItemStack(Items.DIRT, 64)));
-            return true;
-        }
-
-        return false;
-    }
-
-    /**Used to check if the player has something that can be considered a Cold Source
-     * for the Frost Light
-     *
-     * @param player The player to perform checks on*/
-    public static boolean checkWind(PlayerEntity player){
-        //If the player is above sea level and can see the sky winds are there right?
-        if(player.getY() >= 64){
-            if(!player.getEntityWorld().isSkyVisible(player.getBlockPos())){
-                return true;
-            }
-            return true;
-        }
-
-        return checkMultipleBlocksWithTags(player, Config.TRIGGER_BLOCK_RADIUS, 7, WindLight.WIND_TRIGGER_BLOCKS);
-    }
-
-
-    /**Used to check if the player has something that can be considered a Aqua source
-     *
-     * @param player The player to perform checks on*/
-    public static boolean checkAqua(PlayerEntity player){
-        if(player.isTouchingWaterOrRain()){
-            return true;
-        }
-
-        ItemStack main = player.getMainHandStack();
-        ItemStack off = player.getOffHandStack();
-        if(main.isIn(AquaLight.AQUA_TRIGGER_ITEMS) || off.isIn(AquaLight.AQUA_TRIGGER_ITEMS)){
-            return true;
-        }
-        return checkWaterLoggedOrTag(player, Config.TRIGGER_BLOCK_RADIUS, AquaLight.AQUA_TRIGGER_BLOCKS);
-    }
-
-    /**Used to check if the player has something that can be considered a ForestAura source
-     *
-     * @param player The player to perform checks on*/
-    public static boolean checkForestAura(PlayerEntity player){
-        RegistryEntry<Biome> biome = player.getWorld().getBiome(player.getBlockPos());
-        if(biome.isIn(BiomeTags.IS_FOREST) || biome.isIn(BiomeTags.IS_JUNGLE) || biome.isIn(BiomeTags.IS_TAIGA)){
-            return true;
-        }
-
-        ItemStack main = player.getMainHandStack();
-        ItemStack off = player.getOffHandStack();
-        return main.isIn(ItemTags.SAPLINGS) || off.isIn(ItemTags.SAPLINGS);
-    }
 
     /**Used to check if the player is near some leaves
      *
@@ -823,27 +759,6 @@ public class CheckUtils {
         return checkMultipleBlocksPercent(player, BlockTags.LEAVES, Config.TRIGGER_BLOCK_RADIUS, percent);
     }
 
-    /**Used to check if the player has something that can be considered a ThunderAura source
-     *
-     * @param player The player to perform checks on*/
-    //TODO somehow make these datadriven/customizable at some point?
-    public static boolean checkThunderAura(PlayerEntity player){
-        if(checkThundering(player.getWorld())){
-            return true;
-        }
-        //If the player is standing on a is copper rod then lightning conditions met
-        if(player.getWorld().getBlockState(player.getBlockPos().down()).isOf(Blocks.LIGHTNING_ROD)
-            || player.getWorld().getBlockState(player.getBlockPos()).isOf(Blocks.LIGHTNING_ROD)){
-            return true;
-        }
-        if(checkRecentlyStruckByLightning(player)){
-            return true;
-        }
-
-        ItemStack main = player.getMainHandStack();
-        ItemStack off = player.getOffHandStack();
-        return main.isIn(ThunderAuraLight.THUNDER_AURA_TRIGGER_ITEMS) || off.isIn(ThunderAuraLight.THUNDER_AURA_TRIGGER_ITEMS);
-    }
 
     public static boolean checkFalling(LivingEntity entity) {
         if(entity instanceof PlayerEntity){
@@ -876,6 +791,11 @@ public class CheckUtils {
     /** Checks if there is currently a stormy weather in the selected world*/
     public static boolean checkThundering(World world){
         return world.isThundering();
+    }
+
+    /** Checks if there is currently a snowy weather in the selected world at that position*/
+    public static boolean checkSnowing(World world, BlockPos pos){
+        return world.isRaining() && world.getBiome(pos).value().getPrecipitation(pos).equals(Biome.Precipitation.SNOW);
     }
 
     /** Checks if there is currently a rainy weather in the selected world*/

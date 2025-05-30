@@ -1,0 +1,11 @@
+{
+  "dialogueId": "luxdream_0",
+  "fileVersion": 1,
+  "mainText": "screen.lightwithin.luxdialogue.personal.luxdream_0",
+  "mainTextScale": 1.5,
+  "berryPos": "CENTER",
+  "buttons": {
+    "screen.lightwithin.luxdialogue.personal.luxdream_0.dont": "GO_DIALOGUE<personal/luxdream_1>",
+    "screen.lightwithin.luxdialogue.personal.luxdream_0.ok": "CLOSE"
+  }
+}

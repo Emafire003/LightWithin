@@ -1,0 +1,10 @@
+{
+  "dialogueId": "talking",
+  "fileVersion": 1,
+  "mainText": "screen.lightwithin.luxdialogue.personal.luxberries.many.talking",
+  "mainTextScale": 1.5,
+  "berryPos": "CENTER",
+  "buttons": {
+    "screen.lightwithin.luxdialogue.personal.luxberries.many.talking.sure": "CLOSE"
+  }
+}

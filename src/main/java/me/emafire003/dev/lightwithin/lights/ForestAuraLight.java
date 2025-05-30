@@ -1,25 +1,33 @@
 package me.emafire003.dev.lightwithin.lights;
 
-import me.emafire003.dev.lightwithin.compat.coloredglowlib.CGLCompat;
+import com.mojang.datafixers.util.Pair;
+import me.emafire003.dev.lightwithin.LightWithin;
 import me.emafire003.dev.lightwithin.component.LightComponent;
 import me.emafire003.dev.lightwithin.config.BalanceConfig;
 import me.emafire003.dev.lightwithin.config.Config;
+import me.emafire003.dev.lightwithin.config.TriggerConfig;
 import me.emafire003.dev.lightwithin.particles.LightParticles;
 import me.emafire003.dev.lightwithin.particles.LightParticlesUtil;
 import me.emafire003.dev.lightwithin.sounds.LightSounds;
 import me.emafire003.dev.lightwithin.status_effects.LightEffects;
+import me.emafire003.dev.lightwithin.util.CheckUtils;
 import me.emafire003.dev.lightwithin.util.TargetType;
+import me.emafire003.dev.lightwithin.util.TriggerChecks;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
-import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.Block;
 import net.minecraft.entity.*;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.registry.RegistryKeys;
+import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.registry.tag.BiomeTags;
+import net.minecraft.registry.tag.ItemTags;
 import net.minecraft.registry.tag.TagKey;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.text.Text;
@@ -29,36 +37,22 @@ import net.minecraft.util.math.Box;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.shape.VoxelShape;
+import net.minecraft.world.biome.Biome;
+import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static me.emafire003.dev.lightwithin.LightWithin.*;
+import static me.emafire003.dev.lightwithin.util.LightTriggerChecks.getMinTrigger;
+import static me.emafire003.dev.lightwithin.util.LightTriggerChecks.sendLightTriggered;
 
-/*Planned stuff:
- * Targets:
- *  - SELF or ALLIES, which applies the forest aura effect (traversing natural blocks)
- *  - ALL, which either makes all terrain difficult to traverse with spikes or similar
- *       OR puffs of plant like stuff that makes player drunk an stuff like that.
- * Maybe it could have like different effects dependig on the color of the puff and the power level.
- *First chunk of Puffs:
- * Level 0-5:
- * - GREEN
- * - PURPLE
- * - YELLOW
- * - PINK
- * Level 5-10
- * - BLUE
- * - RED
- * - BLACK
- * - ORANGE
- *
- *
- * */
 public class ForestAuraLight extends InnerLight {
 
     public static final Item INGREDIENT = Items.OAK_SAPLING;
+    private final List<TargetType> possibleTargetTypes = Arrays.asList(TargetType.ALL, TargetType.SELF);
+    private final List<TriggerChecks> triggerChecks = List.of(TriggerChecks.ENTITY_ATTACKED, TriggerChecks.ENTITY_ATTACKS_ENTITY, TriggerChecks.ALLY_DIES);
+    private final Identifier lightId = LightWithin.getIdentifier("forest_aura");
 
     public static final TagKey<Block> FOREST_AURA_BLOCKS = TagKey.of(RegistryKeys.BLOCK, new Identifier(MOD_ID, "forest_aura_blocks"));
 
@@ -81,137 +75,160 @@ public class ForestAuraLight extends InnerLight {
     /**Max tries to spawn a single puff*/
     private static final int max_tries = 10000;
 
-
-    public ForestAuraLight(List<LivingEntity> targets, double cooldown_time, double power_multiplier, int duration, String color, PlayerEntity caster, boolean rainbow_col) {
-        super(targets, cooldown_time, power_multiplier, duration, color, caster, rainbow_col);
-        type = InnerLightType.FOREST_AURA;
+    /**
+     * Creates an instance of this InnerLight. Remember to register it!
+     *
+     * @param regex A lambda function, which provides you with a string representing the UUID portion dedicated to type determination.
+     *              You have to provide a check based on the string for which the player will have that particular light.
+     *              Remember that the order with which the lights are registered matters a lot!
+     */
+    public ForestAuraLight(TypeCreationRegex regex) {
+        super(regex);
+        this.color = "forest_aura";
     }
 
-    public ForestAuraLight(List<LivingEntity> targets, double cooldown_time, double power_multiplier, int duration, PlayerEntity caster, boolean rainbow_col) {
-        super(targets, cooldown_time, power_multiplier, duration, caster, rainbow_col);
-        type = InnerLightType.FOREST_AURA;
-        color = COLOR;
+    @Override
+    public List<TargetType> getPossibleTargetTypes() {
+        return possibleTargetTypes;
     }
 
-    public ForestAuraLight(List<LivingEntity> targets, double cooldown_time, double power_multiplier, int duration, PlayerEntity caster) {
-        super(targets, cooldown_time, power_multiplier, duration, caster);
-        type = InnerLightType.FOREST_AURA;
-        //color = "#35f4d1";
-        color = "forest_aura";
+    @Override
+    public List<TriggerChecks> getTriggerChecks() {
+        return triggerChecks;
     }
 
-    private void checkSafety(){
-        if(this.power_multiplier > BalanceConfig.FOREST_AURA_MAX_POWER){
+    @Override
+    public Item getIngredient() {
+        return INGREDIENT;
+    }
+
+    @Override
+    public Identifier getLightId() {
+        return lightId;
+    }
+
+    @Override
+    protected Pair<Double, Integer> checkSafety(double power_multiplier, int duration) {
+        if(power_multiplier > BalanceConfig.FOREST_AURA_MAX_POWER){
             power_multiplier = BalanceConfig.FOREST_AURA_MAX_POWER;
         }
-        if(this.power_multiplier < BalanceConfig.FOREST_AURA_MIN_POWER){
+        if(power_multiplier < BalanceConfig.FOREST_AURA_MIN_POWER){
             power_multiplier = BalanceConfig.FOREST_AURA_MIN_POWER;
         }
         int max_duration = BalanceConfig.FOREST_AURA_MAX_DURATION;
         if(Config.MULTIPLY_DURATION_LIMIT){
             max_duration = (int) (BalanceConfig.FOREST_AURA_MAX_DURATION * Config.DURATION_MULTIPLIER);
         }
-        if(this.duration > max_duration){
-            this.duration = max_duration;
+        if(duration > max_duration){
+            duration = max_duration;
         }
-        if(this.duration < BalanceConfig.FOREST_AURA_MIN_DURATION){
-            this.duration = BalanceConfig.FOREST_AURA_MIN_DURATION;
+        if(duration < BalanceConfig.FOREST_AURA_MIN_DURATION){
+            duration = BalanceConfig.FOREST_AURA_MIN_DURATION;
         }
+        return new Pair<>(power_multiplier, duration);
     }
 
     @Override
-    public void execute(){
+    public void startActivation(LightComponent component, PlayerEntity player) {
+        List<LivingEntity> targets = new ArrayList<>();
 
-        checkSafety();
-        if(FabricLoader.getInstance().isModLoaded("coloredglowlib")){
-            if(this.rainbow_col){
-                CGLCompat.getLib().setRainbowColor(this.caster);
-            }else{
-                CGLCompat.getLib().setColor(this.caster, this.color);
-            }
+        if(component.getTargets().equals(TargetType.ALL)){
+            targets.addAll(player.getWorld().getEntitiesByClass(LivingEntity.class, new Box(player.getBlockPos()).expand(getBoxExpansionAmount()), (entity1 -> true)));
+            targets.remove(player);
+            player.sendMessage(Text.translatable("light.description.activation.forest_aura.all"), true);
+        }else if(component.getTargets().equals(TargetType.SELF)){
+            targets.add(player);
+            player.sendMessage(Text.translatable("light.description.activation.forest_aura.self"), true);
         }
-        caster.getWorld().playSound(null, BlockPos.ofFloored(caster.getPos()),LightSounds.FOREST_AURA_LIGHT, SoundCategory.PLAYERS, 1f, 1f);
+        activate(player, targets, component.getPowerMultiplier(), component.getDuration(), component.getMaxCooldown());
+    }
+
+    @Override
+    protected void activate(PlayerEntity caster, List<LivingEntity> targets, double power_multiplier, int duration, double cooldown_time) {
+        super.activate(caster, targets, power_multiplier, duration, cooldown_time);
+        power_multiplier = checkSafety(power_multiplier, duration).getFirst();
+        duration = checkSafety(power_multiplier, duration).getSecond();
+        
+        caster.getWorld().playSound(null, BlockPos.ofFloored(caster.getPos()), LightSounds.TYPES_SOUNDS.get(lightId), SoundCategory.PLAYERS, 1f, 1f);
         LightComponent component = LIGHT_COMPONENT.get(caster);
 
         if(!caster.getWorld().isClient()){
-            LightParticlesUtil.spawnLightTypeParticle(LightParticles.FOREST_AURA_LIGHT_PARTICLE, (ServerWorld) caster.getWorld(), caster.getPos());
+            LightParticlesUtil.spawnLightTypeParticle(LightParticles.TYPES_PARTICLES.get(lightId), (ServerWorld) caster.getWorld(), caster.getPos());
         }
 
         //The self target type adds the forest aura effect, making the player merge with natural blocks and travel trough them, but not see through them
         //The player can't see because they usually are not a mole. And also because I would need to make every block render the insides too which is not ideal
         if(component.getTargets().equals(TargetType.SELF)){
             //The -1 is because status effect levels start from 0
-            caster.addStatusEffect(new StatusEffectInstance(LightEffects.FOREST_AURA, this.duration*20, (int) this.power_multiplier-1, false, false));
+            caster.addStatusEffect(new StatusEffectInstance(LightEffects.FOREST_AURA, duration*20, (int) power_multiplier-1, false, false));
         }
-        else if(component.getTargets().equals(TargetType.ALL)){
+        else if(component.getTargets().equals(TargetType.ALL)) {
             //I think it should be 1-(2 +1 per level) puffs
 
-            if(caster.getWorld().isClient()){
+            if (caster.getWorld().isClient()) {
                 return;
             }
 
             //The bonus number of puffs added if the power level is above 5
             int bonus = 0;
-            if(power_multiplier > 5){
-                bonus = Math.max(1, (int) ((power_multiplier-5)/2));
+            if (power_multiplier > 5) {
+                bonus = Math.max(1, (int) ((power_multiplier - 5) / 2));
             }
             //The total number of puffs that are going to be spawned in
             //The max number is 10(power)+5(bonus)+2=17 puffs. Maybe a bit much? Well the minimum is 1. And above 5 it's 3. So it's more like 3-17.
-            int puffs = caster.getRandom().nextBetween(1+bonus, (int) (2+power_multiplier+bonus));
+            int puffs = caster.getRandom().nextBetween(1 + bonus, (int) (2 + power_multiplier + bonus));
 
             AtomicInteger spawnedPuffs = new AtomicInteger(0);
-            AtomicInteger total_duration = new AtomicInteger((int) (duration+BalanceConfig.FOREST_AURA_PUFF_DURATION_MULTIPLIER));
+            AtomicInteger total_duration = new AtomicInteger((int) (duration + BalanceConfig.FOREST_AURA_PUFF_DURATION_MULTIPLIER));
             AtomicInteger tickCounter = new AtomicInteger(PUFF_DELAY);
 
             //Isn't there a nicer way to do this scheduling?
+            double finalPower_multiplier = power_multiplier;
             ServerTickEvents.END_SERVER_TICK.register(server -> {
                 //Checks the number of spawned puffs, if it's beyond the number of calculated puffs, stop the loop.
-                if(spawnedPuffs.get()>=puffs){
+                if (spawnedPuffs.get() >= puffs) {
                     return;
                 }
                 //Every tick we check the tickCounter, if it's not ten then we only incremenet it and check the next tick
                 // if it's puffDelay it means ten ticks have passed so a new puff should spawn, so the rest of the code runs
-                if(tickCounter.get() != PUFF_DELAY){
+                if (tickCounter.get() != PUFF_DELAY) {
                     tickCounter.getAndIncrement();
                     return;
                 }
 
                 //Resets the tickCounter to 0, so for the next puff we have to way 10 ticks or whatever puffDelay is
                 tickCounter.set(0);
-                int puff_duration = caster.getRandom().nextBetween(5, 5+total_duration.get());
-                total_duration.set(total_duration.get()-(puff_duration-5));
+                int puff_duration = caster.getRandom().nextBetween(5, 5 + total_duration.get());
+                total_duration.set(total_duration.get() - (puff_duration - 5));
 
                 //The list of the types of puffs that can be spawned
                 List<Integer> possible_puffs = new ArrayList<>(LOW_TIER_COLOR_PUFFS);
 
                 //If the power level is high enough, the high tier color puffs get added ti the pool
-                if(power_multiplier > 5){
+                if (finalPower_multiplier > 5) {
                     possible_puffs.addAll(HIGH_TIER_COLOR_PUFFS);
                 }
 
-                int puff = caster.getRandom().nextBetween(0, possible_puffs.size()-1);
-                Vec3d pos = getRandomPos(caster, caster.getPos().add(0,1,0), BalanceConfig.FOREST_AURA_PUFF_MAX_SPAWN_DIST, BalanceConfig.FOREST_AURA_PUFF_MIN_SPAWN_DIST);
-                if(pos == null){
+                int puff = caster.getRandom().nextBetween(0, possible_puffs.size() - 1);
+                Vec3d pos = getRandomPos(caster, caster.getPos().add(0, 1, 0), BalanceConfig.FOREST_AURA_PUFF_MAX_SPAWN_DIST, BalanceConfig.FOREST_AURA_PUFF_MIN_SPAWN_DIST);
+                if (pos == null) {
                     caster.sendMessage(Text.literal("§c[LightWithin] There was an error spawning the puffs, Position null!"));
-                }else{
-                    createForestPuff(caster, pos, (ServerWorld) caster.getWorld(), possible_puffs.get(puff), puff_duration, (int) power_multiplier);
+                } else {
+                    createForestPuff(caster, pos, (ServerWorld) caster.getWorld(), possible_puffs.get(puff), puff_duration, (int) finalPower_multiplier);
                 }
 
                 //increments the number of spawned puffs
                 spawnedPuffs.getAndIncrement();
             });
-
-            //The puffs mechanism.
-
-            /* The duration might be equal to twice the duration of the caster, divided by the number of puffs
+        }
+    }
+        
+    /*The puffs mechanism.
+        
+    The duration might be equal to twice the duration of the caster, divided by the number of puffs
     This for the total duration of all the generated puffs.
     For each puff it's a random number between 1 second and the total duration-the number of puffs yet to create
-     *
-    * */
-
-        }
-
-    }
+    */
 
 
     /** Gets a random position between an origin point and a specified distance
@@ -288,9 +305,8 @@ public class ForestAuraLight extends InnerLight {
                     //If another player has the ForestAura it will not affect them, but some particles will be spawned
                     //TODO if i ever allow entities to have the light powers remember to change this bit here
 
-                    //TODO test it out multiplayer
-                    if(entity instanceof PlayerEntity && LIGHT_COMPONENT.get(entity).getType().equals(InnerLightType.FOREST_AURA)){
-                        world.spawnParticles(LightParticles.FOREST_AURA_LIGHT_PARTICLE, entity.getX(), entity.getY(), entity.getZ(), 10, 0.11, 0.11, 0.11, 0.01);
+                    if(entity instanceof PlayerEntity && LIGHT_COMPONENT.get(entity).getType() instanceof ForestAuraLight){
+                        world.spawnParticles(LightParticles.TYPES_PARTICLES.get(lightId), entity.getX(), entity.getY(), entity.getZ(), 10, 0.11, 0.11, 0.11, 0.01);
                         ((PlayerEntity) entity).sendMessage(Text.translatable("light.description.negated.forest_aura"), true);
                         return false;
                     }
@@ -353,4 +369,83 @@ public class ForestAuraLight extends InnerLight {
         public static int ORANGE_END = 11291660; // blindess, #AC4C0C
     }
 
+    @Override
+    public void triggerCheck(PlayerEntity player, LightComponent component, @Nullable LivingEntity attacker, @Nullable LivingEntity target) {
+        double trigger_sum = 0;
+
+        if(component.getTargets().equals(TargetType.ALL)){
+
+            //Triggers with: Low health, Very low health, Surrounded,
+            // forest, allies (+1), checkLeavesAround, poisoned or debuffed maybe
+
+            //Checks if the player is very low health
+            if(CheckUtils.checkSelfDanger(player, Config.HP_PERCENTAGE_SELF)){
+                trigger_sum = trigger_sum+ TriggerConfig.FOREST_AURA_ALL_VERY_LOW_HEALTH; //+3
+                //Checks if the player has low health
+            }else if(CheckUtils.checkSelfDanger(player, Config.HP_PERCENTAGE_SELF+Config.HP_PERCENTAGE_INCREMENT)){
+                trigger_sum=trigger_sum+TriggerConfig.FOREST_AURA_ALL_LOW_HEALTH; //+2
+            }
+            if(CheckUtils.checkAllyHealth(player, attacker, Config.HP_PERCENTAGE_ALLIES)){
+                trigger_sum = trigger_sum + TriggerConfig.FOREST_AURA_ALL_ALLY_LOW_HEALTH; //+1
+            }
+            //Checks if the player is surrounded
+            if(Config.CHECK_SURROUNDED && CheckUtils.checkSurrounded(player)){
+                trigger_sum=trigger_sum+TriggerConfig.FOREST_AURA_ALL_SURROUNDED;//+2
+            }
+            if(CheckUtils.checkNearLeaves(player, TriggerConfig.FOREST_AURA_PERCENT_OF_LEAVES_REQUIRED)){
+                trigger_sum = trigger_sum+TriggerConfig.FOREST_AURA_ALL_LEAVES; //+1
+            }
+            //Checks if the player has the optimal criteria for activation
+            if(checkLightConditions(player)){
+                trigger_sum=trigger_sum+TriggerConfig.FOREST_AURA_ALL_CONDITIONS; //+3
+            }
+            if(trigger_sum >= getMinTrigger()){
+                sendLightTriggered((ServerPlayerEntity) player);
+            }
+        }
+        /**CHECKS if the player has ENEMIES as target, either his or his allies health needs to be low*/
+        else if(component.getTargets().equals(TargetType.SELF)){
+
+            if(CheckUtils.checkSelfDanger(player, Config.HP_PERCENTAGE_SELF)){
+                trigger_sum = trigger_sum+TriggerConfig.FOREST_AURA_SELF_VERY_LOW_HEALTH; //+3
+                //Checks if the player has low health
+            }else if(CheckUtils.checkSelfDanger(player, Config.HP_PERCENTAGE_SELF+Config.HP_PERCENTAGE_INCREMENT)){
+                trigger_sum=trigger_sum+TriggerConfig.FOREST_AURA_SELF_LOW_HEALTH; //+2
+            }
+            //Checks if the player is surrounded
+            if(Config.CHECK_SURROUNDED && CheckUtils.checkSurrounded(player)){
+                trigger_sum=trigger_sum+TriggerConfig.FOREST_AURA_SELF_SURROUNDED;//+2
+            }
+            if(CheckUtils.checkHasHarmfulStatusEffect(player)){
+                trigger_sum = trigger_sum+TriggerConfig.FOREST_AURA_SELF_HARMFUL_EFFECT; //+1
+            }
+            //Checks if the player has the optimal criteria for activation
+            if(checkLightConditions(player)){
+                trigger_sum=trigger_sum+TriggerConfig.FOREST_AURA_SELF_CONDITIONS; //+3
+            }
+            if(trigger_sum >= getMinTrigger()){
+                sendLightTriggered((ServerPlayerEntity) player);
+            }
+        }
+    }
+
+    /**Used to check if the player has something that can be considered a ForestAura source
+     *
+     * @param player The player to perform checks on*/
+    @Override
+    public boolean checkLightConditions(PlayerEntity player) {
+        RegistryEntry<Biome> biome = player.getWorld().getBiome(player.getBlockPos());
+        if(biome.isIn(BiomeTags.IS_FOREST) || biome.isIn(BiomeTags.IS_JUNGLE) || biome.isIn(BiomeTags.IS_TAIGA)){
+            return true;
+        }
+
+        ItemStack main = player.getMainHandStack();
+        ItemStack off = player.getOffHandStack();
+        return main.isIn(ItemTags.SAPLINGS) || off.isIn(ItemTags.SAPLINGS);
+    }
+
+    @Override
+    public String toString() {
+        return this.lightId.getPath();
+    }
 }

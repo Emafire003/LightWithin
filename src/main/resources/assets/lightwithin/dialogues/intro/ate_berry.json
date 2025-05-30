@@ -1,0 +1,19 @@
+{
+  "dialogueId": "ate_berry",
+  "fileVersion": 1,
+  "mainText": "screen.lightwithin.luxdialogue.intro.ate_berry",
+  "mainTextScale": 1.5,
+  "subTextPresent": true,
+  "subText": "screen.lightwithin.luxdialogue.intro.ate_berry.sub",
+  "subTextScale": 1.3,
+  "showBerry": true,
+  "berryPos": "CENTER",
+  "berryScale": 4,
+  "buttons": {
+    "screen.lightwithin.luxdialogue.intro.ate_berry.button.cool": "GO_DIALOGUE<intro/what_do>",
+    "screen.lightwithin.luxdialogue.intro.ate_berry.button.guidance": "GO_DIALOGUE<guidance/guidance>",
+    "screen.lightwithin.luxdialogue.intro.ate_berry.button.name": "GO_DIALOGUE<personal/name_0>"
+  },
+  "dialogueProgress": false,
+  "dialogueProgressState": "INTRO_DONE"
+}

@@ -1,24 +1,29 @@
 package me.emafire003.dev.lightwithin.lights;
 
-import me.emafire003.dev.lightwithin.compat.coloredglowlib.CGLCompat;
+import com.mojang.datafixers.util.Pair;
+import me.emafire003.dev.lightwithin.LightWithin;
 import me.emafire003.dev.lightwithin.component.LightComponent;
 import me.emafire003.dev.lightwithin.config.BalanceConfig;
 import me.emafire003.dev.lightwithin.config.Config;
+import me.emafire003.dev.lightwithin.config.TriggerConfig;
 import me.emafire003.dev.lightwithin.events.LightTriggeringAndEvents;
 import me.emafire003.dev.lightwithin.particles.LightParticles;
 import me.emafire003.dev.lightwithin.particles.LightParticlesUtil;
 import me.emafire003.dev.lightwithin.sounds.LightSounds;
 import me.emafire003.dev.lightwithin.status_effects.LightEffects;
+import me.emafire003.dev.lightwithin.util.CheckUtils;
 import me.emafire003.dev.lightwithin.util.TargetType;
+import me.emafire003.dev.lightwithin.util.TriggerChecks;
 import me.emafire003.dev.particleanimationlib.effects.LineEffect;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
-import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.block.Blocks;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LightningEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.registry.RegistryKeys;
@@ -26,19 +31,23 @@ import net.minecraft.registry.tag.TagKey;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
+import org.jetbrains.annotations.Nullable;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static me.emafire003.dev.lightwithin.LightWithin.*;
+import static me.emafire003.dev.lightwithin.util.CheckUtils.checkRecentlyStruckByLightning;
+import static me.emafire003.dev.lightwithin.util.CheckUtils.checkThundering;
+import static me.emafire003.dev.lightwithin.util.LightTriggerChecks.getMinTrigger;
+import static me.emafire003.dev.lightwithin.util.LightTriggerChecks.sendLightTriggered;
 
 /*Planned stuff:
 
@@ -59,7 +68,11 @@ TRIGGERS when (if conditions are met): Struck by lightning, Ally death, Attackin
 public class ThunderAuraLight extends InnerLight {
 
     public static final Item INGREDIENT = Items.COPPER_INGOT; //Glowstone? Iron? Lightning rod?
+    private final List<TargetType> possibleTargetTypes = Arrays.asList(TargetType.ALLIES, TargetType.ALLIES, TargetType.ALL, TargetType.ALL, TargetType.VARIANT);
+    private final List<TriggerChecks> triggerChecks = List.of(TriggerChecks.ENTITY_ATTACKS_ENTITY, TriggerChecks.ALLY_ATTACKED, TriggerChecks.ALLY_DIES, TriggerChecks.ENTITY_STRUCK_BY_LIGHTNING);
+    private final Identifier lightId = LightWithin.getIdentifier("thunder_aura");
 
+    //TODO verify that this is ok not to be used
     public static final String COLOR = "AFCE23";
 
     /// Used in the ALL target type, is the amount of lightnings that a player can still spawn in
@@ -68,65 +81,94 @@ public class ThunderAuraLight extends InnerLight {
     public static final TagKey<Item> THUNDER_AURA_TRIGGER_ITEMS = TagKey.of(RegistryKeys.ITEM, new Identifier(MOD_ID, "thunder_aura_trigger_items"));
 
 
-    public ThunderAuraLight(List<LivingEntity> targets, double cooldown_time, double power_multiplier, int duration, String color, PlayerEntity caster, boolean rainbow_col) {
-        super(targets, cooldown_time, power_multiplier, duration, color, caster, rainbow_col);
-        type = InnerLightType.THUNDER_AURA;
+    /**
+     * Creates an instance of this InnerLight. Remember to register it!
+     *
+     * @param regex A lambda function, which provides you with a string representing the UUID portion dedicated to type determination.
+     *              You have to provide a check based on the string for which the player will have that particular light.
+     *              Remember that the order with which the lights are registered matters a lot!
+     */
+    public ThunderAuraLight(TypeCreationRegex regex) {
+        super(regex);
+        this.color = "thunder_aura";
     }
 
-    public ThunderAuraLight(List<LivingEntity> targets, double cooldown_time, double power_multiplier, int duration, PlayerEntity caster, boolean rainbow_col) {
-        super(targets, cooldown_time, power_multiplier, duration, caster, rainbow_col);
-        type = InnerLightType.THUNDER_AURA;
-        color = COLOR;
+    @Override
+    public List<TargetType> getPossibleTargetTypes() {
+        return possibleTargetTypes;
     }
 
-    public ThunderAuraLight(List<LivingEntity> targets, double cooldown_time, double power_multiplier, int duration, PlayerEntity caster) {
-        super(targets, cooldown_time, power_multiplier, duration, caster);
-        type = InnerLightType.THUNDER_AURA;
-        color = "thunder_aura";
+    @Override
+    public List<TriggerChecks> getTriggerChecks() {
+        return triggerChecks;
     }
-    
-    private void checkSafety(){
-        if(this.power_multiplier > BalanceConfig.THUNDER_AURA_MAX_POWER){
+
+    @Override
+    public Item getIngredient() {
+        return INGREDIENT;
+    }
+
+    @Override
+    public Identifier getLightId() {
+        return lightId;
+    }
+
+    @Override
+    protected Pair<Double, Integer> checkSafety(double power_multiplier, int duration) {
+        if(power_multiplier > BalanceConfig.THUNDER_AURA_MAX_POWER){
             power_multiplier = BalanceConfig.THUNDER_AURA_MAX_POWER;
         }
-        if(this.power_multiplier < BalanceConfig.THUNDER_AURA_MIN_POWER){
+        if(power_multiplier < BalanceConfig.THUNDER_AURA_MIN_POWER){
             power_multiplier = BalanceConfig.THUNDER_AURA_MIN_POWER;
         }
         int max_duration = BalanceConfig.THUNDER_AURA_MAX_DURATION;
         if(Config.MULTIPLY_DURATION_LIMIT){
             max_duration = (int) (BalanceConfig.THUNDER_AURA_MAX_DURATION * Config.DURATION_MULTIPLIER);
         }
-        if(this.duration > max_duration){
-            this.duration = max_duration;
+        if(duration > max_duration){
+            duration = max_duration;
         }
-        if(this.duration < BalanceConfig.THUNDER_AURA_MIN_DURATION){
-            this.duration = BalanceConfig.THUNDER_AURA_MIN_DURATION;
+        if(duration < BalanceConfig.THUNDER_AURA_MIN_DURATION){
+            duration = BalanceConfig.THUNDER_AURA_MIN_DURATION;
         }
+        return new Pair<>(power_multiplier, duration);
     }
 
     @Override
-    public void execute(){
+    public void startActivation(LightComponent component, PlayerEntity player) {
+        List<LivingEntity> targets = new ArrayList<>();
 
-        checkSafety();
-        if(FabricLoader.getInstance().isModLoaded("coloredglowlib")){
-            if(this.rainbow_col){
-                CGLCompat.getLib().setRainbowColor(this.caster);
-            }else{
-                CGLCompat.getLib().setColor(this.caster, this.color);
-            }
+        if(component.getTargets().equals(TargetType.ALLIES)){
+            targets.addAll(getAllies(player));
+            player.sendMessage(Text.translatable("light.description.activation.thunder_aura.allies"), true);
+        }else if(component.getTargets().equals(TargetType.ALL)){
+            player.sendMessage(Text.translatable("light.description.activation.thunder_aura.all"), true);
+        }else if(component.getTargets().equals(TargetType.VARIANT)){
+            targets.add(player);
+            player.sendMessage(Text.translatable("light.description.activation.thunder_aura.variant"), true);
         }
+        activate(player, targets, component.getPowerMultiplier(), component.getDuration(), component.getMaxCooldown());
+    }
 
+    @Override
+    protected void activate(PlayerEntity caster, List<LivingEntity> targets, double power_multiplier, int duration, double cooldown_time) {
+        super.activate(caster, targets, power_multiplier, duration, cooldown_time);
+        power_multiplier = checkSafety(power_multiplier, duration).getFirst();
+        duration = checkSafety(power_multiplier, duration).getSecond();
+        
         LightComponent component = LIGHT_COMPONENT.get(caster);
 
         if(!caster.getWorld().isClient()){
-            LightParticlesUtil.spawnLightTypeParticle(LightParticles.THUNDER_AURA_LIGHT_PARTICLE, (ServerWorld) caster.getWorld(), caster.getPos());
-            caster.getWorld().playSound(null, BlockPos.ofFloored(caster.getPos()), LightSounds.THUNDER_AURA_LIGHT, SoundCategory.PLAYERS, 1f, 1f);
+            LightParticlesUtil.spawnLightTypeParticle(LightParticles.TYPES_PARTICLES.get(lightId), (ServerWorld) caster.getWorld(), caster.getPos());
+            caster.getWorld().playSound(null, BlockPos.ofFloored(caster.getPos()), LightSounds.TYPES_SOUNDS.get(lightId), SoundCategory.PLAYERS, 1f, 1f);
         }
 
         //Allies shield thing
         if(component.getTargets().equals(TargetType.ALLIES)){
             targets.remove(caster);
-            caster.addStatusEffect(new StatusEffectInstance(LightEffects.THUNDER_AURA, this.duration*20, (int) ((this.power_multiplier -1)/Config.DIV_SELF), false, true));
+            caster.addStatusEffect(new StatusEffectInstance(LightEffects.THUNDER_AURA, duration*20, (int) ((power_multiplier -1)/Config.DIV_SELF), false, true));
+            int finalDuration = duration;
+            double finalPower_multiplier = power_multiplier;
             targets.forEach(target -> {
                 if(!caster.getWorld().isClient && !caster.equals(target)){
                     Vec3d origin = caster.getPos().add(0, caster.getDimensions(caster.getPose()).height/2, 0);
@@ -137,16 +179,15 @@ public class ThunderAuraLight extends InnerLight {
 
                     line.runFor(0.5);
                 }
-                target.addStatusEffect(new StatusEffectInstance(LightEffects.THUNDER_AURA, this.duration*20, (int) this.power_multiplier -1, false, true));
+                target.addStatusEffect(new StatusEffectInstance(LightEffects.THUNDER_AURA, finalDuration *20, (int) finalPower_multiplier -1, false, true));
             });
         }//Extra thundery weather (superstorm). The weather change is global, but the extra lightnings are in a localized area
         else if(component.getTargets().equals(TargetType.VARIANT)){
-            caster.addStatusEffect(new StatusEffectInstance(LightEffects.STORM_AURA, this.duration*20, (int) this.power_multiplier, false, false));
+            caster.addStatusEffect(new StatusEffectInstance(LightEffects.STORM_AURA, duration*20, (int) power_multiplier, false, false));
         }
         /// "ALL" is defined inside {@link LightTriggeringAndEvents#registerThunderAuraAllEffect()}
         /// Anyways, it will allow the player to spawn a lightning at the point they are looking at.
         /// A max number of power multiplier of lightnings
-
     }
 
     /**Spawns a lot of lightnings inside the specified box area for the specified duration
@@ -211,5 +252,122 @@ public class ThunderAuraLight extends InnerLight {
         });
     }
 
+    @Override
+    public void triggerCheck(PlayerEntity player, LightComponent component, @Nullable LivingEntity attacker, @Nullable LivingEntity target) {
+        double trigger_sum = 0;
 
+        if(component.getTargets().equals(TargetType.ALL)){
+            //Triggers with: Low health, Very low health, Self Armor broken,
+            // thunder aura, raining +1
+
+            //Checks if the player is very low health
+            if(CheckUtils.checkSelfDanger(player, Config.HP_PERCENTAGE_SELF)){
+                trigger_sum = trigger_sum+ TriggerConfig.THUNDER_AURA_ALL_VERY_LOW_HEALTH; //+3
+                //Checks if the player has low health
+            }else if(CheckUtils.checkSelfDanger(player, Config.HP_PERCENTAGE_SELF+Config.HP_PERCENTAGE_INCREMENT)){
+                trigger_sum=trigger_sum+TriggerConfig.THUNDER_AURA_ALL_LOW_HEALTH; //+2
+            }
+            //Checks if the player has low armor durability
+            if(Config.CHECK_ARMOR_DURABILITY && CheckUtils.checkArmorDurability(player, Config.DUR_PERCENTAGE_SELF)){
+                trigger_sum=trigger_sum+TriggerConfig.THUNDER_AURA_ALL_ARMOR_DURABILITY;//+1
+            }
+            if(CheckUtils.checkRaining(player.getWorld())){
+                trigger_sum = trigger_sum+TriggerConfig.THUNDER_AURA_ALL_RAINING; //+1
+            }
+            //Checks if the player has the optimal criteria for activation
+            if(checkLightConditions(player)){
+                trigger_sum=trigger_sum+TriggerConfig.THUNDER_AURA_ALL_CONDITIONS; //+3
+            }
+            if(trigger_sum >= getMinTrigger()){
+                sendLightTriggered((ServerPlayerEntity) player);
+            }
+        }else if(component.getTargets().equals(TargetType.ALLIES)){
+            //Ally low health, ally very low health, self very low health,
+            //ally struck by lightning, surrounded by allies, conditions
+
+            if(!player.equals(target) && CheckUtils.checkAllyHealth(player, attacker, Config.HP_PERCENTAGE_ALLIES+5)){
+                trigger_sum = trigger_sum + TriggerConfig.THUNDER_AURA_ALLIES_ALLY_LOW_HEALTH; //+2
+            }
+            if(!player.equals(target) && CheckUtils.checkAllyHealth(player, attacker, Config.HP_PERCENTAGE_ALLIES-5)){
+                trigger_sum = trigger_sum + TriggerConfig.THUNDER_AURA_ALLIES_VERY_LOW_HEALTH;//+3
+            }
+
+            if(CheckUtils.checkSelfDanger(player, Config.HP_PERCENTAGE_SELF)){
+                trigger_sum = trigger_sum+TriggerConfig.THUNDER_AURA_ALLIES_VERY_LOW_HEALTH; //+2
+            }
+
+            if(CheckUtils.checkRaining(player.getWorld())){
+                trigger_sum = trigger_sum+TriggerConfig.THUNDER_AURA_ALLIES_RAINING; //+1
+            }
+            if(!player.equals(target) && target instanceof LivingEntity && CheckUtils.CheckAllies.checkAlly(player, target) && checkRecentlyStruckByLightning(target)){
+                trigger_sum=trigger_sum+TriggerConfig.THUNDER_AURA_ALLIES_STRUCK_BY_LIGHTNING; //+1
+            }
+            //Checks if the player is surrounded
+            if(Config.CHECK_SURROUNDED_BY_ALLIES && CheckUtils.checkSurroundedByAllies(player)){
+                trigger_sum=trigger_sum+TriggerConfig.THUNDER_AURA_ALLIES_SURROUNDED_BY_ALLIES;//+1
+            }
+
+            if(checkLightConditions(player)){
+                trigger_sum=trigger_sum+TriggerConfig.THUNDER_AURA_ALLIES_CONDITIONS;
+            }
+
+            if(trigger_sum >= getMinTrigger()) {
+                sendLightTriggered((ServerPlayerEntity) player);
+            }
+        }
+        /**CHECKS if the player has ENEMIES as target, either his or his allies health needs to be low*/
+        else if(component.getTargets().equals(TargetType.VARIANT)){
+
+            //Self low health, very low health, rainy weather (+2), surrounded, conditions
+            if(CheckUtils.checkSelfDanger(player, Config.HP_PERCENTAGE_SELF)){
+                trigger_sum = trigger_sum+TriggerConfig.THUNDER_AURA_VARIANT_VERY_LOW_HEALTH; //+3
+                //Checks if the player has low health
+            }else if(CheckUtils.checkSelfDanger(player, Config.HP_PERCENTAGE_SELF+Config.HP_PERCENTAGE_INCREMENT)){
+                trigger_sum=trigger_sum+TriggerConfig.THUNDER_AURA_VARIANT_LOW_HEALTH; //+2
+            }
+            //Checks if the player is surrounded
+            if(Config.CHECK_SURROUNDED && CheckUtils.checkSurrounded(player)){
+                trigger_sum=trigger_sum+TriggerConfig.THUNDER_AURA_VARIANT_SURROUNDED;//+1
+            }
+            if(CheckUtils.checkRaining(player.getWorld())){
+                trigger_sum = trigger_sum+TriggerConfig.THUNDER_AURA_VARIANT_RAINING; //+2
+            }
+            //Checks if the player has the optimal criteria for activation
+            if(checkLightConditions(player)){
+                trigger_sum=trigger_sum+TriggerConfig.THUNDER_AURA_VARIANT_CONDITIONS; //+3
+            }
+            if(trigger_sum >= getMinTrigger()){
+                sendLightTriggered((ServerPlayerEntity) player);
+            }
+        }
+    }
+
+    /**Used to check if the player has something that can be considered a ThunderAura source
+     *
+     * @param player The player to perform checks on*/
+    //TODO somehow make these datadriven/customizable at some point?
+    @Override
+    public boolean checkLightConditions(PlayerEntity player) {
+        if(checkThundering(player.getWorld())){
+            return true;
+        }
+        //If the player is standing on a is copper rod then lightning conditions met
+        if(player.getWorld().getBlockState(player.getBlockPos().down()).isOf(Blocks.LIGHTNING_ROD)
+                || player.getWorld().getBlockState(player.getBlockPos()).isOf(Blocks.LIGHTNING_ROD)){
+            return true;
+        }
+        if(checkRecentlyStruckByLightning(player)){
+            return true;
+        }
+
+        ItemStack main = player.getMainHandStack();
+        ItemStack off = player.getOffHandStack();
+        return main.isIn(ThunderAuraLight.THUNDER_AURA_TRIGGER_ITEMS) || off.isIn(ThunderAuraLight.THUNDER_AURA_TRIGGER_ITEMS);
+
+    }
+
+    @Override
+    public String toString() {
+        return this.lightId.getPath();
+    }
 }

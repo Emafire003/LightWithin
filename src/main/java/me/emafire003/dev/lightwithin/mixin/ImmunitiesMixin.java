@@ -1,7 +1,7 @@
 package me.emafire003.dev.lightwithin.mixin;
 
 import me.emafire003.dev.lightwithin.LightWithin;
-import me.emafire003.dev.lightwithin.lights.InnerLightType;
+import me.emafire003.dev.lightwithin.lights.ThunderAuraLight;
 import me.emafire003.dev.lightwithin.status_effects.LightEffects;
 import net.minecraft.entity.Attackable;
 import net.minecraft.entity.Entity;
@@ -49,9 +49,11 @@ public abstract class ImmunitiesMixin extends Entity implements Attackable {
             if(this.hasStatusEffect(LightEffects.THUNDER_AURA)){
                 cir.setReturnValue(false);
             }
-            if(this.hasStatusEffect(LightEffects.LIGHT_ACTIVE) && LightWithin.LIGHT_COMPONENT.get(this).getType().equals(InnerLightType.THUNDER_AURA)){
+            if(this.hasStatusEffect(LightEffects.LIGHT_ACTIVE) && LightWithin.LIGHT_COMPONENT.get(this).getType() instanceof ThunderAuraLight){
                 cir.setReturnValue(false);
             }
         }
     }
+
+    /// The luxcognita immunity is {@link LuxcognitaDreamAttackedMixin}
 }

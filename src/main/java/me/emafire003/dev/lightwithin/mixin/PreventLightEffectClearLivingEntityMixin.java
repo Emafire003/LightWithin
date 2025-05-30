@@ -45,7 +45,7 @@ public abstract class PreventLightEffectClearLivingEntityMixin extends Entity im
     public boolean shouldClearEffect(LivingEntity instance, StatusEffectInstance effect) {
         if(this.lightWithin$getHasDrunkMilk()){
             StatusEffect type = effect.getEffectType();
-            if(type.equals(LightEffects.LIGHT_ACTIVE) || type.equals(LightEffects.LIGHT_FATIGUE)){
+            if(type.equals(LightEffects.LIGHT_ACTIVE) || type.equals(LightEffects.LIGHT_FATIGUE) || type.equals(LightEffects.LUXCOGNITA_OFFENDED)){
                 clearNextEffect = false;
                 return false;
             }

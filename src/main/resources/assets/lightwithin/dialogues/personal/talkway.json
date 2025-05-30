@@ -1,0 +1,13 @@
+{
+  "dialogueId": "talkway",
+  "fileVersion": 1,
+  "mainText": "screen.lightwithin.luxdialogue.personal.talkway",
+  "mainTextScale": 1.5,
+  "subTextPresent": true,
+  "subText": "screen.lightwithin.luxdialogue.personal.talkway.sub",
+  "subTextScale": 1.25,
+  "berryPos": "CENTER",
+  "buttons": {
+    "screen.lightwithin.luxdialogue.next": "CLOSE"
+  }
+}

@@ -14,7 +14,7 @@ public class Config {
     public static SimpleConfig CONFIG;
     private static ConfigProvider configs;
 
-    private static final int ver = 5;
+    private static final int ver = 7;
     public static int VERSION;
 
     //box expansion amount while searching for other entities, like when checking for allies or targets near the player
@@ -88,6 +88,11 @@ public class Config {
     public static boolean ALLOW_MAX_CHARGE_8;
     public static boolean BYPASS_NATURAL_TRIGGER;
     public static String LIGHT_USABLE_IN_FACTION = UsableInFactionOptions.EVERYONE.toString();
+
+    // Added with version 6
+    public static int MAX_POWER_WITH_COMMANDS = 10;
+
+    public static boolean LUXCOGNITA_ON_JOIN = false;
 
     public enum UsableInFactionOptions{
         EVERYONE,
@@ -167,6 +172,8 @@ public class Config {
         configs.addKeyValuePair(new Pair<>("player_glows", true), "Does the player glow when the light activates?");
         configs.addKeyValuePair(new Pair<>("always_affect_allies", true), "Should every ally be affected by the effect of a light triggering? For example, should an ally at full health be healed by the heal light of the caster?");
         configs.addKeyValuePair(new Pair<>("div_self", 2), "By how much should the power be divided for applying the effect of the ALLIES to the caster? Set to 1 to disable");
+        //v6
+        configs.addKeyValuePair(new Pair<>("max_power_with_commands", 10), "The limit of the power level that you can set for a player by using the /light set power commands.Recommended to leave it as is, but could be fun to increase. A server restart is required after modifying this value.");
 
         configs.addKeyValuePair(new Pair<>("spacer", "spacer"), "");
 
@@ -196,7 +203,7 @@ public class Config {
         configs.addKeyValuePair(new Pair<>("hp_percentage_self", 30), "The hp percentage below which the light will be triggerable if the target is SELF (like 15, 20, 50) (in some cases it may not apply)");
         configs.addKeyValuePair(new Pair<>("hp_percentage_allies", 50), "The hp percentage below which the light will be triggerable if the target is ALLIES (like 15, 20, 50) (in some cases it may not apply)");
         configs.addKeyValuePair(new Pair<>("hp_percentage_variant", 50), "The hp percentage below which the light will be triggerable if the target is VARIANT/Passive mobs for example (like 15, 20, 50) (in some cases it may not apply)");
-        configs.addKeyValuePair(new Pair<>("hp_percentage_increment", 20), "The hp percentage to add to differentiante from very low and low health");
+        configs.addKeyValuePair(new Pair<>("hp_percentage_increment", 20), "The hp percentage to add to differentiate from very low and low health");
         configs.addKeyValuePair(new Pair<>("min_allies_low", 1), "How many allies near the player should be on low health for them to trigger a light activation?");
 
         configs.addKeyValuePair(new Pair<>("spacer", "spacer"), "");
@@ -241,6 +248,10 @@ public class Config {
 
         configs.addKeyValuePair(new Pair<>("bypass_natural_trigger", false), "If true will bypass the requirement of having to activate the light naturally before using a light charge");
         configs.addKeyValuePair(new Pair<>("light_usable_in_faction", UsableInFactionOptions.EVERYONE.toString()), "If Factions is installed, who can activate a light in a faction territory? Options: EVERYONE, MEMBER, OWNER, LEADER, COMMANDER, GUEST, ALLIES, ENEMIES. The last two include members as well.");
+
+        //V6-7
+        configs.addKeyValuePair(new Pair<>("luxcognita_on_join", false), "Weather or not to give the player a luxcognita berry on join, as a sort of 'tutorial'");
+
     }
 
     public static void reloadConfig(){
@@ -317,6 +328,12 @@ public class Config {
         ALLOW_MAX_CHARGE_8 = CONFIG.getOrDefault("allow_max_charge_8", true);
         BYPASS_NATURAL_TRIGGER = CONFIG.getOrDefault("bypass_natural_trigger", false);
         LIGHT_USABLE_IN_FACTION = CONFIG.getOrDefault("light_usable_in_faction", UsableInFactionOptions.EVERYONE.toString());
+
+        //Config version 6
+        MAX_POWER_WITH_COMMANDS = CONFIG.getOrDefault("max_power_with_commands", 10);
+        //6-7
+        //TODO test
+        LUXCOGNITA_ON_JOIN = CONFIG.getOrDefault("luxcognita_on_join", false);
     }
 }
 

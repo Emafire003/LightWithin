@@ -312,6 +312,20 @@ public class SimpleConfig {
     }
 
     /**
+     * Returns float value from config corresponding to the given
+     * key, or the default string if the key is missing or invalid.
+     *
+     * @return  value corresponding to the given key, or the default value
+     */
+    public float getOrDefault( String key, float def ) {
+        try {
+            return Float.parseFloat( get(key) );
+        } catch (Exception e) {
+            return def;
+        }
+    }
+
+    /**
      * Returns double value from config corresponding to the given
      * key, or the default string if the key is missing or invalid.
      * Returns the minimum value if the one specified is below it

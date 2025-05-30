@@ -4,12 +4,14 @@ import com.mojang.datafixers.util.Pair;
 import me.emafire003.dev.lightwithin.LightWithin;
 import me.emafire003.dev.lightwithin.component.LightComponent;
 import me.emafire003.dev.lightwithin.config.Config;
-import me.emafire003.dev.lightwithin.lights.InnerLightType;
+import me.emafire003.dev.lightwithin.lights.InnerLight;
+import me.emafire003.dev.lightwithin.lights.NoneLight;
 import me.emafire003.dev.lightwithin.util.TargetType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ActionResult;
 
 import java.util.List;
+import java.util.UUID;
 
 import static me.emafire003.dev.lightwithin.LightWithin.LIGHT_COMPONENT;
 import static me.emafire003.dev.lightwithin.LightWithin.LOGGER;
@@ -60,15 +62,22 @@ public class LightCreationAndEvent {
             component.setMaxLightStack(determineMaxLightCharges(id_bits, COOLDOWN_BIT));
             component.setLightCharges(0);
             component.setVersion(2);
+        }if(component.getVersion() == 2){
+            component.setVersion(3);
         }
 
-        if(!component.getType().equals(InnerLightType.NONE) || component.getType() == null){
+
+        // This check is here to non-reset the light unless it became invalid (somehow)
+        if(!(component.getType() instanceof NoneLight || component.getType() == null)){
             return;
+            //Basically checks if it's not the first join for the player
+        }else if(component.getDuration() != -1){
+            LOGGER.warn("The light of " + player.getName().toString() + " has (somehow) become invalid (it now is: " + component.getType() + " ). Resetting it it!");
         }
 
         //Type bit & target bit
         //If the second part of the UUID starts with a letter form a to h && the second character is a digit -> Heal
-        Pair<InnerLightType, TargetType> type_and_target = determineTypeAndTarget(id_bits, TYPE_BIT, TARGET_BIT);
+        Pair<InnerLight, TargetType> type_and_target = determineTypeAndTarget(id_bits, TYPE_BIT, TARGET_BIT);
         //type
         component.setType(type_and_target.getFirst());
         //Target
@@ -129,7 +138,7 @@ public class LightCreationAndEvent {
     }
 
     //0,0015% of probabilty of gaining a legendary light? (well times 2)
-    public static Pair<InnerLightType, TargetType> determineTypeAndTarget(String[] id_bits, int type_bit, int target_bit){
+    public static Pair<InnerLight, TargetType> determineTypeAndTarget(String[] id_bits, int type_bit, int target_bit){
         if(type_bit == 2 || type_bit == 3){
             //It also adds the last digit from the previous bit
             id_bits[target_bit] = id_bits[target_bit].substring(1)+id_bits[target_bit-1].substring(id_bits[target_bit-1].length()-1);
@@ -138,57 +147,20 @@ public class LightCreationAndEvent {
             //It also adds the last digit from the previous bit
             id_bits[target_bit] = id_bits[target_bit].substring(1)+id_bits[target_bit-1].substring(id_bits[target_bit-1].length()-1);
         }
-        //The second character of the thing
-        int i = 1;
 
-        //All of these realease 1.0.0 have roughly a 12.5% chance of appearing. Except the frog that tends very much to 0.
+        //Checks all of the lights for what they should have in the UUID in order to be selected
+        /// See the {@link me.emafire003.dev.lightwithin.lights.InnerLightTypes} to see how they are determined
+        for(InnerLight innerLight : LightWithin.INNERLIGHT_REGISTRY.stream().toList()){
+            if(innerLight instanceof NoneLight){
+                continue;
+            }
+            if(innerLight.getCreationRegex().isCompatible(id_bits[type_bit])){
+                return new Pair<>(innerLight, determineTarget(id_bits, target_bit, innerLight.getPossibleTargetTypes()));
+            }
+        }
 
-        //ForestAura
-        if(String.valueOf(id_bits[type_bit].charAt(i+1)).matches("f")){
-            return new Pair<>(InnerLightType.FOREST_AURA, determineTarget(id_bits, target_bit, LightWithin.POSSIBLE_TARGETS.get(InnerLightType.FOREST_AURA)));
-        }
-        //Thunder Aura
-        else if(String.valueOf(id_bits[type_bit].charAt(i+2)).matches("f")){
-            return new Pair<>(InnerLightType.THUNDER_AURA, determineTarget(id_bits, target_bit, LightWithin.POSSIBLE_TARGETS.get(InnerLightType.THUNDER_AURA)));
-        }
-        //Frog? aka f = 6 r = 18 = F+2 o = 15 = E g = 7
-        //If there is "frog" spelled as numbers of the alphabet, then your light is frog. Happy?
-        else if(String.valueOf(id_bits[type_bit]).contains("6f2e7")){
-            return new Pair<>(InnerLightType.FROG, determineTarget(id_bits, target_bit, List.of(TargetType.ALL)));
-        }
-        //HEAL
-        else if(String.valueOf(id_bits[type_bit].charAt(i)).matches("[a-b]")){
-            return new Pair<InnerLightType, TargetType>(InnerLightType.HEAL, determineTarget(id_bits, target_bit, LightWithin.POSSIBLE_TARGETS.get(InnerLightType.HEAL)));
-        }
-        //DEFENCE
-        else if(String.valueOf(id_bits[type_bit].charAt(i)).matches("[c-d]")){
-            return new Pair<>(InnerLightType.DEFENCE, determineTarget(id_bits, target_bit, LightWithin.POSSIBLE_TARGETS.get(InnerLightType.DEFENCE)));
-            //STRENGTH
-        }else if(String.valueOf(id_bits[type_bit].charAt(i)).matches("[e-f]")){
-            return new Pair<>(InnerLightType.STRENGTH, determineTarget(id_bits, target_bit, LightWithin.POSSIBLE_TARGETS.get(InnerLightType.STRENGTH)));
-        }
-        //Blazing
-        else if(String.valueOf(id_bits[type_bit].charAt(i)).matches("[0-1]")){
-            return new Pair<>(InnerLightType.BLAZING, determineTarget(id_bits, target_bit, LightWithin.POSSIBLE_TARGETS.get(InnerLightType.BLAZING)));
-        }
-        //Frost
-        else if(String.valueOf(id_bits[type_bit].charAt(i)).matches("[2-3]")){
-            return new Pair<>(InnerLightType.FROST, determineTarget(id_bits, target_bit, LightWithin.POSSIBLE_TARGETS.get(InnerLightType.FROST)));
-        }
-        //Earthen
-        else if(String.valueOf(id_bits[type_bit].charAt(i)).matches("[4-5]")){
-            return new Pair<>(InnerLightType.EARTHEN, determineTarget(id_bits, target_bit, LightWithin.POSSIBLE_TARGETS.get(InnerLightType.EARTHEN)));
-        }
-        //Wind
-        else if(String.valueOf(id_bits[type_bit].charAt(i)).matches("[6-7]")){
-            return new Pair<>(InnerLightType.WIND, determineTarget(id_bits, target_bit, LightWithin.POSSIBLE_TARGETS.get(InnerLightType.WIND)));
-        }
-        //Aqua
-        else if(String.valueOf(id_bits[type_bit].charAt(i)).matches("[8-9]")){
-            return new Pair<>(InnerLightType.AQUA, determineTarget(id_bits, target_bit, LightWithin.POSSIBLE_TARGETS.get(InnerLightType.AQUA)));
-        }
-        LOGGER.info("[debug] nop not matched, UUID bit: " + id_bits[type_bit]);
-        return new Pair<>(InnerLightType.HEAL, TargetType.SELF);
+        LOGGER.error("[debug] The light type did not match any option of the UUID bits: " + id_bits[type_bit]);
+        return new Pair<>(LightWithin.INNERLIGHT_REGISTRY.get(LightWithin.getIdentifier("heal")), TargetType.SELF);
     }
 
     //id bits 0
@@ -270,5 +242,30 @@ public class LightCreationAndEvent {
             max = 7;
         }
         return max;
+    }
+
+
+    /** Changes the all of a light's parameters/attributes using a new UUID
+     *
+     * @param targetsComponent The {@link LightComponent} of the target entity, the one whose light is going to be changed to a new one
+     * @param uuid The new UUID used to determine the new light parameters/attributes*/
+
+    public static void mutateLightToUUID(LightComponent targetsComponent, UUID uuid){
+        mutateLightToUUID(targetsComponent, uuid.toString().toLowerCase());
+    }
+
+    /** Changes the all of a light's parameters/attributes using a new UUID
+     *
+     * @param targetsComponent The {@link LightComponent} of the target entity, the one whose light is going to be changed to a new one
+     * @param uuidString The string representation of the new UUID used to determine the new light parameters/attributes*/
+    public static void mutateLightToUUID(LightComponent targetsComponent, String uuidString){
+        String[] id_bits = uuidString.split("-");
+        targetsComponent.setType(LightCreationAndEvent.determineTypeAndTarget(id_bits, LightCreationAndEvent.TYPE_BIT, LightCreationAndEvent.TARGET_BIT).getFirst());
+        targetsComponent.setTargets(LightCreationAndEvent.determineTypeAndTarget(id_bits, LightCreationAndEvent.TYPE_BIT, LightCreationAndEvent.TARGET_BIT).getSecond());
+
+        targetsComponent.setPowerMultiplier(LightCreationAndEvent.determinePower(id_bits, LightCreationAndEvent.POWER_BIT));
+        targetsComponent.setDuration(LightCreationAndEvent.determineDuration(id_bits, LightCreationAndEvent.DURATION_BIT));
+        targetsComponent.setMaxCooldown(LightCreationAndEvent.determineCooldown(id_bits, LightCreationAndEvent.COOLDOWN_BIT));
+        targetsComponent.setMaxLightStack(LightCreationAndEvent.determineMaxLightCharges(id_bits, LightCreationAndEvent.COOLDOWN_BIT));
     }
 }

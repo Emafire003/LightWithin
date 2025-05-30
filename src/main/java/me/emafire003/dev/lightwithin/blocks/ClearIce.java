@@ -2,7 +2,7 @@ package me.emafire003.dev.lightwithin.blocks;
 
 
 import me.emafire003.dev.lightwithin.LightWithin;
-import me.emafire003.dev.lightwithin.lights.InnerLightType;
+import me.emafire003.dev.lightwithin.lights.FrostLight;
 import me.emafire003.dev.lightwithin.status_effects.LightEffects;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
@@ -57,7 +57,7 @@ public class ClearIce extends FrostedIceBlock {
 
         if(!entities.isEmpty()){
             for(PlayerEntity p : entities){
-                if(LightWithin.LIGHT_COMPONENT.get(p).getType().equals(InnerLightType.FROST)
+                if(LightWithin.LIGHT_COMPONENT.get(p).getType() instanceof FrostLight
                         && p.hasStatusEffect(LightEffects.LIGHT_ACTIVE)){
                     run = false;
                     break;

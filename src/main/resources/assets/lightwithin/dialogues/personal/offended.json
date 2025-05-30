@@ -1,0 +1,12 @@
+{
+  "dialogueId": "offended",
+  "fileVersion": 1,
+  "mainText": "screen.lightwithin.luxdialogue.offended",
+  "mainTextScale": 1.2,
+  "berryPos": "CENTER",
+  "buttons": {
+    "screen.lightwithin.luxdialogue.next": "CLOSE"
+  },
+  "dialogueProgress": true,
+  "dialogueProgressState": "PISSED_OFF"
+}

@@ -1,0 +1,15 @@
+{
+  "dialogueId": "my_light",
+  "fileVersion": 1,
+  "mainText": "screen.lightwithin.luxdialogue.my_light",
+  "mainTextScale": 1.5,
+  "buttons": {
+    "screen.lightwithin.luxdialogue.my_light.power": "SHOW_POWER",
+    "screen.lightwithin.luxdialogue.my_light.target": "SHOW_TARGET",
+    "screen.lightwithin.luxdialogue.my_light.type": "SHOW_TYPE_RUNES",
+    "screen.lightwithin.luxdialogue.my_light.duration": "SHOW_DURATION",
+    "screen.lightwithin.luxdialogue.my_light.maxcharges": "SHOW_MAXCHARGES",
+    "screen.lightwithin.luxdialogue.my_light.maxcooldown": "SHOW_MAXCOOLDOWN",
+    "screen.lightwithin.luxdialogue.my_light.my_triggers": "GO_DIALOGUE<my_light/triggers>"
+  }
+}
