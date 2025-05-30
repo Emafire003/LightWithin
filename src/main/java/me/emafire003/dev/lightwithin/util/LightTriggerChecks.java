@@ -10,7 +10,7 @@ public class LightTriggerChecks {
     //If the sum of the things happening to player is greater than this the light activates
     /// this is updatet in LightWithin class, when the server starts.
     public static double MIN_TRIGGER = 5;
-    
+
     public static double getMinTrigger(){
         return MIN_TRIGGER;
     }

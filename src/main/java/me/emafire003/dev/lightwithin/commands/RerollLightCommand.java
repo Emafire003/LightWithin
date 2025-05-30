@@ -124,9 +124,6 @@ public class RerollLightCommand implements LightCommand{
                     source.sendFeedback( () -> Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("§eThe new target type for " + target.getName().getString() + " is: §a" + targets_new )), false);
                 }
 
-
-
-
             }
         }catch (Exception e){
             e.printStackTrace();

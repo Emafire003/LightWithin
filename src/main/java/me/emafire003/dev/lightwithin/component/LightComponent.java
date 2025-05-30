@@ -1,18 +1,25 @@
 package me.emafire003.dev.lightwithin.component;
 
 import me.emafire003.dev.lightwithin.LightWithin;
+import me.emafire003.dev.lightwithin.client.luxcognita_dialogues.DialogueProgressState;
 import me.emafire003.dev.lightwithin.config.Config;
 import me.emafire003.dev.lightwithin.lights.InnerLight;
 import me.emafire003.dev.lightwithin.lights.NoneLight;
 import me.emafire003.dev.lightwithin.util.TargetType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtElement;
+import net.minecraft.nbt.NbtList;
+import net.minecraft.nbt.NbtString;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import org.ladysnake.cca.api.v3.component.ComponentV3;
 import org.ladysnake.cca.api.v3.component.sync.AutoSyncedComponent;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static me.emafire003.dev.lightwithin.LightWithin.*;
 
@@ -29,13 +36,16 @@ public class LightComponent implements ComponentV3, AutoSyncedComponent {
 
     protected String prev_color = "ffffff";
     protected int max_increment_percent = -1;
-    protected int max_light_stack = 1;
+    protected int max_light_charges = 1;
     protected int current_light_charges = 0;
     protected boolean has_triggered_naturally = false;
 
     //As in can the player use the light? Either in a specif time or place (needs to be set)
     protected boolean isLocked = Config.LIGHT_LOCKED_DEFAULT;
     protected int version = CURRENT_VERSION;
+
+    //V3-V4 (cause of the alpha thingy on modrinth)
+    protected List<DialogueProgressState> dialogueProgressStates = new ArrayList<>();
 
     private final PlayerEntity caster;
 
@@ -123,9 +133,9 @@ public class LightComponent implements ComponentV3, AutoSyncedComponent {
 
         if(tag.contains("max_light_stack")){
             if(debug){LOGGER.info("the max_light_stack got: " + tag.getInt("max_light_stack"));}
-            this.max_light_stack = tag.getInt("max_light_stack");
+            this.max_light_charges = tag.getInt("max_light_stack");
         }else{
-            this.max_light_stack = 1;
+            this.max_light_charges = 1;
         }
 
         if(tag.contains("light_charges")){
@@ -149,8 +159,26 @@ public class LightComponent implements ComponentV3, AutoSyncedComponent {
             this.has_triggered_naturally = false;
         }
 
+        if(tag.contains("dialogueProgressStates")){
+            if(debug){LOGGER.info("the dialogueProgressStates got: " + tag.getList("dialogueProgressStates", NbtElement.STRING_TYPE));}
+
+            NbtList stringStates = tag.getList("dialogueProgressStates", NbtElement.STRING_TYPE);
+
+            List<DialogueProgressState> stateList = new ArrayList<>();
+            stringStates.forEach( nbtElement -> {
+                if(DialogueProgressState.valueOf(nbtElement.asString()) != null){
+                    stateList.add(DialogueProgressState.valueOf(nbtElement.asString()));
+                }
+            });
+            this.dialogueProgressStates.clear();
+            this.dialogueProgressStates.addAll(stateList);
+
+        }else{
+            this.has_triggered_naturally = false;
+        }
+
         if(shouldWrite){
-            this.writeToNbt(tag, wrapperLookup);
+            this.writeToNbt(tag);
         }
 
     }
@@ -169,11 +197,17 @@ public class LightComponent implements ComponentV3, AutoSyncedComponent {
         tag.putInt("duration", this.duration);
         tag.putString("prev_color", this.prev_color);
         tag.putInt("max_increment", this.max_increment_percent);
-        tag.putInt("max_light_stack", this.max_light_stack);
+        tag.putInt("max_light_stack", this.max_light_charges);
         tag.putInt("light_charges", this.current_light_charges);
         tag.putBoolean("isLocked", this.isLocked);
         tag.putBoolean("hasTriggeredNaturally", this.has_triggered_naturally);
         tag.putInt("version", this.version);
+
+        NbtList diProgList = new NbtList();
+        dialogueProgressStates.forEach( dialogueProgressState -> diProgList.add(NbtString.of(dialogueProgressState.toString())));
+        tag.remove("dialogueProgressStates"); //clears it from the old stuff
+        tag.put("dialogueProgressStates", diProgList);
+
     }
 
 
@@ -200,8 +234,8 @@ public class LightComponent implements ComponentV3, AutoSyncedComponent {
     public int getMaxIncrementPercent() {
         return this.max_increment_percent;
     }
-    public int getMaxLightStack(){
-        return this.max_light_stack;
+    public int getMaxLightCharges(){
+        return this.max_light_charges;
     }
     public int getCurrentLightCharges(){
         return this.current_light_charges;
@@ -224,6 +258,10 @@ public class LightComponent implements ComponentV3, AutoSyncedComponent {
 
     public int getVersion() {
         return this.version;
+    }
+
+    public List<DialogueProgressState> getDialogueProgressStates() {
+        return dialogueProgressStates;
     }
 
     public void setType(InnerLight type) {
@@ -304,7 +342,26 @@ public class LightComponent implements ComponentV3, AutoSyncedComponent {
 
 
     public void setMaxLightStack(int max_stack) {
-        this.max_light_stack = max_stack;
+        this.max_light_charges = max_stack;
+        LightWithin.LIGHT_COMPONENT.sync(caster);
+    }
+
+    public void setDialogueProgressStates(List<DialogueProgressState> states){
+        this.dialogueProgressStates.clear();
+        this.dialogueProgressStates.addAll(states);
+        LightWithin.LIGHT_COMPONENT.sync(caster);
+    }
+
+    public void addDialogueProgressState(DialogueProgressState state){
+        if(this.dialogueProgressStates.contains(state)){
+            return;
+        }
+        this.dialogueProgressStates.add(state);
+        LightWithin.LIGHT_COMPONENT.sync(caster);
+    }
+
+    public void removeDialogueProgressState(DialogueProgressState state){
+        this.dialogueProgressStates.remove(state);
         LightWithin.LIGHT_COMPONENT.sync(caster);
     }
 
@@ -315,7 +372,7 @@ public class LightComponent implements ComponentV3, AutoSyncedComponent {
         this.power_multiplier = power;
         this.duration = duration;
         this.max_increment_percent = max_increment;
-        this.max_light_stack = max_light_stack;
+        this.max_light_charges = max_light_stack;
         this.isLocked = locked;
         this.version = version;
         LightWithin.LIGHT_COMPONENT.sync(caster);
@@ -329,7 +386,7 @@ public class LightComponent implements ComponentV3, AutoSyncedComponent {
         //this.version = CURRENT_VERSION;
         this.type = new NoneLight();
         this.max_increment_percent = -1;
-        this.max_light_stack = 1;
+        this.max_light_charges = 1;
         this.isLocked = false;
         LightWithin.LIGHT_COMPONENT.sync(caster);
     }

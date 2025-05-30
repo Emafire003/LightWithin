@@ -1,0 +1,21 @@
+{
+  "dialogueId": "example",
+  "fileVersion": 1,
+  "mainText": "screen.lightwithin.luxdialogue.light_info.targets.self.example",
+  "mainTextScale": 1.5,
+  "subTextPresent": true,
+  "subText": "screen.lightwithin.luxdialogue.light_info.targets.self.example.sub",
+  "subTextScale": 1.2,
+  "showImage": true,
+  "imagePos": "CENTER",
+  "imagePath": {
+    "namespace": "lightwithin",
+    "path": "textures/lights/target_icons/self.png"
+  },
+  "imageWidth": 18,
+  "imageHeight": 18,
+  "imageScale": 2.0,
+  "buttons": {
+    "screen.lightwithin.luxdialogue.next": "GO_IF_PROGRESS<light_info/targets/allies/desc, LISTING_TARGETS>"
+  }
+}

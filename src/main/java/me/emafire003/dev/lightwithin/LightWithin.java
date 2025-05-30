@@ -10,6 +10,7 @@ import org.ladysnake.cca.api.v3.entity.EntityComponentFactoryRegistry;
 import org.ladysnake.cca.api.v3.entity.EntityComponentInitializer;
 import org.ladysnake.cca.api.v3.entity.RespawnCopyStrategy;
 import me.emafire003.dev.lightwithin.blocks.LightBlocks;
+import me.emafire003.dev.lightwithin.client.luxcognita_dialogues.DialogueProgressState;
 import me.emafire003.dev.lightwithin.commands.LightCommands;
 import me.emafire003.dev.lightwithin.compat.coloredglowlib.CGLCompat;
 import me.emafire003.dev.lightwithin.compat.flan.FlanCompat;
@@ -20,8 +21,7 @@ import me.emafire003.dev.lightwithin.config.Config;
 import me.emafire003.dev.lightwithin.config.TriggerConfig;
 import me.emafire003.dev.lightwithin.entities.LightEntities;
 import me.emafire003.dev.lightwithin.entities.earth_golem.EarthGolemEntity;
-import me.emafire003.dev.lightwithin.events.LightTriggeringAndEvents;
-import me.emafire003.dev.lightwithin.events.PlayerJoinEvent;
+import me.emafire003.dev.lightwithin.events.*;
 import me.emafire003.dev.lightwithin.items.LightItems;
 import me.emafire003.dev.lightwithin.items.crafting.BrewRecipes;
 import me.emafire003.dev.lightwithin.lights.*;
@@ -30,7 +30,6 @@ import me.emafire003.dev.lightwithin.particles.LightParticles;
 import me.emafire003.dev.lightwithin.sounds.LightSounds;
 import me.emafire003.dev.lightwithin.status_effects.LightEffects;
 import me.emafire003.dev.lightwithin.particles.LightParticlesUtil;
-import me.emafire003.dev.lightwithin.events.LightCreationAndEvent;
 import me.emafire003.dev.lightwithin.util.*;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
@@ -48,7 +47,11 @@ import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
-import net.minecraft.registry.*;
+import net.minecraft.item.ItemStack;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.SimpleRegistry;
 import net.minecraft.registry.entry.RegistryEntryList;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
@@ -56,6 +59,8 @@ import net.minecraft.sound.SoundCategory;
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Formatting;
+import net.minecraft.util.Identifier;
+import net.minecraft.util.Pair;
 import net.minecraft.util.math.Box;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -132,9 +137,12 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 		LightTriggeringAndEvents.registerListeners();
 		registerLightUsedPacket();
 		registerLightChargeConsumedPacket();
+		registerInteractPacket();
 		registerReadyLightCacheRemover();
 		registerSyncOptionsOnJoin();
 		registerInteractedPacket();
+		registerDialogueStateUpdatePacket();
+		registerLuxdreamDialogueStopPacket();
 		LightSounds.registerSounds();
 		LightEffects.registerModEffects();
 		LightItems.registerItems();
@@ -144,6 +152,7 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 		LightCommands.registerArguments();
 		LightEntities.registerEntities();
 		registerTags();
+		registerLuxCognitaOnFirstJoin();
         LightItemComponents.registerComponents();
 
         if(FabricLoader.getInstance().isModLoaded("flan")){
@@ -151,9 +160,6 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
         }
         CommandRegistrationCallback.EVENT.register(LightCommands::registerCommands);
 
-		if(FabricLoader.getInstance().isModLoaded("flan")){
-			FlanCompat.registerFlan();
-		}
 
 
 		ServerLifecycleEvents.SERVER_STARTED.register(minecraftServer -> {
@@ -201,7 +207,25 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 				return ActionResult.PASS;
 			}
 			syncCustomConfigOptions(player);
+
+			//Not really meant to be here, but it remvoes the effect of luxdream if the player crashed or quit and then logged back in
+			if(player.hasStatusEffect(LightEffects.LUXCOGNITA_DREAM)){
+				player.removeStatusEffect(LightEffects.LUXCOGNITA_DREAM);
+			}
 			return ActionResult.PASS;
+		});
+	}
+
+
+
+	private static void registerLuxCognitaOnFirstJoin(){
+		PlayerFirstJoinEvent.EVENT.register((player, server) -> {
+			if(player.getWorld().isClient){
+				return;
+			}
+			if(Config.LUXCOGNITA_ON_JOIN){
+				player.giveItemStack(new ItemStack(LightItems.LUXCOGNITA_BERRY, 1));
+			}
 		});
 	}
 
@@ -232,7 +256,18 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 		return Config.AREA_OF_SEARCH_FOR_ENTITIES;
 	}
 
-    /**Sends a packet with updated config options to the client
+	/** Sets the new value for the maximum power settable using commands
+	 * If below 1, it will be set to 1*/
+	public static void setMaxPowerWithCommands(int max){
+		MAX_POWER_COMMANDS = Math.max(max, 1);
+	}
+
+	/** Returns the maximum power settable using commands */
+	public static int getMaxPowerCommands(){
+		return Math.max(MAX_POWER_COMMANDS, 1);
+	}
+
+	/**Sends a packet with updated config options to the client
      * such as the auto light activation permission*/
     public static void syncCustomConfigOptions(ServerPlayerEntity player){
         Map<String, Boolean> booleanMap = new HashMap<>();
@@ -324,6 +359,53 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 
             //var results = LightUsedPacketC2S.read(buf);
         }));
+    }
+
+    /**Fires when the player sees a dialogue which ahs to update a certain dialogue state*/
+    private static void registerDialogueStateUpdatePacket(){
+        ServerPlayNetworking.registerGlobalReceiver(DialogueProgressUpdatePacketC2S.ID, (((server, player, handler, buf, responseSender) -> {
+            if(player.getWorld().isClient){
+                return;
+            }
+            Pair<DialogueProgressState, Boolean> pair = DialogueProgressUpdatePacketC2S.read(buf);
+            DialogueProgressState state = Objects.requireNonNull(pair).getLeft();
+            boolean shouldRemove = pair.getRight();
+
+            server.execute(()->{
+                if(state != null && state.equals(DialogueProgressState.PISSED_OFF)){
+                    player.addStatusEffect(new StatusEffectInstance(LightEffects.LUXCOGNITA_OFFENDED, 60*20));
+                    return;
+                }
+
+                if(shouldRemove){
+                    LIGHT_COMPONENT.get(player).removeDialogueProgressState(state);
+                }else{
+                    LIGHT_COMPONENT.get(player).addDialogueProgressState(state);
+                }
+            });
+
+        })));
+    }
+
+    /**Triggered when a player has finished their luxdialogue / dream*/
+    private static void registerLuxdreamDialogueStopPacket(){
+        ServerPlayNetworking.registerGlobalReceiver(LuxdreamClientPacketC2S.ID, (((server, player, handler, buf, responseSender) -> {
+            if(player.getWorld().isClient){
+                return;
+            }
+            LuxDialogueActions action = LuxdreamClientPacketC2S.read(buf);
+            server.execute(() -> {
+                //StopDream packet thing
+                if(action.equals(LuxDialogueActions.STOP_DREAM)){
+                    if(!player.hasStatusEffect(LightEffects.LUXCOGNITA_DREAM)){
+                        LOGGER.warn("Luxdream termination packet sent but there was no Luxcognita Dream effect to be removed!");
+                        return;
+                    }
+                    player.removeStatusEffect(LightEffects.LUXCOGNITA_DREAM);
+                }
+
+            });
+        })));
     }
 
 

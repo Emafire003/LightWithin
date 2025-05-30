@@ -1,0 +1,20 @@
+{
+  "dialogueId": "obtain_4_yes",
+  "fileVersion": 1,
+  "mainText": "screen.lightwithin.luxdialogue.light_charge.obtain_4_yes",
+  "textScale": 1.5,
+  "subTextPresent": true,
+  "subText": "screen.lightwithin.luxdialogue.light_charge.obtain_4_yes.sub",
+  "subTextScale": 1.3,
+  "showItem": true,
+  "itemPos": "CENTER",
+  "item": {
+    "namespace": "lightwithin",
+    "path": "bottled_light"
+  },
+  "itemScale": 3.0,
+  "buttons": {
+    "screen.lightwithin.luxdialogue.light_charge.obtain_4_yes.knew": "GO_DIALOGUE<light_charges/obtain_4_yes_bye>",
+    "screen.lightwithin.luxdialogue.light_charge.obtain_4_yes.confident": "GO_DIALOGUE<light_charges/alchemy/step_0>"
+  }
+}

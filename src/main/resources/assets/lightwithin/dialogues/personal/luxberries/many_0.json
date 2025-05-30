@@ -1,0 +1,13 @@
+{
+  "dialogueId": "many_0",
+  "fileVersion": 1,
+  "mainText": "screen.lightwithin.luxdialogue.personal.luxberries.many_0",
+  "mainTextScale": 1.5,
+  "subTextPresent": true,
+  "subText": "screen.lightwithin.luxdialogue.personal.luxberries.many_0.sub",
+  "subTextScale": 1.3,
+  "berryPos": "CENTER",
+  "buttons": {
+    "screen.lightwithin.luxdialogue.next": "GO_DIALOGUE<personal/luxberries/many_1>"
+  }
+}

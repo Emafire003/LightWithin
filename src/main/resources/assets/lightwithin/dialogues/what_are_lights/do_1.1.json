@@ -1,0 +1,9 @@
+{
+  "dialogueId": "do_1.1",
+  "fileVersion": 1,
+  "mainText": "screen.lightwithin.luxdialogue.what_are_lights.do_1.1",
+  "textScale": 1.45,
+  "buttons": {
+    "screen.lightwithin.luxdialogue.next": "GO_DIALOGUE<what_are_lights/do_2>"
+  }
+}

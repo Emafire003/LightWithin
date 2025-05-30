@@ -1,0 +1,13 @@
+{
+  "dialogueId": "finish_targets",
+  "fileVersion": 1,
+  "mainText": "screen.lightwithin.luxdialogue.light_info.finish",
+  "mainTextScale": 1.5,
+  "buttons": {
+    "screen.lightwithin.luxdialogue.light_info.finish.ok": "GO_DIALOGUE<personal/smile>",
+    "screen.lightwithin.luxdialogue.light_info.finish.boring": "GO_DIALOGUE<personal/offended>"
+  },
+  "dialogueProgress": true,
+  "dialogueProgressState": "LISTING_TARGETS",
+  "removeDialogueProgress": true
+}

@@ -1,0 +1,13 @@
+{
+  "dialogueId": "start",
+  "fileVersion": 1,
+  "mainText": "screen.lightwithin.luxdialogue.what_are_lights.start",
+  "textScale": 1.45,
+  "subTextPresent": true,
+  "subText": "screen.lightwithin.luxdialogue.what_are_lights.start.sub",
+  "subTextScale": 1.2,
+  "buttons": {
+    "screen.lightwithin.luxdialogue.what_are_lights.start.do": "GO_DIALOGUE<what_are_lights/do_0>",
+    "screen.lightwithin.luxdialogue.what_are_lights.start.are": "GO_DIALOGUE<what_are_lights/lore_0>"
+  }
+}

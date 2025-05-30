@@ -1,0 +1,16 @@
+{
+  "dialogueId": "in_danger",
+  "fileVersion": 1,
+  "mainText": "screen.lightwithin.luxdialogue.intro.in_danger",
+  "mainTextScale": 1.5,
+  "subTextPresent": true,
+  "subText": "screen.lightwithin.luxdialogue.intro.in_danger.sub",
+  "subTextScale": 1.1,
+  "showBerry": true,
+  "berryPos": "TOP_LEFT",
+  "berryScale": 2.5,
+  "buttons": {
+    "screen.lightwithin.luxdialogue.intro.in_danger.button.can_help": "GO_DIALOGUE<intro/can_help>",
+    "screen.lightwithin.luxdialogue.intro.in_danger.button.let_go": "GO_DIALOGUE<intro/eat_new_berry>"
+  }
+}

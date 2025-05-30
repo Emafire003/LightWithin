@@ -5,6 +5,7 @@ import me.emafire003.dev.lightwithin.compat.argonauts.ArgonautsChecker;
 import me.emafire003.dev.lightwithin.compat.factions.FactionChecker;
 import me.emafire003.dev.lightwithin.compat.flan.FlanCompat;
 import me.emafire003.dev.lightwithin.compat.ftb_teams.FTBTeamsChecker;
+import me.emafire003.dev.lightwithin.compat.guilded.GuildedChecker;
 import me.emafire003.dev.lightwithin.compat.open_parties_and_claims.OPACChecker;
 import me.emafire003.dev.lightwithin.compat.yawp.YawpCompat;
 import me.emafire003.dev.lightwithin.component.SummonedByComponent;
@@ -496,6 +497,11 @@ public class CheckUtils {
                     return true;
                 }
             }
+            if(FabricLoader.getInstance().isModLoaded(GuildedChecker.getModId()) && entity.getWorld().isClient() && entity instanceof PlayerEntity && teammate instanceof PlayerEntity){
+                if(GuildedChecker.areInSameGuild((ServerPlayerEntity) entity, (ServerPlayerEntity) teammate)){
+                    return true;
+                }
+            }
             return checkTeam(entity, teammate) || checkPet(entity, teammate) || checkSummoned(entity, teammate);
 
         }
@@ -808,6 +814,11 @@ public class CheckUtils {
     /** Checks if there is currently a stormy weather in the selected world*/
     public static boolean checkThundering(World world){
         return world.isThundering();
+    }
+
+    /** Checks if there is currently a snowy weather in the selected world at that position*/
+    public static boolean checkSnowing(World world, BlockPos pos){
+        return world.isRaining() && world.getBiome(pos).value().getPrecipitation(pos).equals(Biome.Precipitation.SNOW);
     }
 
     /** Checks if there is currently a rainy weather in the selected world*/

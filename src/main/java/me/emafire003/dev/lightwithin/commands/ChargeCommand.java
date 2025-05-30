@@ -30,15 +30,15 @@ public class ChargeCommand implements LightCommand{
         for(ServerPlayerEntity target : targets){
             LightComponent component = LightWithin.LIGHT_COMPONENT.get(target);
             int total_charges = light_charges_to_add+component.getCurrentLightCharges();
-            if(total_charges > component.getMaxLightStack()){
+            if(total_charges > component.getMaxLightCharges()){
                 if(Config.TARGET_FEEDBACK){
                     target.sendMessage(Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("Cannot add this many light charges, the max number of allowed light charges is: " ).formatted(Formatting.RED)
-                            .append(Text.literal(String.valueOf(component.getMaxLightStack())).formatted(Formatting.GREEN))));
+                            .append(Text.literal(String.valueOf(component.getMaxLightCharges())).formatted(Formatting.GREEN))));
                     target.playSound(LightSounds.LIGHT_CHARGED, 1f, 1f);
                 }
                 if(!Objects.requireNonNull(source.getPlayer()).equals(target) || !Config.TARGET_FEEDBACK){
                     source.sendError(Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The number of light charges of " + target.getName().getString() + "§e could not be changes, since it would exceed the max light stacking which is: " ).formatted(Formatting.RED)
-                            .append(Text.literal(String.valueOf(component.getMaxLightStack())).formatted(Formatting.GREEN))));
+                            .append(Text.literal(String.valueOf(component.getMaxLightCharges())).formatted(Formatting.GREEN))));
                 }
                 return 0;
             }else{
@@ -100,18 +100,18 @@ public class ChargeCommand implements LightCommand{
 
         for(ServerPlayerEntity target : targets){
             LightComponent component = LightWithin.LIGHT_COMPONENT.get(target);
-            component.setLightCharges(component.getMaxLightStack());
+            component.setLightCharges(component.getMaxLightCharges());
 
             if(Config.TARGET_FEEDBACK){
                 target.sendMessage(Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The number of your light charges is now: " ).formatted(Formatting.YELLOW)
-                        .append(Text.literal(String.valueOf(component.getMaxLightStack())).formatted(Formatting.GREEN))));
+                        .append(Text.literal(String.valueOf(component.getMaxLightCharges())).formatted(Formatting.GREEN))));
                 LightParticlesUtil.spawnChargedParticles(target);
                 target.playSound(LightSounds.LIGHT_CHARGED, 1f, 1f);
             }
 
             if(!Objects.requireNonNull(source.getPlayer()).equals(target) || !Config.TARGET_FEEDBACK){
                 source.sendFeedback( () -> Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("The number of light charges of " + target.getName().getString() + "§e has been changed to: " ).formatted(Formatting.YELLOW)
-                        .append(Text.literal(String.valueOf(component.getMaxLightStack())).formatted(Formatting.GREEN))), true);
+                        .append(Text.literal(String.valueOf(component.getMaxLightCharges())).formatted(Formatting.GREEN))), true);
             }
 
         }

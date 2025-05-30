@@ -2,7 +2,7 @@ package me.emafire003.dev.lightwithin.client;
 
 import me.emafire003.dev.lightwithin.LightWithin;
 import me.emafire003.dev.lightwithin.blocks.LightBlocks;
-import me.emafire003.dev.lightwithin.client.screens.LuxcognitaScreen;
+import me.emafire003.dev.lightwithin.client.screens.LuxdialogueScreens;
 import me.emafire003.dev.lightwithin.client.shaders.LightShaders;
 import me.emafire003.dev.lightwithin.commands.client.ClientLightCommands;
 import me.emafire003.dev.lightwithin.compat.coloredglowlib.CGLCompat;
@@ -11,6 +11,7 @@ import me.emafire003.dev.lightwithin.config.ClientConfig;
 import me.emafire003.dev.lightwithin.entities.LightEntities;
 import me.emafire003.dev.lightwithin.entities.earth_golem.EarthGolemEntityModel;
 import me.emafire003.dev.lightwithin.entities.earth_golem.EarthGolemEntityRenderer;
+import me.emafire003.dev.lightwithin.items.LightItems;
 import me.emafire003.dev.lightwithin.lights.ForestAuraLight;
 import me.emafire003.dev.lightwithin.networking.*;
 import me.emafire003.dev.lightwithin.particles.LightParticle;
@@ -19,15 +20,13 @@ import me.emafire003.dev.lightwithin.particles.LightParticles;
 import me.emafire003.dev.lightwithin.particles.LightningParticle;
 import me.emafire003.dev.lightwithin.particles.coloredpuff.ColoredPuffParticle;
 import me.emafire003.dev.lightwithin.sounds.LightSounds;
-import me.emafire003.dev.lightwithin.util.ConfigPacketConstants;
-import me.emafire003.dev.lightwithin.util.ForestAuraRelation;
-import me.emafire003.dev.lightwithin.util.IRenderEffectsEntity;
-import me.emafire003.dev.lightwithin.util.RenderEffect;
+import me.emafire003.dev.lightwithin.util.*;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
@@ -45,7 +44,11 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Util;
 
 import java.net.URI;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.UUID;
+import java.util.Map;
 
 import static me.emafire003.dev.lightwithin.LightWithin.LOGGER;
 
@@ -78,10 +81,12 @@ public class LightWithinClient implements ClientModInitializer {
         registerWindLightVelocityPacket();
         registerConfigOptionsSyncPacket();
         registerGlowingEntitiesPacket();
+        registerLuxdreamPacketClient();
+
         registerParticlesRenderer();
         LightShaders.registerShaders();
 
-        ClientCommandRegistrationCallback.EVENT.register(ClientLightCommands::registerCommands);
+
         event_handler.registerRenderEvent();
         event_handler.registerRunesRenderer();
 
@@ -97,6 +102,18 @@ public class LightWithinClient implements ClientModInitializer {
         EntityModelLayerRegistry.registerModelLayer(MODEL_EARTH_GOLEM_LAYER, EarthGolemEntityModel::getTexturedModelData);
 
         ClientConfig.reloadConfig();
+        ClientCommandRegistrationCallback.EVENT.register(ClientLightCommands::registerCommands);
+
+        /*LuxDialogue def = new LuxDialogue();
+        def.serialize();*/
+
+        ClientLifecycleEvents.CLIENT_STARTED.register( minecraftClient -> {
+            LuxdialogueScreens.registerDialogueScreens();
+        });
+
+        ClientLifecycleEvents.CLIENT_STOPPING.register(minecraftClient -> {
+            LuxdialogueScreens.LUXDIALOGUE_SCREENS.clear();
+        });
 
         ClientTickEvents.END_CLIENT_TICK.register((minecraftClient -> {
             //This is done as to not display another Light Ready icon when it just triggered
@@ -163,6 +180,8 @@ public class LightWithinClient implements ClientModInitializer {
         ParticleFactoryRegistry.getInstance().register(LightParticles.DEFENSELIGHT_PARTICLE, LightTypeParticleV3.Factory::new);
         ParticleFactoryRegistry.getInstance().register(LightParticles.STRENGTHLIGHT_PARTICLE, LightTypeParticleV3.Factory::new);
 
+        LightWithin.INNERLIGHT_REGISTRY.forEach( innerLight -> ParticleFactoryRegistry.getInstance().register(LightParticles.TYPES_PARTICLES.get(innerLight.getLightId()), LightTypeParticleV3.Factory::new));
+
         ParticleFactoryRegistry.getInstance().register(LightParticles.BLAZINGLIGHT_PARTICLE, LightTypeParticleV3.Factory::new);
         ParticleFactoryRegistry.getInstance().register(LightParticles.FROSTLIGHT_PARTICLE, LightTypeParticleV3.Factory::new);
         ParticleFactoryRegistry.getInstance().register(LightParticles.EARTHENLIGHT_PARTICLE, LightTypeParticleV3.Factory::new);
@@ -189,6 +208,11 @@ public class LightWithinClient implements ClientModInitializer {
 
     public static RendererEventHandler getRendererEventHandler(){
         return event_handler;
+    }
+
+    /**Sends an overlay message to the client player that displayes for a custom duration, expressed in seconds*/
+    public static void sendOverlayMessageWithDuration(Text text, int secondsDuration){
+        ((IGameHudOverlayMessage) MinecraftClient.getInstance().inGameHud).lightwithin$setOverlayMessageWithDuration(text, secondsDuration*20, false);
     }
 
     private void registerLightReadyPacket(){
@@ -278,7 +302,8 @@ public class LightWithinClient implements ClientModInitializer {
                         }
 
                         else if(effect.equals(RenderEffect.LUXCOGNITA_SCREEN)){
-                            MinecraftClient.getInstance().setScreen(new LuxcognitaScreen(Text.literal("LightWithin - Luxcognita Dialogue")));
+                            MinecraftClient.getInstance().setScreen(LuxdialogueScreens.LUXDIALOGUE_SCREENS.get("intro/intro"));
+                            //MinecraftClient.getInstance().setScreen(new LuxcognitaScreenV1(Text.literal("LightWithin - Luxcognita Dialogue")));
                         }
 
                         else if(effect.equals(RenderEffect.RUNES)){
@@ -298,6 +323,24 @@ public class LightWithinClient implements ClientModInitializer {
                 }
             });
         });
+    }
+
+    private void registerLuxdreamPacketClient(){
+        ClientPlayNetworking.registerGlobalReceiver(LuxdreamServerPacketS2C.ID, ((client, handler, buf, responseSender) -> {
+            LuxDialogueActions action = LuxdreamServerPacketS2C.read(buf);
+            client.execute(() -> {
+
+                if(action.equals(LuxDialogueActions.ATTACKED)){
+                    MinecraftClient.getInstance().setScreen(LuxdialogueScreens.LUXDIALOGUE_SCREENS.get("attacked"));
+                }else if(action.equals(LuxDialogueActions.START_BGM)){
+                    LOGGER.warn("Starting again");
+                    client.player.playSound(LightItems.MUSIC_DISC_LUXCOGNITA_DREAM.getSound(), ClientConfig.LUXCOGNITA_DREAM_BGM_VOLUME, 1f);
+                }else if(action.equals(LuxDialogueActions.STOP_BGM)){
+                    client.getSoundManager().stopSounds(LightItems.MUSIC_DISC_LUXCOGNITA_DREAM.getSound().getId(), null);
+                }
+
+            });
+        }));
     }
 
     /**Create a config screen for ModMenu if YACL is present, or

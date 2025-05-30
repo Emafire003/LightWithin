@@ -1,0 +1,41 @@
+{
+  "dialogueId": "step_13",
+  "fileVersion": 1,
+  "mainText": "screen.lightwithin.luxdialogue.light_charge.alchemy.step_13",
+  "textScale": 1.5,
+  "subTextPresent": true,
+  "subText": "screen.lightwithin.luxdialogue.light_charge.alchemy.step_13.sub",
+  "subTextScale": 1.4,
+  "showImage": true,
+  "imagePos": "CENTER",
+  "imageWidth": 16,
+  "imageHeight": 16,
+  "imageScale": 2.0,
+  "imageHasStages": true,
+  "imageStages": [
+    {
+      "namespace": "lightwithin",
+      "path": "textures/lights/ingredients/target/self.png"
+    },
+    {
+      "namespace": "lightwithin",
+      "path": "textures/lights/ingredients/target/allies.png"
+    },
+    {
+      "namespace": "lightwithin",
+      "path": "textures/lights/ingredients/target/enemies.png"
+    },
+    {
+      "namespace": "lightwithin",
+      "path": "textures/lights/ingredients/target/all.png"
+    },
+    {
+      "namespace": "lightwithin",
+      "path": "textures/lights/ingredients/target/variant.png"
+    }
+  ],
+  "imageInterval": 30,
+  "buttons": {
+    "screen.lightwithin.luxdialogue.next": "GO_DIALOGUE<light_charges/alchemy/step_14>"
+  }
+}

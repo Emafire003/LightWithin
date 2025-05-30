@@ -1,0 +1,15 @@
+{
+  "dialogueId": "attacked",
+  "fileVersion": 1,
+  "mainText": "screen.lightwithin.luxdialogue.attacked",
+  "textScale": 1.5,
+  "subTextPresent": true,
+  "subText": "screen.lightwithin.luxdialogue.attacked.sub",
+  "subTextScale": 1.3,
+  "showBerry": true,
+  "berryPos": "CENTER",
+  "berryScale": 3,
+  "buttons": {
+    "screen.lightwithin.luxdialogue.attacked.button": "CLOSE"
+  }
+}

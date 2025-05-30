@@ -1,0 +1,13 @@
+{
+  "dialogueId": "lore_6",
+  "fileVersion": 1,
+  "mainText": "screen.lightwithin.luxdialogue.what_are_lights.lore_6",
+  "textScale": 1.45,
+  "subTextPresent": true,
+  "subText": "screen.lightwithin.luxdialogue.what_are_lights.lore_6.sub",
+  "subTextScale": 1.3,
+  "buttons": {
+    "screen.lightwithin.luxdialogue.what_are_lights.lore_6.ok": "GO_DIALOGUE<personal/smile>",
+    "screen.lightwithin.luxdialogue.what_are_lights.lore_6.more": "GO_DIALOGUE<personal/offended>"
+  }
+}

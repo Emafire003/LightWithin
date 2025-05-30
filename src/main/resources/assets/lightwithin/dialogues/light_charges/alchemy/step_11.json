@@ -1,0 +1,43 @@
+{
+  "dialogueId": "step_11",
+  "fileVersion": 1,
+  "mainText": "screen.lightwithin.luxdialogue.light_charge.alchemy.step_11",
+  "textScale": 1.46,
+  "subTextPresent": true,
+  "subText": "screen.lightwithin.luxdialogue.light_charge.alchemy.step_11.sub",
+  "subTextScale": 1.38,
+  "showItem": true,
+  "itemPos": "CENTER",
+  "item": {
+    "namespace": "minecraft",
+    "path": "golden_apple"
+  },
+  "multipleItems": true,
+  "items": [
+    {
+      "namespace": "minecraft",
+      "path": "golden_apple"
+    },
+    {
+      "namespace": "minecraft",
+      "path": "snowball"
+    },
+    {
+      "namespace": "minecraft",
+      "path": "fire_charge"
+    },
+    {
+      "namespace": "minecraft",
+      "path": "snowball"
+    },
+    {
+      "namespace": "minecraft",
+      "path": "oak_sapling"
+    }
+  ],
+  "itemsInterval": 30,
+  "itemScale": 2.5,
+  "buttons": {
+    "screen.lightwithin.luxdialogue.next": "GO_DIALOGUE<light_charges/alchemy/step_12>"
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "dialogueId": "what_are_you",
+  "fileVersion": 1,
+  "mainText": "screen.lightwithin.luxdialogue.intro.what_are_you",
+  "mainTextScale": 1.5,
+  "subTextPresent": true,
+  "subText": "screen.lightwithin.luxdialogue.intro.what_are_you.sub",
+  "subTextScale": 1.3,
+  "showBerry": true,
+  "berryPos": "CENTER",
+  "berryScale": 4,
+  "buttons": {
+    "screen.lightwithin.luxdialogue.intro.what_are_you.button.cool": "GO_DIALOGUE<intro/what_do>",
+    "screen.lightwithin.luxdialogue.intro.what_are_you.button.dont_understand": "GO_DIALOGUE<intro/dont_understand>",
+    "screen.lightwithin.luxdialogue.intro.what_are_you.button.in_danger": "GO_DIALOGUE<intro/in_danger>"
+  },
+  "dialogueProgress": false,
+  "dialogueProgressState": "INTRO_DONE"
+}

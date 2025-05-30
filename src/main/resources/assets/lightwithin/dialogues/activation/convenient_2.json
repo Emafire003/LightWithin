@@ -1,0 +1,37 @@
+{
+  "dialogueId": "convenient_2",
+  "fileVersion": 1,
+  "mainText": "screen.lightwithin.luxdialogue.activation.convenient_2",
+  "textScale": 1.5,
+  "subTextPresent": true,
+  "subText": "screen.lightwithin.luxdialogue.activation.convenient_2.sub",
+  "subTextScale": 1.25,
+  "showImage": true,
+  "imagePos": "CENTER",
+  "imageWidth": 16,
+  "imageHeight": 16,
+  "imageScale": 2.0,
+  "imageHasStages": true,
+  "imageStages": [
+    {
+      "namespace": "lightwithin",
+      "path": "textures/dialogues/activation/light_charge_limit_0.png"
+    },
+    {
+      "namespace": "lightwithin",
+      "path": "textures/dialogues/activation/light_charge_limit_1.png"
+    },
+    {
+      "namespace": "lightwithin",
+      "path": "textures/dialogues/activation/light_charge_limit_2.png"
+    },
+    {
+      "namespace": "lightwithin",
+      "path": "textures/dialogues/activation/light_charge_limit_3.png"
+    }
+  ],
+  "imageInterval": 60,
+  "buttons": {
+    "screen.lightwithin.luxdialogue.next": "GO_DIALOGUE<activation/convenient_3>"
+  }
+}
