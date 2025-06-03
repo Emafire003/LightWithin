@@ -423,7 +423,7 @@ public class SetLightCommand implements LightCommand{
                                                         )
                                                 )
                                                 .then(
-                                                        CommandManager.literal("remove")
+                                                        CommandManager.literal("shouldRemove")
                                                                 .then(
                                                                         CommandManager.argument("dialogueState", LuxdialogueStateArgument.state())
                                                                                 .suggests(LightCommand.Suggests.dialogueState())

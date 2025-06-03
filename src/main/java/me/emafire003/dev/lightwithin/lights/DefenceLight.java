@@ -69,21 +69,21 @@ public class DefenceLight extends InnerLight {
 
     @Override
     protected Pair<Double, Integer> checkSafety(double power_multiplier, int duration) {
-        if(power_multiplier > BalanceConfig.DEFENSE_MAX_POWER){
-            power_multiplier = BalanceConfig.DEFENSE_MAX_POWER;
+        if(power_multiplier > BalanceConfig.DEFENCE_MAX_POWER){
+            power_multiplier = BalanceConfig.DEFENCE_MAX_POWER;
         }
-        if(duration > BalanceConfig.DEFENSE_MAX_DURATION){
-            duration = BalanceConfig.DEFENSE_MAX_DURATION;
+        if(duration > BalanceConfig.DEFENCE_MAX_DURATION){
+            duration = BalanceConfig.DEFENCE_MAX_DURATION;
         }
-        int max_duration = BalanceConfig.DEFENSE_MAX_DURATION;
+        int max_duration = BalanceConfig.DEFENCE_MAX_DURATION;
         if(Config.MULTIPLY_DURATION_LIMIT){
-            max_duration = (int) (BalanceConfig.DEFENSE_MAX_DURATION * Config.DURATION_MULTIPLIER);
+            max_duration = (int) (BalanceConfig.DEFENCE_MAX_DURATION * Config.DURATION_MULTIPLIER);
         }
         if(duration > max_duration){
             duration = max_duration;
         }
-        if(power_multiplier < BalanceConfig.DEFENSE_MIN_POWER){
-            power_multiplier = BalanceConfig.DEFENSE_MIN_POWER;
+        if(power_multiplier < BalanceConfig.DEFENCE_MIN_POWER){
+            power_multiplier = BalanceConfig.DEFENCE_MIN_POWER;
         }
         return new Pair<>(power_multiplier, duration);
     }

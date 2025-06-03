@@ -35,10 +35,11 @@ public class LightEffects {
             new ThunderAuraEffect());
     public static final RegistryEntry<StatusEffect> STORM_AURA = registerStatusEffect("storm_aura",
             new StormAuraEffect());
-    public static final StatusEffect LUXCOGNITA_DREAM = registerStatusEffect("luxcognita_dream",
+    public static final RegistryEntry<StatusEffect> LUXCOGNITA_DREAM = registerStatusEffect("luxcognita_dream",
             new LuxcognitaDreamEffect());
-    public static final StatusEffect LUXCOGNITA_OFFENDED = registerStatusEffect("luxcognita_offended",
-            new LuxcognitaDreamEffect());
+    //TODO backport this change to main
+    public static final RegistryEntry<StatusEffect> LUXCOGNITA_OFFENDED = registerStatusEffect("luxcognita_offended",
+            new LuxcognitaOffendedEffect());
 
     private static RegistryEntry<StatusEffect> registerStatusEffect(String name, StatusEffect effect) {
         return Registry.registerReference(Registries.STATUS_EFFECT, LightWithin.getIdentifier(name), effect);

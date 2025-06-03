@@ -33,13 +33,16 @@ import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.block.jukebox.JukeboxSong;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.ConfirmScreen;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.entity.model.EntityModelLayer;
 import net.minecraft.entity.Entity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.screen.ScreenTexts;
+import net.minecraft.sound.SoundEvent;
 import net.minecraft.text.Text;
 import net.minecraft.util.Util;
 
@@ -326,22 +329,36 @@ public class LightWithinClient implements ClientModInitializer {
     }
 
     private void registerLuxdreamPacketClient(){
-        ClientPlayNetworking.registerGlobalReceiver(LuxdreamServerPacketS2C.ID, ((client, handler, buf, responseSender) -> {
-            LuxDialogueActions action = LuxdreamServerPacketS2C.read(buf);
+
+        ClientPlayNetworking.registerGlobalReceiver(LuxdreamServerPayloadS2C.ID, (payload, context) -> {
+            MinecraftClient client = context.client();
+            LuxDialogueActions action = payload.action();
             client.execute(() -> {
+                try{
+                    if(action.equals(LuxDialogueActions.ATTACKED)){
+                        MinecraftClient.getInstance().setScreen(LuxdialogueScreens.LUXDIALOGUE_SCREENS.get("attacked"));
+                    }else if(action.equals(LuxDialogueActions.START_BGM)){
+                        //TODO test out
+                        SoundEvent bgm_sound = JukeboxSong.getSongEntryFromStack(client.player.getWorld().getRegistryManager(), new ItemStack(LightItems.MUSIC_DISC_LUXCOGNITA_DREAM, 1))
+                                .get().value().soundEvent().value();
 
-                if(action.equals(LuxDialogueActions.ATTACKED)){
-                    MinecraftClient.getInstance().setScreen(LuxdialogueScreens.LUXDIALOGUE_SCREENS.get("attacked"));
-                }else if(action.equals(LuxDialogueActions.START_BGM)){
-                    LOGGER.warn("Starting again");
-                    client.player.playSound(LightItems.MUSIC_DISC_LUXCOGNITA_DREAM.getSound(), ClientConfig.LUXCOGNITA_DREAM_BGM_VOLUME, 1f);
-                }else if(action.equals(LuxDialogueActions.STOP_BGM)){
-                    client.getSoundManager().stopSounds(LightItems.MUSIC_DISC_LUXCOGNITA_DREAM.getSound().getId(), null);
+                        client.player.playSound(bgm_sound, ClientConfig.LUXCOGNITA_DREAM_BGM_VOLUME, 1f);
+                    }else if(action.equals(LuxDialogueActions.STOP_BGM)){
+                        //TODO test out
+                        SoundEvent bgm_sound = JukeboxSong.getSongEntryFromStack(client.player.getWorld().getRegistryManager(), new ItemStack(LightItems.MUSIC_DISC_LUXCOGNITA_DREAM, 1))
+                                .get().value().soundEvent().value();
+                        client.getSoundManager().stopSounds(bgm_sound.getId(), null);
+                    }
+                }catch (NoSuchElementException e){
+                    LOGGER.warn("No value in the packet, probably not a big problem");
+                }catch (Exception e){
+                    LOGGER.error("There was an error while getting the packet!");
+                    e.printStackTrace();
                 }
-
             });
-        }));
+        });
     }
+
 
     /**Create a config screen for ModMenu if YACL is present, or
      * a confirmation screen otherwise to tell you to download yacl*/

@@ -44,14 +44,10 @@ public abstract class PreventLightEffectClearLivingEntityMixin extends Entity im
     @WrapWithCondition(method = "clearStatusEffects", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;onStatusEffectRemoved(Lnet/minecraft/entity/effect/StatusEffectInstance;)V"))
     public boolean shouldClearEffect(LivingEntity instance, StatusEffectInstance effect) {
         if(this.lightWithin$getHasDrunkMilk()){
-            StatusEffect type = effect.getEffectType();
-            if(type.equals(LightEffects.LIGHT_ACTIVE) || type.equals(LightEffects.LIGHT_FATIGUE) || type.equals(LightEffects.LUXCOGNITA_OFFENDED)){
-
-                //TODO FIX THIS
             RegistryEntry<StatusEffect> type = effect.getEffectType();
             //TODO should all lightwithin's status effects be prevented from clearing?
             //if(type.getIdAsString().startsWith(LightWithin.MOD_ID))
-            if(type.matchesKey(LightEffects.LIGHT_ACTIVE.getKey().get()) || type.matchesKey(LightEffects.LIGHT_FATIGUE.getKey().get())){
+            if(type.matchesKey(LightEffects.LIGHT_ACTIVE.getKey().get()) || type.matchesKey(LightEffects.LIGHT_FATIGUE.getKey().get()) || type.equals(LightEffects.LUXCOGNITA_OFFENDED)){
                 clearNextEffect = false;
                 return false;
             }

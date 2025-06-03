@@ -346,7 +346,7 @@ public class LightTriggeringAndEvents {
                 }
             }
 
-            //TODO most likely remove this bit here, for AQUA light too
+            //TODO most likely shouldRemove this bit here, for AQUA light too
             //if the one getting attacked is a passive entity, the entity is the target
             //while the player who triggers the light is the one nearby
             if(boltedEntity instanceof PassiveEntity){
@@ -381,7 +381,7 @@ public class LightTriggeringAndEvents {
                 }
             }
 
-            //TODO most likely remove this bit here, for AQUA light too
+            //TODO most likely shouldRemove this bit here, for AQUA light too
             //if the one getting attacked is a passive entity, the entity is the target
             //while the player who triggers the light is the one nearby
             if(entity instanceof PassiveEntity){
