@@ -43,7 +43,8 @@ public class TransitionScreen extends Screen{
 
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-        this.renderBackground(context);
+        //TODO draw the LuxCognita berry at the center of the screen
+        this.renderBackground(context, mouseX, mouseY, delta);
         super.render(context, mouseX, mouseY, delta);
 
         int center_x = this.width/2;
@@ -82,16 +83,16 @@ public class TransitionScreen extends Screen{
     public void fillWithLayer(DrawContext context, RenderLayer layer, int startX, int startY, int endX, int endY, int z) {
         Matrix4f matrix4f = context.getMatrices().peek().getPositionMatrix();
         VertexConsumer vertexConsumer = context.getVertexConsumers().getBuffer(layer);
-        vertexConsumer.vertex(matrix4f, (float)startX, (float)startY, (float)z).next();
-        vertexConsumer.vertex(matrix4f, (float)startX, (float)endY, (float)z).next();
-        vertexConsumer.vertex(matrix4f, (float)endX, (float)endY, (float)z).next();
-        vertexConsumer.vertex(matrix4f, (float)endX, (float)startY, (float)z).next();
+        vertexConsumer.vertex(matrix4f, (float)startX, (float)startY, (float)z);
+        vertexConsumer.vertex(matrix4f, (float)startX, (float)endY, (float)z);
+        vertexConsumer.vertex(matrix4f, (float)endX, (float)endY, (float)z);
+        vertexConsumer.vertex(matrix4f, (float)endX, (float)startY, (float)z);
         context.draw();
     }
 
     @Override
-    public void renderBackground(DrawContext context) {
-        super.renderBackground(context);
+    public void renderBackground(DrawContext context, int mouseX, int mouseY, float delta) {
+        super.renderBackground(context, mouseX, mouseY, delta);
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
         fillWithLayer(context, LightRenderLayer.getLightScreen(), 0, 0, this.width, this.height, 0);

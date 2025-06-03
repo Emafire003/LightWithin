@@ -1,0 +1,8 @@
+{
+  "comparator_output": 6,
+  "description": {
+    "translate": "item.lightwithin.music_disc_luxcognita_dream.desc"
+  },
+  "length_in_seconds": 54,
+  "sound_event": "lightwithin:luxcognita_dream"
+}

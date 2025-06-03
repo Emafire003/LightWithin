@@ -50,6 +50,10 @@ public interface LightCommand {
                 });
 
 
+                return builder.buildFuture();
+            };
+        }
+
         static SuggestionProvider<ServerCommandSource> dialogueState() {
             return (context, builder) -> {
                 for(DialogueProgressState state : DialogueProgressState.values()) {

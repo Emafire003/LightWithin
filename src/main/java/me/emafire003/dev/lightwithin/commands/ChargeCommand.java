@@ -69,7 +69,7 @@ public class ChargeCommand implements LightCommand{
             int total_charges = component.getCurrentLightCharges()-light_charges_to_remove;
             if(total_charges < 0){
                 if(Config.TARGET_FEEDBACK){
-                    target.sendMessage(Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("Cannot remove this many light charges, it would go into the negatives! The current amount of charge is: " ).formatted(Formatting.RED)
+                    target.sendMessage(Text.literal(LightWithin.PREFIX_MSG).formatted(Formatting.AQUA).append(Text.literal("Cannot shouldRemove this many light charges, it would go into the negatives! The current amount of charge is: " ).formatted(Formatting.RED)
                             .append(Text.literal(String.valueOf(component.getCurrentLightCharges())).formatted(Formatting.GREEN))));
                 }
                 if(!Objects.requireNonNull(source.getPlayer()).equals(target) || !Config.TARGET_FEEDBACK){
@@ -176,7 +176,7 @@ public class ChargeCommand implements LightCommand{
                                 )
                 ).then(
                         CommandManager
-                                .literal("remove")
+                                .literal("shouldRemove")
                                 .then(
                                         CommandManager.argument("player", EntityArgumentType.players())
                                                 .then(

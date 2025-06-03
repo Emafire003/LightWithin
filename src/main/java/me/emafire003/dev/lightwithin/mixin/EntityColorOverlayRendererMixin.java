@@ -4,6 +4,7 @@ import com.llamalad7.mixinextras.sugar.Local;
 import me.emafire003.dev.lightwithin.LightWithin;
 import me.emafire003.dev.lightwithin.lights.ForestAuraLight;
 import me.emafire003.dev.lightwithin.lights.ThunderAuraLight;
+import me.emafire003.dev.lightwithin.particles.LightParticles;
 import me.emafire003.dev.lightwithin.status_effects.LightEffects;
 import net.minecraft.client.render.entity.EntityRenderer;
 import net.minecraft.client.render.entity.EntityRendererFactory;
@@ -13,6 +14,7 @@ import net.minecraft.client.render.entity.model.EntityModel;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.ColorHelper;
+import net.minecraft.util.math.random.Random;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArgs;
@@ -54,16 +56,25 @@ public abstract class EntityColorOverlayRendererMixin<T extends LivingEntity, M 
 
                 int color = ColorHelper.Argb.mixColor(og, ColorHelper.Argb.fromFloats(0.84F, (float) color1.getRed()/255, (float) color1.getGreen()/255, (float) color1.getBlue()/255));
                 args.set(4, color);
+            }else if(livingEntity.hasStatusEffect(LightEffects.LUXCOGNITA_DREAM)){
+                int og = args.get(4);
+                int color = ColorHelper.Argb.mixColor(og, ColorHelper.Argb.fromFloats(0.4F, 0.318f, 0.859f, 0.655f));
+                args.set(4, color);
+
+                Random random = livingEntity.getRandom();
+                if(random.nextInt(170) == 1){
+                    int filp_x = -1;
+                    if(random.nextBoolean()){
+                        filp_x = 1;
+                    }
+                    int filp_z = -1;
+                    if(random.nextBoolean()){
+                        filp_z = 1;
+                    }
+                    livingEntity.getWorld().addParticle(LightParticles.SHINE_PARTICLE, false, livingEntity.getX()+ (double) random.nextInt(15) /10*filp_x, livingEntity.getY()+1, livingEntity.getZ()+(double) random.nextInt(15)/10*filp_z, (double) random.nextInt(4) /100, (double) random.nextInt(4) /100, (double) random.nextInt(4) /100);
+                }
             }
         }
-        /*TEST STUFF
-        if(livingEntity.getType().equals(EntityType.CREEPER)){
-
-            args.set(4, 0.01f);
-            args.set(5, 0.5f);
-            args.set(6, 0.5f);
-            args.set(7, 0.2f);
-        }*/
 
     }
 }

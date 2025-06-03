@@ -4,8 +4,11 @@ import me.emafire003.dev.lightwithin.LightWithin;
 import me.emafire003.dev.lightwithin.lights.FrogLight;
 import me.emafire003.dev.lightwithin.lights.InnerLight;
 import me.emafire003.dev.lightwithin.lights.NoneLight;
+import net.minecraft.block.jukebox.JukeboxSong;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Identifier;
 
@@ -31,6 +34,9 @@ public class LightSounds {
     public static SoundEvent THUNDER_AURA_ZAP = registerSoundEvent("thunder_aura_zap");
     public static SoundEvent LUXCOGNITA_DAMAGE_BLOCK = registerSoundEvent("luxcognita_damage_block");
     public static SoundEvent LUXCOGNITA_DREAM_BGM = registerSoundEvent("luxcognita_dream");
+
+    public static final RegistryKey<JukeboxSong> LUXCOGNITA_DREAM_SONG_KEY =
+            RegistryKey.of(RegistryKeys.JUKEBOX_SONG, LightWithin.getIdentifier("luxcognita_dream"));
 
     private static SoundEvent registerSoundEvent(String name) {
         Identifier id = LightWithin.getIdentifier(name);

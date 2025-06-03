@@ -14,9 +14,9 @@ import me.emafire003.dev.lightwithin.config.ClientConfig;
 import me.emafire003.dev.lightwithin.items.LightItems;
 import me.emafire003.dev.lightwithin.lights.InnerLight;
 import me.emafire003.dev.lightwithin.lights.NoneLight;
-import me.emafire003.dev.lightwithin.networking.DialogueProgressUpdatePacketC2S;
+import me.emafire003.dev.lightwithin.networking.DialogueProgressUpdatePayloadC2S;
 import me.emafire003.dev.lightwithin.networking.LuxDialogueActions;
-import me.emafire003.dev.lightwithin.networking.LuxdreamClientPacketC2S;
+import me.emafire003.dev.lightwithin.networking.LuxdreamClientPayloadC2S;
 import me.emafire003.dev.lightwithin.sounds.LightSounds;
 import me.emafire003.dev.lightwithin.util.ScreenUtils;
 import me.emafire003.dev.lightwithin.util.TargetType;
@@ -625,7 +625,7 @@ public class LuxcognitaScreenV2 extends Screen{
 
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-        this.renderBackground(context);
+        this.renderBackground(context, mouseX, mouseY, delta);
         super.render(context, mouseX, mouseY, delta);
 
         // Low (lighter) 3735330
@@ -753,29 +753,29 @@ public class LuxcognitaScreenV2 extends Screen{
     public void fillWithLayer(DrawContext context, RenderLayer layer, int startX, int startY, int endX, int endY, int z) {
         Matrix4f matrix4f = context.getMatrices().peek().getPositionMatrix();
         VertexConsumer vertexConsumer = context.getVertexConsumers().getBuffer(layer);
-        vertexConsumer.vertex(matrix4f, (float)startX, (float)startY, (float)z).next();
-        vertexConsumer.vertex(matrix4f, (float)startX, (float)endY, (float)z).next();
-        vertexConsumer.vertex(matrix4f, (float)endX, (float)endY, (float)z).next();
-        vertexConsumer.vertex(matrix4f, (float)endX, (float)startY, (float)z).next();
+        vertexConsumer.vertex(matrix4f, (float)startX, (float)startY, (float)z);
+        vertexConsumer.vertex(matrix4f, (float)startX, (float)endY, (float)z);
+        vertexConsumer.vertex(matrix4f, (float)endX, (float)endY, (float)z);
+        vertexConsumer.vertex(matrix4f, (float)endX, (float)startY, (float)z);
         context.draw();
     }
 
     @Override
-    public void renderBackground(DrawContext context) {
-        super.renderBackground(context);
+    public void renderBackground(DrawContext context, int mouseX, int mouseY, float delta) {
+        super.renderBackground(context, mouseX, mouseY, delta);
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
         fillWithLayer(context, LightRenderLayer.getLightScreen(), 0, 0, this.width, this.height, 0);
     }
 
     public static void sendDialogueStateUpdatePacket(DialogueProgressState state, boolean shouldRemove){
-        ClientPlayNetworking.send(DialogueProgressUpdatePacketC2S.ID, new DialogueProgressUpdatePacketC2S(state, shouldRemove));
+        ClientPlayNetworking.send(new DialogueProgressUpdatePayloadC2S(state, shouldRemove));
     }
 
     /**Stops the dialogue with luxcognita and also clears the {@link me.emafire003.dev.lightwithin.status_effects.LuxcognitaDreamEffect}
      * as well as stopping the ticking of the Luxcognita BGM song, as well as the song itself*/
     public static void sendDialogueStopDreamPacket(){
-        ClientPlayNetworking.send(LuxdreamClientPacketC2S.ID, new LuxdreamClientPacketC2S(LuxDialogueActions.STOP_DREAM));
+        ClientPlayNetworking.send(new LuxdreamClientPayloadC2S(LuxDialogueActions.STOP_DREAM));
         playLuxcognitaDisplaySound();
     }
 

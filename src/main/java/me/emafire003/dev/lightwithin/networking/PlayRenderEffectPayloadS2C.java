@@ -6,8 +6,6 @@ import net.minecraft.network.PacketByteBuf;
 import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.network.codec.PacketCodecs;
 import net.minecraft.network.packet.CustomPayload;
-import net.minecraft.util.Identifier;
-
 
 public record PlayRenderEffectPayloadS2C(RenderEffect effect, Integer targetID) implements CustomPayload {
     public static final Id<PlayRenderEffectPayloadS2C> ID = new Id<>(

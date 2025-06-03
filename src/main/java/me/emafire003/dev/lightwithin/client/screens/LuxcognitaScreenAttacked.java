@@ -16,8 +16,8 @@ public class LuxcognitaScreenAttacked extends LuxcognitaScreenV2{
     }
 
     @Override
-    public void renderBackground(DrawContext context) {
-        super.renderBackground(context);
+    public void renderBackground(DrawContext context, int mouseX, int mouseY, float delta) {
+        super.renderBackground(context, mouseX, mouseY, delta);
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
         fillWithLayer(context, LightRenderLayer.getLightScreenAttacked(), 0, 0, this.width, this.height, 0);

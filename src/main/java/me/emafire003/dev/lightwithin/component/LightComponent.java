@@ -178,7 +178,7 @@ public class LightComponent implements ComponentV3, AutoSyncedComponent {
         }
 
         if(shouldWrite){
-            this.writeToNbt(tag);
+            this.writeToNbt(tag, wrapperLookup);
         }
 
     }

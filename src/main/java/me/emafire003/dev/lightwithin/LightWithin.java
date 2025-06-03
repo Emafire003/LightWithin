@@ -59,8 +59,6 @@ import net.minecraft.sound.SoundCategory;
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Formatting;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.Pair;
 import net.minecraft.util.math.Box;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -137,12 +135,11 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 		LightTriggeringAndEvents.registerListeners();
 		registerLightUsedPacket();
 		registerLightChargeConsumedPacket();
-		registerInteractPacket();
 		registerReadyLightCacheRemover();
 		registerSyncOptionsOnJoin();
 		registerInteractedPacket();
 		registerDialogueStateUpdatePacket();
-		registerLuxdreamDialogueStopPacket();
+		registerLuxdreamDialogueC2SPacket();
 		LightSounds.registerSounds();
 		LightEffects.registerModEffects();
 		LightItems.registerItems();
@@ -217,7 +214,7 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 	}
 
 
-
+//TODO testout
 	private static void registerLuxCognitaOnFirstJoin(){
 		PlayerFirstJoinEvent.EVENT.register((player, server) -> {
 			if(player.getWorld().isClient){
@@ -267,6 +264,7 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 		return Math.max(MAX_POWER_COMMANDS, 1);
 	}
 
+
 	/**Sends a packet with updated config options to the client
      * such as the auto light activation permission*/
     public static void syncCustomConfigOptions(ServerPlayerEntity player){
@@ -284,6 +282,8 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
         PayloadTypeRegistry.playC2S().register(LightUsedPayloadC2S.ID, LightUsedPayloadC2S.PACKET_CODEC);
         PayloadTypeRegistry.playC2S().register(LightChargeConsumedPayloadC2S.ID, LightChargeConsumedPayloadC2S.PACKET_CODEC);
 		PayloadTypeRegistry.playC2S().register(InteractedPayloadC2S.ID, InteractedPayloadC2S.PACKET_CODEC);
+        PayloadTypeRegistry.playC2S().register(DialogueProgressUpdatePayloadC2S.ID, DialogueProgressUpdatePayloadC2S.PACKET_CODEC);
+        PayloadTypeRegistry.playC2S().register(LuxdreamClientPayloadC2S.ID, LuxdreamClientPayloadC2S.PACKET_CODEC);
 
 		//Server to Client (clientbound packets)
         PayloadTypeRegistry.playS2C().register(LightReadyPayloadS2C.ID, LightReadyPayloadS2C.PACKET_CODEC);
@@ -291,19 +291,9 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
         PayloadTypeRegistry.playS2C().register(PlayRenderEffectPayloadS2C.ID, PlayRenderEffectPayloadS2C.PACKET_CODEC);
         PayloadTypeRegistry.playS2C().register(WindLightVelocityPayloadS2C.ID, WindLightVelocityPayloadS2C.PACKET_CODEC);
 		PayloadTypeRegistry.playS2C().register(GlowEntitiesPayloadS2C.ID, GlowEntitiesPayloadS2C.PACKET_CODEC);
+        PayloadTypeRegistry.playS2C().register(LuxdreamServerPayloadS2C.ID, LuxdreamServerPayloadS2C.PACKET_CODEC);
 
     }
-	/** Sets the new value for the maximum power settable using commands
-	 * If below 1, it will be set to 1*/
-	public static void setMaxPowerWithCommands(int max){
-		MAX_POWER_COMMANDS = Math.max(max, 1);
-	}
-
-	/** Returns the maximum power settable using commands */
-	public static int getMaxPowerCommands(){
-		return Math.max(MAX_POWER_COMMANDS, 1);
-	}
-
 
     private static void registerLightUsedPacket(){
         ServerPlayNetworking.registerGlobalReceiver(LightUsedPayloadC2S.ID, ((payload, context) -> {
@@ -360,53 +350,65 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
             //var results = LightUsedPacketC2S.read(buf);
         }));
     }
-
     /**Fires when the player sees a dialogue which ahs to update a certain dialogue state*/
     private static void registerDialogueStateUpdatePacket(){
-        ServerPlayNetworking.registerGlobalReceiver(DialogueProgressUpdatePacketC2S.ID, (((server, player, handler, buf, responseSender) -> {
+        ServerPlayNetworking.registerGlobalReceiver(DialogueProgressUpdatePayloadC2S.ID, ((payload, context) -> {
+            ServerPlayerEntity player = context.player();
             if(player.getWorld().isClient){
                 return;
             }
-            Pair<DialogueProgressState, Boolean> pair = DialogueProgressUpdatePacketC2S.read(buf);
-            DialogueProgressState state = Objects.requireNonNull(pair).getLeft();
-            boolean shouldRemove = pair.getRight();
+            DialogueProgressState state = payload.state();
+            boolean shouldRemove = payload.shouldRemove();
 
-            server.execute(()->{
-                if(state != null && state.equals(DialogueProgressState.PISSED_OFF)){
-                    player.addStatusEffect(new StatusEffectInstance(LightEffects.LUXCOGNITA_OFFENDED, 60*20));
-                    return;
-                }
+            player.getServer().execute( () -> {
+                try{
+					if(state != null && state.equals(DialogueProgressState.PISSED_OFF)){
+						player.addStatusEffect(new StatusEffectInstance(LightEffects.LUXCOGNITA_OFFENDED, 60*20));
+						return;
+					}
 
-                if(shouldRemove){
-                    LIGHT_COMPONENT.get(player).removeDialogueProgressState(state);
-                }else{
-                    LIGHT_COMPONENT.get(player).addDialogueProgressState(state);
+					if(shouldRemove){
+						LIGHT_COMPONENT.get(player).removeDialogueProgressState(state);
+					}else{
+						LIGHT_COMPONENT.get(player).addDialogueProgressState(state);
+					}
+                }catch (NoSuchElementException e){
+                    LOGGER.warn("No value in the packet!");
+                }catch (Exception e){
+                    LOGGER.error("There was an error while getting the packet!");
+                    e.printStackTrace();
                 }
             });
-
-        })));
+        }));
     }
 
-    /**Triggered when a player has finished their luxdialogue / dream*/
-    private static void registerLuxdreamDialogueStopPacket(){
-        ServerPlayNetworking.registerGlobalReceiver(LuxdreamClientPacketC2S.ID, (((server, player, handler, buf, responseSender) -> {
-            if(player.getWorld().isClient){
-                return;
-            }
-            LuxDialogueActions action = LuxdreamClientPacketC2S.read(buf);
-            server.execute(() -> {
-                //StopDream packet thing
-                if(action.equals(LuxDialogueActions.STOP_DREAM)){
-                    if(!player.hasStatusEffect(LightEffects.LUXCOGNITA_DREAM)){
-                        LOGGER.warn("Luxdream termination packet sent but there was no Luxcognita Dream effect to be removed!");
-                        return;
-                    }
-                    player.removeStatusEffect(LightEffects.LUXCOGNITA_DREAM);
-                }
-
-            });
-        })));
-    }
+	/**Triggered when a player has finished their luxdialogue / dream*/
+	private static void registerLuxdreamDialogueC2SPacket(){
+		ServerPlayNetworking.registerGlobalReceiver(LuxdreamClientPayloadC2S.ID, ((payload, context) -> {
+			ServerPlayerEntity player = context.player();
+			if(player.getWorld().isClient){
+				return;
+			}
+			LuxDialogueActions action = payload.action();
+			player.getServer().execute( () -> {
+				try{
+					//StopDream packet thing
+					if(action.equals(LuxDialogueActions.STOP_DREAM)){
+						if(!player.hasStatusEffect(LightEffects.LUXCOGNITA_DREAM)){
+							LOGGER.warn("Luxdream termination packet sent but there was no Luxcognita Dream effect to be removed!");
+							return;
+						}
+						player.removeStatusEffect(LightEffects.LUXCOGNITA_DREAM);
+					}
+				}catch (NoSuchElementException e){
+					LOGGER.warn("No value in the packet!");
+				}catch (Exception e){
+					LOGGER.error("There was an error while getting the packet!");
+					e.printStackTrace();
+				}
+			});
+		}));
+	}
 
 
     private static void registerLightChargeConsumedPacket(){
