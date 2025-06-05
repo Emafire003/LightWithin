@@ -45,7 +45,7 @@ public class LightItems {
     //Music disc for Luxcognita BGM dream song
     //TODO maybe implement a way to have the longer version with a resourcepack
     public static final Item MUSIC_DISC_LUXCOGNITA_DREAM = registerItem("music_disc_luxcognita_dream",
-            new Item(new Item.Settings().maxCount(1).rarity(Rarity.RARE).jukeboxPlayable(LightSounds.LUXCOGNITA_DREAM_SONG_KEY)),
+            new Item(new Item.Settings().jukeboxPlayable(LightSounds.LUXCOGNITA_DREAM_SONG_KEY).maxCount(1).rarity(Rarity.RARE)),
             ItemGroups.TOOLS, Items.MUSIC_DISC_RELIC);
 
     private static Item registerItem(String name, Item item, RegistryKey<ItemGroup> group, Item add_after){

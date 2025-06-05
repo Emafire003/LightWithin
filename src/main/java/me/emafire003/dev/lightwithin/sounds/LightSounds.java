@@ -33,8 +33,8 @@ public class LightSounds {
     public static SoundEvent FOREST_AURA_PUFF = registerSoundEvent("forest_aura_puff");
     public static SoundEvent THUNDER_AURA_ZAP = registerSoundEvent("thunder_aura_zap");
     public static SoundEvent LUXCOGNITA_DAMAGE_BLOCK = registerSoundEvent("luxcognita_damage_block");
-    public static SoundEvent LUXCOGNITA_DREAM_BGM = registerSoundEvent("luxcognita_dream");
 
+    public static SoundEvent LUXCOGNITA_DREAM_BGM = registerSoundEvent("luxcognita_dream");
     public static final RegistryKey<JukeboxSong> LUXCOGNITA_DREAM_SONG_KEY =
             RegistryKey.of(RegistryKeys.JUKEBOX_SONG, LightWithin.getIdentifier("luxcognita_dream"));
 
