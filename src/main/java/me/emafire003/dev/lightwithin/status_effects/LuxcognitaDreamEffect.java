@@ -47,7 +47,7 @@ public class LuxcognitaDreamEffect extends StatusEffect {
     public boolean applyUpdateEffect(LivingEntity entity, int amplifier) {
         super.applyUpdateEffect(entity, amplifier);
         if(entity.getWorld().isClient()) {
-            return false;
+            return true;
         }
         if(songTicker > songLength){
             songTicker = 0;

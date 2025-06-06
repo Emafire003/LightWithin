@@ -51,7 +51,7 @@ public class ClientConfig {
     public static boolean INTOXICATION_SHADER_WARNING = true;
     public static final boolean INTOXICATION_SHADER_WARNING_default = true;
     public static float LUXDIALOGUE_TEXT_SCALE = 1.0f;
-    public static final float LUXDIALOGYE_TEXT_SCALE_default = 1.0f;
+    public static final float LUXDIALOGUE_TEXT_SCALE_default = 1.0f;
     public static int CLOSE_LUXDIALOGUE_SCREEN_AFTER = 60;
     public static final int CLOSE_LUXDIALOGUE_SCREEN_AFTER_default = 60;
     public static float LUXCOGNITA_DREAM_BGM_VOLUME = 0.7f;
@@ -240,7 +240,7 @@ public class ClientConfig {
         FORESTAURA_ALLY_COLOR = CONFIG.getOrDefault("forestaura_ally_color", FORESTAURA_ALLY_COLOR_default);
         FORESTAURA_INTOXICATION_SHADER = CONFIG.getOrDefault("forestaura_intoxication_shader", FORESTAURA_INTOXICATION_SHADER_default);
         INTOXICATION_SHADER_WARNING = CONFIG.getOrDefault("intoxication_shader", INTOXICATION_SHADER_WARNING_default);
-        LUXDIALOGUE_TEXT_SCALE = CONFIG.getOrDefault("luxdialogue_text_scale", LUXDIALOGYE_TEXT_SCALE_default);
+        LUXDIALOGUE_TEXT_SCALE = CONFIG.getOrDefault("luxdialogue_text_scale", LUXDIALOGUE_TEXT_SCALE_default);
         CLOSE_LUXDIALOGUE_SCREEN_AFTER = CONFIG.getOrDefault("close_luxdialogue_screen_after", CLOSE_LUXDIALOGUE_SCREEN_AFTER_default);
         LUXCOGNITA_DREAM_BGM_VOLUME =  CONFIG.getOrDefault("luxcognita_dream_bgm", LUXCOGNITA_DREAM_BGM_VOLUME_default);
         OVERLAY_TEXT_DURATION = CONFIG.getOrDefault("overlay_text_duration", OVERLAY_TEXT_DURATION_default);

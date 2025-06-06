@@ -404,7 +404,7 @@ public class YaclScreenMaker {
                         .name(Text.translatable("config.lightwithin.luxdialogue.text_scale"))
                         .description(OptionDescription.of(Text.translatable("config.lightwithin.luxdialogue.text_scale.tooltip")))
                         .binding(
-                                ClientConfig.LUXDIALOGYE_TEXT_SCALE_default, // the default value
+                                ClientConfig.LUXDIALOGUE_TEXT_SCALE_default, // the default value
                                 () -> ClientConfig.LUXDIALOGUE_TEXT_SCALE, // a field to get the current value from
                                 newVal -> {
                                     ClientConfig.LUXDIALOGUE_TEXT_SCALE = newVal;
