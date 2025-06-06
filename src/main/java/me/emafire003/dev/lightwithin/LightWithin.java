@@ -237,6 +237,7 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 		RegistryEntryList.Named<Item> FROST_TRIGGER_ITEMS = Registries.ITEM.getOrCreateEntryList(FrostLight.FROST_TRIGGER_ITEMS);
 
 		RegistryEntryList.Named<Block> WIND_TRIGGER_BLOCKS = Registries.BLOCK.getOrCreateEntryList(WindLight.WIND_TRIGGER_BLOCKS);
+		RegistryEntryList.Named<Item> WIND_TRIGGER_ITEMS = Registries.ITEM.getOrCreateEntryList(WindLight.WIND_TRIGGER_ITEMS);
 
 		RegistryEntryList.Named<Block> AQUA_TRIGGER_BLOCKS = Registries.BLOCK.getOrCreateEntryList(AquaLight.AQUA_TRIGGER_BLOCKS);
 		RegistryEntryList.Named<Item> AQUA_TRIGGER_ITEMS = Registries.ITEM.getOrCreateEntryList(AquaLight.AQUA_TRIGGER_ITEMS);
