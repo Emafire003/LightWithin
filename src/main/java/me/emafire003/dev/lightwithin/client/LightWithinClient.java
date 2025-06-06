@@ -338,13 +338,11 @@ public class LightWithinClient implements ClientModInitializer {
                     if(action.equals(LuxDialogueActions.ATTACKED)){
                         MinecraftClient.getInstance().setScreen(LuxdialogueScreens.LUXDIALOGUE_SCREENS.get("attacked"));
                     }else if(action.equals(LuxDialogueActions.START_BGM)){
-                        //TODO test out
                         SoundEvent bgm_sound = JukeboxSong.getSongEntryFromStack(client.player.getWorld().getRegistryManager(), new ItemStack(LightItems.MUSIC_DISC_LUXCOGNITA_DREAM, 1))
                                 .get().value().soundEvent().value();
 
                         client.player.playSound(bgm_sound, ClientConfig.LUXCOGNITA_DREAM_BGM_VOLUME, 1f);
                     }else if(action.equals(LuxDialogueActions.STOP_BGM)){
-                        //TODO test out
                         SoundEvent bgm_sound = JukeboxSong.getSongEntryFromStack(client.player.getWorld().getRegistryManager(), new ItemStack(LightItems.MUSIC_DISC_LUXCOGNITA_DREAM, 1))
                                 .get().value().soundEvent().value();
                         client.getSoundManager().stopSounds(bgm_sound.getId(), null);
