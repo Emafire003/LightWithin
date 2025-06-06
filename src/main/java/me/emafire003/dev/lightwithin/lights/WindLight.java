@@ -51,6 +51,8 @@ import static me.emafire003.dev.lightwithin.util.LightTriggerChecks.sendLightTri
 public class WindLight extends InnerLight {
 
     public static final TagKey<Block> WIND_TRIGGER_BLOCKS = TagKey.of(RegistryKeys.BLOCK, LightWithin.getIdentifier("wind_trigger_blocks"));
+    public static final TagKey<Item> WIND_TRIGGER_ITEMS = TagKey.of(RegistryKeys.ITEM, LightWithin.getIdentifier("wind_trigger_items"));
+
     public static final Item INGREDIENT = Items.WIND_CHARGE;
 
     private final List<TargetType> possibleTargetTypes = Arrays.asList(TargetType.SELF, TargetType.ALL, TargetType.ALLIES);
@@ -298,6 +300,13 @@ public class WindLight extends InnerLight {
             if(!player.getEntityWorld().isSkyVisible(player.getBlockPos())){
                 return true;
             }
+            return true;
+        }
+
+        //TODO wiki - add this in the wind thingy
+        ItemStack main = player.getMainHandStack();
+        ItemStack off = player.getOffHandStack();
+        if(main.isIn(WIND_TRIGGER_ITEMS) || off.isIn(WIND_TRIGGER_ITEMS)){
             return true;
         }
 
