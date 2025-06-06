@@ -203,8 +203,6 @@ public class LightWithin implements ModInitializer, EntityComponentInitializer {
 		});
 	}
 
-
-//TODO testout
 	private static void registerLuxCognitaOnFirstJoin(){
 		PlayerFirstJoinEvent.EVENT.register((player, server) -> {
 			if(player.getWorld().isClient){

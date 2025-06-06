@@ -332,7 +332,6 @@ public class Config {
         //Config version 6
         MAX_POWER_WITH_COMMANDS = CONFIG.getOrDefault("max_power_with_commands", 10);
         //6-7
-        //TODO test
         LUXCOGNITA_ON_JOIN = CONFIG.getOrDefault("luxcognita_on_join", false);
     }
 }

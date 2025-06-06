@@ -45,7 +45,7 @@ public abstract class PreventLightEffectClearLivingEntityMixin extends Entity im
     public boolean shouldClearEffect(LivingEntity instance, StatusEffectInstance effect) {
         if(this.lightWithin$getHasDrunkMilk()){
             RegistryEntry<StatusEffect> type = effect.getEffectType();
-            //TODO should all lightwithin's status effects be prevented from clearing?
+            //TODO should all lightwithin's status effects be prevented from clearing? like walking on water/air etc
             //if(type.getIdAsString().startsWith(LightWithin.MOD_ID))
             if(type.matchesKey(LightEffects.LIGHT_ACTIVE.getKey().get()) || type.matchesKey(LightEffects.LIGHT_FATIGUE.getKey().get()) || type.equals(LightEffects.LUXCOGNITA_OFFENDED)){
                 clearNextEffect = false;
