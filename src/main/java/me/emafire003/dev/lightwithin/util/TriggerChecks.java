@@ -10,7 +10,6 @@ public enum TriggerChecks {
     ENTITY_STRUCK_BY_LIGHTNING("light.trigger_check.entity_struck_by_lightning"), /// An entity has been struck by a lightning bolt
     ENTITY_BURNING("light.trigger_check.entity_burning"), /// An entity is on fire/taking fire damage
     ENTITY_FREEZING("light.trigger_check.entity_freezing"), /// An entity is freezing/taking freeze damage (powder snow)
-    // TODO IMPLEMENT in the event thingies
     ARMOR_OR_TOOL_BREAKS("light.trigger_check.equipment_break"),
     ; /// The equipment of an entity breaks
 

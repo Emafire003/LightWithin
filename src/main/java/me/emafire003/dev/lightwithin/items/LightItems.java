@@ -43,7 +43,7 @@ public class LightItems {
             ItemGroups.INGREDIENTS, Items.BLAZE_POWDER);
 
     //Music disc for Luxcognita BGM dream song
-    //TODO maybe implement a way to have the longer version with a resourcepack
+    //TODO maybe implement a way to have the longer version with a resourcepack (should be doable in 1.21+ i think?)
     public static final Item MUSIC_DISC_LUXCOGNITA_DREAM = registerItem("music_disc_luxcognita_dream",
             new Item(new Item.Settings().jukeboxPlayable(LightSounds.LUXCOGNITA_DREAM_SONG_KEY).maxCount(1).rarity(Rarity.RARE)),
             ItemGroups.TOOLS, Items.MUSIC_DISC_RELIC);

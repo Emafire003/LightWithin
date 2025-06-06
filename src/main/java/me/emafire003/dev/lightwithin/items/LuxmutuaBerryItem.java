@@ -49,7 +49,7 @@ public class LuxmutuaBerryItem extends Item {
         }
     }
 
-    //TODO maybe make a screen for it selecting which attribute you want to change?
+    //TODO maybe make a screen for it selecting which attribute you want to change? - nah
 
     @Override
     public ItemStack finishUsing(ItemStack stack, World world, LivingEntity user) {
