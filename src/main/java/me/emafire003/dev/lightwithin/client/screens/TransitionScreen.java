@@ -3,6 +3,7 @@ package me.emafire003.dev.lightwithin.client.screens;
 import com.mojang.blaze3d.systems.RenderSystem;
 import me.emafire003.dev.lightwithin.LightWithin;
 import me.emafire003.dev.lightwithin.client.LightRenderLayer;
+import me.emafire003.dev.lightwithin.config.ClientConfig;
 import me.x150.renderer.ClipStack;
 import me.x150.renderer.Rectangle;
 import me.x150.renderer.Renderer2d;
@@ -38,6 +39,7 @@ public class TransitionScreen extends Screen{
         this.loadStartTime = System.currentTimeMillis();
     }
 
+    //The og dimension of the circle image thing
     int dim = 16;
     boolean inversionDone = false;
 
@@ -63,13 +65,13 @@ public class TransitionScreen extends Screen{
         ClipStack.popWindow();
 
         if(this.inverted){
-            dim = dim - 32;
+            dim = dim - ClientConfig.LUXDIALOGUE_TRANSITION_SPEED; //og: 32
 
             if(dim < 0){
                 MinecraftClient.getInstance().setScreen(nextScreen);
             }
         }else{
-            dim = dim + 32;
+            dim = dim + ClientConfig.LUXDIALOGUE_TRANSITION_SPEED;
 
             if(dim > this.width){
                 MinecraftClient.getInstance().setScreen(nextScreen);

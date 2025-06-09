@@ -152,8 +152,10 @@
   "light.description.triggering.light_conditions.thunder_aura": "The Thunder and what attracts its children",
 
   "config.lightwithin.name": "LightWithin client options",
-  "config.lightwithin.category_name": "Options",
-  "config.lightwithin.description": "A settings menu to manage what is rendered on the client",
+  "config.lightwithin.general_category": "General Options",
+  "config.lightwithin.general_category.description": "A settings menu to manage what is rendered on the client",
+  "config.lightwithin.luxdialogue_category": "Luxdialogue Options",
+  "config.lightwithin.luxdialogue_category.description": "A settings menu to manager what's rendered in the 'Luxdialogue' with the Luxcognita berry",
 
   "config.lightwithin.light_ready_icon_x": "LightReady icon X coordinate",
   "config.lightwithin.light_ready_icon_x.tooltip": "Change this value to move the LightReady icon horizontally on your screen",
@@ -212,6 +214,12 @@
   "config.lightwithin.luxdialogue.close_after.tooltip": "After how many seconds should the luxdialogue screen automatically close? (to prevent being stuck seeing it forever)",
   "config.lightwithin.luxdialogue.bgm_volume": "Luxdialogue BGM volume",
   "config.lightwithin.luxdialogue.bgm_volume.tooltip": "The volume of the song that plays in the background of the Luxdialogue screen",
+
+  "config.lightwithin.luxdialogue.text_blink_speed": "Luxdialogue text blink speed",
+  "config.lightwithin.luxdialogue.text_blink_speed.tooltip": "The speed at which the text on the Luxdialogue changes color while blinking",
+
+  "config.lightwithin.luxdialogue.transition_speed": "Luxdialogue transition speed",
+  "config.lightwithin.luxdialogue.transition_speed.tooltip": "The speed at which the transition animation between two screens plays at",
 
   "config.lightwithin.overlay_text_duration": "Overlay text duration",
   "config.lightwithin.overlay_text_duration.tooltip": "The amount of seconds for which some of the overlay texts remain displayed on screen",
