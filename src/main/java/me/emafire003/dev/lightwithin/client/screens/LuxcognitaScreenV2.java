@@ -621,8 +621,6 @@ public class LuxcognitaScreenV2 extends Screen{
     private int itemTicker = -1;
     private int currentItem = 0;
 
-//TODO this kinda conflicts with ModernFix's something. aaand not only that. probably sodium and stuff too.
-
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
         this.renderBackground(context);
@@ -685,7 +683,7 @@ public class LuxcognitaScreenV2 extends Screen{
         if(dialogue.showItem){
             Pair<Integer, Integer> xy = ScreenUtils.getXYItems(dialogue.itemPos, dialogue.itemScale, this.width, this.height, 0, 16, 16);
 
-            Identifier item = dialogue.item;
+            Identifier item = LuxDialogue.convertMapToId(dialogue.item);
 
             if(dialogue.multipleItems){
                 //checks if it should change the
@@ -696,7 +694,8 @@ public class LuxcognitaScreenV2 extends Screen{
                     }
                     itemTicker = 0;
                 }
-                item = dialogue.items.get(currentItem);
+
+                item = LuxDialogue.convertMapToId(dialogue.items.get(currentItem));
                 itemTicker++;
             }
 
@@ -712,7 +711,8 @@ public class LuxcognitaScreenV2 extends Screen{
         if(dialogue.showImage){
             Pair<Integer, Integer> xy = ScreenUtils.getXYImgs(dialogue.imagePos, dialogue.imageScale, dialogue.imageWidth, dialogue.imageHeight, 0);
 
-            Identifier image = dialogue.imagePath;
+            Identifier image = LuxDialogue.convertMapToId(dialogue.imagePath);
+
             if(dialogue.imageHasStages){
                 //checks if it should change the
                 if(imageTicker > dialogue.imageInterval){
@@ -722,7 +722,7 @@ public class LuxcognitaScreenV2 extends Screen{
                     }
                     imageTicker = 0;
                 }
-                image = dialogue.imageStages.get(currentImage);
+                image = LuxDialogue.convertMapToId(dialogue.imageStages.get(currentImage));
                 imageTicker++;
             }
 
@@ -730,9 +730,9 @@ public class LuxcognitaScreenV2 extends Screen{
             RenderSystem.defaultBlendFunc();
             ClipStack.addWindow(context.getMatrices(), new Rectangle(0,0, width, height));
 
+            LightWithin.LOGGER.warn("======0 triying to find image: " + image);
             Renderer2d.renderTexture(context.getMatrices(), image, xy.getFirst(), xy.getSecond(), dialogue.imageWidth*dialogue.imageScale, dialogue.imageHeight*dialogue.imageScale);
             ClipStack.popWindow();
-
         }
 
         matrixStack.pop();

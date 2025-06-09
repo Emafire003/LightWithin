@@ -30,7 +30,7 @@
   "imageStages": [
     {
       "namespace": "lightwithin",
-      "path": "textures/lux_dialogue/default.png"
+      "path": "textures/dialogues/default.png"
     }
   ],
   "imageInterval": 20,
@@ -46,10 +46,6 @@
     {
       "namespace": "lightwithin",
       "path": "luxintus_berry_powder"
-    },
-    {
-      "namespace": "lightwithin",
-      "path": "luxintus_berry"
     }
   ],
   "itemsInterval": 20,

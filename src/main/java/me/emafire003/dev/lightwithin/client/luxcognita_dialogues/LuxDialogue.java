@@ -25,8 +25,7 @@ import java.util.Map;
 import static me.emafire003.dev.lightwithin.LightWithin.MOD_ID;
 
 
-/* JSON equivalent:
-TODO add the final version of the json
+/* The json equivalent is in the root folder of the dialogues, the name is default.json
  */
 public class LuxDialogue {
 
@@ -63,8 +62,8 @@ public class LuxDialogue {
     /// The image's position as described for the berry
     public ScreenPositionsPresets imagePos = ScreenPositionsPresets.CENTER;
     /// The image's path location. It's an identifier
-    //TODO maybe make all of these into lists? To have more images in one screen
-    public Identifier imagePath = LightWithin.getIdentifier("textures/dialogues/default.png");
+    /// !!! Since there are issues with Identifiers while running outside of dev env, this mimics and identifier !!!
+    public Map<String, String> imagePath = convertIdToMap(LightWithin.getIdentifier("textures/dialogues/default.png"));
     /// Image width
     public int imageWidth = 32;
     /// Image height
@@ -74,21 +73,21 @@ public class LuxDialogue {
     /// Weather or not the image has stages. If it has they will start from name_0.png to name_x.png
     public boolean imageHasStages = false;
     /// A map of the texture files
-    public List<Identifier> imageStages = List.of(LightWithin.getIdentifier("textures/lux_dialogue/default.png"));
+    public List<Map<String, String>> imageStages = List.of(convertIdToMap(LightWithin.getIdentifier("textures/dialogues/default.png")));
     ///  The interval between each frame, in ticks (1s = 20t)
     public int imageInterval = 20;
     ///  Weather or not to show an item
     public boolean showItem = false;
     /// The image's position as described for the berry
     public ScreenPositionsPresets itemPos = ScreenPositionsPresets.CENTER;
-    /// The item's identifier
-    public Identifier item = Registries.ITEM.getId(LightItems.LUXINTUS_BERRY_POWDER);
+    /// !!! Since there are issues with Identifiers while running outside of dev env, this mimics and identifier !!!
+    public Map<String, String> item = convertIdToMap(Registries.ITEM.getId(LightItems.LUXINTUS_BERRY_POWDER));
     /// The item's scale
     public float itemScale = 3f;
     /// Weather or not to have multiple items show in sequence
     public boolean multipleItems = false;
     /// A List of the items
-    public List<Identifier> items = List.of(Registries.ITEM.getId(LightItems.LUXINTUS_BERRY_POWDER), Registries.ITEM.getId(LightItems.LUXINTUS_BERRY));
+    public List<Map<String, String>> items = List.of(convertIdToMap(Registries.ITEM.getId(LightItems.LUXINTUS_BERRY_POWDER)));
     /// the interval between each display of an item
     public int itemsInterval = 20;
 
@@ -118,7 +117,6 @@ public class LuxDialogue {
     public void serialize() {
         Gson serializedDialogue = new GsonBuilder().setPrettyPrinting()//.excludeFieldsWithoutExposeAnnotation()
                 .create();
-
         try {
             Files.createDirectories(FabricLoader.getInstance().getConfigDir().resolve(MOD_ID+"/jsontest/"));
         } catch (IOException e) {
@@ -159,4 +157,65 @@ public class LuxDialogue {
         }
     }
 
+    /** Due to the inability of deserializing the Identifier,
+     * a Map of strings is used in its place.
+     * <p>
+     * This method converts it back to a proper identifier*/
+    public static Identifier convertMapToId(Map<String, String> wanna_be_id){
+        return Identifier.of(wanna_be_id.get("namespace"), wanna_be_id.get("path"));
+    }
+
+    /** Due to the inability of deserializing the Identifier,
+     * a Map of strings is used in its place.
+     * <p>
+     * This method converts an Identifier to its map format*/
+    public static Map<String, String> convertIdToMap(Identifier id){
+        return Map.of("namespace", id.getNamespace(), "path", id.getPath());
+    }
+
+    @Override
+    public String toString() {
+        return "LuxDialogue{" +
+                "dialogueId='" + dialogueId + '\'' +
+                ", fileVersion=" + fileVersion +
+                ", mainText='" + mainText + '\'' +
+                ", mainTextScale=" + mainTextScale +
+                ", hasReplaceableMainText=" + hasReplaceableMainText +
+                ", replaceablesListMain=" + replaceablesListMain +
+                ", subTextPresent=" + subTextPresent +
+                ", subText='" + subText + '\'' +
+                ", subTextScale=" + subTextScale +
+                ", hasReplaceableSubText=" + hasReplaceableSubText +
+                ", replaceablesListSub=" + replaceablesListSub +
+                ", showBerry=" + showBerry +
+                ", berryPos=" + berryPos +
+                ", berryScale=" + berryScale +
+                ", showImage=" + showImage +
+                ", imagePos=" + imagePos +
+                ", imagePath=" + imagePath +
+                ", imageWidth=" + imageWidth +
+                ", imageHeight=" + imageHeight +
+                ", imageScale=" + imageScale +
+                ", imageHasStages=" + imageHasStages +
+                ", imageStages=" + imageStages +
+                ", imageInterval=" + imageInterval +
+                ", showItem=" + showItem +
+                ", itemPos=" + itemPos +
+                ", item=" + item +
+                ", itemScale=" + itemScale +
+                ", multipleItems=" + multipleItems +
+                ", items=" + items +
+                ", itemsInterval=" + itemsInterval +
+                ", randomizedButtons=" + randomizedButtons +
+                ", randomButtonsAmount=" + randomButtonsAmount +
+                ", buttons=" + buttons +
+                ", dialogueProgress=" + dialogueProgress +
+                ", dialogueProgressState=" + dialogueProgressState +
+                ", removeDialogueProgress=" + removeDialogueProgress +
+                ", canRedirect=" + canRedirect +
+                ", redirectTo='" + redirectTo + '\'' +
+                ", redirectStateRequired=" + redirectStateRequired +
+                ", invertRedirectRequirement=" + invertRedirectRequirement +
+                '}';
+    }
 }
