@@ -1,82 +1,48 @@
-Hi! It's been a while (again)! Update 1.2.0 brings you (mainly)...
-## Aura lights!
-A new category of lights, beside the effect-based ones (well technically almost all of them use effects) and the "elemental ones".
-These first ones added are ForestAura and ThunderAura, and you have a roughly 6% chance of getting them. (They are still based on you uuid so it's not chance per se, but more of the "chance you have of having a compatible uuid" with it)
+Hello! First major version bump uh?
+# Luxcognita Overhaul - An in-game guide!
+Now there are proper guides and explanations in the mod itself! Woohoo! Only took, two/three years?
+Eating a **Luxcognita** berry will now open up a custom "Luxdialogue" screen, where you will be able to ask the
+"light of knowledge" herself *(kind of)* everything that you need to know. You can also chat a bit about random things, but
+be careful, she gets upset fairly easily!
 
-### ForestAura
-This light is linked to the essence of the forest, be it the soil or the plants. Whenever you activate it, you will be communing with the forest and thus you will turn green! (photosynthesis ehy?)
-It has two target types:
-- **SELF**: Once activate, your matter and the matter of the forest will become one thing, and you will be able to pass through forest blocks (defined in a dedicated tag), like dirt logs and leaves. 
-It works similarly to powder snow. You will also be able to see other entities through a glow effect, and everything the borders of the terrain around you.
-Based on the power level of your light, you will also be able to tell apart friend from foe!
-- **ALL**: This variant will be harnessing the power of the secondary metabolites of forest plants: it will spawn a few different "puffs" of various substances around the caster, and they will affect every other entity around them,
-except for other fellow forest-aura light-bringers. The puffs will apply different potion effects, like blindness slowness, poison etc, their strength type and duration depeding on the light's duration and power level. A new potion effect has been added,
-Intoxication, that will randomise the movement controls, and make the player see... well peculiar stuff. (configurable in the config for accessibility). It will also make them jump around!
+Mainly, you will interact using buttons displayed in the bottom half of the screen, while in the top half there will be 
+the main text, which is what Luxcognita is saying. There will also be some images and "scenes" that will help you understand
+what she's talking about a bit better. 
 
-You are immune to suffocation damage while you have your light active, but be aware of its timer!
+I could list all the dialogue options and things, but it's way too much stuff and you can just open up the game and eat
+a berry to see it for yourself. 
 
-To trigger this light, you (generally) will need to be: low health, in a forest biome, be surrounded by leaves or hold a sapling.
-The relevant checks are performed when: you get attacked, you attack, an ally dies. More info on the wiki.
+Some features of note: 
+- You will be invulnerable (not unmovable!) as long as you see the luxdialogue screen, but as soon when you get attacked, you'll get a warning and the screen will automatically close.
+- While talking, you will also appear translucent to other players! (who knows where 'you' *really* are uh?)
+- Some dialogues will only be unlocked after others, for example, you won't reach the main dialogue unless you have completed the intro dialogue
+- The dialogues are formatted as json files, and in theory you can add your own using a resource pack. Let me know if you would like a guide on how to do that, or if you have suggestions for more dialogues, please add an issue (or a pull request!) on github!
+- A background music will also play in the background
 
-### ThunderAura
-This one comes with the power of bellowing thunder and the strength of its lightnings. Whenever you activated, you will become a bit yellowier than before. And statically charged probably too.
-It has three target types:
-- **ALLIES**: Upon activation, you and your allies will be shielded by the thunder, with a globe of electrical particles floating around you. This forcefield will
-always be centered around you or you ally, and if any entity comes into contact with it will get shocked and bounced back where it came! (it is a very satisfying and fun thing to do trust me). 
-A "zap" sound will also be played, and particles displayed. The strength of the repulsion and the damage are scaled on the power level. The size of the forcefield is scaled by the size of the entity.
-You and your allies will also be immune to lightning damage while the effect is active
-- **ALL**: You will be able to use the power of the storm to strike wherever you like with a thunder bolt! Just point, right click, and... BAM HERE COMES LIGHTNING!!! *(mcqueen?)*. You can do so even if you don't have a free hand.
-The number of lightnings spawned (by default, but it's configurable), is determined by the light's power level. The max distance is several blocks away (30ish iirc).
-- **VARIANT**: This is the most peculiar target type, and maybe the most close to thunder itself. Once you activate, you will call a storm where you stand.
-But it will be supercharged with A LOT of extra lightnings. They will randomly spawn in (configurable) area around you, and they will be spawning both on ground and in the air.
-The amount of lightnings per second is based on you power level, as well as the area of this effect. 
+## Backend/Code-wise updates
+The code that manages the light types (the things that give you the powers) has been migrated to a registry,
+(hence the major version bump, which is a very breaking thing), which should make adding more light types considerably 
+easier, potentially allowing a future API to add more lights using addons (not currently planned, but still).
+This was already present in the alpha 1.4.0 alpha release of the mod. 
 
-You are always protected from lightning damage while your light is active as well.
-To trigger this light, you (generally) will need to: be on low health (or your allies need to), surrounded by your allies, have a copper rod, stand on a copper rod, thundery or rainy weather.
-The checks are performed when an ally is getting attacked or struck by lightning, you are getting attacked or struck by lightning. Check the wiki for more info.
-
-Get more info in the wiki, or just try it out! It of course comes with its icon, particle effect and sounds!
-
-### WindLight ALLIES update
-Added a new effect, called "Wind Walking", which will allow you and your allies to jump and walk on air blocks! Much like scaffolding and the ForestAura effect described above.
-
-### New wiki!
-The wiki has been updated and moved to [ModdedMc](https://moddedmc.wiki/en/project/lightwithin/)! The plan is to also allow you to use mods like Oracle Index to view the wiki in game, while waiting for ingame tutorials done by this mod itself.
-
-### Trigger items and blocks are now tags
-The list of blocks and item that acted as triggers for some of the lights have now been moved away from the config files and into new tags, located in
-`..data/lightwithin/tags/` and you will be able to modify them via a datapack. 
-
-### New trigger options and checks
-A new check has been added, _surrounded by allies_, which checks how many allies are you close to. It is used in the thunder aura light currently.
-There are also checks for the weather, and the surrounding leaves. There are also triggers for when you get zapped by lightning.
-
-### Config Files
-- Updated the main Config to version 5, added the "surrounded_by_allies" option, similar to surrounded by instead of enemies it uses allies.
-- BalanceConfig to version 2, added the new settings for forest and thunder aura. You will also be able to set the puff action range, their max and min distance relative to the player. 
-You can also change the number of lightnings per level and the size of the superstorm.
-- TriggerConfig updated to version 3, added the settings for Forest and Thunder Aura
-- ClientConfig to verso 2, added the options to scale the runes displayed on activation as well as the option to choose the colors for ForsetAura's vision of allies enemies and neutrals.
-
-### Under the hood changes
-Updated to Loom 1.9, updated to the newer gradle version, updated to ParticleAnimationLib 0.1.0. Updated to new YAWP version (1.21.1)
-
-### Misc & Bug fixes
-- Added a few new particles, the lightnings ones and puff particle ones.
-- Added the relevant BottledLights to the 2 new lights
-- Tweaked how the light types particle look, they now go a bit more horizontally before floating up. They also are a little less randomly coloured.
-- The area of search for entities (the one that checks for allies and enemies and does stuff) has been double to 12 blocks (from 6) by default
-- Added sound subtitles translations
-- Now when you activate a light, light rays will be displayed from you. If you did so using a light charge, some rays will be redder. (They won't be displayed at all if activate with a command)
-- Fixed how the sounds are played 
-- Fixed [#23](https://github.com/Emafire003/LightWithin/issues/23)
-- Fixed [#17](https://github.com/Emafire003/LightWithin/issues/17)
-- Fixed the runes rendering off-center
-- Fixed a bug where the ClientConfig loaded wrong defaults on startup
-- Fixed a bug that didn't allow changing the size of the area of search for entities
-- Fixed FrostLight particles non spawning
-- Fixed HealLight sound being played too low
-- Fixed the `/light ready|activate delay` timers, they now work properly [#26](https://github.com/Emafire003/LightWithin/issues/27)
-- Probably other stuff I forgot
-
-
+## Changes and additions
+### Commands
+- Added the /light spoof command, that will allow you to copy another player's light attributes, using their UUID
+- Added /light set dialogueProgress add/remove to manage the dialogue progress states (the "gates" that prevent a player from seeing certain screens and stuff)
+### Config files
+#### Main config
+- Added config option to set custom maximum power level settable using commands (won't affect the natural maximum power level cap)
+- Added config option to give new players a Luxcognita Berry as soon as they join for the first time (as a sort of introduction tutorial)
+#### Client config
+- Added a new config tab related to the Luxdialogue options
+- TODO
+### Misc
+- Added the Equipment Break trigger to EarthenLight
+- Fixed luxcognita texture
+- Added Luxcognita Dream effect and Luxcognita Offended effect
+- Updated the tooltips of the lux berries
+- Added snowing check to FrostLight's conditions
+- Added a new music disc 'Luxcognita Dream', which is the background music played inside the screen. Currently only obtainable in creative mode.
+### Mod Compatibility
+- Added compatibility for allies enemies and such with "Guilded"
+- Sodium could sometimes cause some issues with the display of the transition animation and the text blink speed. You can account for such issues using the options in the client config. 
