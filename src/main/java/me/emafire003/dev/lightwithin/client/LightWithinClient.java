@@ -326,7 +326,6 @@ public class LightWithinClient implements ClientModInitializer {
                 if(action.equals(LuxDialogueActions.ATTACKED)){
                     MinecraftClient.getInstance().setScreen(LuxdialogueScreens.LUXDIALOGUE_SCREENS.get("attacked"));
                 }else if(action.equals(LuxDialogueActions.START_BGM)){
-                    LOGGER.warn("Starting again");
                     client.player.playSound(LightItems.MUSIC_DISC_LUXCOGNITA_DREAM.getSound(), ClientConfig.LUXCOGNITA_DREAM_BGM_VOLUME, 1f);
                 }else if(action.equals(LuxDialogueActions.STOP_BGM)){
                     client.getSoundManager().stopSounds(LightItems.MUSIC_DISC_LUXCOGNITA_DREAM.getSound().getId(), null);

@@ -60,7 +60,7 @@
   "defense_light": {
   "subtitle": "audio.lightwithin.defense_light_triggered",
   "sounds": [
-    "lightwithin:defense_light"
+    "lightwithin:defence_light"
   ]
   },
   "strength_light": {
