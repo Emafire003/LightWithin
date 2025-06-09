@@ -51,13 +51,17 @@ public class ClientConfig {
     public static boolean INTOXICATION_SHADER_WARNING = true;
     public static final boolean INTOXICATION_SHADER_WARNING_default = true;
     public static float LUXDIALOGUE_TEXT_SCALE = 1.0f;
-    public static final float LUXDIALOGYE_TEXT_SCALE_default = 1.0f;
+    public static final float LUXDIALOGUE_TEXT_SCALE_default = 1.0f;
     public static int CLOSE_LUXDIALOGUE_SCREEN_AFTER = 60;
     public static final int CLOSE_LUXDIALOGUE_SCREEN_AFTER_default = 60;
     public static float LUXCOGNITA_DREAM_BGM_VOLUME = 0.7f;
     public static final float LUXCOGNITA_DREAM_BGM_VOLUME_default = 0.7f;
     public static int OVERLAY_TEXT_DURATION = 5;
     public static final int OVERLAY_TEXT_DURATION_default = 5;
+    public static int LUXDIALOGUE_TEXT_BLINK_SPEED = 10;
+    public static final int LUXDIALOGUE_TEXT_BLINK_SPEED_default = 10;
+    public static int LUXDIALOGUE_TRANSITION_SPEED = 32;
+    public static final int LUXDIALOGUE_TRANSITION_SPEED_default = 32;
 
     public static final int light_icon_default_position = 10;
     public static final double light_icon_default_scale = 1.0;
@@ -112,6 +116,8 @@ public class ClientConfig {
             CONFIG.set("close_luxdialogue_screen_after", CLOSE_LUXDIALOGUE_SCREEN_AFTER);
             CONFIG.set("luxcognita_dream_bgm_volume", LUXCOGNITA_DREAM_BGM_VOLUME);
             CONFIG.set("overlay_text_duration", OVERLAY_TEXT_DURATION);
+            CONFIG.set("luxdialogue_text_blink_speed", LUXDIALOGUE_TEXT_BLINK_SPEED);
+            CONFIG.set("luxdialogue_transition_speed", LUXDIALOGUE_TRANSITION_SPEED);
             CONFIG.update();
             RendererEventHandler.updateFromConfig();
         } catch (IOException e) {
@@ -196,17 +202,20 @@ public class ClientConfig {
 
         configs.addKeyValuePair(new Pair<>("auto_light_activation", AUTO_LIGHT_ACTIVATION_default), "Setting this value to true will activate your light as soon as it's ready. WARNING: it may be disabled by the server!");
 
-        configs.addKeyValuePair(new Pair<>("forestaura_enemy_color", FORESTAURA_ENEMY_COLOR), "The color that will indicate enemies with the forest aura vision. You must install ColoredGlowLib to see the effect.");
-        configs.addKeyValuePair(new Pair<>("forestaura_ally_color", FORESTAURA_ALLY_COLOR), "The color that will indicate allies with the forest aura vision. You must install ColoredGlowLib to see the effect.");
-        configs.addKeyValuePair(new Pair<>("forestaura_intoxication_shader", FORESTAURA_INTOXICATION_SHADER), "Accessibility setting. Disable this if you don't want to see the Intoxicated effect shader (may give motion sickness)");
-        configs.addKeyValuePair(new Pair<>("intoxication_shader_warning", INTOXICATION_SHADER_WARNING), "Accessibility setting. Turn this off to not see the warning message every time the intoxication effect is applied to you");
+        configs.addKeyValuePair(new Pair<>("forestaura_enemy_color", FORESTAURA_ENEMY_COLOR_default), "The color that will indicate enemies with the forest aura vision. You must install ColoredGlowLib to see the effect.");
+        configs.addKeyValuePair(new Pair<>("forestaura_ally_color", FORESTAURA_ALLY_COLOR_default), "The color that will indicate allies with the forest aura vision. You must install ColoredGlowLib to see the effect.");
+        configs.addKeyValuePair(new Pair<>("forestaura_intoxication_shader", FORESTAURA_INTOXICATION_SHADER_default), "Accessibility setting. Disable this if you don't want to see the Intoxicated effect shader (may give motion sickness)");
+        configs.addKeyValuePair(new Pair<>("intoxication_shader_warning", INTOXICATION_SHADER_WARNING_default), "Accessibility setting. Turn this off to not see the warning message every time the intoxication effect is applied to you");
 
 
-        configs.addKeyValuePair(new Pair<>("luxdialogue_text_scale", LUXDIALOGUE_TEXT_SCALE), "Scale of the text rendered while talking with luxcognita berry");
-        configs.addKeyValuePair(new Pair<>("close_luxdialogue_screen_after", CLOSE_LUXDIALOGUE_SCREEN_AFTER), "After how many seconds should the dialogue screen (with luxcognita berry) automatically close?");
-        configs.addKeyValuePair(new Pair<>("luxcognita_dream_bgm", LUXCOGNITA_DREAM_BGM_VOLUME), "The volume at which the luxcognita background music song plays while the dialogue screen is open");
+        configs.addKeyValuePair(new Pair<>("luxdialogue_text_scale", LUXDIALOGUE_TEXT_SCALE_default), "Scale of the text rendered while talking with luxcognita berry");
+        configs.addKeyValuePair(new Pair<>("close_luxdialogue_screen_after", CLOSE_LUXDIALOGUE_SCREEN_AFTER_default), "After how many seconds should the dialogue screen (with luxcognita berry) automatically close?");
+        configs.addKeyValuePair(new Pair<>("luxcognita_dream_bgm", LUXCOGNITA_DREAM_BGM_VOLUME_default), "The volume at which the luxcognita background music song plays while the dialogue screen is open");
 
-        configs.addKeyValuePair(new Pair<>("overlay_text_duration", OVERLAY_TEXT_DURATION), "The amount of time, in seconds, for which some overlay messages are displayed for");
+        configs.addKeyValuePair(new Pair<>("overlay_text_duration", OVERLAY_TEXT_DURATION_default), "The amount of time, in seconds, for which some overlay messages are displayed for");
+
+        configs.addKeyValuePair(new Pair<>("luxcognita_text_blink_speed", LUXDIALOGUE_TEXT_BLINK_SPEED_default), "The speed at which the text on the Luxdialogue changes color while blinking");
+        configs.addKeyValuePair(new Pair<>("luxdialogue_transition_speed", LUXDIALOGUE_TRANSITION_SPEED_default), "The speed at which the animation between two screens plays at");
 
     }
 
@@ -240,10 +249,13 @@ public class ClientConfig {
         FORESTAURA_ALLY_COLOR = CONFIG.getOrDefault("forestaura_ally_color", FORESTAURA_ALLY_COLOR_default);
         FORESTAURA_INTOXICATION_SHADER = CONFIG.getOrDefault("forestaura_intoxication_shader", FORESTAURA_INTOXICATION_SHADER_default);
         INTOXICATION_SHADER_WARNING = CONFIG.getOrDefault("intoxication_shader", INTOXICATION_SHADER_WARNING_default);
-        LUXDIALOGUE_TEXT_SCALE = CONFIG.getOrDefault("luxdialogue_text_scale", LUXDIALOGYE_TEXT_SCALE_default);
+        LUXDIALOGUE_TEXT_SCALE = CONFIG.getOrDefault("luxdialogue_text_scale", LUXDIALOGUE_TEXT_SCALE_default);
         CLOSE_LUXDIALOGUE_SCREEN_AFTER = CONFIG.getOrDefault("close_luxdialogue_screen_after", CLOSE_LUXDIALOGUE_SCREEN_AFTER_default);
         LUXCOGNITA_DREAM_BGM_VOLUME =  CONFIG.getOrDefault("luxcognita_dream_bgm", LUXCOGNITA_DREAM_BGM_VOLUME_default);
         OVERLAY_TEXT_DURATION = CONFIG.getOrDefault("overlay_text_duration", OVERLAY_TEXT_DURATION_default);
+
+        LUXDIALOGUE_TEXT_BLINK_SPEED = CONFIG.getOrDefault("luxcognita_text_blink_speed", LUXDIALOGUE_TEXT_BLINK_SPEED_default);
+        LUXDIALOGUE_TRANSITION_SPEED = CONFIG.getOrDefault("luxdialogue_transition_speed", LUXDIALOGUE_TRANSITION_SPEED_default);
     }
 
 }

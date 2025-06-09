@@ -24,15 +24,109 @@ public class YaclScreenMaker {
         return YetAnotherConfigLib.createBuilder()
                 .title(Text.translatable("config.lightwithin.name"))
                 .category(ConfigCategory.createBuilder()
-                        .name(Text.translatable("config.lightwithin.category_name"))
-                        .tooltip(Text.translatable("config.lightwithin.description"))
-                        .options(createOptions())
+                        .name(Text.translatable("config.lightwithin.general_category"))
+                        .tooltip(Text.translatable("config.lightwithin.general_category.description"))
+                        .options(createGeneralOptions())
+                        .build())
+                .category(ConfigCategory.createBuilder()
+                        .name(Text.translatable("config.lightwithin.luxdialogue_category"))
+                        .tooltip(Text.translatable("config.lightwithin.luxdialogue_category.description"))
+                        .options(createLuxdialogueOptions())
                         .build())
                 .build().generateScreen(parent);
     }
 
+    public static @NotNull Collection<? extends Option<?>> createLuxdialogueOptions(){
+        List<Option<?>> options = new ArrayList<>();
+        options.add(
+                Option.<Float>createBuilder()
+                        .name(Text.translatable("config.lightwithin.luxdialogue.text_scale"))
+                        .description(OptionDescription.of(Text.translatable("config.lightwithin.luxdialogue.text_scale.tooltip")))
+                        .binding(
+                                ClientConfig.LUXDIALOGUE_TEXT_SCALE_default, // the default value
+                                () -> ClientConfig.LUXDIALOGUE_TEXT_SCALE, // a field to get the current value from
+                                newVal -> {
+                                    ClientConfig.LUXDIALOGUE_TEXT_SCALE = newVal;
+                                    ClientConfig.saveToFile();
+                                }
+                        )
+                        .controller(opt -> FloatSliderControllerBuilder.create(opt)
+                                .range(0.0f, 2.0f)
+                                .step(0.05f))
+                        .build()
+        );
+        options.add(
+                Option.<Integer>createBuilder()
+                        .name(Text.translatable("config.lightwithin.luxdialogue.close_after"))
+                        .description(OptionDescription.of(Text.translatable("config.lightwithin.luxdialogue.close_after.tooltip")))
+                        .binding(
+                                ClientConfig.CLOSE_LUXDIALOGUE_SCREEN_AFTER_default, // the default value
+                                () -> ClientConfig.CLOSE_LUXDIALOGUE_SCREEN_AFTER, // a field to get the current value from
+                                newVal -> {
+                                    ClientConfig.CLOSE_LUXDIALOGUE_SCREEN_AFTER = newVal;
+                                    ClientConfig.saveToFile();
+                                }
+                        )
+                        .controller(opt -> IntegerFieldControllerBuilder.create(opt)
+                                .min(5)
+                        )
+                        .build()
+        );
+        options.add(
+                Option.<Float>createBuilder()
+                        .name(Text.translatable("config.lightwithin.luxdialogue.bgm_volume"))
+                        .description(OptionDescription.of(Text.translatable("config.lightwithin.luxdialogue.bgm_volume.tooltip")))
+                        .binding(
+                                ClientConfig.LUXCOGNITA_DREAM_BGM_VOLUME_default, // the default value
+                                () -> ClientConfig.LUXCOGNITA_DREAM_BGM_VOLUME, // a field to get the current value from
+                                newVal -> {
+                                    ClientConfig.LUXCOGNITA_DREAM_BGM_VOLUME = newVal;
+                                    ClientConfig.saveToFile();
+                                }
+                        )
+                        .controller(opt -> FloatSliderControllerBuilder.create(opt)
+                                .range(0.0f, 1.0f)
+                                .step(0.01f))
+                        .build()
+        );
+        options.add(
+                Option.<Integer>createBuilder()
+                        .name(Text.translatable("config.lightwithin.luxdialogue.text_blink_speed"))
+                        .description(OptionDescription.of(Text.translatable("config.lightwithin.luxdialogue.text_blink_speed.tooltip")))
+                        .binding(
+                                ClientConfig.LUXDIALOGUE_TEXT_BLINK_SPEED_default, // the default value
+                                () -> ClientConfig.LUXDIALOGUE_TEXT_BLINK_SPEED, // a field to get the current value from
+                                newVal -> {
+                                    ClientConfig.LUXDIALOGUE_TEXT_BLINK_SPEED = newVal;
+                                    ClientConfig.saveToFile();
+                                }
+                        )
+                        .controller(opt -> IntegerSliderControllerBuilder.create(opt)
+                                .range(0, 30)
+                                .step(1))
+                        .build()
+        );
+        options.add(
+                Option.<Integer>createBuilder()
+                        .name(Text.translatable("config.lightwithin.luxdialogue.transition_speed"))
+                        .description(OptionDescription.of(Text.translatable("config.lightwithin.luxdialogue.transition_speed.tooltip")))
+                        .binding(
+                                ClientConfig.LUXDIALOGUE_TRANSITION_SPEED_default, // the default value
+                                () -> ClientConfig.LUXDIALOGUE_TRANSITION_SPEED, // a field to get the current value from
+                                newVal -> {
+                                    ClientConfig.LUXDIALOGUE_TRANSITION_SPEED= newVal;
+                                    ClientConfig.saveToFile();
+                                }
+                        )
+                        .controller(opt -> IntegerSliderControllerBuilder.create(opt)
+                                .range(0, 100)
+                                .step(1))
+                        .build()
+        );
+        return options;
+    }
 
-    public static @NotNull Collection<? extends Option<?>> createOptions(){
+    public static @NotNull Collection<? extends Option<?>> createGeneralOptions(){
         List<Option<?>> options = new ArrayList<>();
         AtomicBoolean updatedFromActivePreset = new AtomicBoolean(false);
         AtomicBoolean updatedFromChargePreset = new AtomicBoolean(false);
@@ -397,57 +491,6 @@ public class YaclScreenMaker {
                                 }
                         )
                         .controller(TickBoxControllerBuilder::create)
-                        .build()
-        );
-        options.add(
-                Option.<Float>createBuilder()
-                        .name(Text.translatable("config.lightwithin.luxdialogue.text_scale"))
-                        .description(OptionDescription.of(Text.translatable("config.lightwithin.luxdialogue.text_scale.tooltip")))
-                        .binding(
-                                ClientConfig.LUXDIALOGYE_TEXT_SCALE_default, // the default value
-                                () -> ClientConfig.LUXDIALOGUE_TEXT_SCALE, // a field to get the current value from
-                                newVal -> {
-                                    ClientConfig.LUXDIALOGUE_TEXT_SCALE = newVal;
-                                    ClientConfig.saveToFile();
-                                }
-                        )
-                        .controller(opt -> FloatSliderControllerBuilder.create(opt)
-                                .range(0.0f, 2.0f)
-                                .step(0.05f))
-                        .build()
-        );
-        options.add(
-                Option.<Integer>createBuilder()
-                        .name(Text.translatable("config.lightwithin.luxdialogue.close_after"))
-                        .description(OptionDescription.of(Text.translatable("config.lightwithin.luxdialogue.close_after.tooltip")))
-                        .binding(
-                                ClientConfig.CLOSE_LUXDIALOGUE_SCREEN_AFTER_default, // the default value
-                                () -> ClientConfig.CLOSE_LUXDIALOGUE_SCREEN_AFTER, // a field to get the current value from
-                                newVal -> {
-                                    ClientConfig.CLOSE_LUXDIALOGUE_SCREEN_AFTER = newVal;
-                                    ClientConfig.saveToFile();
-                                }
-                        )
-                        .controller(opt -> IntegerFieldControllerBuilder.create(opt)
-                                .min(5)
-                        )
-                        .build()
-        );
-        options.add(
-                Option.<Float>createBuilder()
-                        .name(Text.translatable("config.lightwithin.luxdialogue.bgm_volume"))
-                        .description(OptionDescription.of(Text.translatable("config.lightwithin.luxdialogue.bgm_volume.tooltip")))
-                        .binding(
-                                ClientConfig.LUXCOGNITA_DREAM_BGM_VOLUME_default, // the default value
-                                () -> ClientConfig.LUXCOGNITA_DREAM_BGM_VOLUME, // a field to get the current value from
-                                newVal -> {
-                                    ClientConfig.LUXCOGNITA_DREAM_BGM_VOLUME = newVal;
-                                    ClientConfig.saveToFile();
-                                }
-                        )
-                        .controller(opt -> FloatSliderControllerBuilder.create(opt)
-                                .range(0.0f, 1.0f)
-                                .step(0.01f))
                         .build()
         );
         options.add(

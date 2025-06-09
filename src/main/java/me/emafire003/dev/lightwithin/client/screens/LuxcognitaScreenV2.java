@@ -581,33 +581,32 @@ public class LuxcognitaScreenV2 extends Screen{
      * It remains in the greens anyway*/
     private int getTextColor(){
         //#3ad94f #31c83f #28b72f #1ea71e #129706
-        //TODO make better?
         colorTicks++;
-        if(colorTicks < 15){
+        if(colorTicks < 5 + ClientConfig.LUXDIALOGUE_TEXT_BLINK_SPEED){
             return 3856719;
         }
-        if(colorTicks < 25){
+        if(colorTicks < 5 + ClientConfig.LUXDIALOGUE_TEXT_BLINK_SPEED*2){
             return 3262527;
         }
-        if(colorTicks < 35){
+        if(colorTicks < 5 + ClientConfig.LUXDIALOGUE_TEXT_BLINK_SPEED*3){
             return 2668335;
         }
-        if(colorTicks < 45){
+        if(colorTicks < 5 + ClientConfig.LUXDIALOGUE_TEXT_BLINK_SPEED*4){
             return 2008862;
         }
-        if(colorTicks < 55){
+        if(colorTicks < 5 + ClientConfig.LUXDIALOGUE_TEXT_BLINK_SPEED*5){
             return 1218310;
         }
-        if(colorTicks < 65){
+        if(colorTicks < 5 + ClientConfig.LUXDIALOGUE_TEXT_BLINK_SPEED*6){
             return 2008862;
         }
-        if(colorTicks < 75){
+        if(colorTicks < 5 + ClientConfig.LUXDIALOGUE_TEXT_BLINK_SPEED*7){
             return 2668335;
         }
-        if(colorTicks < 85){
+        if(colorTicks < 5 + ClientConfig.LUXDIALOGUE_TEXT_BLINK_SPEED*8){
             return 3262527;
         }
-        if(colorTicks < 95){
+        if(colorTicks < 5 + ClientConfig.LUXDIALOGUE_TEXT_BLINK_SPEED*9){
             return 3856719;
         }
         colorTicks = 0;
@@ -730,7 +729,6 @@ public class LuxcognitaScreenV2 extends Screen{
             RenderSystem.defaultBlendFunc();
             ClipStack.addWindow(context.getMatrices(), new Rectangle(0,0, width, height));
 
-            LightWithin.LOGGER.warn("======0 triying to find image: " + image);
             Renderer2d.renderTexture(context.getMatrices(), image, xy.getFirst(), xy.getSecond(), dialogue.imageWidth*dialogue.imageScale, dialogue.imageHeight*dialogue.imageScale);
             ClipStack.popWindow();
         }
