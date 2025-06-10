@@ -336,12 +336,14 @@ public class LuxcognitaScreenV2 extends Screen{
                 String finalTarget = target;
                 pressAction = (button -> {
                     this.client.player.sendMessage(Text.translatable(finalTarget));
+                    sendDialogueStopDreamPacket();
                     this.closeWithAnimation();
                 });
             }else if(clickAction.equals(ClickActions.SEND_OVERLAY_MSG)){
                 String finalTarget = target;
                 pressAction = (button -> {
                     this.client.player.sendMessage(Text.translatable(finalTarget), true);
+                    sendDialogueStopDreamPacket();
                     this.closeWithAnimation();
                 });
             }
