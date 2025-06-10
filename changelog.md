@@ -34,14 +34,19 @@ This was already present in the alpha 1.4.0 alpha release of the mod.
 - Added config option to set custom maximum power level settable using commands (won't affect the natural maximum power level cap)
 - Added config option to give new players a Luxcognita Berry as soon as they join for the first time (as a sort of introduction tutorial)
 #### Client config
-- Added a new config tab related to the Luxdialogue options
-- TODO
+- Added an option set for how long the action bar/overlay messages are displayed on screen
+- Added a new config tab related to the Luxdialogue options where you will find options for:
+- Scaling the text displayed on the luxdialogue screen
+- Setting how long before the screen autocloses
+- Setting the volume at which the BGM plays at
+- Setting the speed of the text color blink
+- Setting the speed of the transition animation between screen
 ### Misc
 - Added the Equipment Break trigger to EarthenLight
-- Fixed luxcognita texture
-- Added Luxcognita Dream effect and Luxcognita Offended effect
-- Updated the tooltips of the lux berries
 - Added snowing check to FrostLight's conditions
+- Fixed Luxcognita Berry texture
+- Added Luxcognita Dream effect and Luxcognita Offended effect (it will prevent you from eating the Luxcognita berry for some time)
+- Updated the tooltips of the lux berries
 - Added a new music disc 'Luxcognita Dream', which is the background music played inside the screen. Currently only obtainable in creative mode.
 ### Mod Compatibility
 - Added compatibility for allies enemies and such with "Guilded"
