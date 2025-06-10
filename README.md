@@ -1,7 +1,8 @@
 ![lightwithin_title](https://github.com/Emafire003/LightWithin/assets/29462910/d2898053-0a12-41dc-87aa-dcae6d05d87b)
 This mod adds a new mechanic, called *"InnerLights"* which are cool fancy magicalish powers present within the player, and they are pretty much **UNIQUE** for every single
-one of them! And you can't just spam them, they will only help you if your are in danger! It is also highly configurable, and multiplayer friendly!
+one of them! They will help you if your are in danger! It is also highly configurable, and multiplayer friendly!
 
+Eat a Luxcognita Berry in order to start your journey with a little bit more help!
 
 There are lots of lights, ranging from ones that grant powerful status effects like healing, to freezing all of your enemies on the spot, or even save your allies from falling from great heights by flying away! You can even summon creatures to defend yourself against dangers!
 Each light has a cool sound design and distinct effects, with particles, custom glowing effects, and runes appearing on your screen!
