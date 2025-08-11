@@ -46,6 +46,7 @@ import net.minecraft.sound.SoundEvent;
 import net.minecraft.text.Text;
 import net.minecraft.util.Util;
 
+import javax.swing.*;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
@@ -305,8 +306,9 @@ public class LightWithinClient implements ClientModInitializer {
                         }
 
                         else if(effect.equals(RenderEffect.LUXCOGNITA_SCREEN)){
-                            MinecraftClient.getInstance().setScreen(LuxdialogueScreens.LUXDIALOGUE_SCREENS.get("intro/intro"));
-                            //MinecraftClient.getInstance().setScreen(new LuxcognitaScreenV1(Text.literal("LightWithin - Luxcognita Dialogue")));
+                            MinecraftClient.getInstance().setScreen(LuxdialogueScreens.LUXDIALOGUE_SCREENS.get("test"));
+
+                            //MinecraftClient.getInstance().setScreen(LuxdialogueScreens.LUXDIALOGUE_SCREENS.get("intro/intro"));
                         }
 
                         else if(effect.equals(RenderEffect.RUNES)){

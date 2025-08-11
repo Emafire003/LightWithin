@@ -634,10 +634,6 @@ public class LuxcognitaScreenV2 extends Screen{
 
         matrixStack.push();
 
-
-        matrixStack.scale(dialogue.mainTextScale*ClientConfig.LUXDIALOGUE_TEXT_SCALE, dialogue.mainTextScale*ClientConfig.LUXDIALOGUE_TEXT_SCALE, dialogue.mainTextScale*ClientConfig.LUXDIALOGUE_TEXT_SCALE);
-
-
         Text mainText = Text.translatable(dialogue.mainText);
         if(dialogue.hasReplaceableMainText){
             List<String> toReplace = new ArrayList<>(dialogue.replaceablesListMain.size());
@@ -647,7 +643,31 @@ public class LuxcognitaScreenV2 extends Screen{
             mainText = Text.translatable(dialogue.mainText, toReplace.toArray());
         }
 
-        context.drawCenteredTextWithShadow(this.textRenderer, mainText, (int) (((float) this.width / 2)/(dialogue.mainTextScale*ClientConfig.LUXDIALOGUE_TEXT_SCALE)), (int) (((float) this.height / 2 - 70)/(dialogue.mainTextScale*ClientConfig.LUXDIALOGUE_TEXT_SCALE)), getTextColor());
+        LightWithin.LOGGER.warn("1This is the width: " + this.textRenderer.getWidth(mainText)); //678
+        LightWithin.LOGGER.info("1Width * scale: " + this.textRenderer.getWidth(mainText)*dialogue.mainTextScale*ClientConfig.LUXDIALOGUE_TEXT_SCALE); //too much, 1017
+        LightWithin.LOGGER.info("1This is the total available width: " + this.width); //427
+
+        //The calc is: textWidth/to obtain the maximum scale i think
+
+        float scale = dialogue.mainTextScale*ClientConfig.LUXDIALOGUE_TEXT_SCALE;
+
+        if(this.textRenderer.getWidth(mainText) > this.width){
+            //scale = Math.min(this.textRenderer.getWidth(mainText)/this.width, scale);
+
+            LightWithin.LOGGER.info("======The scale would be " + scale);
+            //scale = (this.textRenderer.getWidth(mainText)/this.width)-0.5f;
+            float f = this.textRenderer.getWidth(mainText)/this.width;
+            LightWithin.LOGGER.info("The new thingy is: " + f + "or: " + 582f/427f);
+            scale = 1/(this.textRenderer.getWidth(mainText)/this.width);
+            //TODO it is messed up because it's not centered anymore
+            LightWithin.LOGGER.info("======The scale now is: " + scale);
+           // scale = scale * 1/(this.textRenderer.getWidth(mainText)/this.width); //nooope maybe 1/the new scale?
+        }
+
+        matrixStack.scale(scale, scale, scale);
+
+        context.drawCenteredTextWithShadow(this.textRenderer, mainText, (int) (((float) this.width / 2)/(scale)), (int) (((float) this.height / 2 - 70)/(scale)), getTextColor());
+
         matrixStack.pop();
         matrixStack.push();
 
