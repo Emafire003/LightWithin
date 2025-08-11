@@ -10,7 +10,7 @@
   "imagePos": "CENTER",
   "imagePath": {
     "namespace": "lightwithin",
-    "path": "textures/dialogues/!.png"
+    "path": "textures/dialogues/exclamation_mark.png"
   },
   "imageWidth": 16,
   "imageHeight": 16,
