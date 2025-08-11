@@ -23,6 +23,7 @@ public class ClientLightCommands {
 
         ClientLightCommand[] commands = new ClientLightCommand[] {
                 new ReloadClientConfigCommand(),
+                new TestAllScreensCommand()
         };
 
         for (ClientLightCommand command : commands) {
